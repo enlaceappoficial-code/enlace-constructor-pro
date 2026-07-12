@@ -36492,8 +36492,7 @@ MATERIALES:
                                 }),
                               ],
                             }),
-                            E &&
-                              e.jsx("div", {
+                            e.jsx("div", {
                                 style: {
                                   gridColumn: "span 6",
                                   marginBottom: 6,
@@ -36506,14 +36505,13 @@ MATERIALES:
                                     borderRadius: 6,
                                     padding: "3px 10px",
                                     fontSize: 12,
-                                    color: "#34d399",
+                                    color: E ? "#34d399" : "#60a5fa",
                                     cursor: "pointer",
                                     fontWeight: 600,
                                   },
                                   onClick: () =>
-                                    R({ idx: T, catItem: L, apu: E }),
-                                  children:
-                                    "🔧 Ver y ajustar materiales del APU",
+                                    R({ idx: T, catItem: L, apu: E || { id: "manual_" + T, nombre: W.desc || "Ítem Manual", unidad: W.unidad || "unidad", materiales: [], pctMO: 0, pctGG: 0, pctUtilidad: 0, rendimiento: 0, dotacion: 1 } }),
+                                  children: E ? "🔧 Ver y ajustar materiales del APU" : "🔧 Definir materiales manualmente",
                                 }),
                               }),
                           ],
@@ -43371,27 +43369,31 @@ MATERIALES:
     t.items.forEach((m) => {
       var p = parseFloat(m.cant) || 0;
       if (p !== 0) {
-        var C = o(m);
-        if (C) {
-          var b = r.find((h) => h.catalogId === C.id);
-          if (b && !b.esSubcontrato) {
-            var matList = m._customApuMaterials ? m._customApuMaterials.filter(x => x._activo) : b.materiales;
-            if (matList && matList.length > 0) {
-              matList.forEach((h) => {
-                var j = h._mat ? h._mat : n.find((g) => g.id === h.materialId);
-                if (j) {
-                  var F = (parseFloat(h.cantidad) || 0) * p;
-                  (s[j.id] || (s[j.id] = { mat: j, totalCant: 0, aparece: [] }),
-                    (s[j.id].totalCant += F),
-                    s[j.id].aparece.push({
-                      desc: m.desc,
-                      cant: F,
-                      unidadAPU: b.unidad,
-                    }));
-                }
-              });
+        var matList = m._customApuMaterials ? m._customApuMaterials.filter(x => x._activo) : null;
+        var b = null;
+        if (!matList) {
+          var C = o(m);
+          if (C) {
+            b = r.find((h) => h.catalogId === C.id);
+            if (b && !b.esSubcontrato) {
+              matList = b.materiales;
             }
           }
+        }
+        if (matList && matList.length > 0) {
+          matList.forEach((h) => {
+            var j = h._mat ? h._mat : n.find((g) => g.id === h.materialId);
+            if (j) {
+              var F = (parseFloat(h.cantidad) || 0) * p;
+              (s[j.id] || (s[j.id] = { mat: j, totalCant: 0, aparece: [] }),
+                (s[j.id].totalCant += F),
+                s[j.id].aparece.push({
+                  desc: m.desc,
+                  cant: F,
+                  unidadAPU: b ? b.unidad : m.unidad || "u",
+                }));
+            }
+          });
         }
       }
     });
