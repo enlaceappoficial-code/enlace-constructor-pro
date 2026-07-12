@@ -28675,8 +28675,20 @@ ${r.empresa}`;
                     },
                     children: [
                       e.jsx("option", { value: "", children: "-- Selecciona un insumo del catálogo --" }),
-                      ...[...r].sort((A, B) => A.nombre.localeCompare(B.nombre)).map((mat) => 
-                        e.jsxs("option", { value: mat.id, children: [mat.nombre, " (", mat.unidad, ") - $", mat.precio.toLocaleString("es-CL")] }, mat.id)
+                      ...Object.entries(
+                        r.reduce((acc, mat) => {
+                          const cat = mat.cat || "Sin Categoría";
+                          if (!acc[cat]) acc[cat] = [];
+                          acc[cat].push(mat);
+                          return acc;
+                        }, {})
+                      ).sort((a, b) => a[0].localeCompare(b[0])).map(([cat, mats]) =>
+                        e.jsx("optgroup", {
+                          label: cat,
+                          children: mats.sort((A, B) => A.nombre.localeCompare(B.nombre)).map((mat) =>
+                            e.jsxs("option", { value: mat.id, children: [mat.nombre, " (", mat.unidad, ") - $", mat.precio.toLocaleString("es-CL")] }, mat.id)
+                          )
+                        }, cat)
                       )
                     ]
                   })
