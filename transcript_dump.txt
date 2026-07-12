@@ -1,0 +1,88 @@
+Step 6773:
+Instruction: "Replace the empty state message with a JSON dump of the budget items to see their structure."
+Content: "                        children: consolidatedItems.length === 0 ? e.jsxs(\"div\", { style: { padding: 40, overflow: \"auto\", fontSize: 12 }, children: [e.jsx(\"div\",{style:{marginBottom:10,color:\"var(--muted)\",textAlign:\"center\"},children:\"Estructura interna del presupuesto (toma captura de esto):\"}), e.jsx(\"pre\", { style: { background: \"var(--sb)\", padding: 16, borderRadius: 8, whiteSpace: \"pre-wrap\" }, children: JSON.stringify(budget.items, null, 2) })] }) : e.jsxs(\"div\", {"...
+
+Step 6785:
+Instruction: "Fix the logic that extracts materials from budget items to use `item._cid` and `m.materialId` / `m.cantidad` based on the internal structure of ECP APUs and materials."
+Content: "    // Step 1: Consolidate materials from budget items\n    const [consolidatedItems, setConsolidatedItems] = Re.useState([]);\n    \n    Re.useEffect(() => {\n        if (!budget || !budget.items) return;\n        \n        let reqs = {};\n        budget.items.forEach(item => {\n            const apuId = item._cid || item.apu;\n            if (apuId || item.materiales) {\n                // Find APU definition\n                const apuDef = apus.find(a => String(a.id) === String(apuId)) || it...
+
+Step 6791:
+Instruction: "Restore the empty state message."
+Content: "                        children: consolidatedItems.length === 0 ? e.jsx(\"div\", { style: { textAlign: \"center\", color: \"var(--muted)\", padding: 40 }, children: \"Este presupuesto no tiene materiales asignados en sus APUs.\" }) : e.jsxs(\"div\", {"...
+
+Step 6824:
+Instruction: "Replace `ecp_proveedores`, `ecp_materiales`, and `ecp_apus` with the correct `enlace_constructor_pro_v1_` prefix."
+Content: "    const [proveedores, setProveedores] = Re.useState(() => {\n        try { return JSON.parse(localStorage.getItem(\"enlace_constructor_pro_v1_proveedores\") || \"[]\"); } catch { return []; }\n    });\n    const [materiales, setMateriales] = Re.useState(() => {\n        try { return JSON.parse(localStorage.getItem(\"enlace_constructor_pro_v1_materiales\") || \"[]\"); } catch { return []; }\n    });\n    const [apus, setApus] = Re.useState(() => {\n        try { return JSON.parse(localStorage....
+
+Step 6863:
+Instruction: "Provide a fallback mock array for proveedores when localStorage is empty."
+Content: "    const [proveedores, setProveedores] = Re.useState(() => {\n        try { \n            const provs = JSON.parse(localStorage.getItem(\"enlace_constructor_pro_v1_proveedores\") || \"[]\");\n            if (provs && provs.length > 0) return provs;\n        } catch {}\n        return [\n            { id: 101, nombre: \"Ferretería El Maestro\", vendedor: \"Juan Pérez\", telefono: \"+56912345678\", email: \"ventas@elmaestro.cl\" },\n            { id: 102, nombre: \"Sodimac Constructor\", vendedo...
+
+Step 6928:
+Instruction: "Replace the hardcoded signature width/height with dynamic aspect-ratio scaling."
+Content: "            // Signatures\n            if (cfg?.firmaImg) {\n                try {\n                    const { w, h } = await getImageSize(cfg.firmaImg);\n                    if (w && h) {\n                        const maxW = 56;\n                        const maxH = 24;\n                        const ratio = Math.min(maxW / w, maxH / h);\n                        const imgW = w * ratio;\n                        const imgH = h * ratio;\n                        doc.addImage(cfg.firmaImg, cfg.fi...
+
+Step 7047:
+Instruction: "Replace the Generate button styling to use a high-contrast green gradient with white text."
+Content: "                            e.jsx(\"button\", {\n                                style: { \n                                    padding: \"10px 24px\", \n                                    fontSize: 14, \n                                    background: consolidatedItems.length === 0 ? \"var(--border)\" : \"linear-gradient(135deg, #10b981 0%, #059669 100%)\", \n                                    border: \"none\", \n                                    color: consolidatedItems.length === 0 ? \"v...
+
+Step 7311:
+Instruction: "Replace pdfDataUri initialization with Blob URL"
+Content: "                const pdfName = \\`${isSC ? \"Cotizacion\" : \"Orden_Compra\"}_${prov.nombre.replace(/\\s+/g, '_')}_P${budget.id}.pdf\\`;\n                const pdfBlob = doc.output(\"blob\");\n                const pdfDataUri = URL.createObjectURL(pdfBlob);\n                \n                docsGenerated.push({ prov, items, subtotal, pdfName, pdfDataUri, pdfBlob });"...
+
+Step 7319:
+Instruction: "Change datauristring output to blob URL for better iframe support"
+Content: "                const pdfName = \\`${isSC ? \"Cotizacion\" : \"Orden_Compra\"}_${prov.nombre.replace(/\\s+/g, '_')}_P${budget.id}.pdf\\`;\n                const pdfBlob = doc.output(\"blob\");\n                const pdfDataUri = URL.createObjectURL(pdfBlob);\n                \n                docsGenerated.push({ prov, items, subtotal, pdfName, pdfDataUri, pdfBlob });"...
+
+Step 7363:
+Instruction: "Remove the trailing duplicated lines."
+Content: "            } catch (error) {\n                console.error(\"Error generating preview:\", error);\n                setToast(\"❌ Hubo un error al generar los documentos.\");\n            } finally {\n                setIsGenerating(false);\n            }\n    };"...
+
+Step 7407:
+Instruction: "Remove duplicate try/catch block."
+Content: "            } catch (error) {\n                console.error(\"Error generating preview:\", error);\n                setToast(\"❌ Hubo un error al generar los documentos.\");\n            } finally {\n                setIsGenerating(false);\n            }\n    };"...
+
+Step 7461:
+Instruction: "Replace the old button styles with new styles using explicit colors and shadows for the active state"
+Content: [{"AllowMultiple":false,"EndLine":804,"ReplacementContent":"                                                        e.jsx(\"button\", {\n                                                            style: { flex: 1, padding: \"12px\", borderRadius: 8, border: docType === \"sc\" ? \"none\" : \"1px solid var(--border)\", background: docType === \"sc\" ? \"#f5a020\" : \"var(--bg)\", color: docType === \"sc\" ? \"#ffffff\" : \"var(--text)\", fontWeight: docType === \"sc\" ? 700 : 500, cursor: \"point...
+
+Step 7512:
+Instruction: "Change icon and label for the Adquisiciones button"
+Content: "{icon:\"📌\",label:\"Guardar como plantilla\",color:\"#fbbf24\",action:()=>{k(Q),I(null)}},{icon:\"📦\",label:\"Centro de Adquisiciones\",color:\"#f5a020\",action:()=>{setOcBudget(Q),I(null)}},\n{icon:\"📄\",label:\"C"...
+
+Step 7529:
+Instruction: "Inject the saveHistory logic just before setGeneratedDocs(docsGenerated)"
+Content: "                const saveHistory = (docs) => {\n                    try {\n                        const history = JSON.parse(localStorage.getItem(\"enlace_constructor_pro_v1_adquisiciones\") || \"[]\");\n                        const newEntries = docs.map(d => ({\n                            id: `REQ-${new Date().getTime().toString(36)}-${Math.random().toString(36).substr(2, 5)}`.toUpperCase(),\n                            presupuestoId: budget.id,\n                            fecha: new Date...
+
+Step 7535:
+Instruction: "Mark the first two tasks as completed in the task tracker"
+Content: "- [x] 1. Renombrar el botón en `index.js` (\"Generar Órdenes de Compra\" a \"📦 Centro de Adquisiciones\").\n- [x] 2. Implementar lógica de guardado en `generador_oc_modulo.js` para crear registros en `enlace_constructor_pro_v1_adquisiciones` al generar un documento."...
+
+Step 7544:
+Instruction: "Inject the adquisiciones state, the new view button, the history view, and update the compare view to handle specific requests."
+Content: [{"AllowMultiple":false,"EndLine":18,"ReplacementContent":"    const [apus, setApus] = Re.useState(() => {\n        try { return JSON.parse(localStorage.getItem(\"enlace_constructor_pro_v1_apus\") || \"[]\"); } catch { return []; }\n    });\n    const [adquisiciones, setAdquisiciones] = Re.useState(() => {\n        try { return JSON.parse(localStorage.getItem(\"enlace_constructor_pro_v1_adquisiciones\") || \"[]\"); } catch { return []; }\n    });","StartLine":16,"TargetContent":"    const [apus,...
+
+Step 7800:
+Instruction: "Use props for budgets, apus and materiales instead of just reading from local storage"
+Content: [{"AllowMultiple":false,"EndLine":2,"ReplacementContent":"function ModuloProveedores({budgets, apus, materiales, cfg, setToast}) {","StartLine":2,"TargetContent":"function ModuloProveedores({cfg, setToast}) {"},{"AllowMultiple":false,"EndLine":21,"ReplacementContent":"    const [presupuestosLocal, setPresupuestos] = Re.useState(() => {\n        try { return JSON.parse(localStorage.getItem(\"enlace_constructor_pro_v1_presupuestos\") || \"[]\"); } catch { return []; }\n    });\n    const presupues...
+
+Step 7895:
+Instruction: "Replace presupuestos.find"
+Content: "        const budget = presupuestosArray.find(p => String(p.id) === String(selectedBudget));"...
+
+Step 7898:
+Instruction: "Replace the dependency array with Array variables"
+Content: "    }, [selectedBudget, selectedProv, apusArray, materialesArray, presupuestosArray]);"...
+
+Step 7922:
+Instruction: "Add attachment state to modulo_proveedores.js"
+Content: "    // \"list\" | \"compare\" | \"history\"\n    const [view, setView] = Re.useState(\"list\");\n    const [attachmentUrl, setAttachmentUrl] = Re.useState(null);"...
+
+Step 7975:
+Instruction: "Fix the unclosed div overflowY:auto by restoring the missing closing bracket and moving the inner div closing sequence."
+Content: "                                ]\n                            })\n                        })\n                    })\n                    ]}),\n                    attachmentUrl && e.jsxs(\"div\", {"...
+
+Step 7999:
+Instruction: "Add an upload document button to the header of the compare view when no request is selected."
+Content: [{"AllowMultiple":false,"EndLine":364,"ReplacementContent":"                                ]\n                            }),\n                            e.jsxs(\"label\", {\n                                style: { padding: \"8px 16px\", background: \"var(--accent)\", color: \"white\", borderRadius: 6, cursor: \"pointer\", fontSize: 13, fontWeight: 600, display: \"flex\", alignItems: \"center\", gap: 6, marginLeft: \"auto\", alignSelf: \"flex-end\" },\n                                children...
+

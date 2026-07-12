@@ -1,0 +1,9 @@
+﻿const fs = require('fs');
+let content = fs.readFileSync('src/assets/index.js', 'utf8');
+
+const t1 = 'if(oe==="mo")return ne(nm);if(oe==="separado"){if(ce==="mat")return ne(mt);if(ce==="mo")return ne(nm);return e.jsxs("div",{style:{display:"flex",flexDirection:"column",alignItems:"flex-end",fontSize:10,lineHeight:1.2,color:"#fb923c"},children:[e.jsx("span",{children:"MAT "+ne(mt)}),e.jsx("span",{children:"MO "+ne(nm)}),e.jsx("span",{style:{fontSize:13,color:a.accent,fontWeight:700,marginTop:3},children:ne(tt)})]})}return ne(tt)';
+console.log("t1 match:", content.includes(t1));
+
+const t2 = 'e.jsx("input",{style:u(d({},c.inp),{fontSize:13,padding:"6px 8px",textAlign:"right",borderColor:W._cid&&U?"#7c2d12":void 0,fontWeight:700}),type:"number",value:Math.round(W.precio||0),onChange:M=>D(J=>{var re=[...J.items];var p=parseFloat(M.target.value)||0;re[T]=u(d({},re[T]),{precio:p,_tipoCosto:"auto",_apuMatUnit:p>0&&(me_tmp+de_tmp)>0?(p/(me_tmp+de_tmp))*me_tmp:0});return u(d({},J),{items:re})}),min:"0"}),e.jsx("input",{style:u(d({},c.inp),{fontSize:13,padding:"6px 8px",textAlign:"right"}),type:"number",value:Math.round(me_tmp),onChange:M=>D(J=>{var re=[...J.items];var m=parseFloat(M.target.value)||0;re[T]=u(d({},re[T]),{_apuMatUnit:m,precio:m+de_tmp,_tipoCosto:"auto"});return u(d({},J),{items:re})}),min:"0"}),e.jsxs("div",{style:{position:"relative",display:"flex",alignItems:"center"},children:[e.jsx("input",{style:u(d({},c.inp),{fontSize:13,padding:"6px 8px",textAlign:"right"}),type:"number",value:Math.round(de_tmp),onChange:M=>D(J=>{var re=[...J.items];var mo=parseFloat(M.target.value)||0;re[T]=u(d({},re[T]),{_apuMatUnit:me_tmp,precio:me_tmp+mo,_tipoCosto:"auto"});return u(d({},J),{items:re})}),min:"0"}),W._cid&&U&&e.jsx("span",{title:"Precio puede estar desactualizado (+90 días)",style:{position:"absolute",right:-16,fontSize:12,color:"#fb923c",cursor:"help"},children:"⚠"})]})';
+console.log("t2 match:", content.includes(t2));
+

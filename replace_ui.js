@@ -1,0 +1,14 @@
+﻿const fs = require('fs');
+let content = fs.readFileSync('src/assets/index.js', 'utf8');
+
+const targetRegex = /e\.jsxs\("div",\{children:\[e\.jsx\("div",\{style:\{fontSize:12,color:a\.muted,marginBottom:5,fontWeight:600\},children:"FILTRAR POR PALABRA \(TÍTULO\)"\}\),e\.jsx\("input",\{style:u\(d\(\{\},c\.inp\),\{margin:"0 0 12px 0",width:"100%",boxSizing:"border-box"\}\),placeholder:"Ej: pavimentación, pintura\.\.\.",value:S,onChange:[a-zA-Z0-9]+=>O\([a-zA-Z0-9]+\.target\.value\)\}\)\]\}\),e\.jsx\("div",\{style:\{flex:1,overflowY:"auto",background:"var\(--surface\)",border:"1px solid "\+a\.border,borderRadius:8\},children:window\.licList\?window\.licList\.filter\([a-zA-Z0-9]+=>!S\|\|[a-zA-Z0-9]+\.Nombre\.toLowerCase\(\)\.includes\(S\.toLowerCase\(\)\)\)\.map/s;
+
+const replacement = 'e.jsxs("div",{children:[e.jsx("div",{style:{fontSize:12,color:a.muted,marginBottom:5,fontWeight:600},children:"BÚSQUEDA Y FILTRO POR REGIÓN"}),e.jsxs("div",{style:{display:"flex",gap:8,marginBottom:12},children:[e.jsx("input",{style:u(d({},c.inp),{width:"100%",boxSizing:"border-box"}),placeholder:"Ej: pavimentación...",value:S,onChange:N=>{O(N.target.value);window.licMatches=null}}),e.jsx("select",{style:u(d({},c.inp),{width:"200px",flexShrink:0}),value:P,onChange:N=>{A(N.target.value);window.licMatches=null},children:q.map(N=>e.jsx("option",{value:N,children:N},N))}),e.jsx("button",{style:c.btn("p"),onClick:async()=>{if(!window.licList)return alert("Sincroniza primero usando el botón de arriba.");window.licLoading=true;y(Date.now().toString());let matches=window.licList.filter(l=>!S||l.Nombre.toLowerCase().includes(S.toLowerCase()));if(P&&P!=="Todas las regiones"){for(let m of matches){if(!m.RegionUnidad){try{const r=await fetch("https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo="+m.CodigoExterno+"&ticket=79B6AA40-A970-4164-ADEE-47CF3F378CBA");const d=await r.json();if(d.Listado)m.RegionUnidad=d.Listado[0].Comprador.RegionUnidad;}catch(e){}}}matches=matches.filter(m=>m.RegionUnidad&&m.RegionUnidad.includes(P));}window.licMatches=matches;window.licLoading=false;y(Date.now().toString());},children:window.licLoading?"⏳...":"🔍 Buscar"})]}),window.licLoading&&e.jsx("div",{style:{fontSize:12,color:a.accent,marginBottom:10},children:"Consultando regiones al gobierno (puede tomar unos segundos)..."})]}),e.jsx("div",{style:{flex:1,overflowY:"auto",background:"var(--surface)",border:"1px solid "+a.border,borderRadius:8},children:window.licList?(window.licMatches||window.licList.slice(0,100)).map';
+
+if(content.match(targetRegex)) {
+    content = content.replace(targetRegex, replacement);
+    fs.writeFileSync('src/assets/index.js', content, 'utf8');
+    console.log("Replaced UI successfully!");
+} else {
+    console.log("Could not find the UI block with Regex");
+}

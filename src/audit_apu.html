@@ -1,0 +1,1317 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Auditoría Catálogo ↔ APUs</title>
+    <style>
+      :root{--bg:#0b1220;--panel:#111827;--panel2:#0f172a;--muted:#94a3b8;--text:#e5e7eb;--line:#243a58;--chip:#0b2440;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;}
+      body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;}
+      .wrap{max-width:1200px;margin:0 auto;padding:18px;}
+      h1{margin:0 0 10px;font-size:18px;letter-spacing:.2px}
+      .sub{color:var(--muted);margin:0 0 14px}
+      .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+      .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:12px 12px;min-width:210px}
+      .k{color:var(--muted);font-size:12px}
+      .v{font-size:18px;font-weight:800;margin-top:2px}
+      .v.ok{color:var(--ok)}
+      .v.warn{color:var(--warn)}
+      .v.bad{color:var(--bad)}
+      .btn{border:1px solid var(--line);background:#0b1a33;color:var(--text);border-radius:10px;padding:9px 10px;font-weight:800;cursor:pointer}
+      .btn:active{transform:translateY(1px)}
+      .btn.secondary{background:#0b1427;font-weight:700}
+      .input{border:1px solid var(--line);background:#0b1427;color:var(--text);border-radius:10px;padding:9px 10px;min-width:260px}
+      .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:6px 10px}
+      .pill b{font-weight:900}
+      .sep{height:1px;background:var(--line);margin:14px 0}
+      table{width:100%;border-collapse:separate;border-spacing:0}
+      th,td{border-bottom:1px solid rgba(36,58,88,.55);padding:10px 10px;vertical-align:top}
+      th{color:var(--muted);text-align:left;font-size:12px;letter-spacing:.2px;background:rgba(17,24,39,.55);position:sticky;top:0}
+      tr:hover td{background:rgba(2,6,23,.35)}
+      .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+      .small{font-size:12px;color:var(--muted)}
+      .tag{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 8px;font-size:12px;font-weight:900;border:1px solid rgba(36,58,88,.75)}
+      .tag.bad{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35);color:#fecaca}
+      .tag.warn{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.35);color:#fde68a}
+      .tag.ok{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.35);color:#bbf7d0}
+      .hidden{display:none}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Auditoría Catálogo ↔ APUs <span class="small mono" id="ver"></span></h1>
+      <p class="sub">Lee datos desde localStorage y muestra Partidas sin APU, APUs huérfanas y un cruce exportable a CSV.</p>
+
+      <div class="row" style="margin-bottom:10px">
+        <span class="pill"><span class="small">Prefijo</span> <b class="mono" id="prefix"></b></span>
+        <input class="input mono" id="prefixInput" placeholder="Prefijo (opcional)" />
+        <button class="btn secondary" id="reloadBtn">Recargar</button>
+        <button class="btn" id="csvBtn">Exportar CSV</button>
+        <button class="btn secondary" id="jsonBtn">Exportar JSON (para IA)</button>
+        <button class="btn secondary" id="toggleAllBtn">Ver/Ocultar cruce completo</button>
+      </div>
+
+      <div class="row small" id="meta"></div>
+
+      <div class="row" style="margin:10px 0 0">
+        <input class="input" id="backupFile" type="file" accept=".json,application/json" />
+        <button class="btn secondary" id="clearBackupBtn">Quitar backup</button>
+        <span class="small" id="backupInfo"></span>
+      </div>
+
+      <div class="row" style="margin:10px 0 0">
+        <input class="input" id="claudeHtmlFile" type="file" accept=".html,text/html" />
+        <button class="btn secondary" id="clearClaudeBtn">Quitar Claude</button>
+        <button class="btn" id="applyClaudeBtn">Aplicar Claude a localStorage</button>
+        <span class="small" id="claudeInfo"></span>
+      </div>
+
+      <div class="row" id="cards"></div>
+
+      <div class="sep"></div>
+
+      <div class="row" style="justify-content:space-between;align-items:flex-end">
+        <div>
+          <div style="font-weight:900;margin-bottom:6px">Partidas sin APU</div>
+          <div class="small" id="missingApuNote"></div>
+        </div>
+        <div class="row">
+          <span class="tag bad" id="missingApuTag"></span>
+        </div>
+      </div>
+      <div style="overflow:auto;max-height:420px;border:1px solid var(--line);border-radius:14px;margin-top:10px">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:90px">ID</th>
+              <th style="width:180px">Categoría</th>
+              <th>Descripción</th>
+              <th style="width:120px">Unidad</th>
+              <th style="width:120px">Precio</th>
+            </tr>
+          </thead>
+          <tbody id="missingApuBody"></tbody>
+        </table>
+      </div>
+
+      <div class="sep"></div>
+
+      <div class="row" style="justify-content:space-between;align-items:flex-end">
+        <div>
+          <div style="font-weight:900;margin-bottom:6px">APUs huérfanas (catalogId inválido o faltante)</div>
+          <div class="small" id="orphanApuNote"></div>
+        </div>
+        <div class="row">
+          <span class="tag warn" id="orphanApuTag"></span>
+        </div>
+      </div>
+      <div style="overflow:auto;max-height:420px;border:1px solid var(--line);border-radius:14px;margin-top:10px">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:90px">APU ID</th>
+              <th>Nombre</th>
+              <th style="width:160px">Categoría</th>
+              <th style="width:120px">Unidad</th>
+              <th style="width:110px">catalogId</th>
+              <th style="width:120px">Materiales</th>
+            </tr>
+          </thead>
+          <tbody id="orphanApuBody"></tbody>
+        </table>
+      </div>
+
+      <div class="sep"></div>
+
+      <div class="row" style="justify-content:space-between;align-items:flex-end">
+        <div>
+          <div style="font-weight:900;margin-bottom:6px">APUs sin materiales</div>
+          <div class="small" id="noMatApuNote"></div>
+        </div>
+        <div class="row">
+          <span class="tag warn" id="noMatApuTag"></span>
+        </div>
+      </div>
+      <div style="overflow:auto;max-height:420px;border:1px solid var(--line);border-radius:14px;margin-top:10px">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:90px">APU ID</th>
+              <th>Nombre</th>
+              <th style="width:160px">Categoría</th>
+              <th style="width:120px">Unidad</th>
+              <th style="width:110px">catalogId</th>
+            </tr>
+          </thead>
+          <tbody id="noMatApuBody"></tbody>
+        </table>
+      </div>
+
+      <div class="sep"></div>
+
+      <div class="row" style="justify-content:space-between;align-items:flex-end">
+        <div>
+          <div style="font-weight:900;margin-bottom:6px">Materiales faltantes (referenciados por APUs, pero no existen en Materiales)</div>
+          <div class="small" id="missingMatNote"></div>
+        </div>
+        <div class="row">
+          <span class="tag bad" id="missingMatTag"></span>
+        </div>
+      </div>
+      <div style="overflow:auto;max-height:420px;border:1px solid var(--line);border-radius:14px;margin-top:10px">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:110px">materialId</th>
+              <th style="width:130px">Usos</th>
+              <th>Ejemplo APU</th>
+            </tr>
+          </thead>
+          <tbody id="missingMatBody"></tbody>
+        </table>
+      </div>
+
+      <div class="sep"></div>
+
+      <div class="row" style="justify-content:space-between;align-items:flex-end">
+        <div>
+          <div style="font-weight:900;margin-bottom:6px">Cruce completo Catálogo ↔ APUs</div>
+          <div class="small">Una fila por vínculo; si una Partida tiene varias APUs, aparecen varias filas.</div>
+        </div>
+        <div class="row">
+          <span class="tag ok" id="crossTag"></span>
+        </div>
+      </div>
+      <div id="allWrap" class="hidden" style="overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:14px;margin-top:10px">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:90px">catalogId</th>
+              <th style="width:160px">Cat</th>
+              <th>Partida</th>
+              <th style="width:120px">Unidad</th>
+              <th style="width:120px">Precio</th>
+              <th style="width:90px">apuId</th>
+              <th>APU</th>
+              <th style="width:140px">APU cat</th>
+              <th style="width:110px">APU unidad</th>
+              <th style="width:110px">Materiales</th>
+            </tr>
+          </thead>
+          <tbody id="crossBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        function esc(s) {
+          return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] || c;
+          });
+        }
+
+        function asNum(x) {
+          var n = parseInt(x, 10);
+          return isFinite(n) ? n : null;
+        }
+
+        function normalizeStr(x) {
+          return String(x == null ? "" : x).trim();
+        }
+
+        function getPrefix() {
+          try {
+            var q = new URLSearchParams(location.search);
+            var qp = q.get("prefix");
+            var inp = document.getElementById("prefixInput").value.trim();
+            return inp || (qp ? qp.trim() : "") || "enlace_constructor_pro_v1";
+          } catch (e) {
+            return "enlace_constructor_pro_v1";
+          }
+        }
+
+        function getKey(prefix, key) {
+          try {
+            var v = localStorage.getItem(prefix + "_" + key);
+            v == null && (v = localStorage.getItem(key));
+            return v;
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function getKeyInfo(prefix, key) {
+          try {
+            var k1 = prefix + "_" + key;
+            var raw = localStorage.getItem(k1);
+            var used = k1;
+            if (raw == null) {
+              raw = localStorage.getItem(key);
+              used = key;
+            }
+            return { raw: raw, usedKey: raw == null ? "" : used, bytes: raw ? raw.length : 0 };
+          } catch (e) {
+            return { raw: null, usedKey: "", bytes: 0 };
+          }
+        }
+
+        function getJson(prefix, key) {
+          try {
+            var raw = getKey(prefix, key);
+            if (!raw) return null;
+            return JSON.parse(raw);
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function getJsonInfo(prefix, key) {
+          var ki = getKeyInfo(prefix, key);
+          if (!ki.raw) return { data: null, usedKey: ki.usedKey, bytes: ki.bytes, ok: false };
+          try {
+            return { data: JSON.parse(ki.raw), usedKey: ki.usedKey, bytes: ki.bytes, ok: true };
+          } catch (e) {
+            return { data: null, usedKey: ki.usedKey, bytes: ki.bytes, ok: false };
+          }
+        }
+
+        function setCards(items) {
+          var wrap = document.getElementById("cards");
+          wrap.innerHTML = "";
+          items.forEach(function (it) {
+            var c = document.createElement("div");
+            c.className = "card";
+            c.innerHTML = "<div class='k'>" + esc(it.k) + "</div><div class='v " + esc(it.tone || "") + "'>" + esc(it.v) + "</div>";
+            wrap.appendChild(c);
+          });
+        }
+
+        function rowTd(vals) {
+          return (
+            "<tr>" +
+            vals
+              .map(function (v) {
+                return "<td>" + (v && v.__html ? v.__html : esc(v)) + "</td>";
+              })
+              .join("") +
+            "</tr>"
+          );
+        }
+
+        function csvCell(v) {
+          var s = String(v == null ? "" : v);
+          if (s.indexOf('"') !== -1) s = s.replace(/"/g, '""');
+          if (/[",\n\r]/.test(s)) s = '"' + s + '"';
+          return s;
+        }
+
+        function buildCsv(rows) {
+          return rows
+            .map(function (r) {
+              return r.map(csvCell).join(",");
+            })
+            .join("\n");
+        }
+
+        function downloadText(filename, text) {
+          var blob = new Blob([text], { type: "text/csv;charset=utf-8" });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(function () {
+            URL.revokeObjectURL(url);
+          }, 2000);
+        }
+
+        function extractArrayLiteral(src, needle) {
+          try {
+            var at = src.indexOf(needle);
+            if (at === -1) return null;
+            var i = at + needle.length;
+            while (i < src.length && /\s/.test(src[i])) i++;
+            if (src[i] !== "[") return null;
+            var start = i;
+
+            var mode = "code";
+            var quote = null;
+            var tplDepth = 0;
+            var stack = [];
+            function push(ch) {
+              stack.push(ch);
+            }
+            function pop(expect) {
+              var top = stack.pop();
+              if (top !== expect) throw new Error("Mismatch " + expect + " vs " + top);
+            }
+
+            for (; i < src.length; i++) {
+              var ch = src[i];
+              var next = src[i + 1];
+
+              if (mode === "string") {
+                if (ch === "\\" && next) {
+                  i++;
+                  continue;
+                }
+                if (ch === quote) {
+                  mode = "code";
+                  quote = null;
+                }
+                continue;
+              }
+
+              if (mode === "template") {
+                if (ch === "\\" && next) {
+                  i++;
+                  continue;
+                }
+                if (ch === "`") {
+                  mode = "code";
+                  continue;
+                }
+                if (ch === "$" && next === "{") {
+                  tplDepth++;
+                  mode = "code";
+                  push("{");
+                  i++;
+                }
+                continue;
+              }
+
+              if (ch === "'" || ch === '"') {
+                mode = "string";
+                quote = ch;
+                continue;
+              }
+              if (ch === "`") {
+                mode = "template";
+                continue;
+              }
+
+              if (ch === "[") push("[");
+              else if (ch === "]") {
+                pop("[");
+                if (stack.length === 0) {
+                  i++;
+                  break;
+                }
+              } else if (ch === "{") push("{");
+              else if (ch === "}") {
+                pop("{");
+                if (tplDepth > 0 && stack.length > 0 && stack[stack.length - 1] !== "{") {
+                  tplDepth--;
+                  mode = "template";
+                }
+              } else if (ch === "(") push("(");
+              else if (ch === ")") pop("(");
+              else if (ch === "/" && next === "/") {
+                while (i < src.length && src[i] !== "\n") i++;
+              } else if (ch === "/" && next === "*") {
+                i += 2;
+                while (i < src.length - 1 && !(src[i] === "*" && src[i + 1] === "/")) i++;
+                i++;
+              }
+            }
+
+            return src.slice(start, i);
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function evalExpr(expr) {
+          try {
+            return Function("return (" + expr + ")")();
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function fixMojibake(s) {
+          try {
+            s = String(s == null ? "" : s);
+            return decodeURIComponent(escape(s));
+          } catch (e) {
+            return String(s == null ? "" : s);
+          }
+        }
+
+        function fixPackStrings(pack) {
+          if (!pack) return pack;
+          function fixObj(o, keys) {
+            if (!o) return o;
+            for (var i = 0; i < keys.length; i++) {
+              var k = keys[i];
+              if (o[k] != null) o[k] = fixMojibake(o[k]);
+            }
+            return o;
+          }
+          if (Array.isArray(pack.DMAT)) {
+            for (var i1 = 0; i1 < pack.DMAT.length; i1++) fixObj(pack.DMAT[i1], ["cat", "nombre", "unidad"]);
+          }
+          if (Array.isArray(pack.DCAT)) {
+            for (var i2 = 0; i2 < pack.DCAT.length; i2++) fixObj(pack.DCAT[i2], ["cat", "desc", "unidad"]);
+          }
+          if (Array.isArray(pack.DAPU)) {
+            for (var i3 = 0; i3 < pack.DAPU.length; i3++) fixObj(pack.DAPU[i3], ["tipo", "estructura", "nombre", "categoria", "unidad"]);
+          }
+          return pack;
+        }
+
+        function parseClaudePack(htmlText) {
+          var dmatExpr = extractArrayLiteral(htmlText, "const DMAT=");
+          var dapuExpr = extractArrayLiteral(htmlText, "const DAPU=");
+          var dcatExpr = extractArrayLiteral(htmlText, "const DCAT=");
+          if (!dmatExpr || !dapuExpr || !dcatExpr) return null;
+          var DMAT = evalExpr(dmatExpr);
+          var DAPU = evalExpr(dapuExpr);
+          var DCAT = evalExpr(dcatExpr);
+          if (!Array.isArray(DMAT) || !Array.isArray(DAPU) || !Array.isArray(DCAT)) return null;
+          return fixPackStrings({ DMAT: DMAT, DAPU: DAPU, DCAT: DCAT });
+        }
+
+        function normText(s) {
+          try {
+            return String(s == null ? "" : s)
+              .trim()
+              .toLowerCase()
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .replace(/\s+/g, " ");
+          } catch (e) {
+            return String(s == null ? "" : s).trim().toLowerCase();
+          }
+        }
+
+        function maxId(arr) {
+          var m = 0;
+          for (var i = 0; i < arr.length; i++) {
+            var n = asNum(arr[i] && arr[i].id);
+            if (n != null && n > m) m = n;
+          }
+          return m;
+        }
+
+        function applyClaudeToLocalStorage(prefix, pack) {
+          var catInfo = getJsonInfo(prefix, "catalog");
+          var apuInfo = getJsonInfo(prefix, "apus");
+          var matInfo = getJsonInfo(prefix, "materiales");
+          var catalog = Array.isArray(catInfo.data) ? catInfo.data : [];
+          var apus = Array.isArray(apuInfo.data) ? apuInfo.data : [];
+          var materiales = Array.isArray(matInfo.data) ? matInfo.data : [];
+
+          var backupObj = {
+            prefix: prefix,
+            origin: String(location.origin || ""),
+            savedAt: new Date().toISOString(),
+            materiales: materiales,
+            catalog: catalog,
+            apus: apus,
+          };
+          downloadText("backup_before_claude_apply_" + prefix + ".json", JSON.stringify(backupObj, null, 2));
+
+          var matByNorm = {};
+          for (var mi = 0; mi < materiales.length; mi++) {
+            var m = materiales[mi] || {};
+            var key = normText(m.nombre);
+            if (key && matByNorm[key] == null && asNum(m.id) != null) matByNorm[key] = asNum(m.id);
+          }
+
+          var removedAutoApus = 0;
+          var pendingKey = normText("Pendiente (completar materiales)");
+          var pendingId = matByNorm[pendingKey];
+          var cleanApus = [];
+          for (var cai = 0; cai < apus.length; cai++) {
+            var a0 = apus[cai] || {};
+            var nm0 = String(a0.nombre || "");
+            if (nm0.indexOf("[auto]") !== -1) {
+              removedAutoApus++;
+              continue;
+            }
+            if (pendingId != null) {
+              var mats0 = Array.isArray(a0.materiales) ? a0.materiales : [];
+              var hasPend = false;
+              for (var cmj = 0; cmj < mats0.length; cmj++) {
+                if (asNum(mats0[cmj] && mats0[cmj].materialId) === pendingId) {
+                  hasPend = true;
+                  break;
+                }
+              }
+              if (hasPend) {
+                removedAutoApus++;
+                continue;
+              }
+            }
+            cleanApus.push(a0);
+          }
+          apus = cleanApus;
+          if (pendingId != null) {
+            var cleanMats = [];
+            for (var cmi = 0; cmi < materiales.length; cmi++) {
+              var m0 = materiales[cmi] || {};
+              if (asNum(m0.id) === pendingId) continue;
+              cleanMats.push(m0);
+            }
+            materiales = cleanMats;
+            delete matByNorm[pendingKey];
+          }
+
+          var dmatById = {};
+          for (var dmi = 0; dmi < pack.DMAT.length; dmi++) {
+            var dm = pack.DMAT[dmi] || {};
+            var did = asNum(dm.id);
+            if (did != null) dmatById[did] = dm;
+          }
+
+          var dapuByCatalog = {};
+          for (var di = 0; di < pack.DAPU.length; di++) {
+            var da = pack.DAPU[di] || {};
+            var cid = asNum(da.catalogId);
+            if (cid == null) continue;
+            (dapuByCatalog[cid] = dapuByCatalog[cid] || []).push(da);
+          }
+
+          var claudeCatalogs = Array.isArray(pack.DCAT) ? pack.DCAT : [];
+          var localCatById = {};
+          for (var lci = 0; lci < catalog.length; lci++) {
+            var lc = catalog[lci] || {};
+            var lid = asNum(lc.id);
+            if (lid != null) localCatById[lid] = lc;
+          }
+
+          function textScore(a, b) {
+            var x = normText(a);
+            var y = normText(b);
+            if (!x || !y) return 0;
+            if (x === y) return 100;
+            if (x.indexOf(y) !== -1 || y.indexOf(x) !== -1) return 85;
+            var xt = x.split(" ");
+            var yt = y.split(" ");
+            var set = {};
+            for (var i2 = 0; i2 < xt.length; i2++) set[xt[i2]] = 1;
+            var inter = 0;
+            var union = xt.length;
+            for (var j2 = 0; j2 < yt.length; j2++) (set[yt[j2]] ? inter++ : union++);
+            return union ? Math.round((inter / union) * 60) : 0;
+          }
+
+          var claudePickCache = {};
+          function pickClaudeCatalogForLocal(localCat) {
+            var cidLocal = asNum(localCat && localCat.id);
+            if (cidLocal != null && claudePickCache[cidLocal]) return claudePickCache[cidLocal];
+            var best = null;
+            var bestSc = 0;
+            for (var i3 = 0; i3 < claudeCatalogs.length; i3++) {
+              var cc = claudeCatalogs[i3] || {};
+              var sc = textScore(localCat && localCat.desc, cc && cc.desc);
+              if (sc) {
+                normText(localCat && localCat.cat) && normText(cc && cc.cat) && normText(localCat.cat) === normText(cc.cat) && (sc += 20);
+                normText(localCat && localCat.unidad) && normText(cc && cc.unidad) && normText(localCat.unidad) === normText(cc.unidad) && (sc += 10);
+              }
+              if (sc > bestSc) {
+                bestSc = sc;
+                best = cc;
+              }
+            }
+            var out = { cat: best, sc: bestSc };
+            if (cidLocal != null) claudePickCache[cidLocal] = out;
+            return out;
+          }
+
+          function recipesForLocalCatalog(localCat) {
+            var cidLocal = asNum(localCat && localCat.id);
+            var direct = cidLocal != null ? dapuByCatalog[cidLocal] || [] : [];
+            if (direct.length) return { recipes: direct, via: "catalogId", sc: 100, claudeCatalogId: cidLocal };
+            var pick = pickClaudeCatalogForLocal(localCat);
+            var ccid = asNum(pick && pick.cat && pick.cat.id);
+            if (ccid == null || (pick && pick.sc) < 70) return { recipes: [], via: "none", sc: (pick && pick.sc) || 0, claudeCatalogId: ccid };
+            var recs = dapuByCatalog[ccid] || [];
+            return { recipes: recs, via: "desc", sc: (pick && pick.sc) || 0, claudeCatalogId: ccid };
+          }
+
+          var apusByCat = {};
+          for (var ai = 0; ai < apus.length; ai++) {
+            var a = apus[ai] || {};
+            var cid2 = asNum(a.catalogId);
+            if (cid2 == null) continue;
+            (apusByCat[cid2] = apusByCat[cid2] || []).push(a);
+          }
+
+          var apuNameIndex = {};
+          for (var ai2 = 0; ai2 < apus.length; ai2++) {
+            var a2 = apus[ai2] || {};
+            var k = String(asNum(a2.catalogId) || "") + "|" + normText(a2.nombre);
+            if (k !== "|") apuNameIndex[k] = 1;
+          }
+
+          var nextMatId = Math.max(305, maxId(materiales)) + 1;
+          var nextApuId = Math.max(142, maxId(apus)) + 1;
+
+          function ensureMaterialFromDmatId(dmatId) {
+            var dm = dmatById[dmatId];
+            if (!dm) return null;
+            var key = normText(dm.nombre);
+            var existingId = key ? matByNorm[key] : null;
+            if (existingId != null) return existingId;
+            var newId = nextMatId++;
+            materiales.push({
+              id: newId,
+              cat: String(dm.cat || "General"),
+              nombre: String(dm.nombre || ("Material " + String(dmatId))),
+              unidad: String(dm.unidad || "unidad"),
+              precio: Number(dm.precio) || 0,
+            });
+            key && (matByNorm[key] = newId);
+            return newId;
+          }
+
+          function buildMaterialesList(da) {
+            var mats = Array.isArray(da && da.materiales) ? da.materiales : [];
+            var out = [];
+            for (var i = 0; i < mats.length; i++) {
+              var it = mats[i] || {};
+              var mid0 = asNum(it.materialId);
+              if (mid0 == null) continue;
+              var realId = ensureMaterialFromDmatId(mid0);
+              if (realId == null) continue;
+              var qty = Number(it.cantidad);
+              out.push({ materialId: realId, cantidad: isFinite(qty) ? qty : 1 });
+            }
+            return out;
+          }
+
+          function bestApuMatchFor(ap) {
+            var cid = asNum(ap && ap.catalogId);
+            if (cid == null) return null;
+            var localCat = localCatById[cid] || null;
+            var packPick = localCat ? recipesForLocalCatalog(localCat) : { recipes: dapuByCatalog[cid] || [], via: "catalogId", sc: 100, claudeCatalogId: cid };
+            var cand = packPick.recipes || [];
+            if (!cand.length) return null;
+            var target = normText(ap && ap.nombre);
+            var best = null;
+            var bestSc = 0;
+            for (var i = 0; i < cand.length; i++) {
+              var c = cand[i] || {};
+              var n = normText(c.nombre);
+              if (!n || !target) continue;
+              var sc = 0;
+              if (n === target) sc = 100;
+              else if (n.indexOf(target) !== -1 || target.indexOf(n) !== -1) sc = 85;
+              else {
+                var nt = n.split(" ");
+                var tt = target.split(" ");
+                var set = {};
+                for (var a = 0; a < nt.length; a++) set[nt[a]] = 1;
+                var inter = 0;
+                var union = nt.length;
+                for (var b = 0; b < tt.length; b++) (set[tt[b]] ? inter++ : union++);
+                sc = union ? Math.round((inter / union) * 60) : 0;
+              }
+              if (sc > bestSc) {
+                bestSc = sc;
+                best = c;
+              }
+            }
+            return bestSc >= 60 ? best : null;
+          }
+
+          var createdApus = 0;
+          var filledApus = 0;
+          var createdMaterials = 0;
+          var unresolved = [];
+
+          var matCountBefore = materiales.length;
+
+          for (var ci = 0; ci < catalog.length; ci++) {
+            var cat = catalog[ci] || {};
+            var cid3 = asNum(cat.id);
+            if (cid3 == null) continue;
+            var linked = apusByCat[cid3] || [];
+            if (linked.length) continue;
+            var pick2 = recipesForLocalCatalog(cat);
+            var recipes = pick2.recipes || [];
+            if (!recipes.length) {
+              unresolved.push({
+                type: "catalogMissingApu",
+                catalogId: cid3,
+                desc: cat.desc || "",
+                reason: "No hay receta en Claude (match " + String(pick2.via) + " sc " + String(pick2.sc) + ")",
+              });
+              continue;
+            }
+            for (var rr = 0; rr < recipes.length; rr++) {
+              var rec = recipes[rr];
+              var matList = buildMaterialesList(rec);
+              if (!matList.length) continue;
+              var k2 = String(cid3) + "|" + normText(rec && rec.nombre);
+              if (apuNameIndex[k2]) continue;
+              var apuNew = {
+                id: nextApuId++,
+                tipo: String((rec && rec.tipo) || "Terminaciones"),
+                estructura: String((rec && rec.estructura) || (cat && cat.cat) || "General"),
+                nombre: String((rec && rec.nombre) || (cat && cat.desc) || ("Partida " + String(cid3))),
+                categoria: String((rec && rec.categoria) || (cat && cat.cat) || "General"),
+                unidad: String((rec && rec.unidad) || (cat && cat.unidad) || "unidad"),
+                catalogId: cid3,
+                esSubcontrato: !!(rec && rec.esSubcontrato),
+                precioSubcontrato: Number(rec && rec.precioSubcontrato) || 0,
+                pctMO: Number(rec && rec.pctMO) || 70,
+                pctGG: Number(rec && rec.pctGG) || 12,
+                pctUtilidad: Number(rec && rec.pctUtilidad) || 15,
+                pctSource: "cfg",
+                rendimiento: Number(rec && rec.rendimiento) || 1,
+                dotacion: Number(rec && rec.dotacion) || 1,
+                materiales: matList,
+              };
+              apus.push(apuNew);
+              createdApus++;
+              (apusByCat[cid3] = apusByCat[cid3] || []).push(apuNew);
+              apuNameIndex[k2] = 1;
+            }
+            if (!apusByCat[cid3] || !apusByCat[cid3].length) {
+              unresolved.push({ type: "catalogMissingApu", catalogId: cid3, desc: cat.desc || "", reason: "Recetas encontradas pero sin materiales resolubles" });
+            }
+          }
+
+          for (var aidx = 0; aidx < apus.length; aidx++) {
+            var ap0 = apus[aidx] || {};
+            var mats0 = Array.isArray(ap0.materiales) ? ap0.materiales : [];
+            if (mats0.length) continue;
+            var best = bestApuMatchFor(ap0);
+            if (!best) continue;
+            var matList2 = buildMaterialesList(best);
+            if (!matList2.length) continue;
+            ap0.materiales = matList2;
+            typeof ap0.rendimiento !== "number" && (ap0.rendimiento = Number(best && best.rendimiento) || 1);
+            typeof ap0.dotacion !== "number" && (ap0.dotacion = Number(best && best.dotacion) || 1);
+            typeof ap0.pctMO !== "number" && (ap0.pctMO = Number(best && best.pctMO) || 70);
+            typeof ap0.pctGG !== "number" && (ap0.pctGG = Number(best && best.pctGG) || 12);
+            typeof ap0.pctUtilidad !== "number" && (ap0.pctUtilidad = Number(best && best.pctUtilidad) || 15);
+            filledApus++;
+          }
+
+          createdMaterials = Math.max(0, materiales.length - matCountBefore);
+
+          try {
+            localStorage.setItem(prefix + "_materiales", JSON.stringify(materiales));
+            localStorage.setItem(prefix + "_apus", JSON.stringify(apus));
+          } catch (e) {}
+
+          return { createdApus: createdApus, filledApus: filledApus, createdMaterials: createdMaterials, removedAutoApus: removedAutoApus, unresolved: unresolved };
+        }
+
+        function calcStats(catalog, apus) {
+          Array.isArray(catalog) || (catalog = []);
+          Array.isArray(apus) || (apus = []);
+          var catById = {};
+          for (var i = 0; i < catalog.length; i++) {
+            var c = catalog[i];
+            var id = asNum(c && c.id);
+            if (id != null) catById[id] = c;
+          }
+          var apusByCat = {};
+          var orphan = 0;
+          for (var j = 0; j < apus.length; j++) {
+            var a = apus[j] || {};
+            var cid = asNum(a.catalogId);
+            if (cid == null || !catById[cid]) {
+              orphan++;
+              continue;
+            }
+            (apusByCat[cid] = apusByCat[cid] || 0), (apusByCat[cid] += 1);
+          }
+          var missingApu = 0;
+          var missingUnidad = 0;
+          for (var k = 0; k < catalog.length; k++) {
+            var it = catalog[k] || {};
+            var id2 = asNum(it.id);
+            var u = normalizeStr(it.unidad);
+            if (!u || u.toLowerCase() === "unidad") missingUnidad++;
+            if (id2 == null) missingApu++;
+            else if (!apusByCat[id2]) missingApu++;
+          }
+          return {
+            catalog: catalog.length,
+            apus: apus.length,
+            partidasSinApu: missingApu,
+            partidasSinUnidad: missingUnidad,
+            apusHuerfanas: orphan,
+          };
+        }
+
+        function run() {
+          try {
+            var ve = document.getElementById("ver");
+            ve && (ve.textContent = "v2026-05-07");
+          } catch (e) {}
+          var prefix = getPrefix();
+          document.getElementById("prefix").textContent = prefix;
+          if (!document.getElementById("prefixInput").value.trim()) document.getElementById("prefixInput").value = prefix;
+
+          var catInfo = getJsonInfo(prefix, "catalog");
+          var apuInfo = getJsonInfo(prefix, "apus");
+          var matInfo = getJsonInfo(prefix, "materiales");
+          var catalog = catInfo.data;
+          var apus = apuInfo.data;
+          var materiales = matInfo.data;
+          Array.isArray(catalog) || (catalog = []);
+          Array.isArray(apus) || (apus = []);
+          Array.isArray(materiales) || (materiales = []);
+
+          var meta = document.getElementById("meta");
+          if (meta) {
+            var now = new Date();
+            var origin = String(location.origin || "");
+            var claudeSeedKey = prefix + "_claude_pack_applied_v1";
+            var claudeSeedVal = "";
+            try {
+              claudeSeedVal = localStorage.getItem(claudeSeedKey);
+            } catch (e) {}
+            var catKey = catInfo.usedKey ? "<span class='mono'>" + esc(catInfo.usedKey) + "</span>" : "<span class='mono' style='color:#fecaca'>no encontrado</span>";
+            var apuKey = apuInfo.usedKey ? "<span class='mono'>" + esc(apuInfo.usedKey) + "</span>" : "<span class='mono' style='color:#fecaca'>no encontrado</span>";
+            var matKey = matInfo.usedKey ? "<span class='mono'>" + esc(matInfo.usedKey) + "</span>" : "<span class='mono' style='color:#fecaca'>no encontrado</span>";
+            meta.innerHTML =
+              "<span class='pill'><span class='small'>Origen</span> <b class='mono'>" +
+              esc(origin) +
+              "</b></span>" +
+              "<span class='pill'><span class='small'>Leído</span> <b class='mono'>" +
+              esc(now.toLocaleString()) +
+              "</b></span>" +
+              "<span class='pill'><span class='small'>Claude seed</span> <b class='mono'>" +
+              esc(String(claudeSeedVal || "null")) +
+              "</b></span>" +
+              "<span class='pill'><span class='small'>Key catalog</span> " +
+              catKey +
+              " <span class='small'>(" +
+              esc(String(catInfo.bytes)) +
+              "b)</span></span>" +
+              "<span class='pill'><span class='small'>Key apus</span> " +
+              apuKey +
+              " <span class='small'>(" +
+              esc(String(apuInfo.bytes)) +
+              "b)</span></span>" +
+              "<span class='pill'><span class='small'>Key materiales</span> " +
+              matKey +
+              " <span class='small'>(" +
+              esc(String(matInfo.bytes)) +
+              "b)</span></span>" +
+              "<span class='pill'><span class='small'>Nota</span> <b>localStorage cambia por puerto/origen</b></span>";
+          }
+
+          var backupInfo = document.getElementById("backupInfo");
+          var backupData = window.__backupData || null;
+          var backupStats = backupData ? calcStats(backupData.catalog, backupData.apus) : null;
+          if (backupInfo) {
+            backupInfo.innerHTML = backupStats
+              ? "Backup: <span class='mono'>" +
+                esc(backupData.name || "archivo") +
+                "</span> — Catálogo " +
+                esc(String(backupStats.catalog)) +
+                ", APUs " +
+                esc(String(backupStats.apus)) +
+                ", Sin APU " +
+                esc(String(backupStats.partidasSinApu)) +
+                ", Huérfanas " +
+                esc(String(backupStats.apusHuerfanas))
+              : "";
+          }
+
+          var catById = {};
+          for (var i = 0; i < catalog.length; i++) {
+            var c = catalog[i];
+            var id = asNum(c && c.id);
+            if (id != null) catById[id] = c;
+          }
+
+          var apusByCat = {};
+          var orphanApus = [];
+          var noMatApus = [];
+          var matById = {};
+          for (var mi = 0; mi < materiales.length; mi++) {
+            var m = materiales[mi] || {};
+            var mid = asNum(m.id);
+            if (mid != null) matById[mid] = 1;
+          }
+          var missingMatCounts = {};
+          var missingMatExample = {};
+          for (var j = 0; j < apus.length; j++) {
+            var a = apus[j] || {};
+            var cid = asNum(a.catalogId);
+            if (cid == null || !catById[cid]) {
+              orphanApus.push(a);
+              continue;
+            }
+            (apusByCat[cid] = apusByCat[cid] || []).push(a);
+            var matsArr = Array.isArray(a.materiales) ? a.materiales : [];
+            if (matsArr.length === 0) noMatApus.push(a);
+            for (var mm = 0; mm < matsArr.length; mm++) {
+              var it2 = matsArr[mm] || {};
+              var rid = asNum(it2.materialId);
+              if (rid == null) continue;
+              if (!matById[rid]) {
+                missingMatCounts[rid] = (missingMatCounts[rid] || 0) + 1;
+                missingMatExample[rid] || (missingMatExample[rid] = a && a.nombre);
+              }
+            }
+          }
+
+          var missingApu = [];
+          var missingUnidad = [];
+          for (var k = 0; k < catalog.length; k++) {
+            var it = catalog[k] || {};
+            var id2 = asNum(it.id);
+            var u = normalizeStr(it.unidad);
+            if (!u || u.toLowerCase() === "unidad") missingUnidad.push(it);
+            if (id2 == null) {
+              missingApu.push(it);
+            } else if (!apusByCat[id2] || apusByCat[id2].length === 0) {
+              missingApu.push(it);
+            }
+          }
+
+          var missTone = missingApu.length === 0 ? "ok" : missingApu.length <= 5 ? "warn" : "bad";
+          var unitTone = missingUnidad.length === 0 ? "ok" : missingUnidad.length <= 10 ? "warn" : "bad";
+          var orphanTone = orphanApus.length === 0 ? "ok" : orphanApus.length <= 5 ? "warn" : "bad";
+          var noMatTone = noMatApus.length === 0 ? "ok" : noMatApus.length <= 5 ? "warn" : "bad";
+          var missingMatIds = Object.keys(missingMatCounts);
+          var missingMatTone = missingMatIds.length === 0 ? "ok" : missingMatIds.length <= 5 ? "warn" : "bad";
+
+          var cards = [
+            { k: "Partidas (catálogo)", v: String(catalog.length), tone: "ok" },
+            { k: "APUs", v: String(apus.length), tone: "ok" },
+            { k: "Materiales", v: String(materiales.length), tone: "ok" },
+            { k: "Partidas sin APU", v: String(missingApu.length), tone: missTone },
+            { k: "Partidas sin unidad", v: String(missingUnidad.length), tone: unitTone },
+            { k: "APUs huérfanas", v: String(orphanApus.length), tone: orphanTone },
+            { k: "APUs sin materiales", v: String(noMatApus.length), tone: noMatTone },
+            { k: "Materiales faltantes", v: String(missingMatIds.length), tone: missingMatTone },
+          ];
+          if (backupStats) {
+            var bMissTone = backupStats.partidasSinApu === 0 ? "ok" : backupStats.partidasSinApu <= 5 ? "warn" : "bad";
+            var bUnitTone = backupStats.partidasSinUnidad === 0 ? "ok" : backupStats.partidasSinUnidad <= 10 ? "warn" : "bad";
+            var bOrphTone = backupStats.apusHuerfanas === 0 ? "ok" : backupStats.apusHuerfanas <= 5 ? "warn" : "bad";
+            cards = cards.concat([
+              { k: "Partidas (backup)", v: String(backupStats.catalog), tone: "ok" },
+              { k: "APUs (backup)", v: String(backupStats.apus), tone: "ok" },
+              { k: "Sin APU (backup)", v: String(backupStats.partidasSinApu), tone: bMissTone },
+              { k: "Sin unidad (backup)", v: String(backupStats.partidasSinUnidad), tone: bUnitTone },
+              { k: "Huérfanas (backup)", v: String(backupStats.apusHuerfanas), tone: bOrphTone },
+            ]);
+          }
+          setCards(cards);
+
+          document.getElementById("missingApuTag").textContent = missingApu.length === 0 ? "OK" : missingApu.length + " detectadas";
+          document.getElementById("missingApuNote").textContent =
+            missingApu.length === 0
+              ? "No se encontraron Partidas sin APU (según apus[].catalogId)."
+              : "Listado de Partidas del catálogo que no tienen ninguna APU vinculada por catalogId.";
+
+          document.getElementById("orphanApuTag").textContent = orphanApus.length === 0 ? "OK" : orphanApus.length + " detectadas";
+          document.getElementById("orphanApuNote").textContent =
+            orphanApus.length === 0
+              ? "No se encontraron APUs con catalogId inválido/faltante."
+              : "Listado de APUs cuyo catalogId no existe en el catálogo actual.";
+
+          document.getElementById("noMatApuTag").textContent = noMatApus.length === 0 ? "OK" : noMatApus.length + " detectadas";
+          document.getElementById("noMatApuNote").textContent =
+            noMatApus.length === 0
+              ? "No se encontraron APUs sin materiales."
+              : "Listado de APUs cuyo arreglo materiales está vacío.";
+
+          document.getElementById("missingMatTag").textContent = missingMatIds.length === 0 ? "OK" : missingMatIds.length + " IDs";
+          document.getElementById("missingMatNote").textContent =
+            missingMatIds.length === 0
+              ? "No se encontraron materiales faltantes (todos los materialId existen en Materiales)."
+              : "Listado de materialId referenciados en APUs.materiales que no existen en Materiales.";
+
+          document.getElementById("crossTag").textContent = "Filas: " + String(Object.keys(apusByCat).length);
+
+          var missingBody = document.getElementById("missingApuBody");
+          missingBody.innerHTML = missingApu.length
+            ? missingApu
+                .slice()
+                .sort(function (a, b) {
+                  var ai = asNum(a && a.id) || 0;
+                  var bi = asNum(b && b.id) || 0;
+                  return ai - bi;
+                })
+                .map(function (c) {
+                  return rowTd([asNum(c && c.id) || "", c && c.cat, c && c.desc, c && c.unidad, c && c.precio]);
+                })
+                .join("")
+            : rowTd([{ __html: "<span class='small'>Sin registros</span>" }, "", "", "", ""]);
+
+          var orphanBody = document.getElementById("orphanApuBody");
+          orphanBody.innerHTML = orphanApus.length
+            ? orphanApus
+                .slice()
+                .sort(function (a, b) {
+                  var ai2 = asNum(a && a.id) || 0;
+                  var bi2 = asNum(b && b.id) || 0;
+                  return ai2 - bi2;
+                })
+                .map(function (a) {
+                  var mats = Array.isArray(a && a.materiales) ? a.materiales.length : 0;
+                  return rowTd([asNum(a && a.id) || "", a && a.nombre, a && a.categoria, a && a.unidad, a && a.catalogId, String(mats)]);
+                })
+                .join("")
+            : rowTd([{ __html: "<span class='small'>Sin registros</span>" }, "", "", "", "", ""]);
+
+          var noMatBody = document.getElementById("noMatApuBody");
+          noMatBody.innerHTML = noMatApus.length
+            ? noMatApus
+                .slice()
+                .sort(function (a, b) {
+                  var ai3 = asNum(a && a.id) || 0;
+                  var bi3 = asNum(b && b.id) || 0;
+                  return ai3 - bi3;
+                })
+                .map(function (a) {
+                  return rowTd([asNum(a && a.id) || "", a && a.nombre, a && a.categoria, a && a.unidad, a && a.catalogId]);
+                })
+                .join("")
+            : rowTd([{ __html: "<span class='small'>Sin registros</span>" }, "", "", "", ""]);
+
+          var missingMatBody = document.getElementById("missingMatBody");
+          missingMatBody.innerHTML = missingMatIds.length
+            ? missingMatIds
+                .slice()
+                .sort(function (a, b) {
+                  return (missingMatCounts[b] || 0) - (missingMatCounts[a] || 0) || (asNum(a) || 0) - (asNum(b) || 0);
+                })
+                .map(function (idStr) {
+                  return rowTd([idStr, String(missingMatCounts[idStr] || 0), missingMatExample[idStr] || ""]);
+                })
+                .join("")
+            : rowTd([{ __html: "<span class='small'>Sin registros</span>" }, "", ""]);
+
+          var crossRows = [];
+          var crossBody = document.getElementById("crossBody");
+          for (var ciStr in catById) {
+            var ci = asNum(ciStr);
+            if (ci == null) continue;
+            var cat = catById[ci] || {};
+            var linked = apusByCat[ci] || [];
+            if (!linked.length) {
+              crossRows.push([ci, cat.cat || "", cat.desc || "", cat.unidad || "", cat.precio || "", "", "", "", "", "0"]);
+              continue;
+            }
+            for (var ai = 0; ai < linked.length; ai++) {
+              var ap = linked[ai] || {};
+              var mats2 = Array.isArray(ap && ap.materiales) ? ap.materiales.length : 0;
+              crossRows.push([ci, cat.cat || "", cat.desc || "", cat.unidad || "", cat.precio || "", ap.id || "", ap.nombre || "", ap.categoria || "", ap.unidad || "", String(mats2)]);
+            }
+          }
+
+          crossBody.innerHTML = crossRows
+            .slice()
+            .sort(function (a, b) {
+              return (asNum(a[0]) || 0) - (asNum(b[0]) || 0) || String(a[2] || "").localeCompare(String(b[2] || ""), "es");
+            })
+            .map(function (r) {
+              return rowTd(r);
+            })
+            .join("");
+
+          window.__auditState = {
+            prefix: prefix,
+            catalog: catalog,
+            apus: apus,
+            materiales: materiales,
+            missingApu: missingApu,
+            missingUnidad: missingUnidad,
+            orphanApus: orphanApus,
+            noMatApus: noMatApus,
+            missingMatCounts: missingMatCounts,
+            crossRows: crossRows,
+          };
+        }
+
+        document.getElementById("reloadBtn").addEventListener("click", function () {
+          run();
+        });
+
+        document.getElementById("toggleAllBtn").addEventListener("click", function () {
+          var w = document.getElementById("allWrap");
+          w.className = w.className.indexOf("hidden") !== -1 ? "" : "hidden";
+        });
+
+        document.getElementById("csvBtn").addEventListener("click", function () {
+          run();
+          var st = window.__auditState;
+          var rows = [["catalogId", "cat", "partida", "unidadCatalog", "precio", "apuId", "apuNombre", "apuCategoria", "apuUnidad", "materialesCount"]].concat(st.crossRows);
+          var csv = buildCsv(rows);
+          var name = "catalog_apu_crossref_" + st.prefix + ".csv";
+          downloadText(name, csv);
+        });
+
+        document.getElementById("jsonBtn").addEventListener("click", function () {
+          run();
+          var st = window.__auditState || {};
+          var payload = {
+            prefix: st.prefix || "",
+            origin: String(location.origin || ""),
+            generatedAt: new Date().toISOString(),
+            goals: {
+              requireEachCatalogHasAtLeastOneApu: true,
+              requireEachApuHasAtLeastOneMaterial: true,
+            },
+            catalogMissingApu: (st.missingApu || []).map(function (c) {
+              return {
+                id: c && c.id,
+                cat: c && c.cat,
+                desc: c && c.desc,
+                unidad: c && c.unidad,
+                precio: c && c.precio,
+              };
+            }),
+            apusOrphan: (st.orphanApus || []).map(function (a) {
+              return {
+                id: a && a.id,
+                nombre: a && a.nombre,
+                categoria: a && a.categoria,
+                unidad: a && a.unidad,
+                catalogId: a && a.catalogId,
+                materialesCount: Array.isArray(a && a.materiales) ? a.materiales.length : 0,
+              };
+            }),
+            apusNoMaterials: (st.noMatApus || []).map(function (a) {
+              return {
+                id: a && a.id,
+                nombre: a && a.nombre,
+                categoria: a && a.categoria,
+                unidad: a && a.unidad,
+                catalogId: a && a.catalogId,
+              };
+            }),
+            materialsMissingIds: Object.keys(st.missingMatCounts || {}).map(function (idStr) {
+              return { materialId: idStr, uses: st.missingMatCounts[idStr] || 0 };
+            }),
+          };
+          var name = "apu_tasks_" + String(st.prefix || "ecp") + ".json";
+          downloadText(name, JSON.stringify(payload, null, 2));
+        });
+
+        document.getElementById("backupFile").addEventListener("change", function (ev) {
+          try {
+            var f = ev && ev.target && ev.target.files && ev.target.files[0];
+            if (!f) return;
+            var r = new FileReader();
+            r.onload = function () {
+              try {
+                var data = JSON.parse(String(r.result || ""));
+                window.__backupData = {
+                  name: f.name,
+                  catalog: Array.isArray(data.catalog) ? data.catalog : [],
+                  apus: Array.isArray(data.apus) ? data.apus : [],
+                  materiales: Array.isArray(data.materiales) ? data.materiales : [],
+                };
+              } catch (e) {
+                window.__backupData = null;
+              }
+              run();
+            };
+            r.readAsText(f);
+          } catch (e) {
+            window.__backupData = null;
+            run();
+          }
+        });
+
+        document.getElementById("clearBackupBtn").addEventListener("click", function () {
+          try {
+            window.__backupData = null;
+            var fi = document.getElementById("backupFile");
+            if (fi) fi.value = "";
+          } catch (e) {}
+          run();
+        });
+
+        document.getElementById("claudeHtmlFile").addEventListener("change", function (ev) {
+          try {
+            var f = ev && ev.target && ev.target.files && ev.target.files[0];
+            if (!f) return;
+            var r = new FileReader();
+            r.onload = function () {
+              try {
+                var txt = String(r.result || "");
+                var pack = parseClaudePack(txt);
+                window.__claudePack = pack;
+                var ci = document.getElementById("claudeInfo");
+                if (ci) {
+                  ci.textContent = pack
+                    ? "Claude cargado: DMAT " + pack.DMAT.length + ", DAPU " + pack.DAPU.length + ", DCAT " + pack.DCAT.length
+                    : "No se pudo leer Claude (no se encontraron const DMAT/DCAT/DAPU)";
+                }
+              } catch (e) {
+                window.__claudePack = null;
+                var ci2 = document.getElementById("claudeInfo");
+                if (ci2) ci2.textContent = "No se pudo leer Claude";
+              }
+              run();
+            };
+            r.readAsText(f);
+          } catch (e) {
+            window.__claudePack = null;
+            var ci3 = document.getElementById("claudeInfo");
+            if (ci3) ci3.textContent = "No se pudo leer Claude";
+            run();
+          }
+        });
+
+        document.getElementById("clearClaudeBtn").addEventListener("click", function () {
+          try {
+            window.__claudePack = null;
+            var fi = document.getElementById("claudeHtmlFile");
+            if (fi) fi.value = "";
+            var ci = document.getElementById("claudeInfo");
+            if (ci) ci.textContent = "";
+          } catch (e) {}
+          run();
+        });
+
+        document.getElementById("applyClaudeBtn").addEventListener("click", function () {
+          run();
+          var pack = window.__claudePack;
+          if (!pack) {
+            var ci = document.getElementById("claudeInfo");
+            if (ci) ci.textContent = "Primero carga el HTML de Claude";
+            return;
+          }
+          var ok = true;
+          try {
+            ok = confirm("Esto modificará tu localStorage (creará materiales y APUs). Se descargará un backup antes. ¿Continuar?");
+          } catch (e) {}
+          if (!ok) return;
+          var prefix = getPrefix();
+          var res = applyClaudeToLocalStorage(prefix, pack);
+          var ci2 = document.getElementById("claudeInfo");
+          if (ci2) {
+            var un = (res && res.unresolved && res.unresolved.length) || 0;
+            ci2.textContent =
+              "Aplicado: +APUs " +
+              String((res && res.createdApus) || 0) +
+              ", +Materiales " +
+              String((res && res.createdMaterials) || 0) +
+              ", eliminadas auto " +
+              String((res && res.removedAutoApus) || 0) +
+              ", APUs completadas " +
+              String((res && res.filledApus) || 0) +
+              (un ? ", sin receta: " + String(un) : "");
+          }
+          if (res && res.unresolved && res.unresolved.length) {
+            downloadText("claude_unresolved_" + prefix + ".json", JSON.stringify(res.unresolved, null, 2));
+          }
+          run();
+        });
+
+        run();
+      })();
+    </script>
+  </body>
+</html>

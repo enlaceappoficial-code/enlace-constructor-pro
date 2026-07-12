@@ -1,0 +1,4 @@
+﻿90: body[data-theme="light"] .ecp-nb-label{color:rgba(255,255,255,0.9);}
+17500:             <button onClick={()=>setPage("tu_plan")} style={{background:"transparent",border:"none",cursor:"pointer",fontSize:11,c
+17502:           <button onClick={()=>setPage("pide_modulo")} style={{
+17566:             {(page==="dashboard"||page==="history")&&<button style={{...S.btn("p"),background:accent}} onClick={()=>{setEditB(null

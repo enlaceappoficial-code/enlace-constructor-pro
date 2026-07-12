@@ -1,0 +1,9 @@
+{
+  "count": 1,
+  "samples": [
+    {
+      "message": "No closing brace",
+      "raw": "{id:177, tipo:\"Nueva Construcción\", estructura:\"General\",\n   nombre:\"Vereda perimetral piscina hormigón\", categoria:\"Piscinas\",\n   unidad:\"m²\", catalogId:194, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:,\n\n  /* ── APUs complementarias sanitarias ── */\n  "
+    }
+  ]
+}

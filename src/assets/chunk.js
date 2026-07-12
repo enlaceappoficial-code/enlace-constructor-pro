@@ -1,0 +1,19198 @@
+var ix = Object.defineProperty,
+  rx = Object.defineProperties;
+var ax = Object.getOwnPropertyDescriptors;
+var Zp = Object.getOwnPropertySymbols;
+var nx = Object.prototype.hasOwnProperty,
+  ox = Object.prototype.propertyIsEnumerable;
+var eu = (Mt, at, nt) =>
+    at in Mt
+      ? ix(Mt, at, {
+          enumerable: !0,
+          configurable: !0,
+          writable: !0,
+          value: nt,
+        })
+      : (Mt[at] = nt),
+  d = (Mt, at) => {
+    for (var nt in at || (at = {})) nx.call(at, nt) && eu(Mt, nt, at[nt]);
+    if (Zp) for (var nt of Zp(at)) ox.call(at, nt) && eu(Mt, nt, at[nt]);
+    return Mt;
+  },
+  u = (Mt, at) => rx(Mt, ax(at));
+(function () {
+  "use strict";
+  function Mt(t) {
+    return t &&
+      t.__esModule &&
+      Object.prototype.hasOwnProperty.call(t, "default")
+      ? t.default
+      : t;
+  }
+  var at = { exports: {} },
+    nt = {},
+    ns = { exports: {} },
+    Te = {};
+  /**
+   * @license React
+   * react.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */ var Ir = Symbol.for("react.element"),
+    tu = Symbol.for("react.portal"),
+    iu = Symbol.for("react.fragment"),
+    ru = Symbol.for("react.strict_mode"),
+    au = Symbol.for("react.profiler"),
+    nu = Symbol.for("react.provider"),
+    ou = Symbol.for("react.context"),
+    lu = Symbol.for("react.forward_ref"),
+    su = Symbol.for("react.suspense"),
+    du = Symbol.for("react.memo"),
+    cu = Symbol.for("react.lazy"),
+    os = Symbol.iterator;
+  function pu(t) {
+    return t === null || typeof t != "object"
+      ? null
+      : ((t = (os && t[os]) || t["@@iterator"]),
+        typeof t == "function" ? t : null);
+  }
+  var ls = {
+      isMounted: function () {
+        return !1;
+      },
+      enqueueForceUpdate: function () {},
+      enqueueReplaceState: function () {},
+      enqueueSetState: function () {},
+    },
+    ss = Object.assign,
+    ds = {};
+  function Yi(t, i, r) {
+    ((this.props = t),
+      (this.context = i),
+      (this.refs = ds),
+      (this.updater = r || ls));
+  }
+  ((Yi.prototype.isReactComponent = {}),
+    (Yi.prototype.setState = function (t, i) {
+      if (typeof t != "object" && typeof t != "function" && t != null)
+        throw Error(
+          "setState(...): takes an object of state variables to update or a function which returns an object of state variables.",
+        );
+      this.updater.enqueueSetState(this, t, i, "setState");
+    }),
+    (Yi.prototype.forceUpdate = function (t) {
+      this.updater.enqueueForceUpdate(this, t, "forceUpdate");
+    }));
+  function cs() {}
+  cs.prototype = Yi.prototype;
+  function Dn(t, i, r) {
+    ((this.props = t),
+      (this.context = i),
+      (this.refs = ds),
+      (this.updater = r || ls));
+  }
+  var Nn = (Dn.prototype = new cs());
+  ((Nn.constructor = Dn), ss(Nn, Yi.prototype), (Nn.isPureReactComponent = !0));
+  var ps = Array.isArray,
+    us = Object.prototype.hasOwnProperty,
+    On = { current: null },
+    ms = { key: !0, ref: !0, __self: !0, __source: !0 };
+  function fs(t, i, r) {
+    var n,
+      l = {},
+      o = null,
+      s = null;
+    if (i != null)
+      for (n in (i.ref !== void 0 && (s = i.ref),
+      i.key !== void 0 && (o = "" + i.key),
+      i))
+        us.call(i, n) && !ms.hasOwnProperty(n) && (l[n] = i[n]);
+    var m = arguments.length - 2;
+    if (m === 1) l.children = r;
+    else if (1 < m) {
+      for (var p = Array(m), C = 0; C < m; C++) p[C] = arguments[C + 2];
+      l.children = p;
+    }
+    if (t && t.defaultProps)
+      for (n in ((m = t.defaultProps), m)) l[n] === void 0 && (l[n] = m[n]);
+    return {
+      $$typeof: Ir,
+      type: t,
+      key: o,
+      ref: s,
+      props: l,
+      _owner: On.current,
+    };
+  }
+  function uu(t, i) {
+    return {
+      $$typeof: Ir,
+      type: t.type,
+      key: i,
+      ref: t.ref,
+      props: t.props,
+      _owner: t._owner,
+    };
+  }
+  function Wn(t) {
+    return typeof t == "object" && t !== null && t.$$typeof === Ir;
+  }
+  function mu(t) {
+    var i = { "=": "=0", ":": "=2" };
+    return (
+      "$" +
+      t.replace(/[=:]/g, function (r) {
+        return i[r];
+      })
+    );
+  }
+  var gs = /\/+/g;
+  function Un(t, i) {
+    return typeof t == "object" && t !== null && t.key != null
+      ? mu("" + t.key)
+      : i.toString(36);
+  }
+  function va(t, i, r, n, l) {
+    var o = typeof t;
+    (o === "undefined" || o === "boolean") && (t = null);
+    var s = !1;
+    if (t === null) s = !0;
+    else
+      switch (o) {
+        case "string":
+        case "number":
+          s = !0;
+          break;
+        case "object":
+          switch (t.$$typeof) {
+            case Ir:
+            case tu:
+              s = !0;
+          }
+      }
+    if (s)
+      return (
+        (s = t),
+        (l = l(s)),
+        (t = n === "" ? "." + Un(s, 0) : n),
+        ps(l)
+          ? ((r = ""),
+            t != null && (r = t.replace(gs, "$&/") + "/"),
+            va(l, i, r, "", function (C) {
+              return C;
+            }))
+          : l != null &&
+            (Wn(l) &&
+              (l = uu(
+                l,
+                r +
+                  (!l.key || (s && s.key === l.key)
+                    ? ""
+                    : ("" + l.key).replace(gs, "$&/") + "/") +
+                  t,
+              )),
+            i.push(l)),
+        1
+      );
+    if (((s = 0), (n = n === "" ? "." : n + ":"), ps(t)))
+      for (var m = 0; m < t.length; m++) {
+        o = t[m];
+        var p = n + Un(o, m);
+        s += va(o, i, r, p, l);
+      }
+    else if (((p = pu(t)), typeof p == "function"))
+      for (t = p.call(t), m = 0; !(o = t.next()).done;)
+        ((o = o.value), (p = n + Un(o, m++)), (s += va(o, i, r, p, l)));
+    else if (o === "object")
+      throw (
+        (i = String(t)),
+        Error(
+          "Objects are not valid as a React child (found: " +
+            (i === "[object Object]"
+              ? "object with keys {" + Object.keys(t).join(", ") + "}"
+              : i) +
+            "). If you meant to render a collection of children, use an array instead.",
+        )
+      );
+    return s;
+  }
+  function ba(t, i, r) {
+    if (t == null) return t;
+    var n = [],
+      l = 0;
+    return (
+      va(t, n, "", "", function (o) {
+        return i.call(r, o, l++);
+      }),
+      n
+    );
+  }
+  function fu(t) {
+    if (t._status === -1) {
+      var i = t._result;
+      ((i = i()),
+        i.then(
+          function (r) {
+            (t._status === 0 || t._status === -1) &&
+              ((t._status = 1), (t._result = r));
+          },
+          function (r) {
+            (t._status === 0 || t._status === -1) &&
+              ((t._status = 2), (t._result = r));
+          },
+        ),
+        t._status === -1 && ((t._status = 0), (t._result = i)));
+    }
+    if (t._status === 1) return t._result.default;
+    throw t._result;
+  }
+  var ot = { current: null },
+    ya = { transition: null },
+    gu = {
+      ReactCurrentDispatcher: ot,
+      ReactCurrentBatchConfig: ya,
+      ReactCurrentOwner: On,
+    };
+  function xs() {
+    throw Error("act(...) is not supported in production builds of React.");
+  }
+  ((Te.Children = {
+    map: ba,
+    forEach: function (t, i, r) {
+      ba(
+        t,
+        function () {
+          i.apply(this, arguments);
+        },
+        r,
+      );
+    },
+    count: function (t) {
+      var i = 0;
+      return (
+        ba(t, function () {
+          i++;
+        }),
+        i
+      );
+    },
+    toArray: function (t) {
+      return (
+        ba(t, function (i) {
+          return i;
+        }) || []
+      );
+    },
+    only: function (t) {
+      if (!Wn(t))
+        throw Error(
+          "React.Children.only expected to receive a single React element child.",
+        );
+      return t;
+    },
+  }),
+    (Te.Component = Yi),
+    (Te.Fragment = iu),
+    (Te.Profiler = au),
+    (Te.PureComponent = Dn),
+    (Te.StrictMode = ru),
+    (Te.Suspense = su),
+    (Te.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = gu),
+    (Te.act = xs),
+    (Te.cloneElement = function (t, i, r) {
+      if (t == null)
+        throw Error(
+          "React.cloneElement(...): The argument must be a React element, but you passed " +
+            t +
+            ".",
+        );
+      var n = ss({}, t.props),
+        l = t.key,
+        o = t.ref,
+        s = t._owner;
+      if (i != null) {
+        if (
+          (i.ref !== void 0 && ((o = i.ref), (s = On.current)),
+          i.key !== void 0 && (l = "" + i.key),
+          t.type && t.type.defaultProps)
+        )
+          var m = t.type.defaultProps;
+        for (p in i)
+          us.call(i, p) &&
+            !ms.hasOwnProperty(p) &&
+            (n[p] = i[p] === void 0 && m !== void 0 ? m[p] : i[p]);
+      }
+      var p = arguments.length - 2;
+      if (p === 1) n.children = r;
+      else if (1 < p) {
+        m = Array(p);
+        for (var C = 0; C < p; C++) m[C] = arguments[C + 2];
+        n.children = m;
+      }
+      return {
+        $$typeof: Ir,
+        type: t.type,
+        key: l,
+        ref: o,
+        props: n,
+        _owner: s,
+      };
+    }),
+    (Te.createContext = function (t) {
+      return (
+        (t = {
+          $$typeof: ou,
+          _currentValue: t,
+          _currentValue2: t,
+          _threadCount: 0,
+          Provider: null,
+          Consumer: null,
+          _defaultValue: null,
+          _globalName: null,
+        }),
+        (t.Provider = { $$typeof: nu, _context: t }),
+        (t.Consumer = t)
+      );
+    }),
+    (Te.createElement = fs),
+    (Te.createFactory = function (t) {
+      var i = fs.bind(null, t);
+      return ((i.type = t), i);
+    }),
+    (Te.createRef = function () {
+      return { current: null };
+    }),
+    (Te.forwardRef = function (t) {
+      return { $$typeof: lu, render: t };
+    }),
+    (Te.isValidElement = Wn),
+    (Te.lazy = function (t) {
+      return { $$typeof: cu, _payload: { _status: -1, _result: t }, _init: fu };
+    }),
+    (Te.memo = function (t, i) {
+      return { $$typeof: du, type: t, compare: i === void 0 ? null : i };
+    }),
+    (Te.startTransition = function (t) {
+      var i = ya.transition;
+      ya.transition = {};
+      try {
+        t();
+      } finally {
+        ya.transition = i;
+      }
+    }),
+    (Te.unstable_act = xs),
+    (Te.useCallback = function (t, i) {
+      return ot.current.useCallback(t, i);
+    }),
+    (Te.useContext = function (t) {
+      return ot.current.useContext(t);
+    }),
+    (Te.useDebugValue = function () {}),
+    (Te.useDeferredValue = function (t) {
+      return ot.current.useDeferredValue(t);
+    }),
+    (Te.useEffect = function (t, i) {
+      return ot.current.useEffect(t, i);
+    }),
+    (Te.useId = function () {
+      return ot.current.useId();
+    }),
+    (Te.useImperativeHandle = function (t, i, r) {
+      return ot.current.useImperativeHandle(t, i, r);
+    }),
+    (Te.useInsertionEffect = function (t, i) {
+      return ot.current.useInsertionEffect(t, i);
+    }),
+    (Te.useLayoutEffect = function (t, i) {
+      return ot.current.useLayoutEffect(t, i);
+    }),
+    (Te.useMemo = function (t, i) {
+      return ot.current.useMemo(t, i);
+    }),
+    (Te.useReducer = function (t, i, r) {
+      return ot.current.useReducer(t, i, r);
+    }),
+    (Te.useRef = function (t) {
+      return ot.current.useRef(t);
+    }),
+    (Te.useState = function (t) {
+      return ot.current.useState(t);
+    }),
+    (Te.useSyncExternalStore = function (t, i, r) {
+      return ot.current.useSyncExternalStore(t, i, r);
+    }),
+    (Te.useTransition = function () {
+      return ot.current.useTransition();
+    }),
+    (Te.version = "18.3.1"),
+    (ns.exports = Te));
+  var Gn = ns.exports;
+  const Re = Mt(Gn);
+  /**
+   * @license React
+   * react-jsx-runtime.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */ var xu = Gn,
+    hu = Symbol.for("react.element"),
+    vu = Symbol.for("react.fragment"),
+    bu = Object.prototype.hasOwnProperty,
+    yu =
+      xu.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
+    ju = { key: !0, ref: !0, __self: !0, __source: !0 };
+  function hs(t, i, r) {
+    var n,
+      l = {},
+      o = null,
+      s = null;
+    (r !== void 0 && (o = "" + r),
+      i.key !== void 0 && (o = "" + i.key),
+      i.ref !== void 0 && (s = i.ref));
+    for (n in i) bu.call(i, n) && !ju.hasOwnProperty(n) && (l[n] = i[n]);
+    if (t && t.defaultProps)
+      for (n in ((i = t.defaultProps), i)) l[n] === void 0 && (l[n] = i[n]);
+    return {
+      $$typeof: hu,
+      type: t,
+      key: o,
+      ref: s,
+      props: l,
+      _owner: yu.current,
+    };
+  }
+  ((nt.Fragment = vu), (nt.jsx = hs), (nt.jsxs = hs), (at.exports = nt));
+  var e = at.exports,
+    _n = {},
+    vs = { exports: {} },
+    ht = {},
+    bs = { exports: {} },
+    ys = {};
+  /**
+   * @license React
+   * scheduler.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */ ((function (t) {
+    function i(Y, le) {
+      var Z = Y.length;
+      Y.push(le);
+      e: for (; 0 < Z;) {
+        var X = (Z - 1) >>> 1,
+          W = Y[X];
+        if (0 < l(W, le)) ((Y[X] = le), (Y[Z] = W), (Z = X));
+        else break e;
+      }
+    }
+    function r(Y) {
+      return Y.length === 0 ? null : Y[0];
+    }
+    function n(Y) {
+      if (Y.length === 0) return null;
+      var le = Y[0],
+        Z = Y.pop();
+      if (Z !== le) {
+        Y[0] = Z;
+        e: for (var X = 0, W = Y.length, T = W >>> 1; X < T;) {
+          var L = 2 * (X + 1) - 1,
+            E = Y[L],
+            M = L + 1,
+            q = Y[M];
+          if (0 > l(E, Z))
+            M < W && 0 > l(q, E)
+              ? ((Y[X] = q), (Y[M] = Z), (X = M))
+              : ((Y[X] = E), (Y[L] = Z), (X = L));
+          else if (M < W && 0 > l(q, Z)) ((Y[X] = q), (Y[M] = Z), (X = M));
+          else break e;
+        }
+      }
+      return le;
+    }
+    function l(Y, le) {
+      var Z = Y.sortIndex - le.sortIndex;
+      return Z !== 0 ? Z : Y.id - le.id;
+    }
+    if (
+      typeof performance == "object" &&
+      typeof performance.now == "function"
+    ) {
+      var o = performance;
+      t.unstable_now = function () {
+        return o.now();
+      };
+    } else {
+      var s = Date,
+        m = s.now();
+      t.unstable_now = function () {
+        return s.now() - m;
+      };
+    }
+    var p = [],
+      C = [],
+      b = 1,
+      h = null,
+      j = 3,
+      F = !1,
+      g = !1,
+      z = !1,
+      B = typeof setTimeout == "function" ? setTimeout : null,
+      w = typeof clearTimeout == "function" ? clearTimeout : null,
+      v = typeof setImmediate != "undefined" ? setImmediate : null;
+    typeof navigator != "undefined" &&
+      navigator.scheduling !== void 0 &&
+      navigator.scheduling.isInputPending !== void 0 &&
+      navigator.scheduling.isInputPending.bind(navigator.scheduling);
+    function x(Y) {
+      for (var le = r(C); le !== null;) {
+        if (le.callback === null) n(C);
+        else if (le.startTime <= Y)
+          (n(C), (le.sortIndex = le.expirationTime), i(p, le));
+        else break;
+        le = r(C);
+      }
+    }
+    function f(Y) {
+      if (((z = !1), x(Y), !g))
+        if (r(p) !== null) ((g = !0), $(I));
+        else {
+          var le = r(C);
+          le !== null && ee(f, le.startTime - Y);
+        }
+    }
+    function I(Y, le) {
+      ((g = !1), z && ((z = !1), w(R), (R = -1)), (F = !0));
+      var Z = j;
+      try {
+        for (
+          x(le), h = r(p);
+          h !== null && (!(h.expirationTime > le) || (Y && !P()));
+        ) {
+          var X = h.callback;
+          if (typeof X == "function") {
+            ((h.callback = null), (j = h.priorityLevel));
+            var W = X(h.expirationTime <= le);
+            ((le = t.unstable_now()),
+              typeof W == "function" ? (h.callback = W) : h === r(p) && n(p),
+              x(le));
+          } else n(p);
+          h = r(p);
+        }
+        if (h !== null) var T = !0;
+        else {
+          var L = r(C);
+          (L !== null && ee(f, L.startTime - le), (T = !1));
+        }
+        return T;
+      } finally {
+        ((h = null), (j = Z), (F = !1));
+      }
+    }
+    var D = !1,
+      k = null,
+      R = -1,
+      K = 5,
+      y = -1;
+    function P() {
+      return !(t.unstable_now() - y < K);
+    }
+    function A() {
+      if (k !== null) {
+        var Y = t.unstable_now();
+        y = Y;
+        var le = !0;
+        try {
+          le = k(!0, Y);
+        } finally {
+          le ? S() : ((D = !1), (k = null));
+        }
+      } else D = !1;
+    }
+    var S;
+    if (typeof v == "function")
+      S = function () {
+        v(A);
+      };
+    else if (typeof MessageChannel != "undefined") {
+      var O = new MessageChannel(),
+        U = O.port2;
+      ((O.port1.onmessage = A),
+        (S = function () {
+          U.postMessage(null);
+        }));
+    } else
+      S = function () {
+        B(A, 0);
+      };
+    function $(Y) {
+      ((k = Y), D || ((D = !0), S()));
+    }
+    function ee(Y, le) {
+      R = B(function () {
+        Y(t.unstable_now());
+      }, le);
+    }
+    ((t.unstable_IdlePriority = 5),
+      (t.unstable_ImmediatePriority = 1),
+      (t.unstable_LowPriority = 4),
+      (t.unstable_NormalPriority = 3),
+      (t.unstable_Profiling = null),
+      (t.unstable_UserBlockingPriority = 2),
+      (t.unstable_cancelCallback = function (Y) {
+        Y.callback = null;
+      }),
+      (t.unstable_continueExecution = function () {
+        g || F || ((g = !0), $(I));
+      }),
+      (t.unstable_forceFrameRate = function (Y) {
+        0 > Y || 125 < Y
+          ? console.error(
+              "forceFrameRate takes a positive int between 0 and 125, forcing frame rates higher than 125 fps is not supported",
+            )
+          : (K = 0 < Y ? Math.floor(1e3 / Y) : 5);
+      }),
+      (t.unstable_getCurrentPriorityLevel = function () {
+        return j;
+      }),
+      (t.unstable_getFirstCallbackNode = function () {
+        return r(p);
+      }),
+      (t.unstable_next = function (Y) {
+        switch (j) {
+          case 1:
+          case 2:
+          case 3:
+            var le = 3;
+            break;
+          default:
+            le = j;
+        }
+        var Z = j;
+        j = le;
+        try {
+          return Y();
+        } finally {
+          j = Z;
+        }
+      }),
+      (t.unstable_pauseExecution = function () {}),
+      (t.unstable_requestPaint = function () {}),
+      (t.unstable_runWithPriority = function (Y, le) {
+        switch (Y) {
+          case 1:
+          case 2:
+          case 3:
+          case 4:
+          case 5:
+            break;
+          default:
+            Y = 3;
+        }
+        var Z = j;
+        j = Y;
+        try {
+          return le();
+        } finally {
+          j = Z;
+        }
+      }),
+      (t.unstable_scheduleCallback = function (Y, le, Z) {
+        var X = t.unstable_now();
+        switch (
+          (typeof Z == "object" && Z !== null
+            ? ((Z = Z.delay), (Z = typeof Z == "number" && 0 < Z ? X + Z : X))
+            : (Z = X),
+          Y)
+        ) {
+          case 1:
+            var W = -1;
+            break;
+          case 2:
+            W = 250;
+            break;
+          case 5:
+            W = 1073741823;
+            break;
+          case 4:
+            W = 1e4;
+            break;
+          default:
+            W = 5e3;
+        }
+        return (
+          (W = Z + W),
+          (Y = {
+            id: b++,
+            callback: le,
+            priorityLevel: Y,
+            startTime: Z,
+            expirationTime: W,
+            sortIndex: -1,
+          }),
+          Z > X
+            ? ((Y.sortIndex = Z),
+              i(C, Y),
+              r(p) === null &&
+                Y === r(C) &&
+                (z ? (w(R), (R = -1)) : (z = !0), ee(f, Z - X)))
+            : ((Y.sortIndex = W), i(p, Y), g || F || ((g = !0), $(I))),
+          Y
+        );
+      }),
+      (t.unstable_shouldYield = P),
+      (t.unstable_wrapCallback = function (Y) {
+        var le = j;
+        return function () {
+          var Z = j;
+          j = le;
+          try {
+            return Y.apply(this, arguments);
+          } finally {
+            j = Z;
+          }
+        };
+      }));
+  })(ys),
+    (bs.exports = ys));
+  var Su = bs.exports;
+  /**
+   * @license React
+   * react-dom.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */ var Cu = Gn,
+    vt = Su;
+  function ge(t) {
+    for (
+      var i = "https://reactjs.org/docs/error-decoder.html?invariant=" + t,
+        r = 1;
+      r < arguments.length;
+      r++
+    )
+      i += "&args[]=" + encodeURIComponent(arguments[r]);
+    return (
+      "Minified React error #" +
+      t +
+      "; visit " +
+      i +
+      " for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+    );
+  }
+  var js = new Set(),
+    kr = {};
+  function Fi(t, i) {
+    (Xi(t, i), Xi(t + "Capture", i));
+  }
+  function Xi(t, i) {
+    for (kr[t] = i, t = 0; t < i.length; t++) js.add(i[t]);
+  }
+  var Jt = !(
+      typeof window == "undefined" ||
+      typeof window.document == "undefined" ||
+      typeof window.document.createElement == "undefined"
+    ),
+    Hn = Object.prototype.hasOwnProperty,
+    zu =
+      /^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,
+    Ss = {},
+    Cs = {};
+  function wu(t) {
+    return Hn.call(Cs, t)
+      ? !0
+      : Hn.call(Ss, t)
+        ? !1
+        : zu.test(t)
+          ? (Cs[t] = !0)
+          : ((Ss[t] = !0), !1);
+  }
+  function Iu(t, i, r, n) {
+    if (r !== null && r.type === 0) return !1;
+    switch (typeof i) {
+      case "function":
+      case "symbol":
+        return !0;
+      case "boolean":
+        return n
+          ? !1
+          : r !== null
+            ? !r.acceptsBooleans
+            : ((t = t.toLowerCase().slice(0, 5)),
+              t !== "data-" && t !== "aria-");
+      default:
+        return !1;
+    }
+  }
+  function ku(t, i, r, n) {
+    if (i === null || typeof i == "undefined" || Iu(t, i, r, n)) return !0;
+    if (n) return !1;
+    if (r !== null)
+      switch (r.type) {
+        case 3:
+          return !i;
+        case 4:
+          return i === !1;
+        case 5:
+          return isNaN(i);
+        case 6:
+          return isNaN(i) || 1 > i;
+      }
+    return !1;
+  }
+  function lt(t, i, r, n, l, o, s) {
+    ((this.acceptsBooleans = i === 2 || i === 3 || i === 4),
+      (this.attributeName = n),
+      (this.attributeNamespace = l),
+      (this.mustUseProperty = r),
+      (this.propertyName = t),
+      (this.type = i),
+      (this.sanitizeURL = o),
+      (this.removeEmptyString = s));
+  }
+  var Je = {};
+  ("children dangerouslySetInnerHTML defaultValue defaultChecked innerHTML suppressContentEditableWarning suppressHydrationWarning style"
+    .split(" ")
+    .forEach(function (t) {
+      Je[t] = new lt(t, 0, !1, t, null, !1, !1);
+    }),
+    [
+      ["acceptCharset", "accept-charset"],
+      ["className", "class"],
+      ["htmlFor", "for"],
+      ["httpEquiv", "http-equiv"],
+    ].forEach(function (t) {
+      var i = t[0];
+      Je[i] = new lt(i, 1, !1, t[1], null, !1, !1);
+    }),
+    ["contentEditable", "draggable", "spellCheck", "value"].forEach(
+      function (t) {
+        Je[t] = new lt(t, 2, !1, t.toLowerCase(), null, !1, !1);
+      },
+    ),
+    [
+      "autoReverse",
+      "externalResourcesRequired",
+      "focusable",
+      "preserveAlpha",
+    ].forEach(function (t) {
+      Je[t] = new lt(t, 2, !1, t, null, !1, !1);
+    }),
+    "allowFullScreen async autoFocus autoPlay controls default defer disabled disablePictureInPicture disableRemotePlayback formNoValidate hidden loop noModule noValidate open playsInline readOnly required reversed scoped seamless itemScope"
+      .split(" ")
+      .forEach(function (t) {
+        Je[t] = new lt(t, 3, !1, t.toLowerCase(), null, !1, !1);
+      }),
+    ["checked", "multiple", "muted", "selected"].forEach(function (t) {
+      Je[t] = new lt(t, 3, !0, t, null, !1, !1);
+    }),
+    ["capture", "download"].forEach(function (t) {
+      Je[t] = new lt(t, 4, !1, t, null, !1, !1);
+    }),
+    ["cols", "rows", "size", "span"].forEach(function (t) {
+      Je[t] = new lt(t, 6, !1, t, null, !1, !1);
+    }),
+    ["rowSpan", "start"].forEach(function (t) {
+      Je[t] = new lt(t, 5, !1, t.toLowerCase(), null, !1, !1);
+    }));
+  var $n = /[\-:]([a-z])/g;
+  function Vn(t) {
+    return t[1].toUpperCase();
+  }
+  ("accent-height alignment-baseline arabic-form baseline-shift cap-height clip-path clip-rule color-interpolation color-interpolation-filters color-profile color-rendering dominant-baseline enable-background fill-opacity fill-rule flood-color flood-opacity font-family font-size font-size-adjust font-stretch font-style font-variant font-weight glyph-name glyph-orientation-horizontal glyph-orientation-vertical horiz-adv-x horiz-origin-x image-rendering letter-spacing lighting-color marker-end marker-mid marker-start overline-position overline-thickness paint-order panose-1 pointer-events rendering-intent shape-rendering stop-color stop-opacity strikethrough-position strikethrough-thickness stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin stroke-miterlimit stroke-opacity stroke-width text-anchor text-decoration text-rendering underline-position underline-thickness unicode-bidi unicode-range units-per-em v-alphabetic v-hanging v-ideographic v-mathematical vector-effect vert-adv-y vert-origin-x vert-origin-y word-spacing writing-mode xmlns:xlink x-height"
+    .split(" ")
+    .forEach(function (t) {
+      var i = t.replace($n, Vn);
+      Je[i] = new lt(i, 1, !1, t, null, !1, !1);
+    }),
+    "xlink:actuate xlink:arcrole xlink:role xlink:show xlink:title xlink:type"
+      .split(" ")
+      .forEach(function (t) {
+        var i = t.replace($n, Vn);
+        Je[i] = new lt(i, 1, !1, t, "http://www.w3.org/1999/xlink", !1, !1);
+      }),
+    ["xml:base", "xml:lang", "xml:space"].forEach(function (t) {
+      var i = t.replace($n, Vn);
+      Je[i] = new lt(
+        i,
+        1,
+        !1,
+        t,
+        "http://www.w3.org/XML/1998/namespace",
+        !1,
+        !1,
+      );
+    }),
+    ["tabIndex", "crossOrigin"].forEach(function (t) {
+      Je[t] = new lt(t, 1, !1, t.toLowerCase(), null, !1, !1);
+    }),
+    (Je.xlinkHref = new lt(
+      "xlinkHref",
+      1,
+      !1,
+      "xlink:href",
+      "http://www.w3.org/1999/xlink",
+      !0,
+      !1,
+    )),
+    ["src", "href", "action", "formAction"].forEach(function (t) {
+      Je[t] = new lt(t, 1, !1, t.toLowerCase(), null, !0, !0);
+    }));
+  function qn(t, i, r, n) {
+    var l = Je.hasOwnProperty(i) ? Je[i] : null;
+    (l !== null
+      ? l.type !== 0
+      : n ||
+        !(2 < i.length) ||
+        (i[0] !== "o" && i[0] !== "O") ||
+        (i[1] !== "n" && i[1] !== "N")) &&
+      (ku(i, r, l, n) && (r = null),
+      n || l === null
+        ? wu(i) &&
+          (r === null ? t.removeAttribute(i) : t.setAttribute(i, "" + r))
+        : l.mustUseProperty
+          ? (t[l.propertyName] = r === null ? (l.type === 3 ? !1 : "") : r)
+          : ((i = l.attributeName),
+            (n = l.attributeNamespace),
+            r === null
+              ? t.removeAttribute(i)
+              : ((l = l.type),
+                (r = l === 3 || (l === 4 && r === !0) ? "" : "" + r),
+                n ? t.setAttributeNS(n, i, r) : t.setAttribute(i, r))));
+  }
+  var Kt = Cu.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
+    ja = Symbol.for("react.element"),
+    Ji = Symbol.for("react.portal"),
+    Ki = Symbol.for("react.fragment"),
+    Qn = Symbol.for("react.strict_mode"),
+    Yn = Symbol.for("react.profiler"),
+    zs = Symbol.for("react.provider"),
+    ws = Symbol.for("react.context"),
+    Xn = Symbol.for("react.forward_ref"),
+    Jn = Symbol.for("react.suspense"),
+    Kn = Symbol.for("react.suspense_list"),
+    Zn = Symbol.for("react.memo"),
+    pi = Symbol.for("react.lazy"),
+    Is = Symbol.for("react.offscreen"),
+    ks = Symbol.iterator;
+  function Pr(t) {
+    return t === null || typeof t != "object"
+      ? null
+      : ((t = (ks && t[ks]) || t["@@iterator"]),
+        typeof t == "function" ? t : null);
+  }
+  var We = Object.assign,
+    eo;
+  function Tr(t) {
+    if (eo === void 0)
+      try {
+        throw Error();
+      } catch (r) {
+        var i = r.stack.trim().match(/\n( *(at )?)/);
+        eo = (i && i[1]) || "";
+      }
+    return (
+      `
+` +
+      eo +
+      t
+    );
+  }
+  var to = !1;
+  function io(t, i) {
+    if (!t || to) return "";
+    to = !0;
+    var r = Error.prepareStackTrace;
+    Error.prepareStackTrace = void 0;
+    try {
+      if (i)
+        if (
+          ((i = function () {
+            throw Error();
+          }),
+          Object.defineProperty(i.prototype, "props", {
+            set: function () {
+              throw Error();
+            },
+          }),
+          typeof Reflect == "object" && Reflect.construct)
+        ) {
+          try {
+            Reflect.construct(i, []);
+          } catch (C) {
+            var n = C;
+          }
+          Reflect.construct(t, [], i);
+        } else {
+          try {
+            i.call();
+          } catch (C) {
+            n = C;
+          }
+          t.call(i.prototype);
+        }
+      else {
+        try {
+          throw Error();
+        } catch (C) {
+          n = C;
+        }
+        t();
+      }
+    } catch (C) {
+      if (C && n && typeof C.stack == "string") {
+        for (
+          var l = C.stack.split(`
+`),
+            o = n.stack.split(`
+`),
+            s = l.length - 1,
+            m = o.length - 1;
+          1 <= s && 0 <= m && l[s] !== o[m];
+        )
+          m--;
+        for (; 1 <= s && 0 <= m; s--, m--)
+          if (l[s] !== o[m]) {
+            if (s !== 1 || m !== 1)
+              do
+                if ((s--, m--, 0 > m || l[s] !== o[m])) {
+                  var p =
+                    `
+` + l[s].replace(" at new ", " at ");
+                  return (
+                    t.displayName &&
+                      p.includes("<anonymous>") &&
+                      (p = p.replace("<anonymous>", t.displayName)),
+                    p
+                  );
+                }
+              while (1 <= s && 0 <= m);
+            break;
+          }
+      }
+    } finally {
+      ((to = !1), (Error.prepareStackTrace = r));
+    }
+    return (t = t ? t.displayName || t.name : "") ? Tr(t) : "";
+  }
+  function Pu(t) {
+    switch (t.tag) {
+      case 5:
+        return Tr(t.type);
+      case 16:
+        return Tr("Lazy");
+      case 13:
+        return Tr("Suspense");
+      case 19:
+        return Tr("SuspenseList");
+      case 0:
+      case 2:
+      case 15:
+        return ((t = io(t.type, !1)), t);
+      case 11:
+        return ((t = io(t.type.render, !1)), t);
+      case 1:
+        return ((t = io(t.type, !0)), t);
+      default:
+        return "";
+    }
+  }
+  function ro(t) {
+    if (t == null) return null;
+    if (typeof t == "function") return t.displayName || t.name || null;
+    if (typeof t == "string") return t;
+    switch (t) {
+      case Ki:
+        return "Fragment";
+      case Ji:
+        return "Portal";
+      case Yn:
+        return "Profiler";
+      case Qn:
+        return "StrictMode";
+      case Jn:
+        return "Suspense";
+      case Kn:
+        return "SuspenseList";
+    }
+    if (typeof t == "object")
+      switch (t.$$typeof) {
+        case ws:
+          return (t.displayName || "Context") + ".Consumer";
+        case zs:
+          return (t._context.displayName || "Context") + ".Provider";
+        case Xn:
+          var i = t.render;
+          return (
+            (t = t.displayName),
+            t ||
+              ((t = i.displayName || i.name || ""),
+              (t = t !== "" ? "ForwardRef(" + t + ")" : "ForwardRef")),
+            t
+          );
+        case Zn:
+          return (
+            (i = t.displayName || null),
+            i !== null ? i : ro(t.type) || "Memo"
+          );
+        case pi:
+          ((i = t._payload), (t = t._init));
+          try {
+            return ro(t(i));
+          } catch (r) {}
+      }
+    return null;
+  }
+  function Tu(t) {
+    var i = t.type;
+    switch (t.tag) {
+      case 24:
+        return "Cache";
+      case 9:
+        return (i.displayName || "Context") + ".Consumer";
+      case 10:
+        return (i._context.displayName || "Context") + ".Provider";
+      case 18:
+        return "DehydratedFragment";
+      case 11:
+        return (
+          (t = i.render),
+          (t = t.displayName || t.name || ""),
+          i.displayName || (t !== "" ? "ForwardRef(" + t + ")" : "ForwardRef")
+        );
+      case 7:
+        return "Fragment";
+      case 5:
+        return i;
+      case 4:
+        return "Portal";
+      case 3:
+        return "Root";
+      case 6:
+        return "Text";
+      case 16:
+        return ro(i);
+      case 8:
+        return i === Qn ? "StrictMode" : "Mode";
+      case 22:
+        return "Offscreen";
+      case 12:
+        return "Profiler";
+      case 21:
+        return "Scope";
+      case 13:
+        return "Suspense";
+      case 19:
+        return "SuspenseList";
+      case 25:
+        return "TracingMarker";
+      case 1:
+      case 0:
+      case 17:
+      case 2:
+      case 14:
+      case 15:
+        if (typeof i == "function") return i.displayName || i.name || null;
+        if (typeof i == "string") return i;
+    }
+    return null;
+  }
+  function ui(t) {
+    switch (typeof t) {
+      case "boolean":
+      case "number":
+      case "string":
+      case "undefined":
+        return t;
+      case "object":
+        return t;
+      default:
+        return "";
+    }
+  }
+  function Ps(t) {
+    var i = t.type;
+    return (
+      (t = t.nodeName) &&
+      t.toLowerCase() === "input" &&
+      (i === "checkbox" || i === "radio")
+    );
+  }
+  function Eu(t) {
+    var i = Ps(t) ? "checked" : "value",
+      r = Object.getOwnPropertyDescriptor(t.constructor.prototype, i),
+      n = "" + t[i];
+    if (
+      !t.hasOwnProperty(i) &&
+      typeof r != "undefined" &&
+      typeof r.get == "function" &&
+      typeof r.set == "function"
+    ) {
+      var l = r.get,
+        o = r.set;
+      return (
+        Object.defineProperty(t, i, {
+          configurable: !0,
+          get: function () {
+            return l.call(this);
+          },
+          set: function (s) {
+            ((n = "" + s), o.call(this, s));
+          },
+        }),
+        Object.defineProperty(t, i, { enumerable: r.enumerable }),
+        {
+          getValue: function () {
+            return n;
+          },
+          setValue: function (s) {
+            n = "" + s;
+          },
+          stopTracking: function () {
+            ((t._valueTracker = null), delete t[i]);
+          },
+        }
+      );
+    }
+  }
+  function Sa(t) {
+    t._valueTracker || (t._valueTracker = Eu(t));
+  }
+  function Ts(t) {
+    if (!t) return !1;
+    var i = t._valueTracker;
+    if (!i) return !0;
+    var r = i.getValue(),
+      n = "";
+    return (
+      t && (n = Ps(t) ? (t.checked ? "true" : "false") : t.value),
+      (t = n),
+      t !== r ? (i.setValue(t), !0) : !1
+    );
+  }
+  function Ca(t) {
+    if (
+      ((t = t || (typeof document != "undefined" ? document : void 0)),
+      typeof t == "undefined")
+    )
+      return null;
+    try {
+      return t.activeElement || t.body;
+    } catch (i) {
+      return t.body;
+    }
+  }
+  function ao(t, i) {
+    var r = i.checked;
+    return We({}, i, {
+      defaultChecked: void 0,
+      defaultValue: void 0,
+      value: void 0,
+      checked: r != null ? r : t._wrapperState.initialChecked,
+    });
+  }
+  function Es(t, i) {
+    var r = i.defaultValue == null ? "" : i.defaultValue,
+      n = i.checked != null ? i.checked : i.defaultChecked;
+    ((r = ui(i.value != null ? i.value : r)),
+      (t._wrapperState = {
+        initialChecked: n,
+        initialValue: r,
+        controlled:
+          i.type === "checkbox" || i.type === "radio"
+            ? i.checked != null
+            : i.value != null,
+      }));
+  }
+  function As(t, i) {
+    ((i = i.checked), i != null && qn(t, "checked", i, !1));
+  }
+  function no(t, i) {
+    As(t, i);
+    var r = ui(i.value),
+      n = i.type;
+    if (r != null)
+      n === "number"
+        ? ((r === 0 && t.value === "") || t.value != r) && (t.value = "" + r)
+        : t.value !== "" + r && (t.value = "" + r);
+    else if (n === "submit" || n === "reset") {
+      t.removeAttribute("value");
+      return;
+    }
+    (i.hasOwnProperty("value")
+      ? oo(t, i.type, r)
+      : i.hasOwnProperty("defaultValue") && oo(t, i.type, ui(i.defaultValue)),
+      i.checked == null &&
+        i.defaultChecked != null &&
+        (t.defaultChecked = !!i.defaultChecked));
+  }
+  function Ms(t, i, r) {
+    if (i.hasOwnProperty("value") || i.hasOwnProperty("defaultValue")) {
+      var n = i.type;
+      if (!(
+        (n !== "submit" && n !== "reset") ||
+        (i.value !== void 0 && i.value !== null)
+      ))
+        return;
+      ((i = "" + t._wrapperState.initialValue),
+        r || i === t.value || (t.value = i),
+        (t.defaultValue = i));
+    }
+    ((r = t.name),
+      r !== "" && (t.name = ""),
+      (t.defaultChecked = !!t._wrapperState.initialChecked),
+      r !== "" && (t.name = r));
+  }
+  function oo(t, i, r) {
+    (i !== "number" || Ca(t.ownerDocument) !== t) &&
+      (r == null
+        ? (t.defaultValue = "" + t._wrapperState.initialValue)
+        : t.defaultValue !== "" + r && (t.defaultValue = "" + r));
+  }
+  var Er = Array.isArray;
+  function Zi(t, i, r, n) {
+    if (((t = t.options), i)) {
+      i = {};
+      for (var l = 0; l < r.length; l++) i["$" + r[l]] = !0;
+      for (r = 0; r < t.length; r++)
+        ((l = i.hasOwnProperty("$" + t[r].value)),
+          t[r].selected !== l && (t[r].selected = l),
+          l && n && (t[r].defaultSelected = !0));
+    } else {
+      for (r = "" + ui(r), i = null, l = 0; l < t.length; l++) {
+        if (t[l].value === r) {
+          ((t[l].selected = !0), n && (t[l].defaultSelected = !0));
+          return;
+        }
+        i !== null || t[l].disabled || (i = t[l]);
+      }
+      i !== null && (i.selected = !0);
+    }
+  }
+  function lo(t, i) {
+    if (i.dangerouslySetInnerHTML != null) throw Error(ge(91));
+    return We({}, i, {
+      value: void 0,
+      defaultValue: void 0,
+      children: "" + t._wrapperState.initialValue,
+    });
+  }
+  function Fs(t, i) {
+    var r = i.value;
+    if (r == null) {
+      if (((r = i.children), (i = i.defaultValue), r != null)) {
+        if (i != null) throw Error(ge(92));
+        if (Er(r)) {
+          if (1 < r.length) throw Error(ge(93));
+          r = r[0];
+        }
+        i = r;
+      }
+      (i == null && (i = ""), (r = i));
+    }
+    t._wrapperState = { initialValue: ui(r) };
+  }
+  function Rs(t, i) {
+    var r = ui(i.value),
+      n = ui(i.defaultValue);
+    (r != null &&
+      ((r = "" + r),
+      r !== t.value && (t.value = r),
+      i.defaultValue == null && t.defaultValue !== r && (t.defaultValue = r)),
+      n != null && (t.defaultValue = "" + n));
+  }
+  function Bs(t) {
+    var i = t.textContent;
+    i === t._wrapperState.initialValue &&
+      i !== "" &&
+      i !== null &&
+      (t.value = i);
+  }
+  function Ls(t) {
+    switch (t) {
+      case "svg":
+        return "http://www.w3.org/2000/svg";
+      case "math":
+        return "http://www.w3.org/1998/Math/MathML";
+      default:
+        return "http://www.w3.org/1999/xhtml";
+    }
+  }
+  function so(t, i) {
+    return t == null || t === "http://www.w3.org/1999/xhtml"
+      ? Ls(i)
+      : t === "http://www.w3.org/2000/svg" && i === "foreignObject"
+        ? "http://www.w3.org/1999/xhtml"
+        : t;
+  }
+  var za,
+    Ds = (function (t) {
+      return typeof MSApp != "undefined" && MSApp.execUnsafeLocalFunction
+        ? function (i, r, n, l) {
+            MSApp.execUnsafeLocalFunction(function () {
+              return t(i, r, n, l);
+            });
+          }
+        : t;
+    })(function (t, i) {
+      if (t.namespaceURI !== "http://www.w3.org/2000/svg" || "innerHTML" in t)
+        t.innerHTML = i;
+      else {
+        for (
+          za = za || document.createElement("div"),
+            za.innerHTML = "<svg>" + i.valueOf().toString() + "</svg>",
+            i = za.firstChild;
+          t.firstChild;
+        )
+          t.removeChild(t.firstChild);
+        for (; i.firstChild;) t.appendChild(i.firstChild);
+      }
+    });
+  function Ar(t, i) {
+    if (i) {
+      var r = t.firstChild;
+      if (r && r === t.lastChild && r.nodeType === 3) {
+        r.nodeValue = i;
+        return;
+      }
+    }
+    t.textContent = i;
+  }
+  var Mr = {
+      animationIterationCount: !0,
+      aspectRatio: !0,
+      borderImageOutset: !0,
+      borderImageSlice: !0,
+      borderImageWidth: !0,
+      boxFlex: !0,
+      boxFlexGroup: !0,
+      boxOrdinalGroup: !0,
+      columnCount: !0,
+      columns: !0,
+      flex: !0,
+      flexGrow: !0,
+      flexPositive: !0,
+      flexShrink: !0,
+      flexNegative: !0,
+      flexOrder: !0,
+      gridArea: !0,
+      gridRow: !0,
+      gridRowEnd: !0,
+      gridRowSpan: !0,
+      gridRowStart: !0,
+      gridColumn: !0,
+      gridColumnEnd: !0,
+      gridColumnSpan: !0,
+      gridColumnStart: !0,
+      fontWeight: !0,
+      lineClamp: !0,
+      lineHeight: !0,
+      opacity: !0,
+      order: !0,
+      orphans: !0,
+      tabSize: !0,
+      widows: !0,
+      zIndex: !0,
+      zoom: !0,
+      fillOpacity: !0,
+      floodOpacity: !0,
+      stopOpacity: !0,
+      strokeDasharray: !0,
+      strokeDashoffset: !0,
+      strokeMiterlimit: !0,
+      strokeOpacity: !0,
+      strokeWidth: !0,
+    },
+    Au = ["Webkit", "ms", "Moz", "O"];
+  Object.keys(Mr).forEach(function (t) {
+    Au.forEach(function (i) {
+      ((i = i + t.charAt(0).toUpperCase() + t.substring(1)), (Mr[i] = Mr[t]));
+    });
+  });
+  function Ns(t, i, r) {
+    return i == null || typeof i == "boolean" || i === ""
+      ? ""
+      : r || typeof i != "number" || i === 0 || (Mr.hasOwnProperty(t) && Mr[t])
+        ? ("" + i).trim()
+        : i + "px";
+  }
+  function Os(t, i) {
+    t = t.style;
+    for (var r in i)
+      if (i.hasOwnProperty(r)) {
+        var n = r.indexOf("--") === 0,
+          l = Ns(r, i[r], n);
+        (r === "float" && (r = "cssFloat"),
+          n ? t.setProperty(r, l) : (t[r] = l));
+      }
+  }
+  var Mu = We(
+    { menuitem: !0 },
+    {
+      area: !0,
+      base: !0,
+      br: !0,
+      col: !0,
+      embed: !0,
+      hr: !0,
+      img: !0,
+      input: !0,
+      keygen: !0,
+      link: !0,
+      meta: !0,
+      param: !0,
+      source: !0,
+      track: !0,
+      wbr: !0,
+    },
+  );
+  function co(t, i) {
+    if (i) {
+      if (Mu[t] && (i.children != null || i.dangerouslySetInnerHTML != null))
+        throw Error(ge(137, t));
+      if (i.dangerouslySetInnerHTML != null) {
+        if (i.children != null) throw Error(ge(60));
+        if (
+          typeof i.dangerouslySetInnerHTML != "object" ||
+          !("__html" in i.dangerouslySetInnerHTML)
+        )
+          throw Error(ge(61));
+      }
+      if (i.style != null && typeof i.style != "object") throw Error(ge(62));
+    }
+  }
+  function po(t, i) {
+    if (t.indexOf("-") === -1) return typeof i.is == "string";
+    switch (t) {
+      case "annotation-xml":
+      case "color-profile":
+      case "font-face":
+      case "font-face-src":
+      case "font-face-uri":
+      case "font-face-format":
+      case "font-face-name":
+      case "missing-glyph":
+        return !1;
+      default:
+        return !0;
+    }
+  }
+  var uo = null;
+  function mo(t) {
+    return (
+      (t = t.target || t.srcElement || window),
+      t.correspondingUseElement && (t = t.correspondingUseElement),
+      t.nodeType === 3 ? t.parentNode : t
+    );
+  }
+  var fo = null,
+    er = null,
+    tr = null;
+  function Ws(t) {
+    if ((t = ea(t))) {
+      if (typeof fo != "function") throw Error(ge(280));
+      var i = t.stateNode;
+      i && ((i = qa(i)), fo(t.stateNode, t.type, i));
+    }
+  }
+  function Us(t) {
+    er ? (tr ? tr.push(t) : (tr = [t])) : (er = t);
+  }
+  function Gs() {
+    if (er) {
+      var t = er,
+        i = tr;
+      if (((tr = er = null), Ws(t), i)) for (t = 0; t < i.length; t++) Ws(i[t]);
+    }
+  }
+  function _s(t, i) {
+    return t(i);
+  }
+  function Hs() {}
+  var go = !1;
+  function $s(t, i, r) {
+    if (go) return t(i, r);
+    go = !0;
+    try {
+      return _s(t, i, r);
+    } finally {
+      ((go = !1), (er !== null || tr !== null) && (Hs(), Gs()));
+    }
+  }
+  function Fr(t, i) {
+    var r = t.stateNode;
+    if (r === null) return null;
+    var n = qa(r);
+    if (n === null) return null;
+    r = n[i];
+    e: switch (i) {
+      case "onClick":
+      case "onClickCapture":
+      case "onDoubleClick":
+      case "onDoubleClickCapture":
+      case "onMouseDown":
+      case "onMouseDownCapture":
+      case "onMouseMove":
+      case "onMouseMoveCapture":
+      case "onMouseUp":
+      case "onMouseUpCapture":
+      case "onMouseEnter":
+        ((n = !n.disabled) ||
+          ((t = t.type),
+          (n = !(
+            t === "button" ||
+            t === "input" ||
+            t === "select" ||
+            t === "textarea"
+          ))),
+          (t = !n));
+        break e;
+      default:
+        t = !1;
+    }
+    if (t) return null;
+    if (r && typeof r != "function") throw Error(ge(231, i, typeof r));
+    return r;
+  }
+  var xo = !1;
+  if (Jt)
+    try {
+      var Rr = {};
+      (Object.defineProperty(Rr, "passive", {
+        get: function () {
+          xo = !0;
+        },
+      }),
+        window.addEventListener("test", Rr, Rr),
+        window.removeEventListener("test", Rr, Rr));
+    } catch (t) {
+      xo = !1;
+    }
+  function Fu(t, i, r, n, l, o, s, m, p) {
+    var C = Array.prototype.slice.call(arguments, 3);
+    try {
+      i.apply(r, C);
+    } catch (b) {
+      this.onError(b);
+    }
+  }
+  var Br = !1,
+    wa = null,
+    Ia = !1,
+    ho = null,
+    Ru = {
+      onError: function (t) {
+        ((Br = !0), (wa = t));
+      },
+    };
+  function Bu(t, i, r, n, l, o, s, m, p) {
+    ((Br = !1), (wa = null), Fu.apply(Ru, arguments));
+  }
+  function Lu(t, i, r, n, l, o, s, m, p) {
+    if ((Bu.apply(this, arguments), Br)) {
+      if (Br) {
+        var C = wa;
+        ((Br = !1), (wa = null));
+      } else throw Error(ge(198));
+      Ia || ((Ia = !0), (ho = C));
+    }
+  }
+  function Ri(t) {
+    var i = t,
+      r = t;
+    if (t.alternate) for (; i.return;) i = i.return;
+    else {
+      t = i;
+      do ((i = t), i.flags & 4098 && (r = i.return), (t = i.return));
+      while (t);
+    }
+    return i.tag === 3 ? r : null;
+  }
+  function Vs(t) {
+    if (t.tag === 13) {
+      var i = t.memoizedState;
+      if (
+        (i === null && ((t = t.alternate), t !== null && (i = t.memoizedState)),
+        i !== null)
+      )
+        return i.dehydrated;
+    }
+    return null;
+  }
+  function qs(t) {
+    if (Ri(t) !== t) throw Error(ge(188));
+  }
+  function Du(t) {
+    var i = t.alternate;
+    if (!i) {
+      if (((i = Ri(t)), i === null)) throw Error(ge(188));
+      return i !== t ? null : t;
+    }
+    for (var r = t, n = i; ;) {
+      var l = r.return;
+      if (l === null) break;
+      var o = l.alternate;
+      if (o === null) {
+        if (((n = l.return), n !== null)) {
+          r = n;
+          continue;
+        }
+        break;
+      }
+      if (l.child === o.child) {
+        for (o = l.child; o;) {
+          if (o === r) return (qs(l), t);
+          if (o === n) return (qs(l), i);
+          o = o.sibling;
+        }
+        throw Error(ge(188));
+      }
+      if (r.return !== n.return) ((r = l), (n = o));
+      else {
+        for (var s = !1, m = l.child; m;) {
+          if (m === r) {
+            ((s = !0), (r = l), (n = o));
+            break;
+          }
+          if (m === n) {
+            ((s = !0), (n = l), (r = o));
+            break;
+          }
+          m = m.sibling;
+        }
+        if (!s) {
+          for (m = o.child; m;) {
+            if (m === r) {
+              ((s = !0), (r = o), (n = l));
+              break;
+            }
+            if (m === n) {
+              ((s = !0), (n = o), (r = l));
+              break;
+            }
+            m = m.sibling;
+          }
+          if (!s) throw Error(ge(189));
+        }
+      }
+      if (r.alternate !== n) throw Error(ge(190));
+    }
+    if (r.tag !== 3) throw Error(ge(188));
+    return r.stateNode.current === r ? t : i;
+  }
+  function Qs(t) {
+    return ((t = Du(t)), t !== null ? Ys(t) : null);
+  }
+  function Ys(t) {
+    if (t.tag === 5 || t.tag === 6) return t;
+    for (t = t.child; t !== null;) {
+      var i = Ys(t);
+      if (i !== null) return i;
+      t = t.sibling;
+    }
+    return null;
+  }
+  var Xs = vt.unstable_scheduleCallback,
+    Js = vt.unstable_cancelCallback,
+    Nu = vt.unstable_shouldYield,
+    Ou = vt.unstable_requestPaint,
+    $e = vt.unstable_now,
+    Wu = vt.unstable_getCurrentPriorityLevel,
+    vo = vt.unstable_ImmediatePriority,
+    Ks = vt.unstable_UserBlockingPriority,
+    ka = vt.unstable_NormalPriority,
+    Uu = vt.unstable_LowPriority,
+    Zs = vt.unstable_IdlePriority,
+    Pa = null,
+    $t = null;
+  function Gu(t) {
+    if ($t && typeof $t.onCommitFiberRoot == "function")
+      try {
+        $t.onCommitFiberRoot(Pa, t, void 0, (t.current.flags & 128) === 128);
+      } catch (i) {}
+  }
+  var Ft = Math.clz32 ? Math.clz32 : $u,
+    _u = Math.log,
+    Hu = Math.LN2;
+  function $u(t) {
+    return ((t >>>= 0), t === 0 ? 32 : (31 - ((_u(t) / Hu) | 0)) | 0);
+  }
+  var Ta = 64,
+    Ea = 4194304;
+  function Lr(t) {
+    switch (t & -t) {
+      case 1:
+        return 1;
+      case 2:
+        return 2;
+      case 4:
+        return 4;
+      case 8:
+        return 8;
+      case 16:
+        return 16;
+      case 32:
+        return 32;
+      case 64:
+      case 128:
+      case 256:
+      case 512:
+      case 1024:
+      case 2048:
+      case 4096:
+      case 8192:
+      case 16384:
+      case 32768:
+      case 65536:
+      case 131072:
+      case 262144:
+      case 524288:
+      case 1048576:
+      case 2097152:
+        return t & 4194240;
+      case 4194304:
+      case 8388608:
+      case 16777216:
+      case 33554432:
+      case 67108864:
+        return t & 130023424;
+      case 134217728:
+        return 134217728;
+      case 268435456:
+        return 268435456;
+      case 536870912:
+        return 536870912;
+      case 1073741824:
+        return 1073741824;
+      default:
+        return t;
+    }
+  }
+  function Aa(t, i) {
+    var r = t.pendingLanes;
+    if (r === 0) return 0;
+    var n = 0,
+      l = t.suspendedLanes,
+      o = t.pingedLanes,
+      s = r & 268435455;
+    if (s !== 0) {
+      var m = s & ~l;
+      m !== 0 ? (n = Lr(m)) : ((o &= s), o !== 0 && (n = Lr(o)));
+    } else ((s = r & ~l), s !== 0 ? (n = Lr(s)) : o !== 0 && (n = Lr(o)));
+    if (n === 0) return 0;
+    if (
+      i !== 0 &&
+      i !== n &&
+      !(i & l) &&
+      ((l = n & -n), (o = i & -i), l >= o || (l === 16 && (o & 4194240) !== 0))
+    )
+      return i;
+    if ((n & 4 && (n |= r & 16), (i = t.entangledLanes), i !== 0))
+      for (t = t.entanglements, i &= n; 0 < i;)
+        ((r = 31 - Ft(i)), (l = 1 << r), (n |= t[r]), (i &= ~l));
+    return n;
+  }
+  function Vu(t, i) {
+    switch (t) {
+      case 1:
+      case 2:
+      case 4:
+        return i + 250;
+      case 8:
+      case 16:
+      case 32:
+      case 64:
+      case 128:
+      case 256:
+      case 512:
+      case 1024:
+      case 2048:
+      case 4096:
+      case 8192:
+      case 16384:
+      case 32768:
+      case 65536:
+      case 131072:
+      case 262144:
+      case 524288:
+      case 1048576:
+      case 2097152:
+        return i + 5e3;
+      case 4194304:
+      case 8388608:
+      case 16777216:
+      case 33554432:
+      case 67108864:
+        return -1;
+      case 134217728:
+      case 268435456:
+      case 536870912:
+      case 1073741824:
+        return -1;
+      default:
+        return -1;
+    }
+  }
+  function qu(t, i) {
+    for (
+      var r = t.suspendedLanes,
+        n = t.pingedLanes,
+        l = t.expirationTimes,
+        o = t.pendingLanes;
+      0 < o;
+    ) {
+      var s = 31 - Ft(o),
+        m = 1 << s,
+        p = l[s];
+      (p === -1
+        ? (!(m & r) || m & n) && (l[s] = Vu(m, i))
+        : p <= i && (t.expiredLanes |= m),
+        (o &= ~m));
+    }
+  }
+  function bo(t) {
+    return (
+      (t = t.pendingLanes & -1073741825),
+      t !== 0 ? t : t & 1073741824 ? 1073741824 : 0
+    );
+  }
+  function ed() {
+    var t = Ta;
+    return ((Ta <<= 1), !(Ta & 4194240) && (Ta = 64), t);
+  }
+  function yo(t) {
+    for (var i = [], r = 0; 31 > r; r++) i.push(t);
+    return i;
+  }
+  function Dr(t, i, r) {
+    ((t.pendingLanes |= i),
+      i !== 536870912 && ((t.suspendedLanes = 0), (t.pingedLanes = 0)),
+      (t = t.eventTimes),
+      (i = 31 - Ft(i)),
+      (t[i] = r));
+  }
+  function Qu(t, i) {
+    var r = t.pendingLanes & ~i;
+    ((t.pendingLanes = i),
+      (t.suspendedLanes = 0),
+      (t.pingedLanes = 0),
+      (t.expiredLanes &= i),
+      (t.mutableReadLanes &= i),
+      (t.entangledLanes &= i),
+      (i = t.entanglements));
+    var n = t.eventTimes;
+    for (t = t.expirationTimes; 0 < r;) {
+      var l = 31 - Ft(r),
+        o = 1 << l;
+      ((i[l] = 0), (n[l] = -1), (t[l] = -1), (r &= ~o));
+    }
+  }
+  function jo(t, i) {
+    var r = (t.entangledLanes |= i);
+    for (t = t.entanglements; r;) {
+      var n = 31 - Ft(r),
+        l = 1 << n;
+      ((l & i) | (t[n] & i) && (t[n] |= i), (r &= ~l));
+    }
+  }
+  var Be = 0;
+  function td(t) {
+    return (
+      (t &= -t),
+      1 < t ? (4 < t ? (t & 268435455 ? 16 : 536870912) : 4) : 1
+    );
+  }
+  var id,
+    So,
+    rd,
+    ad,
+    nd,
+    Co = !1,
+    Ma = [],
+    mi = null,
+    fi = null,
+    gi = null,
+    Nr = new Map(),
+    Or = new Map(),
+    xi = [],
+    Yu =
+      "mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset submit".split(
+        " ",
+      );
+  function od(t, i) {
+    switch (t) {
+      case "focusin":
+      case "focusout":
+        mi = null;
+        break;
+      case "dragenter":
+      case "dragleave":
+        fi = null;
+        break;
+      case "mouseover":
+      case "mouseout":
+        gi = null;
+        break;
+      case "pointerover":
+      case "pointerout":
+        Nr.delete(i.pointerId);
+        break;
+      case "gotpointercapture":
+      case "lostpointercapture":
+        Or.delete(i.pointerId);
+    }
+  }
+  function Wr(t, i, r, n, l, o) {
+    return t === null || t.nativeEvent !== o
+      ? ((t = {
+          blockedOn: i,
+          domEventName: r,
+          eventSystemFlags: n,
+          nativeEvent: o,
+          targetContainers: [l],
+        }),
+        i !== null && ((i = ea(i)), i !== null && So(i)),
+        t)
+      : ((t.eventSystemFlags |= n),
+        (i = t.targetContainers),
+        l !== null && i.indexOf(l) === -1 && i.push(l),
+        t);
+  }
+  function Xu(t, i, r, n, l) {
+    switch (i) {
+      case "focusin":
+        return ((mi = Wr(mi, t, i, r, n, l)), !0);
+      case "dragenter":
+        return ((fi = Wr(fi, t, i, r, n, l)), !0);
+      case "mouseover":
+        return ((gi = Wr(gi, t, i, r, n, l)), !0);
+      case "pointerover":
+        var o = l.pointerId;
+        return (Nr.set(o, Wr(Nr.get(o) || null, t, i, r, n, l)), !0);
+      case "gotpointercapture":
+        return (
+          (o = l.pointerId),
+          Or.set(o, Wr(Or.get(o) || null, t, i, r, n, l)),
+          !0
+        );
+    }
+    return !1;
+  }
+  function ld(t) {
+    var i = Bi(t.target);
+    if (i !== null) {
+      var r = Ri(i);
+      if (r !== null) {
+        if (((i = r.tag), i === 13)) {
+          if (((i = Vs(r)), i !== null)) {
+            ((t.blockedOn = i),
+              nd(t.priority, function () {
+                rd(r);
+              }));
+            return;
+          }
+        } else if (i === 3 && r.stateNode.current.memoizedState.isDehydrated) {
+          t.blockedOn = r.tag === 3 ? r.stateNode.containerInfo : null;
+          return;
+        }
+      }
+    }
+    t.blockedOn = null;
+  }
+  function Fa(t) {
+    if (t.blockedOn !== null) return !1;
+    for (var i = t.targetContainers; 0 < i.length;) {
+      var r = wo(t.domEventName, t.eventSystemFlags, i[0], t.nativeEvent);
+      if (r === null) {
+        r = t.nativeEvent;
+        var n = new r.constructor(r.type, r);
+        ((uo = n), r.target.dispatchEvent(n), (uo = null));
+      } else return ((i = ea(r)), i !== null && So(i), (t.blockedOn = r), !1);
+      i.shift();
+    }
+    return !0;
+  }
+  function sd(t, i, r) {
+    Fa(t) && r.delete(i);
+  }
+  function Ju() {
+    ((Co = !1),
+      mi !== null && Fa(mi) && (mi = null),
+      fi !== null && Fa(fi) && (fi = null),
+      gi !== null && Fa(gi) && (gi = null),
+      Nr.forEach(sd),
+      Or.forEach(sd));
+  }
+  function Ur(t, i) {
+    t.blockedOn === i &&
+      ((t.blockedOn = null),
+      Co ||
+        ((Co = !0),
+        vt.unstable_scheduleCallback(vt.unstable_NormalPriority, Ju)));
+  }
+  function Gr(t) {
+    function i(l) {
+      return Ur(l, t);
+    }
+    if (0 < Ma.length) {
+      Ur(Ma[0], t);
+      for (var r = 1; r < Ma.length; r++) {
+        var n = Ma[r];
+        n.blockedOn === t && (n.blockedOn = null);
+      }
+    }
+    for (
+      mi !== null && Ur(mi, t),
+        fi !== null && Ur(fi, t),
+        gi !== null && Ur(gi, t),
+        Nr.forEach(i),
+        Or.forEach(i),
+        r = 0;
+      r < xi.length;
+      r++
+    )
+      ((n = xi[r]), n.blockedOn === t && (n.blockedOn = null));
+    for (; 0 < xi.length && ((r = xi[0]), r.blockedOn === null);)
+      (ld(r), r.blockedOn === null && xi.shift());
+  }
+  var ir = Kt.ReactCurrentBatchConfig,
+    Ra = !0;
+  function Ku(t, i, r, n) {
+    var l = Be,
+      o = ir.transition;
+    ir.transition = null;
+    try {
+      ((Be = 1), zo(t, i, r, n));
+    } finally {
+      ((Be = l), (ir.transition = o));
+    }
+  }
+  function Zu(t, i, r, n) {
+    var l = Be,
+      o = ir.transition;
+    ir.transition = null;
+    try {
+      ((Be = 4), zo(t, i, r, n));
+    } finally {
+      ((Be = l), (ir.transition = o));
+    }
+  }
+  function zo(t, i, r, n) {
+    if (Ra) {
+      var l = wo(t, i, r, n);
+      if (l === null) (Go(t, i, n, Ba, r), od(t, n));
+      else if (Xu(l, t, i, r, n)) n.stopPropagation();
+      else if ((od(t, n), i & 4 && -1 < Yu.indexOf(t))) {
+        for (; l !== null;) {
+          var o = ea(l);
+          if (
+            (o !== null && id(o),
+            (o = wo(t, i, r, n)),
+            o === null && Go(t, i, n, Ba, r),
+            o === l)
+          )
+            break;
+          l = o;
+        }
+        l !== null && n.stopPropagation();
+      } else Go(t, i, n, null, r);
+    }
+  }
+  var Ba = null;
+  function wo(t, i, r, n) {
+    if (((Ba = null), (t = mo(n)), (t = Bi(t)), t !== null))
+      if (((i = Ri(t)), i === null)) t = null;
+      else if (((r = i.tag), r === 13)) {
+        if (((t = Vs(i)), t !== null)) return t;
+        t = null;
+      } else if (r === 3) {
+        if (i.stateNode.current.memoizedState.isDehydrated)
+          return i.tag === 3 ? i.stateNode.containerInfo : null;
+        t = null;
+      } else i !== t && (t = null);
+    return ((Ba = t), null);
+  }
+  function dd(t) {
+    switch (t) {
+      case "cancel":
+      case "click":
+      case "close":
+      case "contextmenu":
+      case "copy":
+      case "cut":
+      case "auxclick":
+      case "dblclick":
+      case "dragend":
+      case "dragstart":
+      case "drop":
+      case "focusin":
+      case "focusout":
+      case "input":
+      case "invalid":
+      case "keydown":
+      case "keypress":
+      case "keyup":
+      case "mousedown":
+      case "mouseup":
+      case "paste":
+      case "pause":
+      case "play":
+      case "pointercancel":
+      case "pointerdown":
+      case "pointerup":
+      case "ratechange":
+      case "reset":
+      case "resize":
+      case "seeked":
+      case "submit":
+      case "touchcancel":
+      case "touchend":
+      case "touchstart":
+      case "volumechange":
+      case "change":
+      case "selectionchange":
+      case "textInput":
+      case "compositionstart":
+      case "compositionend":
+      case "compositionupdate":
+      case "beforeblur":
+      case "afterblur":
+      case "beforeinput":
+      case "blur":
+      case "fullscreenchange":
+      case "focus":
+      case "hashchange":
+      case "popstate":
+      case "select":
+      case "selectstart":
+        return 1;
+      case "drag":
+      case "dragenter":
+      case "dragexit":
+      case "dragleave":
+      case "dragover":
+      case "mousemove":
+      case "mouseout":
+      case "mouseover":
+      case "pointermove":
+      case "pointerout":
+      case "pointerover":
+      case "scroll":
+      case "toggle":
+      case "touchmove":
+      case "wheel":
+      case "mouseenter":
+      case "mouseleave":
+      case "pointerenter":
+      case "pointerleave":
+        return 4;
+      case "message":
+        switch (Wu()) {
+          case vo:
+            return 1;
+          case Ks:
+            return 4;
+          case ka:
+          case Uu:
+            return 16;
+          case Zs:
+            return 536870912;
+          default:
+            return 16;
+        }
+      default:
+        return 16;
+    }
+  }
+  var hi = null,
+    Io = null,
+    La = null;
+  function cd() {
+    if (La) return La;
+    var t,
+      i = Io,
+      r = i.length,
+      n,
+      l = "value" in hi ? hi.value : hi.textContent,
+      o = l.length;
+    for (t = 0; t < r && i[t] === l[t]; t++);
+    var s = r - t;
+    for (n = 1; n <= s && i[r - n] === l[o - n]; n++);
+    return (La = l.slice(t, 1 < n ? 1 - n : void 0));
+  }
+  function Da(t) {
+    var i = t.keyCode;
+    return (
+      "charCode" in t
+        ? ((t = t.charCode), t === 0 && i === 13 && (t = 13))
+        : (t = i),
+      t === 10 && (t = 13),
+      32 <= t || t === 13 ? t : 0
+    );
+  }
+  function Na() {
+    return !0;
+  }
+  function pd() {
+    return !1;
+  }
+  function bt(t) {
+    function i(r, n, l, o, s) {
+      ((this._reactName = r),
+        (this._targetInst = l),
+        (this.type = n),
+        (this.nativeEvent = o),
+        (this.target = s),
+        (this.currentTarget = null));
+      for (var m in t)
+        t.hasOwnProperty(m) && ((r = t[m]), (this[m] = r ? r(o) : o[m]));
+      return (
+        (this.isDefaultPrevented = (
+          o.defaultPrevented != null ? o.defaultPrevented : o.returnValue === !1
+        )
+          ? Na
+          : pd),
+        (this.isPropagationStopped = pd),
+        this
+      );
+    }
+    return (
+      We(i.prototype, {
+        preventDefault: function () {
+          this.defaultPrevented = !0;
+          var r = this.nativeEvent;
+          r &&
+            (r.preventDefault
+              ? r.preventDefault()
+              : typeof r.returnValue != "unknown" && (r.returnValue = !1),
+            (this.isDefaultPrevented = Na));
+        },
+        stopPropagation: function () {
+          var r = this.nativeEvent;
+          r &&
+            (r.stopPropagation
+              ? r.stopPropagation()
+              : typeof r.cancelBubble != "unknown" && (r.cancelBubble = !0),
+            (this.isPropagationStopped = Na));
+        },
+        persist: function () {},
+        isPersistent: Na,
+      }),
+      i
+    );
+  }
+  var rr = {
+      eventPhase: 0,
+      bubbles: 0,
+      cancelable: 0,
+      timeStamp: function (t) {
+        return t.timeStamp || Date.now();
+      },
+      defaultPrevented: 0,
+      isTrusted: 0,
+    },
+    ko = bt(rr),
+    _r = We({}, rr, { view: 0, detail: 0 }),
+    em = bt(_r),
+    Po,
+    To,
+    Hr,
+    Oa = We({}, _r, {
+      screenX: 0,
+      screenY: 0,
+      clientX: 0,
+      clientY: 0,
+      pageX: 0,
+      pageY: 0,
+      ctrlKey: 0,
+      shiftKey: 0,
+      altKey: 0,
+      metaKey: 0,
+      getModifierState: Ao,
+      button: 0,
+      buttons: 0,
+      relatedTarget: function (t) {
+        return t.relatedTarget === void 0
+          ? t.fromElement === t.srcElement
+            ? t.toElement
+            : t.fromElement
+          : t.relatedTarget;
+      },
+      movementX: function (t) {
+        return "movementX" in t
+          ? t.movementX
+          : (t !== Hr &&
+              (Hr && t.type === "mousemove"
+                ? ((Po = t.screenX - Hr.screenX), (To = t.screenY - Hr.screenY))
+                : (To = Po = 0),
+              (Hr = t)),
+            Po);
+      },
+      movementY: function (t) {
+        return "movementY" in t ? t.movementY : To;
+      },
+    }),
+    ud = bt(Oa),
+    tm = We({}, Oa, { dataTransfer: 0 }),
+    im = bt(tm),
+    rm = We({}, _r, { relatedTarget: 0 }),
+    Eo = bt(rm),
+    am = We({}, rr, { animationName: 0, elapsedTime: 0, pseudoElement: 0 }),
+    nm = bt(am),
+    om = We({}, rr, {
+      clipboardData: function (t) {
+        return "clipboardData" in t ? t.clipboardData : window.clipboardData;
+      },
+    }),
+    lm = bt(om),
+    sm = We({}, rr, { data: 0 }),
+    md = bt(sm),
+    dm = {
+      Esc: "Escape",
+      Spacebar: " ",
+      Left: "ArrowLeft",
+      Up: "ArrowUp",
+      Right: "ArrowRight",
+      Down: "ArrowDown",
+      Del: "Delete",
+      Win: "OS",
+      Menu: "ContextMenu",
+      Apps: "ContextMenu",
+      Scroll: "ScrollLock",
+      MozPrintableKey: "Unidentified",
+    },
+    cm = {
+      8: "Backspace",
+      9: "Tab",
+      12: "Clear",
+      13: "Enter",
+      16: "Shift",
+      17: "Control",
+      18: "Alt",
+      19: "Pause",
+      20: "CapsLock",
+      27: "Escape",
+      32: " ",
+      33: "PageUp",
+      34: "PageDown",
+      35: "End",
+      36: "Home",
+      37: "ArrowLeft",
+      38: "ArrowUp",
+      39: "ArrowRight",
+      40: "ArrowDown",
+      45: "Insert",
+      46: "Delete",
+      112: "F1",
+      113: "F2",
+      114: "F3",
+      115: "F4",
+      116: "F5",
+      117: "F6",
+      118: "F7",
+      119: "F8",
+      120: "F9",
+      121: "F10",
+      122: "F11",
+      123: "F12",
+      144: "NumLock",
+      145: "ScrollLock",
+      224: "Meta",
+    },
+    pm = {
+      Alt: "altKey",
+      Control: "ctrlKey",
+      Meta: "metaKey",
+      Shift: "shiftKey",
+    };
+  function um(t) {
+    var i = this.nativeEvent;
+    return i.getModifierState
+      ? i.getModifierState(t)
+      : (t = pm[t])
+        ? !!i[t]
+        : !1;
+  }
+  function Ao() {
+    return um;
+  }
+  var mm = We({}, _r, {
+      key: function (t) {
+        if (t.key) {
+          var i = dm[t.key] || t.key;
+          if (i !== "Unidentified") return i;
+        }
+        return t.type === "keypress"
+          ? ((t = Da(t)), t === 13 ? "Enter" : String.fromCharCode(t))
+          : t.type === "keydown" || t.type === "keyup"
+            ? cm[t.keyCode] || "Unidentified"
+            : "";
+      },
+      code: 0,
+      location: 0,
+      ctrlKey: 0,
+      shiftKey: 0,
+      altKey: 0,
+      metaKey: 0,
+      repeat: 0,
+      locale: 0,
+      getModifierState: Ao,
+      charCode: function (t) {
+        return t.type === "keypress" ? Da(t) : 0;
+      },
+      keyCode: function (t) {
+        return t.type === "keydown" || t.type === "keyup" ? t.keyCode : 0;
+      },
+      which: function (t) {
+        return t.type === "keypress"
+          ? Da(t)
+          : t.type === "keydown" || t.type === "keyup"
+            ? t.keyCode
+            : 0;
+      },
+    }),
+    fm = bt(mm),
+    gm = We({}, Oa, {
+      pointerId: 0,
+      width: 0,
+      height: 0,
+      pressure: 0,
+      tangentialPressure: 0,
+      tiltX: 0,
+      tiltY: 0,
+      twist: 0,
+      pointerType: 0,
+      isPrimary: 0,
+    }),
+    fd = bt(gm),
+    xm = We({}, _r, {
+      touches: 0,
+      targetTouches: 0,
+      changedTouches: 0,
+      altKey: 0,
+      metaKey: 0,
+      ctrlKey: 0,
+      shiftKey: 0,
+      getModifierState: Ao,
+    }),
+    hm = bt(xm),
+    vm = We({}, rr, { propertyName: 0, elapsedTime: 0, pseudoElement: 0 }),
+    bm = bt(vm),
+    ym = We({}, Oa, {
+      deltaX: function (t) {
+        return "deltaX" in t
+          ? t.deltaX
+          : "wheelDeltaX" in t
+            ? -t.wheelDeltaX
+            : 0;
+      },
+      deltaY: function (t) {
+        return "deltaY" in t
+          ? t.deltaY
+          : "wheelDeltaY" in t
+            ? -t.wheelDeltaY
+            : "wheelDelta" in t
+              ? -t.wheelDelta
+              : 0;
+      },
+      deltaZ: 0,
+      deltaMode: 0,
+    }),
+    jm = bt(ym),
+    Sm = [9, 13, 27, 32],
+    Mo = Jt && "CompositionEvent" in window,
+    $r = null;
+  Jt && "documentMode" in document && ($r = document.documentMode);
+  var Cm = Jt && "TextEvent" in window && !$r,
+    gd = Jt && (!Mo || ($r && 8 < $r && 11 >= $r)),
+    xd = " ",
+    hd = !1;
+  function vd(t, i) {
+    switch (t) {
+      case "keyup":
+        return Sm.indexOf(i.keyCode) !== -1;
+      case "keydown":
+        return i.keyCode !== 229;
+      case "keypress":
+      case "mousedown":
+      case "focusout":
+        return !0;
+      default:
+        return !1;
+    }
+  }
+  function bd(t) {
+    return (
+      (t = t.detail),
+      typeof t == "object" && "data" in t ? t.data : null
+    );
+  }
+  var ar = !1;
+  function zm(t, i) {
+    switch (t) {
+      case "compositionend":
+        return bd(i);
+      case "keypress":
+        return i.which !== 32 ? null : ((hd = !0), xd);
+      case "textInput":
+        return ((t = i.data), t === xd && hd ? null : t);
+      default:
+        return null;
+    }
+  }
+  function wm(t, i) {
+    if (ar)
+      return t === "compositionend" || (!Mo && vd(t, i))
+        ? ((t = cd()), (La = Io = hi = null), (ar = !1), t)
+        : null;
+    switch (t) {
+      case "paste":
+        return null;
+      case "keypress":
+        if (!(i.ctrlKey || i.altKey || i.metaKey) || (i.ctrlKey && i.altKey)) {
+          if (i.char && 1 < i.char.length) return i.char;
+          if (i.which) return String.fromCharCode(i.which);
+        }
+        return null;
+      case "compositionend":
+        return gd && i.locale !== "ko" ? null : i.data;
+      default:
+        return null;
+    }
+  }
+  var Im = {
+    color: !0,
+    date: !0,
+    datetime: !0,
+    "datetime-local": !0,
+    email: !0,
+    month: !0,
+    number: !0,
+    password: !0,
+    range: !0,
+    search: !0,
+    tel: !0,
+    text: !0,
+    time: !0,
+    url: !0,
+    week: !0,
+  };
+  function yd(t) {
+    var i = t && t.nodeName && t.nodeName.toLowerCase();
+    return i === "input" ? !!Im[t.type] : i === "textarea";
+  }
+  function jd(t, i, r, n) {
+    (Us(n),
+      (i = Ha(i, "onChange")),
+      0 < i.length &&
+        ((r = new ko("onChange", "change", null, r, n)),
+        t.push({ event: r, listeners: i })));
+  }
+  var Vr = null,
+    qr = null;
+  function km(t) {
+    Od(t, 0);
+  }
+  function Wa(t) {
+    var i = dr(t);
+    if (Ts(i)) return t;
+  }
+  function Pm(t, i) {
+    if (t === "change") return i;
+  }
+  var Sd = !1;
+  if (Jt) {
+    var Fo;
+    if (Jt) {
+      var Ro = "oninput" in document;
+      if (!Ro) {
+        var Cd = document.createElement("div");
+        (Cd.setAttribute("oninput", "return;"),
+          (Ro = typeof Cd.oninput == "function"));
+      }
+      Fo = Ro;
+    } else Fo = !1;
+    Sd = Fo && (!document.documentMode || 9 < document.documentMode);
+  }
+  function zd() {
+    Vr && (Vr.detachEvent("onpropertychange", wd), (qr = Vr = null));
+  }
+  function wd(t) {
+    if (t.propertyName === "value" && Wa(qr)) {
+      var i = [];
+      (jd(i, qr, t, mo(t)), $s(km, i));
+    }
+  }
+  function Tm(t, i, r) {
+    t === "focusin"
+      ? (zd(), (Vr = i), (qr = r), Vr.attachEvent("onpropertychange", wd))
+      : t === "focusout" && zd();
+  }
+  function Em(t) {
+    if (t === "selectionchange" || t === "keyup" || t === "keydown")
+      return Wa(qr);
+  }
+  function Am(t, i) {
+    if (t === "click") return Wa(i);
+  }
+  function Mm(t, i) {
+    if (t === "input" || t === "change") return Wa(i);
+  }
+  function Fm(t, i) {
+    return (t === i && (t !== 0 || 1 / t === 1 / i)) || (t !== t && i !== i);
+  }
+  var Rt = typeof Object.is == "function" ? Object.is : Fm;
+  function Qr(t, i) {
+    if (Rt(t, i)) return !0;
+    if (
+      typeof t != "object" ||
+      t === null ||
+      typeof i != "object" ||
+      i === null
+    )
+      return !1;
+    var r = Object.keys(t),
+      n = Object.keys(i);
+    if (r.length !== n.length) return !1;
+    for (n = 0; n < r.length; n++) {
+      var l = r[n];
+      if (!Hn.call(i, l) || !Rt(t[l], i[l])) return !1;
+    }
+    return !0;
+  }
+  function Id(t) {
+    for (; t && t.firstChild;) t = t.firstChild;
+    return t;
+  }
+  function kd(t, i) {
+    var r = Id(t);
+    t = 0;
+    for (var n; r;) {
+      if (r.nodeType === 3) {
+        if (((n = t + r.textContent.length), t <= i && n >= i))
+          return { node: r, offset: i - t };
+        t = n;
+      }
+      e: {
+        for (; r;) {
+          if (r.nextSibling) {
+            r = r.nextSibling;
+            break e;
+          }
+          r = r.parentNode;
+        }
+        r = void 0;
+      }
+      r = Id(r);
+    }
+  }
+  function Pd(t, i) {
+    return t && i
+      ? t === i
+        ? !0
+        : t && t.nodeType === 3
+          ? !1
+          : i && i.nodeType === 3
+            ? Pd(t, i.parentNode)
+            : "contains" in t
+              ? t.contains(i)
+              : t.compareDocumentPosition
+                ? !!(t.compareDocumentPosition(i) & 16)
+                : !1
+      : !1;
+  }
+  function Td() {
+    for (var t = window, i = Ca(); i instanceof t.HTMLIFrameElement;) {
+      try {
+        var r = typeof i.contentWindow.location.href == "string";
+      } catch (n) {
+        r = !1;
+      }
+      if (r) t = i.contentWindow;
+      else break;
+      i = Ca(t.document);
+    }
+    return i;
+  }
+  function Bo(t) {
+    var i = t && t.nodeName && t.nodeName.toLowerCase();
+    return (
+      i &&
+      ((i === "input" &&
+        (t.type === "text" ||
+          t.type === "search" ||
+          t.type === "tel" ||
+          t.type === "url" ||
+          t.type === "password")) ||
+        i === "textarea" ||
+        t.contentEditable === "true")
+    );
+  }
+  function Rm(t) {
+    var i = Td(),
+      r = t.focusedElem,
+      n = t.selectionRange;
+    if (
+      i !== r &&
+      r &&
+      r.ownerDocument &&
+      Pd(r.ownerDocument.documentElement, r)
+    ) {
+      if (n !== null && Bo(r)) {
+        if (
+          ((i = n.start),
+          (t = n.end),
+          t === void 0 && (t = i),
+          "selectionStart" in r)
+        )
+          ((r.selectionStart = i),
+            (r.selectionEnd = Math.min(t, r.value.length)));
+        else if (
+          ((t = ((i = r.ownerDocument || document) && i.defaultView) || window),
+          t.getSelection)
+        ) {
+          t = t.getSelection();
+          var l = r.textContent.length,
+            o = Math.min(n.start, l);
+          ((n = n.end === void 0 ? o : Math.min(n.end, l)),
+            !t.extend && o > n && ((l = n), (n = o), (o = l)),
+            (l = kd(r, o)));
+          var s = kd(r, n);
+          l &&
+            s &&
+            (t.rangeCount !== 1 ||
+              t.anchorNode !== l.node ||
+              t.anchorOffset !== l.offset ||
+              t.focusNode !== s.node ||
+              t.focusOffset !== s.offset) &&
+            ((i = i.createRange()),
+            i.setStart(l.node, l.offset),
+            t.removeAllRanges(),
+            o > n
+              ? (t.addRange(i), t.extend(s.node, s.offset))
+              : (i.setEnd(s.node, s.offset), t.addRange(i)));
+        }
+      }
+      for (i = [], t = r; (t = t.parentNode);)
+        t.nodeType === 1 &&
+          i.push({ element: t, left: t.scrollLeft, top: t.scrollTop });
+      for (typeof r.focus == "function" && r.focus(), r = 0; r < i.length; r++)
+        ((t = i[r]),
+          (t.element.scrollLeft = t.left),
+          (t.element.scrollTop = t.top));
+    }
+  }
+  var Bm = Jt && "documentMode" in document && 11 >= document.documentMode,
+    nr = null,
+    Lo = null,
+    Yr = null,
+    Do = !1;
+  function Ed(t, i, r) {
+    var n =
+      r.window === r ? r.document : r.nodeType === 9 ? r : r.ownerDocument;
+    Do ||
+      nr == null ||
+      nr !== Ca(n) ||
+      ((n = nr),
+      "selectionStart" in n && Bo(n)
+        ? (n = { start: n.selectionStart, end: n.selectionEnd })
+        : ((n = (
+            (n.ownerDocument && n.ownerDocument.defaultView) ||
+            window
+          ).getSelection()),
+          (n = {
+            anchorNode: n.anchorNode,
+            anchorOffset: n.anchorOffset,
+            focusNode: n.focusNode,
+            focusOffset: n.focusOffset,
+          })),
+      (Yr && Qr(Yr, n)) ||
+        ((Yr = n),
+        (n = Ha(Lo, "onSelect")),
+        0 < n.length &&
+          ((i = new ko("onSelect", "select", null, i, r)),
+          t.push({ event: i, listeners: n }),
+          (i.target = nr))));
+  }
+  function Ua(t, i) {
+    var r = {};
+    return (
+      (r[t.toLowerCase()] = i.toLowerCase()),
+      (r["Webkit" + t] = "webkit" + i),
+      (r["Moz" + t] = "moz" + i),
+      r
+    );
+  }
+  var or = {
+      animationend: Ua("Animation", "AnimationEnd"),
+      animationiteration: Ua("Animation", "AnimationIteration"),
+      animationstart: Ua("Animation", "AnimationStart"),
+      transitionend: Ua("Transition", "TransitionEnd"),
+    },
+    No = {},
+    Ad = {};
+  Jt &&
+    ((Ad = document.createElement("div").style),
+    "AnimationEvent" in window ||
+      (delete or.animationend.animation,
+      delete or.animationiteration.animation,
+      delete or.animationstart.animation),
+    "TransitionEvent" in window || delete or.transitionend.transition);
+  function Ga(t) {
+    if (No[t]) return No[t];
+    if (!or[t]) return t;
+    var i = or[t],
+      r;
+    for (r in i) if (i.hasOwnProperty(r) && r in Ad) return (No[t] = i[r]);
+    return t;
+  }
+  var Md = Ga("animationend"),
+    Fd = Ga("animationiteration"),
+    Rd = Ga("animationstart"),
+    Bd = Ga("transitionend"),
+    Ld = new Map(),
+    Dd =
+      "abort auxClick cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel".split(
+        " ",
+      );
+  function vi(t, i) {
+    (Ld.set(t, i), Fi(i, [t]));
+  }
+  for (var Oo = 0; Oo < Dd.length; Oo++) {
+    var Wo = Dd[Oo],
+      Lm = Wo.toLowerCase(),
+      Dm = Wo[0].toUpperCase() + Wo.slice(1);
+    vi(Lm, "on" + Dm);
+  }
+  (vi(Md, "onAnimationEnd"),
+    vi(Fd, "onAnimationIteration"),
+    vi(Rd, "onAnimationStart"),
+    vi("dblclick", "onDoubleClick"),
+    vi("focusin", "onFocus"),
+    vi("focusout", "onBlur"),
+    vi(Bd, "onTransitionEnd"),
+    Xi("onMouseEnter", ["mouseout", "mouseover"]),
+    Xi("onMouseLeave", ["mouseout", "mouseover"]),
+    Xi("onPointerEnter", ["pointerout", "pointerover"]),
+    Xi("onPointerLeave", ["pointerout", "pointerover"]),
+    Fi(
+      "onChange",
+      "change click focusin focusout input keydown keyup selectionchange".split(
+        " ",
+      ),
+    ),
+    Fi(
+      "onSelect",
+      "focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange".split(
+        " ",
+      ),
+    ),
+    Fi("onBeforeInput", ["compositionend", "keypress", "textInput", "paste"]),
+    Fi(
+      "onCompositionEnd",
+      "compositionend focusout keydown keypress keyup mousedown".split(" "),
+    ),
+    Fi(
+      "onCompositionStart",
+      "compositionstart focusout keydown keypress keyup mousedown".split(" "),
+    ),
+    Fi(
+      "onCompositionUpdate",
+      "compositionupdate focusout keydown keypress keyup mousedown".split(" "),
+    ));
+  var Xr =
+      "abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting".split(
+        " ",
+      ),
+    Nm = new Set(
+      "cancel close invalid load scroll toggle".split(" ").concat(Xr),
+    );
+  function Nd(t, i, r) {
+    var n = t.type || "unknown-event";
+    ((t.currentTarget = r), Lu(n, i, void 0, t), (t.currentTarget = null));
+  }
+  function Od(t, i) {
+    i = (i & 4) !== 0;
+    for (var r = 0; r < t.length; r++) {
+      var n = t[r],
+        l = n.event;
+      n = n.listeners;
+      e: {
+        var o = void 0;
+        if (i)
+          for (var s = n.length - 1; 0 <= s; s--) {
+            var m = n[s],
+              p = m.instance,
+              C = m.currentTarget;
+            if (((m = m.listener), p !== o && l.isPropagationStopped()))
+              break e;
+            (Nd(l, m, C), (o = p));
+          }
+        else
+          for (s = 0; s < n.length; s++) {
+            if (
+              ((m = n[s]),
+              (p = m.instance),
+              (C = m.currentTarget),
+              (m = m.listener),
+              p !== o && l.isPropagationStopped())
+            )
+              break e;
+            (Nd(l, m, C), (o = p));
+          }
+      }
+    }
+    if (Ia) throw ((t = ho), (Ia = !1), (ho = null), t);
+  }
+  function De(t, i) {
+    var r = i[Qo];
+    r === void 0 && (r = i[Qo] = new Set());
+    var n = t + "__bubble";
+    r.has(n) || (Wd(i, t, 2, !1), r.add(n));
+  }
+  function Uo(t, i, r) {
+    var n = 0;
+    (i && (n |= 4), Wd(r, t, n, i));
+  }
+  var _a = "_reactListening" + Math.random().toString(36).slice(2);
+  function Jr(t) {
+    if (!t[_a]) {
+      ((t[_a] = !0),
+        js.forEach(function (r) {
+          r !== "selectionchange" && (Nm.has(r) || Uo(r, !1, t), Uo(r, !0, t));
+        }));
+      var i = t.nodeType === 9 ? t : t.ownerDocument;
+      i === null || i[_a] || ((i[_a] = !0), Uo("selectionchange", !1, i));
+    }
+  }
+  function Wd(t, i, r, n) {
+    switch (dd(i)) {
+      case 1:
+        var l = Ku;
+        break;
+      case 4:
+        l = Zu;
+        break;
+      default:
+        l = zo;
+    }
+    ((r = l.bind(null, i, r, t)),
+      (l = void 0),
+      !xo ||
+        (i !== "touchstart" && i !== "touchmove" && i !== "wheel") ||
+        (l = !0),
+      n
+        ? l !== void 0
+          ? t.addEventListener(i, r, { capture: !0, passive: l })
+          : t.addEventListener(i, r, !0)
+        : l !== void 0
+          ? t.addEventListener(i, r, { passive: l })
+          : t.addEventListener(i, r, !1));
+  }
+  function Go(t, i, r, n, l) {
+    var o = n;
+    if (!(i & 1) && !(i & 2) && n !== null)
+      e: for (;;) {
+        if (n === null) return;
+        var s = n.tag;
+        if (s === 3 || s === 4) {
+          var m = n.stateNode.containerInfo;
+          if (m === l || (m.nodeType === 8 && m.parentNode === l)) break;
+          if (s === 4)
+            for (s = n.return; s !== null;) {
+              var p = s.tag;
+              if (
+                (p === 3 || p === 4) &&
+                ((p = s.stateNode.containerInfo),
+                p === l || (p.nodeType === 8 && p.parentNode === l))
+              )
+                return;
+              s = s.return;
+            }
+          for (; m !== null;) {
+            if (((s = Bi(m)), s === null)) return;
+            if (((p = s.tag), p === 5 || p === 6)) {
+              n = o = s;
+              continue e;
+            }
+            m = m.parentNode;
+          }
+        }
+        n = n.return;
+      }
+    $s(function () {
+      var C = o,
+        b = mo(r),
+        h = [];
+      e: {
+        var j = Ld.get(t);
+        if (j !== void 0) {
+          var F = ko,
+            g = t;
+          switch (t) {
+            case "keypress":
+              if (Da(r) === 0) break e;
+            case "keydown":
+            case "keyup":
+              F = fm;
+              break;
+            case "focusin":
+              ((g = "focus"), (F = Eo));
+              break;
+            case "focusout":
+              ((g = "blur"), (F = Eo));
+              break;
+            case "beforeblur":
+            case "afterblur":
+              F = Eo;
+              break;
+            case "click":
+              if (r.button === 2) break e;
+            case "auxclick":
+            case "dblclick":
+            case "mousedown":
+            case "mousemove":
+            case "mouseup":
+            case "mouseout":
+            case "mouseover":
+            case "contextmenu":
+              F = ud;
+              break;
+            case "drag":
+            case "dragend":
+            case "dragenter":
+            case "dragexit":
+            case "dragleave":
+            case "dragover":
+            case "dragstart":
+            case "drop":
+              F = im;
+              break;
+            case "touchcancel":
+            case "touchend":
+            case "touchmove":
+            case "touchstart":
+              F = hm;
+              break;
+            case Md:
+            case Fd:
+            case Rd:
+              F = nm;
+              break;
+            case Bd:
+              F = bm;
+              break;
+            case "scroll":
+              F = em;
+              break;
+            case "wheel":
+              F = jm;
+              break;
+            case "copy":
+            case "cut":
+            case "paste":
+              F = lm;
+              break;
+            case "gotpointercapture":
+            case "lostpointercapture":
+            case "pointercancel":
+            case "pointerdown":
+            case "pointermove":
+            case "pointerout":
+            case "pointerover":
+            case "pointerup":
+              F = fd;
+          }
+          var z = (i & 4) !== 0,
+            B = !z && t === "scroll",
+            w = z ? (j !== null ? j + "Capture" : null) : j;
+          z = [];
+          for (var v = C, x; v !== null;) {
+            x = v;
+            var f = x.stateNode;
+            if (
+              (x.tag === 5 &&
+                f !== null &&
+                ((x = f),
+                w !== null &&
+                  ((f = Fr(v, w)), f != null && z.push(Kr(v, f, x)))),
+              B)
+            )
+              break;
+            v = v.return;
+          }
+          0 < z.length &&
+            ((j = new F(j, g, null, r, b)), h.push({ event: j, listeners: z }));
+        }
+      }
+      if (!(i & 7)) {
+        e: {
+          if (
+            ((j = t === "mouseover" || t === "pointerover"),
+            (F = t === "mouseout" || t === "pointerout"),
+            j &&
+              r !== uo &&
+              (g = r.relatedTarget || r.fromElement) &&
+              (Bi(g) || g[Zt]))
+          )
+            break e;
+          if (
+            (F || j) &&
+            ((j =
+              b.window === b
+                ? b
+                : (j = b.ownerDocument)
+                  ? j.defaultView || j.parentWindow
+                  : window),
+            F
+              ? ((g = r.relatedTarget || r.toElement),
+                (F = C),
+                (g = g ? Bi(g) : null),
+                g !== null &&
+                  ((B = Ri(g)), g !== B || (g.tag !== 5 && g.tag !== 6)) &&
+                  (g = null))
+              : ((F = null), (g = C)),
+            F !== g)
+          ) {
+            if (
+              ((z = ud),
+              (f = "onMouseLeave"),
+              (w = "onMouseEnter"),
+              (v = "mouse"),
+              (t === "pointerout" || t === "pointerover") &&
+                ((z = fd),
+                (f = "onPointerLeave"),
+                (w = "onPointerEnter"),
+                (v = "pointer")),
+              (B = F == null ? j : dr(F)),
+              (x = g == null ? j : dr(g)),
+              (j = new z(f, v + "leave", F, r, b)),
+              (j.target = B),
+              (j.relatedTarget = x),
+              (f = null),
+              Bi(b) === C &&
+                ((z = new z(w, v + "enter", g, r, b)),
+                (z.target = x),
+                (z.relatedTarget = B),
+                (f = z)),
+              (B = f),
+              F && g)
+            )
+              t: {
+                for (z = F, w = g, v = 0, x = z; x; x = lr(x)) v++;
+                for (x = 0, f = w; f; f = lr(f)) x++;
+                for (; 0 < v - x;) ((z = lr(z)), v--);
+                for (; 0 < x - v;) ((w = lr(w)), x--);
+                for (; v--;) {
+                  if (z === w || (w !== null && z === w.alternate)) break t;
+                  ((z = lr(z)), (w = lr(w)));
+                }
+                z = null;
+              }
+            else z = null;
+            (F !== null && Ud(h, j, F, z, !1),
+              g !== null && B !== null && Ud(h, B, g, z, !0));
+          }
+        }
+        e: {
+          if (
+            ((j = C ? dr(C) : window),
+            (F = j.nodeName && j.nodeName.toLowerCase()),
+            F === "select" || (F === "input" && j.type === "file"))
+          )
+            var I = Pm;
+          else if (yd(j))
+            if (Sd) I = Mm;
+            else {
+              I = Em;
+              var D = Tm;
+            }
+          else
+            (F = j.nodeName) &&
+              F.toLowerCase() === "input" &&
+              (j.type === "checkbox" || j.type === "radio") &&
+              (I = Am);
+          if (I && (I = I(t, C))) {
+            jd(h, I, r, b);
+            break e;
+          }
+          (D && D(t, j, C),
+            t === "focusout" &&
+              (D = j._wrapperState) &&
+              D.controlled &&
+              j.type === "number" &&
+              oo(j, "number", j.value));
+        }
+        switch (((D = C ? dr(C) : window), t)) {
+          case "focusin":
+            (yd(D) || D.contentEditable === "true") &&
+              ((nr = D), (Lo = C), (Yr = null));
+            break;
+          case "focusout":
+            Yr = Lo = nr = null;
+            break;
+          case "mousedown":
+            Do = !0;
+            break;
+          case "contextmenu":
+          case "mouseup":
+          case "dragend":
+            ((Do = !1), Ed(h, r, b));
+            break;
+          case "selectionchange":
+            if (Bm) break;
+          case "keydown":
+          case "keyup":
+            Ed(h, r, b);
+        }
+        var k;
+        if (Mo)
+          e: {
+            switch (t) {
+              case "compositionstart":
+                var R = "onCompositionStart";
+                break e;
+              case "compositionend":
+                R = "onCompositionEnd";
+                break e;
+              case "compositionupdate":
+                R = "onCompositionUpdate";
+                break e;
+            }
+            R = void 0;
+          }
+        else
+          ar
+            ? vd(t, r) && (R = "onCompositionEnd")
+            : t === "keydown" &&
+              r.keyCode === 229 &&
+              (R = "onCompositionStart");
+        (R &&
+          (gd &&
+            r.locale !== "ko" &&
+            (ar || R !== "onCompositionStart"
+              ? R === "onCompositionEnd" && ar && (k = cd())
+              : ((hi = b),
+                (Io = "value" in hi ? hi.value : hi.textContent),
+                (ar = !0))),
+          (D = Ha(C, R)),
+          0 < D.length &&
+            ((R = new md(R, t, null, r, b)),
+            h.push({ event: R, listeners: D }),
+            k ? (R.data = k) : ((k = bd(r)), k !== null && (R.data = k)))),
+          (k = Cm ? zm(t, r) : wm(t, r)) &&
+            ((C = Ha(C, "onBeforeInput")),
+            0 < C.length &&
+              ((b = new md("onBeforeInput", "beforeinput", null, r, b)),
+              h.push({ event: b, listeners: C }),
+              (b.data = k))));
+      }
+      Od(h, i);
+    });
+  }
+  function Kr(t, i, r) {
+    return { instance: t, listener: i, currentTarget: r };
+  }
+  function Ha(t, i) {
+    for (var r = i + "Capture", n = []; t !== null;) {
+      var l = t,
+        o = l.stateNode;
+      (l.tag === 5 &&
+        o !== null &&
+        ((l = o),
+        (o = Fr(t, r)),
+        o != null && n.unshift(Kr(t, o, l)),
+        (o = Fr(t, i)),
+        o != null && n.push(Kr(t, o, l))),
+        (t = t.return));
+    }
+    return n;
+  }
+  function lr(t) {
+    if (t === null) return null;
+    do t = t.return;
+    while (t && t.tag !== 5);
+    return t || null;
+  }
+  function Ud(t, i, r, n, l) {
+    for (var o = i._reactName, s = []; r !== null && r !== n;) {
+      var m = r,
+        p = m.alternate,
+        C = m.stateNode;
+      if (p !== null && p === n) break;
+      (m.tag === 5 &&
+        C !== null &&
+        ((m = C),
+        l
+          ? ((p = Fr(r, o)), p != null && s.unshift(Kr(r, p, m)))
+          : l || ((p = Fr(r, o)), p != null && s.push(Kr(r, p, m)))),
+        (r = r.return));
+    }
+    s.length !== 0 && t.push({ event: i, listeners: s });
+  }
+  var Om = /\r\n?/g,
+    Wm = /\u0000|\uFFFD/g;
+  function Gd(t) {
+    return (typeof t == "string" ? t : "" + t)
+      .replace(
+        Om,
+        `
+`,
+      )
+      .replace(Wm, "");
+  }
+  function $a(t, i, r) {
+    if (((i = Gd(i)), Gd(t) !== i && r)) throw Error(ge(425));
+  }
+  function Va() {}
+  var _o = null,
+    Ho = null;
+  function $o(t, i) {
+    return (
+      t === "textarea" ||
+      t === "noscript" ||
+      typeof i.children == "string" ||
+      typeof i.children == "number" ||
+      (typeof i.dangerouslySetInnerHTML == "object" &&
+        i.dangerouslySetInnerHTML !== null &&
+        i.dangerouslySetInnerHTML.__html != null)
+    );
+  }
+  var Vo = typeof setTimeout == "function" ? setTimeout : void 0,
+    Um = typeof clearTimeout == "function" ? clearTimeout : void 0,
+    _d = typeof Promise == "function" ? Promise : void 0,
+    Gm =
+      typeof queueMicrotask == "function"
+        ? queueMicrotask
+        : typeof _d != "undefined"
+          ? function (t) {
+              return _d.resolve(null).then(t).catch(_m);
+            }
+          : Vo;
+  function _m(t) {
+    setTimeout(function () {
+      throw t;
+    });
+  }
+  function qo(t, i) {
+    var r = i,
+      n = 0;
+    do {
+      var l = r.nextSibling;
+      if ((t.removeChild(r), l && l.nodeType === 8))
+        if (((r = l.data), r === "/$")) {
+          if (n === 0) {
+            (t.removeChild(l), Gr(i));
+            return;
+          }
+          n--;
+        } else (r !== "$" && r !== "$?" && r !== "$!") || n++;
+      r = l;
+    } while (r);
+    Gr(i);
+  }
+  function bi(t) {
+    for (; t != null; t = t.nextSibling) {
+      var i = t.nodeType;
+      if (i === 1 || i === 3) break;
+      if (i === 8) {
+        if (((i = t.data), i === "$" || i === "$!" || i === "$?")) break;
+        if (i === "/$") return null;
+      }
+    }
+    return t;
+  }
+  function Hd(t) {
+    t = t.previousSibling;
+    for (var i = 0; t;) {
+      if (t.nodeType === 8) {
+        var r = t.data;
+        if (r === "$" || r === "$!" || r === "$?") {
+          if (i === 0) return t;
+          i--;
+        } else r === "/$" && i++;
+      }
+      t = t.previousSibling;
+    }
+    return null;
+  }
+  var sr = Math.random().toString(36).slice(2),
+    Vt = "__reactFiber$" + sr,
+    Zr = "__reactProps$" + sr,
+    Zt = "__reactContainer$" + sr,
+    Qo = "__reactEvents$" + sr,
+    Hm = "__reactListeners$" + sr,
+    $m = "__reactHandles$" + sr;
+  function Bi(t) {
+    var i = t[Vt];
+    if (i) return i;
+    for (var r = t.parentNode; r;) {
+      if ((i = r[Zt] || r[Vt])) {
+        if (
+          ((r = i.alternate),
+          i.child !== null || (r !== null && r.child !== null))
+        )
+          for (t = Hd(t); t !== null;) {
+            if ((r = t[Vt])) return r;
+            t = Hd(t);
+          }
+        return i;
+      }
+      ((t = r), (r = t.parentNode));
+    }
+    return null;
+  }
+  function ea(t) {
+    return (
+      (t = t[Vt] || t[Zt]),
+      !t || (t.tag !== 5 && t.tag !== 6 && t.tag !== 13 && t.tag !== 3)
+        ? null
+        : t
+    );
+  }
+  function dr(t) {
+    if (t.tag === 5 || t.tag === 6) return t.stateNode;
+    throw Error(ge(33));
+  }
+  function qa(t) {
+    return t[Zr] || null;
+  }
+  var Yo = [],
+    cr = -1;
+  function yi(t) {
+    return { current: t };
+  }
+  function Ne(t) {
+    0 > cr || ((t.current = Yo[cr]), (Yo[cr] = null), cr--);
+  }
+  function Le(t, i) {
+    (cr++, (Yo[cr] = t.current), (t.current = i));
+  }
+  var ji = {},
+    et = yi(ji),
+    ut = yi(!1),
+    Li = ji;
+  function pr(t, i) {
+    var r = t.type.contextTypes;
+    if (!r) return ji;
+    var n = t.stateNode;
+    if (n && n.__reactInternalMemoizedUnmaskedChildContext === i)
+      return n.__reactInternalMemoizedMaskedChildContext;
+    var l = {},
+      o;
+    for (o in r) l[o] = i[o];
+    return (
+      n &&
+        ((t = t.stateNode),
+        (t.__reactInternalMemoizedUnmaskedChildContext = i),
+        (t.__reactInternalMemoizedMaskedChildContext = l)),
+      l
+    );
+  }
+  function mt(t) {
+    return ((t = t.childContextTypes), t != null);
+  }
+  function Qa() {
+    (Ne(ut), Ne(et));
+  }
+  function $d(t, i, r) {
+    if (et.current !== ji) throw Error(ge(168));
+    (Le(et, i), Le(ut, r));
+  }
+  function Vd(t, i, r) {
+    var n = t.stateNode;
+    if (((i = i.childContextTypes), typeof n.getChildContext != "function"))
+      return r;
+    n = n.getChildContext();
+    for (var l in n) if (!(l in i)) throw Error(ge(108, Tu(t) || "Unknown", l));
+    return We({}, r, n);
+  }
+  function Ya(t) {
+    return (
+      (t =
+        ((t = t.stateNode) && t.__reactInternalMemoizedMergedChildContext) ||
+        ji),
+      (Li = et.current),
+      Le(et, t),
+      Le(ut, ut.current),
+      !0
+    );
+  }
+  function qd(t, i, r) {
+    var n = t.stateNode;
+    if (!n) throw Error(ge(169));
+    (r
+      ? ((t = Vd(t, i, Li)),
+        (n.__reactInternalMemoizedMergedChildContext = t),
+        Ne(ut),
+        Ne(et),
+        Le(et, t))
+      : Ne(ut),
+      Le(ut, r));
+  }
+  var ei = null,
+    Xa = !1,
+    Xo = !1;
+  function Qd(t) {
+    ei === null ? (ei = [t]) : ei.push(t);
+  }
+  function Vm(t) {
+    ((Xa = !0), Qd(t));
+  }
+  function Si() {
+    if (!Xo && ei !== null) {
+      Xo = !0;
+      var t = 0,
+        i = Be;
+      try {
+        var r = ei;
+        for (Be = 1; t < r.length; t++) {
+          var n = r[t];
+          do n = n(!0);
+          while (n !== null);
+        }
+        ((ei = null), (Xa = !1));
+      } catch (l) {
+        throw (ei !== null && (ei = ei.slice(t + 1)), Xs(vo, Si), l);
+      } finally {
+        ((Be = i), (Xo = !1));
+      }
+    }
+    return null;
+  }
+  var ur = [],
+    mr = 0,
+    Ja = null,
+    Ka = 0,
+    wt = [],
+    It = 0,
+    Di = null,
+    ti = 1,
+    ii = "";
+  function Ni(t, i) {
+    ((ur[mr++] = Ka), (ur[mr++] = Ja), (Ja = t), (Ka = i));
+  }
+  function Yd(t, i, r) {
+    ((wt[It++] = ti), (wt[It++] = ii), (wt[It++] = Di), (Di = t));
+    var n = ti;
+    t = ii;
+    var l = 32 - Ft(n) - 1;
+    ((n &= ~(1 << l)), (r += 1));
+    var o = 32 - Ft(i) + l;
+    if (30 < o) {
+      var s = l - (l % 5);
+      ((o = (n & ((1 << s) - 1)).toString(32)),
+        (n >>= s),
+        (l -= s),
+        (ti = (1 << (32 - Ft(i) + l)) | (r << l) | n),
+        (ii = o + t));
+    } else ((ti = (1 << o) | (r << l) | n), (ii = t));
+  }
+  function Jo(t) {
+    t.return !== null && (Ni(t, 1), Yd(t, 1, 0));
+  }
+  function Ko(t) {
+    for (; t === Ja;)
+      ((Ja = ur[--mr]), (ur[mr] = null), (Ka = ur[--mr]), (ur[mr] = null));
+    for (; t === Di;)
+      ((Di = wt[--It]),
+        (wt[It] = null),
+        (ii = wt[--It]),
+        (wt[It] = null),
+        (ti = wt[--It]),
+        (wt[It] = null));
+  }
+  var yt = null,
+    jt = null,
+    Oe = !1,
+    Bt = null;
+  function Xd(t, i) {
+    var r = Et(5, null, null, 0);
+    ((r.elementType = "DELETED"),
+      (r.stateNode = i),
+      (r.return = t),
+      (i = t.deletions),
+      i === null ? ((t.deletions = [r]), (t.flags |= 16)) : i.push(r));
+  }
+  function Jd(t, i) {
+    switch (t.tag) {
+      case 5:
+        var r = t.type;
+        return (
+          (i =
+            i.nodeType !== 1 || r.toLowerCase() !== i.nodeName.toLowerCase()
+              ? null
+              : i),
+          i !== null
+            ? ((t.stateNode = i), (yt = t), (jt = bi(i.firstChild)), !0)
+            : !1
+        );
+      case 6:
+        return (
+          (i = t.pendingProps === "" || i.nodeType !== 3 ? null : i),
+          i !== null ? ((t.stateNode = i), (yt = t), (jt = null), !0) : !1
+        );
+      case 13:
+        return (
+          (i = i.nodeType !== 8 ? null : i),
+          i !== null
+            ? ((r = Di !== null ? { id: ti, overflow: ii } : null),
+              (t.memoizedState = {
+                dehydrated: i,
+                treeContext: r,
+                retryLane: 1073741824,
+              }),
+              (r = Et(18, null, null, 0)),
+              (r.stateNode = i),
+              (r.return = t),
+              (t.child = r),
+              (yt = t),
+              (jt = null),
+              !0)
+            : !1
+        );
+      default:
+        return !1;
+    }
+  }
+  function Zo(t) {
+    return (t.mode & 1) !== 0 && (t.flags & 128) === 0;
+  }
+  function el(t) {
+    if (Oe) {
+      var i = jt;
+      if (i) {
+        var r = i;
+        if (!Jd(t, i)) {
+          if (Zo(t)) throw Error(ge(418));
+          i = bi(r.nextSibling);
+          var n = yt;
+          i && Jd(t, i)
+            ? Xd(n, r)
+            : ((t.flags = (t.flags & -4097) | 2), (Oe = !1), (yt = t));
+        }
+      } else {
+        if (Zo(t)) throw Error(ge(418));
+        ((t.flags = (t.flags & -4097) | 2), (Oe = !1), (yt = t));
+      }
+    }
+  }
+  function Kd(t) {
+    for (
+      t = t.return;
+      t !== null && t.tag !== 5 && t.tag !== 3 && t.tag !== 13;
+    )
+      t = t.return;
+    yt = t;
+  }
+  function Za(t) {
+    if (t !== yt) return !1;
+    if (!Oe) return (Kd(t), (Oe = !0), !1);
+    var i;
+    if (
+      ((i = t.tag !== 3) &&
+        !(i = t.tag !== 5) &&
+        ((i = t.type),
+        (i = i !== "head" && i !== "body" && !$o(t.type, t.memoizedProps))),
+      i && (i = jt))
+    ) {
+      if (Zo(t)) throw (Zd(), Error(ge(418)));
+      for (; i;) (Xd(t, i), (i = bi(i.nextSibling)));
+    }
+    if ((Kd(t), t.tag === 13)) {
+      if (((t = t.memoizedState), (t = t !== null ? t.dehydrated : null), !t))
+        throw Error(ge(317));
+      e: {
+        for (t = t.nextSibling, i = 0; t;) {
+          if (t.nodeType === 8) {
+            var r = t.data;
+            if (r === "/$") {
+              if (i === 0) {
+                jt = bi(t.nextSibling);
+                break e;
+              }
+              i--;
+            } else (r !== "$" && r !== "$!" && r !== "$?") || i++;
+          }
+          t = t.nextSibling;
+        }
+        jt = null;
+      }
+    } else jt = yt ? bi(t.stateNode.nextSibling) : null;
+    return !0;
+  }
+  function Zd() {
+    for (var t = jt; t;) t = bi(t.nextSibling);
+  }
+  function fr() {
+    ((jt = yt = null), (Oe = !1));
+  }
+  function tl(t) {
+    Bt === null ? (Bt = [t]) : Bt.push(t);
+  }
+  var qm = Kt.ReactCurrentBatchConfig;
+  function ta(t, i, r) {
+    if (
+      ((t = r.ref),
+      t !== null && typeof t != "function" && typeof t != "object")
+    ) {
+      if (r._owner) {
+        if (((r = r._owner), r)) {
+          if (r.tag !== 1) throw Error(ge(309));
+          var n = r.stateNode;
+        }
+        if (!n) throw Error(ge(147, t));
+        var l = n,
+          o = "" + t;
+        return i !== null &&
+          i.ref !== null &&
+          typeof i.ref == "function" &&
+          i.ref._stringRef === o
+          ? i.ref
+          : ((i = function (s) {
+              var m = l.refs;
+              s === null ? delete m[o] : (m[o] = s);
+            }),
+            (i._stringRef = o),
+            i);
+      }
+      if (typeof t != "string") throw Error(ge(284));
+      if (!r._owner) throw Error(ge(290, t));
+    }
+    return t;
+  }
+  function en(t, i) {
+    throw (
+      (t = Object.prototype.toString.call(i)),
+      Error(
+        ge(
+          31,
+          t === "[object Object]"
+            ? "object with keys {" + Object.keys(i).join(", ") + "}"
+            : t,
+        ),
+      )
+    );
+  }
+  function ec(t) {
+    var i = t._init;
+    return i(t._payload);
+  }
+  function tc(t) {
+    function i(w, v) {
+      if (t) {
+        var x = w.deletions;
+        x === null ? ((w.deletions = [v]), (w.flags |= 16)) : x.push(v);
+      }
+    }
+    function r(w, v) {
+      if (!t) return null;
+      for (; v !== null;) (i(w, v), (v = v.sibling));
+      return null;
+    }
+    function n(w, v) {
+      for (w = new Map(); v !== null;)
+        (v.key !== null ? w.set(v.key, v) : w.set(v.index, v), (v = v.sibling));
+      return w;
+    }
+    function l(w, v) {
+      return ((w = Ei(w, v)), (w.index = 0), (w.sibling = null), w);
+    }
+    function o(w, v, x) {
+      return (
+        (w.index = x),
+        t
+          ? ((x = w.alternate),
+            x !== null
+              ? ((x = x.index), x < v ? ((w.flags |= 2), v) : x)
+              : ((w.flags |= 2), v))
+          : ((w.flags |= 1048576), v)
+      );
+    }
+    function s(w) {
+      return (t && w.alternate === null && (w.flags |= 2), w);
+    }
+    function m(w, v, x, f) {
+      return v === null || v.tag !== 6
+        ? ((v = Vl(x, w.mode, f)), (v.return = w), v)
+        : ((v = l(v, x)), (v.return = w), v);
+    }
+    function p(w, v, x, f) {
+      var I = x.type;
+      return I === Ki
+        ? b(w, v, x.props.children, f, x.key)
+        : v !== null &&
+            (v.elementType === I ||
+              (typeof I == "object" &&
+                I !== null &&
+                I.$$typeof === pi &&
+                ec(I) === v.type))
+          ? ((f = l(v, x.props)), (f.ref = ta(w, v, x)), (f.return = w), f)
+          : ((f = wn(x.type, x.key, x.props, null, w.mode, f)),
+            (f.ref = ta(w, v, x)),
+            (f.return = w),
+            f);
+    }
+    function C(w, v, x, f) {
+      return v === null ||
+        v.tag !== 4 ||
+        v.stateNode.containerInfo !== x.containerInfo ||
+        v.stateNode.implementation !== x.implementation
+        ? ((v = ql(x, w.mode, f)), (v.return = w), v)
+        : ((v = l(v, x.children || [])), (v.return = w), v);
+    }
+    function b(w, v, x, f, I) {
+      return v === null || v.tag !== 7
+        ? ((v = Vi(x, w.mode, f, I)), (v.return = w), v)
+        : ((v = l(v, x)), (v.return = w), v);
+    }
+    function h(w, v, x) {
+      if ((typeof v == "string" && v !== "") || typeof v == "number")
+        return ((v = Vl("" + v, w.mode, x)), (v.return = w), v);
+      if (typeof v == "object" && v !== null) {
+        switch (v.$$typeof) {
+          case ja:
+            return (
+              (x = wn(v.type, v.key, v.props, null, w.mode, x)),
+              (x.ref = ta(w, null, v)),
+              (x.return = w),
+              x
+            );
+          case Ji:
+            return ((v = ql(v, w.mode, x)), (v.return = w), v);
+          case pi:
+            var f = v._init;
+            return h(w, f(v._payload), x);
+        }
+        if (Er(v) || Pr(v))
+          return ((v = Vi(v, w.mode, x, null)), (v.return = w), v);
+        en(w, v);
+      }
+      return null;
+    }
+    function j(w, v, x, f) {
+      var I = v !== null ? v.key : null;
+      if ((typeof x == "string" && x !== "") || typeof x == "number")
+        return I !== null ? null : m(w, v, "" + x, f);
+      if (typeof x == "object" && x !== null) {
+        switch (x.$$typeof) {
+          case ja:
+            return x.key === I ? p(w, v, x, f) : null;
+          case Ji:
+            return x.key === I ? C(w, v, x, f) : null;
+          case pi:
+            return ((I = x._init), j(w, v, I(x._payload), f));
+        }
+        if (Er(x) || Pr(x)) return I !== null ? null : b(w, v, x, f, null);
+        en(w, x);
+      }
+      return null;
+    }
+    function F(w, v, x, f, I) {
+      if ((typeof f == "string" && f !== "") || typeof f == "number")
+        return ((w = w.get(x) || null), m(v, w, "" + f, I));
+      if (typeof f == "object" && f !== null) {
+        switch (f.$$typeof) {
+          case ja:
+            return (
+              (w = w.get(f.key === null ? x : f.key) || null),
+              p(v, w, f, I)
+            );
+          case Ji:
+            return (
+              (w = w.get(f.key === null ? x : f.key) || null),
+              C(v, w, f, I)
+            );
+          case pi:
+            var D = f._init;
+            return F(w, v, x, D(f._payload), I);
+        }
+        if (Er(f) || Pr(f))
+          return ((w = w.get(x) || null), b(v, w, f, I, null));
+        en(v, f);
+      }
+      return null;
+    }
+    function g(w, v, x, f) {
+      for (
+        var I = null, D = null, k = v, R = (v = 0), K = null;
+        k !== null && R < x.length;
+        R++
+      ) {
+        k.index > R ? ((K = k), (k = null)) : (K = k.sibling);
+        var y = j(w, k, x[R], f);
+        if (y === null) {
+          k === null && (k = K);
+          break;
+        }
+        (t && k && y.alternate === null && i(w, k),
+          (v = o(y, v, R)),
+          D === null ? (I = y) : (D.sibling = y),
+          (D = y),
+          (k = K));
+      }
+      if (R === x.length) return (r(w, k), Oe && Ni(w, R), I);
+      if (k === null) {
+        for (; R < x.length; R++)
+          ((k = h(w, x[R], f)),
+            k !== null &&
+              ((v = o(k, v, R)),
+              D === null ? (I = k) : (D.sibling = k),
+              (D = k)));
+        return (Oe && Ni(w, R), I);
+      }
+      for (k = n(w, k); R < x.length; R++)
+        ((K = F(k, w, R, x[R], f)),
+          K !== null &&
+            (t && K.alternate !== null && k.delete(K.key === null ? R : K.key),
+            (v = o(K, v, R)),
+            D === null ? (I = K) : (D.sibling = K),
+            (D = K)));
+      return (
+        t &&
+          k.forEach(function (P) {
+            return i(w, P);
+          }),
+        Oe && Ni(w, R),
+        I
+      );
+    }
+    function z(w, v, x, f) {
+      var I = Pr(x);
+      if (typeof I != "function") throw Error(ge(150));
+      if (((x = I.call(x)), x == null)) throw Error(ge(151));
+      for (
+        var D = (I = null), k = v, R = (v = 0), K = null, y = x.next();
+        k !== null && !y.done;
+        R++, y = x.next()
+      ) {
+        k.index > R ? ((K = k), (k = null)) : (K = k.sibling);
+        var P = j(w, k, y.value, f);
+        if (P === null) {
+          k === null && (k = K);
+          break;
+        }
+        (t && k && P.alternate === null && i(w, k),
+          (v = o(P, v, R)),
+          D === null ? (I = P) : (D.sibling = P),
+          (D = P),
+          (k = K));
+      }
+      if (y.done) return (r(w, k), Oe && Ni(w, R), I);
+      if (k === null) {
+        for (; !y.done; R++, y = x.next())
+          ((y = h(w, y.value, f)),
+            y !== null &&
+              ((v = o(y, v, R)),
+              D === null ? (I = y) : (D.sibling = y),
+              (D = y)));
+        return (Oe && Ni(w, R), I);
+      }
+      for (k = n(w, k); !y.done; R++, y = x.next())
+        ((y = F(k, w, R, y.value, f)),
+          y !== null &&
+            (t && y.alternate !== null && k.delete(y.key === null ? R : y.key),
+            (v = o(y, v, R)),
+            D === null ? (I = y) : (D.sibling = y),
+            (D = y)));
+      return (
+        t &&
+          k.forEach(function (A) {
+            return i(w, A);
+          }),
+        Oe && Ni(w, R),
+        I
+      );
+    }
+    function B(w, v, x, f) {
+      if (
+        (typeof x == "object" &&
+          x !== null &&
+          x.type === Ki &&
+          x.key === null &&
+          (x = x.props.children),
+        typeof x == "object" && x !== null)
+      ) {
+        switch (x.$$typeof) {
+          case ja:
+            e: {
+              for (var I = x.key, D = v; D !== null;) {
+                if (D.key === I) {
+                  if (((I = x.type), I === Ki)) {
+                    if (D.tag === 7) {
+                      (r(w, D.sibling),
+                        (v = l(D, x.props.children)),
+                        (v.return = w),
+                        (w = v));
+                      break e;
+                    }
+                  } else if (
+                    D.elementType === I ||
+                    (typeof I == "object" &&
+                      I !== null &&
+                      I.$$typeof === pi &&
+                      ec(I) === D.type)
+                  ) {
+                    (r(w, D.sibling),
+                      (v = l(D, x.props)),
+                      (v.ref = ta(w, D, x)),
+                      (v.return = w),
+                      (w = v));
+                    break e;
+                  }
+                  r(w, D);
+                  break;
+                } else i(w, D);
+                D = D.sibling;
+              }
+              x.type === Ki
+                ? ((v = Vi(x.props.children, w.mode, f, x.key)),
+                  (v.return = w),
+                  (w = v))
+                : ((f = wn(x.type, x.key, x.props, null, w.mode, f)),
+                  (f.ref = ta(w, v, x)),
+                  (f.return = w),
+                  (w = f));
+            }
+            return s(w);
+          case Ji:
+            e: {
+              for (D = x.key; v !== null;) {
+                if (v.key === D)
+                  if (
+                    v.tag === 4 &&
+                    v.stateNode.containerInfo === x.containerInfo &&
+                    v.stateNode.implementation === x.implementation
+                  ) {
+                    (r(w, v.sibling),
+                      (v = l(v, x.children || [])),
+                      (v.return = w),
+                      (w = v));
+                    break e;
+                  } else {
+                    r(w, v);
+                    break;
+                  }
+                else i(w, v);
+                v = v.sibling;
+              }
+              ((v = ql(x, w.mode, f)), (v.return = w), (w = v));
+            }
+            return s(w);
+          case pi:
+            return ((D = x._init), B(w, v, D(x._payload), f));
+        }
+        if (Er(x)) return g(w, v, x, f);
+        if (Pr(x)) return z(w, v, x, f);
+        en(w, x);
+      }
+      return (typeof x == "string" && x !== "") || typeof x == "number"
+        ? ((x = "" + x),
+          v !== null && v.tag === 6
+            ? (r(w, v.sibling), (v = l(v, x)), (v.return = w), (w = v))
+            : (r(w, v), (v = Vl(x, w.mode, f)), (v.return = w), (w = v)),
+          s(w))
+        : r(w, v);
+    }
+    return B;
+  }
+  var gr = tc(!0),
+    ic = tc(!1),
+    tn = yi(null),
+    rn = null,
+    xr = null,
+    il = null;
+  function rl() {
+    il = xr = rn = null;
+  }
+  function al(t) {
+    var i = tn.current;
+    (Ne(tn), (t._currentValue = i));
+  }
+  function nl(t, i, r) {
+    for (; t !== null;) {
+      var n = t.alternate;
+      if (
+        ((t.childLanes & i) !== i
+          ? ((t.childLanes |= i), n !== null && (n.childLanes |= i))
+          : n !== null && (n.childLanes & i) !== i && (n.childLanes |= i),
+        t === r)
+      )
+        break;
+      t = t.return;
+    }
+  }
+  function hr(t, i) {
+    ((rn = t),
+      (il = xr = null),
+      (t = t.dependencies),
+      t !== null &&
+        t.firstContext !== null &&
+        (t.lanes & i && (ft = !0), (t.firstContext = null)));
+  }
+  function kt(t) {
+    var i = t._currentValue;
+    if (il !== t)
+      if (((t = { context: t, memoizedValue: i, next: null }), xr === null)) {
+        if (rn === null) throw Error(ge(308));
+        ((xr = t), (rn.dependencies = { lanes: 0, firstContext: t }));
+      } else xr = xr.next = t;
+    return i;
+  }
+  var Oi = null;
+  function ol(t) {
+    Oi === null ? (Oi = [t]) : Oi.push(t);
+  }
+  function rc(t, i, r, n) {
+    var l = i.interleaved;
+    return (
+      l === null ? ((r.next = r), ol(i)) : ((r.next = l.next), (l.next = r)),
+      (i.interleaved = r),
+      ri(t, n)
+    );
+  }
+  function ri(t, i) {
+    t.lanes |= i;
+    var r = t.alternate;
+    for (r !== null && (r.lanes |= i), r = t, t = t.return; t !== null;)
+      ((t.childLanes |= i),
+        (r = t.alternate),
+        r !== null && (r.childLanes |= i),
+        (r = t),
+        (t = t.return));
+    return r.tag === 3 ? r.stateNode : null;
+  }
+  var Ci = !1;
+  function ll(t) {
+    t.updateQueue = {
+      baseState: t.memoizedState,
+      firstBaseUpdate: null,
+      lastBaseUpdate: null,
+      shared: { pending: null, interleaved: null, lanes: 0 },
+      effects: null,
+    };
+  }
+  function ac(t, i) {
+    ((t = t.updateQueue),
+      i.updateQueue === t &&
+        (i.updateQueue = {
+          baseState: t.baseState,
+          firstBaseUpdate: t.firstBaseUpdate,
+          lastBaseUpdate: t.lastBaseUpdate,
+          shared: t.shared,
+          effects: t.effects,
+        }));
+  }
+  function ai(t, i) {
+    return {
+      eventTime: t,
+      lane: i,
+      tag: 0,
+      payload: null,
+      callback: null,
+      next: null,
+    };
+  }
+  function zi(t, i, r) {
+    var n = t.updateQueue;
+    if (n === null) return null;
+    if (((n = n.shared), Ae & 2)) {
+      var l = n.pending;
+      return (
+        l === null ? (i.next = i) : ((i.next = l.next), (l.next = i)),
+        (n.pending = i),
+        ri(t, r)
+      );
+    }
+    return (
+      (l = n.interleaved),
+      l === null ? ((i.next = i), ol(n)) : ((i.next = l.next), (l.next = i)),
+      (n.interleaved = i),
+      ri(t, r)
+    );
+  }
+  function an(t, i, r) {
+    if (
+      ((i = i.updateQueue), i !== null && ((i = i.shared), (r & 4194240) !== 0))
+    ) {
+      var n = i.lanes;
+      ((n &= t.pendingLanes), (r |= n), (i.lanes = r), jo(t, r));
+    }
+  }
+  function nc(t, i) {
+    var r = t.updateQueue,
+      n = t.alternate;
+    if (n !== null && ((n = n.updateQueue), r === n)) {
+      var l = null,
+        o = null;
+      if (((r = r.firstBaseUpdate), r !== null)) {
+        do {
+          var s = {
+            eventTime: r.eventTime,
+            lane: r.lane,
+            tag: r.tag,
+            payload: r.payload,
+            callback: r.callback,
+            next: null,
+          };
+          (o === null ? (l = o = s) : (o = o.next = s), (r = r.next));
+        } while (r !== null);
+        o === null ? (l = o = i) : (o = o.next = i);
+      } else l = o = i;
+      ((r = {
+        baseState: n.baseState,
+        firstBaseUpdate: l,
+        lastBaseUpdate: o,
+        shared: n.shared,
+        effects: n.effects,
+      }),
+        (t.updateQueue = r));
+      return;
+    }
+    ((t = r.lastBaseUpdate),
+      t === null ? (r.firstBaseUpdate = i) : (t.next = i),
+      (r.lastBaseUpdate = i));
+  }
+  function nn(t, i, r, n) {
+    var l = t.updateQueue;
+    Ci = !1;
+    var o = l.firstBaseUpdate,
+      s = l.lastBaseUpdate,
+      m = l.shared.pending;
+    if (m !== null) {
+      l.shared.pending = null;
+      var p = m,
+        C = p.next;
+      ((p.next = null), s === null ? (o = C) : (s.next = C), (s = p));
+      var b = t.alternate;
+      b !== null &&
+        ((b = b.updateQueue),
+        (m = b.lastBaseUpdate),
+        m !== s &&
+          (m === null ? (b.firstBaseUpdate = C) : (m.next = C),
+          (b.lastBaseUpdate = p)));
+    }
+    if (o !== null) {
+      var h = l.baseState;
+      ((s = 0), (b = C = p = null), (m = o));
+      do {
+        var j = m.lane,
+          F = m.eventTime;
+        if ((n & j) === j) {
+          b !== null &&
+            (b = b.next =
+              {
+                eventTime: F,
+                lane: 0,
+                tag: m.tag,
+                payload: m.payload,
+                callback: m.callback,
+                next: null,
+              });
+          e: {
+            var g = t,
+              z = m;
+            switch (((j = i), (F = r), z.tag)) {
+              case 1:
+                if (((g = z.payload), typeof g == "function")) {
+                  h = g.call(F, h, j);
+                  break e;
+                }
+                h = g;
+                break e;
+              case 3:
+                g.flags = (g.flags & -65537) | 128;
+              case 0:
+                if (
+                  ((g = z.payload),
+                  (j = typeof g == "function" ? g.call(F, h, j) : g),
+                  j == null)
+                )
+                  break e;
+                h = We({}, h, j);
+                break e;
+              case 2:
+                Ci = !0;
+            }
+          }
+          m.callback !== null &&
+            m.lane !== 0 &&
+            ((t.flags |= 64),
+            (j = l.effects),
+            j === null ? (l.effects = [m]) : j.push(m));
+        } else
+          ((F = {
+            eventTime: F,
+            lane: j,
+            tag: m.tag,
+            payload: m.payload,
+            callback: m.callback,
+            next: null,
+          }),
+            b === null ? ((C = b = F), (p = h)) : (b = b.next = F),
+            (s |= j));
+        if (((m = m.next), m === null)) {
+          if (((m = l.shared.pending), m === null)) break;
+          ((j = m),
+            (m = j.next),
+            (j.next = null),
+            (l.lastBaseUpdate = j),
+            (l.shared.pending = null));
+        }
+      } while (!0);
+      if (
+        (b === null && (p = h),
+        (l.baseState = p),
+        (l.firstBaseUpdate = C),
+        (l.lastBaseUpdate = b),
+        (i = l.shared.interleaved),
+        i !== null)
+      ) {
+        l = i;
+        do ((s |= l.lane), (l = l.next));
+        while (l !== i);
+      } else o === null && (l.shared.lanes = 0);
+      ((Gi |= s), (t.lanes = s), (t.memoizedState = h));
+    }
+  }
+  function oc(t, i, r) {
+    if (((t = i.effects), (i.effects = null), t !== null))
+      for (i = 0; i < t.length; i++) {
+        var n = t[i],
+          l = n.callback;
+        if (l !== null) {
+          if (((n.callback = null), (n = r), typeof l != "function"))
+            throw Error(ge(191, l));
+          l.call(n);
+        }
+      }
+  }
+  var ia = {},
+    qt = yi(ia),
+    ra = yi(ia),
+    aa = yi(ia);
+  function Wi(t) {
+    if (t === ia) throw Error(ge(174));
+    return t;
+  }
+  function sl(t, i) {
+    switch ((Le(aa, i), Le(ra, t), Le(qt, ia), (t = i.nodeType), t)) {
+      case 9:
+      case 11:
+        i = (i = i.documentElement) ? i.namespaceURI : so(null, "");
+        break;
+      default:
+        ((t = t === 8 ? i.parentNode : i),
+          (i = t.namespaceURI || null),
+          (t = t.tagName),
+          (i = so(i, t)));
+    }
+    (Ne(qt), Le(qt, i));
+  }
+  function vr() {
+    (Ne(qt), Ne(ra), Ne(aa));
+  }
+  function lc(t) {
+    Wi(aa.current);
+    var i = Wi(qt.current),
+      r = so(i, t.type);
+    i !== r && (Le(ra, t), Le(qt, r));
+  }
+  function dl(t) {
+    ra.current === t && (Ne(qt), Ne(ra));
+  }
+  var Ue = yi(0);
+  function on(t) {
+    for (var i = t; i !== null;) {
+      if (i.tag === 13) {
+        var r = i.memoizedState;
+        if (
+          r !== null &&
+          ((r = r.dehydrated), r === null || r.data === "$?" || r.data === "$!")
+        )
+          return i;
+      } else if (i.tag === 19 && i.memoizedProps.revealOrder !== void 0) {
+        if (i.flags & 128) return i;
+      } else if (i.child !== null) {
+        ((i.child.return = i), (i = i.child));
+        continue;
+      }
+      if (i === t) break;
+      for (; i.sibling === null;) {
+        if (i.return === null || i.return === t) return null;
+        i = i.return;
+      }
+      ((i.sibling.return = i.return), (i = i.sibling));
+    }
+    return null;
+  }
+  var cl = [];
+  function pl() {
+    for (var t = 0; t < cl.length; t++)
+      cl[t]._workInProgressVersionPrimary = null;
+    cl.length = 0;
+  }
+  var ln = Kt.ReactCurrentDispatcher,
+    ul = Kt.ReactCurrentBatchConfig,
+    Ui = 0,
+    Ge = null,
+    qe = null,
+    Ye = null,
+    sn = !1,
+    na = !1,
+    oa = 0,
+    Qm = 0;
+  function tt() {
+    throw Error(ge(321));
+  }
+  function ml(t, i) {
+    if (i === null) return !1;
+    for (var r = 0; r < i.length && r < t.length; r++)
+      if (!Rt(t[r], i[r])) return !1;
+    return !0;
+  }
+  function fl(t, i, r, n, l, o) {
+    if (
+      ((Ui = o),
+      (Ge = i),
+      (i.memoizedState = null),
+      (i.updateQueue = null),
+      (i.lanes = 0),
+      (ln.current = t === null || t.memoizedState === null ? Km : Zm),
+      (t = r(n, l)),
+      na)
+    ) {
+      o = 0;
+      do {
+        if (((na = !1), (oa = 0), 25 <= o)) throw Error(ge(301));
+        ((o += 1),
+          (Ye = qe = null),
+          (i.updateQueue = null),
+          (ln.current = ef),
+          (t = r(n, l)));
+      } while (na);
+    }
+    if (
+      ((ln.current = pn),
+      (i = qe !== null && qe.next !== null),
+      (Ui = 0),
+      (Ye = qe = Ge = null),
+      (sn = !1),
+      i)
+    )
+      throw Error(ge(300));
+    return t;
+  }
+  function gl() {
+    var t = oa !== 0;
+    return ((oa = 0), t);
+  }
+  function Qt() {
+    var t = {
+      memoizedState: null,
+      baseState: null,
+      baseQueue: null,
+      queue: null,
+      next: null,
+    };
+    return (Ye === null ? (Ge.memoizedState = Ye = t) : (Ye = Ye.next = t), Ye);
+  }
+  function Pt() {
+    if (qe === null) {
+      var t = Ge.alternate;
+      t = t !== null ? t.memoizedState : null;
+    } else t = qe.next;
+    var i = Ye === null ? Ge.memoizedState : Ye.next;
+    if (i !== null) ((Ye = i), (qe = t));
+    else {
+      if (t === null) throw Error(ge(310));
+      ((qe = t),
+        (t = {
+          memoizedState: qe.memoizedState,
+          baseState: qe.baseState,
+          baseQueue: qe.baseQueue,
+          queue: qe.queue,
+          next: null,
+        }),
+        Ye === null ? (Ge.memoizedState = Ye = t) : (Ye = Ye.next = t));
+    }
+    return Ye;
+  }
+  function la(t, i) {
+    return typeof i == "function" ? i(t) : i;
+  }
+  function xl(t) {
+    var i = Pt(),
+      r = i.queue;
+    if (r === null) throw Error(ge(311));
+    r.lastRenderedReducer = t;
+    var n = qe,
+      l = n.baseQueue,
+      o = r.pending;
+    if (o !== null) {
+      if (l !== null) {
+        var s = l.next;
+        ((l.next = o.next), (o.next = s));
+      }
+      ((n.baseQueue = l = o), (r.pending = null));
+    }
+    if (l !== null) {
+      ((o = l.next), (n = n.baseState));
+      var m = (s = null),
+        p = null,
+        C = o;
+      do {
+        var b = C.lane;
+        if ((Ui & b) === b)
+          (p !== null &&
+            (p = p.next =
+              {
+                lane: 0,
+                action: C.action,
+                hasEagerState: C.hasEagerState,
+                eagerState: C.eagerState,
+                next: null,
+              }),
+            (n = C.hasEagerState ? C.eagerState : t(n, C.action)));
+        else {
+          var h = {
+            lane: b,
+            action: C.action,
+            hasEagerState: C.hasEagerState,
+            eagerState: C.eagerState,
+            next: null,
+          };
+          (p === null ? ((m = p = h), (s = n)) : (p = p.next = h),
+            (Ge.lanes |= b),
+            (Gi |= b));
+        }
+        C = C.next;
+      } while (C !== null && C !== o);
+      (p === null ? (s = n) : (p.next = m),
+        Rt(n, i.memoizedState) || (ft = !0),
+        (i.memoizedState = n),
+        (i.baseState = s),
+        (i.baseQueue = p),
+        (r.lastRenderedState = n));
+    }
+    if (((t = r.interleaved), t !== null)) {
+      l = t;
+      do ((o = l.lane), (Ge.lanes |= o), (Gi |= o), (l = l.next));
+      while (l !== t);
+    } else l === null && (r.lanes = 0);
+    return [i.memoizedState, r.dispatch];
+  }
+  function hl(t) {
+    var i = Pt(),
+      r = i.queue;
+    if (r === null) throw Error(ge(311));
+    r.lastRenderedReducer = t;
+    var n = r.dispatch,
+      l = r.pending,
+      o = i.memoizedState;
+    if (l !== null) {
+      r.pending = null;
+      var s = (l = l.next);
+      do ((o = t(o, s.action)), (s = s.next));
+      while (s !== l);
+      (Rt(o, i.memoizedState) || (ft = !0),
+        (i.memoizedState = o),
+        i.baseQueue === null && (i.baseState = o),
+        (r.lastRenderedState = o));
+    }
+    return [o, n];
+  }
+  function sc() {}
+  function dc(t, i) {
+    var r = Ge,
+      n = Pt(),
+      l = i(),
+      o = !Rt(n.memoizedState, l);
+    if (
+      (o && ((n.memoizedState = l), (ft = !0)),
+      (n = n.queue),
+      vl(uc.bind(null, r, n, t), [t]),
+      n.getSnapshot !== i || o || (Ye !== null && Ye.memoizedState.tag & 1))
+    ) {
+      if (
+        ((r.flags |= 2048),
+        sa(9, pc.bind(null, r, n, l, i), void 0, null),
+        Xe === null)
+      )
+        throw Error(ge(349));
+      Ui & 30 || cc(r, i, l);
+    }
+    return l;
+  }
+  function cc(t, i, r) {
+    ((t.flags |= 16384),
+      (t = { getSnapshot: i, value: r }),
+      (i = Ge.updateQueue),
+      i === null
+        ? ((i = { lastEffect: null, stores: null }),
+          (Ge.updateQueue = i),
+          (i.stores = [t]))
+        : ((r = i.stores), r === null ? (i.stores = [t]) : r.push(t)));
+  }
+  function pc(t, i, r, n) {
+    ((i.value = r), (i.getSnapshot = n), mc(i) && fc(t));
+  }
+  function uc(t, i, r) {
+    return r(function () {
+      mc(i) && fc(t);
+    });
+  }
+  function mc(t) {
+    var i = t.getSnapshot;
+    t = t.value;
+    try {
+      var r = i();
+      return !Rt(t, r);
+    } catch (n) {
+      return !0;
+    }
+  }
+  function fc(t) {
+    var i = ri(t, 1);
+    i !== null && Ot(i, t, 1, -1);
+  }
+  function gc(t) {
+    var i = Qt();
+    return (
+      typeof t == "function" && (t = t()),
+      (i.memoizedState = i.baseState = t),
+      (t = {
+        pending: null,
+        interleaved: null,
+        lanes: 0,
+        dispatch: null,
+        lastRenderedReducer: la,
+        lastRenderedState: t,
+      }),
+      (i.queue = t),
+      (t = t.dispatch = Jm.bind(null, Ge, t)),
+      [i.memoizedState, t]
+    );
+  }
+  function sa(t, i, r, n) {
+    return (
+      (t = { tag: t, create: i, destroy: r, deps: n, next: null }),
+      (i = Ge.updateQueue),
+      i === null
+        ? ((i = { lastEffect: null, stores: null }),
+          (Ge.updateQueue = i),
+          (i.lastEffect = t.next = t))
+        : ((r = i.lastEffect),
+          r === null
+            ? (i.lastEffect = t.next = t)
+            : ((n = r.next), (r.next = t), (t.next = n), (i.lastEffect = t))),
+      t
+    );
+  }
+  function xc() {
+    return Pt().memoizedState;
+  }
+  function dn(t, i, r, n) {
+    var l = Qt();
+    ((Ge.flags |= t),
+      (l.memoizedState = sa(1 | i, r, void 0, n === void 0 ? null : n)));
+  }
+  function cn(t, i, r, n) {
+    var l = Pt();
+    n = n === void 0 ? null : n;
+    var o = void 0;
+    if (qe !== null) {
+      var s = qe.memoizedState;
+      if (((o = s.destroy), n !== null && ml(n, s.deps))) {
+        l.memoizedState = sa(i, r, o, n);
+        return;
+      }
+    }
+    ((Ge.flags |= t), (l.memoizedState = sa(1 | i, r, o, n)));
+  }
+  function hc(t, i) {
+    return dn(8390656, 8, t, i);
+  }
+  function vl(t, i) {
+    return cn(2048, 8, t, i);
+  }
+  function vc(t, i) {
+    return cn(4, 2, t, i);
+  }
+  function bc(t, i) {
+    return cn(4, 4, t, i);
+  }
+  function yc(t, i) {
+    if (typeof i == "function")
+      return (
+        (t = t()),
+        i(t),
+        function () {
+          i(null);
+        }
+      );
+    if (i != null)
+      return (
+        (t = t()),
+        (i.current = t),
+        function () {
+          i.current = null;
+        }
+      );
+  }
+  function jc(t, i, r) {
+    return (
+      (r = r != null ? r.concat([t]) : null),
+      cn(4, 4, yc.bind(null, i, t), r)
+    );
+  }
+  function bl() {}
+  function Sc(t, i) {
+    var r = Pt();
+    i = i === void 0 ? null : i;
+    var n = r.memoizedState;
+    return n !== null && i !== null && ml(i, n[1])
+      ? n[0]
+      : ((r.memoizedState = [t, i]), t);
+  }
+  function Cc(t, i) {
+    var r = Pt();
+    i = i === void 0 ? null : i;
+    var n = r.memoizedState;
+    return n !== null && i !== null && ml(i, n[1])
+      ? n[0]
+      : ((t = t()), (r.memoizedState = [t, i]), t);
+  }
+  function zc(t, i, r) {
+    return Ui & 21
+      ? (Rt(r, i) ||
+          ((r = ed()), (Ge.lanes |= r), (Gi |= r), (t.baseState = !0)),
+        i)
+      : (t.baseState && ((t.baseState = !1), (ft = !0)), (t.memoizedState = r));
+  }
+  function Ym(t, i) {
+    var r = Be;
+    ((Be = r !== 0 && 4 > r ? r : 4), t(!0));
+    var n = ul.transition;
+    ul.transition = {};
+    try {
+      (t(!1), i());
+    } finally {
+      ((Be = r), (ul.transition = n));
+    }
+  }
+  function wc() {
+    return Pt().memoizedState;
+  }
+  function Xm(t, i, r) {
+    var n = Pi(t);
+    if (
+      ((r = {
+        lane: n,
+        action: r,
+        hasEagerState: !1,
+        eagerState: null,
+        next: null,
+      }),
+      Ic(t))
+    )
+      kc(i, r);
+    else if (((r = rc(t, i, r, n)), r !== null)) {
+      var l = dt();
+      (Ot(r, t, n, l), Pc(r, i, n));
+    }
+  }
+  function Jm(t, i, r) {
+    var n = Pi(t),
+      l = {
+        lane: n,
+        action: r,
+        hasEagerState: !1,
+        eagerState: null,
+        next: null,
+      };
+    if (Ic(t)) kc(i, l);
+    else {
+      var o = t.alternate;
+      if (
+        t.lanes === 0 &&
+        (o === null || o.lanes === 0) &&
+        ((o = i.lastRenderedReducer), o !== null)
+      )
+        try {
+          var s = i.lastRenderedState,
+            m = o(s, r);
+          if (((l.hasEagerState = !0), (l.eagerState = m), Rt(m, s))) {
+            var p = i.interleaved;
+            (p === null
+              ? ((l.next = l), ol(i))
+              : ((l.next = p.next), (p.next = l)),
+              (i.interleaved = l));
+            return;
+          }
+        } catch (C) {
+        } finally {
+        }
+      ((r = rc(t, i, l, n)),
+        r !== null && ((l = dt()), Ot(r, t, n, l), Pc(r, i, n)));
+    }
+  }
+  function Ic(t) {
+    var i = t.alternate;
+    return t === Ge || (i !== null && i === Ge);
+  }
+  function kc(t, i) {
+    na = sn = !0;
+    var r = t.pending;
+    (r === null ? (i.next = i) : ((i.next = r.next), (r.next = i)),
+      (t.pending = i));
+  }
+  function Pc(t, i, r) {
+    if (r & 4194240) {
+      var n = i.lanes;
+      ((n &= t.pendingLanes), (r |= n), (i.lanes = r), jo(t, r));
+    }
+  }
+  var pn = {
+      readContext: kt,
+      useCallback: tt,
+      useContext: tt,
+      useEffect: tt,
+      useImperativeHandle: tt,
+      useInsertionEffect: tt,
+      useLayoutEffect: tt,
+      useMemo: tt,
+      useReducer: tt,
+      useRef: tt,
+      useState: tt,
+      useDebugValue: tt,
+      useDeferredValue: tt,
+      useTransition: tt,
+      useMutableSource: tt,
+      useSyncExternalStore: tt,
+      useId: tt,
+      unstable_isNewReconciler: !1,
+    },
+    Km = {
+      readContext: kt,
+      useCallback: function (t, i) {
+        return ((Qt().memoizedState = [t, i === void 0 ? null : i]), t);
+      },
+      useContext: kt,
+      useEffect: hc,
+      useImperativeHandle: function (t, i, r) {
+        return (
+          (r = r != null ? r.concat([t]) : null),
+          dn(4194308, 4, yc.bind(null, i, t), r)
+        );
+      },
+      useLayoutEffect: function (t, i) {
+        return dn(4194308, 4, t, i);
+      },
+      useInsertionEffect: function (t, i) {
+        return dn(4, 2, t, i);
+      },
+      useMemo: function (t, i) {
+        var r = Qt();
+        return (
+          (i = i === void 0 ? null : i),
+          (t = t()),
+          (r.memoizedState = [t, i]),
+          t
+        );
+      },
+      useReducer: function (t, i, r) {
+        var n = Qt();
+        return (
+          (i = r !== void 0 ? r(i) : i),
+          (n.memoizedState = n.baseState = i),
+          (t = {
+            pending: null,
+            interleaved: null,
+            lanes: 0,
+            dispatch: null,
+            lastRenderedReducer: t,
+            lastRenderedState: i,
+          }),
+          (n.queue = t),
+          (t = t.dispatch = Xm.bind(null, Ge, t)),
+          [n.memoizedState, t]
+        );
+      },
+      useRef: function (t) {
+        var i = Qt();
+        return ((t = { current: t }), (i.memoizedState = t));
+      },
+      useState: gc,
+      useDebugValue: bl,
+      useDeferredValue: function (t) {
+        return (Qt().memoizedState = t);
+      },
+      useTransition: function () {
+        var t = gc(!1),
+          i = t[0];
+        return ((t = Ym.bind(null, t[1])), (Qt().memoizedState = t), [i, t]);
+      },
+      useMutableSource: function () {},
+      useSyncExternalStore: function (t, i, r) {
+        var n = Ge,
+          l = Qt();
+        if (Oe) {
+          if (r === void 0) throw Error(ge(407));
+          r = r();
+        } else {
+          if (((r = i()), Xe === null)) throw Error(ge(349));
+          Ui & 30 || cc(n, i, r);
+        }
+        l.memoizedState = r;
+        var o = { value: r, getSnapshot: i };
+        return (
+          (l.queue = o),
+          hc(uc.bind(null, n, o, t), [t]),
+          (n.flags |= 2048),
+          sa(9, pc.bind(null, n, o, r, i), void 0, null),
+          r
+        );
+      },
+      useId: function () {
+        var t = Qt(),
+          i = Xe.identifierPrefix;
+        if (Oe) {
+          var r = ii,
+            n = ti;
+          ((r = (n & ~(1 << (32 - Ft(n) - 1))).toString(32) + r),
+            (i = ":" + i + "R" + r),
+            (r = oa++),
+            0 < r && (i += "H" + r.toString(32)),
+            (i += ":"));
+        } else ((r = Qm++), (i = ":" + i + "r" + r.toString(32) + ":"));
+        return (t.memoizedState = i);
+      },
+      unstable_isNewReconciler: !1,
+    },
+    Zm = {
+      readContext: kt,
+      useCallback: Sc,
+      useContext: kt,
+      useEffect: vl,
+      useImperativeHandle: jc,
+      useInsertionEffect: vc,
+      useLayoutEffect: bc,
+      useMemo: Cc,
+      useReducer: xl,
+      useRef: xc,
+      useState: function () {
+        return xl(la);
+      },
+      useDebugValue: bl,
+      useDeferredValue: function (t) {
+        var i = Pt();
+        return zc(i, qe.memoizedState, t);
+      },
+      useTransition: function () {
+        var t = xl(la)[0],
+          i = Pt().memoizedState;
+        return [t, i];
+      },
+      useMutableSource: sc,
+      useSyncExternalStore: dc,
+      useId: wc,
+      unstable_isNewReconciler: !1,
+    },
+    ef = {
+      readContext: kt,
+      useCallback: Sc,
+      useContext: kt,
+      useEffect: vl,
+      useImperativeHandle: jc,
+      useInsertionEffect: vc,
+      useLayoutEffect: bc,
+      useMemo: Cc,
+      useReducer: hl,
+      useRef: xc,
+      useState: function () {
+        return hl(la);
+      },
+      useDebugValue: bl,
+      useDeferredValue: function (t) {
+        var i = Pt();
+        return qe === null ? (i.memoizedState = t) : zc(i, qe.memoizedState, t);
+      },
+      useTransition: function () {
+        var t = hl(la)[0],
+          i = Pt().memoizedState;
+        return [t, i];
+      },
+      useMutableSource: sc,
+      useSyncExternalStore: dc,
+      useId: wc,
+      unstable_isNewReconciler: !1,
+    };
+  function Lt(t, i) {
+    if (t && t.defaultProps) {
+      ((i = We({}, i)), (t = t.defaultProps));
+      for (var r in t) i[r] === void 0 && (i[r] = t[r]);
+      return i;
+    }
+    return i;
+  }
+  function yl(t, i, r, n) {
+    ((i = t.memoizedState),
+      (r = r(n, i)),
+      (r = r == null ? i : We({}, i, r)),
+      (t.memoizedState = r),
+      t.lanes === 0 && (t.updateQueue.baseState = r));
+  }
+  var un = {
+    isMounted: function (t) {
+      return (t = t._reactInternals) ? Ri(t) === t : !1;
+    },
+    enqueueSetState: function (t, i, r) {
+      t = t._reactInternals;
+      var n = dt(),
+        l = Pi(t),
+        o = ai(n, l);
+      ((o.payload = i),
+        r != null && (o.callback = r),
+        (i = zi(t, o, l)),
+        i !== null && (Ot(i, t, l, n), an(i, t, l)));
+    },
+    enqueueReplaceState: function (t, i, r) {
+      t = t._reactInternals;
+      var n = dt(),
+        l = Pi(t),
+        o = ai(n, l);
+      ((o.tag = 1),
+        (o.payload = i),
+        r != null && (o.callback = r),
+        (i = zi(t, o, l)),
+        i !== null && (Ot(i, t, l, n), an(i, t, l)));
+    },
+    enqueueForceUpdate: function (t, i) {
+      t = t._reactInternals;
+      var r = dt(),
+        n = Pi(t),
+        l = ai(r, n);
+      ((l.tag = 2),
+        i != null && (l.callback = i),
+        (i = zi(t, l, n)),
+        i !== null && (Ot(i, t, n, r), an(i, t, n)));
+    },
+  };
+  function Tc(t, i, r, n, l, o, s) {
+    return (
+      (t = t.stateNode),
+      typeof t.shouldComponentUpdate == "function"
+        ? t.shouldComponentUpdate(n, o, s)
+        : i.prototype && i.prototype.isPureReactComponent
+          ? !Qr(r, n) || !Qr(l, o)
+          : !0
+    );
+  }
+  function Ec(t, i, r) {
+    var n = !1,
+      l = ji,
+      o = i.contextType;
+    return (
+      typeof o == "object" && o !== null
+        ? (o = kt(o))
+        : ((l = mt(i) ? Li : et.current),
+          (n = i.contextTypes),
+          (o = (n = n != null) ? pr(t, l) : ji)),
+      (i = new i(r, o)),
+      (t.memoizedState =
+        i.state !== null && i.state !== void 0 ? i.state : null),
+      (i.updater = un),
+      (t.stateNode = i),
+      (i._reactInternals = t),
+      n &&
+        ((t = t.stateNode),
+        (t.__reactInternalMemoizedUnmaskedChildContext = l),
+        (t.__reactInternalMemoizedMaskedChildContext = o)),
+      i
+    );
+  }
+  function Ac(t, i, r, n) {
+    ((t = i.state),
+      typeof i.componentWillReceiveProps == "function" &&
+        i.componentWillReceiveProps(r, n),
+      typeof i.UNSAFE_componentWillReceiveProps == "function" &&
+        i.UNSAFE_componentWillReceiveProps(r, n),
+      i.state !== t && un.enqueueReplaceState(i, i.state, null));
+  }
+  function jl(t, i, r, n) {
+    var l = t.stateNode;
+    ((l.props = r), (l.state = t.memoizedState), (l.refs = {}), ll(t));
+    var o = i.contextType;
+    (typeof o == "object" && o !== null
+      ? (l.context = kt(o))
+      : ((o = mt(i) ? Li : et.current), (l.context = pr(t, o))),
+      (l.state = t.memoizedState),
+      (o = i.getDerivedStateFromProps),
+      typeof o == "function" && (yl(t, i, o, r), (l.state = t.memoizedState)),
+      typeof i.getDerivedStateFromProps == "function" ||
+        typeof l.getSnapshotBeforeUpdate == "function" ||
+        (typeof l.UNSAFE_componentWillMount != "function" &&
+          typeof l.componentWillMount != "function") ||
+        ((i = l.state),
+        typeof l.componentWillMount == "function" && l.componentWillMount(),
+        typeof l.UNSAFE_componentWillMount == "function" &&
+          l.UNSAFE_componentWillMount(),
+        i !== l.state && un.enqueueReplaceState(l, l.state, null),
+        nn(t, r, l, n),
+        (l.state = t.memoizedState)),
+      typeof l.componentDidMount == "function" && (t.flags |= 4194308));
+  }
+  function br(t, i) {
+    try {
+      var r = "",
+        n = i;
+      do ((r += Pu(n)), (n = n.return));
+      while (n);
+      var l = r;
+    } catch (o) {
+      l =
+        `
+Error generating stack: ` +
+        o.message +
+        `
+` +
+        o.stack;
+    }
+    return { value: t, source: i, stack: l, digest: null };
+  }
+  function Sl(t, i, r) {
+    return {
+      value: t,
+      source: null,
+      stack: r != null ? r : null,
+      digest: i != null ? i : null,
+    };
+  }
+  function Cl(t, i) {
+    try {
+      console.error(i.value);
+    } catch (r) {
+      setTimeout(function () {
+        throw r;
+      });
+    }
+  }
+  var tf = typeof WeakMap == "function" ? WeakMap : Map;
+  function Mc(t, i, r) {
+    ((r = ai(-1, r)), (r.tag = 3), (r.payload = { element: null }));
+    var n = i.value;
+    return (
+      (r.callback = function () {
+        (bn || ((bn = !0), (Nl = n)), Cl(t, i));
+      }),
+      r
+    );
+  }
+  function Fc(t, i, r) {
+    ((r = ai(-1, r)), (r.tag = 3));
+    var n = t.type.getDerivedStateFromError;
+    if (typeof n == "function") {
+      var l = i.value;
+      ((r.payload = function () {
+        return n(l);
+      }),
+        (r.callback = function () {
+          Cl(t, i);
+        }));
+    }
+    var o = t.stateNode;
+    return (
+      o !== null &&
+        typeof o.componentDidCatch == "function" &&
+        (r.callback = function () {
+          (Cl(t, i),
+            typeof n != "function" &&
+              (Ii === null ? (Ii = new Set([this])) : Ii.add(this)));
+          var s = i.stack;
+          this.componentDidCatch(i.value, {
+            componentStack: s !== null ? s : "",
+          });
+        }),
+      r
+    );
+  }
+  function Rc(t, i, r) {
+    var n = t.pingCache;
+    if (n === null) {
+      n = t.pingCache = new tf();
+      var l = new Set();
+      n.set(i, l);
+    } else ((l = n.get(i)), l === void 0 && ((l = new Set()), n.set(i, l)));
+    l.has(r) || (l.add(r), (t = xf.bind(null, t, i, r)), i.then(t, t));
+  }
+  function Bc(t) {
+    do {
+      var i;
+      if (
+        ((i = t.tag === 13) &&
+          ((i = t.memoizedState),
+          (i = i !== null ? i.dehydrated !== null : !0)),
+        i)
+      )
+        return t;
+      t = t.return;
+    } while (t !== null);
+    return null;
+  }
+  function Lc(t, i, r, n, l) {
+    return t.mode & 1
+      ? ((t.flags |= 65536), (t.lanes = l), t)
+      : (t === i
+          ? (t.flags |= 65536)
+          : ((t.flags |= 128),
+            (r.flags |= 131072),
+            (r.flags &= -52805),
+            r.tag === 1 &&
+              (r.alternate === null
+                ? (r.tag = 17)
+                : ((i = ai(-1, 1)), (i.tag = 2), zi(r, i, 1))),
+            (r.lanes |= 1)),
+        t);
+  }
+  var rf = Kt.ReactCurrentOwner,
+    ft = !1;
+  function st(t, i, r, n) {
+    i.child = t === null ? ic(i, null, r, n) : gr(i, t.child, r, n);
+  }
+  function Dc(t, i, r, n, l) {
+    r = r.render;
+    var o = i.ref;
+    return (
+      hr(i, l),
+      (n = fl(t, i, r, n, o, l)),
+      (r = gl()),
+      t !== null && !ft
+        ? ((i.updateQueue = t.updateQueue),
+          (i.flags &= -2053),
+          (t.lanes &= ~l),
+          ni(t, i, l))
+        : (Oe && r && Jo(i), (i.flags |= 1), st(t, i, n, l), i.child)
+    );
+  }
+  function Nc(t, i, r, n, l) {
+    if (t === null) {
+      var o = r.type;
+      return typeof o == "function" &&
+        !$l(o) &&
+        o.defaultProps === void 0 &&
+        r.compare === null &&
+        r.defaultProps === void 0
+        ? ((i.tag = 15), (i.type = o), Oc(t, i, o, n, l))
+        : ((t = wn(r.type, null, n, i, i.mode, l)),
+          (t.ref = i.ref),
+          (t.return = i),
+          (i.child = t));
+    }
+    if (((o = t.child), !(t.lanes & l))) {
+      var s = o.memoizedProps;
+      if (
+        ((r = r.compare), (r = r !== null ? r : Qr), r(s, n) && t.ref === i.ref)
+      )
+        return ni(t, i, l);
+    }
+    return (
+      (i.flags |= 1),
+      (t = Ei(o, n)),
+      (t.ref = i.ref),
+      (t.return = i),
+      (i.child = t)
+    );
+  }
+  function Oc(t, i, r, n, l) {
+    if (t !== null) {
+      var o = t.memoizedProps;
+      if (Qr(o, n) && t.ref === i.ref)
+        if (((ft = !1), (i.pendingProps = n = o), (t.lanes & l) !== 0))
+          t.flags & 131072 && (ft = !0);
+        else return ((i.lanes = t.lanes), ni(t, i, l));
+    }
+    return zl(t, i, r, n, l);
+  }
+  function Wc(t, i, r) {
+    var n = i.pendingProps,
+      l = n.children,
+      o = t !== null ? t.memoizedState : null;
+    if (n.mode === "hidden")
+      if (!(i.mode & 1))
+        ((i.memoizedState = {
+          baseLanes: 0,
+          cachePool: null,
+          transitions: null,
+        }),
+          Le(jr, St),
+          (St |= r));
+      else {
+        if (!(r & 1073741824))
+          return (
+            (t = o !== null ? o.baseLanes | r : r),
+            (i.lanes = i.childLanes = 1073741824),
+            (i.memoizedState = {
+              baseLanes: t,
+              cachePool: null,
+              transitions: null,
+            }),
+            (i.updateQueue = null),
+            Le(jr, St),
+            (St |= t),
+            null
+          );
+        ((i.memoizedState = {
+          baseLanes: 0,
+          cachePool: null,
+          transitions: null,
+        }),
+          (n = o !== null ? o.baseLanes : r),
+          Le(jr, St),
+          (St |= n));
+      }
+    else
+      (o !== null ? ((n = o.baseLanes | r), (i.memoizedState = null)) : (n = r),
+        Le(jr, St),
+        (St |= n));
+    return (st(t, i, l, r), i.child);
+  }
+  function Uc(t, i) {
+    var r = i.ref;
+    ((t === null && r !== null) || (t !== null && t.ref !== r)) &&
+      ((i.flags |= 512), (i.flags |= 2097152));
+  }
+  function zl(t, i, r, n, l) {
+    var o = mt(r) ? Li : et.current;
+    return (
+      (o = pr(i, o)),
+      hr(i, l),
+      (r = fl(t, i, r, n, o, l)),
+      (n = gl()),
+      t !== null && !ft
+        ? ((i.updateQueue = t.updateQueue),
+          (i.flags &= -2053),
+          (t.lanes &= ~l),
+          ni(t, i, l))
+        : (Oe && n && Jo(i), (i.flags |= 1), st(t, i, r, l), i.child)
+    );
+  }
+  function Gc(t, i, r, n, l) {
+    if (mt(r)) {
+      var o = !0;
+      Ya(i);
+    } else o = !1;
+    if ((hr(i, l), i.stateNode === null))
+      (fn(t, i), Ec(i, r, n), jl(i, r, n, l), (n = !0));
+    else if (t === null) {
+      var s = i.stateNode,
+        m = i.memoizedProps;
+      s.props = m;
+      var p = s.context,
+        C = r.contextType;
+      typeof C == "object" && C !== null
+        ? (C = kt(C))
+        : ((C = mt(r) ? Li : et.current), (C = pr(i, C)));
+      var b = r.getDerivedStateFromProps,
+        h =
+          typeof b == "function" ||
+          typeof s.getSnapshotBeforeUpdate == "function";
+      (h ||
+        (typeof s.UNSAFE_componentWillReceiveProps != "function" &&
+          typeof s.componentWillReceiveProps != "function") ||
+        ((m !== n || p !== C) && Ac(i, s, n, C)),
+        (Ci = !1));
+      var j = i.memoizedState;
+      ((s.state = j),
+        nn(i, n, s, l),
+        (p = i.memoizedState),
+        m !== n || j !== p || ut.current || Ci
+          ? (typeof b == "function" && (yl(i, r, b, n), (p = i.memoizedState)),
+            (m = Ci || Tc(i, r, m, n, j, p, C))
+              ? (h ||
+                  (typeof s.UNSAFE_componentWillMount != "function" &&
+                    typeof s.componentWillMount != "function") ||
+                  (typeof s.componentWillMount == "function" &&
+                    s.componentWillMount(),
+                  typeof s.UNSAFE_componentWillMount == "function" &&
+                    s.UNSAFE_componentWillMount()),
+                typeof s.componentDidMount == "function" &&
+                  (i.flags |= 4194308))
+              : (typeof s.componentDidMount == "function" &&
+                  (i.flags |= 4194308),
+                (i.memoizedProps = n),
+                (i.memoizedState = p)),
+            (s.props = n),
+            (s.state = p),
+            (s.context = C),
+            (n = m))
+          : (typeof s.componentDidMount == "function" && (i.flags |= 4194308),
+            (n = !1)));
+    } else {
+      ((s = i.stateNode),
+        ac(t, i),
+        (m = i.memoizedProps),
+        (C = i.type === i.elementType ? m : Lt(i.type, m)),
+        (s.props = C),
+        (h = i.pendingProps),
+        (j = s.context),
+        (p = r.contextType),
+        typeof p == "object" && p !== null
+          ? (p = kt(p))
+          : ((p = mt(r) ? Li : et.current), (p = pr(i, p))));
+      var F = r.getDerivedStateFromProps;
+      ((b =
+        typeof F == "function" ||
+        typeof s.getSnapshotBeforeUpdate == "function") ||
+        (typeof s.UNSAFE_componentWillReceiveProps != "function" &&
+          typeof s.componentWillReceiveProps != "function") ||
+        ((m !== h || j !== p) && Ac(i, s, n, p)),
+        (Ci = !1),
+        (j = i.memoizedState),
+        (s.state = j),
+        nn(i, n, s, l));
+      var g = i.memoizedState;
+      m !== h || j !== g || ut.current || Ci
+        ? (typeof F == "function" && (yl(i, r, F, n), (g = i.memoizedState)),
+          (C = Ci || Tc(i, r, C, n, j, g, p) || !1)
+            ? (b ||
+                (typeof s.UNSAFE_componentWillUpdate != "function" &&
+                  typeof s.componentWillUpdate != "function") ||
+                (typeof s.componentWillUpdate == "function" &&
+                  s.componentWillUpdate(n, g, p),
+                typeof s.UNSAFE_componentWillUpdate == "function" &&
+                  s.UNSAFE_componentWillUpdate(n, g, p)),
+              typeof s.componentDidUpdate == "function" && (i.flags |= 4),
+              typeof s.getSnapshotBeforeUpdate == "function" &&
+                (i.flags |= 1024))
+            : (typeof s.componentDidUpdate != "function" ||
+                (m === t.memoizedProps && j === t.memoizedState) ||
+                (i.flags |= 4),
+              typeof s.getSnapshotBeforeUpdate != "function" ||
+                (m === t.memoizedProps && j === t.memoizedState) ||
+                (i.flags |= 1024),
+              (i.memoizedProps = n),
+              (i.memoizedState = g)),
+          (s.props = n),
+          (s.state = g),
+          (s.context = p),
+          (n = C))
+        : (typeof s.componentDidUpdate != "function" ||
+            (m === t.memoizedProps && j === t.memoizedState) ||
+            (i.flags |= 4),
+          typeof s.getSnapshotBeforeUpdate != "function" ||
+            (m === t.memoizedProps && j === t.memoizedState) ||
+            (i.flags |= 1024),
+          (n = !1));
+    }
+    return wl(t, i, r, n, o, l);
+  }
+  function wl(t, i, r, n, l, o) {
+    Uc(t, i);
+    var s = (i.flags & 128) !== 0;
+    if (!n && !s) return (l && qd(i, r, !1), ni(t, i, o));
+    ((n = i.stateNode), (rf.current = i));
+    var m =
+      s && typeof r.getDerivedStateFromError != "function" ? null : n.render();
+    return (
+      (i.flags |= 1),
+      t !== null && s
+        ? ((i.child = gr(i, t.child, null, o)), (i.child = gr(i, null, m, o)))
+        : st(t, i, m, o),
+      (i.memoizedState = n.state),
+      l && qd(i, r, !0),
+      i.child
+    );
+  }
+  function _c(t) {
+    var i = t.stateNode;
+    (i.pendingContext
+      ? $d(t, i.pendingContext, i.pendingContext !== i.context)
+      : i.context && $d(t, i.context, !1),
+      sl(t, i.containerInfo));
+  }
+  function Hc(t, i, r, n, l) {
+    return (fr(), tl(l), (i.flags |= 256), st(t, i, r, n), i.child);
+  }
+  var Il = { dehydrated: null, treeContext: null, retryLane: 0 };
+  function kl(t) {
+    return { baseLanes: t, cachePool: null, transitions: null };
+  }
+  function $c(t, i, r) {
+    var n = i.pendingProps,
+      l = Ue.current,
+      o = !1,
+      s = (i.flags & 128) !== 0,
+      m;
+    if (
+      ((m = s) ||
+        (m = t !== null && t.memoizedState === null ? !1 : (l & 2) !== 0),
+      m
+        ? ((o = !0), (i.flags &= -129))
+        : (t === null || t.memoizedState !== null) && (l |= 1),
+      Le(Ue, l & 1),
+      t === null)
+    )
+      return (
+        el(i),
+        (t = i.memoizedState),
+        t !== null && ((t = t.dehydrated), t !== null)
+          ? (i.mode & 1
+              ? t.data === "$!"
+                ? (i.lanes = 8)
+                : (i.lanes = 1073741824)
+              : (i.lanes = 1),
+            null)
+          : ((s = n.children),
+            (t = n.fallback),
+            o
+              ? ((n = i.mode),
+                (o = i.child),
+                (s = { mode: "hidden", children: s }),
+                !(n & 1) && o !== null
+                  ? ((o.childLanes = 0), (o.pendingProps = s))
+                  : (o = In(s, n, 0, null)),
+                (t = Vi(t, n, r, null)),
+                (o.return = i),
+                (t.return = i),
+                (o.sibling = t),
+                (i.child = o),
+                (i.child.memoizedState = kl(r)),
+                (i.memoizedState = Il),
+                t)
+              : Pl(i, s))
+      );
+    if (((l = t.memoizedState), l !== null && ((m = l.dehydrated), m !== null)))
+      return af(t, i, s, n, m, l, r);
+    if (o) {
+      ((o = n.fallback), (s = i.mode), (l = t.child), (m = l.sibling));
+      var p = { mode: "hidden", children: n.children };
+      return (
+        !(s & 1) && i.child !== l
+          ? ((n = i.child),
+            (n.childLanes = 0),
+            (n.pendingProps = p),
+            (i.deletions = null))
+          : ((n = Ei(l, p)), (n.subtreeFlags = l.subtreeFlags & 14680064)),
+        m !== null ? (o = Ei(m, o)) : ((o = Vi(o, s, r, null)), (o.flags |= 2)),
+        (o.return = i),
+        (n.return = i),
+        (n.sibling = o),
+        (i.child = n),
+        (n = o),
+        (o = i.child),
+        (s = t.child.memoizedState),
+        (s =
+          s === null
+            ? kl(r)
+            : {
+                baseLanes: s.baseLanes | r,
+                cachePool: null,
+                transitions: s.transitions,
+              }),
+        (o.memoizedState = s),
+        (o.childLanes = t.childLanes & ~r),
+        (i.memoizedState = Il),
+        n
+      );
+    }
+    return (
+      (o = t.child),
+      (t = o.sibling),
+      (n = Ei(o, { mode: "visible", children: n.children })),
+      !(i.mode & 1) && (n.lanes = r),
+      (n.return = i),
+      (n.sibling = null),
+      t !== null &&
+        ((r = i.deletions),
+        r === null ? ((i.deletions = [t]), (i.flags |= 16)) : r.push(t)),
+      (i.child = n),
+      (i.memoizedState = null),
+      n
+    );
+  }
+  function Pl(t, i) {
+    return (
+      (i = In({ mode: "visible", children: i }, t.mode, 0, null)),
+      (i.return = t),
+      (t.child = i)
+    );
+  }
+  function mn(t, i, r, n) {
+    return (
+      n !== null && tl(n),
+      gr(i, t.child, null, r),
+      (t = Pl(i, i.pendingProps.children)),
+      (t.flags |= 2),
+      (i.memoizedState = null),
+      t
+    );
+  }
+  function af(t, i, r, n, l, o, s) {
+    if (r)
+      return i.flags & 256
+        ? ((i.flags &= -257), (n = Sl(Error(ge(422)))), mn(t, i, s, n))
+        : i.memoizedState !== null
+          ? ((i.child = t.child), (i.flags |= 128), null)
+          : ((o = n.fallback),
+            (l = i.mode),
+            (n = In({ mode: "visible", children: n.children }, l, 0, null)),
+            (o = Vi(o, l, s, null)),
+            (o.flags |= 2),
+            (n.return = i),
+            (o.return = i),
+            (n.sibling = o),
+            (i.child = n),
+            i.mode & 1 && gr(i, t.child, null, s),
+            (i.child.memoizedState = kl(s)),
+            (i.memoizedState = Il),
+            o);
+    if (!(i.mode & 1)) return mn(t, i, s, null);
+    if (l.data === "$!") {
+      if (((n = l.nextSibling && l.nextSibling.dataset), n)) var m = n.dgst;
+      return (
+        (n = m),
+        (o = Error(ge(419))),
+        (n = Sl(o, n, void 0)),
+        mn(t, i, s, n)
+      );
+    }
+    if (((m = (s & t.childLanes) !== 0), ft || m)) {
+      if (((n = Xe), n !== null)) {
+        switch (s & -s) {
+          case 4:
+            l = 2;
+            break;
+          case 16:
+            l = 8;
+            break;
+          case 64:
+          case 128:
+          case 256:
+          case 512:
+          case 1024:
+          case 2048:
+          case 4096:
+          case 8192:
+          case 16384:
+          case 32768:
+          case 65536:
+          case 131072:
+          case 262144:
+          case 524288:
+          case 1048576:
+          case 2097152:
+          case 4194304:
+          case 8388608:
+          case 16777216:
+          case 33554432:
+          case 67108864:
+            l = 32;
+            break;
+          case 536870912:
+            l = 268435456;
+            break;
+          default:
+            l = 0;
+        }
+        ((l = l & (n.suspendedLanes | s) ? 0 : l),
+          l !== 0 &&
+            l !== o.retryLane &&
+            ((o.retryLane = l), ri(t, l), Ot(n, t, l, -1)));
+      }
+      return (Hl(), (n = Sl(Error(ge(421)))), mn(t, i, s, n));
+    }
+    return l.data === "$?"
+      ? ((i.flags |= 128),
+        (i.child = t.child),
+        (i = hf.bind(null, t)),
+        (l._reactRetry = i),
+        null)
+      : ((t = o.treeContext),
+        (jt = bi(l.nextSibling)),
+        (yt = i),
+        (Oe = !0),
+        (Bt = null),
+        t !== null &&
+          ((wt[It++] = ti),
+          (wt[It++] = ii),
+          (wt[It++] = Di),
+          (ti = t.id),
+          (ii = t.overflow),
+          (Di = i)),
+        (i = Pl(i, n.children)),
+        (i.flags |= 4096),
+        i);
+  }
+  function Vc(t, i, r) {
+    t.lanes |= i;
+    var n = t.alternate;
+    (n !== null && (n.lanes |= i), nl(t.return, i, r));
+  }
+  function Tl(t, i, r, n, l) {
+    var o = t.memoizedState;
+    o === null
+      ? (t.memoizedState = {
+          isBackwards: i,
+          rendering: null,
+          renderingStartTime: 0,
+          last: n,
+          tail: r,
+          tailMode: l,
+        })
+      : ((o.isBackwards = i),
+        (o.rendering = null),
+        (o.renderingStartTime = 0),
+        (o.last = n),
+        (o.tail = r),
+        (o.tailMode = l));
+  }
+  function qc(t, i, r) {
+    var n = i.pendingProps,
+      l = n.revealOrder,
+      o = n.tail;
+    if ((st(t, i, n.children, r), (n = Ue.current), n & 2))
+      ((n = (n & 1) | 2), (i.flags |= 128));
+    else {
+      if (t !== null && t.flags & 128)
+        e: for (t = i.child; t !== null;) {
+          if (t.tag === 13) t.memoizedState !== null && Vc(t, r, i);
+          else if (t.tag === 19) Vc(t, r, i);
+          else if (t.child !== null) {
+            ((t.child.return = t), (t = t.child));
+            continue;
+          }
+          if (t === i) break e;
+          for (; t.sibling === null;) {
+            if (t.return === null || t.return === i) break e;
+            t = t.return;
+          }
+          ((t.sibling.return = t.return), (t = t.sibling));
+        }
+      n &= 1;
+    }
+    if ((Le(Ue, n), !(i.mode & 1))) i.memoizedState = null;
+    else
+      switch (l) {
+        case "forwards":
+          for (r = i.child, l = null; r !== null;)
+            ((t = r.alternate),
+              t !== null && on(t) === null && (l = r),
+              (r = r.sibling));
+          ((r = l),
+            r === null
+              ? ((l = i.child), (i.child = null))
+              : ((l = r.sibling), (r.sibling = null)),
+            Tl(i, !1, l, r, o));
+          break;
+        case "backwards":
+          for (r = null, l = i.child, i.child = null; l !== null;) {
+            if (((t = l.alternate), t !== null && on(t) === null)) {
+              i.child = l;
+              break;
+            }
+            ((t = l.sibling), (l.sibling = r), (r = l), (l = t));
+          }
+          Tl(i, !0, r, null, o);
+          break;
+        case "together":
+          Tl(i, !1, null, null, void 0);
+          break;
+        default:
+          i.memoizedState = null;
+      }
+    return i.child;
+  }
+  function fn(t, i) {
+    !(i.mode & 1) &&
+      t !== null &&
+      ((t.alternate = null), (i.alternate = null), (i.flags |= 2));
+  }
+  function ni(t, i, r) {
+    if (
+      (t !== null && (i.dependencies = t.dependencies),
+      (Gi |= i.lanes),
+      !(r & i.childLanes))
+    )
+      return null;
+    if (t !== null && i.child !== t.child) throw Error(ge(153));
+    if (i.child !== null) {
+      for (
+        t = i.child, r = Ei(t, t.pendingProps), i.child = r, r.return = i;
+        t.sibling !== null;
+      )
+        ((t = t.sibling),
+          (r = r.sibling = Ei(t, t.pendingProps)),
+          (r.return = i));
+      r.sibling = null;
+    }
+    return i.child;
+  }
+  function nf(t, i, r) {
+    switch (i.tag) {
+      case 3:
+        (_c(i), fr());
+        break;
+      case 5:
+        lc(i);
+        break;
+      case 1:
+        mt(i.type) && Ya(i);
+        break;
+      case 4:
+        sl(i, i.stateNode.containerInfo);
+        break;
+      case 10:
+        var n = i.type._context,
+          l = i.memoizedProps.value;
+        (Le(tn, n._currentValue), (n._currentValue = l));
+        break;
+      case 13:
+        if (((n = i.memoizedState), n !== null))
+          return n.dehydrated !== null
+            ? (Le(Ue, Ue.current & 1), (i.flags |= 128), null)
+            : r & i.child.childLanes
+              ? $c(t, i, r)
+              : (Le(Ue, Ue.current & 1),
+                (t = ni(t, i, r)),
+                t !== null ? t.sibling : null);
+        Le(Ue, Ue.current & 1);
+        break;
+      case 19:
+        if (((n = (r & i.childLanes) !== 0), t.flags & 128)) {
+          if (n) return qc(t, i, r);
+          i.flags |= 128;
+        }
+        if (
+          ((l = i.memoizedState),
+          l !== null &&
+            ((l.rendering = null), (l.tail = null), (l.lastEffect = null)),
+          Le(Ue, Ue.current),
+          n)
+        )
+          break;
+        return null;
+      case 22:
+      case 23:
+        return ((i.lanes = 0), Wc(t, i, r));
+    }
+    return ni(t, i, r);
+  }
+  var Qc, El, Yc, Xc;
+  ((Qc = function (t, i) {
+    for (var r = i.child; r !== null;) {
+      if (r.tag === 5 || r.tag === 6) t.appendChild(r.stateNode);
+      else if (r.tag !== 4 && r.child !== null) {
+        ((r.child.return = r), (r = r.child));
+        continue;
+      }
+      if (r === i) break;
+      for (; r.sibling === null;) {
+        if (r.return === null || r.return === i) return;
+        r = r.return;
+      }
+      ((r.sibling.return = r.return), (r = r.sibling));
+    }
+  }),
+    (El = function () {}),
+    (Yc = function (t, i, r, n) {
+      var l = t.memoizedProps;
+      if (l !== n) {
+        ((t = i.stateNode), Wi(qt.current));
+        var o = null;
+        switch (r) {
+          case "input":
+            ((l = ao(t, l)), (n = ao(t, n)), (o = []));
+            break;
+          case "select":
+            ((l = We({}, l, { value: void 0 })),
+              (n = We({}, n, { value: void 0 })),
+              (o = []));
+            break;
+          case "textarea":
+            ((l = lo(t, l)), (n = lo(t, n)), (o = []));
+            break;
+          default:
+            typeof l.onClick != "function" &&
+              typeof n.onClick == "function" &&
+              (t.onclick = Va);
+        }
+        co(r, n);
+        var s;
+        r = null;
+        for (C in l)
+          if (!n.hasOwnProperty(C) && l.hasOwnProperty(C) && l[C] != null)
+            if (C === "style") {
+              var m = l[C];
+              for (s in m) m.hasOwnProperty(s) && (r || (r = {}), (r[s] = ""));
+            } else
+              C !== "dangerouslySetInnerHTML" &&
+                C !== "children" &&
+                C !== "suppressContentEditableWarning" &&
+                C !== "suppressHydrationWarning" &&
+                C !== "autoFocus" &&
+                (kr.hasOwnProperty(C)
+                  ? o || (o = [])
+                  : (o = o || []).push(C, null));
+        for (C in n) {
+          var p = n[C];
+          if (
+            ((m = l != null ? l[C] : void 0),
+            n.hasOwnProperty(C) && p !== m && (p != null || m != null))
+          )
+            if (C === "style")
+              if (m) {
+                for (s in m)
+                  !m.hasOwnProperty(s) ||
+                    (p && p.hasOwnProperty(s)) ||
+                    (r || (r = {}), (r[s] = ""));
+                for (s in p)
+                  p.hasOwnProperty(s) &&
+                    m[s] !== p[s] &&
+                    (r || (r = {}), (r[s] = p[s]));
+              } else (r || (o || (o = []), o.push(C, r)), (r = p));
+            else
+              C === "dangerouslySetInnerHTML"
+                ? ((p = p ? p.__html : void 0),
+                  (m = m ? m.__html : void 0),
+                  p != null && m !== p && (o = o || []).push(C, p))
+                : C === "children"
+                  ? (typeof p != "string" && typeof p != "number") ||
+                    (o = o || []).push(C, "" + p)
+                  : C !== "suppressContentEditableWarning" &&
+                    C !== "suppressHydrationWarning" &&
+                    (kr.hasOwnProperty(C)
+                      ? (p != null && C === "onScroll" && De("scroll", t),
+                        o || m === p || (o = []))
+                      : (o = o || []).push(C, p));
+        }
+        r && (o = o || []).push("style", r);
+        var C = o;
+        (i.updateQueue = C) && (i.flags |= 4);
+      }
+    }),
+    (Xc = function (t, i, r, n) {
+      r !== n && (i.flags |= 4);
+    }));
+  function da(t, i) {
+    if (!Oe)
+      switch (t.tailMode) {
+        case "hidden":
+          i = t.tail;
+          for (var r = null; i !== null;)
+            (i.alternate !== null && (r = i), (i = i.sibling));
+          r === null ? (t.tail = null) : (r.sibling = null);
+          break;
+        case "collapsed":
+          r = t.tail;
+          for (var n = null; r !== null;)
+            (r.alternate !== null && (n = r), (r = r.sibling));
+          n === null
+            ? i || t.tail === null
+              ? (t.tail = null)
+              : (t.tail.sibling = null)
+            : (n.sibling = null);
+      }
+  }
+  function it(t) {
+    var i = t.alternate !== null && t.alternate.child === t.child,
+      r = 0,
+      n = 0;
+    if (i)
+      for (var l = t.child; l !== null;)
+        ((r |= l.lanes | l.childLanes),
+          (n |= l.subtreeFlags & 14680064),
+          (n |= l.flags & 14680064),
+          (l.return = t),
+          (l = l.sibling));
+    else
+      for (l = t.child; l !== null;)
+        ((r |= l.lanes | l.childLanes),
+          (n |= l.subtreeFlags),
+          (n |= l.flags),
+          (l.return = t),
+          (l = l.sibling));
+    return ((t.subtreeFlags |= n), (t.childLanes = r), i);
+  }
+  function of(t, i, r) {
+    var n = i.pendingProps;
+    switch ((Ko(i), i.tag)) {
+      case 2:
+      case 16:
+      case 15:
+      case 0:
+      case 11:
+      case 7:
+      case 8:
+      case 12:
+      case 9:
+      case 14:
+        return (it(i), null);
+      case 1:
+        return (mt(i.type) && Qa(), it(i), null);
+      case 3:
+        return (
+          (n = i.stateNode),
+          vr(),
+          Ne(ut),
+          Ne(et),
+          pl(),
+          n.pendingContext &&
+            ((n.context = n.pendingContext), (n.pendingContext = null)),
+          (t === null || t.child === null) &&
+            (Za(i)
+              ? (i.flags |= 4)
+              : t === null ||
+                (t.memoizedState.isDehydrated && !(i.flags & 256)) ||
+                ((i.flags |= 1024), Bt !== null && (Ul(Bt), (Bt = null)))),
+          El(t, i),
+          it(i),
+          null
+        );
+      case 5:
+        dl(i);
+        var l = Wi(aa.current);
+        if (((r = i.type), t !== null && i.stateNode != null))
+          (Yc(t, i, r, n, l),
+            t.ref !== i.ref && ((i.flags |= 512), (i.flags |= 2097152)));
+        else {
+          if (!n) {
+            if (i.stateNode === null) throw Error(ge(166));
+            return (it(i), null);
+          }
+          if (((t = Wi(qt.current)), Za(i))) {
+            ((n = i.stateNode), (r = i.type));
+            var o = i.memoizedProps;
+            switch (((n[Vt] = i), (n[Zr] = o), (t = (i.mode & 1) !== 0), r)) {
+              case "dialog":
+                (De("cancel", n), De("close", n));
+                break;
+              case "iframe":
+              case "object":
+              case "embed":
+                De("load", n);
+                break;
+              case "video":
+              case "audio":
+                for (l = 0; l < Xr.length; l++) De(Xr[l], n);
+                break;
+              case "source":
+                De("error", n);
+                break;
+              case "img":
+              case "image":
+              case "link":
+                (De("error", n), De("load", n));
+                break;
+              case "details":
+                De("toggle", n);
+                break;
+              case "input":
+                (Es(n, o), De("invalid", n));
+                break;
+              case "select":
+                ((n._wrapperState = { wasMultiple: !!o.multiple }),
+                  De("invalid", n));
+                break;
+              case "textarea":
+                (Fs(n, o), De("invalid", n));
+            }
+            (co(r, o), (l = null));
+            for (var s in o)
+              if (o.hasOwnProperty(s)) {
+                var m = o[s];
+                s === "children"
+                  ? typeof m == "string"
+                    ? n.textContent !== m &&
+                      (o.suppressHydrationWarning !== !0 &&
+                        $a(n.textContent, m, t),
+                      (l = ["children", m]))
+                    : typeof m == "number" &&
+                      n.textContent !== "" + m &&
+                      (o.suppressHydrationWarning !== !0 &&
+                        $a(n.textContent, m, t),
+                      (l = ["children", "" + m]))
+                  : kr.hasOwnProperty(s) &&
+                    m != null &&
+                    s === "onScroll" &&
+                    De("scroll", n);
+              }
+            switch (r) {
+              case "input":
+                (Sa(n), Ms(n, o, !0));
+                break;
+              case "textarea":
+                (Sa(n), Bs(n));
+                break;
+              case "select":
+              case "option":
+                break;
+              default:
+                typeof o.onClick == "function" && (n.onclick = Va);
+            }
+            ((n = l), (i.updateQueue = n), n !== null && (i.flags |= 4));
+          } else {
+            ((s = l.nodeType === 9 ? l : l.ownerDocument),
+              t === "http://www.w3.org/1999/xhtml" && (t = Ls(r)),
+              t === "http://www.w3.org/1999/xhtml"
+                ? r === "script"
+                  ? ((t = s.createElement("div")),
+                    (t.innerHTML = "<script><\/script>"),
+                    (t = t.removeChild(t.firstChild)))
+                  : typeof n.is == "string"
+                    ? (t = s.createElement(r, { is: n.is }))
+                    : ((t = s.createElement(r)),
+                      r === "select" &&
+                        ((s = t),
+                        n.multiple
+                          ? (s.multiple = !0)
+                          : n.size && (s.size = n.size)))
+                : (t = s.createElementNS(t, r)),
+              (t[Vt] = i),
+              (t[Zr] = n),
+              Qc(t, i, !1, !1),
+              (i.stateNode = t));
+            e: {
+              switch (((s = po(r, n)), r)) {
+                case "dialog":
+                  (De("cancel", t), De("close", t), (l = n));
+                  break;
+                case "iframe":
+                case "object":
+                case "embed":
+                  (De("load", t), (l = n));
+                  break;
+                case "video":
+                case "audio":
+                  for (l = 0; l < Xr.length; l++) De(Xr[l], t);
+                  l = n;
+                  break;
+                case "source":
+                  (De("error", t), (l = n));
+                  break;
+                case "img":
+                case "image":
+                case "link":
+                  (De("error", t), De("load", t), (l = n));
+                  break;
+                case "details":
+                  (De("toggle", t), (l = n));
+                  break;
+                case "input":
+                  (Es(t, n), (l = ao(t, n)), De("invalid", t));
+                  break;
+                case "option":
+                  l = n;
+                  break;
+                case "select":
+                  ((t._wrapperState = { wasMultiple: !!n.multiple }),
+                    (l = We({}, n, { value: void 0 })),
+                    De("invalid", t));
+                  break;
+                case "textarea":
+                  (Fs(t, n), (l = lo(t, n)), De("invalid", t));
+                  break;
+                default:
+                  l = n;
+              }
+              (co(r, l), (m = l));
+              for (o in m)
+                if (m.hasOwnProperty(o)) {
+                  var p = m[o];
+                  o === "style"
+                    ? Os(t, p)
+                    : o === "dangerouslySetInnerHTML"
+                      ? ((p = p ? p.__html : void 0), p != null && Ds(t, p))
+                      : o === "children"
+                        ? typeof p == "string"
+                          ? (r !== "textarea" || p !== "") && Ar(t, p)
+                          : typeof p == "number" && Ar(t, "" + p)
+                        : o !== "suppressContentEditableWarning" &&
+                          o !== "suppressHydrationWarning" &&
+                          o !== "autoFocus" &&
+                          (kr.hasOwnProperty(o)
+                            ? p != null && o === "onScroll" && De("scroll", t)
+                            : p != null && qn(t, o, p, s));
+                }
+              switch (r) {
+                case "input":
+                  (Sa(t), Ms(t, n, !1));
+                  break;
+                case "textarea":
+                  (Sa(t), Bs(t));
+                  break;
+                case "option":
+                  n.value != null && t.setAttribute("value", "" + ui(n.value));
+                  break;
+                case "select":
+                  ((t.multiple = !!n.multiple),
+                    (o = n.value),
+                    o != null
+                      ? Zi(t, !!n.multiple, o, !1)
+                      : n.defaultValue != null &&
+                        Zi(t, !!n.multiple, n.defaultValue, !0));
+                  break;
+                default:
+                  typeof l.onClick == "function" && (t.onclick = Va);
+              }
+              switch (r) {
+                case "button":
+                case "input":
+                case "select":
+                case "textarea":
+                  n = !!n.autoFocus;
+                  break e;
+                case "img":
+                  n = !0;
+                  break e;
+                default:
+                  n = !1;
+              }
+            }
+            n && (i.flags |= 4);
+          }
+          i.ref !== null && ((i.flags |= 512), (i.flags |= 2097152));
+        }
+        return (it(i), null);
+      case 6:
+        if (t && i.stateNode != null) Xc(t, i, t.memoizedProps, n);
+        else {
+          if (typeof n != "string" && i.stateNode === null)
+            throw Error(ge(166));
+          if (((r = Wi(aa.current)), Wi(qt.current), Za(i))) {
+            if (
+              ((n = i.stateNode),
+              (r = i.memoizedProps),
+              (n[Vt] = i),
+              (o = n.nodeValue !== r) && ((t = yt), t !== null))
+            )
+              switch (t.tag) {
+                case 3:
+                  $a(n.nodeValue, r, (t.mode & 1) !== 0);
+                  break;
+                case 5:
+                  t.memoizedProps.suppressHydrationWarning !== !0 &&
+                    $a(n.nodeValue, r, (t.mode & 1) !== 0);
+              }
+            o && (i.flags |= 4);
+          } else
+            ((n = (r.nodeType === 9 ? r : r.ownerDocument).createTextNode(n)),
+              (n[Vt] = i),
+              (i.stateNode = n));
+        }
+        return (it(i), null);
+      case 13:
+        if (
+          (Ne(Ue),
+          (n = i.memoizedState),
+          t === null ||
+            (t.memoizedState !== null && t.memoizedState.dehydrated !== null))
+        ) {
+          if (Oe && jt !== null && i.mode & 1 && !(i.flags & 128))
+            (Zd(), fr(), (i.flags |= 98560), (o = !1));
+          else if (((o = Za(i)), n !== null && n.dehydrated !== null)) {
+            if (t === null) {
+              if (!o) throw Error(ge(318));
+              if (
+                ((o = i.memoizedState),
+                (o = o !== null ? o.dehydrated : null),
+                !o)
+              )
+                throw Error(ge(317));
+              o[Vt] = i;
+            } else
+              (fr(),
+                !(i.flags & 128) && (i.memoizedState = null),
+                (i.flags |= 4));
+            (it(i), (o = !1));
+          } else (Bt !== null && (Ul(Bt), (Bt = null)), (o = !0));
+          if (!o) return i.flags & 65536 ? i : null;
+        }
+        return i.flags & 128
+          ? ((i.lanes = r), i)
+          : ((n = n !== null),
+            n !== (t !== null && t.memoizedState !== null) &&
+              n &&
+              ((i.child.flags |= 8192),
+              i.mode & 1 &&
+                (t === null || Ue.current & 1 ? Qe === 0 && (Qe = 3) : Hl())),
+            i.updateQueue !== null && (i.flags |= 4),
+            it(i),
+            null);
+      case 4:
+        return (
+          vr(),
+          El(t, i),
+          t === null && Jr(i.stateNode.containerInfo),
+          it(i),
+          null
+        );
+      case 10:
+        return (al(i.type._context), it(i), null);
+      case 17:
+        return (mt(i.type) && Qa(), it(i), null);
+      case 19:
+        if ((Ne(Ue), (o = i.memoizedState), o === null)) return (it(i), null);
+        if (((n = (i.flags & 128) !== 0), (s = o.rendering), s === null))
+          if (n) da(o, !1);
+          else {
+            if (Qe !== 0 || (t !== null && t.flags & 128))
+              for (t = i.child; t !== null;) {
+                if (((s = on(t)), s !== null)) {
+                  for (
+                    i.flags |= 128,
+                      da(o, !1),
+                      n = s.updateQueue,
+                      n !== null && ((i.updateQueue = n), (i.flags |= 4)),
+                      i.subtreeFlags = 0,
+                      n = r,
+                      r = i.child;
+                    r !== null;
+                  )
+                    ((o = r),
+                      (t = n),
+                      (o.flags &= 14680066),
+                      (s = o.alternate),
+                      s === null
+                        ? ((o.childLanes = 0),
+                          (o.lanes = t),
+                          (o.child = null),
+                          (o.subtreeFlags = 0),
+                          (o.memoizedProps = null),
+                          (o.memoizedState = null),
+                          (o.updateQueue = null),
+                          (o.dependencies = null),
+                          (o.stateNode = null))
+                        : ((o.childLanes = s.childLanes),
+                          (o.lanes = s.lanes),
+                          (o.child = s.child),
+                          (o.subtreeFlags = 0),
+                          (o.deletions = null),
+                          (o.memoizedProps = s.memoizedProps),
+                          (o.memoizedState = s.memoizedState),
+                          (o.updateQueue = s.updateQueue),
+                          (o.type = s.type),
+                          (t = s.dependencies),
+                          (o.dependencies =
+                            t === null
+                              ? null
+                              : {
+                                  lanes: t.lanes,
+                                  firstContext: t.firstContext,
+                                })),
+                      (r = r.sibling));
+                  return (Le(Ue, (Ue.current & 1) | 2), i.child);
+                }
+                t = t.sibling;
+              }
+            o.tail !== null &&
+              $e() > Sr &&
+              ((i.flags |= 128), (n = !0), da(o, !1), (i.lanes = 4194304));
+          }
+        else {
+          if (!n)
+            if (((t = on(s)), t !== null)) {
+              if (
+                ((i.flags |= 128),
+                (n = !0),
+                (r = t.updateQueue),
+                r !== null && ((i.updateQueue = r), (i.flags |= 4)),
+                da(o, !0),
+                o.tail === null &&
+                  o.tailMode === "hidden" &&
+                  !s.alternate &&
+                  !Oe)
+              )
+                return (it(i), null);
+            } else
+              2 * $e() - o.renderingStartTime > Sr &&
+                r !== 1073741824 &&
+                ((i.flags |= 128), (n = !0), da(o, !1), (i.lanes = 4194304));
+          o.isBackwards
+            ? ((s.sibling = i.child), (i.child = s))
+            : ((r = o.last),
+              r !== null ? (r.sibling = s) : (i.child = s),
+              (o.last = s));
+        }
+        return o.tail !== null
+          ? ((i = o.tail),
+            (o.rendering = i),
+            (o.tail = i.sibling),
+            (o.renderingStartTime = $e()),
+            (i.sibling = null),
+            (r = Ue.current),
+            Le(Ue, n ? (r & 1) | 2 : r & 1),
+            i)
+          : (it(i), null);
+      case 22:
+      case 23:
+        return (
+          _l(),
+          (n = i.memoizedState !== null),
+          t !== null && (t.memoizedState !== null) !== n && (i.flags |= 8192),
+          n && i.mode & 1
+            ? St & 1073741824 &&
+              (it(i), i.subtreeFlags & 6 && (i.flags |= 8192))
+            : it(i),
+          null
+        );
+      case 24:
+        return null;
+      case 25:
+        return null;
+    }
+    throw Error(ge(156, i.tag));
+  }
+  function lf(t, i) {
+    switch ((Ko(i), i.tag)) {
+      case 1:
+        return (
+          mt(i.type) && Qa(),
+          (t = i.flags),
+          t & 65536 ? ((i.flags = (t & -65537) | 128), i) : null
+        );
+      case 3:
+        return (
+          vr(),
+          Ne(ut),
+          Ne(et),
+          pl(),
+          (t = i.flags),
+          t & 65536 && !(t & 128) ? ((i.flags = (t & -65537) | 128), i) : null
+        );
+      case 5:
+        return (dl(i), null);
+      case 13:
+        if (
+          (Ne(Ue), (t = i.memoizedState), t !== null && t.dehydrated !== null)
+        ) {
+          if (i.alternate === null) throw Error(ge(340));
+          fr();
+        }
+        return (
+          (t = i.flags),
+          t & 65536 ? ((i.flags = (t & -65537) | 128), i) : null
+        );
+      case 19:
+        return (Ne(Ue), null);
+      case 4:
+        return (vr(), null);
+      case 10:
+        return (al(i.type._context), null);
+      case 22:
+      case 23:
+        return (_l(), null);
+      case 24:
+        return null;
+      default:
+        return null;
+    }
+  }
+  var gn = !1,
+    rt = !1,
+    sf = typeof WeakSet == "function" ? WeakSet : Set,
+    Se = null;
+  function yr(t, i) {
+    var r = t.ref;
+    if (r !== null)
+      if (typeof r == "function")
+        try {
+          r(null);
+        } catch (n) {
+          _e(t, i, n);
+        }
+      else r.current = null;
+  }
+  function Al(t, i, r) {
+    try {
+      r();
+    } catch (n) {
+      _e(t, i, n);
+    }
+  }
+  var Jc = !1;
+  function df(t, i) {
+    if (((_o = Ra), (t = Td()), Bo(t))) {
+      if ("selectionStart" in t)
+        var r = { start: t.selectionStart, end: t.selectionEnd };
+      else
+        e: {
+          r = ((r = t.ownerDocument) && r.defaultView) || window;
+          var n = r.getSelection && r.getSelection();
+          if (n && n.rangeCount !== 0) {
+            r = n.anchorNode;
+            var l = n.anchorOffset,
+              o = n.focusNode;
+            n = n.focusOffset;
+            try {
+              (r.nodeType, o.nodeType);
+            } catch (f) {
+              r = null;
+              break e;
+            }
+            var s = 0,
+              m = -1,
+              p = -1,
+              C = 0,
+              b = 0,
+              h = t,
+              j = null;
+            t: for (;;) {
+              for (
+                var F;
+                h !== r || (l !== 0 && h.nodeType !== 3) || (m = s + l),
+                  h !== o || (n !== 0 && h.nodeType !== 3) || (p = s + n),
+                  h.nodeType === 3 && (s += h.nodeValue.length),
+                  (F = h.firstChild) !== null;
+              )
+                ((j = h), (h = F));
+              for (;;) {
+                if (h === t) break t;
+                if (
+                  (j === r && ++C === l && (m = s),
+                  j === o && ++b === n && (p = s),
+                  (F = h.nextSibling) !== null)
+                )
+                  break;
+                ((h = j), (j = h.parentNode));
+              }
+              h = F;
+            }
+            r = m === -1 || p === -1 ? null : { start: m, end: p };
+          } else r = null;
+        }
+      r = r || { start: 0, end: 0 };
+    } else r = null;
+    for (
+      Ho = { focusedElem: t, selectionRange: r }, Ra = !1, Se = i;
+      Se !== null;
+    )
+      if (
+        ((i = Se), (t = i.child), (i.subtreeFlags & 1028) !== 0 && t !== null)
+      )
+        ((t.return = i), (Se = t));
+      else
+        for (; Se !== null;) {
+          i = Se;
+          try {
+            var g = i.alternate;
+            if (i.flags & 1024)
+              switch (i.tag) {
+                case 0:
+                case 11:
+                case 15:
+                  break;
+                case 1:
+                  if (g !== null) {
+                    var z = g.memoizedProps,
+                      B = g.memoizedState,
+                      w = i.stateNode,
+                      v = w.getSnapshotBeforeUpdate(
+                        i.elementType === i.type ? z : Lt(i.type, z),
+                        B,
+                      );
+                    w.__reactInternalSnapshotBeforeUpdate = v;
+                  }
+                  break;
+                case 3:
+                  var x = i.stateNode.containerInfo;
+                  x.nodeType === 1
+                    ? (x.textContent = "")
+                    : x.nodeType === 9 &&
+                      x.documentElement &&
+                      x.removeChild(x.documentElement);
+                  break;
+                case 5:
+                case 6:
+                case 4:
+                case 17:
+                  break;
+                default:
+                  throw Error(ge(163));
+              }
+          } catch (f) {
+            _e(i, i.return, f);
+          }
+          if (((t = i.sibling), t !== null)) {
+            ((t.return = i.return), (Se = t));
+            break;
+          }
+          Se = i.return;
+        }
+    return ((g = Jc), (Jc = !1), g);
+  }
+  function ca(t, i, r) {
+    var n = i.updateQueue;
+    if (((n = n !== null ? n.lastEffect : null), n !== null)) {
+      var l = (n = n.next);
+      do {
+        if ((l.tag & t) === t) {
+          var o = l.destroy;
+          ((l.destroy = void 0), o !== void 0 && Al(i, r, o));
+        }
+        l = l.next;
+      } while (l !== n);
+    }
+  }
+  function xn(t, i) {
+    if (
+      ((i = i.updateQueue), (i = i !== null ? i.lastEffect : null), i !== null)
+    ) {
+      var r = (i = i.next);
+      do {
+        if ((r.tag & t) === t) {
+          var n = r.create;
+          r.destroy = n();
+        }
+        r = r.next;
+      } while (r !== i);
+    }
+  }
+  function Ml(t) {
+    var i = t.ref;
+    if (i !== null) {
+      var r = t.stateNode;
+      switch (t.tag) {
+        case 5:
+          t = r;
+          break;
+        default:
+          t = r;
+      }
+      typeof i == "function" ? i(t) : (i.current = t);
+    }
+  }
+  function Kc(t) {
+    var i = t.alternate;
+    (i !== null && ((t.alternate = null), Kc(i)),
+      (t.child = null),
+      (t.deletions = null),
+      (t.sibling = null),
+      t.tag === 5 &&
+        ((i = t.stateNode),
+        i !== null &&
+          (delete i[Vt],
+          delete i[Zr],
+          delete i[Qo],
+          delete i[Hm],
+          delete i[$m])),
+      (t.stateNode = null),
+      (t.return = null),
+      (t.dependencies = null),
+      (t.memoizedProps = null),
+      (t.memoizedState = null),
+      (t.pendingProps = null),
+      (t.stateNode = null),
+      (t.updateQueue = null));
+  }
+  function Zc(t) {
+    return t.tag === 5 || t.tag === 3 || t.tag === 4;
+  }
+  function ep(t) {
+    e: for (;;) {
+      for (; t.sibling === null;) {
+        if (t.return === null || Zc(t.return)) return null;
+        t = t.return;
+      }
+      for (
+        t.sibling.return = t.return, t = t.sibling;
+        t.tag !== 5 && t.tag !== 6 && t.tag !== 18;
+      ) {
+        if (t.flags & 2 || t.child === null || t.tag === 4) continue e;
+        ((t.child.return = t), (t = t.child));
+      }
+      if (!(t.flags & 2)) return t.stateNode;
+    }
+  }
+  function Fl(t, i, r) {
+    var n = t.tag;
+    if (n === 5 || n === 6)
+      ((t = t.stateNode),
+        i
+          ? r.nodeType === 8
+            ? r.parentNode.insertBefore(t, i)
+            : r.insertBefore(t, i)
+          : (r.nodeType === 8
+              ? ((i = r.parentNode), i.insertBefore(t, r))
+              : ((i = r), i.appendChild(t)),
+            (r = r._reactRootContainer),
+            r != null || i.onclick !== null || (i.onclick = Va)));
+    else if (n !== 4 && ((t = t.child), t !== null))
+      for (Fl(t, i, r), t = t.sibling; t !== null;)
+        (Fl(t, i, r), (t = t.sibling));
+  }
+  function Rl(t, i, r) {
+    var n = t.tag;
+    if (n === 5 || n === 6)
+      ((t = t.stateNode), i ? r.insertBefore(t, i) : r.appendChild(t));
+    else if (n !== 4 && ((t = t.child), t !== null))
+      for (Rl(t, i, r), t = t.sibling; t !== null;)
+        (Rl(t, i, r), (t = t.sibling));
+  }
+  var Ke = null,
+    Dt = !1;
+  function wi(t, i, r) {
+    for (r = r.child; r !== null;) (tp(t, i, r), (r = r.sibling));
+  }
+  function tp(t, i, r) {
+    if ($t && typeof $t.onCommitFiberUnmount == "function")
+      try {
+        $t.onCommitFiberUnmount(Pa, r);
+      } catch (m) {}
+    switch (r.tag) {
+      case 5:
+        rt || yr(r, i);
+      case 6:
+        var n = Ke,
+          l = Dt;
+        ((Ke = null),
+          wi(t, i, r),
+          (Ke = n),
+          (Dt = l),
+          Ke !== null &&
+            (Dt
+              ? ((t = Ke),
+                (r = r.stateNode),
+                t.nodeType === 8
+                  ? t.parentNode.removeChild(r)
+                  : t.removeChild(r))
+              : Ke.removeChild(r.stateNode)));
+        break;
+      case 18:
+        Ke !== null &&
+          (Dt
+            ? ((t = Ke),
+              (r = r.stateNode),
+              t.nodeType === 8
+                ? qo(t.parentNode, r)
+                : t.nodeType === 1 && qo(t, r),
+              Gr(t))
+            : qo(Ke, r.stateNode));
+        break;
+      case 4:
+        ((n = Ke),
+          (l = Dt),
+          (Ke = r.stateNode.containerInfo),
+          (Dt = !0),
+          wi(t, i, r),
+          (Ke = n),
+          (Dt = l));
+        break;
+      case 0:
+      case 11:
+      case 14:
+      case 15:
+        if (
+          !rt &&
+          ((n = r.updateQueue), n !== null && ((n = n.lastEffect), n !== null))
+        ) {
+          l = n = n.next;
+          do {
+            var o = l,
+              s = o.destroy;
+            ((o = o.tag),
+              s !== void 0 && (o & 2 || o & 4) && Al(r, i, s),
+              (l = l.next));
+          } while (l !== n);
+        }
+        wi(t, i, r);
+        break;
+      case 1:
+        if (
+          !rt &&
+          (yr(r, i),
+          (n = r.stateNode),
+          typeof n.componentWillUnmount == "function")
+        )
+          try {
+            ((n.props = r.memoizedProps),
+              (n.state = r.memoizedState),
+              n.componentWillUnmount());
+          } catch (m) {
+            _e(r, i, m);
+          }
+        wi(t, i, r);
+        break;
+      case 21:
+        wi(t, i, r);
+        break;
+      case 22:
+        r.mode & 1
+          ? ((rt = (n = rt) || r.memoizedState !== null), wi(t, i, r), (rt = n))
+          : wi(t, i, r);
+        break;
+      default:
+        wi(t, i, r);
+    }
+  }
+  function ip(t) {
+    var i = t.updateQueue;
+    if (i !== null) {
+      t.updateQueue = null;
+      var r = t.stateNode;
+      (r === null && (r = t.stateNode = new sf()),
+        i.forEach(function (n) {
+          var l = vf.bind(null, t, n);
+          r.has(n) || (r.add(n), n.then(l, l));
+        }));
+    }
+  }
+  function Nt(t, i) {
+    var r = i.deletions;
+    if (r !== null)
+      for (var n = 0; n < r.length; n++) {
+        var l = r[n];
+        try {
+          var o = t,
+            s = i,
+            m = s;
+          e: for (; m !== null;) {
+            switch (m.tag) {
+              case 5:
+                ((Ke = m.stateNode), (Dt = !1));
+                break e;
+              case 3:
+                ((Ke = m.stateNode.containerInfo), (Dt = !0));
+                break e;
+              case 4:
+                ((Ke = m.stateNode.containerInfo), (Dt = !0));
+                break e;
+            }
+            m = m.return;
+          }
+          if (Ke === null) throw Error(ge(160));
+          (tp(o, s, l), (Ke = null), (Dt = !1));
+          var p = l.alternate;
+          (p !== null && (p.return = null), (l.return = null));
+        } catch (C) {
+          _e(l, i, C);
+        }
+      }
+    if (i.subtreeFlags & 12854)
+      for (i = i.child; i !== null;) (rp(i, t), (i = i.sibling));
+  }
+  function rp(t, i) {
+    var r = t.alternate,
+      n = t.flags;
+    switch (t.tag) {
+      case 0:
+      case 11:
+      case 14:
+      case 15:
+        if ((Nt(i, t), Yt(t), n & 4)) {
+          try {
+            (ca(3, t, t.return), xn(3, t));
+          } catch (z) {
+            _e(t, t.return, z);
+          }
+          try {
+            ca(5, t, t.return);
+          } catch (z) {
+            _e(t, t.return, z);
+          }
+        }
+        break;
+      case 1:
+        (Nt(i, t), Yt(t), n & 512 && r !== null && yr(r, r.return));
+        break;
+      case 5:
+        if (
+          (Nt(i, t),
+          Yt(t),
+          n & 512 && r !== null && yr(r, r.return),
+          t.flags & 32)
+        ) {
+          var l = t.stateNode;
+          try {
+            Ar(l, "");
+          } catch (z) {
+            _e(t, t.return, z);
+          }
+        }
+        if (n & 4 && ((l = t.stateNode), l != null)) {
+          var o = t.memoizedProps,
+            s = r !== null ? r.memoizedProps : o,
+            m = t.type,
+            p = t.updateQueue;
+          if (((t.updateQueue = null), p !== null))
+            try {
+              (m === "input" &&
+                o.type === "radio" &&
+                o.name != null &&
+                As(l, o),
+                po(m, s));
+              var C = po(m, o);
+              for (s = 0; s < p.length; s += 2) {
+                var b = p[s],
+                  h = p[s + 1];
+                b === "style"
+                  ? Os(l, h)
+                  : b === "dangerouslySetInnerHTML"
+                    ? Ds(l, h)
+                    : b === "children"
+                      ? Ar(l, h)
+                      : qn(l, b, h, C);
+              }
+              switch (m) {
+                case "input":
+                  no(l, o);
+                  break;
+                case "textarea":
+                  Rs(l, o);
+                  break;
+                case "select":
+                  var j = l._wrapperState.wasMultiple;
+                  l._wrapperState.wasMultiple = !!o.multiple;
+                  var F = o.value;
+                  F != null
+                    ? Zi(l, !!o.multiple, F, !1)
+                    : j !== !!o.multiple &&
+                      (o.defaultValue != null
+                        ? Zi(l, !!o.multiple, o.defaultValue, !0)
+                        : Zi(l, !!o.multiple, o.multiple ? [] : "", !1));
+              }
+              l[Zr] = o;
+            } catch (z) {
+              _e(t, t.return, z);
+            }
+        }
+        break;
+      case 6:
+        if ((Nt(i, t), Yt(t), n & 4)) {
+          if (t.stateNode === null) throw Error(ge(162));
+          ((l = t.stateNode), (o = t.memoizedProps));
+          try {
+            l.nodeValue = o;
+          } catch (z) {
+            _e(t, t.return, z);
+          }
+        }
+        break;
+      case 3:
+        if (
+          (Nt(i, t), Yt(t), n & 4 && r !== null && r.memoizedState.isDehydrated)
+        )
+          try {
+            Gr(i.containerInfo);
+          } catch (z) {
+            _e(t, t.return, z);
+          }
+        break;
+      case 4:
+        (Nt(i, t), Yt(t));
+        break;
+      case 13:
+        (Nt(i, t),
+          Yt(t),
+          (l = t.child),
+          l.flags & 8192 &&
+            ((o = l.memoizedState !== null),
+            (l.stateNode.isHidden = o),
+            !o ||
+              (l.alternate !== null && l.alternate.memoizedState !== null) ||
+              (Dl = $e())),
+          n & 4 && ip(t));
+        break;
+      case 22:
+        if (
+          ((b = r !== null && r.memoizedState !== null),
+          t.mode & 1 ? ((rt = (C = rt) || b), Nt(i, t), (rt = C)) : Nt(i, t),
+          Yt(t),
+          n & 8192)
+        ) {
+          if (
+            ((C = t.memoizedState !== null),
+            (t.stateNode.isHidden = C) && !b && t.mode & 1)
+          )
+            for (Se = t, b = t.child; b !== null;) {
+              for (h = Se = b; Se !== null;) {
+                switch (((j = Se), (F = j.child), j.tag)) {
+                  case 0:
+                  case 11:
+                  case 14:
+                  case 15:
+                    ca(4, j, j.return);
+                    break;
+                  case 1:
+                    yr(j, j.return);
+                    var g = j.stateNode;
+                    if (typeof g.componentWillUnmount == "function") {
+                      ((n = j), (r = j.return));
+                      try {
+                        ((i = n),
+                          (g.props = i.memoizedProps),
+                          (g.state = i.memoizedState),
+                          g.componentWillUnmount());
+                      } catch (z) {
+                        _e(n, r, z);
+                      }
+                    }
+                    break;
+                  case 5:
+                    yr(j, j.return);
+                    break;
+                  case 22:
+                    if (j.memoizedState !== null) {
+                      op(h);
+                      continue;
+                    }
+                }
+                F !== null ? ((F.return = j), (Se = F)) : op(h);
+              }
+              b = b.sibling;
+            }
+          e: for (b = null, h = t; ;) {
+            if (h.tag === 5) {
+              if (b === null) {
+                b = h;
+                try {
+                  ((l = h.stateNode),
+                    C
+                      ? ((o = l.style),
+                        typeof o.setProperty == "function"
+                          ? o.setProperty("display", "none", "important")
+                          : (o.display = "none"))
+                      : ((m = h.stateNode),
+                        (p = h.memoizedProps.style),
+                        (s =
+                          p != null && p.hasOwnProperty("display")
+                            ? p.display
+                            : null),
+                        (m.style.display = Ns("display", s))));
+                } catch (z) {
+                  _e(t, t.return, z);
+                }
+              }
+            } else if (h.tag === 6) {
+              if (b === null)
+                try {
+                  h.stateNode.nodeValue = C ? "" : h.memoizedProps;
+                } catch (z) {
+                  _e(t, t.return, z);
+                }
+            } else if (
+              ((h.tag !== 22 && h.tag !== 23) ||
+                h.memoizedState === null ||
+                h === t) &&
+              h.child !== null
+            ) {
+              ((h.child.return = h), (h = h.child));
+              continue;
+            }
+            if (h === t) break e;
+            for (; h.sibling === null;) {
+              if (h.return === null || h.return === t) break e;
+              (b === h && (b = null), (h = h.return));
+            }
+            (b === h && (b = null),
+              (h.sibling.return = h.return),
+              (h = h.sibling));
+          }
+        }
+        break;
+      case 19:
+        (Nt(i, t), Yt(t), n & 4 && ip(t));
+        break;
+      case 21:
+        break;
+      default:
+        (Nt(i, t), Yt(t));
+    }
+  }
+  function Yt(t) {
+    var i = t.flags;
+    if (i & 2) {
+      try {
+        e: {
+          for (var r = t.return; r !== null;) {
+            if (Zc(r)) {
+              var n = r;
+              break e;
+            }
+            r = r.return;
+          }
+          throw Error(ge(160));
+        }
+        switch (n.tag) {
+          case 5:
+            var l = n.stateNode;
+            n.flags & 32 && (Ar(l, ""), (n.flags &= -33));
+            var o = ep(t);
+            Rl(t, o, l);
+            break;
+          case 3:
+          case 4:
+            var s = n.stateNode.containerInfo,
+              m = ep(t);
+            Fl(t, m, s);
+            break;
+          default:
+            throw Error(ge(161));
+        }
+      } catch (p) {
+        _e(t, t.return, p);
+      }
+      t.flags &= -3;
+    }
+    i & 4096 && (t.flags &= -4097);
+  }
+  function cf(t, i, r) {
+    ((Se = t), ap(t));
+  }
+  function ap(t, i, r) {
+    for (var n = (t.mode & 1) !== 0; Se !== null;) {
+      var l = Se,
+        o = l.child;
+      if (l.tag === 22 && n) {
+        var s = l.memoizedState !== null || gn;
+        if (!s) {
+          var m = l.alternate,
+            p = (m !== null && m.memoizedState !== null) || rt;
+          m = gn;
+          var C = rt;
+          if (((gn = s), (rt = p) && !C))
+            for (Se = l; Se !== null;)
+              ((s = Se),
+                (p = s.child),
+                s.tag === 22 && s.memoizedState !== null
+                  ? lp(l)
+                  : p !== null
+                    ? ((p.return = s), (Se = p))
+                    : lp(l));
+          for (; o !== null;) ((Se = o), ap(o), (o = o.sibling));
+          ((Se = l), (gn = m), (rt = C));
+        }
+        np(t);
+      } else
+        l.subtreeFlags & 8772 && o !== null
+          ? ((o.return = l), (Se = o))
+          : np(t);
+    }
+  }
+  function np(t) {
+    for (; Se !== null;) {
+      var i = Se;
+      if (i.flags & 8772) {
+        var r = i.alternate;
+        try {
+          if (i.flags & 8772)
+            switch (i.tag) {
+              case 0:
+              case 11:
+              case 15:
+                rt || xn(5, i);
+                break;
+              case 1:
+                var n = i.stateNode;
+                if (i.flags & 4 && !rt)
+                  if (r === null) n.componentDidMount();
+                  else {
+                    var l =
+                      i.elementType === i.type
+                        ? r.memoizedProps
+                        : Lt(i.type, r.memoizedProps);
+                    n.componentDidUpdate(
+                      l,
+                      r.memoizedState,
+                      n.__reactInternalSnapshotBeforeUpdate,
+                    );
+                  }
+                var o = i.updateQueue;
+                o !== null && oc(i, o, n);
+                break;
+              case 3:
+                var s = i.updateQueue;
+                if (s !== null) {
+                  if (((r = null), i.child !== null))
+                    switch (i.child.tag) {
+                      case 5:
+                        r = i.child.stateNode;
+                        break;
+                      case 1:
+                        r = i.child.stateNode;
+                    }
+                  oc(i, s, r);
+                }
+                break;
+              case 5:
+                var m = i.stateNode;
+                if (r === null && i.flags & 4) {
+                  r = m;
+                  var p = i.memoizedProps;
+                  switch (i.type) {
+                    case "button":
+                    case "input":
+                    case "select":
+                    case "textarea":
+                      p.autoFocus && r.focus();
+                      break;
+                    case "img":
+                      p.src && (r.src = p.src);
+                  }
+                }
+                break;
+              case 6:
+                break;
+              case 4:
+                break;
+              case 12:
+                break;
+              case 13:
+                if (i.memoizedState === null) {
+                  var C = i.alternate;
+                  if (C !== null) {
+                    var b = C.memoizedState;
+                    if (b !== null) {
+                      var h = b.dehydrated;
+                      h !== null && Gr(h);
+                    }
+                  }
+                }
+                break;
+              case 19:
+              case 17:
+              case 21:
+              case 22:
+              case 23:
+              case 25:
+                break;
+              default:
+                throw Error(ge(163));
+            }
+          rt || (i.flags & 512 && Ml(i));
+        } catch (j) {
+          _e(i, i.return, j);
+        }
+      }
+      if (i === t) {
+        Se = null;
+        break;
+      }
+      if (((r = i.sibling), r !== null)) {
+        ((r.return = i.return), (Se = r));
+        break;
+      }
+      Se = i.return;
+    }
+  }
+  function op(t) {
+    for (; Se !== null;) {
+      var i = Se;
+      if (i === t) {
+        Se = null;
+        break;
+      }
+      var r = i.sibling;
+      if (r !== null) {
+        ((r.return = i.return), (Se = r));
+        break;
+      }
+      Se = i.return;
+    }
+  }
+  function lp(t) {
+    for (; Se !== null;) {
+      var i = Se;
+      try {
+        switch (i.tag) {
+          case 0:
+          case 11:
+          case 15:
+            var r = i.return;
+            try {
+              xn(4, i);
+            } catch (p) {
+              _e(i, r, p);
+            }
+            break;
+          case 1:
+            var n = i.stateNode;
+            if (typeof n.componentDidMount == "function") {
+              var l = i.return;
+              try {
+                n.componentDidMount();
+              } catch (p) {
+                _e(i, l, p);
+              }
+            }
+            var o = i.return;
+            try {
+              Ml(i);
+            } catch (p) {
+              _e(i, o, p);
+            }
+            break;
+          case 5:
+            var s = i.return;
+            try {
+              Ml(i);
+            } catch (p) {
+              _e(i, s, p);
+            }
+        }
+      } catch (p) {
+        _e(i, i.return, p);
+      }
+      if (i === t) {
+        Se = null;
+        break;
+      }
+      var m = i.sibling;
+      if (m !== null) {
+        ((m.return = i.return), (Se = m));
+        break;
+      }
+      Se = i.return;
+    }
+  }
+  var pf = Math.ceil,
+    hn = Kt.ReactCurrentDispatcher,
+    Bl = Kt.ReactCurrentOwner,
+    Tt = Kt.ReactCurrentBatchConfig,
+    Ae = 0,
+    Xe = null,
+    Ve = null,
+    Ze = 0,
+    St = 0,
+    jr = yi(0),
+    Qe = 0,
+    pa = null,
+    Gi = 0,
+    vn = 0,
+    Ll = 0,
+    ua = null,
+    gt = null,
+    Dl = 0,
+    Sr = 1 / 0,
+    oi = null,
+    bn = !1,
+    Nl = null,
+    Ii = null,
+    yn = !1,
+    ki = null,
+    jn = 0,
+    ma = 0,
+    Ol = null,
+    Sn = -1,
+    Cn = 0;
+  function dt() {
+    return Ae & 6 ? $e() : Sn !== -1 ? Sn : (Sn = $e());
+  }
+  function Pi(t) {
+    return t.mode & 1
+      ? Ae & 2 && Ze !== 0
+        ? Ze & -Ze
+        : qm.transition !== null
+          ? (Cn === 0 && (Cn = ed()), Cn)
+          : ((t = Be),
+            t !== 0 ||
+              ((t = window.event), (t = t === void 0 ? 16 : dd(t.type))),
+            t)
+      : 1;
+  }
+  function Ot(t, i, r, n) {
+    if (50 < ma) throw ((ma = 0), (Ol = null), Error(ge(185)));
+    (Dr(t, r, n),
+      (!(Ae & 2) || t !== Xe) &&
+        (t === Xe && (!(Ae & 2) && (vn |= r), Qe === 4 && Ti(t, Ze)),
+        xt(t, n),
+        r === 1 &&
+          Ae === 0 &&
+          !(i.mode & 1) &&
+          ((Sr = $e() + 500), Xa && Si())));
+  }
+  function xt(t, i) {
+    var r = t.callbackNode;
+    qu(t, i);
+    var n = Aa(t, t === Xe ? Ze : 0);
+    if (n === 0)
+      (r !== null && Js(r), (t.callbackNode = null), (t.callbackPriority = 0));
+    else if (((i = n & -n), t.callbackPriority !== i)) {
+      if ((r != null && Js(r), i === 1))
+        (t.tag === 0 ? Vm(dp.bind(null, t)) : Qd(dp.bind(null, t)),
+          Gm(function () {
+            !(Ae & 6) && Si();
+          }),
+          (r = null));
+      else {
+        switch (td(n)) {
+          case 1:
+            r = vo;
+            break;
+          case 4:
+            r = Ks;
+            break;
+          case 16:
+            r = ka;
+            break;
+          case 536870912:
+            r = Zs;
+            break;
+          default:
+            r = ka;
+        }
+        r = hp(r, sp.bind(null, t));
+      }
+      ((t.callbackPriority = i), (t.callbackNode = r));
+    }
+  }
+  function sp(t, i) {
+    if (((Sn = -1), (Cn = 0), Ae & 6)) throw Error(ge(327));
+    var r = t.callbackNode;
+    if (Cr() && t.callbackNode !== r) return null;
+    var n = Aa(t, t === Xe ? Ze : 0);
+    if (n === 0) return null;
+    if (n & 30 || n & t.expiredLanes || i) i = zn(t, n);
+    else {
+      i = n;
+      var l = Ae;
+      Ae |= 2;
+      var o = pp();
+      (Xe !== t || Ze !== i) && ((oi = null), (Sr = $e() + 500), Hi(t, i));
+      do
+        try {
+          ff();
+          break;
+        } catch (m) {
+          cp(t, m);
+        }
+      while (!0);
+      (rl(),
+        (hn.current = o),
+        (Ae = l),
+        Ve !== null ? (i = 0) : ((Xe = null), (Ze = 0), (i = Qe)));
+    }
+    if (i !== 0) {
+      if (
+        (i === 2 && ((l = bo(t)), l !== 0 && ((n = l), (i = Wl(t, l)))),
+        i === 1)
+      )
+        throw ((r = pa), Hi(t, 0), Ti(t, n), xt(t, $e()), r);
+      if (i === 6) Ti(t, n);
+      else {
+        if (
+          ((l = t.current.alternate),
+          !(n & 30) &&
+            !uf(l) &&
+            ((i = zn(t, n)),
+            i === 2 && ((o = bo(t)), o !== 0 && ((n = o), (i = Wl(t, o)))),
+            i === 1))
+        )
+          throw ((r = pa), Hi(t, 0), Ti(t, n), xt(t, $e()), r);
+        switch (((t.finishedWork = l), (t.finishedLanes = n), i)) {
+          case 0:
+          case 1:
+            throw Error(ge(345));
+          case 2:
+            $i(t, gt, oi);
+            break;
+          case 3:
+            if (
+              (Ti(t, n),
+              (n & 130023424) === n && ((i = Dl + 500 - $e()), 10 < i))
+            ) {
+              if (Aa(t, 0) !== 0) break;
+              if (((l = t.suspendedLanes), (l & n) !== n)) {
+                (dt(), (t.pingedLanes |= t.suspendedLanes & l));
+                break;
+              }
+              t.timeoutHandle = Vo($i.bind(null, t, gt, oi), i);
+              break;
+            }
+            $i(t, gt, oi);
+            break;
+          case 4:
+            if ((Ti(t, n), (n & 4194240) === n)) break;
+            for (i = t.eventTimes, l = -1; 0 < n;) {
+              var s = 31 - Ft(n);
+              ((o = 1 << s), (s = i[s]), s > l && (l = s), (n &= ~o));
+            }
+            if (
+              ((n = l),
+              (n = $e() - n),
+              (n =
+                (120 > n
+                  ? 120
+                  : 480 > n
+                    ? 480
+                    : 1080 > n
+                      ? 1080
+                      : 1920 > n
+                        ? 1920
+                        : 3e3 > n
+                          ? 3e3
+                          : 4320 > n
+                            ? 4320
+                            : 1960 * pf(n / 1960)) - n),
+              10 < n)
+            ) {
+              t.timeoutHandle = Vo($i.bind(null, t, gt, oi), n);
+              break;
+            }
+            $i(t, gt, oi);
+            break;
+          case 5:
+            $i(t, gt, oi);
+            break;
+          default:
+            throw Error(ge(329));
+        }
+      }
+    }
+    return (xt(t, $e()), t.callbackNode === r ? sp.bind(null, t) : null);
+  }
+  function Wl(t, i) {
+    var r = ua;
+    return (
+      t.current.memoizedState.isDehydrated && (Hi(t, i).flags |= 256),
+      (t = zn(t, i)),
+      t !== 2 && ((i = gt), (gt = r), i !== null && Ul(i)),
+      t
+    );
+  }
+  function Ul(t) {
+    gt === null ? (gt = t) : gt.push.apply(gt, t);
+  }
+  function uf(t) {
+    for (var i = t; ;) {
+      if (i.flags & 16384) {
+        var r = i.updateQueue;
+        if (r !== null && ((r = r.stores), r !== null))
+          for (var n = 0; n < r.length; n++) {
+            var l = r[n],
+              o = l.getSnapshot;
+            l = l.value;
+            try {
+              if (!Rt(o(), l)) return !1;
+            } catch (s) {
+              return !1;
+            }
+          }
+      }
+      if (((r = i.child), i.subtreeFlags & 16384 && r !== null))
+        ((r.return = i), (i = r));
+      else {
+        if (i === t) break;
+        for (; i.sibling === null;) {
+          if (i.return === null || i.return === t) return !0;
+          i = i.return;
+        }
+        ((i.sibling.return = i.return), (i = i.sibling));
+      }
+    }
+    return !0;
+  }
+  function Ti(t, i) {
+    for (
+      i &= ~Ll,
+        i &= ~vn,
+        t.suspendedLanes |= i,
+        t.pingedLanes &= ~i,
+        t = t.expirationTimes;
+      0 < i;
+    ) {
+      var r = 31 - Ft(i),
+        n = 1 << r;
+      ((t[r] = -1), (i &= ~n));
+    }
+  }
+  function dp(t) {
+    if (Ae & 6) throw Error(ge(327));
+    Cr();
+    var i = Aa(t, 0);
+    if (!(i & 1)) return (xt(t, $e()), null);
+    var r = zn(t, i);
+    if (t.tag !== 0 && r === 2) {
+      var n = bo(t);
+      n !== 0 && ((i = n), (r = Wl(t, n)));
+    }
+    if (r === 1) throw ((r = pa), Hi(t, 0), Ti(t, i), xt(t, $e()), r);
+    if (r === 6) throw Error(ge(345));
+    return (
+      (t.finishedWork = t.current.alternate),
+      (t.finishedLanes = i),
+      $i(t, gt, oi),
+      xt(t, $e()),
+      null
+    );
+  }
+  function Gl(t, i) {
+    var r = Ae;
+    Ae |= 1;
+    try {
+      return t(i);
+    } finally {
+      ((Ae = r), Ae === 0 && ((Sr = $e() + 500), Xa && Si()));
+    }
+  }
+  function _i(t) {
+    ki !== null && ki.tag === 0 && !(Ae & 6) && Cr();
+    var i = Ae;
+    Ae |= 1;
+    var r = Tt.transition,
+      n = Be;
+    try {
+      if (((Tt.transition = null), (Be = 1), t)) return t();
+    } finally {
+      ((Be = n), (Tt.transition = r), (Ae = i), !(Ae & 6) && Si());
+    }
+  }
+  function _l() {
+    ((St = jr.current), Ne(jr));
+  }
+  function Hi(t, i) {
+    ((t.finishedWork = null), (t.finishedLanes = 0));
+    var r = t.timeoutHandle;
+    if ((r !== -1 && ((t.timeoutHandle = -1), Um(r)), Ve !== null))
+      for (r = Ve.return; r !== null;) {
+        var n = r;
+        switch ((Ko(n), n.tag)) {
+          case 1:
+            ((n = n.type.childContextTypes), n != null && Qa());
+            break;
+          case 3:
+            (vr(), Ne(ut), Ne(et), pl());
+            break;
+          case 5:
+            dl(n);
+            break;
+          case 4:
+            vr();
+            break;
+          case 13:
+            Ne(Ue);
+            break;
+          case 19:
+            Ne(Ue);
+            break;
+          case 10:
+            al(n.type._context);
+            break;
+          case 22:
+          case 23:
+            _l();
+        }
+        r = r.return;
+      }
+    if (
+      ((Xe = t),
+      (Ve = t = Ei(t.current, null)),
+      (Ze = St = i),
+      (Qe = 0),
+      (pa = null),
+      (Ll = vn = Gi = 0),
+      (gt = ua = null),
+      Oi !== null)
+    ) {
+      for (i = 0; i < Oi.length; i++)
+        if (((r = Oi[i]), (n = r.interleaved), n !== null)) {
+          r.interleaved = null;
+          var l = n.next,
+            o = r.pending;
+          if (o !== null) {
+            var s = o.next;
+            ((o.next = l), (n.next = s));
+          }
+          r.pending = n;
+        }
+      Oi = null;
+    }
+    return t;
+  }
+  function cp(t, i) {
+    do {
+      var r = Ve;
+      try {
+        if ((rl(), (ln.current = pn), sn)) {
+          for (var n = Ge.memoizedState; n !== null;) {
+            var l = n.queue;
+            (l !== null && (l.pending = null), (n = n.next));
+          }
+          sn = !1;
+        }
+        if (
+          ((Ui = 0),
+          (Ye = qe = Ge = null),
+          (na = !1),
+          (oa = 0),
+          (Bl.current = null),
+          r === null || r.return === null)
+        ) {
+          ((Qe = 1), (pa = i), (Ve = null));
+          break;
+        }
+        e: {
+          var o = t,
+            s = r.return,
+            m = r,
+            p = i;
+          if (
+            ((i = Ze),
+            (m.flags |= 32768),
+            p !== null && typeof p == "object" && typeof p.then == "function")
+          ) {
+            var C = p,
+              b = m,
+              h = b.tag;
+            if (!(b.mode & 1) && (h === 0 || h === 11 || h === 15)) {
+              var j = b.alternate;
+              j
+                ? ((b.updateQueue = j.updateQueue),
+                  (b.memoizedState = j.memoizedState),
+                  (b.lanes = j.lanes))
+                : ((b.updateQueue = null), (b.memoizedState = null));
+            }
+            var F = Bc(s);
+            if (F !== null) {
+              ((F.flags &= -257),
+                Lc(F, s, m, o, i),
+                F.mode & 1 && Rc(o, C, i),
+                (i = F),
+                (p = C));
+              var g = i.updateQueue;
+              if (g === null) {
+                var z = new Set();
+                (z.add(p), (i.updateQueue = z));
+              } else g.add(p);
+              break e;
+            } else {
+              if (!(i & 1)) {
+                (Rc(o, C, i), Hl());
+                break e;
+              }
+              p = Error(ge(426));
+            }
+          } else if (Oe && m.mode & 1) {
+            var B = Bc(s);
+            if (B !== null) {
+              (!(B.flags & 65536) && (B.flags |= 256),
+                Lc(B, s, m, o, i),
+                tl(br(p, m)));
+              break e;
+            }
+          }
+          ((o = p = br(p, m)),
+            Qe !== 4 && (Qe = 2),
+            ua === null ? (ua = [o]) : ua.push(o),
+            (o = s));
+          do {
+            switch (o.tag) {
+              case 3:
+                ((o.flags |= 65536), (i &= -i), (o.lanes |= i));
+                var w = Mc(o, p, i);
+                nc(o, w);
+                break e;
+              case 1:
+                m = p;
+                var v = o.type,
+                  x = o.stateNode;
+                if (
+                  !(o.flags & 128) &&
+                  (typeof v.getDerivedStateFromError == "function" ||
+                    (x !== null &&
+                      typeof x.componentDidCatch == "function" &&
+                      (Ii === null || !Ii.has(x))))
+                ) {
+                  ((o.flags |= 65536), (i &= -i), (o.lanes |= i));
+                  var f = Fc(o, m, i);
+                  nc(o, f);
+                  break e;
+                }
+            }
+            o = o.return;
+          } while (o !== null);
+        }
+        mp(r);
+      } catch (I) {
+        ((i = I), Ve === r && r !== null && (Ve = r = r.return));
+        continue;
+      }
+      break;
+    } while (!0);
+  }
+  function pp() {
+    var t = hn.current;
+    return ((hn.current = pn), t === null ? pn : t);
+  }
+  function Hl() {
+    ((Qe === 0 || Qe === 3 || Qe === 2) && (Qe = 4),
+      Xe === null || (!(Gi & 268435455) && !(vn & 268435455)) || Ti(Xe, Ze));
+  }
+  function zn(t, i) {
+    var r = Ae;
+    Ae |= 2;
+    var n = pp();
+    (Xe !== t || Ze !== i) && ((oi = null), Hi(t, i));
+    do
+      try {
+        mf();
+        break;
+      } catch (l) {
+        cp(t, l);
+      }
+    while (!0);
+    if ((rl(), (Ae = r), (hn.current = n), Ve !== null)) throw Error(ge(261));
+    return ((Xe = null), (Ze = 0), Qe);
+  }
+  function mf() {
+    for (; Ve !== null;) up(Ve);
+  }
+  function ff() {
+    for (; Ve !== null && !Nu();) up(Ve);
+  }
+  function up(t) {
+    var i = xp(t.alternate, t, St);
+    ((t.memoizedProps = t.pendingProps),
+      i === null ? mp(t) : (Ve = i),
+      (Bl.current = null));
+  }
+  function mp(t) {
+    var i = t;
+    do {
+      var r = i.alternate;
+      if (((t = i.return), i.flags & 32768)) {
+        if (((r = lf(r, i)), r !== null)) {
+          ((r.flags &= 32767), (Ve = r));
+          return;
+        }
+        if (t !== null)
+          ((t.flags |= 32768), (t.subtreeFlags = 0), (t.deletions = null));
+        else {
+          ((Qe = 6), (Ve = null));
+          return;
+        }
+      } else if (((r = of(r, i, St)), r !== null)) {
+        Ve = r;
+        return;
+      }
+      if (((i = i.sibling), i !== null)) {
+        Ve = i;
+        return;
+      }
+      Ve = i = t;
+    } while (i !== null);
+    Qe === 0 && (Qe = 5);
+  }
+  function $i(t, i, r) {
+    var n = Be,
+      l = Tt.transition;
+    try {
+      ((Tt.transition = null), (Be = 1), gf(t, i, r, n));
+    } finally {
+      ((Tt.transition = l), (Be = n));
+    }
+    return null;
+  }
+  function gf(t, i, r, n) {
+    do Cr();
+    while (ki !== null);
+    if (Ae & 6) throw Error(ge(327));
+    r = t.finishedWork;
+    var l = t.finishedLanes;
+    if (r === null) return null;
+    if (((t.finishedWork = null), (t.finishedLanes = 0), r === t.current))
+      throw Error(ge(177));
+    ((t.callbackNode = null), (t.callbackPriority = 0));
+    var o = r.lanes | r.childLanes;
+    if (
+      (Qu(t, o),
+      t === Xe && ((Ve = Xe = null), (Ze = 0)),
+      (!(r.subtreeFlags & 2064) && !(r.flags & 2064)) ||
+        yn ||
+        ((yn = !0),
+        hp(ka, function () {
+          return (Cr(), null);
+        })),
+      (o = (r.flags & 15990) !== 0),
+      r.subtreeFlags & 15990 || o)
+    ) {
+      ((o = Tt.transition), (Tt.transition = null));
+      var s = Be;
+      Be = 1;
+      var m = Ae;
+      ((Ae |= 4),
+        (Bl.current = null),
+        df(t, r),
+        rp(r, t),
+        Rm(Ho),
+        (Ra = !!_o),
+        (Ho = _o = null),
+        (t.current = r),
+        cf(r),
+        Ou(),
+        (Ae = m),
+        (Be = s),
+        (Tt.transition = o));
+    } else t.current = r;
+    if (
+      (yn && ((yn = !1), (ki = t), (jn = l)),
+      (o = t.pendingLanes),
+      o === 0 && (Ii = null),
+      Gu(r.stateNode),
+      xt(t, $e()),
+      i !== null)
+    )
+      for (n = t.onRecoverableError, r = 0; r < i.length; r++)
+        ((l = i[r]), n(l.value, { componentStack: l.stack, digest: l.digest }));
+    if (bn) throw ((bn = !1), (t = Nl), (Nl = null), t);
+    return (
+      jn & 1 && t.tag !== 0 && Cr(),
+      (o = t.pendingLanes),
+      o & 1 ? (t === Ol ? ma++ : ((ma = 0), (Ol = t))) : (ma = 0),
+      Si(),
+      null
+    );
+  }
+  function Cr() {
+    if (ki !== null) {
+      var t = td(jn),
+        i = Tt.transition,
+        r = Be;
+      try {
+        if (((Tt.transition = null), (Be = 16 > t ? 16 : t), ki === null))
+          var n = !1;
+        else {
+          if (((t = ki), (ki = null), (jn = 0), Ae & 6)) throw Error(ge(331));
+          var l = Ae;
+          for (Ae |= 4, Se = t.current; Se !== null;) {
+            var o = Se,
+              s = o.child;
+            if (Se.flags & 16) {
+              var m = o.deletions;
+              if (m !== null) {
+                for (var p = 0; p < m.length; p++) {
+                  var C = m[p];
+                  for (Se = C; Se !== null;) {
+                    var b = Se;
+                    switch (b.tag) {
+                      case 0:
+                      case 11:
+                      case 15:
+                        ca(8, b, o);
+                    }
+                    var h = b.child;
+                    if (h !== null) ((h.return = b), (Se = h));
+                    else
+                      for (; Se !== null;) {
+                        b = Se;
+                        var j = b.sibling,
+                          F = b.return;
+                        if ((Kc(b), b === C)) {
+                          Se = null;
+                          break;
+                        }
+                        if (j !== null) {
+                          ((j.return = F), (Se = j));
+                          break;
+                        }
+                        Se = F;
+                      }
+                  }
+                }
+                var g = o.alternate;
+                if (g !== null) {
+                  var z = g.child;
+                  if (z !== null) {
+                    g.child = null;
+                    do {
+                      var B = z.sibling;
+                      ((z.sibling = null), (z = B));
+                    } while (z !== null);
+                  }
+                }
+                Se = o;
+              }
+            }
+            if (o.subtreeFlags & 2064 && s !== null) ((s.return = o), (Se = s));
+            else
+              e: for (; Se !== null;) {
+                if (((o = Se), o.flags & 2048))
+                  switch (o.tag) {
+                    case 0:
+                    case 11:
+                    case 15:
+                      ca(9, o, o.return);
+                  }
+                var w = o.sibling;
+                if (w !== null) {
+                  ((w.return = o.return), (Se = w));
+                  break e;
+                }
+                Se = o.return;
+              }
+          }
+          var v = t.current;
+          for (Se = v; Se !== null;) {
+            s = Se;
+            var x = s.child;
+            if (s.subtreeFlags & 2064 && x !== null) ((x.return = s), (Se = x));
+            else
+              e: for (s = v; Se !== null;) {
+                if (((m = Se), m.flags & 2048))
+                  try {
+                    switch (m.tag) {
+                      case 0:
+                      case 11:
+                      case 15:
+                        xn(9, m);
+                    }
+                  } catch (I) {
+                    _e(m, m.return, I);
+                  }
+                if (m === s) {
+                  Se = null;
+                  break e;
+                }
+                var f = m.sibling;
+                if (f !== null) {
+                  ((f.return = m.return), (Se = f));
+                  break e;
+                }
+                Se = m.return;
+              }
+          }
+          if (
+            ((Ae = l),
+            Si(),
+            $t && typeof $t.onPostCommitFiberRoot == "function")
+          )
+            try {
+              $t.onPostCommitFiberRoot(Pa, t);
+            } catch (I) {}
+          n = !0;
+        }
+        return n;
+      } finally {
+        ((Be = r), (Tt.transition = i));
+      }
+    }
+    return !1;
+  }
+  function fp(t, i, r) {
+    ((i = br(r, i)),
+      (i = Mc(t, i, 1)),
+      (t = zi(t, i, 1)),
+      (i = dt()),
+      t !== null && (Dr(t, 1, i), xt(t, i)));
+  }
+  function _e(t, i, r) {
+    if (t.tag === 3) fp(t, t, r);
+    else
+      for (; i !== null;) {
+        if (i.tag === 3) {
+          fp(i, t, r);
+          break;
+        } else if (i.tag === 1) {
+          var n = i.stateNode;
+          if (
+            typeof i.type.getDerivedStateFromError == "function" ||
+            (typeof n.componentDidCatch == "function" &&
+              (Ii === null || !Ii.has(n)))
+          ) {
+            ((t = br(r, t)),
+              (t = Fc(i, t, 1)),
+              (i = zi(i, t, 1)),
+              (t = dt()),
+              i !== null && (Dr(i, 1, t), xt(i, t)));
+            break;
+          }
+        }
+        i = i.return;
+      }
+  }
+  function xf(t, i, r) {
+    var n = t.pingCache;
+    (n !== null && n.delete(i),
+      (i = dt()),
+      (t.pingedLanes |= t.suspendedLanes & r),
+      Xe === t &&
+        (Ze & r) === r &&
+        (Qe === 4 || (Qe === 3 && (Ze & 130023424) === Ze && 500 > $e() - Dl)
+          ? Hi(t, 0)
+          : (Ll |= r)),
+      xt(t, i));
+  }
+  function gp(t, i) {
+    i === 0 &&
+      (t.mode & 1
+        ? ((i = Ea), (Ea <<= 1), !(Ea & 130023424) && (Ea = 4194304))
+        : (i = 1));
+    var r = dt();
+    ((t = ri(t, i)), t !== null && (Dr(t, i, r), xt(t, r)));
+  }
+  function hf(t) {
+    var i = t.memoizedState,
+      r = 0;
+    (i !== null && (r = i.retryLane), gp(t, r));
+  }
+  function vf(t, i) {
+    var r = 0;
+    switch (t.tag) {
+      case 13:
+        var n = t.stateNode,
+          l = t.memoizedState;
+        l !== null && (r = l.retryLane);
+        break;
+      case 19:
+        n = t.stateNode;
+        break;
+      default:
+        throw Error(ge(314));
+    }
+    (n !== null && n.delete(i), gp(t, r));
+  }
+  var xp;
+  xp = function (t, i, r) {
+    if (t !== null)
+      if (t.memoizedProps !== i.pendingProps || ut.current) ft = !0;
+      else {
+        if (!(t.lanes & r) && !(i.flags & 128)) return ((ft = !1), nf(t, i, r));
+        ft = !!(t.flags & 131072);
+      }
+    else ((ft = !1), Oe && i.flags & 1048576 && Yd(i, Ka, i.index));
+    switch (((i.lanes = 0), i.tag)) {
+      case 2:
+        var n = i.type;
+        (fn(t, i), (t = i.pendingProps));
+        var l = pr(i, et.current);
+        (hr(i, r), (l = fl(null, i, n, t, l, r)));
+        var o = gl();
+        return (
+          (i.flags |= 1),
+          typeof l == "object" &&
+          l !== null &&
+          typeof l.render == "function" &&
+          l.$$typeof === void 0
+            ? ((i.tag = 1),
+              (i.memoizedState = null),
+              (i.updateQueue = null),
+              mt(n) ? ((o = !0), Ya(i)) : (o = !1),
+              (i.memoizedState =
+                l.state !== null && l.state !== void 0 ? l.state : null),
+              ll(i),
+              (l.updater = un),
+              (i.stateNode = l),
+              (l._reactInternals = i),
+              jl(i, n, t, r),
+              (i = wl(null, i, n, !0, o, r)))
+            : ((i.tag = 0), Oe && o && Jo(i), st(null, i, l, r), (i = i.child)),
+          i
+        );
+      case 16:
+        n = i.elementType;
+        e: {
+          switch (
+            (fn(t, i),
+            (t = i.pendingProps),
+            (l = n._init),
+            (n = l(n._payload)),
+            (i.type = n),
+            (l = i.tag = yf(n)),
+            (t = Lt(n, t)),
+            l)
+          ) {
+            case 0:
+              i = zl(null, i, n, t, r);
+              break e;
+            case 1:
+              i = Gc(null, i, n, t, r);
+              break e;
+            case 11:
+              i = Dc(null, i, n, t, r);
+              break e;
+            case 14:
+              i = Nc(null, i, n, Lt(n.type, t), r);
+              break e;
+          }
+          throw Error(ge(306, n, ""));
+        }
+        return i;
+      case 0:
+        return (
+          (n = i.type),
+          (l = i.pendingProps),
+          (l = i.elementType === n ? l : Lt(n, l)),
+          zl(t, i, n, l, r)
+        );
+      case 1:
+        return (
+          (n = i.type),
+          (l = i.pendingProps),
+          (l = i.elementType === n ? l : Lt(n, l)),
+          Gc(t, i, n, l, r)
+        );
+      case 3:
+        e: {
+          if ((_c(i), t === null)) throw Error(ge(387));
+          ((n = i.pendingProps),
+            (o = i.memoizedState),
+            (l = o.element),
+            ac(t, i),
+            nn(i, n, null, r));
+          var s = i.memoizedState;
+          if (((n = s.element), o.isDehydrated))
+            if (
+              ((o = {
+                element: n,
+                isDehydrated: !1,
+                cache: s.cache,
+                pendingSuspenseBoundaries: s.pendingSuspenseBoundaries,
+                transitions: s.transitions,
+              }),
+              (i.updateQueue.baseState = o),
+              (i.memoizedState = o),
+              i.flags & 256)
+            ) {
+              ((l = br(Error(ge(423)), i)), (i = Hc(t, i, n, r, l)));
+              break e;
+            } else if (n !== l) {
+              ((l = br(Error(ge(424)), i)), (i = Hc(t, i, n, r, l)));
+              break e;
+            } else
+              for (
+                jt = bi(i.stateNode.containerInfo.firstChild),
+                  yt = i,
+                  Oe = !0,
+                  Bt = null,
+                  r = ic(i, null, n, r),
+                  i.child = r;
+                r;
+              )
+                ((r.flags = (r.flags & -3) | 4096), (r = r.sibling));
+          else {
+            if ((fr(), n === l)) {
+              i = ni(t, i, r);
+              break e;
+            }
+            st(t, i, n, r);
+          }
+          i = i.child;
+        }
+        return i;
+      case 5:
+        return (
+          lc(i),
+          t === null && el(i),
+          (n = i.type),
+          (l = i.pendingProps),
+          (o = t !== null ? t.memoizedProps : null),
+          (s = l.children),
+          $o(n, l) ? (s = null) : o !== null && $o(n, o) && (i.flags |= 32),
+          Uc(t, i),
+          st(t, i, s, r),
+          i.child
+        );
+      case 6:
+        return (t === null && el(i), null);
+      case 13:
+        return $c(t, i, r);
+      case 4:
+        return (
+          sl(i, i.stateNode.containerInfo),
+          (n = i.pendingProps),
+          t === null ? (i.child = gr(i, null, n, r)) : st(t, i, n, r),
+          i.child
+        );
+      case 11:
+        return (
+          (n = i.type),
+          (l = i.pendingProps),
+          (l = i.elementType === n ? l : Lt(n, l)),
+          Dc(t, i, n, l, r)
+        );
+      case 7:
+        return (st(t, i, i.pendingProps, r), i.child);
+      case 8:
+        return (st(t, i, i.pendingProps.children, r), i.child);
+      case 12:
+        return (st(t, i, i.pendingProps.children, r), i.child);
+      case 10:
+        e: {
+          if (
+            ((n = i.type._context),
+            (l = i.pendingProps),
+            (o = i.memoizedProps),
+            (s = l.value),
+            Le(tn, n._currentValue),
+            (n._currentValue = s),
+            o !== null)
+          )
+            if (Rt(o.value, s)) {
+              if (o.children === l.children && !ut.current) {
+                i = ni(t, i, r);
+                break e;
+              }
+            } else
+              for (o = i.child, o !== null && (o.return = i); o !== null;) {
+                var m = o.dependencies;
+                if (m !== null) {
+                  s = o.child;
+                  for (var p = m.firstContext; p !== null;) {
+                    if (p.context === n) {
+                      if (o.tag === 1) {
+                        ((p = ai(-1, r & -r)), (p.tag = 2));
+                        var C = o.updateQueue;
+                        if (C !== null) {
+                          C = C.shared;
+                          var b = C.pending;
+                          (b === null
+                            ? (p.next = p)
+                            : ((p.next = b.next), (b.next = p)),
+                            (C.pending = p));
+                        }
+                      }
+                      ((o.lanes |= r),
+                        (p = o.alternate),
+                        p !== null && (p.lanes |= r),
+                        nl(o.return, r, i),
+                        (m.lanes |= r));
+                      break;
+                    }
+                    p = p.next;
+                  }
+                } else if (o.tag === 10) s = o.type === i.type ? null : o.child;
+                else if (o.tag === 18) {
+                  if (((s = o.return), s === null)) throw Error(ge(341));
+                  ((s.lanes |= r),
+                    (m = s.alternate),
+                    m !== null && (m.lanes |= r),
+                    nl(s, r, i),
+                    (s = o.sibling));
+                } else s = o.child;
+                if (s !== null) s.return = o;
+                else
+                  for (s = o; s !== null;) {
+                    if (s === i) {
+                      s = null;
+                      break;
+                    }
+                    if (((o = s.sibling), o !== null)) {
+                      ((o.return = s.return), (s = o));
+                      break;
+                    }
+                    s = s.return;
+                  }
+                o = s;
+              }
+          (st(t, i, l.children, r), (i = i.child));
+        }
+        return i;
+      case 9:
+        return (
+          (l = i.type),
+          (n = i.pendingProps.children),
+          hr(i, r),
+          (l = kt(l)),
+          (n = n(l)),
+          (i.flags |= 1),
+          st(t, i, n, r),
+          i.child
+        );
+      case 14:
+        return (
+          (n = i.type),
+          (l = Lt(n, i.pendingProps)),
+          (l = Lt(n.type, l)),
+          Nc(t, i, n, l, r)
+        );
+      case 15:
+        return Oc(t, i, i.type, i.pendingProps, r);
+      case 17:
+        return (
+          (n = i.type),
+          (l = i.pendingProps),
+          (l = i.elementType === n ? l : Lt(n, l)),
+          fn(t, i),
+          (i.tag = 1),
+          mt(n) ? ((t = !0), Ya(i)) : (t = !1),
+          hr(i, r),
+          Ec(i, n, l),
+          jl(i, n, l, r),
+          wl(null, i, n, !0, t, r)
+        );
+      case 19:
+        return qc(t, i, r);
+      case 22:
+        return Wc(t, i, r);
+    }
+    throw Error(ge(156, i.tag));
+  };
+  function hp(t, i) {
+    return Xs(t, i);
+  }
+  function bf(t, i, r, n) {
+    ((this.tag = t),
+      (this.key = r),
+      (this.sibling =
+        this.child =
+        this.return =
+        this.stateNode =
+        this.type =
+        this.elementType =
+          null),
+      (this.index = 0),
+      (this.ref = null),
+      (this.pendingProps = i),
+      (this.dependencies =
+        this.memoizedState =
+        this.updateQueue =
+        this.memoizedProps =
+          null),
+      (this.mode = n),
+      (this.subtreeFlags = this.flags = 0),
+      (this.deletions = null),
+      (this.childLanes = this.lanes = 0),
+      (this.alternate = null));
+  }
+  function Et(t, i, r, n) {
+    return new bf(t, i, r, n);
+  }
+  function $l(t) {
+    return ((t = t.prototype), !(!t || !t.isReactComponent));
+  }
+  function yf(t) {
+    if (typeof t == "function") return $l(t) ? 1 : 0;
+    if (t != null) {
+      if (((t = t.$$typeof), t === Xn)) return 11;
+      if (t === Zn) return 14;
+    }
+    return 2;
+  }
+  function Ei(t, i) {
+    var r = t.alternate;
+    return (
+      r === null
+        ? ((r = Et(t.tag, i, t.key, t.mode)),
+          (r.elementType = t.elementType),
+          (r.type = t.type),
+          (r.stateNode = t.stateNode),
+          (r.alternate = t),
+          (t.alternate = r))
+        : ((r.pendingProps = i),
+          (r.type = t.type),
+          (r.flags = 0),
+          (r.subtreeFlags = 0),
+          (r.deletions = null)),
+      (r.flags = t.flags & 14680064),
+      (r.childLanes = t.childLanes),
+      (r.lanes = t.lanes),
+      (r.child = t.child),
+      (r.memoizedProps = t.memoizedProps),
+      (r.memoizedState = t.memoizedState),
+      (r.updateQueue = t.updateQueue),
+      (i = t.dependencies),
+      (r.dependencies =
+        i === null ? null : { lanes: i.lanes, firstContext: i.firstContext }),
+      (r.sibling = t.sibling),
+      (r.index = t.index),
+      (r.ref = t.ref),
+      r
+    );
+  }
+  function wn(t, i, r, n, l, o) {
+    var s = 2;
+    if (((n = t), typeof t == "function")) $l(t) && (s = 1);
+    else if (typeof t == "string") s = 5;
+    else
+      e: switch (t) {
+        case Ki:
+          return Vi(r.children, l, o, i);
+        case Qn:
+          ((s = 8), (l |= 8));
+          break;
+        case Yn:
+          return (
+            (t = Et(12, r, i, l | 2)),
+            (t.elementType = Yn),
+            (t.lanes = o),
+            t
+          );
+        case Jn:
+          return (
+            (t = Et(13, r, i, l)),
+            (t.elementType = Jn),
+            (t.lanes = o),
+            t
+          );
+        case Kn:
+          return (
+            (t = Et(19, r, i, l)),
+            (t.elementType = Kn),
+            (t.lanes = o),
+            t
+          );
+        case Is:
+          return In(r, l, o, i);
+        default:
+          if (typeof t == "object" && t !== null)
+            switch (t.$$typeof) {
+              case zs:
+                s = 10;
+                break e;
+              case ws:
+                s = 9;
+                break e;
+              case Xn:
+                s = 11;
+                break e;
+              case Zn:
+                s = 14;
+                break e;
+              case pi:
+                ((s = 16), (n = null));
+                break e;
+            }
+          throw Error(ge(130, t == null ? t : typeof t, ""));
+      }
+    return (
+      (i = Et(s, r, i, l)),
+      (i.elementType = t),
+      (i.type = n),
+      (i.lanes = o),
+      i
+    );
+  }
+  function Vi(t, i, r, n) {
+    return ((t = Et(7, t, n, i)), (t.lanes = r), t);
+  }
+  function In(t, i, r, n) {
+    return (
+      (t = Et(22, t, n, i)),
+      (t.elementType = Is),
+      (t.lanes = r),
+      (t.stateNode = { isHidden: !1 }),
+      t
+    );
+  }
+  function Vl(t, i, r) {
+    return ((t = Et(6, t, null, i)), (t.lanes = r), t);
+  }
+  function ql(t, i, r) {
+    return (
+      (i = Et(4, t.children !== null ? t.children : [], t.key, i)),
+      (i.lanes = r),
+      (i.stateNode = {
+        containerInfo: t.containerInfo,
+        pendingChildren: null,
+        implementation: t.implementation,
+      }),
+      i
+    );
+  }
+  function jf(t, i, r, n, l) {
+    ((this.tag = i),
+      (this.containerInfo = t),
+      (this.finishedWork =
+        this.pingCache =
+        this.current =
+        this.pendingChildren =
+          null),
+      (this.timeoutHandle = -1),
+      (this.callbackNode = this.pendingContext = this.context = null),
+      (this.callbackPriority = 0),
+      (this.eventTimes = yo(0)),
+      (this.expirationTimes = yo(-1)),
+      (this.entangledLanes =
+        this.finishedLanes =
+        this.mutableReadLanes =
+        this.expiredLanes =
+        this.pingedLanes =
+        this.suspendedLanes =
+        this.pendingLanes =
+          0),
+      (this.entanglements = yo(0)),
+      (this.identifierPrefix = n),
+      (this.onRecoverableError = l),
+      (this.mutableSourceEagerHydrationData = null));
+  }
+  function Ql(t, i, r, n, l, o, s, m, p) {
+    return (
+      (t = new jf(t, i, r, m, p)),
+      i === 1 ? ((i = 1), o === !0 && (i |= 8)) : (i = 0),
+      (o = Et(3, null, null, i)),
+      (t.current = o),
+      (o.stateNode = t),
+      (o.memoizedState = {
+        element: n,
+        isDehydrated: r,
+        cache: null,
+        transitions: null,
+        pendingSuspenseBoundaries: null,
+      }),
+      ll(o),
+      t
+    );
+  }
+  function Sf(t, i, r) {
+    var n =
+      3 < arguments.length && arguments[3] !== void 0 ? arguments[3] : null;
+    return {
+      $$typeof: Ji,
+      key: n == null ? null : "" + n,
+      children: t,
+      containerInfo: i,
+      implementation: r,
+    };
+  }
+  function vp(t) {
+    if (!t) return ji;
+    t = t._reactInternals;
+    e: {
+      if (Ri(t) !== t || t.tag !== 1) throw Error(ge(170));
+      var i = t;
+      do {
+        switch (i.tag) {
+          case 3:
+            i = i.stateNode.context;
+            break e;
+          case 1:
+            if (mt(i.type)) {
+              i = i.stateNode.__reactInternalMemoizedMergedChildContext;
+              break e;
+            }
+        }
+        i = i.return;
+      } while (i !== null);
+      throw Error(ge(171));
+    }
+    if (t.tag === 1) {
+      var r = t.type;
+      if (mt(r)) return Vd(t, r, i);
+    }
+    return i;
+  }
+  function bp(t, i, r, n, l, o, s, m, p) {
+    return (
+      (t = Ql(r, n, !0, t, l, o, s, m, p)),
+      (t.context = vp(null)),
+      (r = t.current),
+      (n = dt()),
+      (l = Pi(r)),
+      (o = ai(n, l)),
+      (o.callback = i != null ? i : null),
+      zi(r, o, l),
+      (t.current.lanes = l),
+      Dr(t, l, n),
+      xt(t, n),
+      t
+    );
+  }
+  function kn(t, i, r, n) {
+    var l = i.current,
+      o = dt(),
+      s = Pi(l);
+    return (
+      (r = vp(r)),
+      i.context === null ? (i.context = r) : (i.pendingContext = r),
+      (i = ai(o, s)),
+      (i.payload = { element: t }),
+      (n = n === void 0 ? null : n),
+      n !== null && (i.callback = n),
+      (t = zi(l, i, s)),
+      t !== null && (Ot(t, l, s, o), an(t, l, s)),
+      s
+    );
+  }
+  function Pn(t) {
+    if (((t = t.current), !t.child)) return null;
+    switch (t.child.tag) {
+      case 5:
+        return t.child.stateNode;
+      default:
+        return t.child.stateNode;
+    }
+  }
+  function yp(t, i) {
+    if (((t = t.memoizedState), t !== null && t.dehydrated !== null)) {
+      var r = t.retryLane;
+      t.retryLane = r !== 0 && r < i ? r : i;
+    }
+  }
+  function Yl(t, i) {
+    (yp(t, i), (t = t.alternate) && yp(t, i));
+  }
+  function Cf() {
+    return null;
+  }
+  var jp =
+    typeof reportError == "function"
+      ? reportError
+      : function (t) {
+          console.error(t);
+        };
+  function Xl(t) {
+    this._internalRoot = t;
+  }
+  ((Tn.prototype.render = Xl.prototype.render =
+    function (t) {
+      var i = this._internalRoot;
+      if (i === null) throw Error(ge(409));
+      kn(t, i, null, null);
+    }),
+    (Tn.prototype.unmount = Xl.prototype.unmount =
+      function () {
+        var t = this._internalRoot;
+        if (t !== null) {
+          this._internalRoot = null;
+          var i = t.containerInfo;
+          (_i(function () {
+            kn(null, t, null, null);
+          }),
+            (i[Zt] = null));
+        }
+      }));
+  function Tn(t) {
+    this._internalRoot = t;
+  }
+  Tn.prototype.unstable_scheduleHydration = function (t) {
+    if (t) {
+      var i = ad();
+      t = { blockedOn: null, target: t, priority: i };
+      for (var r = 0; r < xi.length && i !== 0 && i < xi[r].priority; r++);
+      (xi.splice(r, 0, t), r === 0 && ld(t));
+    }
+  };
+  function Jl(t) {
+    return !(!t || (t.nodeType !== 1 && t.nodeType !== 9 && t.nodeType !== 11));
+  }
+  function En(t) {
+    return !(
+      !t ||
+      (t.nodeType !== 1 &&
+        t.nodeType !== 9 &&
+        t.nodeType !== 11 &&
+        (t.nodeType !== 8 || t.nodeValue !== " react-mount-point-unstable "))
+    );
+  }
+  function Sp() {}
+  function zf(t, i, r, n, l) {
+    if (l) {
+      if (typeof n == "function") {
+        var o = n;
+        n = function () {
+          var C = Pn(s);
+          o.call(C);
+        };
+      }
+      var s = bp(i, n, t, 0, null, !1, !1, "", Sp);
+      return (
+        (t._reactRootContainer = s),
+        (t[Zt] = s.current),
+        Jr(t.nodeType === 8 ? t.parentNode : t),
+        _i(),
+        s
+      );
+    }
+    for (; (l = t.lastChild);) t.removeChild(l);
+    if (typeof n == "function") {
+      var m = n;
+      n = function () {
+        var C = Pn(p);
+        m.call(C);
+      };
+    }
+    var p = Ql(t, 0, !1, null, null, !1, !1, "", Sp);
+    return (
+      (t._reactRootContainer = p),
+      (t[Zt] = p.current),
+      Jr(t.nodeType === 8 ? t.parentNode : t),
+      _i(function () {
+        kn(i, p, r, n);
+      }),
+      p
+    );
+  }
+  function An(t, i, r, n, l) {
+    var o = r._reactRootContainer;
+    if (o) {
+      var s = o;
+      if (typeof l == "function") {
+        var m = l;
+        l = function () {
+          var p = Pn(s);
+          m.call(p);
+        };
+      }
+      kn(i, s, t, l);
+    } else s = zf(r, i, t, l, n);
+    return Pn(s);
+  }
+  ((id = function (t) {
+    switch (t.tag) {
+      case 3:
+        var i = t.stateNode;
+        if (i.current.memoizedState.isDehydrated) {
+          var r = Lr(i.pendingLanes);
+          r !== 0 &&
+            (jo(i, r | 1), xt(i, $e()), !(Ae & 6) && ((Sr = $e() + 500), Si()));
+        }
+        break;
+      case 13:
+        (_i(function () {
+          var n = ri(t, 1);
+          if (n !== null) {
+            var l = dt();
+            Ot(n, t, 1, l);
+          }
+        }),
+          Yl(t, 1));
+    }
+  }),
+    (So = function (t) {
+      if (t.tag === 13) {
+        var i = ri(t, 134217728);
+        if (i !== null) {
+          var r = dt();
+          Ot(i, t, 134217728, r);
+        }
+        Yl(t, 134217728);
+      }
+    }),
+    (rd = function (t) {
+      if (t.tag === 13) {
+        var i = Pi(t),
+          r = ri(t, i);
+        if (r !== null) {
+          var n = dt();
+          Ot(r, t, i, n);
+        }
+        Yl(t, i);
+      }
+    }),
+    (ad = function () {
+      return Be;
+    }),
+    (nd = function (t, i) {
+      var r = Be;
+      try {
+        return ((Be = t), i());
+      } finally {
+        Be = r;
+      }
+    }),
+    (fo = function (t, i, r) {
+      switch (i) {
+        case "input":
+          if ((no(t, r), (i = r.name), r.type === "radio" && i != null)) {
+            for (r = t; r.parentNode;) r = r.parentNode;
+            for (
+              r = r.querySelectorAll(
+                "input[name=" + JSON.stringify("" + i) + '][type="radio"]',
+              ),
+                i = 0;
+              i < r.length;
+              i++
+            ) {
+              var n = r[i];
+              if (n !== t && n.form === t.form) {
+                var l = qa(n);
+                if (!l) throw Error(ge(90));
+                (Ts(n), no(n, l));
+              }
+            }
+          }
+          break;
+        case "textarea":
+          Rs(t, r);
+          break;
+        case "select":
+          ((i = r.value), i != null && Zi(t, !!r.multiple, i, !1));
+      }
+    }),
+    (_s = Gl),
+    (Hs = _i));
+  var wf = { usingClientEntryPoint: !1, Events: [ea, dr, qa, Us, Gs, Gl] },
+    fa = {
+      findFiberByHostInstance: Bi,
+      bundleType: 0,
+      version: "18.3.1",
+      rendererPackageName: "react-dom",
+    },
+    If = {
+      bundleType: fa.bundleType,
+      version: fa.version,
+      rendererPackageName: fa.rendererPackageName,
+      rendererConfig: fa.rendererConfig,
+      overrideHookState: null,
+      overrideHookStateDeletePath: null,
+      overrideHookStateRenamePath: null,
+      overrideProps: null,
+      overridePropsDeletePath: null,
+      overridePropsRenamePath: null,
+      setErrorHandler: null,
+      setSuspenseHandler: null,
+      scheduleUpdate: null,
+      currentDispatcherRef: Kt.ReactCurrentDispatcher,
+      findHostInstanceByFiber: function (t) {
+        return ((t = Qs(t)), t === null ? null : t.stateNode);
+      },
+      findFiberByHostInstance: fa.findFiberByHostInstance || Cf,
+      findHostInstancesForRefresh: null,
+      scheduleRefresh: null,
+      scheduleRoot: null,
+      setRefreshHandler: null,
+      getCurrentFiber: null,
+      reconcilerVersion: "18.3.1-next-f1338f8080-20240426",
+    };
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ != "undefined") {
+    var Mn = __REACT_DEVTOOLS_GLOBAL_HOOK__;
+    if (!Mn.isDisabled && Mn.supportsFiber)
+      try {
+        ((Pa = Mn.inject(If)), ($t = Mn));
+      } catch (t) {}
+  }
+  ((ht.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = wf),
+    (ht.createPortal = function (t, i) {
+      var r =
+        2 < arguments.length && arguments[2] !== void 0 ? arguments[2] : null;
+      if (!Jl(i)) throw Error(ge(200));
+      return Sf(t, i, null, r);
+    }),
+    (ht.createRoot = function (t, i) {
+      if (!Jl(t)) throw Error(ge(299));
+      var r = !1,
+        n = "",
+        l = jp;
+      return (
+        i != null &&
+          (i.unstable_strictMode === !0 && (r = !0),
+          i.identifierPrefix !== void 0 && (n = i.identifierPrefix),
+          i.onRecoverableError !== void 0 && (l = i.onRecoverableError)),
+        (i = Ql(t, 1, !1, null, null, r, !1, n, l)),
+        (t[Zt] = i.current),
+        Jr(t.nodeType === 8 ? t.parentNode : t),
+        new Xl(i)
+      );
+    }),
+    (ht.findDOMNode = function (t) {
+      if (t == null) return null;
+      if (t.nodeType === 1) return t;
+      var i = t._reactInternals;
+      if (i === void 0)
+        throw typeof t.render == "function"
+          ? Error(ge(188))
+          : ((t = Object.keys(t).join(",")), Error(ge(268, t)));
+      return ((t = Qs(i)), (t = t === null ? null : t.stateNode), t);
+    }),
+    (ht.flushSync = function (t) {
+      return _i(t);
+    }),
+    (ht.hydrate = function (t, i, r) {
+      if (!En(i)) throw Error(ge(200));
+      return An(null, t, i, !0, r);
+    }),
+    (ht.hydrateRoot = function (t, i, r) {
+      if (!Jl(t)) throw Error(ge(405));
+      var n = (r != null && r.hydratedSources) || null,
+        l = !1,
+        o = "",
+        s = jp;
+      if (
+        (r != null &&
+          (r.unstable_strictMode === !0 && (l = !0),
+          r.identifierPrefix !== void 0 && (o = r.identifierPrefix),
+          r.onRecoverableError !== void 0 && (s = r.onRecoverableError)),
+        (i = bp(i, null, t, 1, r != null ? r : null, l, !1, o, s)),
+        (t[Zt] = i.current),
+        Jr(t),
+        n)
+      )
+        for (t = 0; t < n.length; t++)
+          ((r = n[t]),
+            (l = r._getVersion),
+            (l = l(r._source)),
+            i.mutableSourceEagerHydrationData == null
+              ? (i.mutableSourceEagerHydrationData = [r, l])
+              : i.mutableSourceEagerHydrationData.push(r, l));
+      return new Tn(i);
+    }),
+    (ht.render = function (t, i, r) {
+      if (!En(i)) throw Error(ge(200));
+      return An(null, t, i, !1, r);
+    }),
+    (ht.unmountComponentAtNode = function (t) {
+      if (!En(t)) throw Error(ge(40));
+      return t._reactRootContainer
+        ? (_i(function () {
+            An(null, null, t, !1, function () {
+              ((t._reactRootContainer = null), (t[Zt] = null));
+            });
+          }),
+          !0)
+        : !1;
+    }),
+    (ht.unstable_batchedUpdates = Gl),
+    (ht.unstable_renderSubtreeIntoContainer = function (t, i, r, n) {
+      if (!En(r)) throw Error(ge(200));
+      if (t == null || t._reactInternals === void 0) throw Error(ge(38));
+      return An(t, i, r, !1, n);
+    }),
+    (ht.version = "18.3.1-next-f1338f8080-20240426"));
+  function Cp() {
+    if (!(
+      typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ == "undefined" ||
+      typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE != "function"
+    ))
+      try {
+        __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(Cp);
+      } catch (t) {
+        console.error(t);
+      }
+  }
+  (Cp(), (vs.exports = ht));
+  var kf = vs.exports,
+    zp = kf;
+  ((_n.createRoot = zp.createRoot),
+    (_n.hydrateRoot = zp.hydrateRoot),
+    (function () {
+      var t = Re.createElement;
+      (Re.useState,
+        (window.__PMPage = function (r) {
+          var n = r.cfg || {},
+            l = r.onVolver || function () {},
+            o = n.accentColor || "#2563eb",
+            s = Re.useState({
+              tipo: "nuevo_modulo",
+              nombre: n.empresa || "",
+              email: n.email || "",
+              modulo: "",
+              descripcion: "",
+              urgencia: "normal",
+            }),
+            m = s[0],
+            p = s[1],
+            C = Re.useState(!1),
+            b = C[0],
+            h = C[1];
+          function j(v, x) {
+            p(function (f) {
+              var I = Object.assign({}, f);
+              return ((I[v] = x), I);
+            });
+          }
+          var F = [
+              {
+                id: "nuevo_modulo",
+                label: "✨ Módulo nuevo",
+                desc: "Función que no existe en ECP",
+              },
+              {
+                id: "modificacion",
+                label: "🔧 Modificar módulo",
+                desc: "Ajustar uno existente",
+              },
+              {
+                id: "informe",
+                label: "📄 Informe / PDF",
+                desc: "Nuevo formato de documento",
+              },
+              {
+                id: "integracion",
+                label: "🔗 Integración",
+                desc: "Conectar con otro sistema",
+              },
+            ],
+            g = [
+              "Control de calidad con checklist",
+              "Contratos de subcontrato",
+              "Formato MINVU/SERVIU",
+              "Bitácora digital con firmas",
+              "Control de asistencia",
+              "Informe formato Codelco",
+            ];
+          function z() {
+            if (!(!m.modulo.trim() || !m.email.trim())) {
+              var v =
+                  F.find(function (I) {
+                    return I.id === m.tipo;
+                  }) || {},
+                x = `
+`,
+                f = encodeURIComponent(
+                  "⚡ *PIDE TU MÓDULO - Enlace Constructor Pro*" +
+                    x +
+                    x +
+                    "Empresa: " +
+                    (m.nombre || "-") +
+                    x +
+                    "Tipo: " +
+                    (v.label || "") +
+                    x +
+                    "Módulo: " +
+                    m.modulo +
+                    x +
+                    "Descripción: " +
+                    (m.descripcion || "-") +
+                    x +
+                    "Urgencia: " +
+                    m.urgencia +
+                    x +
+                    "Email: " +
+                    m.email,
+                );
+              (window.open("https://wa.me/56912345678?text=" + f, "_blank"),
+                h(!0));
+            }
+          }
+          var B = {
+              width: "100%",
+              padding: "9px 12px",
+              borderRadius: 8,
+              border: "1px solid var(--border)",
+              background: "var(--card)",
+              color: "var(--text)",
+              fontSize: 13,
+              fontFamily: "'DM Sans',sans-serif",
+              outline: "none",
+              boxSizing: "border-box",
+            },
+            w = {
+              fontSize: 11,
+              fontWeight: 700,
+              color: "var(--muted)",
+              textTransform: "uppercase",
+              letterSpacing: ".08em",
+              display: "block",
+              marginBottom: 6,
+            };
+          return b
+            ? t(
+                "div",
+                {
+                  style: {
+                    maxWidth: 480,
+                    margin: "60px auto",
+                    textAlign: "center",
+                    padding: "0 20px",
+                  },
+                },
+                t("div", { style: { fontSize: 48, marginBottom: 12 } }, "⚡"),
+                t(
+                  "div",
+                  {
+                    style: {
+                      fontSize: 20,
+                      fontWeight: 800,
+                      color: o,
+                      marginBottom: 8,
+                    },
+                  },
+                  "¡Solicitud enviada!",
+                ),
+                t(
+                  "p",
+                  { style: { color: "var(--muted)", marginBottom: 24 } },
+                  "Te contactaremos en 24-48 hrs por WhatsApp.",
+                ),
+                t(
+                  "div",
+                  {
+                    style: {
+                      background: "var(--card)",
+                      border: "1px solid var(--border)",
+                      borderRadius: 10,
+                      padding: "14px",
+                      marginBottom: 20,
+                      textAlign: "left",
+                      fontSize: 14,
+                      lineHeight: 1.8,
+                    },
+                  },
+                  t("div", null, t("strong", null, "Módulo: "), m.modulo),
+                  m.descripcion &&
+                    t(
+                      "div",
+                      null,
+                      t("strong", null, "Detalle: "),
+                      m.descripcion,
+                    ),
+                  t("div", null, t("strong", null, "Email: "), m.email),
+                ),
+                t(
+                  "button",
+                  {
+                    onClick: function () {
+                      h(!1);
+                    },
+                    style: {
+                      padding: "8px 16px",
+                      marginRight: 8,
+                      borderRadius: 8,
+                      border: "1px solid var(--border)",
+                      background: "transparent",
+                      color: "var(--text)",
+                      cursor: "pointer",
+                      fontSize: 13,
+                      fontFamily: "'DM Sans',sans-serif",
+                    },
+                  },
+                  "Nueva solicitud",
+                ),
+                t(
+                  "button",
+                  {
+                    onClick: l,
+                    style: {
+                      padding: "8px 16px",
+                      borderRadius: 8,
+                      border: "none",
+                      background: o,
+                      color: "#fff",
+                      cursor: "pointer",
+                      fontSize: 13,
+                      fontWeight: 700,
+                      fontFamily: "'DM Sans',sans-serif",
+                    },
+                  },
+                  "Volver",
+                ),
+              )
+            : t(
+                "div",
+                {
+                  style: { maxWidth: 640, margin: "0 auto", paddingBottom: 40 },
+                },
+                t(
+                  "div",
+                  {
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                      marginBottom: 24,
+                      paddingBottom: 16,
+                      borderBottom: "1px solid var(--border)",
+                    },
+                  },
+                  t(
+                    "button",
+                    {
+                      onClick: l,
+                      style: {
+                        padding: "6px 12px",
+                        borderRadius: 8,
+                        border: "1px solid var(--border)",
+                        background: "transparent",
+                        color: "var(--muted)",
+                        cursor: "pointer",
+                        fontSize: 13,
+                        fontFamily: "'DM Sans',sans-serif",
+                      },
+                    },
+                    "← Volver",
+                  ),
+                  t(
+                    "div",
+                    null,
+                    t(
+                      "div",
+                      { style: { fontSize: 20, fontWeight: 800 } },
+                      "⚡ Pide tu Módulo",
+                    ),
+                    t(
+                      "div",
+                      {
+                        style: {
+                          fontSize: 13,
+                          color: "var(--muted)",
+                          marginTop: 2,
+                        },
+                      },
+                      "Solicita funciones a medida para tu flujo de trabajo",
+                    ),
+                  ),
+                ),
+                t(
+                  "div",
+                  { style: { marginBottom: 16 } },
+                  t("label", { style: w }, "¿Qué necesitas?"),
+                  t(
+                    "div",
+                    {
+                      style: {
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: 8,
+                      },
+                    },
+                    F.map(function (v) {
+                      return t(
+                        "div",
+                        {
+                          key: v.id,
+                          onClick: function () {
+                            j("tipo", v.id);
+                          },
+                          style: {
+                            padding: "11px 13px",
+                            borderRadius: 9,
+                            cursor: "pointer",
+                            border:
+                              "2px solid " +
+                              (m.tipo === v.id ? o : "var(--border)"),
+                            background:
+                              m.tipo === v.id ? o + "18" : "var(--card)",
+                          },
+                        },
+                        t(
+                          "div",
+                          { style: { fontWeight: 700, fontSize: 13 } },
+                          v.label,
+                        ),
+                        t(
+                          "div",
+                          {
+                            style: {
+                              fontSize: 11,
+                              color: "var(--muted)",
+                              marginTop: 2,
+                            },
+                          },
+                          v.desc,
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+                t(
+                  "div",
+                  { style: { marginBottom: 14 } },
+                  t("label", { style: w }, "Módulo que necesitas *"),
+                  t("input", {
+                    value: m.modulo,
+                    onChange: function (v) {
+                      j("modulo", v.target.value);
+                    },
+                    placeholder: "Ej: Control de calidad con checklist",
+                    style: B,
+                  }),
+                  t(
+                    "div",
+                    {
+                      style: {
+                        marginTop: 7,
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 5,
+                      },
+                    },
+                    g.map(function (v) {
+                      return t(
+                        "button",
+                        {
+                          key: v,
+                          onClick: function () {
+                            j("modulo", v);
+                          },
+                          style: {
+                            fontSize: 11,
+                            padding: "3px 9px",
+                            borderRadius: 12,
+                            border: "1px solid var(--border)",
+                            background: "var(--card2)",
+                            color: "var(--muted)",
+                            cursor: "pointer",
+                            fontFamily: "'DM Sans',sans-serif",
+                          },
+                        },
+                        v,
+                      );
+                    }),
+                  ),
+                ),
+                t(
+                  "div",
+                  { style: { marginBottom: 14 } },
+                  t("label", { style: w }, "Descripción (opcional)"),
+                  t("textarea", {
+                    value: m.descripcion,
+                    onChange: function (v) {
+                      j("descripcion", v.target.value);
+                    },
+                    rows: 3,
+                    placeholder: "¿Qué debe hacer? ¿Qué datos necesita?",
+                    style: Object.assign({}, B, { resize: "vertical" }),
+                  }),
+                ),
+                t(
+                  "div",
+                  {
+                    style: {
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: 12,
+                      marginBottom: 14,
+                    },
+                  },
+                  t(
+                    "div",
+                    null,
+                    t("label", { style: w }, "Urgencia"),
+                    t(
+                      "select",
+                      {
+                        value: m.urgencia,
+                        onChange: function (v) {
+                          j("urgencia", v.target.value);
+                        },
+                        style: B,
+                      },
+                      t(
+                        "option",
+                        { value: "baja" },
+                        "Sin urgencia (2-4 semanas)",
+                      ),
+                      t("option", { value: "normal" }, "Normal (1-2 semanas)"),
+                      t("option", { value: "alta" }, "Urgente (3-5 días)"),
+                      t("option", { value: "critica" }, "Crítico (24-48 hrs)"),
+                    ),
+                  ),
+                  t(
+                    "div",
+                    null,
+                    t("label", { style: w }, "Email de contacto *"),
+                    t("input", {
+                      type: "email",
+                      value: m.email,
+                      onChange: function (v) {
+                        j("email", v.target.value);
+                      },
+                      placeholder: "tu@email.cl",
+                      style: B,
+                    }),
+                  ),
+                ),
+                t(
+                  "div",
+                  {
+                    style: {
+                      background: "var(--card)",
+                      border: "1px solid var(--border)",
+                      borderRadius: 10,
+                      padding: "14px",
+                      marginBottom: 18,
+                    },
+                  },
+                  t(
+                    "div",
+                    {
+                      style: {
+                        fontSize: 11,
+                        fontWeight: 700,
+                        color: "var(--muted)",
+                        textTransform: "uppercase",
+                        letterSpacing: ".08em",
+                        marginBottom: 10,
+                      },
+                    },
+                    "Precios referenciales",
+                  ),
+                  t(
+                    "div",
+                    {
+                      style: {
+                        display: "grid",
+                        gridTemplateColumns: "repeat(3,1fr)",
+                        gap: 8,
+                      },
+                    },
+                    [
+                      { t: "Informe/PDF", p: "$25–50 USD", d: "3-5 días" },
+                      { t: "Módulo simple", p: "$80–120 USD", d: "1 semana" },
+                      {
+                        t: "Módulo complejo",
+                        p: "$150–250 USD",
+                        d: "2 semanas",
+                      },
+                    ].map(function (v) {
+                      return t(
+                        "div",
+                        {
+                          key: v.t,
+                          style: {
+                            background: "var(--card2)",
+                            borderRadius: 8,
+                            padding: "10px 12px",
+                            border: "1px solid var(--border)",
+                          },
+                        },
+                        t(
+                          "div",
+                          { style: { fontWeight: 700, fontSize: 12 } },
+                          v.t,
+                        ),
+                        t(
+                          "div",
+                          {
+                            style: {
+                              fontSize: 14,
+                              fontWeight: 800,
+                              color: o,
+                              marginTop: 2,
+                            },
+                          },
+                          v.p,
+                        ),
+                        t(
+                          "div",
+                          {
+                            style: {
+                              fontSize: 11,
+                              color: "var(--muted)",
+                              marginTop: 1,
+                            },
+                          },
+                          v.d,
+                        ),
+                      );
+                    }),
+                  ),
+                  t(
+                    "div",
+                    {
+                      style: {
+                        fontSize: 11,
+                        color: "var(--muted)",
+                        marginTop: 7,
+                      },
+                    },
+                    "Precio final se confirma al revisar tu solicitud. Pago único, sin suscripción.",
+                  ),
+                ),
+                t(
+                  "button",
+                  {
+                    onClick: z,
+                    style: {
+                      width: "100%",
+                      padding: "13px",
+                      borderRadius: 10,
+                      border: "none",
+                      cursor: "pointer",
+                      background: "linear-gradient(135deg," + o + ",#f5a020)",
+                      color: "#fff",
+                      fontSize: 15,
+                      fontWeight: 800,
+                      fontFamily: "'DM Sans',sans-serif",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 8,
+                    },
+                  },
+                  t("span", null, "⚡"),
+                  " Enviar solicitud por WhatsApp",
+                ),
+                t(
+                  "div",
+                  {
+                    style: {
+                      textAlign: "center",
+                      fontSize: 11,
+                      color: "var(--muted)",
+                      marginTop: 6,
+                    },
+                  },
+                  "Se abrirá WhatsApp con tu solicitud · Respuesta en 24-48 hrs",
+                ),
+              );
+        }));
+    })());
+  const { useState: V, useEffect: ct, useRef: wp, useMemo: Pf } = Re;
+  var Ct = {
+      iva: 0.19,
+      paisRegion: "Chile",
+      impuestoNombre: "IVA",
+      moneda: {
+        pais: "Chile",
+        codigo: "CL",
+        moneda: "Peso Chileno",
+        currency: "CLP",
+        simbolo: "$",
+        locale: "es-CL",
+        impuesto: 19,
+        nombreImp: "IVA",
+        decimales: 0,
+      },
+      descuento: 0.05,
+      validez: 30,
+      anticipo: 0.6,
+      nextNum: 1,
+      ggItems: [
+        {
+          id: 1,
+          nombre: "Arriendo oficina / bodega",
+          monto: 15e4,
+          periodo: "mensual",
+        },
+        {
+          id: 2,
+          nombre: "Bencina y transporte",
+          monto: 12e4,
+          periodo: "mensual",
+        },
+        {
+          id: 3,
+          nombre: "Contador / asesoría contable",
+          monto: 8e4,
+          periodo: "mensual",
+        },
+        { id: 4, nombre: "Seguros empresa", monto: 6e4, periodo: "mensual" },
+        {
+          id: 5,
+          nombre: "Teléfonos y comunicaciones",
+          monto: 3e4,
+          periodo: "mensual",
+        },
+        {
+          id: 6,
+          nombre: "Herramientas y EPP recurrentes",
+          monto: 5e4,
+          periodo: "mensual",
+        },
+      ],
+      ggFacturacionPromedio: 3e6,
+      pctMO: 35,
+      pctGG: 20,
+      pctUtil: 15,
+      moItems: [
+        {
+          id: 1,
+          rol: "Maestro primera (especialidad)",
+          jornal: 47e3,
+          horasJornada: 8,
+        },
+        { id: 2, rol: "Maestro segunda", jornal: 38e3, horasJornada: 8 },
+        { id: 3, rol: "Ayudante", jornal: 25e3, horasJornada: 8 },
+      ],
+      moFacturacionPromedio: 44e5,
+      utilItems: [
+        { id: 1, concepto: "Riesgo del proyecto", pct: 5 },
+        { id: 2, concepto: "Garantías y seguros de obra", pct: 4 },
+        { id: 3, concepto: "Imprevistos técnicos", pct: 3 },
+        { id: 4, concepto: "Margen empresa", pct: 5 },
+      ],
+      version: "starter",
+      licenciaCodigo: "",
+      licenciaExpira: "",
+      apiKeyMP: "",
+      ultimaActualizacionCatalogo: "",
+      fuentesPropias: [],
+      terminosCondiciones: `• Presupuesto válido por {validez} días corridos desde la fecha de emisión.
+• El plazo de entrega se coordinará previo pago del anticipo.
+• Los materiales quedan en garantía conforme a la Ley del Consumidor.`,
+      empresa: "Tu Empresa Constructora",
+      rut: "",
+      direccion: "Tu dirección aquí",
+      ciudad: "Tu Ciudad, Chile",
+      telefono: "",
+      email: "",
+      web: "",
+      accentColor: "#f5a020",
+      logo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAA4cklEQVR42u29eZhdVZU2/q699znnTnVrHpNKZahMFRICSUDGSlBsERWHrmjjALQ2fHY7fJ+z7VApmm5b/ITuFkXSTqA4VNk2CNLMSYFAgikIgVRISCo1peb51h3OsPf6/ji3kqBhNKi/38N+nvs895y6de45e+01vevd6wKvj9fH6+P18fp4fbw+Xh+vj9fH6+P18fp4fbw+Xh+vj9fHazPo9Sn4004IAeCTeb3m5mbq7FxFDQ3lhI0bsXHuLxuP+9R2YDu2o3N0lBv27uWWlhbzuqABVFcvK2toaLDzxy/nBYCpqbVVNm9jRUK8qi9nZtrGrFpbW+Vfmhaq1+rC9fX1jpTS3r9/f2runGVxcnxcZQF4L+carcxysyDdthl6TpBnv/Mzi9ect6q8tLRqUWHZgsVFZaXsupn41Fh/1eL6ZV1BJoXJoUk+8NRu37F41672xw4SUR+AAACICA8++KDavn27aWlpmdNOfg2sCv+5TBAB4PWrL14MRxbu2vXrJxsbG1V7e3uw4pR1FwY5vRu2V26xRbBt2ABs28bs7CxsOwGXXVLRpJgZ7E/19h44DKDwb5tv2VS5sP4d8YqqDQxnhRUtVJYTh7AA5vBJLQVEbMCxAEsCMQWwn4bITWeFn31mfKB/x/7ugTu+9vFLHwaQK62trVlQVlsnhG1UNJJ1PZccm9iy45ianATgw7ItpNNpFMeLAQCe52EqPQXLtmBbNrx0uI6IMof3798/C4AvuODtlVoLt7399qmXY4JfMw3IGteRnm0ff851vRyZtOfNVBwum3/8XzRShVEsqT1VYuQ7ufZ2BGdd+IlT3v25H/yLKq+5LFo4v8bXFoZSQC4LBL5hIm2kAgvJEJJgKQNLGUgpIC1CLAJYTkQUROPR6lJsWLRoyYZFp+U+fsGm3uf6e/ru/OG3fvSzh+7+z8cAYNu2bWrTpk36ZGhCLFbkpFLj9ErV5aRrwPz5b5gXjXLyued27gMgALyoIyQhwMZgwYp3Vb/pyk99pWTesg+xUxEfHQZm09oQ2CibRMQhspQhKQSUBUgJkDSwFcFSgJKAZREsJ9QKSzArwawsMo4DUVokRW0hMNU3aLoPdP3iuutu+Oentv18rxAC73nPe+y2thHT2BjeU3t7OwNHzZ9AY6NAe3vw/ACjSTY2jlB391QiHo+KwtKSU0gTT03NPtnZ2Z55yed+DSIpAsArF59fL2N24TPP3N8BNAmgTZ/IPjY2Nqv29pYAAC798l3/p3rlqV90ZU15b7dB1jWBbbOMRCVJAVgWYEkCSUAohm0RhGAoweHflIGSBGkRHIdgyfAzEQewFaAEAA6MExGmMKpUVSkw2T2Y2dOx9xsf/5sLv1FeXl5VVl2XNK4bADay2dRsb++Bw8xMq1atr2Wm0rq6szqz2RI9NPTz6P79+1P19auW5EwQ074sTMQj5cmiyqWOrZCaHPifp5/ueOal/MFrFhGsXPympSTteOdzd+1+oc80Nm9T7S2bgoUr3113/t9+4fvJeRveeLiLMT3lB5GYlLYtSFoGSglI4nBl24CQBCkByzIQElCSYatwxUsloCyGY+fP20DEJtgq1BYlDGI2gYgBsC5NWrKqAHhm59PP3P7j2z7ww5u++hQRgZlBRDDGSCLSv3/vQghorf/gbw0NDVUTExN6aGho9OX4APpjTU1d3alFhYXJYiLBOeRQ6CRJa9ZpT5Rbypo3ne572jNidujg7rFFK9Ys9VKciUazo/PO+RK133xFbt3FX/7rUy++/IZALKncv9cNhCIZiwkSQoAkQdmcn7i8BtiAlASlAMtiCEWhBqhQQEoBKr/qLcmwbIZj5TVAEZQAIhZBCQ0hCYrAUkLPK5Fqqn8w9z+/uOf//NM/XnHTTTftUlddtd4HgLe//cOVK1efsrZm/oJiz5/Njo72dH7jmq8+Nxfibt68WbS1tZn8nJhXkgP9MU6YAaCwkH1jvAwAWACYPfJ9z0hDU5IdR/omE6NZL3S1VsqYlD/vnPdT+81X5DZe9sN/WLj+7TcMDJdiZCCj4wlLSUuAA4KWDEkM1gKGAa0YggEyBCaADKA49Bs897zEx7IHJjAANse/ZzABmglgCWUMWBEJkOoe9P3i8mrnik9ffmMyofquumr9b/7jOz847+zzNn50dCz3Fs1cXF5SgkiUoAMvaGr6YMfBQ/tuJKIfA9CtrSw3byb9lxCGAgAWr3tTYUFgEk899eCR5ztbCTYab7ny583lDe/YcuiQ1Nm0T9G4LYgAYRGkILAApAKUJSAlQUgDy0LoeC06GnZKKzQrtkWwbIaSoQY4DsGWgFIGzpwJEgwpGU7+O5QACNpYSnBZiZR6OoXJgYEbdt7x7S9VLLjwn88//5yPVZaXYHB4CN19I8YYcEEihtKiAllZWQzbttB7+OD2O++64xNf/cKnn2bmE5qrFxviJEY+cy8BgPTYKKX8aXl8VnvllbssNhqbPvLTa0pXvXfLvj0I0lOesGwlgoChNcNoQBsGG8AYgsmfM5qgDWCYws/4DDfH7OaMyWVYZ7JaZ7NaZ1yjsy5rN2eMHxCzEQjNPcMwwxgGa8D3mbO+0QUFliiNQo7ue+7+nb++/U1vXb/i44fHFv17yk9+DEx6dGQoSMYdnldRLAQbmUmnZSqV5tGRMZOemQmW1i/d+DebP7Dzllt++U4i0tu2bXtFVuVk5QF8wuPc0ffU2Mxqawv55773P79a1fDuL+3dPRvonFFWREL7AEkGQCBDAAMkASZACAOQgYGEzhkEgTGWAxMpEKgoEypRIKkgHiZgETt0xABgNJD1GDnf6GwANmCKKEgIIBMYXZSw5LxiyOxw/+5n9z2z5bJLLrodAP7+Czfemiyef2lvV7c3urrSqq2ppOxsFskCB6lUDKlUGtmMS44jKeu6Ymh4RCeSiei5F2z675tu+fnmTZs2tbW2tsrNmzfr10IA9Pz3zeG7pk5CW0NeCJ0EtBmtfZFDTgCgdVfepNpbyD/rbd++ovLUS1v27dF+kNFK2gJGEwSFthoEkAYgGcQCggHPC78yYudMRY0wCxY6al4FBBtGamIgID/dF9XRfbNjE+yRRlFRBFUlRSSMu9IujM4rKiq1ybEwkQGGJjR8A9NQq2RmdGiq96n+q5vO3/BtAB4R4apP/vsXSivqL01PT/jSEnZP7zDqaitgmCAgUFIch+f7cHMuPM+CpRJIJuKSyJhkRQn++pK335z51g9mmpqa7n25QlCvdqWvXLhywb7ulh4AQNuJPtqZlX4NAeCOrVf5q879zDllp77zpsMHSXszGSUjFmkDSACGQ//JhmGMAUiANUN7jKKiADU1Ri9aEpOFhRAT/T39T7V333dw//7f7npg+8Oprp/1AnBPcAPOqZdcVf2OczesWr5qxZl1tVV/tbygaAOUI3p272u7a+uPPvuDn36nh5nF1o4O6+Ebf1lXvWDRFsOsnYhUUjsYGp2B5wVw7NDZx2MOKsoLkU67mJ6ewejYOGYm0hifmhHpbMarqpkXHRgNPkNE9zRv20Yn2wmLtWvPXBItLJRSRoTrqzNiEbVrZGyi0rYiMhFPHAl8XwaBq2ynIDObma7wskF9VIk7du8eNxd/5kdPTqUX1471TRo7HhWGBYgIQhLIUgARpAJICfiuQSJpsHCR5ur5ES4oUSI91H+we/djN7Zdu/lHACaOOXXCL7SRTb93s1IIbZgBIAYgAwDXXLt1LTlc/KVPXrUNAA4cuMs5ciRKmzZtyl3/3du+Vbtwxcd6evsDz/OV7/sIfB9vPH8VFtVWIJN1UZCIYWBoDN+/+U50947CBRkmMhEVoXiiWEpLY2q06wP3/vK6W5uammRbW9tJ1QDOZuWQXSXICxwqjKrOzEww4OZSrvZ9WWDzcJAl6fuukEWFOW/Im/GBzP5n7p14498/clPONNSO9PYHdiSitNZ51yxgWEAEgJCAnwNIuKhvIFRUk7EjCcHBBB3YvuM7P7360i8D05NEBBICXwkCgS1b0NLSwpuJTpDuN4s3vOEeJ5dTC69/8uEDGwFDRLvzsbsiomDZsre6APDF5v+74tQ1qz/kesZUliVlajaHXDaHnCswMDCBuvkVsCwLQpjgmq9/332ud8apXThfFMYKRCweFQIBhJ95SmePfPreX173QFNTq2xrO/k+gPfvfzSF/eHBGy9+99iOHb+amFuNB47/5B4AoBmAB059x3UXq+iaD/fuHwpsSyk2AEQYl8PMxe6MXNogWeLhtDNjcD2j/SAizVTX5MHtP//bB3/2pdvmkh4i4qJksrCFKjQwOvvCt9vCO3Ygu2bNmuwmogAAmpubRdMqKCLy5s9vKPnxP1/yubFUoqJ07Vsunj+vLDk8NMpcmCBBEpIYUhJSsznMpNJcmEzQ9FTGP9g1JCOJcsXawE1PHBE+HvAy47+8s/Xf7gHgMbMgIj13r69ZFJTNpK0XNmHN1MxbcENZWbys5rzvjg8Y1sYVYAfM+ThVEFgEACxkMj7qFjMa1sbQfcjTBcUJGdXPHH7kR//4wb0dd+zc8M4PlnqHe/WaNefRunVvMlOzmdNLSnRBdfUZDwPTiEQiZnLSjUWjyZxtZ+3JyUyBUkrIIDAyJuNNTU2FXV1d/paN2z3a1O7d+k9Xnntmyb4fL5n3zMJ00UU4pAR0kOOIo+B5PpeVOFRUFEE67WFoaATjkymKRSIciUblwtrCJ/fuP/gIefF7up65Y+fk5OT082w6kWm64uPlRDT6moah/mzAL5TtNTZvlC1EQeP7/+vTWp0yf3p8MLCiEWWMARODOfxX1gK+66LhdAvzFkbRsTOraxYWyrjZceA/P/+hi+rL2Ft56jnLZ/btDmzbgVExQY42xVRaDHChbUerg8BlraVRUZWwbZ0lSjjxuEhaliWDIBfEYjE7m9VuZdLO0qb2njv++V3vO2fRvh8WW6ORbN9h34gl5JtlUsQqKBKNIF5QgOGhUXQf7EP7Q49m09lAVldebM+rKtdOLGZv+czlv9rwhlOv7RMEbY49fvPXv1Vz1vq1l1ZX17wXUPVvOGXNhk9/+u8ONjc3ixcrib56DTCZF0jimkX7lo163q3vn4/4qs+O9UwaKaQ0QQCQAEBgIrAx0EGAU892UFQaxc72rKmsLZBl8X09P/rC37+ZvIM9BwcAHDnY//vfUF29bDwej9GuXbtfcpXV1dUt7Ovt6TYM/Obqt1163uKxW2P+IE+OGVNQUWCJXDcKY+NwtQfXyw3/9+33IR6Pl7m+kbuf2R+dV7MQg4NTWLhgVihlQUO9H8C12jCqq6tj3/z3H711xYqFf11cXHJhSWlZidEBIo7CPUJcCODgxo0bXxsB6MxU9sSrf4toJwoWvu+OTwS6LpbNDgaWLRXnYRohNIKAQORi/XlJWFEHHTtdjiQTZkHNQPDgLV/7QG7qyZ48TK1PBADG4zGKRrVzXCbPx8xhM5rz6ck999zjRINJp6cH+NmXL7j8/MVTNznZfnPo3jSGn/TEwneVoOqcfpTYg+ibHcKXv/azASlE/aXvfaucTc3ilFMaAJLo6x9Cw8r5wg8AJ55Y/ZGPfq11dDo3dtkHL7qw8ezT6yMRC7lsDqnpqSAWj5pHdx5WT3eOuACwffv218YE7du3r+dEYW371SKoqn9LuRVd+Hdjw2OsFEtjGJQHKXQgQNLF6eclIWwHnXtcaCPNyuW+6tr1688feOTHv73yypusrVuv8l8oGPA8HQBZ5JHHOdQxbw9a0NICbNvWrK5u2ZFlYP+2/3j3Z88sG74W00d4+LkMKjbYVLkhjr4nApSOTyJe3APLm+HMrHfawPAgBoZGcfYZp+BAdy8eeqgDUcvG0NAEFi6KQhumi976lqZnDw+jZl4d3Fxa57IEZiNisYjq6h0y97XvFoJoOBTAnwYLmsP3JZixYO3l7w9MbZGbSWsCKAQCDNgQApPDmnMLYMeiONDpwfOkXlAXld7oYw/d95//cH3zNlZbt14VvFgimEjoNICZP4RBmLZt26YEETZtagk2nNGcfOKHV/2gsXbkWkz366leH8WLohQps+FUGJQvsTHTH0DMdqAyNk4bTlsSxBJx89SeZ71n9x3EKSuWYNnyJegfHMThngEIEmCWqKst1ItqkoEFbXQAyWRkLBKhdDrLv/r1o5TOZbKDwz17AKB9+xZ9MgRAITLDBDQLAFRZuSa+bt0663ggbiM2GgCQscWXTU2lmaAFGwMwgwzB9XJYti6OWCKO557JAYFixwaVlx4x+x669fNEwu/8Thu/FJTb2dnpHTx48Gj229zcLEIQjHjTpk2BYZZtP/zF3/3y6pJdp5U+d0X2SK9OZ0gWNZSQqioAawP2gEhVgGxWgCcGkMz9DuesW6T8XCB6jwyrZHFBtrQ4yrnZGZCKYGQ8hdlUBiBGLBqTFWXFyg+M8AONmO3A931cf8MvzfgMw3j+Y/fefmNfM7PAS4SiL1cAfDRgR4sBwI4zlezo6MBx6s8tLWSWnPfZ0xklq3PTkxDEwugQr3dzHhYsj6GsugSH9mXguQq+r/X8RVGhJztvf+L+7+346oMPqJebwADNorWVJTNTS0uL2bRpU1BXV1f0y18+fOX+HU88/p61Q1tr1W1LdW5QO/XzZVHDQlgVxaDCclDEAQiwowZRi+BN58ATT6I2PoNFi5aCSVDbbe1+YWERvfGNZ2N4oBc7d+3G4OgUoo4N3w8QjdmYmJhCxHGQTnvmS//yIxzqn2XHkjQ22H89AHRubqM/Ogy98MIL445TVSplOWsdkO+7wrLY9A0On15evWEwEUkMW1bGDE9pNbnrV4OlVWe/xbhJafyZQAtbQWgELqG4xsGCFWXoP5RDJiXDSpdRoqRozAw8sutrYKbOzW0vlbhQU1OraGptwmYivXlzCwDgqqu+0bC28ZwPr11R89cNZWZBYvinmN75I+2PpCmbUZKlh5rzq8CRIhAkRLIIzGMgzVBxhmuiiGT7UFu0DytWLsG99/XR1Mho8sc/+TWfdtoqajx7HZ47PIx0Og1AwAs8FBYlIKXAoa4+/5s3/NxMZaVcUl+vhge67vnFj1vubG5m0dJCfzwU4TgOC2EFzC6EAIi0EMIYIp5VsLJSsm8MEBVR8zRg6mTV+VMzGQBMYEYQADKisfTUCowNEqbGGcoScHNGVy2wJTLdHXff+o+/4598kejEq5+am5tp1aot9N73Ct3Wtlm3ERCPn1J52RevuXjhkmWX1VWVnLWwPGFZRx5F1723avvQ/aTIl9EIEK10MHUki94HhrD4nYXwjA2RrADYwKTG4DgefItg/ACFuSfw1rPOx9DAYqRnRrMXvrmRGlYuiaxeuwrTUxmUlSTheTlIS0JJie7DhzNfu/5ndrS4TC6oq1VT40cODw88+cHm5mYBbDk59YA777wzMwdmPS8WL16sBie7ho9HIivXXBj3OHKal54FCSIGQ3selp5WC1c7GD2SAcgCAzBacEWVwfSRrjYQYcuW7XKOvXZ0pTc14b3vkzpksLUAQOyvLv/OeYvWnHppxfz5by2uXFCms0BXz2GM7nwwqJp+RNaaXlm1shBlNS60EhDSRvmGQvQ8NI2ZvlHE6+rAKAQVEqA1xOJSxHJj0Okx2Nl+1CQ6cPkVmxGzdJSkwPDoNALfRyyqkHNzgLAhOKxTazYiYGnmz6uzOTdxuP/gzr/a+dCvRt945osnX68mDKXfj8UTZTWqvrTMOXjwca+xsVm2t7fouiVvqdfaLvP9LCslhJd1UVKTRLKyBL2HMwg0QyiNwBCsCKmIHNLPHnr0NjBTZ+coNzW1SjQ1oW1upYcwt2h8x9dPL1xc/8malaeclShcuETbNrpGDTJdaV1EM6ix0mJeskhVly7GvKiPpCOQ1dOYHvNQUKIRzWRRVh/F1CAjXicBUiCrBFSchAMPOnMEgiSkzKFC78Rg8DYY6cCShFjUhkuApw0kETIZHxHHwsR4CosXL7SXLl8q4KUfGTqy7292PvSrvpfKfF+tAP6g4qWU1saovAPeCKCFScw/AyYqjEkHWpNSUmD+qhqMjfvIpQxIhgGT72lTMz8uLDPas+vx3T15Cog+rraQXP+Oa8+omL/4nUWLTjnXipedqiKlGJoEJrtd43ouRyIkygshkwkbCSuCqIogYiUQGBujI4yymjgipTFMdQ0BVQ7iSQ8FwoVBMiSBZQ7BmR2EPz0Fk9bIzlpwu7MYxBj2JjqQ5gIUlBQj4ig4EQsRRyGZcBCLRTkajVAsaumSohJZV2Xf++9f+/jbAXhNTU2ypaXlFdWEX3Uilk770rYFAcDs8gJCO8BW1SpvVkAYAzcwWNBQAVIJTI9kQgiCCWwIJmBTWQ0Rj/Pd6GnPEREixatqG8768FmFtWvfHktWv8kpm18lrQQmp4Dxbhc5L6uVLSgStYTtAFbEQEgLmjSYLGgZgR8thTtbiIKi+fAmn4FhD8Xz43CsNPyMgb30HJAJQF3tSA9OYeIA0N+lMTAMTHg2Ju1C7i+q4AOR3Zz2JbQUVFJSSK4bkOvnAEMoK09SIuGgpLiQG88+DSWFkQcAeM2trXbL5s3eK53HVyMABgDfPzLU27vMA4C3Va/THQBIOisC14M2GlZUorS2HBNjPgJXg4hCiogwAEPEExpPPvr0GQ1v+cm/FVXWnS+d0mUqNi9uZBwj0wbugGcCkzKkpLCjUjiOksoWEIIBFoARAAdgQ3DZhosYstpBSawCKddHNDaKInUE7E3CzxXAXnIxpDeKkfvvQc9jaR4Zt3jCJZ5SSU7FS2i2qlSkC2poyllEccQQkQq5XBbFRTEEhtDVP6RdL+1nujOz8+fXRJ49sM/+7Y79OHfDwnoANHj/JJ8YHW4SDQ17ZWdnp38ii/KqNWBwcDADDAIAtmwBt7RAQouaIHDh+4GoXVoGFjFkpjMwzJAU3hsbQCkICymMT65cz9F569OzAtmxAIE/rUnNsuXYUjq2sGwppC1ACDVHa4AEg4QBMxAYAc9IZIwNT0SR8W3MqiQq41OwjEB2ygMSq5BYth66rwPPtD7CXXulno0UKa6OkxuvRlqUYtLEMK0jmPDtXMZ3h2dz6T438HJOJFr3zFB/VUFhsiASTchMKi0PH9httB4/9O73bK6TsWJZ4qRXA+Ct//m/TgidrFvXJSYnUQWg97ViRcwVHiKsRXngeVA2qGReJWanNXTOB0HBsAFBwGjAcgAlDSaOzBg/cI1lR4RUERKRmLSVBRIAs4ExAtAGAgQyDMqbMDaMQBM8TcgEAra0MeFHUBErgC+LMTXTD99LoqjuEiRLi3Dk4V9jz22dwVSuVIllVWrSSvCEKezOmMjusZx5csaYvZPp2f6hoYmhzs47h47bvyDrGt5azqmSSlFAC6Mivnpx/apTcn5uTf+RoeTSlRXY+8z+XQ0Nbyix7USpMW6QgwuHbWL209mstnM5VMXjxWVLV69Xtl1AQZDR0k8NdHZ2eieVnt7Y2Kg9Fdd+dhrJigRkJIH0eAaaDSBMOHkEaGNQEGEYduG7rrAiCUFKAoJg2CBgAxkyUWAMgzTDgCGIwdrA5FERIRl+wMi4DAlgWtroD+KY9YC65CJUNCyDP7ILD/zkh+ZgZ0ZEa09Rs8WV/bNUvLXHx+03PnpkPw62uSfMsfNxfMvVQvd03jUEYAjAUwBun/tMRTk2edmhwp/c+NU7Fy48bZ5nvOVKKeYAEHEC+9aYHaMClnaFbUWTbISIRhOUy5EWiEzlhUwnQQCh6csUnxIXxLHAeCiuroaXEwhyfh6vFEeto9Ehh1MHAQLPQDkapBkMBhkDaA0WGtACLAgsCBAAM4cOPI88aR/wPUIWEoYZOsOguIUlq5YiEcngkft/wQcfuFsbp1bRyhpOF8Wu26eq/uX717ccLei3NjXJvSMN1FnRyQDQ1tbAQEt+T1nLsfC7uZkat0NEoxPyoosuwic/+Vb30bt+sO3R/HW6u5/sAXAidBhr164tz6a9RZ2dOx4/0eSdBAFsIQA83j1RUrzELbQsQrSoCNm0gfE0wOEECRCQn0SlBHQQoqPEAIwJafiCQ65nYMDQoSkSAjwH90mAETLcQIDvCbgZg6z0sXKthdPr56G38yB+c889emZkXFbXvVPFi2XHDJtPf+Nb/9QezmWjAjaalpYW3vzSrAVubm4W2LhRXHPNmwKtdXD33d9CNFpb883v3fBBFvHTW7/7T+/fuHGjaWnpPOaAmwC0tQFo5lTql5EgIImmJtk4MkLtFRWMkMjLJ9UExaviWWZ2I7F4VNoxeJNuWLIjBpkALCQEi5AEZADtaxijARgY1iAGhJEwQUiJIzAMUV55NBgKGgaQAkISPB/IZXKom2/whjMcyIzB1u/s5f1PD+ia8lPU/Kr57pBMXf/bA2bLwbs/6TY3N6uWlhbd0tIeAO0v6ddaW1tFU1MTE5FBPrG69KqWc87bdP7fVi+cf8nSU+pLf9sxuau9vT3YuH27wPG4T9tcwtrCQdDgKxV4aGvT7SfYqHIyNICBFqy4cOX4oUftSSdpRw0rBH46XNlSgsHh6mcGM4Xkq/zWJGM0ICTIAKwDsPQR4qcGyFNQwCrk67MAAkbG1Sgs8bHujAhKioBH/mcQv3toTAeGZXXJPGXoyMNTU+Mfb/3Np58CgHyCFLycp2lllu8VQs+x2lae9ta6933w/e+vX7XqnYU18zbEKsuQyQLPjiCYyvghRLPlhcP1XE6lHCc7+UKM6ZMggFDz9t98s1BLzpNOogiBb6C9AMShI2UKw0fOF7GDwEApFVYZWAMmgCEBQRJGCxDzXHwFIgIMg1nBuAGIDBavcrBwcRS9eydx+2PDJj2pOVkclUkxNqGyz16zY9un/g0ANzc2q5b2Fv1yCFLH0V40gMQ1132vcdGKFR8qqFrw1sLq2sR0AEzNgCdHfB2LEMbTStnCE0cF0HLia0YiZBnLppORiNELQxSEPXv2BOuXZGadaLKSA8McBBRuV2AQhbF8CM8BrotwM92cUMgHQwAkIPyQGwoGQk/A4CAA54CiijiWrIzDz+Zw70+7eXzA1ZGYpUpKU3CwtzUW3P25J3f8tAfM1Lxli8jDAi+Hp0/5yTff/MFtV5922qmXobBqgetEMDhh0NuvtRSGbIuELYWa9QI9MaOQGxuh4+e/sbFRzc7OUkdHhz+HmWntC1vCPynErBdeOIaIyCVljdmxxBJf+2yMAXNeBkdrNqFt97IG0nJg2YDWAYQUoc0PApDKl3jZgE0AnfNgJWKoWlSKRAx4esdhHj40Y5StZHGRVjZ3PRVMP/Wv+/dc8/MwHG5W7URByyvY8diaJ1N9ouWHn9v0rku+sqcPGB8ITEA+WxIioiBBAoEm2DZhcNiwkEA8hoHjr+O6blIIQQDG5+arv79z4jgq5aszQfPnz49asaKl8AHLiiOggNkzpPXsrOtGh9df1eEB8F0vNV0UJeSmvDz3J9xrxZijPwsIAbhZBgmFSFRgZiaAEBaYDSCC8GNgBIEPCIniqmoUlBRium8AB3oHNWuWiWShFH7/hErv+Yba/ZXrDgBeUxPLtrYtPLfhL6SknFrU0/PUNACxbt0654T1jnmnyrbNlHnT33z+3Asuuejrjx2ENzadU7GoEookhNFhBo4wIJhJGwwMMFY0AKl+v68e9c4HPvEJ521ve1swM6MqjZLW2952WjaVmhQFBVkzOAj4fi9ZlsXDw8Pc39+fe8VQRH9/f66xcUlnO4BG5GOIdgB40gDg+fnr2MR7hcCbWTPnuYdhXSbvhMEhI87LMYyWSJZEMDnuwrIENAsIDuBrBvk+rIIiFBYVw89NoWvXU8b3BNvxQulEx90YDn3HTP/gm889t+MIQEDTL2Rb2/OqTwSAZcTUAk2pysr9kUwmWOg4DjMz2bYN8om1FNJxj5jb7l+ofnjv390yoyrNkSM5lYjZwvPCTX2GwgRSgAFB6O72EE0IKAJys9NHxoszFX37DiWiUgqPsV5oSvr+qEqnJ5dqbXULEcwSOchkPMRVPADw3KvBgrg9vz/2RAHcHBin/bFnTN7qMuuQZs5hFhwSsgyIBQJtkElLlFZHcKhzBiALQEjUshwHseJKEAUY7d3LudSoEU5SRmMMS/fdY/sHvrh/z3VPHjU37S0af1hJYwDo2v/008DTGB5GengYe/+gIC4ljNa44TdP3R2tXLLo4adcXRBXMpcDhAp342giGMNwIgKDIz4yGYPqElv4WYYTx77JyYG+hx8cAhuDU8+8JO1mhkseffrhJwA88WrQUNnQ0CABoLy83IyOjgoAtsgWxNPHgGgQCc5mLVNcnM1NTkbN1jvfjoaGhmBsYM+e5KIJBiwJ/r39anzMjwsCxkeBytokjO6FMQ40E2IFpbCiUWSnu5GeGAogSUWitiQzeEDN9n6l98C1rWFYybKtDaa9nYKXMJ0l/f39k88nboUIJXMrEVHwle/f+7OahjV/df8OL4hFlHI9hHuPQeHiIQYpQjpr0NenUVsrEXgW+Txlhp7b2wuATv/IR1TH1q2BpXNOIFUk/K5GCbTrl/KlxwtA1NXVlc/kTJkNpq6umXEirygSiRdbMVkV04rBTIEGWMggkQgCY4omkkn4ubG+IBeROv3sT4fMuo8OSqu2BgaGBAvmY7s2iQWYGJYlMDToYf1Z5bAjEkI6KIwm4QUpTPTu1Rx4UjoJJTEzIs3Br3Pnv363D8igmQVatuD3zM0LRWxM8XjkD4lbzUKpf9ZEhE996zffXXPehe974BE/gFDK9wxIhn7KGMBSAhABiIBDXQGSSYJFggMCed7syMO333o43IBSrcNgRGdt0nmBtxu8wm2qpqenZw54mhsDLz9IlQBrBO74HrtoUU24Le44kTOHxFxtIKTC2JAPYcVRs7AIE0MaUxN7je+moayotOy0Vmbou1F/59VdXfeNzNl5tLzsHYgMAH379z/v/puaWuV//ep9OghM5AtbH7zu9E2brrp/R+B7nrQc20dOK0gVhstahvvMrKjAoS4NoxllxTbSWW0SRZDpwYmujo6OTJ6OzmEUlHJ9XwYvETW+KC/oRD17REjGOv6F418EgNb93U4LAKVnuh4VDBBJpnBZHIUfwGE0ARj4OcbooI1la4owMvg0G+2KqC2FCroeEO6uswf3X/Oxrq77RtDYrAAmvGy+0AlzF2rexqqtbbM22sz7/Lf/p331eZs+es92N5hJhSyBXE7B8wmex/A9wPMYhjR6D2vMTGksqLORzTE8LVkRkJ2Y/m2eenh0Dj1vUvv+bPBKblC9jFifXzDNO250bL1DA+DJA/dtLyg/n6WyhA68vPLnmblztHQDWLbEob05vGHTEi5K7iTSo4ct7/Dnjhy+5Zfhcm2VaNts0N4S4NUPDlf93+iWTRSc+uaPb7r0w5ffXLr09Npf/08u8MlSUUXIZgEh8lGPCHOVSIxwpBeYmgywZq1CNhvmNYYhTDaHiZHuuwHgO6PHmHwHDhwYfxl506veI/ZyU3k64wO7nvX00qW5iTFjSAowgUmGCkMCTARlKeTSrnlTUyX1/O4n++/73mXrQMiAOc+peR6z4ES7z3//3POOm5pa5RyBC4Dzt9f8/B83NJ73jyOpGvXIzpx2IkoqBYBFnu8Utr0RgmFFGNNTQGrCxbozLLiegBcISBWwZdsUzR4evO8zTfUdQ09kwPxHtWU7qeTcjVvCTY8m2//fUccBE5kQbmaQ4aPaQMxgo6Esm/bumuVVF7y9orrhg6eDgaYmUFPTKvq9xXE8X1Sc4NzR48bmbUpIiba2zXozkT7tTZ9941du2fn4+jc3ffWRJ8rVgw+6Rgpbak/Aywh4PsP1AdcHci5Da8JwP2F0MIdT11nwPEZq1oA1w8uxidjg6ZGBbR2DHZlWYyT+yB5D6uVqyLp169R0ebk4ePfdL1j5b2/ZYgBgoufBH5etPO1TgqSc6+XAbMJolCQEMaAJlgUa6s3wyHB5yZIzmtpm+4LPt7XRLccqUyy+++M3l7nTw2dKoYsg+IgjpTCGkkRWhIVWUsneSMT2AoO6manxyfaWTY8BmF506vs/cPHll727evkp75qYrUbrL7I60EpE4kr4bjhrggAKCJAhWKgEMDQEsEnjDefa8D2B8SnAsQV8X4NhEedcGu87cEtYwGk7SVDmyxgLl69eHpNR2dn5eOeLUmZDTqRZ/9ftD2lafd7sxLgGkQQkmEITRCRBUkIQYKDgRD1ee14xPdp2L7ypnp3FVda1Izv+78NDswdHX8Gz2MUVFy2/YPPmTQuWLb2sZtnS01NeBXbuyPLoMHGswBJE+YRAEIgQ7lmgsOMKWGByxENhURYbzo5iJgVMTkpIO1QuIjYFcUs47jPd37ryogbmvhyFRIPXRgPq6uoiUkbrY7GoKCgoMz6iZ/ieX3bmmRdHg8B4vh/k6SkBW1aKJiamJ/v7nzuyfft2AcCkx5++oXh+w3mpuRSIQycWGpAwMmIiKGWQnZV0eH+aN7z9DeaBn/CZs+nkfyVP/9ZUkqb3RSLyQc4MdHv2xEGDSC8H5EmwYs6UR2xaUb2ovrqguOi8upVLayKRyOpo4QJrZJRwzwOuHhrMQNmWtKOCPDdfHKJjk89EEIoRpIGZiRSWLGOsWRdD3xGD6RmFSIRggpBSE7AwsRjE6MH9PwT6s1dt7bAABE1NTfLxxx+3enp6vBcPZF65BlB9fb3t+/No5coop9PREiCIxOMLB/bt20OWFX3eRQsLR80cDNvczNTSQnTWe3+3ZyZTu9KfmTZGSHm8BkBICCFAgiCUgOtqrFgfg8UT5qGfP4pIslTEi8oQTRTBdggqAthRDhJxW1sOCStiWZFEDBEnCsMCs7Ma4+MexkcCncuAVMwWjk1h+YlEftI5DIPnhCAMMjMMmCzWnSNRU+vgwHMGWdeB7YQ+SxIDHLAVc1Bidacf3/qpZR1P3DZ4LMsBamuXrOrrO7T3ZPsADjdBHERPD7BgwYJcLBbDww/f4b5UMLR9e0i0TY3u/I941ZLvTkxzuE+BTVjZEiGzgfO9f1gDlkM48EQWq86qEOdfeh4e+dUunhoeMNnpUdZGwrLiQkVjSjkRJaUFUMCaPM0mBW0MkVSkbJssR0onIgBm+LkQQCMyYWGHOFxxZBBohpv2UDXPx+nnxOH6CrufNGC2IG0Dz0XeRAKBFrqsEiq1f/f3Ozr+e7Cx6e8TPXsenhdxEpZtxyw24ux4PE7MTDlmX/iYtG1L5nImw2yovNyezS/OPyoMlY2NjdR+rGndSxU4QETRde9++Llsblm1lx5jkC0Y4cqHUOB8yVHIkJYihETAHpafHkNRgY/Hbn8SU6MuIgUxSEEAbBYyApI2SEmSlgMhFUhIkAyvCRIh91Pki0AizBVDQhdBBwK5rIdEQYDV6yVq6qLo7WEMDRJsW4VFIwqrcQIAc8BOzOayaFf2oa0fXXnwmXv6a2rWR+Nxb40VTcSjkbiSKnZabnbwd0HAFEB7wohJrX2lFdKccykWk0c6Oztn/9iCjG5vb39R7OX4WHzzZkgAGXf6qc9Fq5f+xJ0WBpYBswiR6Xx9gI4D6wxrWMrBs7syWLgihguuOAf7HzmIfTsHwXAQKxAkZJ6mAkAbDQMBYRhkFCB1mGoYDjuuCIIw4W25OQHPyyIa01i7wUH9KTFMTgh0PM7wPRUWh0K3FmolGCQEtAtdPR9qorPj3w7tvbdvyxaowcGODIAdcw+/YsWZ5tlnf/fAaxoFvZoRopak177zgYcCs/rc2fERI5QtiVSYmJGAUBJCCsx5RikFhBTwfYOiSonVZ8bBbgrPPHIYRw5lEXgOLCcCFVEQlgUpLAhBYbMJoUIOKhEMSwQ+IwgCSItQXM5YstLCgqVReDkLBw/4mJpQkI4KtcOE2frRCp4AjM+msMSipNgz+Isvv3dNM++bbMl3+wvzkSZqaID0vK7agwcXd+cpEXwC5/uCTli+AkEJAFRdvS66fHkNBgcH51Y81dfXJxctWmSi0WhBPF4dn5kZzQJA56pOgX37GIHoKlmw/opc1jLMRswh02EUFxbej4JP+f6h0hJwMwL93R6kY2HVGdVYeloJEkWACTx4bgAvZ+DlfPiuhuczPM9H4PlgDmA7PiqqGCtXC6w9J4qla2KQykb3IcZz+wXcrAVlCUADHOT7yRkRdukyYfKofTY183wx1nX/B7p2fW83sFH2tN9sji3cTh4d7dQTE4OTQCeATn6R+aMTLfhXrAFLliypdV13rL+/P3t8yXLJkiX+008fiSUSnuzt7Z38Ay14881fl8WXfG64t1fbtiMZoa0WQgHSyoeHBJJhGxsSAqQEhCUQ+GGT1qoFArVLHBQU+6AgALwcjK+RywEMCSUFlMOw4wpWREFIidSMxOARYGTIwM0KSELY3TXfnyhcnpy3gpSP+QluVgfz621FY+233XH9xnfN9bo72ePlCEBu2PDGosk0V1qKHEvaywLCaDQqDwovm56eDiiVms3k7eIJv6OpiUVbG8l1Tb/tyGTqT8mOj2jhRGToHBVIWflQ8ZgAQBQKQEkIaUGIuaomwYkKJIoIhUWMeEG+sZ8KGRa+Z5DOSMxMA24G8DwJCEBZHHbmCkJW9ZzfCaPJfP+K/PoNvIBjSYcrCp/1n7r1s8svO/ybvu/XrioyiTglARQUJAEUhBi+CShH09EY2RnAsZJJ289kSOYopUqi1e7MTApACinMAKkUgiDwDx48OPNKnDAZY4qSiURSOpYNjXlRRb6lrKK09mzYGWVZvgvg8AuAZtyGNoDIG+/6749ULPuHHZlUhKE1s1AU0hUNwCavEcetCZPvokUBGBLSElAKYBZITRJSUwCTAMNAiFCDhAhjfiHDIrrtMIwBTMDQHNLatTEhJRIMw8hTJEPInJmgmXVNta+ee/i2f+juvqunc3ObDIJMQdx3LOE4CAIJx8lrg6OFyFqJQMmZCAkVBFYQiUBqPyYDmfNkTMN1AwhXwvUFPE9mcGyT+Ss3QcuXL1+YTqeHjzdBL489vU21t28KVr/xxi2J2g829+07FFi2UiTsMHwEhRCBUsdMkAghC5J5c6UEhJAgCUhFkErkG/vhmNYcL3mT15q5bolz7Lx8Y0Awh2UKw2EJjCS8nBfUry5Qmb67vr/t+xd/pKmVZdtm0q9VoPIKnHCTbG5uoqeeOqSUKuKJiY/4QDu9XCH29NzMTa0st127ob1i8elvLqjYUJcaGtHStgV4LkNFPhoKt4QfA2zy7Lp8OSdEgMM5NHOTbMIK1tyxMWGCx/kWmKzDfnTHzpn8MePoZvLZnK5ZUqgieu/D99xwblNTK1PbZjIvUqw6vlXncUhtswA2Up7C8AI/TPEnCENPANUJ5i1MBUvLznlP2+9mZ+bXjfcf0VY8IYkNiAT4qEMWgAh9AChsYyylBKTMJ28hhAEOTc3xpivMukW46vMFoGOrPzRJc1LTHGqPn3VN+bwCUVY63Lf7N18+q2/3zQNEW+j36hJ/Ng14WVrS0NBgL1iwQBQXF6vy8nI59350tIGAHgbauaWzU2L3I7Psjz9auXLD+zWV2e7UNAsr9AfHJvH56yVP7/q9kkyeqg4+ttKNyTdoRb7pKx/txhiueBOeNxo6z872sj7HiyJcXZMKhvb96sL92//1QGfnKtnZ+bHX/Ldn5MmKpCorK+OBKFiantFlKTcoC9gqS8/oMpdFWcxJOQUFljc7O+ujs5MbG5vV07u+00cUPFu36tz3uLk4e+kZkpYi4rxDnJv5sN3K0fAwPOLnpTp8XERjjra/zO+oMQbGcF4YBsbo0OQYDYJBkNUcKZSmfinJ3id+fvmTd3zsnsbGbequu96m/xQ24c/2gzbrrtxldWxd7zc0fvOK+es+/IPDnTOBNzMllRPLt7eZMzeUd9Ai75CPOWmhZIgnzcHLeSrkXASljQ7ZqPlIay7UNGwgAASuYSep9KrTEqp/962ferztw9c3NrNqb6HgTzUP8jUQKL2U4wGAwY6tZt2VN1l7fvXxjlhBaW7Zaee8eSoltDubJstSZPLsxnBy875N0NF84dhV873+wWA9F88zjNZHTQ8bA5hQA0IVYfg5nyNJGaw+s8g68mTblp1tl//ruit3WY9dNy/4Uy5EiT/jGOy40zQ2s3r8B+c8XFBem16+4Yy3pLMwmaksKUeF6L0AKJ81U14AR0PWufaXYa0z9ANHHW2+6JOffOh8rkEEP+NyoiSm15xZZPU98dNv7mj90Jcam1k9dt08/aeegz+rAACgp73FNDazeuy7Z/y2oLAu1XDO+rf4OmqmR1JkxyQR5U2OlCBJedg5TNhIhhmtEKEN4jlOMDjsSQpzjBiMEB11szkum58wqzYkVPfvWq/Z2XrZF//UZucvSgBzQmhuZnXrTRseceLFR5ZtWH2JEy/HyGDGRKKWIEn5kFRAyJC9JhTyx3Q06yXBeZN1jI3Ief9AEnAzxixcVUKLlweiu6Ptk4+3Xv6vf87J/7M64RNmy/nflFl1/uffvu6Sy37l8nL11CPjgVRCCUkwEhCk8nlAiEBzft8b5/cVs2HoACGnXxuAGEHA0LlccMo5FaowPuDu+vUPrnx2W8stf+7J/4sTAADMpf7FdU1nveezW75XUN7Q8NCD49rPWMJJSGIGSCiEORmDIUBkYExYUNE6nHAThFqQy3rsKKPP2FSqePrZ3vaffvvSro4bHvlLmPy/SAGEmtCs2sNdjUUfufbB79dvaHz3rsddHOpiXVRkSSFD46nUXE3NQLOB5xECP8Tyg4AwPe2aefMEbTgzQaNdT9z2vf/97o8CPUNzmvaX8KzyL1EAPe3tpqmpST777LPZjnt/1FpVUT9z4YU15yxcUhLpGggCaQsqKRSUiAPRKCEaZdgOwbIEnCjBMwTNJnjjBTG5atm0eW7nti/f/MWNHyOamW1qapV3fedt+i/lWf/Sf9+XWpnFZiJ90aVfXn3ZJz/07eKqpec9uMND74gx5SWOUCKkXQdaIO0yRid9vaCExPlnOzTQt//p1u/+4h8e/a/mh0Ma+Ra81tjO/y9Hc/PRH8ZRN965/UtPHBnN3NvNfO09rvmPbQHf+EjA194bcMsdLt93iHn7oWF99fd+cz2AKAA0v8If1nl9nFAIzWIO8fzYP21d9NuOJ+7umc6anUOBfqDX54d7c+bQyLS/r6fnliu+eGMDEP7aXVNTq3x99k7SqF7csGDtuRc0JMvLl1TUNdx89fXf5pGZaT3r+zw8MaY/veVrwbzFDZ9fvnz5wuVnNi78/4CJxf8DZHrcN02KpVYAAAAASUVORK5CYII=",
+      logoPDF: "",
+      firma: "",
+      logoCliente: "",
+      logoPDFCliente: "",
+      onboardingDone: !1,
+      plazoEjecucion: 30,
+      banco: "",
+      tipoCuenta: "Cuenta Corriente",
+      numCuenta: "",
+      titularCuenta: "",
+    },
+    Fn = [
+      {
+        id: 1,
+        nombre: "Constructora Ejemplo SpA",
+        contacto: "Ana González",
+        email: "ana@constructoraejemplo.cl",
+        telefono: "56912345678",
+      },
+      {
+        id: 2,
+        nombre: "Inmobiliaria Los Aromos",
+        contacto: "Roberto Tapia",
+        email: "rtapia@losaromos.cl",
+        telefono: "56923456789",
+      },
+      {
+        id: 3,
+        nombre: "Servicios Técnicos Díaz",
+        contacto: "Luis Díaz",
+        email: "ldíaz@tecnicosdíaz.cl",
+        telefono: "56934567890",
+      },
+    ],
+    qi = [
+      {
+        id: 1,
+        cat: "Pintura",
+        desc: "Pintura muros interiores (2 manos)",
+        unidad: "m²",
+        precio: 5500,
+      },
+      {
+        id: 2,
+        cat: "Pintura",
+        desc: "Pintura muros exteriores (2 manos)",
+        unidad: "m²",
+        precio: 7500,
+      },
+      {
+        id: 3,
+        cat: "Pintura",
+        desc: "Pintura cielos",
+        unidad: "m²",
+        precio: 6500,
+      },
+      {
+        id: 4,
+        cat: "Pintura",
+        desc: "Pintura puertas y ventanas (2 manos)",
+        unidad: "m²",
+        precio: 8500,
+      },
+      {
+        id: 5,
+        cat: "Pintura",
+        desc: "Pintura anticorrosiva estructura met.",
+        unidad: "m²",
+        precio: 9500,
+      },
+      {
+        id: 6,
+        cat: "Pintura",
+        desc: "Pintura repaso 1 mano (mantención)",
+        unidad: "m²",
+        precio: 3500,
+      },
+      {
+        id: 10,
+        cat: "Albañilería",
+        desc: "Radier hormigón H-20",
+        unidad: "m²",
+        precio: 22e3,
+      },
+      {
+        id: 11,
+        cat: "Albañilería",
+        desc: "Radier hormigón H-25",
+        unidad: "m³",
+        precio: 195e3,
+      },
+      {
+        id: 12,
+        cat: "Albañilería",
+        desc: "Muro albañilería reforzada c/bloques",
+        unidad: "m²",
+        precio: 48e3,
+      },
+      {
+        id: 13,
+        cat: "Albañilería",
+        desc: "Muro albañilería ladrillo fiscal",
+        unidad: "m²",
+        precio: 52e3,
+      },
+      {
+        id: 14,
+        cat: "Albañilería",
+        desc: "Fundación corrida H-20",
+        unidad: "m³",
+        precio: 195e3,
+      },
+      {
+        id: 15,
+        cat: "Albañilería",
+        desc: "Losa hormigón H-20",
+        unidad: "m³",
+        precio: 21e4,
+      },
+      {
+        id: 16,
+        cat: "Albañilería",
+        desc: "Losa hormigón H-25",
+        unidad: "m³",
+        precio: 225e3,
+      },
+      {
+        id: 17,
+        cat: "Albañilería",
+        desc: "Estuco exterior",
+        unidad: "m²",
+        precio: 18500,
+      },
+      {
+        id: 18,
+        cat: "Albañilería",
+        desc: "Estuco interior",
+        unidad: "m²",
+        precio: 16500,
+      },
+      {
+        id: 19,
+        cat: "Albañilería",
+        desc: "Reparación estuco exterior parcial",
+        unidad: "m²",
+        precio: 22e3,
+      },
+      {
+        id: 20,
+        cat: "Metalcon",
+        desc: "Muro perimetral Metalcon C150 + OSB + estuco",
+        unidad: "m²",
+        precio: 85e3,
+      },
+      {
+        id: 21,
+        cat: "Metalcon",
+        desc: "Muro perimetral Metalcon C200 + OSB + estuco",
+        unidad: "m²",
+        precio: 95e3,
+      },
+      {
+        id: 22,
+        cat: "Metalcon",
+        desc: "Tabique Metalcon 89mm + lana + 1 placa yeso",
+        unidad: "m²",
+        precio: 58e3,
+      },
+      {
+        id: 23,
+        cat: "Metalcon",
+        desc: "Tabique Metalcon 65mm doble placa yeso",
+        unidad: "m²",
+        precio: 55e3,
+      },
+      {
+        id: 24,
+        cat: "Metalcon",
+        desc: "Tabique Metalcon 65mm 1 placa yeso simple",
+        unidad: "m²",
+        precio: 42e3,
+      },
+      {
+        id: 25,
+        cat: "Metalcon",
+        desc: "Tabique Metalcon 89mm + placa RH baño/cocina",
+        unidad: "m²",
+        precio: 62e3,
+      },
+      {
+        id: 26,
+        cat: "Metalcon",
+        desc: "Tabique Metalcon 65mm en remodelación",
+        unidad: "m²",
+        precio: 48e3,
+      },
+      {
+        id: 30,
+        cat: "Metalcon",
+        desc: "Techumbre Metalcon correas + omegas + zinc 0.35",
+        unidad: "m²",
+        precio: 62e3,
+      },
+      {
+        id: 31,
+        cat: "Metalcon",
+        desc: "Techumbre Metalcon correas + omegas + zinc 0.5",
+        unidad: "m²",
+        precio: 72e3,
+      },
+      {
+        id: 32,
+        cat: "Metalcon",
+        desc: "Techumbre Metalcon C150 + policarbonato",
+        unidad: "m²",
+        precio: 68e3,
+      },
+      {
+        id: 33,
+        cat: "Metalcon",
+        desc: "Cambio zinc ondulado estructura Metalcon",
+        unidad: "m²",
+        precio: 28e3,
+      },
+      {
+        id: 35,
+        cat: "Metalcon",
+        desc: "Cielo yeso cartón 1 placa Metalcon",
+        unidad: "m²",
+        precio: 32e3,
+      },
+      {
+        id: 36,
+        cat: "Metalcon",
+        desc: "Cielo yeso cartón doble placa Metalcon",
+        unidad: "m²",
+        precio: 42e3,
+      },
+      {
+        id: 37,
+        cat: "Metalcon",
+        desc: "Cielo yeso RH (humedad) baño/cocina",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 38,
+        cat: "Metalcon",
+        desc: "Ampliación cielo yeso en remodelación",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 40,
+        cat: "Madera",
+        desc: "Techumbre cerchas pino 1x4 + correas + zinc 0.35",
+        unidad: "m²",
+        precio: 55e3,
+      },
+      {
+        id: 41,
+        cat: "Madera",
+        desc: "Techumbre cerchas pino 1x4 + correas + zinc 0.5",
+        unidad: "m²",
+        precio: 65e3,
+      },
+      {
+        id: 42,
+        cat: "Madera",
+        desc: "Techumbre correas pino 2x3 + zinc 0.35 (simple)",
+        unidad: "m²",
+        precio: 42e3,
+      },
+      {
+        id: 43,
+        cat: "Madera",
+        desc: "Cambio zinc ondulado estructura madera",
+        unidad: "m²",
+        precio: 25e3,
+      },
+      {
+        id: 44,
+        cat: "Madera",
+        desc: "Reparación cercha pino (parcial)",
+        unidad: "unidad",
+        precio: 85e3,
+      },
+      {
+        id: 45,
+        cat: "Madera",
+        desc: "Tabique madera pino 2x4 + OSB + lana",
+        unidad: "m²",
+        precio: 65e3,
+      },
+      {
+        id: 46,
+        cat: "Madera",
+        desc: "Tabique madera pino 2x3 + volcanita",
+        unidad: "m²",
+        precio: 48e3,
+      },
+      {
+        id: 47,
+        cat: "Madera",
+        desc: "Cielo madera terciado 9mm",
+        unidad: "m²",
+        precio: 28e3,
+      },
+      {
+        id: 48,
+        cat: "Madera",
+        desc: "Cielo madera volcanita sobre correas pino",
+        unidad: "m²",
+        precio: 25e3,
+      },
+      {
+        id: 50,
+        cat: "Impermeabilización",
+        desc: "Cubierta membrana asfáltica 4mm (terraza plana)",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 51,
+        cat: "Impermeabilización",
+        desc: "Repaso impermeabilizante cubierta plana",
+        unidad: "m²",
+        precio: 18e3,
+      },
+      {
+        id: 52,
+        cat: "Impermeabilización",
+        desc: "Sellado fisuras muro exterior",
+        unidad: "ml",
+        precio: 8500,
+      },
+      {
+        id: 53,
+        cat: "Impermeabilización",
+        desc: "Impermeabilización fundación cristalizante",
+        unidad: "m²",
+        precio: 32e3,
+      },
+      {
+        id: 60,
+        cat: "Pisos y Revestimientos",
+        desc: "Cerámico piso 45x45cm",
+        unidad: "m²",
+        precio: 28e3,
+      },
+      {
+        id: 61,
+        cat: "Pisos y Revestimientos",
+        desc: "Porcelanato 60x60cm",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 62,
+        cat: "Pisos y Revestimientos",
+        desc: "Piso flotante laminado AC4",
+        unidad: "m²",
+        precio: 22e3,
+      },
+      {
+        id: 63,
+        cat: "Pisos y Revestimientos",
+        desc: "Cerámico muro ducha 30x60cm",
+        unidad: "m²",
+        precio: 32e3,
+      },
+      {
+        id: 64,
+        cat: "Pisos y Revestimientos",
+        desc: "Cambio cerámico piso (inc. retiro)",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 65,
+        cat: "Pisos y Revestimientos",
+        desc: "Cambio piso flotante (inc. retiro)",
+        unidad: "m²",
+        precio: 28e3,
+      },
+      {
+        id: 66,
+        cat: "Pisos y Revestimientos",
+        desc: "Reparación cerámico pisos/sócalos",
+        unidad: "gl",
+        precio: 95e3,
+      },
+      {
+        id: 67,
+        cat: "Pisos y Revestimientos",
+        desc: "Reparación cerámico muros",
+        unidad: "gl",
+        precio: 95e3,
+      },
+      {
+        id: 70,
+        cat: "Carpintería",
+        desc: "Puerta interior HDF 80x200cm + marcos",
+        unidad: "unidad",
+        precio: 185e3,
+      },
+      {
+        id: 71,
+        cat: "Carpintería",
+        desc: "Puerta exterior madera sólida 90x200cm",
+        unidad: "unidad",
+        precio: 285e3,
+      },
+      {
+        id: 72,
+        cat: "Carpintería",
+        desc: "Ventana PVC corredera 100x100cm",
+        unidad: "unidad",
+        precio: 195e3,
+      },
+      {
+        id: 73,
+        cat: "Carpintería",
+        desc: "Ventana PVC termopanel 100x100cm",
+        unidad: "unidad",
+        precio: 285e3,
+      },
+      {
+        id: 74,
+        cat: "Carpintería",
+        desc: "Cambio ventana PVC (inc. retiro old)",
+        unidad: "unidad",
+        precio: 245e3,
+      },
+      {
+        id: 75,
+        cat: "Carpintería",
+        desc: "Reparación muebles cocina",
+        unidad: "gl",
+        precio: 15e4,
+      },
+      {
+        id: 76,
+        cat: "Carpintería",
+        desc: "Cornisas perfil MDF",
+        unidad: "ml",
+        precio: 8500,
+      },
+      {
+        id: 77,
+        cat: "Carpintería",
+        desc: "Guardapolvos MDF",
+        unidad: "ml",
+        precio: 6500,
+      },
+      {
+        id: 80,
+        cat: "Instalaciones Eléctricas",
+        desc: "Punto de luz (foco LED empotrado)",
+        unidad: "unidad",
+        precio: 45e3,
+      },
+      {
+        id: 81,
+        cat: "Instalaciones Eléctricas",
+        desc: "Punto toma corriente triple 16A",
+        unidad: "unidad",
+        precio: 55e3,
+      },
+      {
+        id: 82,
+        cat: "Instalaciones Eléctricas",
+        desc: "Punto eléctrico completo (luz + toma)",
+        unidad: "unidad",
+        precio: 85e3,
+      },
+      {
+        id: 83,
+        cat: "Instalaciones Eléctricas",
+        desc: "Tablero distribución 8 circuitos",
+        unidad: "unidad",
+        precio: 28e4,
+      },
+      {
+        id: 84,
+        cat: "Instalaciones Eléctricas",
+        desc: "Instalación eléctrica completa vivienda 60m²",
+        unidad: "gl",
+        precio: 85e4,
+      },
+      {
+        id: 85,
+        cat: "Instalaciones Eléctricas",
+        desc: "Cambio foco LED (mantención)",
+        unidad: "unidad",
+        precio: 18e3,
+      },
+      {
+        id: 86,
+        cat: "Instalaciones Eléctricas",
+        desc: "Reparación toma corriente (mantención)",
+        unidad: "unidad",
+        precio: 22e3,
+      },
+      {
+        id: 90,
+        cat: "Instalaciones Sanitarias",
+        desc: "Punto agua fría PPR 20mm",
+        unidad: "unidad",
+        precio: 65e3,
+      },
+      {
+        id: 91,
+        cat: "Instalaciones Sanitarias",
+        desc: "Punto agua caliente PPR 20mm",
+        unidad: "unidad",
+        precio: 75e3,
+      },
+      {
+        id: 92,
+        cat: "Instalaciones Sanitarias",
+        desc: "Instalación sanitaria completa baño",
+        unidad: "gl",
+        precio: 45e4,
+      },
+      {
+        id: 93,
+        cat: "Instalaciones Sanitarias",
+        desc: "Artefactos sanitarios c/cubículos",
+        unidad: "unidad",
+        precio: 285e3,
+      },
+      {
+        id: 94,
+        cat: "Instalaciones Sanitarias",
+        desc: "Cambio llave de paso (mantención)",
+        unidad: "unidad",
+        precio: 35e3,
+      },
+      {
+        id: 95,
+        cat: "Gas",
+        desc: "Instalación gas 45KL (duchas y baño)",
+        unidad: "unidad",
+        precio: 112e4,
+      },
+      {
+        id: 96,
+        cat: "Gas",
+        desc: "Instalación cilindros 45KL casino",
+        unidad: "unidad",
+        precio: 355e4,
+      },
+      {
+        id: 97,
+        cat: "Gas",
+        desc: "Sello verde y prueba hermeticidad",
+        unidad: "unidad",
+        precio: 345e3,
+      },
+      {
+        id: 98,
+        cat: "Gas",
+        desc: "Gestión convenio Gasco",
+        unidad: "unidad",
+        precio: 3e5,
+      },
+      {
+        id: 100,
+        cat: "Demolición",
+        desc: "Demolición tabique (retiro escombros inc.)",
+        unidad: "m²",
+        precio: 18500,
+      },
+      {
+        id: 101,
+        cat: "Demolición",
+        desc: "Demolición cielo existente",
+        unidad: "m²",
+        precio: 12e3,
+      },
+      {
+        id: 102,
+        cat: "Demolición",
+        desc: "Demolición muro albañilería",
+        unidad: "m²",
+        precio: 32e3,
+      },
+      {
+        id: 103,
+        cat: "Demolición",
+        desc: "Demolición radier / solera",
+        unidad: "m²",
+        precio: 22e3,
+      },
+      {
+        id: 105,
+        cat: "Hojalatería",
+        desc: "Canal PVC 3m + bajante (ml ojalaería)",
+        unidad: "ml",
+        precio: 18500,
+      },
+      {
+        id: 106,
+        cat: "Hojalatería",
+        desc: "Ojalaería completa (canal + bajante + tapasol)",
+        unidad: "ml",
+        precio: 28e3,
+      },
+      {
+        id: 107,
+        cat: "Hojalatería",
+        desc: "Cambio canal y bajante existente",
+        unidad: "ml",
+        precio: 22e3,
+      },
+      {
+        id: 110,
+        cat: "Regularización",
+        desc: "Carpeta Seremi Salud",
+        unidad: "unidad",
+        precio: 15e4,
+      },
+      {
+        id: 111,
+        cat: "Regularización",
+        desc: "Carpeta Registro Patentes",
+        unidad: "unidad",
+        precio: 15e4,
+      },
+      {
+        id: 115,
+        cat: "Varios",
+        desc: "Reinstalación citófono",
+        unidad: "unidad",
+        precio: 28990,
+      },
+      {
+        id: 116,
+        cat: "Varios",
+        desc: "Celosías y cambio de ventanas",
+        unidad: "unidad",
+        precio: 64e4,
+      },
+      {
+        id: 120,
+        cat: "Estructuras Metálicas",
+        desc: "Reja tubular (fabricación + instalación)",
+        unidad: "m²",
+        precio: 85e3,
+      },
+      {
+        id: 121,
+        cat: "Estructuras Metálicas",
+        desc: "Protección ventana (fabricación + instalación)",
+        unidad: "m²",
+        precio: 53491,
+      },
+      {
+        id: 122,
+        cat: "Estructuras Metálicas",
+        desc: "Portón corredera (fabricación + instalación)",
+        unidad: "m²",
+        precio: 95e3,
+      },
+      {
+        id: 123,
+        cat: "Estructuras Metálicas",
+        desc: "Pilar tubular 100x100x3mm (fabricación + inst.)",
+        unidad: "unidad",
+        precio: 185e3,
+      },
+      {
+        id: 124,
+        cat: "Estructuras Metálicas",
+        desc: "Cierre perimetral tubular c/malla (fab. + inst.)",
+        unidad: "m²",
+        precio: 72e3,
+      },
+      {
+        id: 125,
+        cat: "Estructuras Metálicas",
+        desc: "Escalera metálica recta (fabricación + inst.)",
+        unidad: "ml",
+        precio: 185e3,
+      },
+      {
+        id: 126,
+        cat: "Estructuras Metálicas",
+        desc: "Baranda / pasamanos metálico (fab. + inst.)",
+        unidad: "ml",
+        precio: 85e3,
+      },
+      {
+        id: 127,
+        cat: "Estructuras Metálicas",
+        desc: "Portón abatible 2 hojas (fabricación + inst.)",
+        unidad: "m²",
+        precio: 88e3,
+      },
+      {
+        id: 128,
+        cat: "Estructuras Metálicas",
+        desc: "Cobertizo / pérgola metálica (fab. + inst.)",
+        unidad: "m²",
+        precio: 95e3,
+      },
+      {
+        id: 129,
+        cat: "Estructuras Metálicas",
+        desc: "Marco metálico puerta / ventana (fab. + inst.)",
+        unidad: "unidad",
+        precio: 125e3,
+      },
+      {
+        id: 130,
+        cat: "Mov. de Tierras",
+        desc: "Excavación manual fundaciones",
+        unidad: "m³",
+        precio: 45e3,
+      },
+      {
+        id: 131,
+        cat: "Mov. de Tierras",
+        desc: "Excavación mecánica (retroexcavadora)",
+        unidad: "m³",
+        precio: 22e3,
+      },
+      {
+        id: 132,
+        cat: "Mov. de Tierras",
+        desc: "Relleno compactado material selecto",
+        unidad: "m³",
+        precio: 38e3,
+      },
+      {
+        id: 133,
+        cat: "Mov. de Tierras",
+        desc: "Nivelación y compactación terreno",
+        unidad: "m²",
+        precio: 8500,
+      },
+      {
+        id: 134,
+        cat: "Mov. de Tierras",
+        desc: "Retiro y transporte de escombros",
+        unidad: "m³",
+        precio: 32e3,
+      },
+      {
+        id: 135,
+        cat: "Obras Exteriores",
+        desc: "Vereda hormigón H-20 7cm",
+        unidad: "m²",
+        precio: 28e3,
+      },
+      {
+        id: 136,
+        cat: "Obras Exteriores",
+        desc: "Adoquín peatonal 6cm c/base granular",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 137,
+        cat: "Obras Exteriores",
+        desc: "Solera prefabricada 15x30cm (inst.)",
+        unidad: "ml",
+        precio: 18500,
+      },
+      {
+        id: 138,
+        cat: "Obras Exteriores",
+        desc: "Estacionamiento hormigón H-20 10cm",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 139,
+        cat: "Obras Exteriores",
+        desc: "Muro contención hormigón armado H-25",
+        unidad: "m²",
+        precio: 165e3,
+      },
+      {
+        id: 140,
+        cat: "Obras Exteriores",
+        desc: "Cerco perimetral poste HEB c/cadena",
+        unidad: "ml",
+        precio: 42e3,
+      },
+      {
+        id: 141,
+        cat: "Climatización",
+        desc: "Inst. split 9.000 BTU frío/calor (subcontr.)",
+        unidad: "unidad",
+        precio: 285e3,
+      },
+      {
+        id: 142,
+        cat: "Climatización",
+        desc: "Inst. split 12.000 BTU frío/calor (subcontr.)",
+        unidad: "unidad",
+        precio: 35e4,
+      },
+      {
+        id: 143,
+        cat: "Climatización",
+        desc: "Inst. split 18.000 BTU frío/calor (subcontr.)",
+        unidad: "unidad",
+        precio: 45e4,
+      },
+      {
+        id: 144,
+        cat: "Climatización",
+        desc: "Extractor / ventilador baño c/ducto (inst.)",
+        unidad: "unidad",
+        precio: 85e3,
+      },
+      {
+        id: 145,
+        cat: "Seguridad",
+        desc: "Cámara CCTV IP 2MP exterior (instalación)",
+        unidad: "punto",
+        precio: 125e3,
+      },
+      {
+        id: 146,
+        cat: "Seguridad",
+        desc: "DVR 4 canales 1080p + disco 1TB (inst.)",
+        unidad: "unidad",
+        precio: 285e3,
+      },
+      {
+        id: 147,
+        cat: "Seguridad",
+        desc: "Alarma domiciliaria básica (inst.)",
+        unidad: "unidad",
+        precio: 185e3,
+      },
+      {
+        id: 148,
+        cat: "Seguridad",
+        desc: "Control acceso magnético puerta (inst.)",
+        unidad: "unidad",
+        precio: 225e3,
+      },
+      {
+        id: 150,
+        cat: "Hormigón Armado",
+        desc: "Pilar H-25 armado (cualquier sección)",
+        unidad: "m³",
+        precio: 285e3,
+      },
+      {
+        id: 151,
+        cat: "Hormigón Armado",
+        desc: "Pilar H-30 armado (cualquier sección)",
+        unidad: "m³",
+        precio: 31e4,
+      },
+      {
+        id: 152,
+        cat: "Hormigón Armado",
+        desc: "Viga H-25 armada (cualquier sección)",
+        unidad: "m³",
+        precio: 275e3,
+      },
+      {
+        id: 153,
+        cat: "Hormigón Armado",
+        desc: "Viga H-30 armada (cualquier sección)",
+        unidad: "m³",
+        precio: 295e3,
+      },
+      {
+        id: 154,
+        cat: "Hormigón Armado",
+        desc: "Losa H-25 armada",
+        unidad: "m³",
+        precio: 265e3,
+      },
+      {
+        id: 155,
+        cat: "Hormigón Armado",
+        desc: "Losa H-30 armada",
+        unidad: "m³",
+        precio: 285e3,
+      },
+      {
+        id: 156,
+        cat: "Hormigón Armado",
+        desc: "Fundación corrida H-25 armada",
+        unidad: "m³",
+        precio: 255e3,
+      },
+      {
+        id: 157,
+        cat: "Hormigón Armado",
+        desc: "Zapata aislada H-25 armada",
+        unidad: "m³",
+        precio: 265e3,
+      },
+      {
+        id: 158,
+        cat: "Hormigón Armado",
+        desc: "Moldaje metálico pilar (arriendo+inst.)",
+        unidad: "m²",
+        precio: 28e3,
+      },
+      {
+        id: 159,
+        cat: "Hormigón Armado",
+        desc: "Enfierradura habilitada y colocada",
+        unidad: "kg",
+        precio: 1850,
+      },
+      {
+        id: 160,
+        cat: "Instalaciones Sanitarias",
+        desc: "Cámara de inspección hormigón ø60cm",
+        unidad: "unidad",
+        precio: 285e3,
+      },
+      {
+        id: 161,
+        cat: "Instalaciones Sanitarias",
+        desc: "Colector PVC ø110mm instalado",
+        unidad: "ml",
+        precio: 28e3,
+      },
+      {
+        id: 162,
+        cat: "Instalaciones Sanitarias",
+        desc: "Colector PVC ø160mm instalado",
+        unidad: "ml",
+        precio: 38e3,
+      },
+      {
+        id: 163,
+        cat: "Instalaciones Sanitarias",
+        desc: "Red alcantarillado vivienda completa",
+        unidad: "gl",
+        precio: 85e4,
+      },
+      {
+        id: 164,
+        cat: "Instalaciones Sanitarias",
+        desc: "Trampa de grasa 30L (inst.)",
+        unidad: "unidad",
+        precio: 185e3,
+      },
+      {
+        id: 165,
+        cat: "Instalaciones Sanitarias",
+        desc: 'Llave de paso esfera 3/4" (reemplazo)',
+        unidad: "unidad",
+        precio: 28e3,
+      },
+      {
+        id: 166,
+        cat: "Instalaciones Sanitarias",
+        desc: 'Medidor agua fría 1/2" + conexión',
+        unidad: "unidad",
+        precio: 95e3,
+      },
+      {
+        id: 167,
+        cat: "Instalaciones Sanitarias",
+        desc: "Estanque elevado 500L + estructura",
+        unidad: "unidad",
+        precio: 385e3,
+      },
+      {
+        id: 170,
+        cat: "Obras Provisorias",
+        desc: "Bodega de faena 3x3m (arm.+desarm.)",
+        unidad: "unidad",
+        precio: 285e3,
+      },
+      {
+        id: 171,
+        cat: "Obras Provisorias",
+        desc: "Cerco perimetral obras (inst.+retiro)",
+        unidad: "ml",
+        precio: 12e3,
+      },
+      {
+        id: 172,
+        cat: "Obras Provisorias",
+        desc: "Letrero de obra 1.2x2.4m",
+        unidad: "unidad",
+        precio: 95e3,
+      },
+      {
+        id: 173,
+        cat: "Obras Provisorias",
+        desc: "Baño químico arrendado (mes)",
+        unidad: "mes",
+        precio: 95e3,
+      },
+      {
+        id: 174,
+        cat: "Obras Provisorias",
+        desc: "Instalación eléctrica provisoria faena",
+        unidad: "gl",
+        precio: 185e3,
+      },
+      {
+        id: 175,
+        cat: "Obras Provisorias",
+        desc: "Agua provisoria faena (conexión+punto)",
+        unidad: "gl",
+        precio: 125e3,
+      },
+      {
+        id: 180,
+        cat: "Pavimentos",
+        desc: "Asfalto frío reparación bacheo",
+        unidad: "m²",
+        precio: 28e3,
+      },
+      {
+        id: 181,
+        cat: "Pavimentos",
+        desc: "Sello bituminoso doble tratamiento",
+        unidad: "m²",
+        precio: 18500,
+      },
+      {
+        id: 182,
+        cat: "Pavimentos",
+        desc: "Carpeta asfáltica caliente 5cm (subcontr.)",
+        unidad: "m²",
+        precio: 22e3,
+      },
+      {
+        id: 183,
+        cat: "Pavimentos",
+        desc: "Base estabilizada granular 15cm",
+        unidad: "m²",
+        precio: 12e3,
+      },
+      {
+        id: 184,
+        cat: "Pavimentos",
+        desc: "Señalética horizontal pintura vial",
+        unidad: "ml",
+        precio: 8500,
+      },
+      {
+        id: 185,
+        cat: "Pavimentos",
+        desc: "Tachón reflectante (inst.)",
+        unidad: "unidad",
+        precio: 6500,
+      },
+      {
+        id: 186,
+        cat: "Pavimentos",
+        desc: "Berma HEB/piedra bolón",
+        unidad: "ml",
+        precio: 22e3,
+      },
+      {
+        id: 187,
+        cat: "Piscinas",
+        desc: "Excavación piscina (maquinaria)",
+        unidad: "m³",
+        precio: 22e3,
+      },
+      {
+        id: 188,
+        cat: "Piscinas",
+        desc: "Estructura hormigón armado piscina H-25",
+        unidad: "m³",
+        precio: 285e3,
+      },
+      {
+        id: 189,
+        cat: "Piscinas",
+        desc: "Impermeabilización piscina (membrana)",
+        unidad: "m²",
+        precio: 55e3,
+      },
+      {
+        id: 190,
+        cat: "Piscinas",
+        desc: "Revestimiento gresite/cerámico piscina",
+        unidad: "m²",
+        precio: 65e3,
+      },
+      {
+        id: 191,
+        cat: "Piscinas",
+        desc: "Sistema filtración + bomba (inst.)",
+        unidad: "unidad",
+        precio: 85e4,
+      },
+      {
+        id: 192,
+        cat: "Piscinas",
+        desc: "Iluminación subacuática LED (por punto)",
+        unidad: "unidad",
+        precio: 185e3,
+      },
+      {
+        id: 193,
+        cat: "Piscinas",
+        desc: "Escalera acero inoxidable piscina",
+        unidad: "unidad",
+        precio: 385e3,
+      },
+      {
+        id: 194,
+        cat: "Piscinas",
+        desc: "Vereda perimetral piscina hormigón",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 195,
+        cat: "Piscinas",
+        desc: "Canaleta perimetral piscina (drenaje)",
+        unidad: "ml",
+        precio: 28e3,
+      },
+      {
+        id: 196,
+        cat: "Áreas Exteriores",
+        desc: "Quincho estructura madera (fabricación+inst.)",
+        unidad: "m²",
+        precio: 185e3,
+      },
+      {
+        id: 197,
+        cat: "Áreas Exteriores",
+        desc: "Quincho estructura metálica (fabricación+inst.)",
+        unidad: "m²",
+        precio: 225e3,
+      },
+      {
+        id: 198,
+        cat: "Áreas Exteriores",
+        desc: "Cubierta zinc quincho/pérgola",
+        unidad: "m²",
+        precio: 42e3,
+      },
+      {
+        id: 199,
+        cat: "Áreas Exteriores",
+        desc: "Pérgola madera tratada (fabricación+inst.)",
+        unidad: "m²",
+        precio: 125e3,
+      },
+      {
+        id: 200,
+        cat: "Áreas Exteriores",
+        desc: "Deck madera tratada exterior",
+        unidad: "m²",
+        precio: 68e3,
+      },
+      {
+        id: 201,
+        cat: "Áreas Exteriores",
+        desc: "Deck composite (WPC) exterior",
+        unidad: "m²",
+        precio: 95e3,
+      },
+      {
+        id: 202,
+        cat: "Áreas Exteriores",
+        desc: "Terraza hormigón pulido exterior",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 203,
+        cat: "Áreas Exteriores",
+        desc: "Pavimento adoquín jardín c/base",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 204,
+        cat: "Áreas Exteriores",
+        desc: "Hormigón estampado/decorativo",
+        unidad: "m²",
+        precio: 48e3,
+      },
+      {
+        id: 205,
+        cat: "Áreas Exteriores",
+        desc: "Gravilla volcánica decorativa e=5cm",
+        unidad: "m²",
+        precio: 8500,
+      },
+      {
+        id: 206,
+        cat: "Áreas Exteriores",
+        desc: "Jardín (preparación terreno + pasto)",
+        unidad: "m²",
+        precio: 18500,
+      },
+      {
+        id: 207,
+        cat: "Áreas Exteriores",
+        desc: "Sistema riego automático (por zona)",
+        unidad: "unidad",
+        precio: 185e3,
+      },
+      {
+        id: 208,
+        cat: "Áreas Exteriores",
+        desc: "Muro jardín albañilería decorativa",
+        unidad: "m²",
+        precio: 58e3,
+      },
+      {
+        id: 209,
+        cat: "Áreas Exteriores",
+        desc: "Iluminación exterior (por punto)",
+        unidad: "unidad",
+        precio: 65e3,
+      },
+      {
+        id: 210,
+        cat: "Hormigón y Albañilería",
+        desc: "Revalses (moldaje contorno radier)",
+        unidad: "ml",
+        precio: 7700,
+      },
+      {
+        id: 211,
+        cat: "Hormigón Armado",
+        desc: "Enfierradura malla electrosoldada colocada",
+        unidad: "m²",
+        precio: 8800,
+      },
+      {
+        id: 212,
+        cat: "Impermeabilización",
+        desc: "Impermeabilización bajo radier (polietileno)",
+        unidad: "m²",
+        precio: 3850,
+      },
+      {
+        id: 213,
+        cat: "Mov. de Tierras",
+        desc: "Nivelación y compactación terreno (máquina)",
+        unidad: "m²",
+        precio: 3500,
+      },
+      {
+        id: 214,
+        cat: "Hormigón y Albañilería",
+        desc: "Revalses - solo mano de obra",
+        unidad: "ml",
+        precio: 3500,
+      },
+      {
+        id: 215,
+        cat: "Hormigón Armado",
+        desc: "Enfierradura malla electrosoldada - solo MO",
+        unidad: "m²",
+        precio: 3200,
+      },
+      {
+        id: 216,
+        cat: "Impermeabilización",
+        desc: "Impermeabilización bajo radier - solo MO",
+        unidad: "m²",
+        precio: 1500,
+      },
+      {
+        id: 217,
+        cat: "Mov. de Tierras",
+        desc: "Nivelación y compactación terreno - solo MO",
+        unidad: "m²",
+        precio: 1800,
+      },
+      {
+        id: 218,
+        cat: "Hormigón y Albañilería",
+        desc: "Radier H-20 e=8cm completo (exc+relleno+revalse+radier)",
+        unidad: "m²",
+        precio: 38e3,
+      },
+      {
+        id: 219,
+        cat: "Hormigón y Albañilería",
+        desc: "Radier H-25 e=10cm armado completo",
+        unidad: "m²",
+        precio: 52e3,
+      },
+      {
+        id: 220,
+        cat: "Instalaciones Sanitarias",
+        desc: "Ducha + grifería termostática (inst.)",
+        unidad: "unidad",
+        precio: 185e3,
+      },
+      {
+        id: 221,
+        cat: "Instalaciones Sanitarias",
+        desc: "Lavamanos + grifería (inst.)",
+        unidad: "unidad",
+        precio: 95e3,
+      },
+      {
+        id: 222,
+        cat: "Instalaciones Sanitarias",
+        desc: "WC con bidet incluido (inst.)",
+        unidad: "unidad",
+        precio: 145e3,
+      },
+      {
+        id: 223,
+        cat: "Instalaciones Eléctricas",
+        desc: "Cableado principal 4mm² (ml)",
+        unidad: "ml",
+        precio: 4500,
+      },
+      {
+        id: 300,
+        cat: "Aislación Térmica",
+        desc: "Sistema EIFS completo (EPS 50mm + malla + basecoat)",
+        unidad: "m²",
+        precio: 28500,
+      },
+      {
+        id: 301,
+        cat: "Revestimientos Exteriores",
+        desc: "Instalación Siding Fibrocemento c/barrera humedad",
+        unidad: "m²",
+        precio: 22000,
+      },
+      {
+        id: 302,
+        cat: "Cubiertas y Techumbres",
+        desc: "Cubierta Teja Asfáltica s/OSB 11mm",
+        unidad: "m²",
+        precio: 35000,
+      },
+      {
+        id: 303,
+        cat: "Cubiertas y Techumbres",
+        desc: "Cubierta plancha PV4 (Galvalume)",
+        unidad: "m²",
+        precio: 28000,
+      },
+      {
+        id: 304,
+        cat: "Cierres Perimetrales",
+        desc: "Pandereta Bulldog h=1.8m (placa vibrada)",
+        unidad: "ml",
+        precio: 32000,
+      },
+      {
+        id: 305,
+        cat: "Cierres Perimetrales",
+        desc: "Cierre Acmafor 3D 2.5m verde c/postes",
+        unidad: "ml",
+        precio: 38000,
+      },
+      {
+        id: 306,
+        cat: "Hormigón y Albañilería",
+        desc: "Muro ladrillo Princesa 14x19x29",
+        unidad: "m²",
+        precio: 55000,
+      },
+      {
+        id: 307,
+        cat: "Pisos y Revestimientos",
+        desc: "Piso vinílico SPC click 4mm",
+        unidad: "m²",
+        precio: 25000,
+      },
+      {
+        id: 308,
+        cat: "Pisos y Revestimientos",
+        desc: "Porcelanato rectificado 60x120cm",
+        unidad: "m²",
+        precio: 45000,
+      },
+      {
+        id: 310,
+        cat: "Servicios Generales",
+        desc: "Visita Técnica / Diagnóstico",
+        unidad: "gl",
+        precio: 25000,
+      },
+      {
+        id: 311,
+        cat: "Mantención Techumbres",
+        desc: "Reparación filtración techumbre (parche/tapagoteras)",
+        unidad: "gl",
+        precio: 45000,
+      },
+      {
+        id: 312,
+        cat: "Mantención Techumbres",
+        desc: "Limpieza y destape de canaletas y bajantes",
+        unidad: "ml",
+        precio: 2500,
+      },
+      {
+        id: 313,
+        cat: "Mantención Pintura",
+        desc: "Lijado y pintura esmalte/anticorrosivo reja o portón",
+        unidad: "m²",
+        precio: 12500,
+      },
+      {
+        id: 314,
+        cat: "Mantención Sanitaria",
+        desc: "Cambio herrajes / flotador estanque WC",
+        unidad: "unidad",
+        precio: 25000,
+      },
+      {
+        id: 315,
+        cat: "Mantención Sanitaria",
+        desc: "Destape de WC o cámara de inspección domiciliaria",
+        unidad: "gl",
+        precio: 45000,
+      },
+      {
+        id: 316,
+        cat: "Mantención Sanitaria",
+        desc: "Cambio de sifón lavamanos / lavaplatos",
+        unidad: "unidad",
+        precio: 18500,
+      },
+      {
+        id: 317,
+        cat: "Mantención Eléctrica",
+        desc: "Detección cortocircuito y revisión tablero",
+        unidad: "gl",
+        precio: 35000,
+      },
+      {
+        id: 318,
+        cat: "Mantención Eléctrica",
+        desc: "Cambio de enchufe/interruptor en mal estado",
+        unidad: "unidad",
+        precio: 12500,
+      },
+      {
+        id: 319,
+        cat: "Reparaciones Generales",
+        desc: "Cambio de chapa/cerradura puerta",
+        unidad: "unidad",
+        precio: 28000,
+      },
+      {
+        id: 320,
+        cat: "Reparaciones Generales",
+        desc: "Reparación parche yeso/empaste muro dañado",
+        unidad: "m²",
+        precio: 15000,
+      },
+    ],
+    Rn = [
+      {
+        id: 1,
+        clienteId: 1,
+        descripcion: "Remodelación oficinas primer piso",
+        fecha: "2026-01-15",
+        items: [
+          {
+            desc: "Pintura muros interiores (2 manos)",
+            cant: 80,
+            unidad: "m²",
+            precio: 5500,
+          },
+          {
+            desc: "Cielo americano con estructura metálica",
+            cant: 40,
+            unidad: "m²",
+            precio: 28e3,
+          },
+          { desc: "Piso flotante AC5", cant: 40, unidad: "m²", precio: 18500 },
+          {
+            desc: "Instalación eléctrica (puntos de luz)",
+            cant: 8,
+            unidad: "unidad",
+            precio: 45e3,
+          },
+          {
+            id: 400,
+            cat: "Aislación",
+            nombre: "Placa Poliestireno EPS Alta Densidad 50mm",
+            unidad: "m²",
+            precio: 4500,
+          },
+          {
+            id: 401,
+            cat: "Aislación",
+            nombre: "Malla fibra vidrio EIFS rollo 50m",
+            unidad: "rollo",
+            precio: 22000,
+          },
+          {
+            id: 402,
+            cat: "Aislación",
+            nombre: "Basecoat / Adhesivo EIFS 25kg",
+            unidad: "saco",
+            precio: 9500,
+          },
+          {
+            id: 403,
+            cat: "Aislación",
+            nombre: "Finish coat texturado EIFS (tineta)",
+            unidad: "tineta",
+            precio: 38000,
+          },
+          {
+            id: 404,
+            cat: "Revestimientos",
+            nombre: "Siding fibrocemento 190x3000mm",
+            unidad: "unidad",
+            precio: 4200,
+          },
+          {
+            id: 405,
+            cat: "Cubiertas y Techumbres",
+            nombre: "Teja asfáltica paquete 3m²",
+            unidad: "paquete",
+            precio: 28500,
+          },
+          {
+            id: 406,
+            cat: "Cubiertas y Techumbres",
+            nombre: "Plancha PV4 prepintada ml",
+            unidad: "ml",
+            precio: 7800,
+          },
+          {
+            id: 407,
+            cat: "Obras Exteriores",
+            nombre: "Placa hormigón vibrado 50x200cm",
+            unidad: "unidad",
+            precio: 6500,
+          },
+          {
+            id: 408,
+            cat: "Obras Exteriores",
+            nombre: "Poste hormigón pandereta tipo H",
+            unidad: "unidad",
+            precio: 12500,
+          },
+          {
+            id: 409,
+            cat: "Obras Exteriores",
+            nombre: "Panel Acmafor 3D verde 2.08x2.5m",
+            unidad: "unidad",
+            precio: 35000,
+          },
+          {
+            id: 410,
+            cat: "Obras Exteriores",
+            nombre: "Poste Acmafor verde c/fijaciones",
+            unidad: "unidad",
+            precio: 18500,
+          },
+          {
+            id: 411,
+            cat: "Hormigón y Albañilería",
+            nombre: "Ladrillo Princesa 14x19x29cm",
+            unidad: "unidad",
+            precio: 750,
+          },
+          {
+            id: 420,
+            cat: "Cubiertas y Techumbres",
+            nombre: "Tapagoteras asfáltico/acrílico 1kg",
+            unidad: "unidad",
+            precio: 8500,
+          },
+          {
+            id: 421,
+            cat: "Cubiertas y Techumbres",
+            nombre: "Membrana asfáltica aluminizada adhesiva 10cm x 10m",
+            unidad: "rollo",
+            precio: 12500,
+          },
+          {
+            id: 422,
+            cat: "Instalaciones Sanitarias",
+            nombre: "Kit herrajes WC universal",
+            unidad: "unidad",
+            precio: 7500,
+          },
+          {
+            id: 423,
+            cat: "Instalaciones Sanitarias",
+            nombre: "Sifón corrugado lavamanos universal",
+            unidad: "unidad",
+            precio: 3500,
+          },
+          {
+            id: 424,
+            cat: "Instalaciones Sanitarias",
+            nombre: "Silicona antihongos baño/cocina",
+            unidad: "tubo",
+            precio: 4200,
+          },
+          {
+            id: 425,
+            cat: "Instalaciones Eléctricas",
+            nombre: "Módulo enchufe 10A/16A + placa",
+            unidad: "unidad",
+            precio: 4500,
+          },
+          {
+            id: 426,
+            cat: "Carpintería",
+            nombre: "Cerradura sobreponer/embutir estándar",
+            unidad: "unidad",
+            precio: 14500,
+          },
+          {
+            id: 427,
+            cat: "Pintura",
+            nombre: "Convertidor de óxido 1L",
+            unidad: "litro",
+            precio: 9500,
+          },
+          {
+            id: 428,
+            cat: "Varios",
+            nombre: "Viáticos y Movilización / Bencina",
+            unidad: "gl",
+            precio: 15000,
+          },
+        ],
+        descuento: !1,
+        estado: "Completado",
+        notas: "⚠️ EJEMPLO — reemplaza con tu información real",
+        _esDemo: !0,
+      },
+      {
+        id: 2,
+        clienteId: 2,
+        descripcion: "Construcción muro perimetral con portón",
+        fecha: "2026-02-03",
+        items: [
+          {
+            desc: "Muro albañilería bloque 15x20x40",
+            cant: 35,
+            unidad: "m²",
+            precio: 48e3,
+          },
+          {
+            desc: "Solera hormigón prefabricada",
+            cant: 28,
+            unidad: "ml",
+            precio: 8500,
+          },
+          {
+            desc: "Portón metálico corredero 4m",
+            cant: 1,
+            unidad: "unidad",
+            precio: 38e4,
+          },
+          {
+            desc: "Pintura esmalte anticorrosivo",
+            cant: 12,
+            unidad: "m²",
+            precio: 9800,
+          },
+        ],
+        descuento: !0,
+        estado: "En progreso",
+        notas: "⚠️ EJEMPLO — reemplaza con tu información real",
+        _esDemo: !0,
+      },
+      {
+        id: 3,
+        clienteId: 3,
+        descripcion: "Reparación techumbre zinc ondulado",
+        fecha: "2026-02-20",
+        items: [
+          {
+            desc: "Retiro cubierta zinc existente",
+            cant: 45,
+            unidad: "m²",
+            precio: 3500,
+          },
+          {
+            desc: "Zinc ondulado calibre 0.35mm",
+            cant: 45,
+            unidad: "m²",
+            precio: 14500,
+          },
+          { desc: "Cumbrera zinc 50cm", cant: 12, unidad: "ml", precio: 6800 },
+          {
+            desc: "Tornillos autorroscantes con sello",
+            cant: 1,
+            unidad: "gl",
+            precio: 45e3,
+          },
+        ],
+        descuento: !1,
+        sinIva: !1,
+        estado: "Pendiente",
+        notas: "⚠️ EJEMPLO — reemplaza con tu información real",
+        _esDemo: !0,
+      },
+      {
+        id: 4,
+        clienteId: 1,
+        descripcion: "Pavimentación patio trasero hormigón",
+        fecha: "2026-03-01",
+        items: [
+          {
+            desc: "Excavación y nivelación terreno",
+            cant: 60,
+            unidad: "m²",
+            precio: 8500,
+          },
+          {
+            desc: "Relleno y compactación base granular",
+            cant: 60,
+            unidad: "m²",
+            precio: 6500,
+          },
+          {
+            desc: "Radier hormigón H-25 e=10cm",
+            cant: 60,
+            unidad: "m²",
+            precio: 28500,
+          },
+          { desc: "Enfierradura", cant: 60, unidad: "m²", precio: 4500 },
+        ],
+        descuento: !1,
+        estado: "Pendiente",
+        notas: "⚠️ EJEMPLO — reemplaza con tu información real",
+        _esDemo: !0,
+      },
+      {
+        id: 226,
+        cat: "Pisos y Revestimientos",
+        desc: "Cambio piso Vinílico (instalación)",
+        unidad: "m²",
+        precio: 40500,
+      },
+      {
+        id: 227,
+        cat: "Pisos y Revestimientos",
+        desc: "Cambio piso Vinílico (inc. retiro piso existente)",
+        unidad: "m²",
+        precio: 46e3,
+      },
+    ],
+    Qi = [
+      {
+        id: 1,
+        cat: "Pintura",
+        nombre: "Pintura látex interior 4L",
+        unidad: "galón",
+        precio: 8500,
+      },
+      {
+        id: 2,
+        cat: "Pintura",
+        nombre: "Pintura látex exterior 4L",
+        unidad: "galón",
+        precio: 12900,
+      },
+      {
+        id: 3,
+        cat: "Pintura",
+        nombre: "Pintura esmalte al agua 4L",
+        unidad: "galón",
+        precio: 15900,
+      },
+      {
+        id: 4,
+        cat: "Pintura",
+        nombre: "Pintura anticorrosiva 4L",
+        unidad: "galón",
+        precio: 18500,
+      },
+      {
+        id: 5,
+        cat: "Pintura",
+        nombre: "Sellador base agua 4L",
+        unidad: "galón",
+        precio: 6900,
+      },
+      {
+        id: 6,
+        cat: "Pintura",
+        nombre: "Pintura caucho acrílica exterior 4L",
+        unidad: "galón",
+        precio: 14900,
+      },
+      {
+        id: 7,
+        cat: "Pintura",
+        nombre: "Rodillo lana 23cm",
+        unidad: "unidad",
+        precio: 3500,
+      },
+      {
+        id: 8,
+        cat: "Pintura",
+        nombre: "Rodillo espuma 23cm",
+        unidad: "unidad",
+        precio: 2200,
+      },
+      {
+        id: 9,
+        cat: "Pintura",
+        nombre: 'Brocha 4"',
+        unidad: "unidad",
+        precio: 2800,
+      },
+      {
+        id: 10,
+        cat: "Pintura",
+        nombre: 'Brocha 2"',
+        unidad: "unidad",
+        precio: 1800,
+      },
+      {
+        id: 11,
+        cat: "Pintura",
+        nombre: "Bandeja para rodillo",
+        unidad: "unidad",
+        precio: 1500,
+      },
+      {
+        id: 12,
+        cat: "Pintura",
+        nombre: "Lija grano 80-120",
+        unidad: "unidad",
+        precio: 650,
+      },
+      {
+        id: 13,
+        cat: "Pintura",
+        nombre: "Lija grano 180-220 (fino)",
+        unidad: "unidad",
+        precio: 750,
+      },
+      {
+        id: 14,
+        cat: "Pintura",
+        nombre: "Aguarrás litro",
+        unidad: "litro",
+        uc: { q: 1, label: "botellas 1L" },
+        precio: 1800,
+      },
+      {
+        id: 15,
+        cat: "Pintura",
+        nombre: "Cinta de enmascarar 48mm",
+        unidad: "rollo",
+        precio: 1200,
+      },
+      {
+        id: 16,
+        cat: "Pintura",
+        nombre: 'Espátula metálica 4"',
+        unidad: "unidad",
+        precio: 2200,
+      },
+      {
+        id: 17,
+        cat: "Pintura",
+        nombre: "Masilla plástica 1kg",
+        unidad: "unidad",
+        precio: 3800,
+      },
+      {
+        id: 20,
+        cat: "Hormigón y Albañilería",
+        nombre: "Cemento portland 25kg",
+        unidad: "saco",
+        precio: 8900,
+      },
+      {
+        id: 21,
+        cat: "Hormigón y Albañilería",
+        nombre: "Arena fina (estuco/revoque)",
+        unidad: "m³",
+        precio: 35e3,
+      },
+      {
+        id: 22,
+        cat: "Hormigón y Albañilería",
+        nombre: "Arena gruesa",
+        unidad: "m³",
+        precio: 42e3,
+      },
+      {
+        id: 23,
+        cat: "Hormigón y Albañilería",
+        nombre: 'Gravilla 3/8"',
+        unidad: "m³",
+        precio: 45e3,
+      },
+      {
+        id: 24,
+        cat: "Hormigón y Albañilería",
+        nombre: 'Gravilla 3/4"',
+        unidad: "m³",
+        precio: 48e3,
+      },
+      {
+        id: 25,
+        cat: "Hormigón y Albañilería",
+        nombre: "Piedra bolón",
+        unidad: "m³",
+        precio: 52e3,
+      },
+      {
+        id: 26,
+        cat: "Hormigón y Albañilería",
+        nombre: "Hormigón premezclado H-20",
+        unidad: "m³",
+        precio: 98e3,
+      },
+      {
+        id: 27,
+        cat: "Hormigón y Albañilería",
+        nombre: "Hormigón premezclado H-25",
+        unidad: "m³",
+        precio: 112e3,
+      },
+      {
+        id: 300,
+        cat: "Hormigón y Albañilería",
+        nombre: "Hormigón premezclado H-30",
+        unidad: "m³",
+        precio: 125e3,
+      },
+      {
+        id: 28,
+        cat: "Hormigón y Albañilería",
+        nombre: "Bloque hormigón 39x19x14cm",
+        unidad: "unidad",
+        precio: 1850,
+      },
+      {
+        id: 29,
+        cat: "Hormigón y Albañilería",
+        nombre: "Bloque hormigón 39x19x19cm",
+        unidad: "unidad",
+        precio: 2200,
+      },
+      {
+        id: 30,
+        cat: "Hormigón y Albañilería",
+        nombre: "Ladrillo fiscal 24x11x5.5cm",
+        unidad: "unidad",
+        precio: 320,
+      },
+      {
+        id: 31,
+        cat: "Hormigón y Albañilería",
+        nombre: "Mortero de pega 25kg",
+        unidad: "saco",
+        precio: 4200,
+      },
+      {
+        id: 32,
+        cat: "Hormigón y Albañilería",
+        nombre: "Yeso 25kg",
+        unidad: "saco",
+        precio: 5900,
+      },
+      {
+        id: 33,
+        cat: "Hormigón y Albañilería",
+        nombre: "Estuco exterior 30kg",
+        unidad: "saco",
+        precio: 9800,
+      },
+      {
+        id: 34,
+        cat: "Hormigón y Albañilería",
+        nombre: "Estuco interior yeso 30kg",
+        unidad: "saco",
+        precio: 8500,
+      },
+      {
+        id: 35,
+        cat: "Hormigón y Albañilería",
+        nombre: "Aditivo adherente PVA 1L",
+        unidad: "litro",
+        precio: 3200,
+      },
+      {
+        id: 36,
+        cat: "Hormigón y Albañilería",
+        nombre: "Malla electrosoldada 5mm 2.4x6m",
+        unidad: "paño",
+        precio: 28500,
+      },
+      {
+        id: 37,
+        cat: "Hormigón y Albañilería",
+        nombre: "Fierro corrugado 10mm barra 12m",
+        unidad: "barra",
+        precio: 18500,
+      },
+      {
+        id: 38,
+        cat: "Hormigón y Albañilería",
+        nombre: "Fierro corrugado 8mm barra 12m",
+        unidad: "barra",
+        precio: 12800,
+      },
+      {
+        id: 39,
+        cat: "Hormigón y Albañilería",
+        nombre: "Fierro corrugado 6mm barra 12m",
+        unidad: "barra",
+        precio: 7900,
+      },
+      {
+        id: 40,
+        cat: "Hormigón y Albañilería",
+        nombre: "Alambre galvanizado N16 1kg",
+        unidad: "kg",
+        precio: 2100,
+      },
+      {
+        id: 41,
+        cat: "Hormigón y Albañilería",
+        nombre: "Desmoldante encofrado 1L",
+        unidad: "litro",
+        precio: 3200,
+      },
+      {
+        id: 42,
+        cat: "Hormigón y Albañilería",
+        nombre: "Plastificante hormigón 1L",
+        unidad: "litro",
+        precio: 4500,
+      },
+      {
+        id: 50,
+        cat: "Metalcon Estructural",
+        nombre: "Perfil C (montante) 100x50mm e=0.85mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 2800,
+      },
+      {
+        id: 51,
+        cat: "Metalcon Estructural",
+        nombre: "Perfil C (montante) 150x50mm e=1.0mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 3900,
+      },
+      {
+        id: 52,
+        cat: "Metalcon Estructural",
+        nombre: "Perfil C (montante) 150x50mm e=1.5mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 5200,
+      },
+      {
+        id: 53,
+        cat: "Metalcon Estructural",
+        nombre: "Perfil C (montante) 200x50mm e=2.0mm",
+        unidad: "ml",
+        precio: 7900,
+      },
+      {
+        id: 54,
+        cat: "Metalcon Estructural",
+        nombre: "Canal U (solera) 100x50mm e=0.85mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 2400,
+      },
+      {
+        id: 55,
+        cat: "Metalcon Estructural",
+        nombre: "Canal U (solera) 150x50mm e=1.0mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 3400,
+      },
+      {
+        id: 56,
+        cat: "Metalcon Estructural",
+        nombre: "Canal U (solera) 150x50mm e=1.5mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 5e3,
+      },
+      {
+        id: 57,
+        cat: "Metalcon Estructural",
+        nombre: "Canal U (solera) 200x50mm e=2.0mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 7100,
+      },
+      {
+        id: 58,
+        cat: "Metalcon Estructural",
+        nombre: "Omega 70x30mm e=0.85mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 1800,
+      },
+      {
+        id: 59,
+        cat: "Metalcon Estructural",
+        nombre: "Omega 100x30mm e=0.85mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 2200,
+      },
+      {
+        id: 60,
+        cat: "Metalcon Estructural",
+        nombre: "Omega 100x30mm e=1.5mm (estructural)",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 3200,
+      },
+      {
+        id: 61,
+        cat: "Metalcon Estructural",
+        nombre: "Correa C 150x50mm e=1.5mm (techo)",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 5200,
+      },
+      {
+        id: 62,
+        cat: "Metalcon Estructural",
+        nombre: "Correa C 200x50mm e=2.0mm (techo)",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 7800,
+      },
+      {
+        id: 63,
+        cat: "Metalcon Estructural",
+        nombre: "Viga cajón 2xC 150mm soldada",
+        unidad: "ml",
+        uc: { q: 3, label: "piezas 3m" },
+        precio: 11200,
+      },
+      {
+        id: 64,
+        cat: "Metalcon Estructural",
+        nombre: "Viga cajón 2xC 200mm soldada",
+        unidad: "ml",
+        uc: { q: 3, label: "piezas 3m" },
+        precio: 16500,
+      },
+      {
+        id: 65,
+        cat: "Metalcon Estructural",
+        nombre: "Perfil Z 150mm e=2.0mm",
+        unidad: "ml",
+        precio: 6400,
+      },
+      {
+        id: 66,
+        cat: "Metalcon Estructural",
+        nombre: "Perfil angular acero 50x50x3mm",
+        unidad: "ml",
+        precio: 3900,
+      },
+      {
+        id: 67,
+        cat: "Metalcon Estructural",
+        nombre: "Placa base acero 200x200x6mm",
+        unidad: "unidad",
+        precio: 8500,
+      },
+      {
+        id: 68,
+        cat: "Metalcon Estructural",
+        nombre: "Perno ancla 12x150mm c/tuerca",
+        unidad: "unidad",
+        precio: 1200,
+      },
+      {
+        id: 69,
+        cat: "Metalcon Estructural",
+        nombre: 'Tornillo hex autoperf. 12x1" c/and. c500',
+        unidad: "caja",
+        precio: 9800,
+      },
+      {
+        id: 70,
+        cat: "Metalcon Estructural",
+        nombre: "Tornillo wafer autoperf. 4.2x12mm c500",
+        unidad: "caja",
+        precio: 6500,
+      },
+      {
+        id: 71,
+        cat: "Metalcon Estructural",
+        nombre: "Tornillo wafer autoperf. 4.2x25mm c500",
+        unidad: "caja",
+        precio: 7200,
+      },
+      {
+        id: 72,
+        cat: "Metalcon Estructural",
+        nombre: "Remache ciego 4.8x12mm c1000",
+        unidad: "caja",
+        precio: 4800,
+      },
+      {
+        id: 73,
+        cat: "Metalcon Estructural",
+        nombre: "Espuma poliuretano pistola 750ml",
+        unidad: "frasco",
+        precio: 4200,
+      },
+      {
+        id: 80,
+        cat: "Tabiquería",
+        nombre: "Placa yeso cartón 10mm 1.2x2.4m",
+        unidad: "paño",
+        precio: 9800,
+      },
+      {
+        id: 81,
+        cat: "Tabiquería",
+        nombre: "Placa yeso cartón 13mm 1.2x2.4m",
+        unidad: "paño",
+        precio: 11500,
+      },
+      {
+        id: 82,
+        cat: "Tabiquería",
+        nombre: "Placa yeso RH humedad 12.5mm 1.2x2.4m",
+        unidad: "paño",
+        precio: 14500,
+      },
+      {
+        id: 83,
+        cat: "Tabiquería",
+        nombre: "Placa yeso RF fuego 15mm 1.2x2.4m",
+        unidad: "paño",
+        precio: 16800,
+      },
+      {
+        id: 84,
+        cat: "Tabiquería",
+        nombre: "Volcanita 10mm 1.2x2.4m",
+        unidad: "paño",
+        precio: 8900,
+      },
+      {
+        id: 85,
+        cat: "Tabiquería",
+        nombre: "Masilla empaste fino 5kg",
+        unidad: "balde",
+        precio: 4500,
+      },
+      {
+        id: 86,
+        cat: "Tabiquería",
+        nombre: "Cinta papel yeso 50m",
+        unidad: "rollo",
+        precio: 3200,
+      },
+      {
+        id: 87,
+        cat: "Tabiquería",
+        nombre: "Tornillo yeso punta fina 3.5x25 c500",
+        unidad: "caja",
+        precio: 4800,
+      },
+      {
+        id: 88,
+        cat: "Tabiquería",
+        nombre: "Perfil angulo yeso 25x25mm 3m",
+        unidad: "unidad",
+        precio: 1800,
+      },
+      {
+        id: 89,
+        cat: "Tabiquería",
+        nombre: "Perfil J terminacion yeso 3m",
+        unidad: "unidad",
+        precio: 2200,
+      },
+      {
+        id: 90,
+        cat: "Tabiquería",
+        nombre: "Malla fibra vidrio 4x4 rollo 50m",
+        unidad: "rollo",
+        precio: 12900,
+      },
+      {
+        id: 95,
+        cat: "Aislación",
+        nombre: "Lana mineral 50mm (tabique/cielo)",
+        unidad: "m²",
+        precio: 4200,
+      },
+      {
+        id: 96,
+        cat: "Aislación",
+        nombre: "Lana mineral 100mm (muro exterior)",
+        unidad: "m²",
+        precio: 8500,
+      },
+      {
+        id: 97,
+        cat: "Aislación",
+        nombre: "Lana vidrio 50mm",
+        unidad: "m²",
+        precio: 3800,
+      },
+      {
+        id: 98,
+        cat: "Aislación",
+        nombre: "Poliestireno EPS 50mm",
+        unidad: "m²",
+        precio: 3800,
+      },
+      {
+        id: 99,
+        cat: "Aislación",
+        nombre: "Poliestireno EPS 100mm",
+        unidad: "m²",
+        precio: 7200,
+      },
+      {
+        id: 100,
+        cat: "Aislación",
+        nombre: "Barrera de vapor polietileno 200um",
+        unidad: "m²",
+        precio: 650,
+      },
+      {
+        id: 101,
+        cat: "Aislación",
+        nombre: "Membrana deltaforce 1.5mm",
+        unidad: "m²",
+        precio: 5800,
+      },
+      {
+        id: 105,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Plancha zinc ondulado 0.35mm",
+        unidad: "m²",
+        precio: 4800,
+      },
+      {
+        id: 106,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Plancha zinc ondulado 0.5mm",
+        unidad: "m²",
+        precio: 7200,
+      },
+      {
+        id: 107,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Plancha zinc teja española 0.35mm",
+        unidad: "m²",
+        precio: 9800,
+      },
+      {
+        id: 108,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Plancha policarbonato acanalado 6mm",
+        unidad: "m²",
+        precio: 12900,
+      },
+      {
+        id: 109,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Plancha policarbonato alveolar 8mm",
+        unidad: "m²",
+        precio: 18500,
+      },
+      {
+        id: 110,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Cumbrera zinc 0.35mm x2.4m",
+        unidad: "unidad",
+        precio: 5800,
+      },
+      {
+        id: 111,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Limatesa zinc 2.4m",
+        unidad: "unidad",
+        precio: 6200,
+      },
+      {
+        id: 112,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Tapasol zinc (ml)",
+        unidad: "ml",
+        precio: 2800,
+      },
+      {
+        id: 113,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Papel fieltro 30lb rollo 1x20m",
+        unidad: "rollo",
+        precio: 18900,
+      },
+      {
+        id: 114,
+        cat: "Cubiertas y Techumbres",
+        nombre: 'Tornillo autoperf. 12x1" c/goma c500',
+        unidad: "caja",
+        precio: 8500,
+      },
+      {
+        id: 115,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Canal PVC aguas lluvia 3m",
+        unidad: "unidad",
+        precio: 8500,
+      },
+      {
+        id: 116,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Bajante PVC 75mm 3m",
+        unidad: "unidad",
+        precio: 5900,
+      },
+      {
+        id: 117,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Abrazadera bajante 75mm",
+        unidad: "unidad",
+        precio: 1200,
+      },
+      {
+        id: 118,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Membrana substrato textil 1.5mm",
+        unidad: "m²",
+        precio: 12500,
+      },
+      {
+        id: 119,
+        cat: "Cubiertas y Techumbres",
+        nombre: "Impermeab. techumbre acrílico 4L",
+        unidad: "litro",
+        precio: 6800,
+      },
+      {
+        id: 120,
+        cat: "Madera Estructural",
+        nombre: 'Polin madera pino 2x2" cepillado',
+        unidad: "ml",
+        precio: 1900,
+      },
+      {
+        id: 121,
+        cat: "Madera Estructural",
+        nombre: 'Correa pino 2x3" cepillada',
+        unidad: "ml",
+        precio: 2200,
+      },
+      {
+        id: 122,
+        cat: "Madera Estructural",
+        nombre: 'Madera pino 1x4" cepillada',
+        unidad: "ml",
+        precio: 1800,
+      },
+      {
+        id: 123,
+        cat: "Madera Estructural",
+        nombre: 'Madera pino 2x4" cepillada',
+        unidad: "ml",
+        precio: 2600,
+      },
+      {
+        id: 124,
+        cat: "Madera Estructural",
+        nombre: 'Madera pino 2x6" cepillada',
+        unidad: "ml",
+        precio: 3800,
+      },
+      {
+        id: 125,
+        cat: "Madera Estructural",
+        nombre: 'Madera pino 2x8" cepillada',
+        unidad: "ml",
+        precio: 5200,
+      },
+      {
+        id: 126,
+        cat: "Madera Estructural",
+        nombre: "Cercha pino 6m span (par armado)",
+        unidad: "par",
+        precio: 48e3,
+      },
+      {
+        id: 127,
+        cat: "Madera Estructural",
+        nombre: "Cercha pino 8m span (par armado)",
+        unidad: "par",
+        precio: 68e3,
+      },
+      {
+        id: 128,
+        cat: "Madera Estructural",
+        nombre: "Placa OSB 11mm 1.22x2.44m",
+        unidad: "paño",
+        precio: 28500,
+      },
+      {
+        id: 129,
+        cat: "Madera Estructural",
+        nombre: "Placa OSB 15mm 1.22x2.44m",
+        unidad: "paño",
+        precio: 34500,
+      },
+      {
+        id: 130,
+        cat: "Madera Estructural",
+        nombre: "Terciado estructural 12mm 1.22x2.44",
+        unidad: "paño",
+        precio: 22500,
+      },
+      {
+        id: 131,
+        cat: "Madera Estructural",
+        nombre: "Anclaje metalico tipo L 100mm",
+        unidad: "unidad",
+        precio: 1800,
+      },
+      {
+        id: 132,
+        cat: "Madera Estructural",
+        nombre: "Anclaje tipo T (caballete cercha)",
+        unidad: "unidad",
+        precio: 2400,
+      },
+      {
+        id: 133,
+        cat: "Madera Estructural",
+        nombre: 'Clavo galvanizado 3" caja 1kg',
+        unidad: "caja",
+        precio: 2800,
+      },
+      {
+        id: 134,
+        cat: "Madera Estructural",
+        nombre: 'Clavo galvanizado 4" caja 1kg',
+        unidad: "caja",
+        precio: 3200,
+      },
+      {
+        id: 135,
+        cat: "Madera Estructural",
+        nombre: 'Tornillo madera 3" caja 100un',
+        unidad: "caja",
+        precio: 4500,
+      },
+      {
+        id: 140,
+        cat: "Pisos y Revestimientos",
+        nombre: "Piso flotante laminado AC4",
+        unidad: "m²",
+        precio: 7900,
+      },
+      {
+        id: 141,
+        cat: "Pisos y Revestimientos",
+        nombre: "Piso flotante laminado AC5",
+        unidad: "m²",
+        precio: 12500,
+      },
+      {
+        id: 142,
+        cat: "Pisos y Revestimientos",
+        nombre: "Cerámico piso 45x45cm",
+        unidad: "m²",
+        precio: 8500,
+      },
+      {
+        id: 143,
+        cat: "Pisos y Revestimientos",
+        nombre: "Porcelanato 60x60cm",
+        unidad: "m²",
+        precio: 15900,
+      },
+      {
+        id: 144,
+        cat: "Pisos y Revestimientos",
+        nombre: "Cerámico muro 30x60cm",
+        unidad: "m²",
+        precio: 9800,
+      },
+      {
+        id: 145,
+        cat: "Pisos y Revestimientos",
+        nombre: "Pegamento ceramico 25kg",
+        unidad: "saco",
+        precio: 8900,
+      },
+      {
+        id: 146,
+        cat: "Pisos y Revestimientos",
+        nombre: "Fragua gris 5kg",
+        unidad: "saco",
+        precio: 3900,
+      },
+      {
+        id: 147,
+        cat: "Pisos y Revestimientos",
+        nombre: "Fragua blanca 5kg",
+        unidad: "saco",
+        precio: 4200,
+      },
+      {
+        id: 148,
+        cat: "Pisos y Revestimientos",
+        nombre: "Zocalo ceramico 8x33cm",
+        unidad: "ml",
+        precio: 2800,
+      },
+      {
+        id: 149,
+        cat: "Pisos y Revestimientos",
+        nombre: "Polietileno 0.2mm barrera vapor",
+        unidad: "m²",
+        precio: 450,
+      },
+      {
+        id: 150,
+        cat: "Pisos y Revestimientos",
+        nombre: "Espuma acustica piso 3mm",
+        unidad: "m²",
+        precio: 1200,
+      },
+      {
+        id: 151,
+        cat: "Pisos y Revestimientos",
+        nombre: "Adhesivo parquet gal",
+        unidad: "galón",
+        precio: 12500,
+      },
+      {
+        id: 152,
+        cat: "Pisos y Revestimientos",
+        nombre: "Nivelador piso autonivelante 25kg",
+        unidad: "saco",
+        precio: 14500,
+      },
+      {
+        id: 155,
+        cat: "Carpintería",
+        nombre: "Puerta interior HDF 80x200cm",
+        unidad: "unidad",
+        precio: 68e3,
+      },
+      {
+        id: 156,
+        cat: "Carpintería",
+        nombre: "Puerta exterior madera solida 90x200cm",
+        unidad: "unidad",
+        precio: 185e3,
+      },
+      {
+        id: 157,
+        cat: "Carpintería",
+        nombre: "Marco puerta pino 80cm completo",
+        unidad: "unidad",
+        precio: 32e3,
+      },
+      {
+        id: 158,
+        cat: "Carpintería",
+        nombre: "Chapa embutida cromada",
+        unidad: "unidad",
+        precio: 18500,
+      },
+      {
+        id: 159,
+        cat: "Carpintería",
+        nombre: 'Bisagra 3.5" par',
+        unidad: "par",
+        precio: 2800,
+      },
+      {
+        id: 160,
+        cat: "Carpintería",
+        nombre: "Ventana corredera PVC 100x100cm",
+        unidad: "unidad",
+        precio: 95e3,
+      },
+      {
+        id: 161,
+        cat: "Carpintería",
+        nombre: "Ventana proyectante PVC 60x60cm",
+        unidad: "unidad",
+        precio: 65e3,
+      },
+      {
+        id: 162,
+        cat: "Carpintería",
+        nombre: "Ventana termopanel PVC 100x100cm",
+        unidad: "unidad",
+        precio: 145e3,
+      },
+      {
+        id: 163,
+        cat: "Carpintería",
+        nombre: "Perfil terminacion aluminio 40mm",
+        unidad: "ml",
+        precio: 3200,
+      },
+      {
+        id: 164,
+        cat: "Carpintería",
+        nombre: "Cornisa MDF 60mm",
+        unidad: "ml",
+        precio: 2800,
+      },
+      {
+        id: 165,
+        cat: "Carpintería",
+        nombre: "Guardapolvos MDF 70mm",
+        unidad: "ml",
+        precio: 2200,
+      },
+      {
+        id: 166,
+        cat: "Carpintería",
+        nombre: "Silicona neutra 300ml",
+        unidad: "cartucho",
+        precio: 3800,
+      },
+      {
+        id: 170,
+        cat: "Impermeabilización",
+        nombre: "Membrana asfáltica autoprot. 4mm",
+        unidad: "m²",
+        precio: 18900,
+      },
+      {
+        id: 171,
+        cat: "Impermeabilización",
+        nombre: "Membrana liquida imperm. 4kg",
+        unidad: "balde",
+        precio: 14500,
+      },
+      {
+        id: 172,
+        cat: "Impermeabilización",
+        nombre: "Impermeab. cristalizante 25kg",
+        unidad: "saco",
+        precio: 28500,
+      },
+      {
+        id: 173,
+        cat: "Impermeabilización",
+        nombre: "Geomembrana HDPE 1mm",
+        unidad: "m²",
+        precio: 8900,
+      },
+      {
+        id: 174,
+        cat: "Impermeabilización",
+        nombre: "Sikaflex 1a 300ml",
+        unidad: "cartucho",
+        precio: 4800,
+      },
+      {
+        id: 175,
+        cat: "Impermeabilización",
+        nombre: "Sellante poliuretano 300ml",
+        unidad: "cartucho",
+        precio: 4500,
+      },
+      {
+        id: 176,
+        cat: "Impermeabilización",
+        nombre: "Manta drenante geodren 1m",
+        unidad: "m²",
+        precio: 7800,
+      },
+      {
+        id: 180,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Cable THHN 2.5mm²",
+        unidad: "ml",
+        precio: 890,
+      },
+      {
+        id: 181,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Cable THHN 4mm²",
+        unidad: "ml",
+        precio: 1450,
+      },
+      {
+        id: 182,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Cable THHN 6mm²",
+        unidad: "ml",
+        precio: 2100,
+      },
+      {
+        id: 183,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Cable THHN 10mm²",
+        unidad: "ml",
+        precio: 3200,
+      },
+      {
+        id: 184,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Interruptor simple 10A",
+        unidad: "unidad",
+        precio: 4900,
+      },
+      {
+        id: 185,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Toma corriente triple 16A",
+        unidad: "unidad",
+        precio: 6800,
+      },
+      {
+        id: 186,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Foco LED 9W E27",
+        unidad: "unidad",
+        precio: 3500,
+      },
+      {
+        id: 187,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Foco LED downlight 12W empotrable",
+        unidad: "unidad",
+        precio: 8500,
+      },
+      {
+        id: 188,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Luminaria LED panel 24W",
+        unidad: "unidad",
+        precio: 18900,
+      },
+      {
+        id: 189,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Barra LED 60cm",
+        unidad: "unidad",
+        precio: 9500,
+      },
+      {
+        id: 190,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Caja derivacion 10x10cm",
+        unidad: "unidad",
+        precio: 2200,
+      },
+      {
+        id: 191,
+        cat: "Instalaciones Eléctricas",
+        nombre: 'Cañeria EMT 3/4" barra 3m',
+        unidad: "barra",
+        precio: 5800,
+      },
+      {
+        id: 192,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Ducto plastico canaleta 40x25mm",
+        unidad: "ml",
+        precio: 1800,
+      },
+      {
+        id: 193,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Breaker 20A",
+        unidad: "unidad",
+        precio: 8900,
+      },
+      {
+        id: 194,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Interruptor diferencial 25A 30mA",
+        unidad: "unidad",
+        precio: 28500,
+      },
+      {
+        id: 195,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Tablero 4 circuitos",
+        unidad: "unidad",
+        precio: 32e3,
+      },
+      {
+        id: 196,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Tablero 8 circuitos",
+        unidad: "unidad",
+        precio: 58e3,
+      },
+      {
+        id: 197,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Tablero 12 circuitos",
+        unidad: "unidad",
+        precio: 85e3,
+      },
+      {
+        id: 198,
+        cat: "Instalaciones Eléctricas",
+        nombre: "Cinta aislante 18m",
+        unidad: "rollo",
+        precio: 1200,
+      },
+      {
+        id: 200,
+        cat: "Instalaciones Sanitarias",
+        nombre: 'Tubo PVC desague 4"',
+        unidad: "ml",
+        precio: 4800,
+      },
+      {
+        id: 201,
+        cat: "Instalaciones Sanitarias",
+        nombre: 'Tubo PVC desague 2"',
+        unidad: "ml",
+        precio: 2900,
+      },
+      {
+        id: 202,
+        cat: "Instalaciones Sanitarias",
+        nombre: 'Codo PVC 90° 4"',
+        unidad: "unidad",
+        precio: 2200,
+      },
+      {
+        id: 203,
+        cat: "Instalaciones Sanitarias",
+        nombre: 'Union PVC 4"',
+        unidad: "unidad",
+        precio: 1800,
+      },
+      {
+        id: 204,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Tubo PPR 20mm agua fria/cal.",
+        unidad: "ml",
+        uc: { q: 6, label: "barras 6m" },
+        precio: 2800,
+      },
+      {
+        id: 205,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Codo PPR 90° 20mm",
+        unidad: "unidad",
+        precio: 1200,
+      },
+      {
+        id: 206,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Valvula esfera PPR 20mm",
+        unidad: "unidad",
+        precio: 8900,
+      },
+      {
+        id: 207,
+        cat: "Instalaciones Sanitarias",
+        nombre: "WC completo con cisterna",
+        unidad: "unidad",
+        precio: 89e3,
+      },
+      {
+        id: 208,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Lavamanos + griferia mezcladora",
+        unidad: "unidad",
+        precio: 65e3,
+      },
+      {
+        id: 209,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Ducha + mezcladora",
+        unidad: "unidad",
+        precio: 75e3,
+      },
+      {
+        id: 210,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Tina bañera 1.5m",
+        unidad: "unidad",
+        precio: 185e3,
+      },
+      {
+        id: 211,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Sifon ducha PVC",
+        unidad: "unidad",
+        precio: 8500,
+      },
+      {
+        id: 212,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Cinta teflon",
+        unidad: "unidad",
+        precio: 650,
+      },
+      {
+        id: 213,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Pegamento PVC 1/4 galon",
+        unidad: "frasco",
+        precio: 4900,
+      },
+      {
+        id: 214,
+        cat: "Instalaciones Sanitarias",
+        nombre: 'Llave de paso 1/2"',
+        unidad: "unidad",
+        precio: 8200,
+      },
+      {
+        id: 215,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Calefont gas 10L",
+        unidad: "unidad",
+        precio: 189e3,
+      },
+      {
+        id: 220,
+        cat: "Gas",
+        nombre: 'Tubo cobre 1/2"',
+        unidad: "ml",
+        precio: 4200,
+      },
+      {
+        id: 221,
+        cat: "Gas",
+        nombre: 'Tubo cobre 3/4"',
+        unidad: "ml",
+        precio: 6800,
+      },
+      {
+        id: 222,
+        cat: "Gas",
+        nombre: 'Codo cobre 90° 1/2"',
+        unidad: "unidad",
+        precio: 1800,
+      },
+      {
+        id: 223,
+        cat: "Gas",
+        nombre: 'Te cobre 1/2"',
+        unidad: "unidad",
+        precio: 2400,
+      },
+      {
+        id: 224,
+        cat: "Gas",
+        nombre: "Soldadura plata varilla",
+        unidad: "unidad",
+        precio: 3500,
+      },
+      {
+        id: 225,
+        cat: "Gas",
+        nombre: 'Valvula esfera 1/2"',
+        unidad: "unidad",
+        precio: 8900,
+      },
+      {
+        id: 226,
+        cat: "Gas",
+        nombre: "Regulador presion alta",
+        unidad: "unidad",
+        precio: 28e3,
+      },
+      {
+        id: 227,
+        cat: "Gas",
+        nombre: "Manguera flexible 60cm",
+        unidad: "unidad",
+        precio: 12500,
+      },
+      {
+        id: 228,
+        cat: "Gas",
+        nombre: "Detector gas GLP",
+        unidad: "unidad",
+        precio: 35e3,
+      },
+      {
+        id: 230,
+        cat: "Estructuras Metálicas",
+        nombre: "Tubo cuadrado acero 40x40x2mm",
+        unidad: "ml",
+        uc: { q: 6, label: "barras 6m" },
+        precio: 4200,
+      },
+      {
+        id: 231,
+        cat: "Estructuras Metálicas",
+        nombre: "Tubo cuadrado acero 20x20x1.5mm",
+        unidad: "ml",
+        uc: { q: 6, label: "barras 6m" },
+        precio: 2600,
+      },
+      {
+        id: 232,
+        cat: "Estructuras Metálicas",
+        nombre: 'Planchuela acero 1/8" x 1"',
+        unidad: "ml",
+        precio: 1800,
+      },
+      {
+        id: 233,
+        cat: "Estructuras Metálicas",
+        nombre: "Malla electrosoldada 5x5 3mm",
+        unidad: "m²",
+        precio: 6900,
+      },
+      {
+        id: 234,
+        cat: "Estructuras Metálicas",
+        nombre: 'Electrodo 6013 3/32" 1kg',
+        unidad: "kg",
+        precio: 4200,
+      },
+      {
+        id: 235,
+        cat: "Estructuras Metálicas",
+        nombre: 'Disco corte metal 4.5"',
+        unidad: "unidad",
+        precio: 900,
+      },
+      {
+        id: 236,
+        cat: "Estructuras Metálicas",
+        nombre: 'Disco desbaste metal 4.5"',
+        unidad: "unidad",
+        precio: 1600,
+      },
+      {
+        id: 237,
+        cat: "Estructuras Metálicas",
+        nombre: "Tubo rectangular acero 100x50x3mm",
+        unidad: "ml",
+        uc: { q: 6, label: "barras 6m" },
+        precio: 6200,
+      },
+      {
+        id: 238,
+        cat: "Estructuras Metálicas",
+        nombre: "Tubo cuadrado acero 100x100x3mm",
+        unidad: "ml",
+        uc: { q: 6, label: "barras 6m" },
+        precio: 8900,
+      },
+      {
+        id: 239,
+        cat: "Estructuras Metálicas",
+        nombre: "Ángulo acero 50x50x5mm",
+        unidad: "ml",
+        uc: { q: 6, label: "barras 6m" },
+        precio: 4800,
+      },
+      {
+        id: 240,
+        cat: "Estructuras Metálicas",
+        nombre: "Plato base 150x150x10mm",
+        unidad: "unidad",
+        precio: 3500,
+      },
+      {
+        id: 241,
+        cat: "Estructuras Metálicas",
+        nombre: "Perno anclaje M16 L=300mm",
+        unidad: "unidad",
+        precio: 2200,
+      },
+      {
+        id: 242,
+        cat: "Estructuras Metálicas",
+        nombre: "Pintura anticorrosiva 1L",
+        unidad: "litro",
+        precio: 8500,
+      },
+      {
+        id: 243,
+        cat: "Estructuras Metálicas",
+        nombre: "Pintura esmalte sintético 1L",
+        unidad: "litro",
+        precio: 7800,
+      },
+      {
+        id: 244,
+        cat: "Estructuras Metálicas",
+        nombre: "Thinner estándar 1L",
+        unidad: "litro",
+        precio: 1800,
+      },
+      {
+        id: 245,
+        cat: "Estructuras Metálicas",
+        nombre: 'Tornillo autorroscante 1/4x1" caja 100',
+        unidad: "caja",
+        precio: 3200,
+      },
+      {
+        id: 246,
+        cat: "Mov. de Tierras",
+        nombre: "Material selecto puesto en obra",
+        unidad: "m³",
+        precio: 18e3,
+      },
+      {
+        id: 247,
+        cat: "Mov. de Tierras",
+        nombre: "Hormigón de limpieza H-5",
+        unidad: "m³",
+        precio: 58e3,
+      },
+      {
+        id: 248,
+        cat: "Mov. de Tierras",
+        nombre: "Plancha metálica entibación 2x1m",
+        unidad: "unidad",
+        precio: 35e3,
+      },
+      {
+        id: 249,
+        cat: "Obras Exteriores",
+        nombre: "Hormigón H-20 premezclado",
+        unidad: "m³",
+        precio: 95e3,
+      },
+      {
+        id: 250,
+        cat: "Obras Exteriores",
+        nombre: "Adoquín peatonal 6cm 20x10cm",
+        unidad: "m²",
+        precio: 8500,
+      },
+      {
+        id: 251,
+        cat: "Obras Exteriores",
+        nombre: "Solera prefabricada 15x30x100cm",
+        unidad: "unidad",
+        precio: 4200,
+      },
+      {
+        id: 252,
+        cat: "Obras Exteriores",
+        nombre: "Base granular compactada",
+        unidad: "m³",
+        precio: 22e3,
+      },
+      {
+        id: 253,
+        cat: "Obras Exteriores",
+        nombre: "Malla Acma 5x5mm C188 1.5x6m",
+        unidad: "unidad",
+        precio: 28500,
+      },
+      {
+        id: 254,
+        cat: "Obras Exteriores",
+        nombre: 'Piedra chancada 3/4"',
+        unidad: "m³",
+        precio: 38e3,
+      },
+      {
+        id: 255,
+        cat: "Obras Exteriores",
+        nombre: "Arena lavada",
+        unidad: "m³",
+        precio: 28e3,
+      },
+      {
+        id: 256,
+        cat: "Obras Exteriores",
+        nombre: "Poste HEB 80 h=1.8m",
+        unidad: "unidad",
+        precio: 18500,
+      },
+      {
+        id: 257,
+        cat: "Climatización",
+        nombre: "Split 9.000 BTU equipo (sumin.)",
+        unidad: "unidad",
+        precio: 28e4,
+      },
+      {
+        id: 258,
+        cat: "Climatización",
+        nombre: "Split 12.000 BTU equipo (sumin.)",
+        unidad: "unidad",
+        precio: 38e4,
+      },
+      {
+        id: 259,
+        cat: "Climatización",
+        nombre: "Split 18.000 BTU equipo (sumin.)",
+        unidad: "unidad",
+        precio: 52e4,
+      },
+      {
+        id: 260,
+        cat: "Climatización",
+        nombre: "Extractor baño 150mm c/ducto flex.",
+        unidad: "unidad",
+        precio: 35e3,
+      },
+      {
+        id: 261,
+        cat: "Climatización",
+        nombre: 'Tubería cobre A/C 1/4"+1/2" ml',
+        unidad: "ml",
+        precio: 4800,
+      },
+      {
+        id: 262,
+        cat: "Climatización",
+        nombre: "Cable eléctrico A/C 4mm² ml",
+        unidad: "ml",
+        precio: 2200,
+      },
+      {
+        id: 263,
+        cat: "Seguridad",
+        nombre: "Cámara IP 2MP exterior domo",
+        unidad: "unidad",
+        precio: 45e3,
+      },
+      {
+        id: 264,
+        cat: "Seguridad",
+        nombre: "DVR 4 canales 1080p",
+        unidad: "unidad",
+        precio: 85e3,
+      },
+      {
+        id: 265,
+        cat: "Seguridad",
+        nombre: "Disco duro 1TB CCTV",
+        unidad: "unidad",
+        precio: 65e3,
+      },
+      {
+        id: 266,
+        cat: "Seguridad",
+        nombre: "Cable UTP Cat5e ml",
+        unidad: "ml",
+        precio: 850,
+      },
+      {
+        id: 267,
+        cat: "Seguridad",
+        nombre: "Kit alarma domiciliaria básica",
+        unidad: "unidad",
+        precio: 95e3,
+      },
+      {
+        id: 268,
+        cat: "Seguridad",
+        nombre: "Cerradura magnética 180kg",
+        unidad: "unidad",
+        precio: 48e3,
+      },
+      {
+        id: 269,
+        cat: "Seguridad",
+        nombre: "Botón de salida + fuente poder",
+        unidad: "unidad",
+        precio: 22e3,
+      },
+      {
+        id: 270,
+        cat: "Hormigón Armado",
+        nombre: "Hormigón H-25 premezclado",
+        unidad: "m³",
+        precio: 105e3,
+      },
+      {
+        id: 271,
+        cat: "Hormigón Armado",
+        nombre: "Fierro corrugado A630-420H ø8mm ml",
+        unidad: "ml",
+        precio: 650,
+      },
+      {
+        id: 272,
+        cat: "Hormigón Armado",
+        nombre: "Acero corrugado (kg) — barras (refuerzo)",
+        unidad: "kg",
+        precio: 980,
+      },
+      {
+        id: 273,
+        cat: "Hormigón Armado",
+        nombre: "Acero corrugado (kg) — longitudinal",
+        unidad: "kg",
+        precio: 1420,
+      },
+      {
+        id: 274,
+        cat: "Hormigón Armado",
+        nombre: "Acero corrugado (kg) — estribos",
+        unidad: "kg",
+        precio: 2500,
+      },
+      {
+        id: 275,
+        cat: "Hormigón Armado",
+        nombre: "Moldaje (tablero fenólico/metal)",
+        unidad: "m²",
+        precio: 12e3,
+      },
+      {
+        id: 276,
+        cat: "Hormigón Armado",
+        nombre: "Madera / puntales para moldaje",
+        unidad: "ml",
+        precio: 1800,
+      },
+      {
+        id: 277,
+        cat: "Hormigón Armado",
+        nombre: "Puntales metálicos arriendo (mes)",
+        unidad: "unidad",
+        precio: 4500,
+      },
+      {
+        id: 278,
+        cat: "Hormigón Armado",
+        nombre: "Desmoldante encofrado 1L",
+        unidad: "litro",
+        precio: 900,
+      },
+      {
+        id: 279,
+        cat: "Hormigón Armado",
+        nombre: "Separador plástico hormigón",
+        unidad: "unidad",
+        precio: 42,
+      },
+      {
+        id: 280,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Cámara inspección ø60cm c/tapa",
+        unidad: "unidad",
+        precio: 85e3,
+      },
+      {
+        id: 281,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Tubo PVC alcantarillado ø110mm 3m",
+        unidad: "unidad",
+        precio: 8900,
+      },
+      {
+        id: 282,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Tubo PVC alcantarillado ø160mm 3m",
+        unidad: "unidad",
+        precio: 14500,
+      },
+      {
+        id: 283,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Codo PVC 90° ø110mm",
+        unidad: "unidad",
+        precio: 3200,
+      },
+      {
+        id: 284,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Trampa grasa 30L PVC",
+        unidad: "unidad",
+        precio: 48e3,
+      },
+      {
+        id: 285,
+        cat: "Instalaciones Sanitarias",
+        nombre: "Estanque elevado 500L c/tapa",
+        unidad: "unidad",
+        precio: 78e3,
+      },
+      {
+        id: 286,
+        cat: "Instalaciones Sanitarias",
+        nombre: 'Llave paso esfera 3/4" latón',
+        unidad: "unidad",
+        precio: 12500,
+      },
+      {
+        id: 287,
+        cat: "Obras Provisorias",
+        nombre: "Panel OSB 11mm 1.22x2.44m",
+        unidad: "unidad",
+        precio: 18500,
+      },
+      {
+        id: 288,
+        cat: "Obras Provisorias",
+        nombre: "Pino 2x3 3m",
+        unidad: "unidad",
+        precio: 4200,
+      },
+      {
+        id: 289,
+        cat: "Obras Provisorias",
+        nombre: "Malla raschel verde 50% 1.8m (ml)",
+        unidad: "ml",
+        precio: 1800,
+      },
+      {
+        id: 290,
+        cat: "Obras Provisorias",
+        nombre: "Letrero obra lona impresa 1.2x2.4m",
+        unidad: "unidad",
+        precio: 35e3,
+      },
+      {
+        id: 291,
+        cat: "Obras Provisorias",
+        nombre: "Baño químico arrendado mensual",
+        unidad: "mes",
+        precio: 95e3,
+      },
+      {
+        id: 292,
+        cat: "Obras Provisorias",
+        nombre: "Cable eléctrico 2.5mm² (ml)",
+        unidad: "ml",
+        precio: 1200,
+      },
+      {
+        id: 293,
+        cat: "Obras Provisorias",
+        nombre: "Tablero eléctrico provisorio 4 circuitos",
+        unidad: "unidad",
+        precio: 45e3,
+      },
+      {
+        id: 294,
+        cat: "Pavimentos",
+        nombre: "Asfalto frío reparación 25kg",
+        unidad: "saco",
+        precio: 18e3,
+      },
+      {
+        id: 295,
+        cat: "Pavimentos",
+        nombre: "Emulsión asfáltica CRS-1 200L",
+        unidad: "bidon",
+        precio: 185e3,
+      },
+      {
+        id: 296,
+        cat: "Pavimentos",
+        nombre: "Gravilla 6/10mm piedra partida",
+        unidad: "m³",
+        precio: 42e3,
+      },
+      {
+        id: 297,
+        cat: "Pavimentos",
+        nombre: "Pintura vial blanca 4L",
+        unidad: "galón",
+        precio: 28e3,
+      },
+      {
+        id: 298,
+        cat: "Pavimentos",
+        nombre: "Tachón reflectante blanco/amarillo",
+        unidad: "unidad",
+        precio: 4500,
+      },
+      {
+        id: 299,
+        cat: "Pavimentos",
+        nombre: "Base granular estabilizada (puesto obra)",
+        unidad: "m³",
+        precio: 32e3,
+      },
+      {
+        id: 301,
+        cat: "Pisos y Revestimientos",
+        nombre: "Piso vinílico click Sodimac 4mm",
+        unidad: "m²",
+        precio: 25e3,
+      },
+      {
+        id: 302,
+        cat: "Pisos y Revestimientos",
+        nombre: "Adhesivo acrílico piso vinílico 4L",
+        unidad: "galón",
+        precio: 8e3,
+      },
+      {
+        id: 303,
+        cat: "Pisos y Revestimientos",
+        nombre: "Guardapolvo laminado vinílico",
+        unidad: "ml",
+        precio: 3500,
+      },
+      {
+        id: 304,
+        cat: "Pisos y Revestimientos",
+        nombre: "Cubrejunta aluminio piso",
+        unidad: "ml",
+        precio: 4200,
+      },
+      {
+        id: 305,
+        cat: "Pisos y Revestimientos",
+        nombre: "Bolsa escombros retiro piso",
+        unidad: "un",
+        precio: 6e3,
+      },
+    ],
+    Ip = {
+      Pintura: 45,
+      "Hormigón y Albañilería": 50,
+      Techumbres: 55,
+      "Pisos y Revestimientos": 48,
+      Carpintería: 50,
+      "Instalaciones Eléctricas": 65,
+      "Instalaciones Sanitarias": 60,
+      Gas: 65,
+      "Aislación y Tabiquería": 50,
+      Tabiquería: 50,
+      "Metalcon Estructural": 52,
+      "Madera Estructural": 55,
+      "Estructuras Metálicas": 60,
+      Impermeabilización: 45,
+      Demolición: 88,
+      Varios: 50,
+      "Mov. de Tierras": 88,
+      "Obras Exteriores": 55,
+      Climatización: 40,
+      Seguridad: 35,
+      "Hormigón Armado": 55,
+      Sanitario: 60,
+      "Obras Provisorias": 70,
+      Pavimentos: 50,
+    },
+    Ai = [
+      {
+        id: 1,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Radier hormigón H-20",
+        categoria: "Hormigón y Albañilería",
+        unidad: "m³",
+        catalogId: 10,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 9,
+        dotacion: 2,
+        materiales: [
+          { materialId: 26, cantidad: 1.05 },
+          { materialId: 36, cantidad: 0.18 },
+          { materialId: 39, cantidad: 0.25 },
+          { materialId: 22, cantidad: 0.4 },
+          {
+            id: 100,
+            tipo: "Nueva Construcción",
+            estructura: "General",
+            nombre: "Sistema EIFS completo (EPS 50mm + malla + basecoat)",
+            categoria: "Aislación Térmica",
+            unidad: "m²",
+            catalogId: 300,
+            esSubcontrato: false,
+            precioSubcontrato: 0,
+            pctMO: 45,
+            pctGG: 12,
+            pctUtilidad: 15,
+            rendimiento: 6,
+            dotacion: 2,
+            materiales: [
+              { materialId: 400, cantidad: 1.05 },
+              { materialId: 401, cantidad: 1.1 },
+              { materialId: 402, cantidad: 0.4 },
+              { materialId: 403, cantidad: 0.1 },
+              {
+                id: 105,
+                tipo: "Mantención",
+                estructura: "General",
+                nombre: "Visita Técnica / Diagnóstico",
+                categoria: "Servicios Generales",
+                unidad: "gl",
+                catalogId: 310,
+                esSubcontrato: false,
+                precioSubcontrato: 0,
+                pctMO: 70,
+                pctGG: 15,
+                pctUtilidad: 15,
+                rendimiento: 1,
+                dotacion: 1,
+                materiales: [{ materialId: 428, cantidad: 1 }],
+              },
+              {
+                id: 106,
+                tipo: "Mantención",
+                estructura: "General",
+                nombre: "Reparación filtración techumbre (parche/tapagoteras)",
+                categoria: "Mantención Techumbres",
+                unidad: "gl",
+                catalogId: 311,
+                esSubcontrato: false,
+                precioSubcontrato: 0,
+                pctMO: 60,
+                pctGG: 10,
+                pctUtilidad: 15,
+                rendimiento: 2,
+                dotacion: 1,
+                materiales: [
+                  { materialId: 420, cantidad: 1 },
+                  { materialId: 421, cantidad: 0.2 },
+                  { materialId: 428, cantidad: 0.5 },
+                ],
+              },
+              {
+                id: 107,
+                tipo: "Mantención",
+                estructura: "General",
+                nombre: "Cambio herrajes / flotador estanque WC",
+                categoria: "Mantención Sanitaria",
+                unidad: "unidad",
+                catalogId: 314,
+                esSubcontrato: false,
+                precioSubcontrato: 0,
+                pctMO: 65,
+                pctGG: 10,
+                pctUtilidad: 15,
+                rendimiento: 2,
+                dotacion: 1,
+                materiales: [
+                  { materialId: 422, cantidad: 1 },
+                  { materialId: 424, cantidad: 0.2 },
+                ],
+              },
+              {
+                id: 108,
+                tipo: "Mantención",
+                estructura: "General",
+                nombre: "Cambio de chapa/cerradura puerta",
+                categoria: "Reparaciones Generales",
+                unidad: "unidad",
+                catalogId: 319,
+                esSubcontrato: false,
+                precioSubcontrato: 0,
+                pctMO: 65,
+                pctGG: 10,
+                pctUtilidad: 15,
+                rendimiento: 1.5,
+                dotacion: 1,
+                materiales: [{ materialId: 426, cantidad: 1 }],
+              },
+              {
+                id: 109,
+                tipo: "Mantención",
+                estructura: "General",
+                nombre: "Cambio de enchufe/interruptor en mal estado",
+                categoria: "Mantención Eléctrica",
+                unidad: "unidad",
+                catalogId: 318,
+                esSubcontrato: false,
+                precioSubcontrato: 0,
+                pctMO: 70,
+                pctGG: 10,
+                pctUtilidad: 15,
+                rendimiento: 3,
+                dotacion: 1,
+                materiales: [{ materialId: 425, cantidad: 1 }],
+              },
+            ],
+          },
+          {
+            id: 101,
+            tipo: "Nueva Construcción",
+            estructura: "General",
+            nombre: "Instalación Siding Fibrocemento c/barrera humedad",
+            categoria: "Revestimientos Exteriores",
+            unidad: "m²",
+            catalogId: 301,
+            esSubcontrato: false,
+            precioSubcontrato: 0,
+            pctMO: 50,
+            pctGG: 10,
+            pctUtilidad: 15,
+            rendimiento: 8,
+            dotacion: 2,
+            materiales: [
+              { materialId: 404, cantidad: 1.8 },
+              { materialId: 113, cantidad: 0.05 },
+              { materialId: 70, cantidad: 0.05 },
+            ],
+          },
+          {
+            id: 102,
+            tipo: "Nueva Construcción",
+            estructura: "General",
+            nombre: "Pandereta Bulldog h=1.8m (placa vibrada)",
+            categoria: "Cierres Perimetrales",
+            unidad: "ml",
+            catalogId: 304,
+            esSubcontrato: false,
+            precioSubcontrato: 0,
+            pctMO: 55,
+            pctGG: 10,
+            pctUtilidad: 15,
+            rendimiento: 10,
+            dotacion: 3,
+            materiales: [
+              { materialId: 407, cantidad: 1.8 },
+              { materialId: 408, cantidad: 0.5 },
+              { materialId: 26, cantidad: 0.05 },
+            ],
+          },
+          {
+            id: 103,
+            tipo: "Nueva Construcción",
+            estructura: "General",
+            nombre: "Cubierta Teja Asfáltica s/OSB 11mm",
+            categoria: "Techumbres",
+            unidad: "m²",
+            catalogId: 302,
+            esSubcontrato: false,
+            precioSubcontrato: 0,
+            pctMO: 45,
+            pctGG: 10,
+            pctUtilidad: 15,
+            rendimiento: 12,
+            dotacion: 2,
+            materiales: [
+              { materialId: 405, cantidad: 0.35 },
+              { materialId: 128, cantidad: 0.36 },
+              { materialId: 113, cantidad: 0.06 },
+              { materialId: 134, cantidad: 0.02 },
+            ],
+          },
+          {
+            id: 104,
+            tipo: "Nueva Construcción",
+            estructura: "General",
+            nombre: "Muro ladrillo Princesa 14x19x29",
+            categoria: "Hormigón y Albañilería",
+            unidad: "m²",
+            catalogId: 306,
+            esSubcontrato: false,
+            precioSubcontrato: 0,
+            pctMO: 55,
+            pctGG: 12,
+            pctUtilidad: 15,
+            rendimiento: 5,
+            dotacion: 2,
+            materiales: [
+              { materialId: 411, cantidad: 17 },
+              { materialId: 31, cantidad: 0.6 },
+            ],
+          },
+        ],
+      },
+      {
+        id: 2,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Radier hormigón H-25",
+        categoria: "Hormigón y Albañilería",
+        unidad: "m³",
+        catalogId: 11,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 2,
+        materiales: [
+          { materialId: 27, cantidad: 1.05 },
+          { materialId: 36, cantidad: 0.18 },
+          { materialId: 39, cantidad: 0.25 },
+          { materialId: 22, cantidad: 0.4 },
+        ],
+      },
+      {
+        id: 3,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Fundación corrida H-20 (ml)",
+        categoria: "Hormigón y Albañilería",
+        unidad: "m³",
+        catalogId: 14,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 2,
+        materiales: [
+          { materialId: 26, cantidad: 1.05 },
+          { materialId: 37, cantidad: 0.85 },
+          { materialId: 38, cantidad: 1.2 },
+          { materialId: 40, cantidad: 0.5 },
+        ],
+      },
+      {
+        id: 4,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Losa hormigón H-20",
+        categoria: "Hormigón y Albañilería",
+        unidad: "m³",
+        catalogId: 15,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 58,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 3,
+        materiales: [
+          { materialId: 26, cantidad: 1.05 },
+          { materialId: 36, cantidad: 0.65 },
+          { materialId: 37, cantidad: 1.2 },
+          { materialId: 38, cantidad: 1.6 },
+          { materialId: 40, cantidad: 0.95 },
+        ],
+      },
+      {
+        id: 5,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Losa hormigón H-25",
+        categoria: "Hormigón y Albañilería",
+        unidad: "m³",
+        catalogId: 16,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 58,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 5,
+        dotacion: 3,
+        materiales: [
+          { materialId: 27, cantidad: 1.05 },
+          { materialId: 36, cantidad: 0.65 },
+          { materialId: 37, cantidad: 1.2 },
+          { materialId: 38, cantidad: 1.6 },
+          { materialId: 40, cantidad: 0.95 },
+        ],
+      },
+      {
+        id: 6,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Muro albañilería bloques 19cm c/refuerzo",
+        categoria: "Hormigón y Albañilería",
+        unidad: "m²",
+        catalogId: 12,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 2,
+        materiales: [
+          { materialId: 29, cantidad: 12.5 },
+          { materialId: 20, cantidad: 0.15 },
+          { materialId: 21, cantidad: 0.03 },
+          { materialId: 31, cantidad: 0.4 },
+          { materialId: 37, cantidad: 0.12 },
+        ],
+      },
+      {
+        id: 7,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Muro albañilería ladrillo fiscal",
+        categoria: "Hormigón y Albañilería",
+        unidad: "m²",
+        catalogId: 13,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 2,
+        materiales: [
+          { materialId: 30, cantidad: 70 },
+          { materialId: 20, cantidad: 0.18 },
+          { materialId: 22, cantidad: 0.04 },
+          { materialId: 31, cantidad: 0.5 },
+        ],
+      },
+      {
+        id: 10,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Muro perimetral Metalcon C150 + OSB + estuco ext.",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 20,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 52,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 5,
+        dotacion: 3,
+        materiales: [
+          { materialId: 52, cantidad: 3.8 },
+          { materialId: 56, cantidad: 3.8 },
+          { materialId: 70, cantidad: 0.06 },
+          { materialId: 71, cantidad: 0.04 },
+          { materialId: 129, cantidad: 0.45 },
+          { materialId: 33, cantidad: 0.28 },
+          { materialId: 20, cantidad: 0.04 },
+          { materialId: 100, cantidad: 1.1 },
+        ],
+      },
+      {
+        id: 11,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Muro perimetral Metalcon C200 + OSB + estuco ext.",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 21,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 54,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 3,
+        materiales: [
+          { materialId: 53, cantidad: 3.8 },
+          { materialId: 57, cantidad: 3.8 },
+          { materialId: 70, cantidad: 0.06 },
+          { materialId: 71, cantidad: 0.04 },
+          { materialId: 129, cantidad: 0.45 },
+          { materialId: 33, cantidad: 0.28 },
+          { materialId: 20, cantidad: 0.04 },
+          { materialId: 96, cantidad: 1.05 },
+        ],
+      },
+      {
+        id: 12,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Tabique Metalcon 89mm + lana mineral + 1 placa yeso",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 22,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 2,
+        materiales: [
+          { materialId: 51, cantidad: 3.2 },
+          { materialId: 55, cantidad: 3.2 },
+          { materialId: 95, cantidad: 1.05 },
+          { materialId: 80, cantidad: 0.18 },
+          { materialId: 87, cantidad: 0.14 },
+          { materialId: 85, cantidad: 0.08 },
+          { materialId: 86, cantidad: 0.12 },
+        ],
+      },
+      {
+        id: 13,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Tabique Metalcon 65mm doble placa yeso 13mm",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 23,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 48,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 7,
+        dotacion: 2,
+        materiales: [
+          { materialId: 50, cantidad: 3 },
+          { materialId: 54, cantidad: 3 },
+          { materialId: 97, cantidad: 1.05 },
+          { materialId: 81, cantidad: 0.38 },
+          { materialId: 70, cantidad: 0.1 },
+          { materialId: 85, cantidad: 0.09 },
+          { materialId: 86, cantidad: 0.14 },
+          { materialId: 88, cantidad: 0.5 },
+          { materialId: 89, cantidad: 0.4 },
+        ],
+      },
+      {
+        id: 14,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Tabique Metalcon 65mm 1 placa yeso simple",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 24,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 45,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 2,
+        materiales: [
+          { materialId: 50, cantidad: 3 },
+          { materialId: 54, cantidad: 3 },
+          { materialId: 80, cantidad: 0.36 },
+          { materialId: 70, cantidad: 0.1 },
+          { materialId: 85, cantidad: 0.08 },
+          { materialId: 86, cantidad: 0.12 },
+        ],
+      },
+      {
+        id: 15,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Tabique Metalcon 89mm placa RH baño/cocina",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 25,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 52,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 7,
+        dotacion: 2,
+        materiales: [
+          { materialId: 51, cantidad: 3.2 },
+          { materialId: 55, cantidad: 3.2 },
+          { materialId: 97, cantidad: 1.05 },
+          { materialId: 82, cantidad: 0.38 },
+          { materialId: 70, cantidad: 0.12 },
+          { materialId: 85, cantidad: 0.09 },
+          { materialId: 86, cantidad: 0.14 },
+        ],
+      },
+      {
+        id: 16,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Techumbre Metalcon correas C150 + omegas + zinc 0.35",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 30,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 3,
+        materiales: [
+          { materialId: 61, cantidad: 1.2 },
+          { materialId: 58, cantidad: 2.5 },
+          { materialId: 55, cantidad: 0.8 },
+          { materialId: 105, cantidad: 1.1 },
+          { materialId: 69, cantidad: 0.05 },
+          { materialId: 114, cantidad: 0.02 },
+          { materialId: 113, cantidad: 0.08 },
+          { materialId: 110, cantidad: 0.15 },
+        ],
+      },
+      {
+        id: 17,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Techumbre Metalcon correas C150 + omegas + zinc 0.5",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 31,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 7,
+        dotacion: 3,
+        materiales: [
+          { materialId: 61, cantidad: 1.2 },
+          { materialId: 58, cantidad: 2.5 },
+          { materialId: 55, cantidad: 0.8 },
+          { materialId: 106, cantidad: 1.1 },
+          { materialId: 69, cantidad: 0.05 },
+          { materialId: 114, cantidad: 0.02 },
+          { materialId: 113, cantidad: 0.08 },
+          { materialId: 110, cantidad: 0.15 },
+        ],
+      },
+      {
+        id: 18,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Techumbre Metalcon C150 + policarbonato 6mm",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 32,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 10,
+        dotacion: 2,
+        materiales: [
+          { materialId: 61, cantidad: 1.2 },
+          { materialId: 58, cantidad: 2.5 },
+          { materialId: 108, cantidad: 1.08 },
+          { materialId: 69, cantidad: 0.04 },
+          { materialId: 166, cantidad: 0.15 },
+        ],
+      },
+      {
+        id: 19,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Cielo yeso 1 placa 10mm Metalcon",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 35,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 10,
+        dotacion: 2,
+        materiales: [
+          { materialId: 80, cantidad: 0.36 },
+          { materialId: 54, cantidad: 0.85 },
+          { materialId: 55, cantidad: 0.4 },
+          { materialId: 85, cantidad: 0.12 },
+          { materialId: 86, cantidad: 0.05 },
+          { materialId: 87, cantidad: 0.08 },
+        ],
+      },
+      {
+        id: 20,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Cielo yeso doble placa 10+13mm Metalcon",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 36,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 2,
+        materiales: [
+          { materialId: 54, cantidad: 0.85 },
+          { materialId: 55, cantidad: 0.4 },
+          { materialId: 80, cantidad: 0.37 },
+          { materialId: 81, cantidad: 0.37 },
+          { materialId: 85, cantidad: 0.15 },
+          { materialId: 86, cantidad: 0.06 },
+          { materialId: 87, cantidad: 0.1 },
+          { materialId: 88, cantidad: 0.3 },
+          { materialId: 89, cantidad: 0.2 },
+        ],
+      },
+      {
+        id: 21,
+        tipo: "Nueva Construcción",
+        estructura: "Metalcon",
+        nombre: "Cielo yeso RH 12.5mm baño/cocina Metalcon",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 37,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 52,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 9,
+        dotacion: 2,
+        materiales: [
+          { materialId: 54, cantidad: 0.85 },
+          { materialId: 55, cantidad: 0.4 },
+          { materialId: 82, cantidad: 0.36 },
+          { materialId: 85, cantidad: 0.12 },
+          { materialId: 86, cantidad: 0.05 },
+          { materialId: 87, cantidad: 0.08 },
+        ],
+      },
+      {
+        id: 25,
+        tipo: "Nueva Construcción",
+        estructura: "Madera",
+        nombre: "Techumbre cerchas pino 1x4 + correas + zinc 0.35",
+        categoria: "Madera Estructural",
+        unidad: "m²",
+        catalogId: 40,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 58,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 3,
+        materiales: [
+          { materialId: 126, cantidad: 0.18 },
+          { materialId: 121, cantidad: 2.2 },
+          { materialId: 124, cantidad: 0.5 },
+          { materialId: 105, cantidad: 1.12 },
+          { materialId: 114, cantidad: 0.022 },
+          { materialId: 113, cantidad: 0.08 },
+          { materialId: 110, cantidad: 0.18 },
+          { materialId: 133, cantidad: 0.08 },
+          { materialId: 131, cantidad: 1.2 },
+        ],
+      },
+      {
+        id: 26,
+        tipo: "Nueva Construcción",
+        estructura: "Madera",
+        nombre: "Techumbre cerchas pino 1x4 + correas + zinc 0.5",
+        categoria: "Madera Estructural",
+        unidad: "m²",
+        catalogId: 41,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 58,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 5,
+        dotacion: 3,
+        materiales: [
+          { materialId: 126, cantidad: 0.18 },
+          { materialId: 121, cantidad: 2.2 },
+          { materialId: 124, cantidad: 0.5 },
+          { materialId: 106, cantidad: 1.12 },
+          { materialId: 114, cantidad: 0.022 },
+          { materialId: 113, cantidad: 0.08 },
+          { materialId: 110, cantidad: 0.18 },
+          { materialId: 133, cantidad: 0.08 },
+          { materialId: 131, cantidad: 1.2 },
+        ],
+      },
+      {
+        id: 27,
+        tipo: "Nueva Construcción",
+        estructura: "Madera",
+        nombre: "Techumbre correas pino 2x3 + zinc 0.35 (sencilla)",
+        categoria: "Madera Estructural",
+        unidad: "m²",
+        catalogId: 42,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 2,
+        materiales: [
+          { materialId: 121, cantidad: 2.8 },
+          { materialId: 123, cantidad: 0.6 },
+          { materialId: 105, cantidad: 1.1 },
+          { materialId: 114, cantidad: 0.02 },
+          { materialId: 113, cantidad: 0.06 },
+          { materialId: 133, cantidad: 0.1 },
+        ],
+      },
+      {
+        id: 28,
+        tipo: "Nueva Construcción",
+        estructura: "Madera",
+        nombre: "Tabique madera pino 2x4 + OSB + lana mineral",
+        categoria: "Madera Estructural",
+        unidad: "m²",
+        catalogId: 45,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 5,
+        dotacion: 2,
+        materiales: [
+          { materialId: 123, cantidad: 3.5 },
+          { materialId: 128, cantidad: 0.38 },
+          { materialId: 133, cantidad: 0.1 },
+          { materialId: 135, cantidad: 0.08 },
+          { materialId: 95, cantidad: 1.05 },
+          { materialId: 100, cantidad: 1.05 },
+        ],
+      },
+      {
+        id: 29,
+        tipo: "Nueva Construcción",
+        estructura: "Madera",
+        nombre: "Tabique madera pino 2x3 + volcanita",
+        categoria: "Madera Estructural",
+        unidad: "m²",
+        catalogId: 46,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 48,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 2,
+        materiales: [
+          { materialId: 121, cantidad: 3.2 },
+          { materialId: 84, cantidad: 0.36 },
+          { materialId: 133, cantidad: 0.08 },
+          { materialId: 135, cantidad: 0.06 },
+        ],
+      },
+      {
+        id: 30,
+        tipo: "Nueva Construcción",
+        estructura: "Madera",
+        nombre: "Cielo madera terciado 9mm s/vigas pino",
+        categoria: "Madera Estructural",
+        unidad: "m²",
+        catalogId: 47,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 10,
+        dotacion: 2,
+        materiales: [
+          { materialId: 121, cantidad: 1.1 },
+          { materialId: 130, cantidad: 0.36 },
+          { materialId: 133, cantidad: 0.06 },
+          { materialId: 135, cantidad: 0.04 },
+        ],
+      },
+      {
+        id: 31,
+        tipo: "Nueva Construcción",
+        estructura: "Madera",
+        nombre: "Cielo volcanita s/correas pino",
+        categoria: "Madera Estructural",
+        unidad: "m²",
+        catalogId: 48,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 10,
+        dotacion: 2,
+        materiales: [
+          { materialId: 121, cantidad: 0.9 },
+          { materialId: 84, cantidad: 0.36 },
+          { materialId: 87, cantidad: 0.08 },
+          { materialId: 85, cantidad: 0.06 },
+          { materialId: 86, cantidad: 0.04 },
+        ],
+      },
+      {
+        id: 35,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Estuco exterior",
+        categoria: "Hormigón y Albañilería",
+        unidad: "m²",
+        catalogId: 17,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 12,
+        dotacion: 2,
+        materiales: [
+          { materialId: 33, cantidad: 0.35 },
+          { materialId: 20, cantidad: 0.05 },
+          { materialId: 22, cantidad: 0.015 },
+        ],
+      },
+      {
+        id: 36,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Estuco interior yeso",
+        categoria: "Hormigón y Albañilería",
+        unidad: "m²",
+        catalogId: 18,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 15,
+        dotacion: 2,
+        materiales: [
+          { materialId: 20, cantidad: 0.12 },
+          { materialId: 21, cantidad: 0.025 },
+          { materialId: 32, cantidad: 0.08 },
+          { materialId: 34, cantidad: 0.05 },
+          { materialId: 35, cantidad: 0.03 },
+        ],
+      },
+      {
+        id: 37,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Cubierta membrana asfáltica 4mm (terraza plana)",
+        categoria: "Impermeabilización",
+        unidad: "m²",
+        catalogId: 50,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 45,
+        pctGG: 12,
+        pctUtilidad: 15,
+        materiales: [
+          { materialId: 170, cantidad: 1.15 },
+          { materialId: 118, cantidad: 1.1 },
+          { materialId: 6, cantidad: 0.3 },
+          { materialId: 73, cantidad: 0.15 },
+        ],
+      },
+      {
+        id: 38,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Pintura muros interiores (2 manos + sellador)",
+        categoria: "Pintura",
+        unidad: "m²",
+        catalogId: 1,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 45,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 20,
+        dotacion: 2,
+        materiales: [
+          { materialId: 1, cantidad: 0.12 },
+          { materialId: 5, cantidad: 0.06 },
+          { materialId: 7, cantidad: 0.04 },
+          { materialId: 12, cantidad: 0.15 },
+          { materialId: 15, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 39,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Pintura muros exteriores (2 manos impermeab.)",
+        categoria: "Pintura",
+        unidad: "m²",
+        catalogId: 2,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 45,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 15,
+        dotacion: 2,
+        materiales: [
+          { materialId: 2, cantidad: 0.13 },
+          { materialId: 5, cantidad: 0.07 },
+          { materialId: 12, cantidad: 0.2 },
+          { materialId: 16, cantidad: 0.03 },
+        ],
+      },
+      {
+        id: 40,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Pintura cielos (2 manos)",
+        categoria: "Pintura",
+        unidad: "m²",
+        catalogId: 3,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 18,
+        dotacion: 2,
+        materiales: [
+          { materialId: 5, cantidad: 0.07 },
+          { materialId: 1, cantidad: 0.13 },
+          { materialId: 7, cantidad: 0.02 },
+          { materialId: 9, cantidad: 0.01 },
+          { materialId: 12, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 41,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Pintura puertas y ventanas (esmalte 2 manos)",
+        categoria: "Pintura",
+        unidad: "m²",
+        catalogId: 4,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 1,
+        materiales: [
+          { materialId: 3, cantidad: 0.15 },
+          { materialId: 9, cantidad: 0.03 },
+          { materialId: 12, cantidad: 0.1 },
+          { materialId: 14, cantidad: 0.06 },
+          { materialId: 15, cantidad: 0.06 },
+        ],
+      },
+      {
+        id: 42,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Cerámico piso 45x45cm",
+        categoria: "Pisos y Revestimientos",
+        unidad: "m²",
+        catalogId: 60,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 48,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 2,
+        materiales: [
+          { materialId: 142, cantidad: 1.1 },
+          { materialId: 145, cantidad: 0.35 },
+          { materialId: 146, cantidad: 0.12 },
+          { materialId: 148, cantidad: 0.5 },
+        ],
+      },
+      {
+        id: 43,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Porcelanato 60x60cm",
+        categoria: "Pisos y Revestimientos",
+        unidad: "m²",
+        catalogId: 61,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 52,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 2,
+        materiales: [
+          { materialId: 143, cantidad: 1.08 },
+          { materialId: 145, cantidad: 0.38 },
+          { materialId: 146, cantidad: 0.12 },
+          { materialId: 148, cantidad: 0.5 },
+          { materialId: 152, cantidad: 0.15 },
+        ],
+      },
+      {
+        id: 44,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Piso flotante laminado AC4",
+        categoria: "Pisos y Revestimientos",
+        unidad: "m²",
+        catalogId: 62,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 48,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 18,
+        dotacion: 1,
+        materiales: [
+          { materialId: 140, cantidad: 1.08 },
+          { materialId: 149, cantidad: 1.1 },
+          { materialId: 150, cantidad: 1.05 },
+        ],
+      },
+      {
+        id: 45,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Cerámico muro ducha 30x60cm",
+        categoria: "Pisos y Revestimientos",
+        unidad: "m²",
+        catalogId: 63,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 2,
+        materiales: [
+          { materialId: 144, cantidad: 1.1 },
+          { materialId: 145, cantidad: 0.25 },
+          { materialId: 146, cantidad: 0.1 },
+          { materialId: 213, cantidad: 0.02 },
+        ],
+      },
+      {
+        id: 46,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Punto de luz foco LED empotrado",
+        categoria: "Instalaciones Eléctricas",
+        unidad: "unidad",
+        catalogId: 80,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 1,
+        materiales: [
+          { materialId: 180, cantidad: 8 },
+          { materialId: 187, cantidad: 1 },
+          { materialId: 190, cantidad: 1 },
+          { materialId: 191, cantidad: 0.5 },
+          { materialId: 198, cantidad: 0.15 },
+        ],
+      },
+      {
+        id: 47,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Punto toma corriente triple 16A",
+        categoria: "Instalaciones Eléctricas",
+        unidad: "unidad",
+        catalogId: 81,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 1,
+        materiales: [
+          { materialId: 180, cantidad: 6 },
+          { materialId: 185, cantidad: 1 },
+          { materialId: 190, cantidad: 1 },
+          { materialId: 191, cantidad: 0.5 },
+          { materialId: 198, cantidad: 0.1 },
+        ],
+      },
+      {
+        id: 48,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Punto eléctrico completo (luz + toma)",
+        categoria: "Instalaciones Eléctricas",
+        unidad: "unidad",
+        catalogId: 82,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 3,
+        dotacion: 1,
+        materiales: [
+          { materialId: 180, cantidad: 10 },
+          { materialId: 184, cantidad: 1 },
+          { materialId: 185, cantidad: 1 },
+          { materialId: 187, cantidad: 1 },
+          { materialId: 190, cantidad: 2 },
+          { materialId: 191, cantidad: 1.5 },
+          { materialId: 198, cantidad: 0.2 },
+          { materialId: 192, cantidad: 1.5 },
+        ],
+      },
+      {
+        id: 49,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Tablero distribución 8 circuitos",
+        categoria: "Instalaciones Eléctricas",
+        unidad: "unidad",
+        catalogId: 83,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 60,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 1,
+        dotacion: 1,
+        materiales: [
+          { materialId: 196, cantidad: 1 },
+          { materialId: 193, cantidad: 4 },
+          { materialId: 194, cantidad: 1 },
+          { materialId: 181, cantidad: 8 },
+          { materialId: 198, cantidad: 0.5 },
+        ],
+      },
+      {
+        id: 50,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Punto agua fría PPR 20mm",
+        categoria: "Instalaciones Sanitarias",
+        unidad: "unidad",
+        catalogId: 90,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 60,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 1,
+        materiales: [
+          { materialId: 204, cantidad: 5 },
+          { materialId: 205, cantidad: 3 },
+          { materialId: 206, cantidad: 1 },
+          { materialId: 212, cantidad: 3 },
+          { materialId: 213, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 51,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Punto agua caliente PPR 20mm",
+        categoria: "Instalaciones Sanitarias",
+        unidad: "unidad",
+        catalogId: 91,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 62,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 1,
+        materiales: [
+          { materialId: 204, cantidad: 5 },
+          { materialId: 205, cantidad: 3 },
+          { materialId: 206, cantidad: 1 },
+          { materialId: 212, cantidad: 3 },
+          { materialId: 213, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 52,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Ojalaería completa (canal + bajante + tapasol)",
+        categoria: "Techumbres",
+        unidad: "ml",
+        catalogId: 106,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 60,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 12,
+        dotacion: 2,
+        materiales: [
+          { materialId: 115, cantidad: 1.05 },
+          { materialId: 116, cantidad: 0.33 },
+          { materialId: 117, cantidad: 1.1 },
+          { materialId: 112, cantidad: 1.05 },
+          { materialId: 114, cantidad: 0.008 },
+        ],
+      },
+      {
+        id: 53,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Impermeabilización fundación cristalizante",
+        categoria: "Impermeabilización",
+        unidad: "m²",
+        catalogId: 53,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 40,
+        pctGG: 12,
+        pctUtilidad: 15,
+        materiales: [
+          { materialId: 172, cantidad: 0.55 },
+          { materialId: 173, cantidad: 1.05 },
+          { materialId: 20, cantidad: 0.02 },
+        ],
+      },
+      {
+        id: 54,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Pintura anticorrosiva estructura Metalcon",
+        categoria: "Pintura",
+        unidad: "m²",
+        catalogId: 5,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 40,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 15,
+        dotacion: 1,
+        materiales: [
+          { materialId: 4, cantidad: 0.12 },
+          { materialId: 8, cantidad: 0.02 },
+          { materialId: 14, cantidad: 0.08 },
+        ],
+      },
+      {
+        id: 60,
+        tipo: "Remodelación",
+        estructura: "General",
+        nombre: "Demolición tabique (retiro escombros inc.)",
+        categoria: "Demolición",
+        unidad: "m²",
+        precioMO: 9200,
+        catalogId: 100,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 88,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 25,
+        dotacion: 2,
+        materiales: [],
+      },
+      {
+        id: 61,
+        tipo: "Remodelación",
+        estructura: "General",
+        nombre: "Demolición cielo existente (retiro inc.)",
+        categoria: "Demolición",
+        unidad: "m²",
+        precioMO: 7500,
+        catalogId: 101,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 88,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 20,
+        dotacion: 2,
+        materiales: [],
+      },
+      {
+        id: 62,
+        tipo: "Remodelación",
+        estructura: "General",
+        nombre: "Demolición muro albañilería (retiro inc.)",
+        categoria: "Demolición",
+        unidad: "m²",
+        precioMO: 15e3,
+        catalogId: 102,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 90,
+        pctGG: 10,
+        pctUtilidad: 15,
+        materiales: [],
+      },
+      {
+        id: 63,
+        tipo: "Remodelación",
+        estructura: "General",
+        nombre: "Cambio piso flotante (inc. retiro anterior)",
+        categoria: "Pisos y Revestimientos",
+        unidad: "m²",
+        catalogId: 65,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 2,
+        materiales: [
+          { materialId: 140, cantidad: 1.08 },
+          { materialId: 149, cantidad: 1.1 },
+          { materialId: 150, cantidad: 1.05 },
+        ],
+      },
+      {
+        id: 64,
+        tipo: "Remodelación",
+        estructura: "General",
+        nombre: "Cambio cerámico piso (inc. retiro)",
+        categoria: "Pisos y Revestimientos",
+        unidad: "m²",
+        catalogId: 64,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 60,
+        pctGG: 10,
+        pctUtilidad: 15,
+        materiales: [
+          { materialId: 142, cantidad: 1.1 },
+          { materialId: 145, cantidad: 0.35 },
+          { materialId: 146, cantidad: 0.12 },
+          { materialId: 148, cantidad: 0.5 },
+        ],
+      },
+      {
+        id: 65,
+        tipo: "Remodelación",
+        estructura: "Metalcon",
+        nombre: "Tabique Metalcon 65mm en remodelación",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 26,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 52,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 5,
+        dotacion: 2,
+        materiales: [
+          { materialId: 50, cantidad: 3 },
+          { materialId: 54, cantidad: 3 },
+          { materialId: 97, cantidad: 1.05 },
+          { materialId: 80, cantidad: 0.36 },
+          { materialId: 70, cantidad: 0.1 },
+          { materialId: 85, cantidad: 0.09 },
+          { materialId: 86, cantidad: 0.12 },
+        ],
+      },
+      {
+        id: 66,
+        tipo: "Remodelación",
+        estructura: "Metalcon",
+        nombre: "Ampliación cielo yeso 1 placa en remodelación",
+        categoria: "Metalcon Estructural",
+        unidad: "m²",
+        catalogId: 38,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 58,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 2,
+        materiales: [
+          { materialId: 54, cantidad: 0.85 },
+          { materialId: 55, cantidad: 0.4 },
+          { materialId: 80, cantidad: 0.36 },
+          { materialId: 85, cantidad: 0.15 },
+          { materialId: 86, cantidad: 0.1 },
+          { materialId: 87, cantidad: 0.08 },
+          { materialId: 90, cantidad: 0.15 },
+        ],
+      },
+      {
+        id: 67,
+        tipo: "Remodelación",
+        estructura: "General",
+        nombre: "Cambio ventana PVC termopanel (inc. retiro)",
+        categoria: "Carpintería",
+        unidad: "unidad",
+        catalogId: 74,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 3,
+        dotacion: 2,
+        materiales: [
+          { materialId: 162, cantidad: 1 },
+          { materialId: 166, cantidad: 0.3 },
+          { materialId: 175, cantidad: 0.2 },
+        ],
+      },
+      {
+        id: 68,
+        tipo: "Remodelación",
+        estructura: "Madera",
+        nombre: "Cambio zinc ondulado estructura madera",
+        categoria: "Techumbres",
+        unidad: "m²",
+        catalogId: 43,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 62,
+        pctGG: 12,
+        pctUtilidad: 15,
+        materiales: [
+          { materialId: 105, cantidad: 1.08 },
+          { materialId: 114, cantidad: 0.015 },
+          { materialId: 112, cantidad: 0.12 },
+          { materialId: 121, cantidad: 0.3 },
+        ],
+      },
+      {
+        id: 69,
+        tipo: "Remodelación",
+        estructura: "Metalcon",
+        nombre: "Cambio zinc ondulado estructura Metalcon",
+        categoria: "Techumbres",
+        unidad: "m²",
+        catalogId: 33,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 58,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 3,
+        materiales: [
+          { materialId: 105, cantidad: 1.08 },
+          { materialId: 114, cantidad: 0.015 },
+          { materialId: 112, cantidad: 0.1 },
+          { materialId: 69, cantidad: 0.02 },
+        ],
+      },
+      {
+        id: 70,
+        tipo: "Remodelación",
+        estructura: "Madera",
+        nombre: "Reparación cercha pino (parcial)",
+        categoria: "Madera Estructural",
+        unidad: "unidad",
+        catalogId: 44,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 2,
+        dotacion: 2,
+        materiales: [
+          { materialId: 123, cantidad: 6 },
+          { materialId: 121, cantidad: 4 },
+          { materialId: 131, cantidad: 3 },
+          { materialId: 133, cantidad: 0.2 },
+        ],
+      },
+      {
+        id: 75,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Reparación gotera techumbre zinc (parche)",
+        categoria: "Techumbres",
+        unidad: "m²",
+        catalogId: 0,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 70,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 3,
+        dotacion: 1,
+        materiales: [
+          { materialId: 105, cantidad: 1.15 },
+          { materialId: 114, cantidad: 0.02 },
+          { materialId: 73, cantidad: 0.3 },
+          { materialId: 174, cantidad: 0.2 },
+          { materialId: 166, cantidad: 0.15 },
+        ],
+      },
+      {
+        id: 76,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Sellado fisuras muro exterior (ml)",
+        categoria: "Impermeabilización",
+        unidad: "ml",
+        catalogId: 52,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 75,
+        pctGG: 10,
+        pctUtilidad: 15,
+        materiales: [
+          { materialId: 174, cantidad: 0.15 },
+          { materialId: 166, cantidad: 0.1 },
+          { materialId: 175, cantidad: 0.08 },
+          { materialId: 33, cantidad: 0.02 },
+        ],
+      },
+      {
+        id: 77,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Reparación estuco exterior parcial",
+        categoria: "Hormigón y Albañilería",
+        unidad: "m²",
+        catalogId: 19,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 10,
+        dotacion: 2,
+        materiales: [
+          { materialId: 33, cantidad: 0.3 },
+          { materialId: 20, cantidad: 0.04 },
+          { materialId: 21, cantidad: 0.01 },
+          { materialId: 35, cantidad: 0.02 },
+          { materialId: 90, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 78,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Repaso impermeabilizante cubierta plana",
+        categoria: "Impermeabilización",
+        unidad: "m²",
+        catalogId: 51,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 10,
+        pctUtilidad: 15,
+        materiales: [
+          { materialId: 171, cantidad: 0.8 },
+          { materialId: 6, cantidad: 0.12 },
+          { materialId: 90, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 79,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Pintura repaso exterior 1 mano",
+        categoria: "Pintura",
+        unidad: "m²",
+        catalogId: 6,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 45,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 12,
+        dotacion: 1,
+        materiales: [
+          { materialId: 6, cantidad: 0.12 },
+          { materialId: 7, cantidad: 0.02 },
+          { materialId: 12, cantidad: 0.08 },
+          { materialId: 15, cantidad: 0.03 },
+        ],
+      },
+      {
+        id: 80,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Cambio foco LED (inc. materiales)",
+        categoria: "Instalaciones Eléctricas",
+        unidad: "unidad",
+        catalogId: 85,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 70,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 1,
+        materiales: [
+          { materialId: 187, cantidad: 1 },
+          { materialId: 198, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 81,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Reparación toma corriente",
+        categoria: "Instalaciones Eléctricas",
+        unidad: "unidad",
+        catalogId: 86,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 70,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 1,
+        materiales: [
+          { materialId: 185, cantidad: 1 },
+          { materialId: 180, cantidad: 0.5 },
+          { materialId: 198, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 82,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: 'Cambio llave de paso 1/2"',
+        categoria: "Instalaciones Sanitarias",
+        unidad: "unidad",
+        catalogId: 94,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 1,
+        materiales: [
+          { materialId: 214, cantidad: 1 },
+          { materialId: 212, cantidad: 2 },
+        ],
+      },
+      {
+        id: 83,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Ojalaería — canal y bajante existente (reemplazo)",
+        categoria: "Techumbres",
+        unidad: "ml",
+        catalogId: 107,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 10,
+        pctUtilidad: 15,
+        materiales: [
+          { materialId: 115, cantidad: 1.05 },
+          { materialId: 116, cantidad: 0.33 },
+          { materialId: 117, cantidad: 1 },
+          { materialId: 114, cantidad: 0.008 },
+        ],
+      },
+      {
+        id: 84,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Instalación gas 45KL (subcontrato certificado)",
+        categoria: "Gas",
+        unidad: "unidad",
+        catalogId: 95,
+        esSubcontrato: !0,
+        precioSubcontrato: 85e4,
+        pctMO: 0,
+        pctGG: 15,
+        pctUtilidad: 0,
+        rendimiento: 1,
+        dotacion: 2,
+        materiales: [],
+      },
+      {
+        id: 90,
+        tipo: "Nueva Construcción",
+        estructura: "Estructuras Metálicas",
+        nombre: "Reja tubular (fabricación + instalación)",
+        categoria: "Estructuras Metálicas",
+        unidad: "m²",
+        catalogId: 120,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 60,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 5,
+        dotacion: 2,
+        materiales: [
+          { materialId: 230, cantidad: 6.2 },
+          { materialId: 231, cantidad: 4.5 },
+          { materialId: 234, cantidad: 0.12 },
+          { materialId: 235, cantidad: 0.18 },
+          { materialId: 4, cantidad: 0.08 },
+          { materialId: 14, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 91,
+        tipo: "Nueva Construcción",
+        estructura: "Estructuras Metálicas",
+        nombre: "Protección ventana (fabricación + instalación)",
+        categoria: "Estructuras Metálicas",
+        unidad: "m²",
+        catalogId: 121,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 58,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 2,
+        materiales: [
+          { materialId: 231, cantidad: 7 },
+          { materialId: 232, cantidad: 2.4 },
+          { materialId: 234, cantidad: 0.1 },
+          { materialId: 235, cantidad: 0.14 },
+          { materialId: 4, cantidad: 0.07 },
+          { materialId: 14, cantidad: 0.04 },
+        ],
+      },
+      {
+        id: 92,
+        tipo: "Nueva Construcción",
+        estructura: "Estructuras Metálicas",
+        nombre: "Portón corredera (fabricación + instalación)",
+        categoria: "Estructuras Metálicas",
+        unidad: "m²",
+        catalogId: 122,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 62,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 1,
+        dotacion: 2,
+        materiales: [
+          { materialId: 230, cantidad: 7.8 },
+          { materialId: 231, cantidad: 3.6 },
+          { materialId: 233, cantidad: 1 },
+          { materialId: 234, cantidad: 0.18 },
+          { materialId: 235, cantidad: 0.22 },
+          { materialId: 4, cantidad: 0.1 },
+          { materialId: 14, cantidad: 0.06 },
+        ],
+      },
+      {
+        id: 93,
+        tipo: "Nueva Construcción",
+        estructura: "Estructuras Metálicas",
+        nombre: "Pilar tubular 100x100x3mm (fabricación + inst.)",
+        categoria: "Estructuras Metálicas",
+        unidad: "unidad",
+        catalogId: 123,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 2,
+        dotacion: 2,
+        materiales: [
+          { materialId: 238, cantidad: 3 },
+          { materialId: 240, cantidad: 2 },
+          { materialId: 241, cantidad: 4 },
+          { materialId: 234, cantidad: 0.15 },
+          { materialId: 235, cantidad: 0.5 },
+          { materialId: 242, cantidad: 0.3 },
+          { materialId: 243, cantidad: 0.3 },
+          { materialId: 244, cantidad: 0.2 },
+        ],
+      },
+      {
+        id: 94,
+        tipo: "Nueva Construcción",
+        estructura: "Estructuras Metálicas",
+        nombre: "Cierre perimetral tubular c/malla (fab. + inst.)",
+        categoria: "Estructuras Metálicas",
+        unidad: "m²",
+        catalogId: 124,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 60,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 2,
+        materiales: [
+          { materialId: 230, cantidad: 4 },
+          { materialId: 231, cantidad: 2 },
+          { materialId: 233, cantidad: 1 },
+          { materialId: 234, cantidad: 0.08 },
+          { materialId: 235, cantidad: 0.1 },
+          { materialId: 242, cantidad: 0.15 },
+          { materialId: 243, cantidad: 0.15 },
+        ],
+      },
+      {
+        id: 95,
+        tipo: "Nueva Construcción",
+        estructura: "Estructuras Metálicas",
+        nombre: "Escalera metálica recta (fabricación + inst.)",
+        categoria: "Estructuras Metálicas",
+        unidad: "ml",
+        catalogId: 125,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 2,
+        dotacion: 2,
+        materiales: [
+          { materialId: 237, cantidad: 2.2 },
+          { materialId: 232, cantidad: 3 },
+          { materialId: 239, cantidad: 1 },
+          { materialId: 234, cantidad: 0.2 },
+          { materialId: 235, cantidad: 0.2 },
+          { materialId: 242, cantidad: 0.2 },
+          { materialId: 243, cantidad: 0.2 },
+        ],
+      },
+      {
+        id: 96,
+        tipo: "Nueva Construcción",
+        estructura: "Estructuras Metálicas",
+        nombre: "Baranda / pasamanos metálico (fab. + inst.)",
+        categoria: "Estructuras Metálicas",
+        unidad: "ml",
+        catalogId: 126,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 62,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 5,
+        dotacion: 2,
+        materiales: [
+          { materialId: 230, cantidad: 1.2 },
+          { materialId: 231, cantidad: 2.5 },
+          { materialId: 232, cantidad: 0.5 },
+          { materialId: 234, cantidad: 0.08 },
+          { materialId: 242, cantidad: 0.1 },
+          { materialId: 243, cantidad: 0.1 },
+        ],
+      },
+      {
+        id: 97,
+        tipo: "Nueva Construcción",
+        estructura: "Estructuras Metálicas",
+        nombre: "Portón abatible 2 hojas (fabricación + inst.)",
+        categoria: "Estructuras Metálicas",
+        unidad: "m²",
+        catalogId: 127,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 62,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 1,
+        dotacion: 2,
+        materiales: [
+          { materialId: 230, cantidad: 5 },
+          { materialId: 231, cantidad: 6 },
+          { materialId: 232, cantidad: 1 },
+          { materialId: 233, cantidad: 1 },
+          { materialId: 234, cantidad: 0.15 },
+          { materialId: 235, cantidad: 0.15 },
+          { materialId: 242, cantidad: 0.2 },
+          { materialId: 243, cantidad: 0.2 },
+        ],
+      },
+      {
+        id: 98,
+        tipo: "Nueva Construcción",
+        estructura: "Estructuras Metálicas",
+        nombre: "Cobertizo / pérgola metálica (fab. + inst.)",
+        categoria: "Estructuras Metálicas",
+        unidad: "m²",
+        catalogId: 128,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 58,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 2,
+        materiales: [
+          { materialId: 238, cantidad: 1.5 },
+          { materialId: 237, cantidad: 3 },
+          { materialId: 239, cantidad: 2 },
+          { materialId: 234, cantidad: 0.12 },
+          { materialId: 235, cantidad: 0.1 },
+          { materialId: 242, cantidad: 0.2 },
+        ],
+      },
+      {
+        id: 99,
+        tipo: "Nueva Construcción",
+        estructura: "Estructuras Metálicas",
+        nombre: "Marco metálico puerta / ventana (fab. + inst.)",
+        categoria: "Estructuras Metálicas",
+        unidad: "unidad",
+        catalogId: 129,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 60,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 2,
+        dotacion: 2,
+        materiales: [
+          { materialId: 239, cantidad: 4.5 },
+          { materialId: 232, cantidad: 1 },
+          { materialId: 234, cantidad: 0.1 },
+          { materialId: 235, cantidad: 0.1 },
+          { materialId: 242, cantidad: 0.15 },
+          { materialId: 243, cantidad: 0.15 },
+        ],
+      },
+      {
+        id: 100,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Excavación manual fundaciones",
+        categoria: "Mov. de Tierras",
+        unidad: "m³",
+        catalogId: 130,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 92,
+        pctGG: 8,
+        pctUtilidad: 12,
+        rendimiento: 2,
+        dotacion: 2,
+        materiales: [],
+      },
+      {
+        id: 101,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Excavación mecánica (retroexcavadora)",
+        categoria: "Mov. de Tierras",
+        unidad: "m³",
+        catalogId: 131,
+        esSubcontrato: !0,
+        precioSubcontrato: 85e3,
+        pctMO: 0,
+        pctGG: 12,
+        pctUtilidad: 0,
+        rendimiento: 40,
+        dotacion: 1,
+        materiales: [],
+      },
+      {
+        id: 102,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Relleno compactado material selecto",
+        categoria: "Mov. de Tierras",
+        unidad: "m³",
+        catalogId: 132,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 12,
+        dotacion: 2,
+        materiales: [{ materialId: 246, cantidad: 1.2 }],
+      },
+      {
+        id: 103,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Nivelación y compactación terreno",
+        categoria: "Mov. de Tierras",
+        unidad: "m²",
+        catalogId: 133,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 85,
+        pctGG: 8,
+        pctUtilidad: 12,
+        rendimiento: 50,
+        dotacion: 1,
+        materiales: [],
+      },
+      {
+        id: 104,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Retiro y transporte de escombros",
+        categoria: "Mov. de Tierras",
+        unidad: "m³",
+        catalogId: 134,
+        esSubcontrato: !0,
+        precioSubcontrato: 42e3,
+        pctMO: 0,
+        pctGG: 12,
+        pctUtilidad: 0,
+        rendimiento: 8,
+        dotacion: 2,
+        materiales: [],
+      },
+      {
+        id: 105,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Vereda hormigón H-20 7cm",
+        categoria: "Obras Exteriores",
+        unidad: "m²",
+        catalogId: 135,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 8,
+        dotacion: 3,
+        materiales: [
+          { materialId: 249, cantidad: 0.08 },
+          { materialId: 253, cantidad: 0.18 },
+          { materialId: 255, cantidad: 0.04 },
+        ],
+      },
+      {
+        id: 106,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Adoquín peatonal 6cm c/base granular",
+        categoria: "Obras Exteriores",
+        unidad: "m²",
+        catalogId: 136,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 52,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 10,
+        dotacion: 2,
+        materiales: [
+          { materialId: 250, cantidad: 1.05 },
+          { materialId: 252, cantidad: 0.1 },
+          { materialId: 255, cantidad: 0.03 },
+        ],
+      },
+      {
+        id: 107,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Solera prefabricada 15x30cm (inst.)",
+        categoria: "Obras Exteriores",
+        unidad: "ml",
+        catalogId: 137,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 20,
+        dotacion: 2,
+        materiales: [
+          { materialId: 251, cantidad: 1 },
+          { materialId: 247, cantidad: 0.02 },
+        ],
+      },
+      {
+        id: 108,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Estacionamiento hormigón H-20 10cm",
+        categoria: "Obras Exteriores",
+        unidad: "m²",
+        catalogId: 138,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 52,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 6,
+        dotacion: 3,
+        materiales: [
+          { materialId: 249, cantidad: 0.11 },
+          { materialId: 253, cantidad: 0.2 },
+          { materialId: 254, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 109,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Inst. split 9.000 BTU frío/calor (subcontr.)",
+        categoria: "Climatización",
+        unidad: "unidad",
+        catalogId: 141,
+        esSubcontrato: !0,
+        precioSubcontrato: 38e4,
+        pctMO: 0,
+        pctGG: 12,
+        pctUtilidad: 0,
+        rendimiento: 4,
+        dotacion: 1,
+        materiales: [],
+      },
+      {
+        id: 110,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Inst. split 12.000 BTU frío/calor (subcontr.)",
+        categoria: "Climatización",
+        unidad: "unidad",
+        catalogId: 142,
+        esSubcontrato: !0,
+        precioSubcontrato: 52e4,
+        pctMO: 0,
+        pctGG: 12,
+        pctUtilidad: 0,
+        rendimiento: 3,
+        dotacion: 1,
+        materiales: [],
+      },
+      {
+        id: 111,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Inst. split 18.000 BTU frío/calor (subcontr.)",
+        categoria: "Climatización",
+        unidad: "unidad",
+        catalogId: 143,
+        esSubcontrato: !0,
+        precioSubcontrato: 72e4,
+        pctMO: 0,
+        pctGG: 12,
+        pctUtilidad: 0,
+        rendimiento: 2,
+        dotacion: 1,
+        materiales: [],
+      },
+      {
+        id: 112,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Extractor / ventilador baño c/ducto (inst.)",
+        categoria: "Climatización",
+        unidad: "unidad",
+        catalogId: 144,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 60,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 6,
+        dotacion: 1,
+        materiales: [
+          { materialId: 260, cantidad: 1 },
+          { materialId: 262, cantidad: 2 },
+        ],
+      },
+      {
+        id: 113,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Cámara CCTV IP 2MP exterior (instalación)",
+        categoria: "Seguridad",
+        unidad: "punto",
+        catalogId: 145,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 45,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 3,
+        dotacion: 1,
+        materiales: [
+          { materialId: 263, cantidad: 1 },
+          { materialId: 266, cantidad: 15 },
+        ],
+      },
+      {
+        id: 114,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "DVR 4 canales 1080p + disco 1TB (inst.)",
+        categoria: "Seguridad",
+        unidad: "unidad",
+        catalogId: 146,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 30,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 1,
+        dotacion: 1,
+        materiales: [
+          { materialId: 264, cantidad: 1 },
+          { materialId: 265, cantidad: 1 },
+        ],
+      },
+      {
+        id: 115,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Alarma domiciliaria básica (inst.)",
+        categoria: "Seguridad",
+        unidad: "unidad",
+        catalogId: 147,
+        esSubcontrato: !0,
+        precioSubcontrato: 18e4,
+        pctMO: 0,
+        pctGG: 12,
+        pctUtilidad: 0,
+        rendimiento: 2,
+        dotacion: 1,
+        materiales: [],
+      },
+      {
+        id: 116,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Control acceso magnético puerta (inst.)",
+        categoria: "Seguridad",
+        unidad: "unidad",
+        catalogId: 148,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 40,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 2,
+        dotacion: 1,
+        materiales: [
+          { materialId: 268, cantidad: 1 },
+          { materialId: 269, cantidad: 1 },
+          { materialId: 266, cantidad: 5 },
+        ],
+      },
+      {
+        id: 117,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Pilar H-25 armado (cualquier sección)",
+        categoria: "Hormigón Armado",
+        unidad: "m³",
+        catalogId: 150,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 58,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 20,
+        dotacion: 2,
+        materiales: [
+          { materialId: 270, cantidad: 1.05 },
+          { materialId: 273, cantidad: 52 },
+          { materialId: 274, cantidad: 26 },
+          { materialId: 275, cantidad: 1.8 },
+          { materialId: 276, cantidad: 3.5 },
+          { materialId: 278, cantidad: 0.5 },
+          { materialId: 279, cantidad: 40 },
+        ],
+      },
+      {
+        id: 138,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Pilar H-30 armado (cualquier sección)",
+        categoria: "Hormigón Armado",
+        unidad: "m³",
+        catalogId: 151,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 58,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 2,
+        dotacion: 3,
+        materiales: [
+          { materialId: 300, cantidad: 1.05 },
+          { materialId: 273, cantidad: 55 },
+          { materialId: 274, cantidad: 28 },
+          { materialId: 275, cantidad: 1.8 },
+          { materialId: 276, cantidad: 3.5 },
+          { materialId: 278, cantidad: 0.5 },
+          { materialId: 279, cantidad: 40 },
+        ],
+      },
+      {
+        id: 119,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Viga H-25 armada (cualquier sección)",
+        categoria: "Hormigón Armado",
+        unidad: "m³",
+        catalogId: 152,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 2,
+        dotacion: 3,
+        materiales: [
+          { materialId: 270, cantidad: 1.05 },
+          { materialId: 272, cantidad: 30 },
+          { materialId: 273, cantidad: 30 },
+          { materialId: 275, cantidad: 1.4 },
+          { materialId: 276, cantidad: 3 },
+          { materialId: 278, cantidad: 0.45 },
+          { materialId: 279, cantidad: 35 },
+        ],
+      },
+      {
+        id: 139,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Viga H-30 armada (cualquier sección)",
+        categoria: "Hormigón Armado",
+        unidad: "m³",
+        catalogId: 153,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 2,
+        dotacion: 3,
+        materiales: [
+          { materialId: 300, cantidad: 1.05 },
+          { materialId: 272, cantidad: 32 },
+          { materialId: 273, cantidad: 32 },
+          { materialId: 275, cantidad: 1.4 },
+          { materialId: 276, cantidad: 3 },
+          { materialId: 278, cantidad: 0.45 },
+          { materialId: 279, cantidad: 35 },
+        ],
+      },
+      {
+        id: 120,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Losa H-25 armada",
+        categoria: "Hormigón Armado",
+        unidad: "m³",
+        catalogId: 154,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 52,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 5,
+        dotacion: 3,
+        materiales: [
+          { materialId: 270, cantidad: 1.05 },
+          { materialId: 272, cantidad: 22 },
+          { materialId: 273, cantidad: 11 },
+          { materialId: 275, cantidad: 0.65 },
+          { materialId: 276, cantidad: 2 },
+          { materialId: 277, cantidad: 4 },
+          { materialId: 278, cantidad: 0.35 },
+          { materialId: 279, cantidad: 25 },
+        ],
+      },
+      {
+        id: 140,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Losa H-30 armada",
+        categoria: "Hormigón Armado",
+        unidad: "m³",
+        catalogId: 155,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 52,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 2,
+        materiales: [
+          { materialId: 300, cantidad: 1.05 },
+          { materialId: 272, cantidad: 24 },
+          { materialId: 273, cantidad: 12 },
+          { materialId: 275, cantidad: 0.65 },
+          { materialId: 276, cantidad: 2 },
+          { materialId: 277, cantidad: 4 },
+          { materialId: 278, cantidad: 0.35 },
+          { materialId: 279, cantidad: 25 },
+        ],
+      },
+      {
+        id: 121,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Fundación corrida H-25 armada",
+        categoria: "Hormigón Armado",
+        unidad: "m³",
+        catalogId: 156,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 2,
+        materiales: [
+          { materialId: 270, cantidad: 1.05 },
+          { materialId: 272, cantidad: 28 },
+          { materialId: 273, cantidad: 14 },
+          { materialId: 275, cantidad: 1.2 },
+          { materialId: 276, cantidad: 2.8 },
+          { materialId: 278, cantidad: 0.4 },
+        ],
+      },
+      {
+        id: 122,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Zapata aislada H-25 armada",
+        categoria: "Hormigón Armado",
+        unidad: "m³",
+        catalogId: 157,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 2,
+        dotacion: 2,
+        materiales: [
+          { materialId: 270, cantidad: 1.05 },
+          { materialId: 272, cantidad: 32 },
+          { materialId: 273, cantidad: 22 },
+          { materialId: 275, cantidad: 1.5 },
+          { materialId: 276, cantidad: 2.5 },
+          { materialId: 278, cantidad: 0.4 },
+        ],
+      },
+      {
+        id: 123,
+        tipo: "Nueva Construcción",
+        estructura: "Hormigón",
+        nombre: "Enfierradura habilitada y colocada",
+        categoria: "Hormigón Armado",
+        unidad: "kg",
+        catalogId: 159,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 80,
+        dotacion: 2,
+        materiales: [
+          { materialId: 272, cantidad: 0.7 },
+          { materialId: 273, cantidad: 0.3 },
+          { materialId: 275, cantidad: 0.015 },
+        ],
+      },
+      {
+        id: 124,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Cámara de inspección hormigón ø60cm",
+        categoria: "Sanitario",
+        unidad: "unidad",
+        catalogId: 160,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 60,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 1,
+        dotacion: 2,
+        materiales: [
+          { materialId: 280, cantidad: 1 },
+          { materialId: 20, cantidad: 0.05 },
+          { materialId: 21, cantidad: 0.02 },
+        ],
+      },
+      {
+        id: 125,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Colector PVC ø110mm instalado",
+        categoria: "Sanitario",
+        unidad: "ml",
+        catalogId: 161,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 10,
+        dotacion: 2,
+        materiales: [
+          { materialId: 281, cantidad: 0.34 },
+          { materialId: 283, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 126,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Colector PVC ø160mm instalado",
+        categoria: "Sanitario",
+        unidad: "ml",
+        catalogId: 162,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 8,
+        dotacion: 2,
+        materiales: [{ materialId: 282, cantidad: 0.34 }],
+      },
+      {
+        id: 127,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Trampa de grasa 30L (inst.)",
+        categoria: "Sanitario",
+        unidad: "unidad",
+        catalogId: 164,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 2,
+        dotacion: 2,
+        materiales: [
+          { materialId: 284, cantidad: 1 },
+          { materialId: 281, cantidad: 0.5 },
+        ],
+      },
+      {
+        id: 128,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Bodega de faena 3x3m (arm.+desarm.)",
+        categoria: "Obras Provisorias",
+        unidad: "unidad",
+        catalogId: 170,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 70,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 1,
+        dotacion: 2,
+        materiales: [
+          { materialId: 287, cantidad: 6 },
+          { materialId: 288, cantidad: 24 },
+          { materialId: 293, cantidad: 1 },
+        ],
+      },
+      {
+        id: 129,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Cerco perimetral obras (inst.+retiro)",
+        categoria: "Obras Provisorias",
+        unidad: "ml",
+        catalogId: 171,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 15,
+        dotacion: 2,
+        rendimiento: 15,
+        dotacion: 2,
+        materiales: [
+          { materialId: 289, cantidad: 1.1 },
+          { materialId: 288, cantidad: 0.4 },
+        ],
+      },
+      {
+        id: 130,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Letrero de obra 1.2x2.4m",
+        categoria: "Obras Provisorias",
+        unidad: "unidad",
+        catalogId: 172,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 30,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 3,
+        dotacion: 2,
+        rendimiento: 3,
+        dotacion: 2,
+        materiales: [
+          { materialId: 290, cantidad: 1 },
+          { materialId: 288, cantidad: 4 },
+        ],
+      },
+      {
+        id: 131,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Baño químico arrendado (mes)",
+        categoria: "Obras Provisorias",
+        unidad: "mes",
+        catalogId: 173,
+        esSubcontrato: !0,
+        precioSubcontrato: 95e3,
+        pctMO: 0,
+        pctGG: 12,
+        pctUtilidad: 0,
+        rendimiento: 1,
+        dotacion: 1,
+        rendimiento: 1,
+        dotacion: 1,
+        materiales: [],
+      },
+      {
+        id: 132,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Instalación eléctrica provisoria faena",
+        categoria: "Obras Provisorias",
+        unidad: "gl",
+        catalogId: 174,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 65,
+        pctGG: 12,
+        pctUtilidad: 15,
+        rendimiento: 1,
+        dotacion: 2,
+        rendimiento: 1,
+        dotacion: 2,
+        materiales: [
+          { materialId: 292, cantidad: 20 },
+          { materialId: 293, cantidad: 1 },
+        ],
+      },
+      {
+        id: 133,
+        tipo: "Mantención",
+        estructura: "General",
+        nombre: "Asfalto frío reparación bacheo",
+        categoria: "Pavimentos",
+        unidad: "m²",
+        catalogId: 180,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 70,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 15,
+        dotacion: 2,
+        rendimiento: 15,
+        dotacion: 2,
+        materiales: [
+          { materialId: 294, cantidad: 0.6 },
+          { materialId: 299, cantidad: 0.08 },
+        ],
+      },
+      {
+        id: 134,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Sello bituminoso doble tratamiento",
+        categoria: "Pavimentos",
+        unidad: "m²",
+        catalogId: 181,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 45,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 20,
+        dotacion: 1,
+        rendimiento: 20,
+        dotacion: 1,
+        materiales: [
+          { materialId: 295, cantidad: 0.003 },
+          { materialId: 296, cantidad: 0.012 },
+        ],
+      },
+      {
+        id: 135,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Carpeta asfáltica caliente 5cm (subcontr.)",
+        categoria: "Pavimentos",
+        unidad: "m²",
+        catalogId: 182,
+        esSubcontrato: !0,
+        precioSubcontrato: 18500,
+        pctMO: 0,
+        pctGG: 12,
+        pctUtilidad: 0,
+        rendimiento: 30,
+        dotacion: 2,
+        rendimiento: 30,
+        dotacion: 2,
+        materiales: [],
+      },
+      {
+        id: 136,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Base estabilizada granular 15cm",
+        categoria: "Pavimentos",
+        unidad: "m²",
+        catalogId: 183,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 55,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 20,
+        dotacion: 2,
+        materiales: [{ materialId: 299, cantidad: 0.18 }],
+      },
+      {
+        id: 137,
+        tipo: "Nueva Construcción",
+        estructura: "General",
+        nombre: "Señalética horizontal pintura vial",
+        categoria: "Pavimentos",
+        unidad: "ml",
+        catalogId: 184,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 10,
+        pctUtilidad: 12,
+        rendimiento: 30,
+        dotacion: 1,
+        materiales: [{ materialId: 297, cantidad: 0.06 }],
+      },
+      {
+        id: 141,
+        tipo: "Remodelación",
+        estructura: "General",
+        nombre: "Piso Vinílico Click — Instalación",
+        categoria: "Pisos y Revestimientos",
+        unidad: "m²",
+        catalogId: 226,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 35,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 15,
+        dotacion: 1,
+        materiales: [
+          { materialId: 301, cantidad: 1.05 },
+          { materialId: 302, cantidad: 0.05 },
+          { materialId: 303, cantidad: 0.15 },
+          { materialId: 304, cantidad: 0.05 },
+        ],
+      },
+      {
+        id: 142,
+        tipo: "Remodelación",
+        estructura: "General",
+        nombre: "Piso Vinílico Click — Con retiro piso existente",
+        categoria: "Pisos y Revestimientos",
+        unidad: "m²",
+        catalogId: 227,
+        esSubcontrato: !1,
+        precioSubcontrato: 0,
+        pctMO: 50,
+        pctGG: 10,
+        pctUtilidad: 15,
+        rendimiento: 10,
+        dotacion: 1,
+        materiales: [
+          { materialId: 301, cantidad: 1.05 },
+          { materialId: 302, cantidad: 0.05 },
+          { materialId: 303, cantidad: 0.15 },
+          { materialId: 304, cantidad: 0.05 },
+          { materialId: 305, cantidad: 0.1 },
+        ],
+      },
+    ].map((t) => d({ rendimiento: 30, dotacion: 1 }, t)),
+    Kl = (t) => {
+      window.__isElectron &&
+      window.electronAPI &&
+      window.electronAPI.openExternal
+        ? window.electronAPI.openExternal(t)
+        : window.open(t, "_blank", "noopener,noreferrer");
+    },
+    ne = (t, i) => {
+      if (!t && t !== 0) return "$0";
+      var r = (i && i.moneda) || {
+        simbolo: "$",
+        locale: "es-CL",
+        currency: "CLP",
+        decimales: 0,
+      };
+      try {
+        return new Intl.NumberFormat(r.locale, {
+          style: "currency",
+          currency: r.currency,
+          maximumFractionDigits: r.decimales || 0,
+          minimumFractionDigits: r.decimales || 0,
+        }).format(t);
+      } catch (n) {
+        return r.simbolo + Math.round(t).toLocaleString("es-CL");
+      }
+    },
+    Ee = (t, i, r, n, sinIvaFlag) => {
+      t = Array.isArray(t) ? t : [];
+      var l0 = 0,
+        matS = 0,
+        noMatS = 0;
+      t.forEach((h) => {
+        var cant = parseFloat(h.cant) || 0,
+          precio = parseFloat(h.precio) || 0,
+          tot = cant * precio,
+          tipo = h._tipoCosto || (h._cid ? "auto" : "mo"),
+          mat = 0,
+          noMat = 0;
+        if (tipo === "mat") mat = tot;
+        else if (tipo === "mo") noMat = tot;
+        else {
+          var mu = parseFloat(h._apuMatUnit) || 0;
+          ((mat = Math.max(0, Math.min(tot, mu * cant))),
+            (noMat = Math.max(0, tot - mat)));
+        }
+        ((matS += mat), (noMatS += noMat), (l0 += tot));
+      });
+      var l = n === "mo" ? Math.round(noMatS) : Math.round(l0),
+        o = sinIvaFlag
+          ? 0
+          : i && i.moneda
+            ? i.moneda.impuesto / 100
+            : (i && i.iva) || 0.19,
+        s = l * o,
+        m = l + s,
+        p = r ? m * ((i && i.descuento) || 0) : 0,
+        C = m - p,
+        b = C * ((i && i.anticipo) || 0.6);
+      return {
+        sub: l,
+        iva: s,
+        bruto: m,
+        desc: p,
+        total: C,
+        anticipo: b,
+        matSub: Math.round(matS),
+        noMatSub: Math.round(noMatS),
+      };
+    },
+    li = (t, i) => {
+      if (t.esSubcontrato) {
+        var r = parseFloat(t.precioSubcontrato) || 0,
+          n = (r * (parseFloat(t.pctGG) || 0)) / 100;
+        return {
+          matTotal: 0,
+          moTotal: 0,
+          ggTotal: n,
+          utilTotal: 0,
+          precioFinal: r + n,
+          base: r,
+        };
+      }
+      var l = (t.materiales || []).reduce((h, j) => {
+          var F = i.find((g) => g.id === j.materialId);
+          return h + (F ? F.precio : 0) * (parseFloat(j.cantidad) || 0);
+        }, 0),
+        o = parseFloat(t.precioMO) || 0,
+        s = o > 0 ? o : (l * (parseFloat(t.pctMO) || 0)) / 100,
+        m = ((l + s) * (parseFloat(t.pctGG) || 0)) / 100,
+        p = l + s + m,
+        C = (p * (parseFloat(t.pctUtilidad) || 0)) / 100,
+        b = Math.round(p + C);
+      return {
+        matTotal: l,
+        moTotal: s,
+        ggTotal: m,
+        utilTotal: C,
+        precioFinal: b,
+        base: l,
+      };
+    },
+    Zl = (t) => {
+      if (t instanceof Date) return t;
+      if (t == null) return null;
+      if (typeof t == "number") return new Date(t);
+      if (typeof t != "string") return null;
+      var i = t.trim();
+      if (!i) return null;
+      var r = i.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (r) return new Date(`${r[1]}-${r[2]}-${r[3]}T00:00:00`);
+      if (((r = i.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})/)), r))
+        return new Date(`${r[3]}-${r[2]}-${r[1]}T00:00:00`);
+      var n = new Date(i);
+      return isNaN(n.getTime()) ? null : n;
+    },
+    Xt = () => new Date().toISOString().split("T")[0],
+    Wt = () => {
+      var t = new Date(),
+        i = (r) => r.toString().padStart(2, "0");
+      return `${i(t.getDate())}-${i(t.getMonth() + 1)}-${t.getFullYear()} ${i(t.getHours())}:${i(t.getMinutes())}`;
+    },
+    kp = (t, i) => {
+      var r = Zl(t);
+      return r
+        ? (r.setDate(r.getDate() + (parseInt(i, 10) || 0)),
+          r.toISOString().split("T")[0])
+        : Xt();
+    },
+    ga = (t, i) => {
+      var r = Zl(t),
+        n = Zl(i);
+      return !r || !n ? 0 : Math.round((r - n) / 864e5);
+    },
+    es = [
+      {
+        pais: "Chile",
+        codigo: "CL",
+        moneda: "Peso Chileno",
+        currency: "CLP",
+        simbolo: "$",
+        locale: "es-CL",
+        impuesto: 19,
+        nombreImp: "IVA",
+        decimales: 0,
+      },
+      {
+        pais: "México",
+        codigo: "MX",
+        moneda: "Peso Mexicano",
+        currency: "MXN",
+        simbolo: "$",
+        locale: "es-MX",
+        impuesto: 16,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Colombia",
+        codigo: "CO",
+        moneda: "Peso Colombiano",
+        currency: "COP",
+        simbolo: "$",
+        locale: "es-CO",
+        impuesto: 19,
+        nombreImp: "IVA",
+        decimales: 0,
+      },
+      {
+        pais: "Argentina",
+        codigo: "AR",
+        moneda: "Peso Argentino",
+        currency: "ARS",
+        simbolo: "$",
+        locale: "es-AR",
+        impuesto: 21,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Perú",
+        codigo: "PE",
+        moneda: "Sol Peruano",
+        currency: "PEN",
+        simbolo: "S/",
+        locale: "es-PE",
+        impuesto: 18,
+        nombreImp: "IGV",
+        decimales: 2,
+      },
+      {
+        pais: "Ecuador",
+        codigo: "EC",
+        moneda: "Dólar (USD)",
+        currency: "USD",
+        simbolo: "$",
+        locale: "es-EC",
+        impuesto: 12,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Bolivia",
+        codigo: "BO",
+        moneda: "Boliviano",
+        currency: "BOB",
+        simbolo: "Bs.",
+        locale: "es-BO",
+        impuesto: 13,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Uruguay",
+        codigo: "UY",
+        moneda: "Peso Uruguayo",
+        currency: "UYU",
+        simbolo: "$",
+        locale: "es-UY",
+        impuesto: 22,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Paraguay",
+        codigo: "PY",
+        moneda: "Guaraní",
+        currency: "PYG",
+        simbolo: "₲",
+        locale: "es-PY",
+        impuesto: 10,
+        nombreImp: "IVA",
+        decimales: 0,
+      },
+      {
+        pais: "Venezuela",
+        codigo: "VE",
+        moneda: "Bolívar",
+        currency: "VES",
+        simbolo: "Bs.",
+        locale: "es-VE",
+        impuesto: 16,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Guatemala",
+        codigo: "GT",
+        moneda: "Quetzal",
+        currency: "GTQ",
+        simbolo: "Q",
+        locale: "es-GT",
+        impuesto: 12,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Honduras",
+        codigo: "HN",
+        moneda: "Lempira",
+        currency: "HNL",
+        simbolo: "L",
+        locale: "es-HN",
+        impuesto: 15,
+        nombreImp: "ISV",
+        decimales: 2,
+      },
+      {
+        pais: "El Salvador",
+        codigo: "SV",
+        moneda: "Dólar (USD)",
+        currency: "USD",
+        simbolo: "$",
+        locale: "es-SV",
+        impuesto: 13,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Nicaragua",
+        codigo: "NI",
+        moneda: "Córdoba",
+        currency: "NIO",
+        simbolo: "C$",
+        locale: "es-NI",
+        impuesto: 15,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Costa Rica",
+        codigo: "CR",
+        moneda: "Colón",
+        currency: "CRC",
+        simbolo: "₡",
+        locale: "es-CR",
+        impuesto: 13,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Panamá",
+        codigo: "PA",
+        moneda: "Balboa / USD",
+        currency: "USD",
+        simbolo: "B/.",
+        locale: "es-PA",
+        impuesto: 7,
+        nombreImp: "ITBM",
+        decimales: 2,
+      },
+      {
+        pais: "Rep. Dominicana",
+        codigo: "DO",
+        moneda: "Peso Dominicano",
+        currency: "DOP",
+        simbolo: "$",
+        locale: "es-DO",
+        impuesto: 18,
+        nombreImp: "ITBIS",
+        decimales: 2,
+      },
+      {
+        pais: "Cuba",
+        codigo: "CU",
+        moneda: "Peso Cubano",
+        currency: "CUP",
+        simbolo: "$",
+        locale: "es-CU",
+        impuesto: 0,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Puerto Rico",
+        codigo: "PR",
+        moneda: "Dólar (USD)",
+        currency: "USD",
+        simbolo: "$",
+        locale: "es-PR",
+        impuesto: 11.5,
+        nombreImp: "IVU",
+        decimales: 2,
+      },
+      {
+        pais: "España",
+        codigo: "ES",
+        moneda: "Euro",
+        currency: "EUR",
+        simbolo: "€",
+        locale: "es-ES",
+        impuesto: 21,
+        nombreImp: "IVA",
+        decimales: 2,
+      },
+      {
+        pais: "Personalizado",
+        codigo: "XX",
+        moneda: "Personalizado",
+        currency: "USD",
+        simbolo: "$",
+        locale: "es-CL",
+        impuesto: 0,
+        nombreImp: "IMP",
+        decimales: 2,
+      },
+    ],
+    xa = [
+      {
+        id: 1,
+        idMP: "2390-99-LP99",
+        organismo: "Municipalidad Ejemplo",
+        region: "Coquimbo",
+        nombreObra: "⚠️ EJEMPLO — Mejoramiento veredas sector demo",
+        fechaPublicacion: "2026-03-01",
+        fechaCierre: "2026-04-30",
+        fechaVisita: "2026-03-15",
+        plazoEjecucion: 60,
+        budgetId: null,
+        items: [
+          {
+            desc: "Demolición veredas existentes",
+            cant: 100,
+            unidad: "m²",
+            precioNeto: 4200,
+            especTecnica: "Demolición manual con retiro a botadero autorizado",
+          },
+          {
+            desc: "Pavimento hormigón H-25 e=8cm",
+            cant: 100,
+            unidad: "m²",
+            precioNeto: 28e3,
+            especTecnica: "Terminación escobillada, juntas cada 3m",
+          },
+        ],
+        garantias: {
+          seriedad: {
+            monto: 5e5,
+            tipo: "Boleta bancaria",
+            banco: "BancoEstado",
+            vencimiento: "2026-05-30",
+          },
+          fiel: {
+            monto: 2e6,
+            tipo: "Boleta bancaria",
+            banco: "BancoEstado",
+            vencimiento: "2027-04-30",
+          },
+        },
+        experiencia: [],
+        estado: "Pendiente",
+        notas:
+          "⚠️ Este es un ejemplo. Elimínalo y agrega tus licitaciones reales.",
+        _esDemo: !0,
+      },
+    ],
+    a = {
+      sb: "var(--surface)",
+      bg: "var(--bg)",
+      card: "var(--card)",
+      border: "var(--border)",
+      hover: "var(--hover)",
+      accent: "#f5a020",
+      blue: "#2563eb",
+      text: "var(--text)",
+      muted: "var(--muted)",
+      mutedL: "var(--mutedL)",
+    },
+    c = {
+      app: {
+        fontFamily: "'DM Sans',sans-serif",
+        background: a.bg,
+        minHeight: "100vh",
+        color: a.text,
+      },
+      sb: {
+        width: 230,
+        background: "var(--sb)",
+        borderRight: "none",
+        display: "flex",
+        flexDirection: "column",
+        flexShrink: 0,
+      },
+      logo: {
+        padding: "20px 18px 14px",
+        borderBottom: `1px solid ${a.border}`,
+      },
+      navG: {
+        fontSize: 11,
+        color: "var(--navG-color,var(--muted))",
+        textTransform: "uppercase",
+        letterSpacing: ".14em",
+        padding: "10px 14px 4px",
+        fontWeight: 700,
+      },
+      nb: (t) => ({
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        width: "100%",
+        padding: "9px 12px",
+        borderRadius: 8,
+        border: "none",
+        background: t ? "var(--nb-active)" : "transparent",
+        color: t ? a.accent : a.mutedL,
+        cursor: "pointer",
+        fontSize: 16,
+        fontWeight: t ? 600 : 400,
+        marginBottom: 2,
+        textAlign: "left",
+      }),
+      main: {
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+      },
+      hdr: {
+        padding: "13px 24px",
+        borderBottom: "1px solid rgba(255,255,255,0.1)",
+        background: "#2C5282",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      },
+      cnt: { flex: 1, overflowY: "auto", padding: "22px 26px" },
+      card: {
+        background: a.card,
+        border: `1px solid ${a.border}`,
+        borderRadius: 12,
+        padding: "20px",
+        marginBottom: 16,
+      },
+      ct: {
+        fontSize: 13,
+        fontWeight: 700,
+        color: a.accent,
+        marginBottom: 14,
+        textTransform: "uppercase",
+        letterSpacing: ".08em",
+      },
+      lbl: {
+        fontSize: 12,
+        color: a.muted,
+        textTransform: "uppercase",
+        letterSpacing: ".08em",
+        fontWeight: 700,
+        marginBottom: 5,
+        display: "block",
+      },
+      inp: {
+        width: "100%",
+        background: a.sb,
+        border: `1px solid ${a.border}`,
+        borderRadius: 8,
+        padding: "9px 12px",
+        color: a.text,
+        fontSize: 16,
+        outline: "none",
+        boxSizing: "border-box",
+      },
+      sel: {
+        width: "100%",
+        background: a.sb,
+        border: `1px solid ${a.border}`,
+        borderRadius: 8,
+        padding: "9px 12px",
+        color: a.text,
+        fontSize: 16,
+        outline: "none",
+        boxSizing: "border-box",
+      },
+      selOpt: { background: a.sb, color: a.text },
+      btn: (t) => {
+        const i = {
+          p: {
+            background: a.accent,
+            color: "#050a10",
+            border: "none",
+            borderRadius: 8,
+            padding: "8px 16px",
+            fontSize: 16,
+            fontWeight: 700,
+            cursor: "pointer",
+          },
+          s: {
+            background: "transparent",
+            color: a.text,
+            border: `1px solid ${a.border}`,
+            borderRadius: 8,
+            padding: "8px 16px",
+            fontSize: 16,
+            cursor: "pointer",
+          },
+          d: {
+            background: "transparent",
+            color: "var(--btn-d-color)",
+            border: "1px solid var(--btn-d-border)",
+            borderRadius: 8,
+            padding: "6px 10px",
+            fontSize: 13,
+            cursor: "pointer",
+          },
+          g: {
+            background: "transparent",
+            color: a.accent,
+            border: "none",
+            padding: "5px 7px",
+            fontSize: 13,
+            cursor: "pointer",
+            borderRadius: 6,
+          },
+          b: {
+            background: "var(--btn-b-bg)",
+            color: "var(--btn-b-color)",
+            border: "1px solid var(--btn-b-border)",
+            borderRadius: 7,
+            padding: "5px 8px",
+            fontSize: 13,
+            cursor: "pointer",
+            fontWeight: 700,
+          },
+          em: {
+            background: "var(--btn-em-bg)",
+            color: "var(--btn-em-color)",
+            border: "1px solid var(--btn-em-border)",
+            borderRadius: 7,
+            padding: "5px 8px",
+            fontSize: 13,
+            cursor: "pointer",
+            fontWeight: 700,
+          },
+        };
+        return i[t] || i.p;
+      },
+      th: {
+        textAlign: "left",
+        fontSize: 12,
+        color: a.muted,
+        textTransform: "uppercase",
+        padding: "7px 10px",
+        borderBottom: `1px solid ${a.border}`,
+        fontWeight: 700,
+        whiteSpace: "nowrap",
+      },
+      td: {
+        padding: "9px 10px",
+        borderBottom: "1px solid var(--td-border)",
+        fontSize: 14,
+        verticalAlign: "middle",
+      },
+      bdg: (t) => {
+        const i = {
+            Completado: ["var(--bdg-comp-bg)", "var(--bdg-comp-fg)"],
+            "En progreso": ["var(--bdg-prog-bg)", "var(--bdg-prog-fg)"],
+            Pendiente: ["var(--bdg-pend-bg)", "var(--bdg-pend-fg)"],
+            Rechazado: ["var(--bdg-rech-bg)", "var(--bdg-rech-fg)"],
+          },
+          [r, n] = i[t] || [a.border, a.muted];
+        return {
+          background: r,
+          color: n,
+          padding: "3px 9px",
+          borderRadius: 20,
+          fontSize: 12,
+          fontWeight: 700,
+          whiteSpace: "nowrap",
+        };
+      },
+      sc: {
+        background: a.card,
+        border: `1px solid ${a.border}`,
+        borderRadius: 12,
+        padding: "16px 20px",
+      },
+    },
+    Pe = ({
+      value: t,
+      onChange: i,
+      placeholder: r,
+      type: n = "text",
+      style: l = {},
+    }) =>
+      e.jsx("input", {
+        style: d(d({}, c.inp), l),
+        value: t,
+        onChange: (o) => i(o.target.value),
+        placeholder: r,
+        type: n,
+      }),
+    Mi = ({ value: t, onChange: i, children: r, style: n = {} }) =>
+      e.jsx("select", {
+        style: d(d({}, c.sel), n),
+        value: t,
+        onChange: (l) => i(l.target.value),
+        children: r,
+      }),
+    ze = ({ label: t, children: i }) =>
+      e.jsxs("div", {
+        style: { marginBottom: 13 },
+        children: [e.jsx("label", { style: c.lbl, children: t }), i],
+      }),
+    Tf = ({ text: t }) =>
+      e.jsx("span", {
+        title: t,
+        style: {
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: 15,
+          height: 15,
+          borderRadius: "50%",
+          background: a.border,
+          color: a.mutedL,
+          fontSize: 11,
+          cursor: "help",
+          marginLeft: 5,
+          fontWeight: 700,
+        },
+        children: "?",
+      });
+  function zt(t) {
+    return new Promise((i, r) => {
+      var n = {
+          "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js":
+            "jspdf.umd.min.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js":
+            "qrcode.min.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js":
+            "xlsx.full.min.js",
+        },
+        l = n[t] || t;
+      if (document.querySelector(`script[src="${l}"]`)) {
+        i();
+        return;
+      }
+      const o = document.createElement("script");
+      ((o.src = l),
+        (o.onload = i),
+        (o.onerror = r),
+        document.head.appendChild(o));
+    });
+  }
+  async function zr(t, i, r, n) {
+    ((n = n || pt("pdfTplPref", "simple")),
+      await zt(
+        "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+      ));
+    const { jsPDF: l } = window.jspdf;
+    var o = new l({ orientation: "portrait", unit: "mm", format: "a4" }),
+      s = (M) =>
+        M
+          ? new Intl.NumberFormat("es-CL", {
+              style: "currency",
+              currency: "CLP",
+              maximumFractionDigits: 0,
+            }).format(M)
+          : "$0";
+    const {
+      sub: m,
+      iva: p,
+      desc: C,
+      total: b,
+      anticipo: h,
+    } = Ee(t.items, r, t.descuento, t.modoCosteo, t.sinIva);
+    var j = r.accentColor || "#f5a020",
+      F = j.match(/\w\w/g).map((M) => parseInt(M, 16)),
+      g = (M) =>
+        new Promise((q) => {
+          var J = new window.Image();
+          ((J.onload = () => q({ w: J.naturalWidth, h: J.naturalHeight })),
+            (J.onerror = () => q({ w: 0, h: 0 })),
+            (J.src = M));
+        }),
+      z = async (M, q, J, re) => {
+        var Q = r.logoCliente || "";
+        if (!Q) return 0;
+        try {
+          const { w: te, h: fe } = await g(Q);
+          if (!te || !fe) return 0;
+          var G = Math.min(J / te, re / fe),
+            ie = Math.round(te * G * 10) / 10,
+            oe = Math.round(fe * G * 10) / 10,
+            ce = Q.startsWith("data:image/png") ? "PNG" : "JPEG";
+          return (o.addImage(Q, ce, M, q, ie, oe), oe);
+        } catch (te) {
+          return 0;
+        }
+      },
+      B = (M, q, J, re, Q) => {
+        var G = M,
+          ie = t.modoCosteo || "completo",
+          oe =
+            ie === "separado"
+              ? [
+                  { l: "N°", x: 16, r: !1 },
+                  { l: "Descripción", x: 25, r: !1 },
+                  { l: "Cant.", x: 118, r: !0 },
+                  { l: "Unidad", x: 136, r: !0 },
+                  { l: "MO", x: 160, r: !0 },
+                  { l: "MAT", x: 178, r: !0 },
+                  { l: "Total", x: 194, r: !0 },
+                ]
+              : [
+                  { l: "N°", x: 16, r: !1 },
+                  { l: "Descripción", x: 25, r: !1 },
+                  { l: "Cant.", x: 126, r: !0 },
+                  { l: "Unidad", x: 147, r: !0 },
+                  { l: "P.Unit.", x: 170, r: !0 },
+                  { l: "Total", x: 194, r: !0 },
+                ],
+          ce = ie === "separado" ? 118 : 126,
+          te = ie === "separado" ? 136 : 147,
+          fe = ie === "separado" ? 46 : 52;
+        return (
+          o.setFillColor(...q),
+          o.rect(14, G, 182, 8, "F"),
+          oe.forEach((ve) => {
+            (o.setFont("helvetica", "bold"),
+              o.setFontSize(7.5),
+              o.setTextColor(...J),
+              o.text(ve.l, ve.x, G + 5.3, { align: ve.r ? "right" : "left" }));
+          }),
+          (G += 8),
+          t.items
+            .filter((ve) => ve.desc)
+            .forEach((ve, xr) => {
+              var Fr = 8,
+                gr = xr % 2 === 0 ? re : Q;
+              (o.setFillColor(...gr),
+                o.rect(14, G, 182, Fr, "F"),
+                o.setDrawColor(220, 225, 235),
+                o.setLineWidth(0.1),
+                o.line(14, G + Fr, 196, G + Fr),
+                o.setFont("helvetica", "normal"),
+                o.setFontSize(8.5),
+                o.setTextColor(50, 60, 75),
+                o.text("" + (xr + 1), 16, G + 5.3),
+                o.text((ve.desc || "").slice(0, fe), 25, G + 5.3),
+                o.text("" + ve.cant, ce, G + 5.3, { align: "right" }),
+                o.text(ve.unidad || "", te, G + 5.3, { align: "right" }));
+              var hr = parseFloat(ve.cant) || 0,
+                jr = parseFloat(ve.precio) || 0,
+                Pr = hr * jr,
+                Or = ve._tipoCosto || (ve._cid ? "auto" : "mo"),
+                Ar = 0,
+                Sr = 0;
+              if (Or === "mat") Ar = Pr;
+              else if (Or === "mo") Sr = Pr;
+              else {
+                var wr = parseFloat(ve._apuMatUnit) || 0;
+                ((Ar = Math.max(0, Math.min(Pr, wr * hr))),
+                  (Sr = Math.max(0, Pr - Ar)));
+              }
+              if (ie === "mo") {
+                var Br = hr ? Sr / hr : 0;
+                (o.text(s(Br), 170, G + 5.3, { align: "right" }),
+                  o.setFont("helvetica", "bold"),
+                  o.setTextColor(...F),
+                  o.text(s(Sr), 194, G + 5.3, { align: "right" }));
+              } else
+                (ie === "separado"
+                  ? (o.text(s(Sr), 160, G + 5.3, { align: "right" }),
+                    o.text(s(Ar), 178, G + 5.3, { align: "right" }),
+                    o.setFont("helvetica", "bold"),
+                    o.setTextColor(...F),
+                    o.text(s(Pr), 194, G + 5.3, { align: "right" }))
+                  : (o.text(s(jr), 170, G + 5.3, { align: "right" }),
+                    o.setFont("helvetica", "bold"),
+                    o.setTextColor(...F),
+                    o.text(s(Pr), 194, G + 5.3, { align: "right" })),
+                  (G += Fr),
+                  G > 262 && (o.addPage(), (G = 18)));
+            }),
+          G
+        );
+      },
+      w = (M, q) => {
+        var J = 120;
+        return (
+          (M += t.modoCosteo === "mo" ? 14 : 8),
+          [
+            [
+              t.modoCosteo === "mo" ? "Subtotal Mano de Obra" : "Subtotal Neto",
+              s(m),
+            ],
+            [
+              ((r && r.impuestoNombre) ||
+                (r && r.moneda && r.moneda.nombreImp) ||
+                "IVA") +
+                " (" +
+                Math.round(((r && r.iva) || 0.19) * 100) +
+                "%)",
+              s(p),
+            ],
+            ...(t.descuento
+              ? [
+                  [
+                    "Descuento (" + Math.round(r.descuento * 100) + "%)",
+                    "-" + s(C),
+                  ],
+                ]
+              : []),
+          ].forEach(([re, Q]) => {
+            (o.setFont("helvetica", "normal"),
+              o.setFontSize(9),
+              o.setTextColor(90, 100, 115),
+              o.text(re, J, M),
+              o.setFont("helvetica", "bold"),
+              o.setTextColor(30, 40, 55),
+              o.text(Q, 194, M, { align: "right" }),
+              (M += 6));
+          }),
+          o.setDrawColor(180, 185, 200),
+          o.setLineWidth(0.4),
+          o.line(J, M, 194, M),
+          (M += 2),
+          o.setFillColor(...(q || [26, 58, 92])),
+          o.roundedRect(J - 2, M, 196 - J + 2, 11, 2, 2, "F"),
+          o.setFont("helvetica", "bold"),
+          o.setFontSize(10),
+          o.setTextColor(255, 255, 255),
+          o.text("TOTAL A PAGAR", J + 2, M + 7.5),
+          o.setTextColor(...F),
+          o.text(s(b), 193, M + 7.5, { align: "right" }),
+          (M += 14),
+          o.setFillColor(240, 248, 241),
+          o.setDrawColor(180, 220, 185),
+          o.setLineWidth(0.3),
+          o.roundedRect(J - 2, M, 196 - J + 2, 10, 2, 2, "FD"),
+          o.setFont("helvetica", "normal"),
+          o.setFontSize(9),
+          o.setTextColor(30, 110, 65),
+          o.text(
+            "Anticipo (" + Math.round(r.anticipo * 100) + "%)",
+            J + 2,
+            M + 6.5,
+          ),
+          o.setFont("helvetica", "bold"),
+          o.text(s(h), 193, M + 6.5, { align: "right" }),
+          M + 14
+        );
+      },
+      v = (M, q = 20) => (M + q > 274 ? (o.addPage(), 16) : M),
+      x = (M) => {
+        ((M = v(M, 42)),
+          (M += 2),
+          o.setDrawColor(210, 215, 225),
+          o.setLineWidth(0.3),
+          o.line(14, M, 196, M),
+          (M += 6),
+          o.setFont("helvetica", "bold"),
+          o.setFontSize(8),
+          o.setTextColor(70, 80, 95),
+          o.text("CONDICIONES COMERCIALES", 14, M),
+          (M += 5),
+          o.setFont("helvetica", "normal"),
+          o.setFontSize(8),
+          o.setTextColor(130, 140, 155));
+        var q =
+            r.terminosCondiciones ||
+            `• Presupuesto válido por {validez} días corridos desde la fecha de emisión.
+• El plazo de ejecución se coordinará previo al pago del anticipo.
+• Precios en pesos chilenos (CLP). Garantía según contrato de obra.`,
+          J = q
+            .split(
+              `
+`,
+            )
+            .map(function (re) {
+              return re.replace(/{validez}/g, r.validez);
+            })
+            .filter(Boolean);
+        return (
+          [
+            ...J,
+            "• Pagos a nombre de " + r.empresa + " — RUT: " + r.rut,
+            ...(t.notas ? ["• Observaciones: " + t.notas] : []),
+          ].forEach((re) => {
+            ((M = v(M, 6)), o.text(re, 14, M), (M += 5));
+          }),
+          M
+        );
+      },
+      f = async (M) => {
+        var q =
+          4 +
+          (r.firmaImg ? 22 : 0) +
+          4 +
+          (r.firmaNombre ? 4 : 0) +
+          (r.firmaCargo ? 4 : 0) +
+          4 +
+          14;
+        ((M = v(M, q + 6)), (M += 4));
+        const J = 14,
+          re = 88;
+        if (r.firmaImg)
+          try {
+            (o.addImage(r.firmaImg, "PNG", J, M, re, 20), (M += 22));
+          } catch (ce) {
+            M += 4;
+          }
+        if (
+          (o.setDrawColor(160, 170, 185),
+          o.setLineWidth(0.4),
+          o.line(J, M, J + re, M),
+          (M += 4),
+          r.firmaNombre &&
+            (o.setFont("helvetica", "bold"),
+            o.setFontSize(9),
+            o.setTextColor(26, 58, 92),
+            o.text(r.firmaNombre, J, M),
+            (M += 4)),
+          r.firmaCargo &&
+            (o.setFont("helvetica", "normal"),
+            o.setFontSize(8),
+            o.setTextColor(100, 115, 130),
+            o.text(r.firmaCargo, J, M),
+            (M += 4)),
+          o.setFont("helvetica", "normal"),
+          o.setFontSize(8),
+          o.setTextColor(100, 115, 130),
+          o.text(r.empresa, J, M),
+          (M += 4),
+          o.setFont("helvetica", "bolditalic"),
+          o.setFontSize(10),
+          o.setTextColor(...F),
+          o.text("¡Gracias por su confianza!", 105, M + 10, {
+            align: "center",
+          }),
+          (r.version || "starter") === "procloud")
+        )
+          try {
+            await zt(
+              "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",
+            );
+            var Q = (r.telefono || "").replace(/[^0-9]/g, ""),
+              G =
+                "https://wa.me/" +
+                (Q || "56941278725") +
+                "?text=Hola,%20solicito%20información%20sobre%20el%20presupuesto%20N°%20" +
+                t.id,
+              ie = document.createElement("canvas");
+            ((ie.width = 80),
+              (ie.height = 80),
+              await new Promise((ce) => {
+                (new QRCode(ie, {
+                  text: G,
+                  width: 80,
+                  height: 80,
+                  correctLevel: QRCode.CorrectLevel.M,
+                }),
+                  setTimeout(ce, 300));
+              }));
+            var oe = ie.toDataURL("image/png");
+            (o.addImage(oe, "PNG", 155, M - 4, 18, 18),
+              o.setFont("helvetica", "normal"),
+              o.setFontSize(6),
+              o.setTextColor(150, 150, 150),
+              o.text("Escanea para contactar", 164, M + 16, {
+                align: "center",
+              }));
+          } catch (ce) {}
+        return M + 14;
+      },
+      I = (M, q, J) => {
+        var re = q;
+        return (
+          M.forEach((Q, G) => {
+            var ie = G % 2 === 1,
+              oe = ie ? J + 94 : J;
+            (G % 2 === 0 && G > 0 && (re += 6),
+              o.setFont("helvetica", "normal"),
+              o.setFontSize(8),
+              o.setTextColor(120, 130, 145),
+              o.text(Q[1] + ":", oe, re),
+              o.setFont("helvetica", "bold"),
+              o.setTextColor(20, 35, 55),
+              o.setFontSize(8.5),
+              o.text((Q[0] || "").slice(0, 38), oe + 22, re));
+          }),
+          re + 6
+        );
+      };
+    if (n === "simple") {
+      (o.setFont("helvetica", "bold"),
+        o.setFontSize(15),
+        o.setTextColor(26, 58, 92),
+        o.text(r.empresa, 14, 16),
+        o.setFont("helvetica", "normal"),
+        o.setFontSize(8.5),
+        o.setTextColor(90, 100, 115));
+      var D = 23;
+      (o.text(r.direccion, 14, D),
+        (D += 5),
+        o.text("RUT: " + r.rut + " | " + r.ciudad, 14, D),
+        (D += 5),
+        r.telefono && (o.text("Tel: " + r.telefono, 14, D), (D += 5)),
+        r.email && (o.text(r.email, 14, D), (D += 5)),
+        o.setFont("helvetica", "bold"),
+        o.setFontSize(26),
+        o.setTextColor(...F),
+        o.text("N° " + t.id, 196, 15, { align: "right" }),
+        o.setFont("helvetica", "normal"),
+        o.setFontSize(9),
+        o.setTextColor(90, 100, 115),
+        o.text("PRESUPUESTO", 196, 22, { align: "right" }),
+        o.text(t.fecha, 196, 28, { align: "right" }));
+      var k = Math.max(D + 2, 34);
+      (o.setDrawColor(26, 58, 92), o.setLineWidth(0.7), o.line(14, k, 196, k));
+      var R = k + 8;
+      (o.setFont("helvetica", "bold"),
+        o.setFontSize(7.5),
+        o.setTextColor(150, 160, 175),
+        o.text("CLIENTE", 14, R),
+        o.setDrawColor(...F),
+        o.setLineWidth(0.4),
+        o.line(14, R + 1.5, 38, R + 1.5),
+        (R += 7));
+      var K = [
+        [i.nombre, "Empresa"],
+        [i.contacto, "Contacto"],
+        [i.email, "Correo"],
+        [i.telefono, "Teléfono"],
+      ].filter((M) => M[0]);
+      ((R = I(K, R, 14)),
+        t.descripcion &&
+          (o.setFont("helvetica", "normal"),
+          o.setFontSize(8),
+          o.setTextColor(120, 130, 145),
+          o.text("Proyecto:", 14, R),
+          o.setFont("helvetica", "bold"),
+          o.setTextColor(20, 35, 55),
+          o.setFontSize(8.5),
+          o.text(t.descripcion.slice(0, 90), 36, R)),
+        (R += 10),
+        (R = B(
+          R,
+          [26, 58, 92],
+          [255, 255, 255],
+          [248, 250, 253],
+          [255, 255, 255],
+        )),
+        (R = w(R, [26, 58, 92])),
+        (R = x(R)),
+        (R = await f(R)));
+    } else if (n === "azul") {
+      (o.setFillColor(26, 58, 92),
+        o.rect(0, 0, 210, 48, "F"),
+        o.setFillColor(...F),
+        o.rect(0, 48, 210, 2, "F"));
+      var y = await z(14, 6, 58, 26);
+      (y ||
+        (o.setFont("helvetica", "bold"),
+        o.setFontSize(16),
+        o.setTextColor(255, 255, 255),
+        o.text(r.empresa, 14, 20)),
+        o.setFont("helvetica", "normal"),
+        o.setFontSize(7.5),
+        o.setTextColor(170, 195, 220));
+      var P = 36;
+      (o.text(r.empresa + " — " + r.direccion, 14, P),
+        (P += 4.5),
+        o.text(
+          r.ciudad +
+            " | RUT: " +
+            r.rut +
+            (r.telefono ? " | Tel: " + r.telefono : ""),
+          14,
+          P,
+        ),
+        (P += 4.5),
+        r.email && o.text(r.email, 14, P),
+        o.setFont("helvetica", "bold"),
+        o.setFontSize(28),
+        o.setTextColor(...F),
+        o.text("N° " + t.id, 196, 16, { align: "right" }),
+        o.setFont("helvetica", "bold"),
+        o.setFontSize(9),
+        o.setTextColor(255, 255, 255),
+        o.text("PRESUPUESTO FORMAL", 196, 25, { align: "right" }),
+        o.setFont("helvetica", "normal"),
+        o.setFontSize(8),
+        o.setTextColor(170, 195, 220),
+        o.text(t.fecha, 196, 33, { align: "right" }));
+      var R = 58;
+      (o.setFont("helvetica", "bold"),
+        o.setFontSize(7.5),
+        o.setTextColor(26, 58, 92),
+        o.text("DATOS DEL CLIENTE", 14, R),
+        o.setFillColor(...F),
+        o.rect(14, R + 1.5, 44, 0.5, "F"),
+        (R += 8));
+      var A = [
+        [i.nombre, "Empresa"],
+        [i.contacto, "Contacto"],
+        [i.email, "Correo"],
+        [i.telefono, "Teléfono"],
+      ].filter((q) => q[0]);
+      ((R = I(A, R, 14)),
+        t.descripcion
+          ? (o.setFillColor(240, 244, 252),
+            o.roundedRect(14, R, 182, 10, 2, 2, "F"),
+            o.setFont("helvetica", "normal"),
+            o.setFontSize(8),
+            o.setTextColor(80, 90, 110),
+            o.text("Proyecto:", 16, R + 6.5),
+            o.setFont("helvetica", "bold"),
+            o.setTextColor(20, 35, 55),
+            o.text(t.descripcion.slice(0, 85), 38, R + 6.5),
+            (R += 14))
+          : (R += 2),
+        (R = B(
+          R,
+          [26, 58, 92],
+          [255, 255, 255],
+          [244, 248, 255],
+          [255, 255, 255],
+        )),
+        (R = w(R, [26, 58, 92])),
+        (R = x(R)),
+        (R = await f(R)));
+    } else if (n === "verde") {
+      var S = [18, 72, 54];
+      (o.setFillColor(240, 246, 242),
+        o.rect(0, 0, 210, 50, "F"),
+        o.setFillColor(...S),
+        o.rect(0, 0, 7, 297, "F"),
+        o.setFillColor(...S),
+        o.rect(0, 50, 210, 1.5, "F"));
+      var O = await z(15, 6, 58, 28);
+      (O ||
+        (o.setFont("helvetica", "bold"),
+        o.setFontSize(16),
+        o.setTextColor(...S),
+        o.text(r.empresa, 15, 22)),
+        o.setFont("helvetica", "normal"),
+        o.setFontSize(8),
+        o.setTextColor(60, 90, 70));
+      var U = 37;
+      (o.text(r.empresa + " — " + r.direccion, 15, U),
+        (U += 4.5),
+        o.text(
+          r.ciudad +
+            " | RUT: " +
+            r.rut +
+            (r.telefono ? " | Tel: " + r.telefono : ""),
+          15,
+          U,
+        ),
+        (U += 4.5),
+        r.email && o.text(r.email, 15, U),
+        o.setFont("helvetica", "bold"),
+        o.setFontSize(26),
+        o.setTextColor(...S),
+        o.text("N° " + t.id, 196, 16, { align: "right" }),
+        o.setFont("helvetica", "bold"),
+        o.setFontSize(9),
+        o.setTextColor(...S),
+        o.text("PRESUPUESTO FORMAL", 196, 25, { align: "right" }),
+        o.setFont("helvetica", "normal"),
+        o.setFontSize(8),
+        o.setTextColor(80, 110, 90),
+        o.text(t.fecha, 196, 33, { align: "right" }));
+      var R = 62;
+      (o.setFont("helvetica", "bold"),
+        o.setFontSize(7.5),
+        o.setTextColor(...S),
+        o.text("DATOS DEL CLIENTE", 15, R),
+        o.setFillColor(...S),
+        o.rect(15, R + 1.5, 44, 0.5, "F"),
+        (R += 8));
+      var $ = [
+        [i.nombre, "Empresa"],
+        [i.contacto, "Contacto"],
+        [i.email, "Correo"],
+        [i.telefono, "Teléfono"],
+      ].filter((q) => q[0]);
+      ((R = I($, R, 15)),
+        t.descripcion
+          ? (o.setFillColor(232, 246, 238),
+            o.roundedRect(14, R, 182, 10, 2, 2, "F"),
+            o.setFont("helvetica", "normal"),
+            o.setFontSize(8),
+            o.setTextColor(50, 90, 60),
+            o.text("Proyecto:", 16, R + 6.5),
+            o.setFont("helvetica", "bold"),
+            o.setTextColor(20, 40, 28),
+            o.text(t.descripcion.slice(0, 85), 38, R + 6.5),
+            (R += 14))
+          : (R += 2),
+        (R = B(R, S, [255, 255, 255], [238, 248, 242], [255, 255, 255])),
+        (R = w(R, S)),
+        (R = x(R)),
+        (R = await f(R)));
+    } else if (n === "naranja") {
+      (o.setFillColor(...F),
+        o.rect(0, 0, 210, 5, "F"),
+        o.setFillColor(...F),
+        o.rect(0, 292, 210, 5, "F"));
+      var ee = await z(14, 10, 62, 25);
+      (ee ||
+        (o.setFont("helvetica", "bold"),
+        o.setFontSize(16),
+        o.setTextColor(...F),
+        o.text(r.empresa, 14, 22)),
+        o.setFont("helvetica", "normal"),
+        o.setFontSize(8),
+        o.setTextColor(100, 110, 125),
+        o.text(r.empresa, 14, 40),
+        o.text(r.direccion + " · " + r.ciudad, 14, 45),
+        o.text(
+          "RUT: " + r.rut + (r.telefono ? " · " + r.telefono : ""),
+          14,
+          50,
+        ),
+        o.setFont("helvetica", "bold"),
+        o.setFontSize(30),
+        o.setTextColor(...F),
+        o.text("N° " + t.id, 196, 20, { align: "right" }),
+        o.setFont("helvetica", "bold"),
+        o.setFontSize(9),
+        o.setTextColor(50, 60, 75),
+        o.text("PRESUPUESTO FORMAL", 196, 29, { align: "right" }),
+        o.setFont("helvetica", "normal"),
+        o.setFontSize(8),
+        o.setTextColor(120, 130, 145),
+        o.text(t.fecha, 196, 37, { align: "right" }),
+        o.setDrawColor(...F),
+        o.setLineWidth(1.2),
+        o.line(14, 54, 196, 54),
+        o.setDrawColor(...F),
+        o.setLineWidth(0.3),
+        o.line(14, 56, 196, 56));
+      var R = 66;
+      (o.setFillColor(...F),
+        o.roundedRect(14, R - 6, 58, 7, 1, 1, "F"),
+        o.setFont("helvetica", "bold"),
+        o.setFontSize(7.5),
+        o.setTextColor(255, 255, 255),
+        o.text("DATOS DEL CLIENTE", 16, R - 0.5),
+        (R += 5),
+        o.setDrawColor(...F),
+        o.setLineWidth(0.4),
+        o.roundedRect(14, R - 5, 182, 32, 2, 2));
+      var Y = [
+        [i.nombre, "Empresa"],
+        [i.contacto, "Contacto"],
+        [i.email, "Correo"],
+        [i.telefono, "Teléfono"],
+      ].filter((q) => q[0]);
+      ((R = I(Y, R, 16)),
+        t.descripcion
+          ? (o.setFont("helvetica", "normal"),
+            o.setFontSize(8),
+            o.setTextColor(100, 110, 125),
+            o.text("Proyecto:", 16, R),
+            o.setFont("helvetica", "bold"),
+            o.setTextColor(20, 35, 55),
+            o.text(t.descripcion.slice(0, 82), 36, R),
+            (R += 10))
+          : (R += 4),
+        (R = B(R, F, [20, 20, 20], [253, 248, 240], [255, 255, 255])),
+        (R = w(R, F)),
+        (R = x(R)),
+        (R = await f(R)));
+    } else if (n === "gris") {
+      var le = [48, 55, 65],
+        Z = [90, 100, 115],
+        X = [230, 232, 235],
+        W = [245, 246, 248];
+      (o.setFillColor(...le),
+        o.rect(0, 0, 210, 48, "F"),
+        o.setFillColor(115, 125, 140),
+        o.rect(0, 48, 210, 1, "F"));
+      var T = await z(14, 5, 62, 24);
+      (T
+        ? (o.setFont("helvetica", "bold"),
+          o.setFontSize(8),
+          o.setTextColor(200, 205, 215),
+          o.text(r.empresa, 14, 32))
+        : (o.setFont("helvetica", "bold"),
+          o.setFontSize(15),
+          o.setTextColor(255, 255, 255),
+          o.text(r.empresa, 14, 20)),
+        o.setFont("helvetica", "normal"),
+        o.setFontSize(7.5),
+        o.setTextColor(190, 195, 205));
+      var L = T ? 37 : 28;
+      (o.text(r.direccion + " · " + r.ciudad, 14, L),
+        (L += 4.5),
+        o.text(
+          "RUT: " + r.rut + (r.telefono ? " · Tel: " + r.telefono : ""),
+          14,
+          L,
+        ),
+        (L += 4.5),
+        r.email && o.text(r.email, 14, L),
+        o.setFont("helvetica", "bold"),
+        o.setFontSize(24),
+        o.setTextColor(255, 255, 255),
+        o.text("N° " + t.id, 196, 18, { align: "right" }),
+        o.setFont("helvetica", "bold"),
+        o.setFontSize(8.5),
+        o.setTextColor(190, 195, 205),
+        o.text("PRESUPUESTO FORMAL", 196, 26, { align: "right" }),
+        o.setFont("helvetica", "normal"),
+        o.setFontSize(8),
+        o.setTextColor(160, 168, 180),
+        o.text(t.fecha, 196, 33, { align: "right" }));
+      var R = 62;
+      (o.setFont("helvetica", "bold"),
+        o.setFontSize(7.5),
+        o.setTextColor(...le),
+        o.text("DATOS DEL CLIENTE", 14, R),
+        o.setFillColor(...le),
+        o.rect(14, R + 2, 44, 0.6, "F"),
+        (R += 9));
+      var E = [
+        [i.nombre, "Empresa"],
+        [i.contacto, "Contacto"],
+        [i.email, "Correo"],
+        [i.telefono, "Teléfono"],
+      ].filter((q) => q[0]);
+      ((R = I(E, R, 14)),
+        t.descripcion
+          ? (o.setFillColor(...W),
+            o.roundedRect(14, R, 182, 10, 2, 2, "F"),
+            o.setDrawColor(...X),
+            o.setLineWidth(0.3),
+            o.roundedRect(14, R, 182, 10, 2, 2, "D"),
+            o.setFont("helvetica", "normal"),
+            o.setFontSize(8),
+            o.setTextColor(...Z),
+            o.text("Proyecto:", 16, R + 6.5),
+            o.setFont("helvetica", "bold"),
+            o.setTextColor(...le),
+            o.text(t.descripcion.slice(0, 85), 36, R + 6.5),
+            (R += 14))
+          : (R += 2),
+        (R = B(R, le, [255, 255, 255], W, [255, 255, 255])),
+        (R = w(R, le)),
+        (R = x(R)),
+        (R = await f(R)));
+    }
+    o.save(
+      "Presupuesto_" +
+        t.id +
+        "_" +
+        (i.nombre || "cliente").replace(/\s+/g, "_") +
+        ".pdf",
+    );
+  }
+  function Ef(t, i, r) {
+    const { total: n, anticipo: l } = Ee(
+      t.items,
+      r,
+      t.descuento,
+      t.modoCosteo,
+      t.sinIva,
+    );
+    var o = (r && r.accentColor) || "#f5a020",
+      s = (r && r.empresa) || "Empresa",
+      m = (r && r.logoCliente) || "",
+      p = (r && r.firmaImg) || "",
+      C = (r && r.firmaNombre) || s,
+      b = (r && r.firmaCargo) || "Representante Legal",
+      h = (t && t.plazoEjecucion) || (r && r.plazoEjecucion) || 30,
+      j = new Date().toLocaleDateString("es-CL", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+      F = m
+        ? '<img src="' +
+          m +
+          '" style="height:70px;object-fit:contain;margin-bottom:8px;display:block"/>'
+        : "",
+      g = p
+        ? '<img src="' +
+          p +
+          '" style="height:100px;object-fit:contain;display:block;margin:0 auto 8px"/>'
+        : '<div style="height:100px"></div>',
+      z =
+        '<!DOCTYPE html><html><head><title>Carta de Presentación</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Georgia,serif;color:#111;padding:28px 50px 16px;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6}.firma-bloque{page-break-inside:avoid;page-break-before:avoid}.footer{page-break-inside:avoid;page-break-before:avoid}@media print{.np{display:none}body{padding:14px 35px 10px}}</style></head><body><button class="np" onclick="window.print()" style="margin-bottom:20px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px;font-family:Arial,sans-serif;font-size:13px">🖨 Imprimir / PDF</button><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:14px;border-bottom:2px solid ' +
+        o +
+        '"><div>' +
+        F +
+        '<div style="font-size:21px;font-weight:bold;color:#1a3060;font-family:Arial,sans-serif">' +
+        s +
+        '</div><div style="font-size:12px;color:#666;font-family:Arial,sans-serif;margin-top:3px">' +
+        (r && r.rut ? "RUT: " + r.rut + " | " : "") +
+        ((r && r.ciudad) || "") +
+        '</div><div style="font-size:12px;color:#666;font-family:Arial,sans-serif">' +
+        (r && r.telefono ? r.telefono + " | " : "") +
+        ((r && r.email) || "") +
+        '</div></div><div style="text-align:right;font-family:Arial,sans-serif"><div style="font-size:12px;color:#666">' +
+        j +
+        '</div><div style="font-size:12px;color:#666;margin-top:3px">Ref. Presupuesto N° ' +
+        t.id +
+        '</div></div></div><p style="margin-bottom:14px">Estimado/a <strong>' +
+        (i.contacto || i.nombre || "Cliente") +
+        '</strong>,</p><p style="margin-bottom:10px">Por medio de la presente, <strong>' +
+        s +
+        "</strong> tiene el agrado de presentar su propuesta técnica y económica para la ejecución de los trabajos correspondientes a <strong>" +
+        (t.descripcion || "los trabajos solicitados") +
+        '</strong>.</p><p style="margin-bottom:10px">Contamos con amplia experiencia en proyectos de construcción y remodelación en la Región de Coquimbo, con un equipo de profesionales y maestros especializados comprometidos con la calidad, los plazos y la seguridad en cada obra que ejecutamos.</p><p style="margin-bottom:14px">Nuestra propuesta ha sido elaborada considerando materiales de primera calidad, mano de obra certificada y un plazo de ejecución de <strong>' +
+        h +
+        ' días hábiles</strong> desde la recepción del anticipo correspondiente.</p><div style="background:#f0f4f8;border-left:4px solid ' +
+        o +
+        ';padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:14px;page-break-inside:avoid"><div style="font-family:Arial,sans-serif;font-size:11px;color:#666;margin-bottom:10px;text-transform:uppercase;font-weight:bold;letter-spacing:.08em">Resumen de la Propuesta</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-family:Arial,sans-serif"><div><div style="font-size:11px;color:#888;margin-bottom:3px">Proyecto:</div><strong style="color:#1a3060;font-size:13px">' +
+        (t.descripcion || "") +
+        '</strong></div><div><div style="font-size:11px;color:#888;margin-bottom:3px">Monto total:</div><strong style="color:' +
+        o +
+        ';font-size:20px">$' +
+        n.toLocaleString("es-CL") +
+        '</strong></div><div><div style="font-size:11px;color:#888;margin-bottom:3px">Anticipo requerido:</div><strong style="color:#1a3060">$' +
+        l.toLocaleString("es-CL") +
+        " (" +
+        Math.round(((r && r.anticipo) || 0.6) * 100) +
+        '%)</strong></div><div><div style="font-size:11px;color:#888;margin-bottom:3px">Plazo de ejecución:</div><strong style="color:#1a3060">' +
+        h +
+        ' días hábiles</strong></div></div></div><p style="margin-bottom:10px">Quedamos a su entera disposición para resolver cualquier consulta, aclarar los alcances de la propuesta o coordinar una visita a terreno antes del inicio de los trabajos.</p><p style="margin-bottom:10px">Agradecemos la confianza depositada en nosotros y esperamos poder contribuir al éxito de su proyecto.</p><p style="margin-bottom:18px">Atentamente,</p><div class="firma-bloque" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-top:10px"><div style="text-align:center">' +
+        g +
+        '<div style="border-top:1.5px solid #333;padding-top:8px"><strong style="font-size:14px;color:#1a3060;font-family:Arial,sans-serif">' +
+        C +
+        '</strong><br/><span style="font-size:12px;color:#666;font-family:Arial,sans-serif">' +
+        b +
+        " — " +
+        s +
+        '</span></div></div><div style="text-align:center"><div style="height:100px"></div><div style="border-top:1.5px solid #333;padding-top:8px"><strong style="font-size:14px;color:#1a3060;font-family:Arial,sans-serif">' +
+        (i.nombre || "Cliente") +
+        '</strong><br/><span style="font-size:12px;color:#666;font-family:Arial,sans-serif">RUT: ___________________</span></div></div></div><div class="footer" style="margin-top:16px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;font-family:Arial,sans-serif;text-align:center">Enlace Constructor — ' +
+        s +
+        " · " +
+        new Date().toLocaleDateString("es-CL") +
+        "</div></body></html>",
+      B = window.open("", "_blank");
+    (B.document.write(z), B.document.close());
+  }
+  function ActaRecepcionHTML(t,i,r){
+    const { total: n } = Ee(
+      t.items || [],
+      r,
+      t.descuento,
+      t.modoCosteo,
+      t.sinIva,
+    );
+    var o = (r && r.accentColor) || "#f5a020",
+      s = (r && r.empresa) || "Empresa",
+      m = (r && r.logoCliente) || "",
+      p = (r && r.firmaImg) || "",
+      C = (r && r.firmaNombre) || s,
+      b = (r && r.firmaCargo) || "Representante Legal",
+      j = new Date().toLocaleDateString("es-CL", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+      F = m
+        ? '<img src="' +
+          m +
+          '" style="height:70px;object-fit:contain;margin-bottom:8px;display:block"/>'
+        : "",
+      g = p
+        ? '<img src="' +
+          p +
+          '" style="height:100px;object-fit:contain;display:block;margin:0 auto 8px"/>'
+        : '<div style="height:100px"></div>';
+    var z =
+      '<!DOCTYPE html><html><head><title>Acta de Recepción Conforme</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Georgia,serif;color:#111;padding:30px 50px;max-width:800px;margin:0 auto;font-size:14px;line-height:1.6}.firma-bloque{page-break-inside:avoid;page-break-before:avoid}@media print{.np{display:none}body{padding:15px 35px}}</style></head><body><button class="np" onclick="window.print()" style="margin-bottom:20px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px;font-family:Arial,sans-serif;font-size:13px">🖸 Imprimir / PDF</button><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px;padding-bottom:15px;border-bottom:2px solid ' +
+      o +
+      '"><div>' +
+      F +
+      '<div style="font-size:22px;font-weight:bold;color:#1a3060;margin-bottom:4px">COMPROBANTE DE PAGO Y RECEPCIÓN DE OBRAS</div><div style="font-size:12px;color:#555">Presupuesto N° ' +
+      t.id +
+      '</div></div><div style="text-align:right;font-size:13px;color:#444">' +
+      j +
+      '</div></div><div style="margin-bottom:25px">Mediante el presente documento, se deja constancia de la recepción conforme de los trabajos correspondientes al presupuesto <strong>N° ' +
+      t.id +
+      '</strong>, denominado "<strong>' +
+      (t.descripcion || "Sin descripción") +
+      '</strong>", ejecutados por <strong>' +
+      s +
+      "</strong> para el cliente <strong>" +
+      (i.nombre || "") +
+      '</strong>.</div><div style="margin-bottom:25px">Asimismo, el cliente declara que los trabajos descritos en dicho presupuesto han sido recibidos a su entera satisfacción, dándose por entregada la obra.</div><div style="background:#f8f9fa;padding:15px 20px;border-left:4px solid ' +
+      o +
+      ';margin-bottom:40px"><div style="font-size:12px;color:#666;text-transform:uppercase;margin-bottom:4px">Monto Total Pagado (Sin IVA / Honorarios)</div><div style="font-size:18px;font-weight:bold;color:#111">$' +
+      n.toLocaleString("es-CL") +
+      '</div></div><div style="margin-bottom:50px">Este documento sirve como comprobante formal de que los fondos han sido desembolsados y recibidos, dando por cerrado administrativa y operativamente el trabajo asociado a este presupuesto sin observaciones pendientes por ninguna de las partes.</div><div class="firma-bloque" style="display:flex;justify-content:space-between;margin-top:60px"><div style="width:45%;text-align:center">' +
+      g +
+      '<div style="border-top:1px solid #333;padding-top:8px;font-weight:bold">' +
+      C +
+      '</div><div style="font-size:12px;color:#555">' +
+      b +
+      "<br>" +
+      s +
+      '</div></div><div style="width:45%;text-align:center"><div style="height:100px"></div><div style="border-top:1px solid #333;padding-top:8px;font-weight:bold">' +
+      (i.nombre || "Cliente") +
+      '</div><div style="font-size:12px;color:#555">Recepción Conforme<br>RUT: ' +
+      (i.rut || "______________") +
+      "</div></div></div></body></html>";
+    return z;
+  }
+  function Af(t, i, r) {
+    const { total: n, anticipo: l } = Ee(
+      t.items,
+      r,
+      t.descuento,
+      t.modoCosteo,
+      t.sinIva,
+    );
+    var o = (r && r.accentColor) || "#f5a020",
+      s = (r && r.empresa) || "Empresa",
+      m = (r && r.logoCliente) || "",
+      p = (r && r.firmaImg) || "",
+      C = (r && r.firmaNombre) || s,
+      b = (r && r.firmaCargo) || "Representante Legal",
+      h = (t && t.plazoEjecucion) || (r && r.plazoEjecucion) || 30,
+      j = new Date().toLocaleDateString("es-CL", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+      F = m
+        ? '<img src="' +
+          m +
+          '" style="height:70px;object-fit:contain;margin-bottom:8px;display:block"/>'
+        : "",
+      g = p
+        ? '<img src="' +
+          p +
+          '" style="height:100px;object-fit:contain;display:block;margin:0 auto 8px"/>'
+        : '<div style="height:100px"></div>',
+      z =
+        '<!DOCTYPE html><html><head><title>Carta de Presentación</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Georgia,serif;color:#111;padding:28px 50px 16px;max-width:800px;margin:0 auto;font-size:13px;line-height:1.6}.firma-bloque{page-break-inside:avoid;page-break-before:avoid}.footer{page-break-inside:avoid;page-break-before:avoid}@media print{.np{display:none}body{padding:14px 35px 10px}}</style></head><body><button class="np" onclick="window.print()" style="margin-bottom:20px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px;font-family:Arial,sans-serif;font-size:13px">🖸 Imprimir / PDF</button><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:14px;border-bottom:2px solid ' +
+        o +
+        '"><div>' +
+        F +
+        '<div style="font-size:21px;font-weight:bold;color:#1a3060;font-family:Arial,sans-serif">' +
+        s +
+        '</div><div style="font-size:12px;color:#666;font-family:Arial,sans-serif;margin-top:3px">' +
+        (r && r.rut ? "RUT: " + r.rut + " | " : "") +
+        ((r && r.ciudad) || "") +
+        '</div><div style="font-size:12px;color:#666;font-family:Arial,sans-serif">' +
+        (r && r.telefono ? r.telefono + " | " : "") +
+        ((r && r.email) || "") +
+        '</div></div><div style="text-align:right;font-family:Arial,sans-serif"><div style="font-size:12px;color:#666">' +
+        j +
+        '</div><div style="font-size:12px;color:#666;margin-top:3px">Ref. Presupuesto N° ' +
+        t.id +
+        '</div></div></div><p style="margin-bottom:14px">Estimado/a <strong>' +
+        (i.contacto || i.nombre || "Cliente") +
+        '</strong>,</p><p style="margin-bottom:10px">Por medio de la presente, <strong>' +
+        s +
+        "</strong> tiene el agrado de presentar su propuesta técnica y económica para la ejecución de los trabajos correspondientes a <strong>" +
+        (t.descripcion || "los trabajos solicitados") +
+        '</strong>.</p><p style="margin-bottom:10px">Contamos con amplia experiencia en proyectos de construcción y remodelación en la Región de Coquimbo, con un equipo de profesionales y maestros especializados comprometidos con la calidad, los plazos y la seguridad en cada obra que ejecutamos.</p><p style="margin-bottom:14px">Nuestra propuesta ha sido elaborada considerando materiales de primera calidad, mano de obra certificada y un plazo de ejecución de <strong>' +
+        h +
+        ' días hábiles</strong> desde la recepción del anticipo correspondiente.</p><div style="background:#f0f4f8;border-left:4px solid ' +
+        o +
+        ';padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:14px;page-break-inside:avoid"><div style="font-family:Arial,sans-serif;font-size:11px;color:#666;margin-bottom:10px;text-transform:uppercase;font-weight:bold;letter-spacing:.08em">Resumen de la Propuesta</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-family:Arial,sans-serif"><div><div style="font-size:11px;color:#888;margin-bottom:3px">Proyecto:</div><strong style="color:#1a3060;font-size:13px">' +
+        (t.descripcion || "") +
+        '</strong></div><div><div style="font-size:11px;color:#888;margin-bottom:3px">Monto total:</div><strong style="color:' +
+        o +
+        ';font-size:20px">$' +
+        n.toLocaleString("es-CL") +
+        '</strong></div><div><div style="font-size:11px;color:#888;margin-bottom:3px">Anticipo requerido:</div><strong style="color:#1a3060">$' +
+        l.toLocaleString("es-CL") +
+        " (" +
+        Math.round(((r && r.anticipo) || 0.6) * 100) +
+        '%)</strong></div><div><div style="font-size:11px;color:#888;margin-bottom:3px">Plazo de ejecución:</div><strong style="color:#1a3060">' +
+        h +
+        ' días hábiles</strong></div></div></div><p style="margin-bottom:10px">Quedamos a su entera disposición para resolver cualquier consulta, aclarar los alcances de la propuesta o coordinar una visita a terreno antes del inicio de los trabajos.</p><p style="margin-bottom:10px">Agradecemos la confianza depositada en nosotros y esperamos poder contribuir al éxito de su proyecto.</p><p style="margin-bottom:18px">Atentamente,</p><div class="firma-bloque" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-top:10px"><div style="text-align:center">' +
+        g +
+        '<div style="border-top:1.5px solid #333;padding-top:8px"><strong style="font-size:14px;color:#1a3060;font-family:Arial,sans-serif">' +
+        C +
+        '</strong><br/><span style="font-size:12px;color:#666;font-family:Arial,sans-serif">' +
+        b +
+        " — " +
+        s +
+        '</span></div></div><div style="text-align:center"><div style="height:100px"></div><div style="border-top:1.5px solid #333;padding-top:8px"><strong style="font-size:14px;color:#1a3060;font-family:Arial,sans-serif">' +
+        (i.nombre || "Cliente") +
+        '</strong><br/><span style="font-size:12px;color:#666;font-family:Arial,sans-serif">RUT: ___________________</span></div></div></div><div class="footer" style="margin-top:16px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;font-family:Arial,sans-serif;text-align:center">Enlace Constructor — ' +
+        s +
+        " · " +
+        new Date().toLocaleDateString("es-CL") +
+        "</div></body></html>";
+    return z;
+  }
+  function Pp(t, i, r) {
+    r = r || {};
+    t = t || {};
+    i = i || {};
+    var n = r.accentColor || "#f5a020",
+      l = r.empresa || "Empresa",
+      o = r.logoCliente || r.logo || "",
+      s = o
+        ? '<img src="' +
+          o +
+          '" style="height:70px;object-fit:contain;margin-bottom:8px;display:block"/>'
+        : "",
+      m = t.modoCosteo || "completo",
+      p = parseFloat(r.pctGG) || 0,
+      C = parseFloat(r.pctUtil || r.pctUtilidad) || 0,
+      b = (1 + p / 100) * (1 + C / 100),
+      h = (t.items || []).filter((e) => e && e.desc),
+      j = (e) => "$" + Math.round(Number(e) || 0).toLocaleString("es-CL"),
+      F = () => new Date(t.fecha || Date.now()).toLocaleDateString("es-CL"),
+      g = { mat: 0, mo: 0, gg: 0, util: 0, total: 0 },
+      z = (e) => {
+        var u = parseFloat(e.cant) || 0,
+          d = parseFloat(e.precio) || 0,
+          x = u * d,
+          f = e._tipoCosto || (e._cid ? "auto" : "mo"),
+          I = 0,
+          D = 0;
+        if (f === "mat") I = x;
+        else if (f === "mo") D = x;
+        else {
+          var k = parseFloat(e._apuMatUnit) || 0;
+          ((I = Math.max(0, Math.min(x, k * u))), (D = Math.max(0, x - I)));
+        }
+        return { cant: u, precio: d, tot: x, mat: I, noMat: D };
+      },
+      B = [],
+      w = 0;
+    h.forEach((e) => {
+      var u = z(e),
+        d = u.cant,
+        x = u.precio,
+        f = u.mat,
+        I = u.noMat,
+        D = u.tot;
+      if (m === "mo") {
+        if (I <= 0) return;
+        ((f = 0), (D = I));
+      } else D = f + I;
+      var k = b > 0 ? I / b : I,
+        R = Math.round(I),
+        K = Math.round(k),
+        y = Math.round(K * (p / 100)),
+        P = Math.round((K + y) * (C / 100)),
+        A = K + y + P,
+        S = R - A;
+      (S && (P += S),
+        (g.mat += Math.round(f)),
+        (g.mo += K),
+        (g.gg += y),
+        (g.util += P),
+        (g.total += R),
+        (w += D),
+        B.push(
+          '<tr><td style="padding:8px 10px;font-size:13px;border-bottom:1px solid #e2e8f0">' +
+            (e.desc || "") +
+            '</td><td style="padding:8px 10px;text-align:center;font-size:12px;color:#666;border-bottom:1px solid #e2e8f0">' +
+            d +
+            " " +
+            (e.unidad || "") +
+            '</td><td style="padding:8px 10px;text-align:right;font-size:12px;border-bottom:1px solid #e2e8f0">' +
+            j(x) +
+            '</td><td style="padding:8px 10px;text-align:right;font-size:12px;border-bottom:1px solid #e2e8f0">' +
+            j(f) +
+            '</td><td style="padding:8px 10px;text-align:right;font-size:12px;border-bottom:1px solid #e2e8f0">' +
+            j(K) +
+            '</td><td style="padding:8px 10px;text-align:right;font-size:12px;border-bottom:1px solid #e2e8f0">' +
+            j(y) +
+            '</td><td style="padding:8px 10px;text-align:right;font-size:12px;border-bottom:1px solid #e2e8f0">' +
+            j(P) +
+            '</td><td style="padding:8px 10px;text-align:right;font-size:13px;font-weight:700;border-bottom:1px solid #e2e8f0">' +
+            j(R) +
+            "</td></tr>",
+        ));
+    });
+    var v = Ee(h, r, t.descuento, m, t.sinIva) || {},
+      x0 = Number(v.sub) || 0,
+      f0 = Number(v.iva) || 0,
+      I0 = Number(v.total) || 0,
+      D0 = Number(v.desc) || 0,
+      k0 = Number(v.bruto) || 0,
+      R0 = g.total > 0 ? g.total : x0 || 1,
+      K0 = Math.round((g.mat / R0) * 1e3) / 10,
+      y0 = Math.round((g.mo / R0) * 1e3) / 10,
+      P0 = Math.round((g.gg / R0) * 1e3) / 10,
+      A0 = Math.round((g.util / R0) * 1e3) / 10,
+      S0 =
+        "Factores aplicados: Materiales " +
+        K0 +
+        "% · MO " +
+        y0 +
+        "% · GG " +
+        P0 +
+        "% · Utilidad " +
+        A0 +
+        "%",
+      O0 = B.length
+        ? B.join("")
+        : '<tr><td colspan="8" style="padding:18px;color:#666;text-align:center">Sin partidas</td></tr>',
+      U0 =
+        '<tr class="total-row"><td>TOTALES</td><td></td><td style="text-align:right">' +
+        j(w) +
+        '</td><td style="text-align:right">' +
+        j(g.mat) +
+        '</td><td style="text-align:right">' +
+        j(g.mo) +
+        '</td><td style="text-align:right">' +
+        j(g.gg) +
+        '</td><td style="text-align:right">' +
+        j(g.util) +
+        '</td><td style="text-align:right">' +
+        j(g.total) +
+        "</td></tr>",
+      Q0 =
+        D0 > 0
+          ? '<tr style="background:#fff8f0"><td style="padding:6px 12px;color:#555">Descuento</td><td style="padding:6px 12px;text-align:right">-' +
+            j(D0) +
+            "</td></tr>"
+          : "",
+      G0 =
+        '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Desglose Interno</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;padding:40px;max-width:1000px;margin:0 auto;font-size:13px}table{width:100%;border-collapse:collapse}th{background:#1a3060;color:#fff;padding:9px 10px;font-size:11px;text-align:left;text-transform:uppercase}tr:nth-child(even) td{background:#f8fafc}.total-row td{background:#1a3060;color:#fff;padding:9px 10px;font-weight:800}@media print{.np{display:none}}</style></head><body><button class="np" onclick="window.print()" style="margin-bottom:20px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px">🖨 Imprimir / PDF</button><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;border-bottom:3px solid ' +
+        n +
+        '"><div>' +
+        s +
+        '<div style="font-size:20px;font-weight:bold;color:#1a3060">' +
+        l +
+        "</div>" +
+        (r.rut
+          ? '<div style="font-size:11px;color:#666">RUT: ' + r.rut + "</div>"
+          : "") +
+        '</div><div style="text-align:right"><div style="font-size:12px;font-weight:bold;color:' +
+        n +
+        ';text-transform:uppercase;letter-spacing:.08em">Desglose Interno de Presupuesto</div><div style="font-size:28px;font-weight:900;color:#1a3060">N° ' +
+        (t.id || "") +
+        '</div><div style="font-size:12px;color:#666">' +
+        F() +
+        '</div><div style="font-size:12px;color:#666;margin-top:2px">Cliente: ' +
+        (i.nombre || "") +
+        '</div></div></div><div style="font-size:16px;font-weight:800;color:#1a3060;margin-bottom:8px">' +
+        (t.descripcion || "") +
+        '</div><div style="background:#f0f4ff;border-left:4px solid ' +
+        n +
+        ';padding:10px 14px;border-radius:0 8px 8px 0;margin:10px 0 16px"><div style="font-size:12px;color:#1a3060">' +
+        S0 +
+        '</div><div style="font-size:10px;color:#667085;margin-top:4px">GG y Utilidad calculados desde Configuración sobre MO base; Materiales estimados por APU (apuMatUnit) cuando aplica.</div></div><table><thead><tr><th>Partida</th><th style="width:120px;text-align:center">Cantidad</th><th style="width:110px;text-align:right">Precio Unit.</th><th style="width:110px;text-align:right">MAT. (' +
+        K0 +
+        '%)</th><th style="width:110px;text-align:right">MO (' +
+        y0 +
+        '%)</th><th style="width:110px;text-align:right">GG (' +
+        P0 +
+        '%)</th><th style="width:110px;text-align:right">Util. (' +
+        A0 +
+        '%)</th><th style="width:120px;text-align:right">Total Partida</th></tr></thead><tbody>' +
+        O0 +
+        U0 +
+        '</tbody></table><div style="margin-top:16px;display:flex;justify-content:flex-end"><table style="width:320px;border-collapse:collapse"><tr><td style="padding:6px 12px;color:#555">Subtotal neto</td><td style="padding:6px 12px;text-align:right;font-weight:700">' +
+        j(x0) +
+        '</td></tr><tr style="background:#f8fafc"><td style="padding:6px 12px;color:#555">' +
+        (r.impuestoNombre || (r.moneda && r.moneda.nombreImp) || "IVA") +
+        " (" +
+        Math.round((r.iva || 0.19) * 100) +
+        '%)</td><td style="padding:6px 12px;text-align:right">' +
+        j(f0) +
+        "</td></tr>" +
+        Q0 +
+        '<tr style="background:#1a3060"><td style="padding:9px 12px;color:#fff;font-weight:800">TOTAL CON IVA</td><td style="padding:9px 12px;text-align:right;font-weight:900;font-size:16px;color:' +
+        n +
+        '">' +
+        j(I0) +
+        "</td></tr></table></div></body></html>";
+    return G0;
+  }
+  function Mf(t, i, r) {
+    var n = window.open("", "_blank");
+    (n.document.write(Pp(t, i, r)), n.document.close());
+  }
+  function Tp(t, i, r) {
+    var n = (r && r.accentColor) || "#f5a020",
+      l = (r && r.empresa) || "Empresa",
+      o = (r && r.logoCliente) || r.logo || "",
+      s = o
+        ? '<img src="' +
+          o +
+          '" style="height:60px;object-fit:contain;display:block;margin-bottom:6px"/>'
+        : "",
+      m = (r && r.moItems) || [
+        { rol: "Maestro primera", jornal: 47e3, horasJornada: 8 },
+        { rol: "Maestro segunda", jornal: 38e3, horasJornada: 8 },
+        { rol: "Ayudante", jornal: 25e3, horasJornada: 8 },
+      ],
+      p = (t.items || []).filter((w) => w.desc),
+      C = (w) => "$" + Math.round(w).toLocaleString("es-CL"),
+      b = {};
+    m.forEach((w) => {
+      b[w.rol] = 0;
+    });
+    var modo = t.modoCosteo || "completo",
+      tot = Ee(p, r, t.descuento, modo, t.sinIva) || {},
+      moTotal =
+        modo === "mo"
+          ? Number(tot.sub) || 0
+          : Number(tot.noMatSub || tot.sub) || 0,
+      ggPct = parseFloat(r && r.pctGG) || 0,
+      utilPct = parseFloat(r && (r.pctUtil || r.pctUtilidad)) || 0,
+      den = (1 + ggPct / 100) * (1 + utilPct / 100),
+      moBase = den > 0 ? moTotal / den : moTotal,
+      avgJ =
+        m.reduce((w, v) => w + (parseFloat(v.jornal) || 0), 0) /
+        Math.max(1, m.length),
+      baseTotal = p.reduce((w, v) => {
+        var rr = parseFloat(v._rendimiento) || 0,
+          dd = parseFloat(v._dotacion) || 1,
+          cc = parseFloat(v.cant) || 0,
+          hh = rr > 0 ? Math.round((cc / rr) * dd * 8 * 10) / 10 : 0;
+        return hh ? w + (hh / 8) * avgJ : w;
+      }, 0),
+      scale = baseTotal > 0 && moBase > 0 ? moBase / baseTotal : 1;
+    var h = 0,
+      j = p
+        .map((w) => {
+          var rr = parseFloat(w._rendimiento) || 0,
+            dd = parseFloat(w._dotacion) || 1,
+            cc = parseFloat(w.cant) || 0,
+            hh = rr > 0 ? Math.round((cc / rr) * dd * 8 * 10) / 10 : null;
+          if (!hh) return "";
+          h += hh;
+          var itemMo = 0,
+            k = m
+              .map((R) => {
+                var K = parseFloat(R.jornal) || 0,
+                  y = hh / 8,
+                  P = Math.round(((y * K) / Math.max(1, m.length)) * scale);
+                ((itemMo += P), (b[R.rol] = (b[R.rol] || 0) + P));
+                return '<td style="text-align:right">' + C(P) + "</td>";
+              })
+              .join(""),
+            itemGG = Math.round(itemMo * (ggPct / 100)),
+            itemUtil = Math.round((itemMo + itemGG) * (utilPct / 100)),
+            itemTot = itemMo + itemGG + itemUtil;
+          return (
+            "<tr><td>" +
+            w.desc +
+            '</td><td style="text-align:center">' +
+            cc +
+            " " +
+            (w.unidad || "") +
+            '</td><td style="text-align:center;font-weight:700;color:#2563eb">' +
+            hh.toFixed(1) +
+            ' HH</td><td style="text-align:right;font-weight:700">' +
+            C(itemMo) +
+            '</td><td style="text-align:right">' +
+            C(itemGG) +
+            '</td><td style="text-align:right">' +
+            C(itemUtil) +
+            '</td><td style="text-align:right;font-weight:800">' +
+            C(itemTot) +
+            "</td>" +
+            k +
+            "</tr>"
+          );
+        })
+        .filter((w) => w !== "")
+        .join("");
+    if (!j)
+      return '<html><body style="font-family:Arial;padding:40px;text-align:center"><h2 style="color:#666">Sin datos de HH</h2><p style="color:#888;margin-top:12px">Configura rendimiento y dotación en los APUs de cada partida para generar el Resumen de Dotación.</p></body></html>';
+    var z = Object.values(b).reduce((w, v) => w + v, 0),
+      moBaseR = Math.round(moBase) || 0;
+    if (moBaseR > 0) {
+      var diff = moBaseR - z;
+      if (diff) {
+        var lr = m[m.length - 1] && m[m.length - 1].rol;
+        (lr && (b[lr] = (b[lr] || 0) + diff), (z += diff));
+      }
+    }
+    var ggR = Math.round(moBaseR * (ggPct / 100)),
+      utilR = Math.round((moBaseR + ggR) * (utilPct / 100)),
+      moTotalR = Math.round(moTotal) || 0;
+    if (moTotalR > 0) {
+      var d2 = moTotalR - (moBaseR + ggR + utilR);
+      d2 && (utilR += d2);
+    }
+    var F = m
+        .map(
+          (w) =>
+            '<th style="text-align:right">' +
+            w.rol +
+            '<br><small style="font-weight:400;opacity:.85">$' +
+            Math.round(w.jornal).toLocaleString("es-CL") +
+            "/día</small></th>",
+        )
+        .join(""),
+      g = m
+        .map(
+          (w) =>
+            '<td style="text-align:right;font-weight:800">' +
+            C(b[w.rol] || 0) +
+            "</td>",
+        )
+        .join(""),
+      B =
+        '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Resumen de Dotación — ' +
+        (t.descripcion || "") +
+        "</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;font-size:11px;color:#111;padding:20px}table{width:100%;border-collapse:collapse;margin-top:14px}th{background:#1a3060;color:#fff;padding:7px 8px;text-align:left;font-size:10px;white-space:nowrap}td{padding:6px 8px;border-bottom:1px solid #e5e7eb;vertical-align:top}tr:nth-child(even){background:#f9fafb}.total-row td{font-weight:900;background:" +
+        n +
+        ';color:#fff;border:none}@media print{button{display:none}}@page{size:A4 landscape;margin:12mm 10mm}</style></head><body><button onclick="window.print()" style="margin-bottom:14px;padding:7px 18px;background:' +
+        n +
+        ';color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px">🖨 Imprimir / PDF</button><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;padding-bottom:10px;border-bottom:3px solid ' +
+        n +
+        '"><div>' +
+        s +
+        '<div style="font-size:18px;font-weight:800;color:#1a3060">' +
+        l +
+        "</div>" +
+        (r && r.rut
+          ? '<div style="font-size:11px;color:#666">RUT: ' + r.rut + "</div>"
+          : "") +
+        '</div><div style="text-align:right"><div style="font-size:14px;font-weight:800;color:' +
+        n +
+        ';text-transform:uppercase">Resumen de Dotación</div><div style="font-size:12px;color:#555;margin-top:3px">N° ' +
+        t.id +
+        " — " +
+        new Date(t.fecha || Date.now()).toLocaleDateString("es-CL") +
+        '</div><div style="font-size:12px;color:#555;margin-top:2px">Cliente: ' +
+        ((i && i.nombre) || "Sin cliente") +
+        '</div></div></div><div style="font-size:13px;font-weight:800;color:#1a3060;margin-bottom:10px">' +
+        (t.descripcion || "") +
+        '</div><table><thead><tr><th>Partida</th><th>Cantidad</th><th style="text-align:center">HH</th><th style="text-align:right">MO</th><th style="text-align:right">GG</th><th style="text-align:right">Util</th><th style="text-align:right">Total MO</th>' +
+        F +
+        "</tr></thead><tbody>" +
+        j +
+        '<tr class="total-row"><td>TOTALES</td><td></td><td style="text-align:center">' +
+        h.toFixed(1) +
+        ' HH</td><td style="text-align:right">' +
+        C(moBaseR) +
+        '</td><td style="text-align:right">' +
+        C(ggR) +
+        '</td><td style="text-align:right">' +
+        C(utilR) +
+        '</td><td style="text-align:right">' +
+        C(moBaseR + ggR + utilR) +
+        "</td>" +
+        g +
+        '</tr></tbody></table><div style="margin-top:16px;padding:12px 14px;background:#f0f4ff;border-radius:8px;display:inline-block"><div style="font-size:12px;color:#1a3060">MO (jornales): <strong style="font-size:14px;color:' +
+        n +
+        '">' +
+        C(moBaseR) +
+        '</strong></div><div style="font-size:11px;color:#475569;margin-top:6px">GG (' +
+        Math.round(ggPct) +
+        "%) : <strong>" +
+        C(ggR) +
+        "</strong> · Utilidad (" +
+        Math.round(utilPct) +
+        "%) : <strong>" +
+        C(utilR) +
+        '</strong></div><div style="font-size:12px;color:#1a3060;margin-top:8px">Total MO + GG + Util: <strong style="font-size:16px;color:' +
+        n +
+        '">' +
+        C(moBaseR + ggR + utilR) +
+        '</strong></div></div><div style="margin-top:10px;font-size:10px;color:#888">* Jornales según Configuración · HH según rendimiento/dotación del APU</div></body></html>';
+    return B;
+  }
+  function Ff(t, i, r) {
+    var n = window.open("", "_blank");
+    (n.document.write(Tp(t, i, r)), n.document.close());
+  }
+  function Rf(t, i, r) {
+    const {
+      total: n0,
+      sub: l0,
+      iva: o0,
+      anticipo: s,
+    } = Ee(t.items, r, t.descuento, t.modoCosteo, t.sinIva);
+    var n = Math.round(Number(n0) || 0),
+      l = Math.round(Number(l0) || 0),
+      o = Math.round(Number(o0) || 0),
+      m = (r && r.accentColor) || "#f5a020",
+      p = (r && r.empresa) || "Empresa",
+      C = (r && r.logoCliente) || "",
+      b = C
+        ? '<img src="' +
+          C +
+          '" style="height:70px;object-fit:contain;margin-bottom:8px;display:block"/>'
+        : "",
+      h = (t && t.plazoEjecucion) || (r && r.plazoEjecucion) || 30,
+      modo = (t && t.modoCosteo) || "completo",
+      j = {};
+    (t.items || []).forEach(function (B) {
+      if (!B || !B.desc) return;
+      var w = B.cat || "General";
+      j[w] || (j[w] = { items: [], subtotal: 0 });
+      var cant = parseFloat(B.cant) || 0,
+        precio = parseFloat(B.precio) || 0,
+        tot = cant * precio,
+        tipo = B._tipoCosto || (B._cid ? "auto" : "mo"),
+        mat = 0,
+        noMat = 0;
+      if (tipo === "mat") mat = tot;
+      else if (tipo === "mo") noMat = tot;
+      else {
+        var mu = parseFloat(B._apuMatUnit) || 0;
+        ((mat = Math.max(0, Math.min(tot, mu * cant))),
+          (noMat = Math.max(0, tot - mat)));
+      }
+      var val = modo === "mo" ? noMat : tot;
+      if (modo === "mo" && val <= 0) return;
+      (j[w].items.push(B), (j[w].subtotal += val));
+    });
+    var catsSum = 0;
+    Object.values(j).forEach(function (B) {
+      ((B.subtotal = Math.round(Number(B.subtotal) || 0)),
+        (catsSum += B.subtotal));
+    });
+    var diff = l - catsSum;
+    if (diff && Object.keys(j).length) {
+      var main = j.General || j[Object.keys(j)[0]];
+      main && (main.subtotal += diff);
+    }
+    var F = Object.entries(j)
+        .map(function (B) {
+          var w = B[0],
+            v = B[1];
+          return (
+            '<div style="margin-bottom:12px"><div style="font-size:11px;font-weight:bold;color:' +
+            m +
+            ';text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">' +
+            w +
+            '</div><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#444">' +
+            (v.items || [])
+              .map(function (x) {
+                return x.desc;
+              })
+              .join(", ") +
+            '</span><span style="font-weight:bold;white-space:nowrap;margin-left:12px">$' +
+            (v.subtotal || 0).toLocaleString("es-CL") +
+            "</span></div></div>"
+          );
+        })
+        .join(""),
+      g = [
+        "Materiales de primera calidad con respaldo de proveedores formales",
+        "Mano de obra especializada y cuadrilla propia — sin intermediarios",
+        "Empresa con RUT y factura — todos los trabajos con respaldo legal",
+        "Garantía de 90 días sobre todos los trabajos ejecutados",
+        "Plazo garantizado: " + h + " días hábiles desde el anticipo",
+        "Experiencia comprobada en proyectos similares en la Región de Coquimbo",
+      ],
+      z =
+        '<!DOCTYPE html><html><head><title>Resumen Ejecutivo</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;padding:40px;max-width:780px;margin:0 auto;font-size:13px}@media print{.np{display:none}}</style></head><body><button class="np" onclick="window.print()" style="margin-bottom:20px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px">🖨 Imprimir / PDF</button><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;border-bottom:3px solid ' +
+        m +
+        '"><div>' +
+        b +
+        '<div style="font-size:20px;font-weight:bold;color:#1a3060">' +
+        p +
+        '</div></div><div style="text-align:right"><div style="font-size:12px;font-weight:bold;color:' +
+        m +
+        ';text-transform:uppercase">Resumen Ejecutivo</div><div style="font-size:26px;font-weight:bold;color:#1a3060">N° ' +
+        t.id +
+        '</div><div style="font-size:12px;color:#666">' +
+        t.fecha +
+        '</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px"><div style="background:#f0f4f8;padding:14px;border-radius:8px"><div style="font-size:10px;font-weight:bold;color:#999;text-transform:uppercase;margin-bottom:8px">Cliente</div><strong style="color:#1a3060;font-size:14px">' +
+        (i.nombre || "") +
+        '</strong><br/><span style="font-size:12px;color:#666">' +
+        (t.descripcion || "") +
+        '</span></div><div style="background:#1a3060;padding:14px;border-radius:8px;color:#fff"><div style="font-size:10px;font-weight:bold;color:' +
+        m +
+        ';text-transform:uppercase;margin-bottom:8px">Inversión total</div><div style="font-size:28px;font-weight:bold;color:' +
+        m +
+        '">$' +
+        n.toLocaleString("es-CL") +
+        '</div><div style="font-size:11px;color:#aaa;margin-top:4px">Subtotal $' +
+        l.toLocaleString("es-CL") +
+        " + IVA $" +
+        o.toLocaleString("es-CL") +
+        '</div></div></div><div style="margin-bottom:20px"><div style="font-size:11px;font-weight:bold;color:#1a3060;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;border-bottom:2px solid ' +
+        m +
+        ';padding-bottom:4px">Lo que incluye esta propuesta</div>' +
+        F +
+        '</div><div style="margin-bottom:18px"><div style="font-size:11px;font-weight:bold;color:#1a3060;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;border-bottom:2px solid ' +
+        m +
+        ';padding-bottom:4px">Lo que no incluye</div><div style="background:#fff7ed;border:1px solid #fed7aa;padding:12px 14px;border-radius:8px;color:#7c2d12"><ul style="padding-left:16px;line-height:1.7"><li>Permisos municipales y derechos de construcción (gestión del mandante)</li><li>Modificaciones no contempladas en el presupuesto original</li><li>Materiales provistos por el mandante (si aplica)</li></ul></div></div><div style="margin-bottom:18px"><div style="font-size:11px;font-weight:bold;color:#1a3060;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;border-bottom:2px solid ' +
+        m +
+        ';padding-bottom:4px">Por qué elegirnos</div><div style="background:#f8fafc;border:1px solid #e5e7eb;padding:12px 14px;border-radius:8px;color:#111"><ul style="padding-left:16px;line-height:1.7">' +
+        g
+          .map(function (B) {
+            return "<li>" + B + "</li>";
+          })
+          .join("") +
+        '</ul></div></div><div style="margin-top:18px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;font-family:Arial,sans-serif;text-align:center">Enlace Constructor Pro — ' +
+        p +
+        " · " +
+        new Date().toLocaleDateString("es-CL") +
+        "</div></body></html>";
+    return z;
+  }
+  function Bf(t, i, r) {
+    var n = window.open("", "_blank");
+    (n.document.write(Rf(t, i, r)), n.document.close());
+  }
+  function Df(t, i, r, u) {
+    if (!t) return;
+    const { total: n } = Ee(
+      t.items || [],
+      r,
+      t.descuento,
+      t.modoCosteo,
+      t.sinIva,
+    );
+    var l = (r && r.accentColor) || "#f5a020",
+      o = (r && r.empresa) || "Empresa",
+      s = (r && r.logoCliente) || "",
+      m = s
+        ? '<img src="' +
+          s +
+          '" style="height:70px;object-fit:contain;margin-bottom:8px;display:block"/>'
+        : "",
+      p = (t.items || [])
+        .map(function (z) {
+          var B = (parseFloat(z.cant) || 0) * (parseFloat(z.precio) || 0),
+            w = n > 0 ? Math.round((B / n) * 100) : 0,
+            v = (z.desc || "").toLowerCase(),
+            x =
+              v.includes("pintura") ||
+              v.includes("piso") ||
+              v.includes("flotante") ||
+              v.includes("porcelanato") ||
+              v.includes("cerámico") ||
+              v.includes("ceramico") ||
+              v.includes("acabad") ||
+              v.includes("terminac"),
+            f =
+              v.includes("hormigón") ||
+              v.includes("hormigon") ||
+              v.includes("estructur") ||
+              v.includes("fundación") ||
+              v.includes("fundacion") ||
+              v.includes("radier") ||
+              v.includes("instalac") ||
+              v.includes("eléctric") ||
+              v.includes("electrica") ||
+              v.includes("sanitario") ||
+              v.includes("gas") ||
+              v.includes("agua");
+          return {
+            desc: z.desc,
+            cant: z.cant,
+            unidad: z.unidad,
+            subtotal: B,
+            pct: w,
+            negociable: x,
+            innegociable: f,
+          };
+        })
+        .sort(function (z, B) {
+          return B.subtotal - z.subtotal;
+        }),
+      C = p
+        .filter(function (z) {
+          return z.negociable;
+        })
+        .reduce(function (z, B) {
+          return z + B.subtotal;
+        }, 0),
+      b = n > 0 ? Math.round((C / n) * 100) : 0,
+      h = Math.round(n * 0.85),
+      j = p
+        .map(function (z) {
+          var B = z.innegociable
+              ? "#fee2e2"
+              : z.negociable
+                ? "#dcfce7"
+                : "#f8fafc",
+            w = z.innegociable
+              ? '<span style="background:#fee2e2;color:#991b1b;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:bold">🔒 INNEGOCIABLE</span>'
+              : z.negociable
+                ? '<span style="background:#dcfce7;color:#14532d;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:bold">✅ NEGOCIABLE</span>'
+                : '<span style="background:#f1f5f9;color:#475569;font-size:10px;padding:2px 8px;border-radius:8px">— EVALUAR</span>';
+          return (
+            '<tr style="background:' +
+            B +
+            '"><td style="padding:8px 10px;font-size:13px;border-bottom:1px solid #e2e8f0">' +
+            (z.desc || "") +
+            '</td><td style="padding:8px 10px;text-align:center;font-size:12px;color:#666;border-bottom:1px solid #e2e8f0">' +
+            (z.cant || "") +
+            " " +
+            (z.unidad || "") +
+            '</td><td style="padding:8px 10px;text-align:right;font-size:13px;font-weight:600;border-bottom:1px solid #e2e8f0">$' +
+            z.subtotal.toLocaleString("es-CL") +
+            '</td><td style="padding:8px 10px;text-align:center;font-size:12px;border-bottom:1px solid #e2e8f0">' +
+            z.pct +
+            '%</td><td style="padding:8px 10px;border-bottom:1px solid #e2e8f0">' +
+            w +
+            "</td></tr>"
+          );
+        })
+        .join(""),
+      F =
+        '<!DOCTYPE html><html><head><title>Hoja de Negociación</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;padding:40px;max-width:820px;margin:0 auto;font-size:13px}table{width:100%;border-collapse:collapse}th{background:#1a3060;color:#fff;padding:9px 10px;font-size:11px;text-align:left;text-transform:uppercase}@media print{.np{display:none}}</style></head><body><button class="np" onclick="window.print()" style="margin-bottom:20px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px">🖨 Imprimir / PDF</button><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;border-bottom:3px solid #ef4444"><div>' +
+        m +
+        '<div style="font-size:20px;font-weight:bold;color:#1a3060">' +
+        o +
+        '</div><div style="font-size:11px;color:#ef4444;font-weight:bold;text-transform:uppercase;margin-top:4px;letter-spacing:.08em">⚠️ DOCUMENTO CONFIDENCIAL — USO INTERNO</div></div><div style="text-align:right"><div style="font-size:12px;font-weight:bold;color:#ef4444;text-transform:uppercase">Hoja de Negociación</div><div style="font-size:24px;font-weight:bold;color:#1a3060">N° ' +
+        t.id +
+        '</div><div style="font-size:12px;color:#666">' +
+        (i.nombre || "") +
+        '</div></div></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px"><div style="background:#1a3060;color:#fff;padding:12px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#aaa;margin-bottom:4px">PRECIO OFERTADO</div><div style="font-size:18px;font-weight:bold;color:' +
+        l +
+        '">$' +
+        n.toLocaleString("es-CL") +
+        '</div></div><div style="background:#f0fdf4;border:1px solid #86efac;padding:12px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#666;margin-bottom:4px">MARGEN NEGOCIABLE</div><div style="font-size:18px;font-weight:bold;color:#14532d">$' +
+        C.toLocaleString("es-CL") +
+        " (" +
+        b +
+        '%)</div></div><div style="background:#fff8f0;border:1px solid #fed7aa;padding:12px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#666;margin-bottom:4px">PRECIO MÍNIMO</div><div style="font-size:18px;font-weight:bold;color:#92400e">$' +
+        h.toLocaleString("es-CL") +
+        '</div></div><div style="background:#fee2e2;border:1px solid #fca5a5;padding:12px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#666;margin-bottom:4px">BAJO EL MÍNIMO</div><div style="font-size:18px;font-weight:bold;color:#991b1b">RECHAZAR</div></div></div><div style="margin-bottom:20px"><div style="font-size:11px;font-weight:bold;color:#1a3060;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Análisis por partida</div><table><thead><tr><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:120px;text-align:right">Subtotal</th><th style="width:60px;text-align:center">%</th><th style="width:140px">Clasificación</th></tr></thead><tbody>' +
+        j +
+        '</tbody></table></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px"><div style="background:#f0fdf4;border:1px solid #86efac;padding:14px;border-radius:8px"><div style="font-size:11px;font-weight:bold;color:#14532d;text-transform:uppercase;margin-bottom:8px">Escenarios de rebaja</div><div style="font-size:12px;color:#333;line-height:2"><strong>Si piden 5% menos</strong> ($' +
+        Math.round(n * 0.05).toLocaleString("es-CL") +
+        "): Reducir calidad terminaciones<br/><strong>Si piden 10% menos</strong> ($" +
+        Math.round(n * 0.1).toLocaleString("es-CL") +
+        "): Sacar partidas de acabado<br/><strong>Si piden 15% menos</strong> ($" +
+        Math.round(n * 0.15).toLocaleString("es-CL") +
+        '): Solo si hay partidas negociables suficientes<br/><strong>Sobre 15%</strong>: No aceptar — costo de la obra en riesgo</div></div><div style="background:#fee2e2;border:1px solid #fca5a5;padding:14px;border-radius:8px"><div style="font-size:11px;font-weight:bold;color:#991b1b;text-transform:uppercase;margin-bottom:8px">Argumentos para defender precio</div><div style="font-size:12px;color:#333;line-height:1.9">✓ El precio incluye IVA y materiales de primera calidad<br/>✓ Somos empresa formal con garantía legal<br/>✓ El precio por m² es competitivo para la región<br/>✓ Los plazos son reales, sin extensiones sorpresa<br/>✓ Nuestra mano de obra es propia — sin subcontratos sin control</div></div></div><div style="font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center">CONFIDENCIAL — Enlace Constructor Pro — ' +
+        o +
+        " · " +
+        new Date().toLocaleDateString("es-CL") +
+        "</div></body></html>";
+    if (u === "return") return F;
+    var g = window.open("", "_blank");
+    (g.document.write(F), g.document.close());
+  }
+  function ts(t, i, r) {
+    r = r || {};
+    i = i || {};
+    t = t || {};
+    var modo = t.modoCosteo || "completo";
+    var T = Ee(t.items || [], r, t.descuento, modo, t.sinIva) || {};
+    var total = Number(T.total) || 0,
+      sub = Number(T.sub) || 0,
+      iva = Number(T.iva) || 0,
+      anticipo = Number(T.anticipo) || 0;
+    var matSub = Number(T.matSub) || 0,
+      noMatSub = Number(T.noMatSub) || 0;
+    var ivaPct =
+      r && r.moneda && r.moneda.impuesto !== void 0
+        ? r.moneda.impuesto
+        : Math.round(((r && r.iva) || 0.19) * 100);
+    var subLabel = modo === "mo" ? "Subtotal Mano de Obra" : "Subtotal Neto";
+    var extraTot =
+      modo === "separado"
+        ? '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:12px"><span>Subtotal MO</span><span>$' +
+          Math.round(noMatSub).toLocaleString("es-CL") +
+          "</span></div>" +
+          '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:12px"><span>Subtotal MAT</span><span>$' +
+          Math.round(matSub).toLocaleString("es-CL") +
+          "</span></div>"
+        : "";
+    var accent = (r && r.accentColor) || "#f5a020",
+      empresa = (r && r.empresa) || "Empresa";
+    var logo = r && (r.logoCliente || r.logo || "");
+    var logoHtml = logo
+      ? '<img src="' +
+        logo +
+        '" style="height:70px;object-fit:contain;margin-bottom:6px;display:block"/>'
+      : "";
+    var firmaImg =
+      r && r.firmaImg
+        ? '<img src="' +
+          r.firmaImg +
+          '" style="height:100px;object-fit:contain;display:block;margin:0 auto"/>'
+        : '<div style="height:100px"></div>';
+    var firmaNombre = (r && r.firmaNombre) || empresa;
+    var firmaCargo = (r && r.firmaCargo) || "Representante Legal";
+    var plazo = (t && t.plazoEjecucion) || (r && r.plazoEjecucion) || 30;
+    var ciudad = (r && r.ciudad) || "la República";
+    var fecha = (t && t.fecha) || new Date().toLocaleDateString("es-CL");
+    var cliente = (i && i.nombre) || "Cliente";
+    var saldo = total - anticipo;
+    var anticipoPct = Math.round(((r && r.anticipo) || 0.6) * 100);
+    var cols =
+      modo === "separado"
+        ? '<th style="width:36px">#</th><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:110px;text-align:right">MO</th><th style="width:110px;text-align:right">MAT</th><th style="width:110px;text-align:right">Total</th>'
+        : modo === "mo"
+          ? '<th style="width:36px">#</th><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:110px;text-align:right">MO Unit.</th><th style="width:110px;text-align:right">Total MO</th>'
+          : '<th style="width:36px">#</th><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:110px;text-align:right">P. Unit.</th><th style="width:110px;text-align:right">Total</th>';
+    var x = (() => {
+        var idx = 0;
+        return (t.items || []).reduce(function (acc, I) {
+          var cant = parseFloat(I.cant) || 0,
+            precio = parseFloat(I.precio) || 0,
+            tot = cant * precio,
+            tipo = I._tipoCosto || (I._cid ? "auto" : "mo"),
+            mat = 0,
+            noMat = 0;
+          if (tipo === "mat") mat = tot;
+          else if (tipo === "mo") noMat = tot;
+          else {
+            var mu = parseFloat(I._apuMatUnit) || 0;
+            mat = Math.max(0, Math.min(tot, mu * cant));
+            noMat = Math.max(0, tot - mat);
+          }
+          if (modo === "mo" && noMat <= 0) return acc;
+          idx++;
+          var qty = (I.cant || 0) + " " + (I.unidad || "");
+          if (modo === "separado")
+            return (
+              acc +
+              '<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;color:#999;font-size:12px">' +
+              idx +
+              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:12px">' +
+              (I.desc || "") +
+              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:12px">' +
+              qty +
+              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
+              Math.round(noMat).toLocaleString("es-CL") +
+              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
+              Math.round(mat).toLocaleString("es-CL") +
+              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:600;font-size:12px">$' +
+              Math.round(tot).toLocaleString("es-CL") +
+              "</td></tr>"
+            );
+          if (modo === "mo") {
+            var moUnit = cant ? noMat / cant : 0;
+            return (
+              acc +
+              '<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;color:#999;font-size:12px">' +
+              idx +
+              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:12px">' +
+              (I.desc || "") +
+              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:12px">' +
+              qty +
+              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
+              Math.round(moUnit).toLocaleString("es-CL") +
+              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:600;font-size:12px">$' +
+              Math.round(noMat).toLocaleString("es-CL") +
+              "</td></tr>"
+            );
+          }
+          return (
+            acc +
+            '<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;color:#999;font-size:12px">' +
+            idx +
+            '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:12px">' +
+            (I.desc || "") +
+            '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:12px">' +
+            qty +
+            '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
+            Math.round(precio).toLocaleString("es-CL") +
+            '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:600;font-size:12px">$' +
+            Math.round(tot).toLocaleString("es-CL") +
+            "</td></tr>"
+          );
+        }, "");
+      })(),
+      f =
+        '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Contrato de Obra N° ' +
+        t.id +
+        "</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;font-size:12px;line-height:1.6}@media screen{body{background:#d0d5dc;padding:24px 0}.sheet{background:#fff;max-width:820px;margin:0 auto 24px;padding:40px 50px 36px;box-shadow:0 3px 20px rgba(0,0,0,.22)}}@media print{.np{display:none!important}.sheet{padding:0;margin:0;background:#fff}.pagebreak{page-break-before:always;break-before:page;height:0;margin:0;padding:0}@page{margin:15mm 14mm 18mm 14mm}}h3{font-size:10px;color:" +
+        accent +
+        ";font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding-bottom:5px;border-bottom:1.5px solid " +
+        accent +
+        ";margin:18px 0 10px}table{width:100%;border-collapse:collapse}th{background:#1a3060;color:#fff;padding:8px 10px;font-size:10px;text-align:left;text-transform:uppercase;letter-spacing:.04em}th:last-child{text-align:right}.clausula{background:#f9fafb;border-left:3px solid " +
+        accent +
+        ';padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:10px;font-size:12px;line-height:1.65;page-break-inside:avoid}</style></head><body><button class="np" onclick="window.print()" style="display:block;margin:0 auto 0;padding:10px 28px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px;font-family:Arial,sans-serif;font-size:13px;position:sticky;top:0;z-index:100">🖨 Imprimir / Guardar PDF</button><div class="sheet"><div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:16px;border-bottom:2.5px solid ' +
+        accent +
+        ';margin-bottom:20px"><div>' +
+        logoHtml +
+        '<div style="font-size:20px;font-weight:900;color:#1a3060">' +
+        empresa +
+        '</div><div style="font-size:11px;color:#666;margin-top:3px">' +
+        (r && r.rut ? "RUT: " + r.rut + " │ " : "") +
+        ((r && r.ciudad) || "") +
+        '</div><div style="font-size:11px;color:#666">' +
+        (r && r.telefono ? r.telefono + " │ " : "") +
+        ((r && r.email) || "") +
+        '</div></div><div style="text-align:right"><div style="font-size:10px;font-weight:700;color:' +
+        accent +
+        ';text-transform:uppercase;letter-spacing:.1em">Contrato de Obra</div><div style="font-size:36px;font-weight:900;color:#1a3060;line-height:1.1">N° ' +
+        t.id +
+        '</div><div style="font-size:11px;color:#666;margin-top:4px">Fecha: ' +
+        fecha +
+        '</div><div style="margin-top:8px;display:inline-block;padding:3px 12px;border-radius:10px;font-size:11px;font-weight:700;background:' +
+        accent +
+        "22;color:" +
+        accent +
+        ";border:1px solid " +
+        accent +
+        '">' +
+        (t.estado || "") +
+        '</div></div></div><h3>Partes del Contrato</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px"><div style="background:#f5f7fa;padding:13px 15px;border-radius:8px"><div style="font-size:10px;color:#999;text-transform:uppercase;font-weight:700;letter-spacing:.06em;margin-bottom:6px">Contratista</div><div style="font-size:14px;font-weight:800;color:#1a3060;margin-bottom:4px">' +
+        empresa +
+        '</div><div style="font-size:11px;color:#555;line-height:1.7">' +
+        (r && r.rut ? "RUT: " + r.rut + "<br/>" : "") +
+        firmaNombre +
+        " — " +
+        firmaCargo +
+        "<br/>" +
+        (r && r.direccion ? r.direccion : "") +
+        '</div></div><div style="background:#f5f7fa;padding:13px 15px;border-radius:8px"><div style="font-size:10px;color:#999;text-transform:uppercase;font-weight:700;letter-spacing:.06em;margin-bottom:6px">Cliente / Mandante</div><div style="font-size:14px;font-weight:800;color:#1a3060;margin-bottom:4px">' +
+        cliente +
+        '</div><div style="font-size:11px;color:#555;line-height:1.7">' +
+        (i.contacto ? i.contacto + "<br/>" : "") +
+        (i.telefono ? "Tel: " + i.telefono + "<br/>" : "") +
+        (i.email ? i.email : "") +
+        '</div></div></div><h3>Descripción de la Obra</h3><p style="margin-bottom:12px;font-size:12px"><strong>Proyecto: </strong>' +
+        (t.descripcion || "") +
+        '</p><table style="margin-bottom:16px"><thead><tr>' +
+        cols +
+        "</tr></thead><tbody>" +
+        x +
+        '</tbody></table><div style="display:flex;justify-content:flex-end;margin-bottom:22px"><div style="min-width:280px">' +
+        extraTot +
+        '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:12px"><span>' +
+        subLabel +
+        "</span><span>$" +
+        Math.round(sub).toLocaleString("es-CL") +
+        '</span></div><div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:12px"><span>' +
+        ((r && r.impuestoNombre) ||
+          (r && r.moneda && r.moneda.nombreImp) ||
+          "IVA") +
+        " (" +
+        ivaPct +
+        "%)</span><span>$" +
+        Math.round(iva).toLocaleString("es-CL") +
+        '</span></div><div style="display:flex;justify-content:space-between;padding:10px 14px;background:#1a3060;color:#fff;border-radius:6px;margin-top:8px"><strong style="font-size:13px">TOTAL A PAGAR</strong><strong style="font-size:18px;color:' +
+        accent +
+        '">$' +
+        Math.round(total).toLocaleString("es-CL") +
+        '</strong></div></div></div><h3>Cláusulas del Contrato</h3><div class="clausula"><strong>1. FORMA DE PAGO:</strong> El mandante pagará al contratista la suma total de $' +
+        Math.round(total).toLocaleString("es-CL") +
+        " (impuesto incluido), de la siguiente forma: <strong>Anticipo del " +
+        anticipoPct +
+        "% equivalente a $" +
+        Math.round(anticipo).toLocaleString("es-CL") +
+        "</strong> al inicio de los trabajos; y el saldo de <strong>$" +
+        Math.round(saldo).toLocaleString("es-CL") +
+        '</strong> a la recepción conforme de la obra.</div><div class="clausula"><strong>2. PLAZO DE EJECUCIÓN:</strong> El contratista se compromete a ejecutar los trabajos en un plazo de <strong>' +
+        plazo +
+        ' días hábiles</strong>, contados desde la recepción del anticipo. Cualquier atraso imputable al mandante (falta de acceso, materiales o decisiones) no será responsabilidad del contratista.</div><div class="clausula"><strong>3. RESPONSABILIDAD DEL CONTRATISTA:</strong> El contratista garantiza que los trabajos se ejecutarán conforme a las normas técnicas vigentes en Chile.</div></div><div class="pagebreak"></div><div class="sheet"><div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1.5px solid ' +
+        accent +
+        ';margin-bottom:18px"><div><div style="font-size:13px;font-weight:800;color:#1a3060">Contrato de Obra N° ' +
+        t.id +
+        " — " +
+        empresa +
+        '</div><div style="font-size:11px;color:#666;margin-top:2px">' +
+        (t.descripcion || "") +
+        '</div></div><div style="text-align:right;font-size:11px;color:#666">' +
+        fecha +
+        '<br/><span style="color:' +
+        accent +
+        ';font-weight:700">' +
+        (t.estado || "") +
+        '</span></div></div><div class="clausula"><strong>4. GARANTÍA:</strong> El contratista otorga una garantía de <strong>90 días corridos</strong> sobre los trabajos ejecutados, contados desde la recepción de obra. No incluye daños por mal uso, factores externos o modificaciones realizadas por terceros.</div><div class="clausula"><strong>5. MODIFICACIONES:</strong> Cualquier trabajo adicional no contemplado en este contrato deberá ser acordado por escrito entre las partes y dará origen a un presupuesto complementario.</div><div class="clausula"><strong>6. RESOLUCIÓN DE CONFLICTOS:</strong> En caso de discrepancias, las partes se someten a la jurisdicción de los Tribunales Ordinarios de Justicia de la ciudad de ' +
+        ciudad +
+        '.</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:40px;page-break-inside:avoid;break-inside:avoid"><div style="text-align:center"><div style="height:100px;display:flex;align-items:flex-end;justify-content:center">' +
+        firmaImg +
+        '</div><div style="border-top:1.5px solid #333;padding-top:8px;margin-top:4px"><div style="font-size:13px;font-weight:700;color:#1a3060">' +
+        firmaNombre +
+        '</div><div style="font-size:11px;color:#666;margin-top:2px">' +
+        firmaCargo +
+        " — " +
+        empresa +
+        '</div></div></div><div style="text-align:center"><div style="height:100px"></div><div style="border-top:1.5px solid #333;padding-top:8px"><div style="font-size:13px;font-weight:700;color:#1a3060">' +
+        cliente +
+        '</div><div style="font-size:11px;color:#666;margin-top:2px">RUT: ___________________</div></div></div></div><div style="margin-top:32px;padding-top:10px;border-top:1px solid #eee;font-size:10px;color:#aaa;text-align:center">Generado por Enlace Constructor Pro — ' +
+        empresa +
+        " · " +
+        new Date().toLocaleDateString("es-CL") +
+        "</div></div></body></html>";
+    return f;
+  }
+  function Ep(t, i, r) {
+    var n = ts(t, i, r),
+      l = window.open("", "_blank");
+    (l.document.write(n), l.document.close());
+  }
+  function Ap({ budget: t, client: i, cfg: r, onClose: n }) {
+    const {
+      sub: l,
+      iva: o,
+      total: s,
+      anticipo: m,
+    } = Ee(t.items, r, t.descuento, t.modoCosteo, t.sinIva);
+    var p = i && i.telefono ? i.telefono.replace(/\D/g, "") : "";
+    const [C, b] = V(!0),
+      [h, j] = V(!0),
+      [F, g] = V(!0),
+      [z, B] = V(!0),
+      [w, v] = V(""),
+      [x, f] = V(!1);
+    var I = `Hola ${i && i.nombre ? i.nombre.split(" ")[0] : "cliente"} 👋`,
+      D = t.items
+        .filter((S) => S.desc)
+        .map((S) => {
+          var O = (parseFloat(S.cant) || 0) * (parseFloat(S.precio) || 0);
+          return `▫️ ${S.desc} — ${ne(O)}`;
+        }).join(`
+`),
+      k = [
+        `💰 *Subtotal neto:* ${ne(l)}`,
+        t.sinIva ? "" : "🧾 *IVA (19%):* " + ne(o),
+        `✅ *TOTAL A PAGAR: ${ne(s)}*`,
+        m > 0
+          ? `💳 *Anticipo (${Math.round((r.anticipo || 0.6) * 100)}%): ${ne(m)}*`
+          : "",
+      ].filter(Boolean).join(`
+`),
+      R = `💳 *Forma de pago:*
+• Anticipo ${Math.round((r.anticipo || 0.6) * 100)}% al inicio
+• Saldo al término de la obra`,
+      K = `📅 *Validez:* ${r.validez || 30} días corridos desde la fecha de emisión.`,
+      y = [
+        I,
+        `Te comparto el *Presupuesto N° ${t.id}* para:`,
+        `📋 _${t.descripcion || "la obra"}_`,
+        "",
+        C && t.items.length > 0
+          ? `*DETALLE DE OBRA:*
+${D}
+`
+          : "",
+        h ? k : "",
+        "",
+        F ? R : "",
+        z ? K : "",
+        w
+          ? `
+📝 ${w}`
+          : "",
+        "",
+        "Quedo atento a cualquier consulta 🤝",
+        `*${r.empresa}*`,
+        r.telefono ? `📞 ${r.telefono}` : "",
+      ].filter((S) => S !== !1 && S !== "").join(`
+`),
+      P = async () => {
+        (f(!0), await zr(t, i, r, pt("pdfTplPref", "simple")));
+        var S = p
+          ? `https://wa.me/${p}?text=${encodeURIComponent(y)}`
+          : `https://wa.me/?text=${encodeURIComponent(y)}`;
+        setTimeout(() => {
+          (window.open(S, "_blank"), f(!1), n());
+        }, 400);
+      },
+      A = () => {
+        navigator.clipboard && navigator.clipboard.writeText(y);
+      };
+    return e.jsx("div", {
+      style: {
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,.92)",
+        zIndex: 5e3,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 16,
+        overflowY: "auto",
+      },
+      onClick: (S) => {
+        S.target === S.currentTarget && n();
+      },
+      children: e.jsxs("div", {
+        style: {
+          background: a.bg,
+          border: `1px solid ${a.border}`,
+          borderRadius: 14,
+          width: "100%",
+          maxWidth: 760,
+          maxHeight: "95vh",
+          display: "flex",
+          flexDirection: "column",
+        },
+        onClick: (S) => S.stopPropagation(),
+        children: [
+          e.jsxs("div", {
+            style: {
+              padding: "16px 20px",
+              borderBottom: `1px solid ${a.border}`,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexShrink: 0,
+            },
+            children: [
+              e.jsxs("div", {
+                children: [
+                  e.jsx("div", {
+                    style: { fontSize: 17, fontWeight: 700 },
+                    children: "📲 Compartir por WhatsApp",
+                  }),
+                  e.jsxs("div", {
+                    style: { fontSize: 12, color: a.muted, marginTop: 2 },
+                    children: [
+                      "N° ",
+                      t.id,
+                      " — ",
+                      (i == null ? void 0 : i.nombre) || "Sin cliente",
+                    ],
+                  }),
+                ],
+              }),
+              e.jsx("button", {
+                onClick: n,
+                style: {
+                  background: "none",
+                  border: "none",
+                  fontSize: 20,
+                  cursor: "pointer",
+                  color: a.muted,
+                },
+                children: "✕",
+              }),
+            ],
+          }),
+          e.jsxs("div", { style: {
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+              marginBottom: 16,
+            },
+            children: [
+              e.jsxs("div", {
+                  style: { display: "grid", gridTemplateColumns: canal === "licitaciones" ? "1fr 1fr" : (canal === "compra_agil" ? "1fr 1fr" : "1fr 1fr 1fr"), gap: 12 },
+                  children: [
+                    e.jsxs("div", {
+                      children: [
+                        e.jsx("div", {
+                          style: { fontSize: 11, color: th.muted, fontWeight: 700, marginBottom: 4, textTransform: "uppercase", letterSpacing: ".05em" },
+                          children: "Palabras clave",
+                        }),
+                        e.jsx("input", {
+                          list: "sugerencias-busqueda",
+                          style: d({}, sty.inp),
+                          value: query,
+                          onChange: function (ev) { setQuery(ev.target.value); },
+                          placeholder: "Ej: pintura, construcci\u00F3n, mantenci\u00F3n...",
+                          onKeyDown: function (ev) { ev.key === "Enter" && handleSearch(); },
+                        }),
+                        e.jsx("datalist", {
+                          id: "sugerencias-busqueda",
+                          children: [
+                            "construcci\u00F3n", "reparaci\u00F3n", "mantenci\u00F3n", "obras civiles",
+                            "pavimentaci\u00F3n", "pintura", "techumbre", "demolici\u00F3n",
+                            "alba\u00F1iler\u00EDa", "carpinter\u00EDa",
+                          ].map(function (opt) {
+                            return e.jsx("option", { value: opt }, opt);
+                          }),
+                        }),
+                      ],
+                    }),
+                    (canal === "todos" || canal === "licitaciones") && e.jsxs("div", {
+                        children: [
+                            e.jsx("div", {
+                                style: { fontSize: 11, color: th.muted, fontWeight: 700, marginBottom: 4, textTransform: "uppercase", letterSpacing: ".05em" },
+                                children: "Organismo (Licitaciones)",
+                            }),
+                            e.jsx("input", {
+                                list: "lista-organismos",
+                                style: d({}, sty.inp),
+                                value: organismoSel,
+                                onChange: function(ev) { setOrganismoSel(ev.target.value); },
+                                placeholder: "Todas las entidades...",
+                                onKeyDown: function (ev) { ev.key === "Enter" && handleSearch(); },
+                            }),
+                            e.jsx("datalist", {
+                                id: "lista-organismos",
+                                children: organismosList.map(function(org) {
+                                    return e.jsx("option", { value: org.NombreEmpresa }, org.CodigoEmpresa);
+                                })
+                            })
+                        ]
+                    }),
+                    (canal === "todos" || canal === "compra_agil") && e.jsxs("div", {
+                        children: [
+                            e.jsx("div", {
+                                style: { fontSize: 11, color: th.muted, fontWeight: 700, marginBottom: 4, textTransform: "uppercase", letterSpacing: ".05em" },
+                                children: "Regi\u00F3n (Compra \u00C1gil)",
+                            }),
+                            e.jsx("select", {
+                                style: d({}, sty.inp),
+                                value: region,
+                                onChange: function(ev) { setRegion(ev.target.value); },
+                                children: regiones.map(function(r) {
+                                    return e.jsx("option", { value: r, children: r }, r);
+                                })
+                            })
+                        ]
+                    })
+                  ]
+              }),
+              e.jsx("button", {
+                style: u(d({}, sty.btn("p")), { padding: "12px 32px", fontSize: 14, width: "100%" }),
+                onClick: handleSearch,
+                children: loading ? "\u23F3 Buscando en Mercado P\u00FAblico..." : "\uD83D\uDD0E Buscar Oportunidades",
+              }),
+            ],
+          }),
+        true ?
+                  e.jsx("div", {
+                    style: {
+                      display: "grid",
+                      gap: 16,
+                      gridTemplateColumns:
+                        "repeat(auto-fill, minmax(400px, 1fr))",
+                    },
+                    children: results.map((item) =>
+                      e.jsxs("div", {
+                        key: item.CodigoExterno,
+                        style: {
+                          ...c.card,
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                        },
+                        children: [
+                          e.jsxs("div", {
+                            children: [
+                              e.jsxs("div", {
+                                style: {
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "flex-start",
+                                  marginBottom: 12,
+                                },
+                                children: [
+                                  e.jsxs("div", {
+                                    style: {
+                                      fontSize: 18,
+                                      fontWeight: 700,
+                                      color: a.text,
+                                    },
+                                    children: [item.CodigoExterno],
+                                  }),
+                                  e.jsx("div", {
+                                    style: c.tag(a.sb, a.accent),
+                                    children: item.Estado || "Publicada",
+                                  }),
+                                ],
+                              }),
+                              e.jsx("div", {
+                                style: {
+                                  fontSize: 15,
+                                  fontWeight: 600,
+                                  color: a.accent,
+                                  marginBottom: 6,
+                                },
+                                children: item.Nombre,
+                              }),
+                              e.jsx("div", {
+                                style: {
+                                  fontSize: 13,
+                                  color: a.mutedL,
+                                  marginBottom: 16,
+                                },
+                                children: item.Comprador?.NombreOrganismo,
+                              }),
+                              e.jsx("div", {
+                                style: {
+                                  fontSize: 13,
+                                  color: a.muted,
+                                  lineHeight: 1.5,
+                                  marginBottom: 20,
+                                },
+                                children: item.Descripcion,
+                              }),
+                            ],
+                          }),
+                          e.jsxs("div", {
+                            children: [
+                              e.jsxs("div", {
+                                style: {
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  background: a.sb,
+                                  padding: "10px 14px",
+                                  borderRadius: 8,
+                                  marginBottom: 16,
+                                },
+                                children: [
+                                  e.jsxs("div", {
+                                    children: [
+                                      e.jsx("div", {
+                                        style: {
+                                          fontSize: 11,
+                                          color: a.muted,
+                                          textTransform: "uppercase",
+                                        },
+                                        children: "Cierre",
+                                      }),
+                                      e.jsx("div", {
+                                        style: {
+                                          fontSize: 14,
+                                          fontWeight: 600,
+                                          color: a.text,
+                                        },
+                                        children: item.FechaCierre
+                                          ? new Date(
+                                              item.FechaCierre,
+                                            ).toLocaleDateString("es-CL")
+                                          : "N/A",
+                                      }),
+                                    ],
+                                  }),
+                                  e.jsxs("div", {
+                                    style: { textAlign: "right" },
+                                    children: [
+                                      e.jsx("div", {
+                                        style: {
+                                          fontSize: 11,
+                                          color: a.muted,
+                                          textTransform: "uppercase",
+                                        },
+                                        children: "Monto Est.",
+                                      }),
+                                      e.jsx("div", {
+                                        style: {
+                                          fontSize: 14,
+                                          fontWeight: 600,
+                                          color: "#34d399",
+                                        },
+                                        children: item.MontoEstimado
+                                          ? `$${item.MontoEstimado.toLocaleString("es-CL")}`
+                                          : "Sin definir",
+                                      }),
+                                    ],
+                                  }),
+                                ],
+                              }),
+                              e.jsxs("div", {
+                                style: { display: "flex", gap: 10 },
+                                children: [
+                                  e.jsx("button", {
+                                    style: { ...c.btn("p"), flex: 1 },
+                                    onClick: () => saveToKanban(item),
+                                    children: "📌 Añadir a Kanban",
+                                  }),
+                                  e.jsx("a", {
+                                    href: `https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=${item.CodigoExterno}`,
+                                    target: "_blank",
+                                    style: {
+                                      ...c.btn("s"),
+                                      flex: 1,
+                                      textAlign: "center",
+                                      textDecoration: "none",
+                                    },
+                                    children: "Ver en MP ↗",
+                                  }),
+                                ],
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                    ),
+                  }),
+              ],
+            })

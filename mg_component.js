@@ -1,0 +1,1 @@
+function Mg({licitaciones:t,setLicitaciones:i,budgets:r,cfg:n,apus:l,materiales:o,catalog:s,setToast:m, setPage, setEditB, setCfg}

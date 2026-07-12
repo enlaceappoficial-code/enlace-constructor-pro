@@ -1,0 +1,42 @@
+﻿const fs = require('fs');
+let content = fs.readFileSync('src/assets/index.js', 'utf8');
+
+const startStr = 'children:[e.jsx("span",{style:{fontSize:20},children:"\uD83D\uDD0D"})," Buscar licitaciones en Mercado P\u00FAblico"]})';
+const endStr = ']},de))]})]})]})]})}';
+
+const startIdx = content.indexOf(startStr);
+const endIdx = content.indexOf(endStr, startIdx);
+
+if (startIdx !== -1 && endIdx !== -1) {
+    const fullEndIdx = endIdx + endStr.length;
+    
+    const newBlock = 'children:[e.jsx("span",{style:{fontSize:20},children:"\uD83D\uDCE5"})," Descargar Licitaci\u00F3n"]}),e.jsxs("div",{style:{display:"grid",gap:10},children:[e.jsxs("div",{children:[e.jsx("div",{style:{fontSize:12,color:a.muted,marginBottom:5,fontWeight:600},children:"C\u00D3DIGO DE LICITACI\u00D3N"}),e.jsx("input",{style:u(d({},c.inp),{margin:0,width:"100%",boxSizing:"border-box"}),placeholder:"Ej: 1234-56-LE23",value:S,onChange:N=>O(N.target.value)})]}),e.jsx("button",{style:u(d({},c.btn("p")),{padding:"12px",fontSize:14,width:"100%",marginTop:4}),onClick:async ()=>{if(!S.trim())return alert("Ingresa el c\u00F3digo de la licitaci\u00F3n");const tk=h.apiKeyMP||"79B6AA40-A970-4164-ADEE-47CF3F378CBA";if(!tk)return alert("Falta el Ticket API en Configuraci\u00F3n");try{window.licLoading=true;y(Date.now().toString());const r=await fetch("https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo="+S.trim()+"&ticket="+tk);const d=await r.json();window.licLoading=false;if(d.Cantidad===0||!d.Listado||d.Listado.length===0){window.licData=null;alert("Licitaci\u00F3n no encontrada o ticket inv\u00E1lido.")}else{window.licData=d.Listado[0]}y(Date.now().toString())}catch(er){window.licLoading=false;window.licData=null;y(Date.now().toString());alert("Error de conexi\u00F3n con Mercado P\u00FAblico API.")}},children:window.licLoading?"Descargando...":"Descargar y Analizar"}),e.jsx("div",{style:{fontSize:11,color:a.muted,textAlign:"center"},children:"ECP se conectar\u00E1 a la API usando tu Ticket para descargar las bases autom\u00E1ticamente."})]})]}),e.jsxs("div",{style:{display:"grid",gap:10,alignContent:"start"},children:[window.licData?e.jsxs("div",{style:u(d({},c.card),{padding:"14px 16px"}),children:[e.jsx("div",{style:{fontSize:15,fontWeight:700,color:a.text,marginBottom:8},children:window.licData.Nombre}),e.jsx("div",{style:{fontSize:12,color:a.muted,marginBottom:12},children:window.licData.Descripcion}),e.jsxs("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12},children:[e.jsxs("div",{children:[e.jsx("div",{style:{fontSize:11,fontWeight:600,color:a.muted},children:"ORGANISMO"}),e.jsx("div",{style:{fontSize:13,color:a.text},children:window.licData.Comprador?window.licData.Comprador.NombreOrganismo:"-"})]}),e.jsxs("div",{children:[e.jsx("div",{style:{fontSize:11,fontWeight:600,color:a.muted},children:"CIERRE"}),e.jsx("div",{style:{fontSize:13,color:a.text},children:window.licData.Fechas?new Date(window.licData.Fechas.FechaCierre).toLocaleDateString():"-"})]})]}),e.jsxs("div",{style:{background:"var(--surface)",border:"1px solid "+a.border,borderRadius:8,padding:"10px",marginBottom:16},children:[e.jsx("div",{style:{fontSize:12,fontWeight:700,color:a.text,marginBottom:6},children:"\u00CDTEMS SOLICITADOS ("+(window.licData.Items?window.licData.Items.Cantidad:0)+")"}),window.licData.Items&&window.licData.Items.Listado?e.jsx("div",{style:{maxHeight:150,overflowY:"auto"},children:window.licData.Items.Listado.map((it,i)=>e.jsxs("div",{style:{fontSize:11,color:a.muted,padding:"4px 0",borderBottom:"1px solid "+a.border},children:[e.jsx("span",{style:{fontWeight:600},children:it.Cantidad+" "+it.UnidadMedida})," - ",it.NombreProducto]},i))}):e.jsx("span",{children:"Sin \u00EDtems detallados"})]}),e.jsx("button",{style:u(d({},c.btn("p")),{padding:"10px",fontSize:13,width:"100%"}),onClick:()=>alert("Fase 2: Creaci\u00F3n de presupuesto a partir de estos \u00EDtems en desarrollo."),children:"\uD83D\uDCCB Crear Presupuesto desde Licitaci\u00F3n (Borrador)"})] }):e.jsxs("div",{style:u(d({},c.card),{padding:"14px 16px",textAlign:"center",color:a.muted}),children:[e.jsx("div",{style:{fontSize:30,marginBottom:10},children:"\uD83D\uDCA1"}),e.jsx("div",{style:{fontSize:14,fontWeight:600},children:"Esperando C\u00F3digo"}),e.jsx("div",{style:{fontSize:12},children:"Ingresa un c\u00F3digo de licitaci\u00F3n v\u00E1lido para descargar y analizar su viabilidad."})]})]})]})]})}';
+    
+    // I need to start from a clean copy before this mess. I'll read the backup again.
+    let cleanContent = fs.readFileSync('src/assets/index.js.bak_pre_config_sidebar', 'utf8');
+    // apply sidebar config first!
+    
+    const oOut = 'return e.jsxs("div",{style:{maxWidth:680,margin:"0 auto",padding:"0 0 40px"},children:[';
+    const nOut = 'return e.jsxs("div",{style:{maxWidth:1000,margin:"0 auto",padding:"0 0 40px",display:"grid",gridTemplateColumns:"220px 1fr",gap:"32px",alignItems:"start"},children:[';
+    cleanContent = cleanContent.replace(oOut, nOut);
+    
+    const oHead = 'e.jsxs("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,position:"sticky",top:0,zIndex:10,background:a.bg,padding:"10px 0",borderBottom:1px solid },children:[';
+    const nHead = 'e.jsxs("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:0,position:"sticky",top:0,zIndex:10,background:a.bg,padding:"15px 0 15px",borderBottom:1px solid ,gridColumn:"1 / -1"},children:[';
+    cleanContent = cleanContent.replace(oHead, nHead);
+    
+    const oTabC = 'e.jsx("div",{style:{display:"flex",gap:8,flexWrap:"wrap",margin:"0 0 16px 0",padding:"10px 0",position:"sticky",top:0,zIndex:40,background:"#f5f7fa",borderBottom:"1px solid rgba(0,0,0,0.05)"},children:[';
+    const nTabC = 'e.jsx("div",{style:{display:"flex",flexDirection:"column",gap:10,position:"sticky",top:80,zIndex:40},children:[';
+    cleanContent = cleanContent.replace(oTabC, nTabC);
+    
+    const oTabB = 'style:u(d({},c.btn(F===x.id?"p":"s")),{padding:"12px 20px",fontSize:14,fontWeight:700,borderRadius:24,boxShadow:F===x.id?"0 4px 10px rgba(245,160,32,0.3)":""})';
+    const nTabB = 'style:u(d({},c.btn(F===x.id?"p":"s")),{padding:"14px 20px",fontSize:14,fontWeight:700,borderRadius:12,boxShadow:F===x.id?"0 4px 10px rgba(245,160,32,0.3)":"",textAlign:"left",width:"100%"})';
+    cleanContent = cleanContent.replace(oTabB, nTabB);
+
+    const sIdx = cleanContent.indexOf(startStr);
+    const eIdx = cleanContent.indexOf(endStr, sIdx);
+    if(sIdx !== -1 && eIdx !== -1) {
+        const finalContent = cleanContent.substring(0, sIdx) + newBlock + cleanContent.substring(eIdx + endStr.length);
+        fs.writeFileSync('src/assets/index.js', finalContent, 'utf8');
+        console.log("Clean replace success.");
+    }
+}

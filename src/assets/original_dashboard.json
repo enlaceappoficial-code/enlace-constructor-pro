@@ -1,0 +1,10 @@
+{
+  "ArtifactMetadata": "{\"ArtifactType\":\"other\",\"RequestFeedback\":false,\"Summary\":\"\"}",
+  "CodeContent": "\"const fs = require('fs');\\nconst transcript = fs.readFileSync('C:\\\\\\\\Users\\\\\\\\johnn\\\\\\\\.gemini\\\\\\\\antigravity\\\\\\\\brain\\\\\\\\f9d4baa9-6a51-47fa-90f8-27a15d95811b\\\\\\\\.system_generated\\\\\\\\logs\\\\\\\\transcript.jsonl', 'utf8');\\n\\nconst lines = transcript.split('\\\\n');\\nfor (let i = lines.length - 1; i >= 0; i--) {\\n    if (lines[i].includes('var LicitacionesDashboard = function (props) {')) {\\n        let obj = JSON.parse(lines[i]);\\n        if (obj.tool_calls) {\\n            for (let tc of obj.tool_calls) {\\n                if (tc.name === 'write_to_file' || tc.name === 'run_command' || tc.name === 'replace_file_content' || tc.name === 'multi_replace_file_content') {\\n                    if (JSON.stringify(tc.args).includes('var LicitacionesDashboard = function (props) {')) {\\n                        fs.writeFileSync('src/assets/original_dashboard.json', JSON.stringify(tc.args, null, 2), 'utf8');\\n                        console.log(\\\"Found original injection! Saved to src/assets/original_dashboard.json\\\");\\n                        return;\\n                    }\\n                }\\n            }\\n        }\\n    }\\n}\\nconsole.log(\\\"Not found in tool_calls.\\\");\\n\"",
+  "Description": "\"Find original dashboard\"",
+  "IsArtifact": "false",
+  "Overwrite": "true",
+  "TargetFile": "\"d:\\\\Enlace Mundo\\\\enlace constructor\\\\Proyecto Tauri\\\\enlace-tauri\\\\find_dashboard.js\"",
+  "toolAction": "\"Writing script to find original LicitacionesDashboard code in transcript\"",
+  "toolSummary": "\"Find original dashboard\""
+}
