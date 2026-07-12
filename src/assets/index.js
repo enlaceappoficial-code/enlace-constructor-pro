@@ -28357,18 +28357,20 @@ ${r.empresa}`;
     cantItem: n,
     onConfirm: l,
     onSkip: o,
+    customData: cd,
   }) {
     const [s, m] = V(
+        cd && cd._customApuMaterials ? cd._customApuMaterials :
         i.materiales.map((y) => {
           var P = r.find((A) => A.id === y.materialId);
           return u(d({}, y), { _activo: !0, _mat: P });
         }),
       ),
-      [p, C] = V(i.pctMO),
-      [b, h] = V(i.pctGG),
-      [j, F] = V(i.pctUtilidad),
-      [g, z] = V(i.rendimiento || 0),
-      [B, w] = V(i.dotacion || 1);
+      [p, C] = V(cd && cd._customMO !== undefined ? cd._customMO : i.pctMO),
+      [b, h] = V(cd && cd._customGG !== undefined ? cd._customGG : i.pctGG),
+      [j, F] = V(cd && cd._customUtil !== undefined ? cd._customUtil : i.pctUtilidad),
+      [g, z] = V(cd && cd._rendimiento !== undefined ? cd._rendimiento : i.rendimiento || 0),
+      [B, w] = V(cd && cd._dotacion !== undefined ? cd._dotacion : i.dotacion || 1);
     var v = s
         .filter((y) => y._activo && y._mat)
         .reduce((y, P) => y + P._mat.precio * (parseFloat(P.cantidad) || 0), 0),
@@ -28639,6 +28641,46 @@ ${r.empresa}`;
                   },
                   P,
                 );
+              }),
+              e.jsxs("div", {
+                style: {
+                  marginTop: 10,
+                  padding: "10px 14px",
+                  background: "var(--bg)",
+                  borderRadius: 8,
+                  border: `1px dashed ${a.border}`,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10
+                },
+                children: [
+                  e.jsx("div", {
+                    style: { fontSize: 13, fontWeight: 600, color: a.text, whiteSpace: "nowrap" },
+                    children: "➕ Agregar extra:"
+                  }),
+                  e.jsxs("select", {
+                    style: u(d({}, c.inp), { flex: 1, fontSize: 13, padding: "6px" }),
+                    value: "",
+                    onChange: (O) => {
+                      var newId = parseInt(O.target.value);
+                      if (!newId) return;
+                      if (s.some((x) => x.materialId === newId)) {
+                        m(s.map((x) => x.materialId === newId ? u(d({}, x), { _activo: true }) : x));
+                        return;
+                      }
+                      var newMat = r.find((x) => x.id === newId);
+                      if (newMat) {
+                        m([...s, { materialId: newId, cantidad: 1, _activo: true, _mat: newMat }]);
+                      }
+                    },
+                    children: [
+                      e.jsx("option", { value: "", children: "-- Selecciona un insumo del catálogo --" }),
+                      ...[...r].sort((A, B) => A.nombre.localeCompare(B.nombre)).map((mat) => 
+                        e.jsxs("option", { value: mat.id, children: [mat.nombre, " (", mat.unidad, ") - $", mat.precio.toLocaleString("es-CL")] }, mat.id)
+                      )
+                    ]
+                  })
+                ]
               }),
               e.jsxs("div", {
                 style: {
@@ -28925,7 +28967,7 @@ ${r.empresa}`;
                   padding: "11px",
                   fontSize: 16,
                 }),
-                onClick: () => l(k, g, B, v),
+                onClick: () => l(k, g, B, v, s, p, b, j),
                 children: ["✓ Usar este precio (", ne(k), "/", i.unidad, ")"],
               }),
               e.jsxs("button", {
@@ -28933,7 +28975,7 @@ ${r.empresa}`;
                   padding: "11px 16px",
                   fontSize: 14,
                 }),
-                onClick: () => l(t.precio || k, g, B, v),
+                onClick: () => l(t.precio || k, g, B, v, s, p, b, j),
                 children: ["Precio estándar (", ne(t.precio || k), ")"],
               }),
               e.jsx("button", {
@@ -31907,8 +31949,10 @@ ${re.getDate()}/${re.getMonth() + 1}`,
             }
             O = $e;
           }
+          var activeMats = Z._customApuMaterials || null;
+          var U = null;
           if (O) {
-            var U =
+            U =
               n &&
               n.find(
                 (X) =>
@@ -31917,34 +31961,36 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                   X.materiales &&
                   X.materiales.length > 0,
               );
-            if (U) {
-              var $ = parseFloat(Z.cant) || 0;
-              if (!($ <= 0))
-                for (const X of U.materiales) {
-                  var ee = i && i.find((W) => W.id === X.materialId);
-                  if (ee) {
-                    var Y = ee.id;
-                    S[Y] ||
-                      (S[Y] = {
-                        id: ee.id,
-                        nombre: ee.nombre,
-                        unidad: ee.unidad,
-                        cantidad: 0,
-                        partidas: [],
-                        aparece: [],
-                      });
-                    var le = $ * (parseFloat(X.cantidad) || 0);
-                    ((S[Y].cantidad += le),
-                      S[Y].partidas.includes(Z.desc) ||
-                        S[Y].partidas.push(Z.desc),
-                      S[Y].aparece.push({
-                        desc: Z.desc,
-                        cant: le,
-                        unidadAPU: U.unidad,
-                      }));
-                  }
+            if (!activeMats && U) activeMats = U.materiales;
+          }
+          if (activeMats && activeMats.length > 0) {
+            var $ = parseFloat(Z.cant) || 0;
+            if (!($ <= 0))
+              for (const X of activeMats) {
+                if (X._activo === false) continue;
+                var ee = X._mat ? X._mat : (i && i.find((W) => W.id === X.materialId));
+                if (ee) {
+                  var Y = ee.id;
+                  S[Y] ||
+                    (S[Y] = {
+                      id: ee.id,
+                      nombre: ee.nombre,
+                      unidad: ee.unidad,
+                      cantidad: 0,
+                      partidas: [],
+                      aparece: [],
+                    });
+                  var le = $ * (parseFloat(X.cantidad) || 0);
+                  ((S[Y].cantidad += le),
+                    S[Y].partidas.includes(Z.desc) ||
+                      S[Y].partidas.push(Z.desc),
+                    S[Y].aparece.push({
+                      desc: Z.desc,
+                      cant: le,
+                      unidadAPU: U ? U.unidad : Z.und,
+                    }));
                 }
-            }
+              }
           }
         }
         return Object.values(S)
@@ -35659,7 +35705,7 @@ MATERIALES:
         }
         D((J) => u(d({}, J), { items: E }));
       },
-      Y = (W, T, L, E, M) => {
+      Y = (W, T, L, E, M, customMats, pMO, pGG, pUtil) => {
         D((J) => {
           var re = [...J.items];
           return (
@@ -35668,6 +35714,10 @@ MATERIALES:
               _rendimiento: L,
               _dotacion: E,
               _apuMatUnit: M,
+              _customApuMaterials: customMats,
+              _customMO: pMO,
+              _customGG: pGG,
+              _customUtil: pUtil,
             })),
             u(d({}, J), { items: re })
           );
@@ -35784,8 +35834,9 @@ MATERIALES:
             apu: k.apu,
             materiales: l,
             cantItem: parseFloat(I.items[k.idx] && I.items[k.idx].cant) || 1,
-            onConfirm: (W, T, L, E) => Y(k.idx, W, T, L, E),
+            onConfirm: (W, T, L, E, customMats, pMO, pGG, pUtil) => Y(k.idx, W, T, L, E, customMats, pMO, pGG, pUtil),
             onSkip: () => R(null),
+            customData: I.items[k.idx],
           }),
         e.jsxs("div", {
           style: {
@@ -43311,23 +43362,24 @@ MATERIALES:
         var C = o(m);
         if (C) {
           var b = r.find((h) => h.catalogId === C.id);
-          !b ||
-            b.esSubcontrato ||
-            !b.materiales ||
-            !b.materiales.length ||
-            b.materiales.forEach((h) => {
-              var j = n.find((g) => g.id === h.materialId);
-              if (j) {
-                var F = (parseFloat(h.cantidad) || 0) * p;
-                (s[j.id] || (s[j.id] = { mat: j, totalCant: 0, aparece: [] }),
-                  (s[j.id].totalCant += F),
-                  s[j.id].aparece.push({
-                    desc: m.desc,
-                    cant: F,
-                    unidadAPU: b.unidad,
-                  }));
-              }
-            });
+          if (b && !b.esSubcontrato) {
+            var matList = m._customApuMaterials ? m._customApuMaterials.filter(x => x._activo) : b.materiales;
+            if (matList && matList.length > 0) {
+              matList.forEach((h) => {
+                var j = h._mat ? h._mat : n.find((g) => g.id === h.materialId);
+                if (j) {
+                  var F = (parseFloat(h.cantidad) || 0) * p;
+                  (s[j.id] || (s[j.id] = { mat: j, totalCant: 0, aparece: [] }),
+                    (s[j.id].totalCant += F),
+                    s[j.id].aparece.push({
+                      desc: m.desc,
+                      cant: F,
+                      unidadAPU: b.unidad,
+                    }));
+                }
+              });
+            }
+          }
         }
       }
     });
