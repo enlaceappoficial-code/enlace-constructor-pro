@@ -35607,6 +35607,7 @@ MATERIALES:
     plantillasUser: p,
     onDeletePlantillaUser: C,
     setToast: b,
+    setMateriales: setMateriales,
   }) {
     var h = () => {
         const W = r.moItems || [],
@@ -35846,6 +35847,7 @@ MATERIALES:
             catItem: k.catItem,
             apu: k.apu,
             materiales: l,
+            setMateriales: setMateriales,
             cantItem: parseFloat(I.items[k.idx] && I.items[k.idx].cant) || 1,
             onConfirm: (W, T, L, E, customMats, pMO, pGG, pUtil) => Y(k.idx, W, T, L, E, customMats, pMO, pGG, pUtil),
             onSkip: () => R(null),
@@ -69566,6 +69568,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             cfg: l,
             apus: g,
             materiales: j,
+            setMateriales: F,
             editing: k,
             onSave: oe,
             onCancel: () => {
