@@ -35730,6 +35730,7 @@ MATERIALES:
               _customMO: pMO,
               _customGG: pGG,
               _customUtil: pUtil,
+              _tipoCosto: "auto",
             })),
             u(d({}, J), { items: re })
           );
