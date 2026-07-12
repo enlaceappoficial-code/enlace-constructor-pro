@@ -35717,7 +35717,7 @@ MATERIALES:
         }
         D((J) => u(d({}, J), { items: E }));
       },
-      Y = (W, T, L, E, M, customMats, pMO, pGG, pUtil) => {
+      Y = (W, T, L, E, M_val, customMats, pMO, pGG, pUtil) => {
         D((J) => {
           var re = [...J.items];
           return (
@@ -35725,7 +35725,7 @@ MATERIALES:
               precio: T,
               _rendimiento: L,
               _dotacion: E,
-              _apuMatUnit: M,
+              _apuMatUnit: M_val,
               _customApuMaterials: customMats,
               _customMO: pMO,
               _customGG: pGG,
