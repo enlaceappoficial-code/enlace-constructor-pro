@@ -74826,7 +74826,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                           }),
                                         ],
                                       }),
-                                      (record.items || []).map((it, i) => {
+                                      record.items.map((it, i) => {
                                         const diff =
                                           it.nuevoPrecio - it.precioAnterior;
                                         const isCheaper = diff < 0;
