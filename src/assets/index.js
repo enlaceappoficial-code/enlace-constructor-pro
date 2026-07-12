@@ -28443,12 +28443,12 @@ ${r.empresa}`;
                 children: [
                   e.jsx("span", {
                     style: { color: a.accent, fontWeight: 600 },
-                    children: t.desc,
+                    children: t ? t.desc : i.nombre,
                   }),
                   " · ",
                   n,
                   " ",
-                  t.unidad,
+                  t ? t.unidad : i.unidad,
                 ],
               }),
               e.jsx("div", {
@@ -28987,8 +28987,8 @@ ${r.empresa}`;
                   padding: "11px 16px",
                   fontSize: 14,
                 }),
-                onClick: () => l(t.precio || k, g, B, v, s, p, b, j),
-                children: ["Precio estándar (", ne(t.precio || k), ")"],
+                onClick: () => l(t ? t.precio : (i.precio || k), g, B, v, s, p, b, j),
+                children: ["Precio estándar (", ne(t ? t.precio : (i.precio || k)), ")"],
               }),
               e.jsx("button", {
                 style: u(d({}, c.btn("s")), {
@@ -36510,7 +36510,7 @@ MATERIALES:
                                     fontWeight: 600,
                                   },
                                   onClick: () =>
-                                    R({ idx: T, catItem: L, apu: E || { id: "manual_" + T, nombre: W.desc || "Ítem Manual", unidad: W.unidad || "unidad", materiales: [], pctMO: 0, pctGG: 0, pctUtilidad: 0, rendimiento: 0, dotacion: 1 } }),
+                                    R({ idx: T, catItem: L, apu: E || { id: "manual_" + T, nombre: W.desc || "Ítem Manual", unidad: W.unidad || "unidad", materiales: [], pctMO: g, pctGG: B, pctUtilidad: v, rendimiento: 0, dotacion: 1 } }),
                                   children: E ? "🔧 Ver y ajustar materiales del APU" : "🔧 Definir materiales manualmente",
                                 }),
                               }),
