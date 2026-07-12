@@ -28777,7 +28777,7 @@ ${r.empresa}`;
                       children: [
                         e.jsxs("span", {
                           style: { fontSize: 13, color: a.muted },
-                          children: ["× ", n, " ", t.unidad, " = total ítem"],
+                          children: ["× ", n, " ", t ? t.unidad : i.unidad, " = total ítem"],
                         }),
                         e.jsx("span", {
                           style: {
