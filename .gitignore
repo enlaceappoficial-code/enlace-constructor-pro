@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+target/
+src-tauri/target/
+.env
+.wrangler/
+cdn_tmp/
+backup_localstorage/
+release_installers/
+_backups/
+*.log
