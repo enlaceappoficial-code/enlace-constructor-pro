@@ -66349,6 +66349,9 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     var _ld = V(false),
       loading = _ld[0],
       setLoading = _ld[1];
+    var _searched = V(false),
+      searched = _searched[0],
+      setSearched = _searched[1];
     var _pg = V(1),
       page = _pg[0],
       setPage = _pg[1];
@@ -66432,11 +66435,46 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       },
     ];
 
+    var compraAgilRequest = function (apiUrl, ticket) {
+      var headers = { ticket: ticket };
+      var hasTauriHttp =
+        typeof window !== "undefined" &&
+        window.__TAURI__ &&
+        window.__TAURI__.http &&
+        window.__TAURI__.http.fetch;
+
+      if (hasTauriHttp) {
+        return window.__TAURI__.http
+          .fetch(apiUrl, {
+            method: "GET",
+            headers: headers,
+            responseType: 1,
+          })
+          .then(function (response) {
+            if (response.status && response.status >= 400) {
+              throw new Error("Mercado P\u00FAblico respondi\u00F3 " + response.status);
+            }
+            return response.data;
+          });
+      }
+
+      // El navegador necesita el proxy local por CORS; Tauri consulta la API directa.
+      return fetch("http://localhost:8081/" + apiUrl, { headers: headers }).then(
+        function (response) {
+          if (!response.ok) {
+            throw new Error("Mercado P\u00FAblico respondi\u00F3 " + response.status);
+          }
+          return response.json();
+        },
+      );
+    };
+
     var handleSearch = function () {
       if (!query.trim() && !organismoSel && region === "Todas")
         return props.setToast(
           "\u26A0\uFE0F Selecciona una regi\u00F3n, organismo o ingresa palabras clave",
         );
+      setSearched(true);
       setLoading(true);
       setPage(1);
       setResults([]);
@@ -66490,7 +66528,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
 
       var promises = [];
 
-      if (canal === "todos" || canal === "licitaciones") {
+      {
         var urlLic =
           "https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?estado=activas&ticket=" +
           tk;
@@ -66510,7 +66548,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         );
       }
 
-      if (canal === "todos" || canal === "compra_agil") {
+      {
         var regMap = {
           "Tarapac\u00E1": 1,
           Antofagasta: 2,
@@ -66538,38 +66576,16 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
           urlOC += "&region=" + regMap[region];
         }
 
-        var isTauri =
-          typeof window !== "undefined" &&
-          window.__TAURI__ &&
-          window.__TAURI__.http &&
-          window.__TAURI__.http.fetch;
-        var tauriFetch = isTauri
-          ? function (u, o) {
-              o = o || {};
-              return window.__TAURI__.http
-                .fetch(u, {
-                  method: o.method || "GET",
-                  headers: o.headers || {},
-                  responseType: 1, // JSON
-                })
-                .then(function (res) {
-                  return {
-                    json: function () {
-                      return Promise.resolve(res.data);
-                    },
-                  };
-                });
-            }
-          : fetch;
-
-        // Proxy local para bypassear CORS en el navegador
-        var finalUrl = "http://localhost:8081/" + urlOC;
         promises.push(
-          tauriFetch(finalUrl, { headers: { ticket: tk } })
-            .then(function (r) {
-              return r.json();
-            })
+          compraAgilRequest(urlOC, tk)
             .then(function (data) {
+              if (data && data.success && data.success !== "OK") {
+                var apiError =
+                  data.errors && data.errors.length
+                    ? data.errors[0].mensaje || data.errors[0].message
+                    : "La API rechaz\u00F3 la consulta";
+                throw new Error(apiError);
+              }
               if (data && data.payload && data.payload.items) {
                 var mapped = data.payload.items.map(function (ca) {
                   return {
@@ -66742,13 +66758,13 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       var tk = (cfg && cfg.apiKeyMP) || "79B6AA40-A970-4164-ADEE-47CF3F378CBA";
       if (item._source === "compra_agil") {
         var url =
-          "http://localhost:8081/https://api2.mercadopublico.cl/v2/compra-agil/" +
+          "https://api2.mercadopublico.cl/v2/compra-agil/" +
           item.CodigoExterno;
-        fetch(url, { headers: { ticket: tk } })
-          .then(function (r) {
-            return r.json();
-          })
+        compraAgilRequest(url, tk)
           .then(function (d) {
+            if (d && d.success && d.success !== "OK") {
+              throw new Error("No fue posible cargar el detalle de Compra \u00C1gil");
+            }
             var fullItem = d.data || d.payload || d;
             setDetailView(Object.assign({}, item, { fullData: fullItem }));
             setDetailLoading(false);
@@ -66831,8 +66847,25 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     };
 
     var perPage = 12;
-    var paged = results.slice((page - 1) * perPage, page * perPage);
-    var totalPages = Math.ceil(results.length / perPage) || 1;
+    var filteredResults =
+      canal === "todos"
+        ? results
+        : results.filter(function (item) {
+            return canal === "licitaciones"
+              ? item._source === "licitacion"
+              : item._source === "compra_agil";
+          });
+    var licitacionCount = results.filter(function (item) {
+      return item._source === "licitacion";
+    }).length;
+    var compraAgilCount = results.filter(function (item) {
+      return item._source === "compra_agil";
+    }).length;
+    var paged = filteredResults.slice(
+      (page - 1) * perPage,
+      page * perPage,
+    );
+    var totalPages = Math.ceil(filteredResults.length / perPage) || 1;
 
     var srcBadge = function (src) {
       if (src === "compra_agil")
@@ -67309,31 +67342,47 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     })();
 
     return e.jsxs("div", {
-      style: { padding: "24px 32px", maxWidth: 1300, margin: "0 auto" },
+      style: { padding: "20px 24px 32px", maxWidth: 1180, margin: "0 auto" },
       children: [
         e.jsxs("div", {
-          style: d({}, sty.card),
+          style: u(d({}, sty.card), { padding: 20, marginBottom: 18 }),
           children: [
-            e.jsx("div", {
-              style: {
-                fontSize: 18,
-                fontWeight: 800,
-                color: th.text,
-                marginBottom: 16,
-              },
-              children: "\uD83C\uDFDB\uFE0F Buscar en Mercado P\u00FAblico",
+            e.jsxs("div", {
+              style: { marginBottom: 16 },
+              children: [
+                e.jsx("div", {
+                  style: {
+                    fontSize: 18,
+                    fontWeight: 800,
+                    color: th.text,
+                    marginBottom: 4,
+                  },
+                  children: "Buscar oportunidades",
+                }),
+                e.jsx("div", {
+                  style: { fontSize: 12, color: th.muted, lineHeight: 1.5 },
+                  children:
+                    "Explora licitaciones y compras ágiles usando los filtros que mejor representan tu zona y especialidad.",
+                }),
+              ],
             }),
             e.jsxs("div", {
-              style: { display: "flex", gap: 8, marginBottom: 16 },
+              style: {
+                display: "grid",
+                gridTemplateColumns: "repeat(3,minmax(0,1fr))",
+                gap: 8,
+                marginBottom: 18,
+              },
               children: canales.map(function (ch) {
                 return e.jsxs(
                   "button",
                   {
                     onClick: function () {
                       setCanal(ch.id);
+                      setPage(1);
                     },
                     style: {
-                      padding: "10px 18px",
+                      padding: "10px 12px",
                       borderRadius: 10,
                       cursor: "pointer",
                       fontWeight: 700,
@@ -67349,7 +67398,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                       transition: "all .2s",
                       display: "flex",
                       flexDirection: "column",
-                      alignItems: "flex-start",
+                      alignItems: "center",
                       gap: 2,
                     },
                     children: [
@@ -67367,7 +67416,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             e.jsxs("div", {
               style: {
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))",
                 gap: 12,
                 marginBottom: 12,
               },
@@ -67644,7 +67693,11 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                 padding: "12px 32px",
                 fontSize: 14,
                 width: "100%",
+                fontWeight: 800,
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? "wait" : "pointer",
               }),
+              disabled: loading,
               onClick: handleSearch,
               children: loading
                 ? "\u23F3 Buscando..."
@@ -68465,13 +68518,74 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               ],
             }),
           }),
-        results.length > 0 &&
+        loading &&
+          e.jsxs("div", {
+            style: u(d({}, sty.card), {
+              padding: "34px 20px",
+              marginBottom: 16,
+              textAlign: "center",
+              borderStyle: "dashed",
+            }),
+            children: [
+              e.jsx("div", {
+                style: { fontSize: 28, marginBottom: 10 },
+                children: "🔎",
+              }),
+              e.jsx("div", {
+                style: { color: th.text, fontSize: 14, fontWeight: 800 },
+                children: "Buscando oportunidades disponibles...",
+              }),
+              e.jsx("div", {
+                style: { color: th.muted, fontSize: 12, marginTop: 5 },
+                children: "Consultando Mercado Público con tus filtros actuales",
+              }),
+            ],
+          }),
+        searched &&
+          !loading &&
+          filteredResults.length === 0 &&
+          e.jsxs("div", {
+            style: u(d({}, sty.card), {
+              padding: "36px 20px",
+              marginBottom: 16,
+              textAlign: "center",
+            }),
+            children: [
+              e.jsx("div", {
+                style: { fontSize: 30, marginBottom: 10 },
+                children: "🧭",
+              }),
+              e.jsx("div", {
+                style: {
+                  color: th.text,
+                  fontSize: 15,
+                  fontWeight: 800,
+                  marginBottom: 6,
+                },
+                children: "No encontramos oportunidades con estos filtros",
+              }),
+              e.jsx("div", {
+                style: { color: th.muted, fontSize: 12, lineHeight: 1.5 },
+                children:
+                  results.length > 0
+                    ? "La búsqueda no tiene oportunidades de este tipo. Prueba el filtro Todos."
+                    : "Prueba ampliando la región, quitando el organismo o usando menos palabras clave.",
+              }),
+            ],
+          }),
+        !loading && filteredResults.length > 0 &&
           e.jsxs("div", {
             style: {
-              marginBottom: 12,
+              marginBottom: 14,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              gap: 12,
+              flexWrap: "wrap",
+              padding: "10px 12px",
+              border: "1px solid " + th.border,
+              borderRadius: 10,
+              background: th.surface,
             },
             children: [
               e.jsxs("div", {
@@ -68479,18 +68593,15 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                 children: [
                   e.jsxs("span", {
                     style: { fontSize: 13, fontWeight: 700, color: th.text },
-                    children: [results.length + " resultados"],
+                    children: [filteredResults.length + " resultados"],
                   }),
                   e.jsxs("span", {
                     style: { fontSize: 12, color: th.muted },
                     children: [
-                      results.filter(function (x) {
-                        return x._source === "licitacion";
-                      }).length +
+                      "B\u00FAsqueda: " +
+                        licitacionCount +
                         " licitaciones, " +
-                        results.filter(function (x) {
-                          return x._source === "compra_agil";
-                        }).length +
+                        compraAgilCount +
                         " compra \u00E1gil",
                     ],
                   }),
@@ -68503,7 +68614,11 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                     style: u(d({}, sty.btn("s")), {
                       padding: "6px 12px",
                       fontSize: 12,
+                      opacity: page > 1 ? 1 : 0.45,
+                      cursor: page > 1 ? "pointer" : "default",
                     }),
+                    disabled: page <= 1,
+                    "aria-label": "Página anterior",
                     onClick: function () {
                       page > 1 && setPage(page - 1);
                     },
@@ -68521,7 +68636,11 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                     style: u(d({}, sty.btn("s")), {
                       padding: "6px 12px",
                       fontSize: 12,
+                      opacity: page < totalPages ? 1 : 0.45,
+                      cursor: page < totalPages ? "pointer" : "default",
                     }),
+                    disabled: page >= totalPages,
+                    "aria-label": "Página siguiente",
                     onClick: function () {
                       page < totalPages && setPage(page + 1);
                     },
@@ -68550,6 +68669,10 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                   position: "relative",
                   cursor: "pointer",
                   transition: "transform .15s,box-shadow .15s",
+                  padding: 16,
+                  minHeight: 250,
+                  display: "flex",
+                  flexDirection: "column",
                 }),
                 children: [
                   cd &&
@@ -68593,26 +68716,42 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                       padding: "4px 8px",
                       borderRadius: 4,
                       fontWeight: 800,
-                      marginBottom: 8,
+                      marginBottom: 10,
                       display: "inline-block",
+                      alignSelf: "flex-start",
                     },
                     children: badge.label,
                   }),
                   e.jsx("div", {
                     style: {
-                      fontSize: 14,
+                      fontSize: 10,
+                      color: th.muted,
                       fontWeight: 700,
-                      color: th.text,
+                      letterSpacing: ".04em",
                       marginBottom: 6,
-                      paddingRight: 80,
-                      lineHeight: 1.3,
+                    },
+                    children: "ID MP · " + (it.CodigoExterno || "No informado"),
+                  }),
+                  e.jsx("div", {
+                    style: {
+                      fontSize: 15,
+                      fontWeight: 800,
+                      color: th.text,
+                      marginBottom: 8,
+                      paddingRight: 92,
+                      lineHeight: 1.35,
                     },
                     children: it.Nombre || "Sin nombre",
                   }),
                   e.jsx("div", {
-                    style: { fontSize: 12, color: th.muted, marginBottom: 8 },
+                    style: {
+                      fontSize: 12,
+                      color: th.muted,
+                      marginBottom: 10,
+                      lineHeight: 1.4,
+                    },
                     children: it.Comprador
-                      ? it.Comprador.NombreOrganismo
+                      ? "🏛️ " + (it.Comprador.NombreOrganismo || "Organismo no disponible")
                       : "Organismo no disponible",
                   }),
                   e.jsxs("div", {
@@ -68636,6 +68775,22 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                           },
                           children: "\uD83D\uDCCD " + it.Comprador.RegionUnidad,
                         }),
+                      it.Fechas &&
+                        it.Fechas.FechaCierre &&
+                        e.jsx("span", {
+                          style: {
+                            fontSize: 11,
+                            background: th.surface,
+                            color: th.muted,
+                            padding: "3px 8px",
+                            borderRadius: 12,
+                            border: "1px solid " + th.border,
+                            fontWeight: 600,
+                          },
+                          children:
+                            "Cierre · " +
+                            String(it.Fechas.FechaCierre).slice(0, 10),
+                        }),
                     ],
                   }),
                   it.MontoEstimado && it.MontoEstimado > 0
@@ -68644,15 +68799,38 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                           fontSize: 16,
                           fontWeight: 800,
                           color: "#34d399",
-                          marginBottom: 10,
+                          marginBottom: 12,
                         },
-                        children:
-                          "$ " +
-                          Number(it.MontoEstimado).toLocaleString("es-CL"),
+                        children: [
+                          "$ " + Number(it.MontoEstimado).toLocaleString("es-CL"),
+                          e.jsx("span", {
+                            style: {
+                              display: "block",
+                              color: th.muted,
+                              fontSize: 10,
+                              fontWeight: 600,
+                              marginTop: 2,
+                            },
+                            children: "Monto estimado",
+                          }),
+                        ],
                       })
-                    : null,
+                    : e.jsx("div", {
+                        style: {
+                          color: th.muted,
+                          fontSize: 11,
+                          marginBottom: 12,
+                        },
+                        children: "Monto no informado",
+                      }),
                   e.jsxs("div", {
-                    style: { display: "flex", gap: 8, marginTop: 6 },
+                    style: {
+                      display: "flex",
+                      gap: 8,
+                      marginTop: "auto",
+                      paddingTop: 12,
+                      borderTop: "1px solid " + th.border,
+                    },
                     children: [
                       e.jsx("button", {
                         style: u(d({}, sty.btn("p")), {
@@ -68660,7 +68838,8 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                           padding: "8px",
                           fontSize: 12,
                         }),
-                        onClick: function () {
+                        onClick: function (ev) {
+                          ev.stopPropagation();
                           saveToKanban(it, "En Estudio");
                         },
                         children: "\uD83D\uDCCB Guardar y Analizar",
@@ -68669,6 +68848,9 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                         href: "https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=/K4x+FXMm/TmT4Myr/hLGQ==",
                         target: "_blank",
                         rel: "noopener",
+                        onClick: function (ev) {
+                          ev.stopPropagation();
+                        },
                         style: u(d({}, sty.btn("s")), {
                           flex: 1,
                           padding: "8px",
