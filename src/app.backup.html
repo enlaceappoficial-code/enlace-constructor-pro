@@ -12135,25 +12135,39 @@ async function genExcelLicit(lic,cfg){
   X.writeFile(wb,"Itemizado_"+(lic.idMP||"licit").split("/").join("-")+".xlsx");
 }
 
-function LicitForm({licit,budgets,onSave,onCancel,cfg,setToast}){
+function LicitForm({licit,budgets,onSave,onCancel,cfg}){
   const blank={
     id:0,idMP:"",organismo:"",region:"Coquimbo",nombreObra:"",
     fechaPublicacion:todayStr(),fechaCierre:"",fechaVisita:"",
     plazoEjecucion:30,budgetId:"",
-    items:[], docs: [
-      { id: 1, name: "Garantía de Seriedad de la Oferta", checked: false },
-      { id: 2, name: "Anexos Administrativos", checked: false },
-      { id: 3, name: "Oferta Económica Anexo N°...", checked: false }
-    ],
+    items:[{desc:"",cant:1,unidad:"m2",precioNeto:0,especTecnica:""}],
     garantias:{seriedad:{monto:0,tipo:"Boleta bancaria",banco:"",vencimiento:""},
                fiel:{monto:0,tipo:"Boleta bancaria",banco:"",vencimiento:""}},
     experiencia:[{obra:"",mandante:"",monto:0,año:new Date().getFullYear(),contacto:""}],
     subcontratos:[],archivos:[],metodologia:"",etapas:"",estado:"Borrador",notas:""
   };
-  const[form,setForm]=useState(licit?Object.assign({},blank,licit):Object.assign({},blank));
+  const[form,setForm]=useState(licit?Object.assign({},licit):Object.assign({},blank));
   const[step,setStep]=useState(1);
   const[loading,setLoading]=useState(false);
-  const STEPS=["Ficha Automática","Checklist Documental","Presupuestador (APUs)","Resumen y Cierre"];
+  const STEPS=["Ficha Automática","Itemizado (Match APU)","Técnico","Garantías","Cierre y Doc"];
+  const{neto,iva,total}=calcLicit(form.items||[]);
+
+  function fld(k){return function(val){setForm(function(x){return Object.assign({},x,{[k]:val});});};}
+  function setItem(idx,key,val){setForm(function(x){var items=x.items.slice();items[idx]=Object.assign({},items[idx],{[key]:val});return Object.assign({},x,{items:items});});}
+  function addItem(){setForm(function(x){return Object.assign({},x,{items:x.items.concat([{desc:"",cant:1,unidad:"m2",precioNeto:0,especTecnica:""}])});});}
+  function delItem(idx){setForm(function(x){return Object.assign({},x,{items:x.items.filter(function(_,i){return i!==idx;})});});}
+  function setExp(idx,key,val){setForm(function(x){var e=x.experiencia.slice();e[idx]=Object.assign({},e[idx],{[key]:val});return Object.assign({},x,{experiencia:e});});}
+  function addExp(){setForm(function(x){return Object.assign({},x,{experiencia:x.experiencia.concat([{obra:"",mandante:"",monto:0,año:new Date().getFullYear(),contacto:""}])});});}
+  function delExp(idx){setForm(function(x){return Object.assign({},x,{experiencia:x.experiencia.filter(function(_,i){return i!==idx;})});});}
+  function setSub(idx,key,val){setForm(function(x){var s=x.subcontratos.slice();s[idx]=Object.assign({},s[idx],{[key]:val});return Object.assign({},x,{subcontratos:s});});}
+  function addSub(){setForm(function(x){return Object.assign({},x,{subcontratos:x.subcontratos.concat([{rubro:"",empresa:"",pct:0}])});});}
+  function delSub(idx){setForm(function(x){return Object.assign({},x,{subcontratos:x.subcontratos.filter(function(_,i){return i!==idx;})});});}
+  function setGar(tipo,key,val){setForm(function(x){var g=Object.assign({},x.garantias);g[tipo]=Object.assign({},g[tipo],{[key]:val});return Object.assign({},x,{garantias:g});});}
+  function importBudget(bid){
+    var b=budgets.find(function(x){return x.id===parseInt(bid);});
+    if(!b)return;
+    setForm(function(x){return Object.assign({},x,{budgetId:bid,items:(b.items||[]).map(function(i){return{desc:i.desc,cant:parseFloat(i.cant)||1,unidad:i.unidad||"m2",precioNeto:i.precio||0,especTecnica:""};})});});
+  }
 
   function fetchLicitacion() {
     if (!form.idMP) return alert("Ingresa un Código de Licitación válido");
@@ -12165,17 +12179,18 @@ function LicitForm({licit,budgets,onSave,onCancel,cfg,setToast}){
         setLoading(false);
         if(d && d.Listado && d.Listado.length > 0) {
           var l = d.Listado[0];
-          setForm(function(prev) { return Object.assign({}, prev, {
-            nombreObra: l.Nombre,
-            organismo: l.Comprador ? l.Comprador.NombreOrganismo : "",
-            region: l.Comprador ? l.Comprador.RegionUnidad : "Coquimbo",
-            fechaPublicacion: l.Fechas && l.Fechas.FechaPublicacion ? l.Fechas.FechaPublicacion.substring(0,10) : "",
-            fechaCierre: l.Fechas && l.Fechas.FechaCierre ? l.Fechas.FechaCierre.substring(0,10) : "",
-            fechaVisita: l.Fechas && l.Fechas.FechaVisitaTerreno ? l.Fechas.FechaVisitaTerreno.substring(0,16) : "",
-            items: l.Items && l.Items.Listado ? l.Items.Listado.map(function(i){return {desc: i.NombreProducto, cant: i.Cantidad, unidad: i.UnidadMedida, precioNeto: 0, especTecnica: ""}}) : prev.items
-          })});
-          if (setToast) setToast("✅ Licitación importada con éxito");
-          else alert("Licitación importada con éxito");
+          setForm(function(prev) {
+            return Object.assign({}, prev, {
+              nombreObra: l.Nombre,
+              organismo: l.Comprador ? l.Comprador.NombreOrganismo : "",
+              region: l.Comprador ? l.Comprador.RegionUnidad : "Coquimbo",
+              fechaPublicacion: l.Fechas && l.Fechas.FechaPublicacion ? l.Fechas.FechaPublicacion.substring(0,10) : "",
+              fechaCierre: l.Fechas && l.Fechas.FechaCierre ? l.Fechas.FechaCierre.substring(0,10) : "",
+              fechaVisita: l.Fechas && l.Fechas.FechaVisitaTerreno ? l.Fechas.FechaVisitaTerreno.substring(0,16) : "",
+              items: l.Items && l.Items.Listado ? l.Items.Listado.map(function(i){return {desc: i.NombreProducto, cant: i.Cantidad, unidad: i.UnidadMedida, precioNeto: 0, especTecnica: ""}}) : prev.items
+            });
+          });
+          alert("Licitación importada con éxito");
         } else {
           alert("No se encontró la licitación");
         }
@@ -12186,196 +12201,349 @@ function LicitForm({licit,budgets,onSave,onCancel,cfg,setToast}){
       });
   }
 
-  var neto = form.items.reduce(function(acc, it) { return acc + (parseFloat(it.cant)||1)*(parseFloat(it.precioNeto)||0); }, 0);
-  var iva = neto * 0.19;
-  var total = neto + iva;
-  var docsListos = (form.docs || []).filter(function(d) { return d.checked; }).length;
-  var docsTotal = (form.docs || []).length;
-
-  return (
-    <div style={{display:"flex", flexDirection:"column", gap:16}}>
-      <div style={{display:"flex", gap:4, overflowX:"auto", paddingBottom:8, borderBottom:"1px solid "+C.border}}>
-        {STEPS.map(function(s,i){
-          var n=i+1; var done=n<step; var active=n===step;
-          return (
-            <div key={s} style={{display:"flex", alignItems:"center", gap:8, flexShrink:0, cursor:"pointer", opacity: active||done?1:0.5}} onClick={function(){setStep(n);}}>
-              <div style={{width:28, height:28, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:700, background: done?"#4ade80":active?C.accent:C.border, color: done||active?"#000":C.muted}}>
-                {done?"✓":n}
+  return(
+    <div style={{display:"grid",gridTemplateColumns:"1fr 260px",gap:16,alignItems:"start"}}>
+      <div style={S.card}>
+        <div style={{display:"flex",gap:4,marginBottom:20,overflowX:"auto",paddingBottom:4}}>
+          {STEPS.map(function(s,i){
+            var n=i+1;var done=n<step;var active=n===step;
+            return(
+              <div key={s} style={{display:"flex",alignItems:"center",gap:4,flexShrink:0}}>
+                <div onClick={function(){setStep(n);}} style={{width:28,height:28,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,cursor:"pointer",background:done?"#4ade80":active?C.accent:C.border,color:done||active?"#000":C.muted}}>
+                  {done?"✓":n}
+                </div>
+                <span style={{fontSize:12,color:active?C.text:C.muted,fontWeight:active?600:400,cursor:"pointer"}} onClick={function(){setStep(n);}}>{s}</span>
+                {i<STEPS.length-1&&<div style={{width:16,height:1,background:C.border,flexShrink:0}}/>}
               </div>
-              <span style={{fontSize:14, color: active?C.text:C.muted, fontWeight: active?700:400}}>{s}</span>
-              {i<STEPS.length-1 && <div style={{width:24, height:1, background:C.border, margin:"0 8px"}}/>}
+            );
+          })}
+        </div>
+
+        {step===1&&(
+          <div style={{display:"flex",flexDirection:"column",gap:14}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <div>
+                <label style={S.lbl}>ID Mercado Público</label>
+                <div style={{display:"flex",gap:6}}>
+                  <input style={{...S.inp,flex:1,marginBottom:0}} placeholder="ej: 2390-12-LP25" value={form.idMP} onChange={function(e){fld("idMP")(e.target.value);}}/>
+                  <button style={{...S.btn("p"),padding:"8px 12px",fontSize:13}} onClick={fetchLicitacion} disabled={loading}>{loading?"⏳...":"🔍 Buscar"}</button>
+                </div>
+              </div>
+              <div>
+                <label style={S.lbl}>Estado</label>
+                <select style={S.sel} value={form.estado} onChange={function(e){fld("estado")(e.target.value);}}>
+                  {LEST_LIST.map(function(s){return <option key={s}>{s}</option>;})}
+                </select>
+              </div>
+            </div>
+            <div>
+              <label style={S.lbl}>Organismo Convocante</label>
+              <input style={S.inp} placeholder="ej: Municipalidad de Coquimbo" value={form.organismo} onChange={function(e){fld("organismo")(e.target.value);}}/>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <div>
+                <label style={S.lbl}>Región</label>
+                <select style={S.sel} value={form.region} onChange={function(e){fld("region")(e.target.value);}}>
+                  {REGCL.map(function(r){return <option key={r}>{r}</option>;})}
+                </select>
+              </div>
+              <div>
+                <label style={S.lbl}>Plazo ejecución (días corridos)</label>
+                <input style={S.inp} type="number" min="1" value={form.plazoEjecucion} onChange={function(e){fld("plazoEjecucion")(parseInt(e.target.value)||0);}}/>
+              </div>
+            </div>
+            <div>
+              <label style={S.lbl}>Nombre de la Obra / Servicio</label>
+              <input style={S.inp} placeholder="ej: Mejoramiento veredas sector norte" value={form.nombreObra} onChange={function(e){fld("nombreObra")(e.target.value);}}/>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
+              <div>
+                <label style={S.lbl}>Fecha publicación</label>
+                <input style={S.inp} type="date" value={form.fechaPublicacion} onChange={function(e){fld("fechaPublicacion")(e.target.value);}}/>
+              </div>
+              <div>
+                <label style={S.lbl}>Fecha cierre</label>
+                <input style={S.inp} type="date" value={form.fechaCierre} onChange={function(e){fld("fechaCierre")(e.target.value);}}/>
+              </div>
+              <div>
+                <label style={S.lbl}>Visita a terreno</label>
+                <input style={S.inp} type="date" value={form.fechaVisita} onChange={function(e){fld("fechaVisita")(e.target.value);}}/>
+              </div>
+            </div>
+            <div>
+              <label style={S.lbl}>Vincular desde presupuesto (opcional)</label>
+              <select style={S.sel} value={form.budgetId||""} onChange={function(e){fld("budgetId")(e.target.value);if(e.target.value)importBudget(e.target.value);}}>
+                <option value="">— Sin vincular —</option>
+                {budgets.slice().reverse().map(function(b){return <option key={b.id} value={b.id}>{"N° "+b.id+" — "+b.descripcion}</option>;})}
+              </select>
+              {form.budgetId&&<div style={{fontSize:12,color:"#4ade80",marginTop:4}}>{"✅ Ítems importados del presupuesto N° "+form.budgetId}</div>}
+            </div>
+            <div>
+              <label style={S.lbl}>Notas internas</label>
+              <textarea style={{...S.inp,height:60,resize:"vertical"}} value={form.notas} onChange={function(e){fld("notas")(e.target.value);}}/>
+            </div>
+          </div>
+        )}
+
+        {step===2&&(
+          <div>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+              <div style={{fontSize:13,fontWeight:700,color:C.text}}>Ítems del itemizado</div>
+              <label style={{...S.btn("s"),fontSize:12,padding:"5px 12px",cursor:"pointer",display:"inline-block"}}>
+                📊 Importar desde Excel
+                <input type="file" accept=".xlsx,.xls,.csv" style={{display:"none"}} onChange={function(e){
+                  var file=e.target.files[0];if(!file)return;
+                  loadScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js").then(function(){
+                    var reader=new FileReader();
+                    reader.onload=function(ev){
+                      try{
+                        var wb=XLSX.read(ev.target.result,{type:"binary"});
+                        var ws=wb.Sheets[wb.SheetNames[0]];
+                        var rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:""});
+                        var items=[];
+                        rows.forEach(function(row){
+                          var desc=String(row[1]||row[0]||"").trim();
+                          var cant=parseFloat(row[2]||row[1])||0;
+                          var unidad=String(row[3]||row[2]||"m2").trim();
+                          var precio=parseFloat(row[4]||row[3])||0;
+                          if(desc&&desc.length>2&&!desc.match(/N°|N\.|Descripci|Partida|Item|TOTAL|Subtotal/i)){
+                            items.push({desc:desc,cant:cant||1,unidad:unidad||"m2",precioNeto:precio,especTecnica:""});
+                          }
+                        });
+                        if(items.length>0){
+                          setForm(function(x){return Object.assign({},x,{items:items});});
+                          setToast("✅ "+items.length+" ítems importados desde Excel");
+                        } else {
+                          setToast("⚠️ No se encontraron ítems válidos. Verifica columnas: N° | Descripción | Cantidad | Unidad | Precio");
+                        }
+                      }catch(err){setToast("❌ Error al leer el Excel: "+err.message);}
+                    };
+                    reader.readAsBinaryString(file);
+                  });
+                  e.target.value="";
+                }}/>
+              </label>
+            </div>
+            <div style={{overflowX:"auto"}}>
+              <table style={{width:"100%",borderCollapse:"collapse",minWidth:700}}>
+                <thead>
+                  <tr>
+                    {["N°","Descripción","Cant","Unidad","P.Unit Neto","Subtotal",""].map(function(h){return <th key={h} style={{...S.th,fontSize:11}}>{h}</th>;})}
+                  </tr>
+                </thead>
+                <tbody>
+                  {form.items.map(function(item,idx){return(
+                    <tr key={idx} style={{borderBottom:"1px solid "+C.border}}>
+                      <td style={{...S.td,color:C.muted,fontSize:12,width:30}}>{idx+1}</td>
+                      <td style={S.td}><input style={{...S.inp,margin:0,padding:"5px 8px",fontSize:12}} value={item.desc} onChange={function(e){setItem(idx,"desc",e.target.value);}} placeholder="Descripción"/></td>
+                      <td style={S.td}><input style={{...S.inp,margin:0,padding:"5px 8px",width:60,fontSize:12,textAlign:"right"}} type="number" min="0" value={item.cant} onChange={function(e){setItem(idx,"cant",e.target.value);}}/></td>
+                      <td style={S.td}><input style={{...S.inp,margin:0,padding:"5px 8px",width:70,fontSize:12}} value={item.unidad} onChange={function(e){setItem(idx,"unidad",e.target.value);}}/></td>
+                      <td style={S.td}><input style={{...S.inp,margin:0,padding:"5px 8px",width:110,fontSize:12,textAlign:"right"}} type="number" min="0" value={item.precioNeto} onChange={function(e){setItem(idx,"precioNeto",e.target.value);}}/></td>
+                      <td style={{...S.td,fontWeight:600,color:C.accent,fontSize:12,whiteSpace:"nowrap"}}>{fmt((parseFloat(item.cant)||0)*(parseFloat(item.precioNeto)||0))}</td>
+                      <td style={S.td}><button style={{...S.btn("d"),padding:"3px 7px",fontSize:13}} onClick={function(){delItem(idx);}}>{"×"}</button></td>
+                    </tr>
+                  );})}
+                </tbody>
+              </table>
+            </div>
+            <button style={{...S.btn("s"),marginTop:10,fontSize:13}} onClick={addItem}>{"+ Agregar ítem"}</button>
+            <div style={{marginTop:16,background:C.sb,borderRadius:10,padding:"14px 16px",maxWidth:360,marginLeft:"auto"}}>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:6,fontSize:13}}>
+                <span style={{color:C.muted}}>Subtotal Neto</span>
+                <span style={{fontWeight:600}}>{fmt(neto)}</span>
+              </div>
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:6,fontSize:13}}>
+                <span style={{color:C.muted}}>IVA (19%)</span>
+                <span>{fmt(iva)}</span>
+              </div>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:15,fontWeight:700,color:C.accent,borderTop:"1px solid "+C.border,paddingTop:8}}>
+                <span>Total Oferta</span>
+                <span>{fmt(total)}</span>
+              </div>
+              <div style={{fontSize:11,color:C.muted,marginTop:6}}>{"* Precios netos — formato Mercado Público"}</div>
+            </div>
+          </div>
+        )}
+
+        {step===3&&(
+          <div style={{display:"flex",flexDirection:"column",gap:16}}>
+            <div>
+              <label style={S.lbl}>Metodología de trabajo</label>
+              <textarea style={{...S.inp,height:90,resize:"vertical"}} placeholder="Enfoque metodológico, fases, medidas de seguridad..." value={form.metodologia||""} onChange={function(e){fld("metodologia")(e.target.value);}}/>
+            </div>
+            <div>
+              <label style={S.lbl}>Plan de etapas y plazos (opcional)</label>
+              <textarea style={{...S.inp,height:60,resize:"vertical"}} placeholder="Etapa 1 — semanas 1-2 preparación..." value={form.etapas||""} onChange={function(e){fld("etapas")(e.target.value);}}/>
+            </div>
+            <div>
+              <label style={{...S.lbl,margin:0,marginBottom:8,display:"block"}}>Especificaciones técnicas por ítem</label>
+              {form.items.map(function(item,idx){return(
+                <div key={idx} style={{marginBottom:10,background:C.sb,borderRadius:8,padding:"10px 12px"}}>
+                  <div style={{fontSize:12,fontWeight:600,color:C.text,marginBottom:6}}>{(idx+1)+". "+(item.desc||"(sin descripción)")}</div>
+                  <textarea style={{...S.inp,margin:0,height:55,resize:"vertical",fontSize:12}} placeholder="Especificación técnica..." value={item.especTecnica||""} onChange={function(e){setItem(idx,"especTecnica",e.target.value);}}/>
+                </div>
+              );})}
+            </div>
+            <div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                <label style={{...S.lbl,margin:0}}>Subcontratos declarados</label>
+                <button style={{...S.btn("s"),fontSize:12,padding:"4px 10px"}} onClick={addSub}>{"+ Agregar"}</button>
+              </div>
+              {form.subcontratos.map(function(s,idx){return(
+                <div key={idx} style={{display:"grid",gridTemplateColumns:"1fr 1fr 80px 36px",gap:8,marginBottom:8,alignItems:"center"}}>
+                  <input style={{...S.inp,margin:0,fontSize:12}} placeholder="Rubro" value={s.rubro} onChange={function(e){setSub(idx,"rubro",e.target.value);}}/>
+                  <input style={{...S.inp,margin:0,fontSize:12}} placeholder="Empresa" value={s.empresa} onChange={function(e){setSub(idx,"empresa",e.target.value);}}/>
+                  <input style={{...S.inp,margin:0,fontSize:12,textAlign:"right"}} type="number" min="0" max="100" placeholder="%" value={s.pct} onChange={function(e){setSub(idx,"pct",e.target.value);}}/>
+                  <button style={{...S.btn("d"),padding:"4px 8px"}} onClick={function(){delSub(idx);}}>{"×"}</button>
+                </div>
+              );})}
+              {form.subcontratos.length===0&&<div style={{fontSize:12,color:C.muted}}>Sin subcontratos declarados</div>}
+            </div>
+          </div>
+        )}
+
+        {step===4&&(
+          <div style={{display:"flex",flexDirection:"column",gap:18}}>
+            {[["seriedad","Garantía de Seriedad de la Oferta"],["fiel","Garantía de Fiel Cumplimiento"]].map(function(pair){
+              var tipo=pair[0];var titulo=pair[1];
+              return(
+                <div key={tipo} style={{background:C.sb,borderRadius:10,padding:"14px 16px"}}>
+                  <div style={{fontSize:13,fontWeight:700,color:C.text,marginBottom:10}}>{"🏦 "+titulo}</div>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:10}}>
+                    <div>
+                      <label style={S.lbl}>Monto ($)</label>
+                      <input style={{...S.inp,fontSize:13}} type="number" min="0" value={form.garantias[tipo].monto} onChange={function(e){setGar(tipo,"monto",parseInt(e.target.value)||0);}}/>
+                    </div>
+                    <div>
+                      <label style={S.lbl}>Tipo</label>
+                      <select style={S.sel} value={form.garantias[tipo].tipo} onChange={function(e){setGar(tipo,"tipo",e.target.value);}}>
+                        {["Boleta bancaria","Vale vista","Póliza de seguro","Depósito a plazo","Certificado de fianza"].map(function(t){return <option key={t}>{t}</option>;})}
+                      </select>
+                    </div>
+                    <div>
+                      <label style={S.lbl}>Banco / Institución</label>
+                      <input style={{...S.inp,fontSize:13}} placeholder="ej: BancoEstado" value={form.garantias[tipo].banco} onChange={function(e){setGar(tipo,"banco",e.target.value);}}/>
+                    </div>
+                    <div>
+                      <label style={S.lbl}>Vencimiento</label>
+                      <input style={{...S.inp,fontSize:13}} type="date" value={form.garantias[tipo].vencimiento} onChange={function(e){setGar(tipo,"vencimiento",e.target.value);}}/>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            <div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                <label style={{...S.lbl,margin:0,fontWeight:700}}>{"📁 Experiencia empresa"}</label>
+                {form.experiencia.length<5&&<button style={{...S.btn("s"),fontSize:12,padding:"4px 10px"}} onClick={addExp}>{"+ Agregar"}</button>}
+              </div>
+              {form.experiencia.map(function(e,idx){return(
+                <div key={idx} style={{background:C.sb,borderRadius:8,padding:"12px 14px",marginBottom:8}}>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
+                    <div>
+                      <label style={S.lbl}>Nombre obra / proyecto</label>
+                      <input style={{...S.inp,margin:0,fontSize:12}} value={e.obra} onChange={function(x){setExp(idx,"obra",x.target.value);}}/>
+                    </div>
+                    <div>
+                      <label style={S.lbl}>Mandante / Organismo</label>
+                      <input style={{...S.inp,margin:0,fontSize:12}} value={e.mandante} onChange={function(x){setExp(idx,"mandante",x.target.value);}}/>
+                    </div>
+                  </div>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 80px 1fr 36px",gap:8,alignItems:"end"}}>
+                    <div>
+                      <label style={S.lbl}>Monto contrato ($)</label>
+                      <input style={{...S.inp,margin:0,fontSize:12}} type="number" min="0" value={e.monto} onChange={function(x){setExp(idx,"monto",parseInt(x.target.value)||0);}}/>
+                    </div>
+                    <div>
+                      <label style={S.lbl}>Año</label>
+                      <input style={{...S.inp,margin:0,fontSize:12,textAlign:"center"}} type="number" min="2000" max="2030" value={e.año} onChange={function(x){setExp(idx,"año",parseInt(x.target.value)||0);}}/>
+                    </div>
+                    <div>
+                      <label style={S.lbl}>Contacto de referencia</label>
+                      <input style={{...S.inp,margin:0,fontSize:12}} placeholder="Nombre y teléfono" value={e.contacto} onChange={function(x){setExp(idx,"contacto",x.target.value);}}/>
+                    </div>
+                    <button style={{...S.btn("d"),padding:"4px 8px",alignSelf:"flex-end",marginBottom:1}} onClick={function(){delExp(idx);}}>{"×"}</button>
+                  </div>
+                </div>
+              );})}
+              {form.experiencia.length===0&&<div style={{fontSize:12,color:"#fb7185"}}>{"⚠ Sin experiencia declarada"}</div>}
+            </div>
+          </div>
+        )}
+
+        {step===5&&(
+          <div style={{display:"flex",flexDirection:"column",gap:14}}>
+            <div style={{background:C.sb,borderRadius:10,padding:"14px 16px"}}>
+              <div style={{fontSize:13,fontWeight:700,color:C.text,marginBottom:10}}>{"📄 Documentos automáticos"}</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+                {[{ic:"📋",label:"Oferta Técnica",desc:"Itemizado + especificaciones + experiencia",key:"tecnica"},{ic:"💰",label:"Oferta Económica",desc:"Precios netos + IVA + Total",key:"economica"},{ic:"✉️",label:"Carta de Presentación",desc:"Carta formal con datos empresa",key:"carta"},{ic:"📜",label:"Declaración Jurada",desc:"Declaración simple para la oferta",key:"djurada"}].map(function(d){return(
+                  <div key={d.key} style={{background:C.card,borderRadius:8,padding:"12px 14px",border:"1px solid "+C.border}}>
+                    <div style={{fontSize:16,marginBottom:4}}>{d.ic}</div>
+                    <div style={{fontSize:13,fontWeight:600,color:C.text,marginBottom:3}}>{d.label}</div>
+                    <div style={{fontSize:11,color:C.muted,marginBottom:10,lineHeight:1.4}}>{d.desc}</div>
+                    <button style={{...S.btn("p"),width:"100%",fontSize:12,padding:"7px"}} onClick={function(){genDocLicit(form,d.key,cfg);}}>{"⬇ Descargar PDF"}</button>
+                  </div>
+                );})}
+              </div>
+              <button style={{...S.btn("s"),width:"100%",marginTop:10,fontSize:12,padding:"8px"}} onClick={function(){genExcelLicit(form,cfg);}}>{"📊 Descargar Itemizado Excel (formato MP)"}</button>
+            </div>
+            <div style={{background:C.sb,borderRadius:10,padding:"14px 16px"}}>
+              <div style={{fontSize:13,fontWeight:700,color:C.text,marginBottom:6}}>{"📁 Archivos propios"}</div>
+              <div style={{fontSize:12,color:C.muted,marginBottom:10}}>Sube bases, formularios del organismo o certificados para tenerlos centralizados.</div>
+              <label style={{display:"block",border:"2px dashed "+C.border,borderRadius:8,padding:"18px",textAlign:"center",cursor:"pointer",fontSize:13,color:C.muted,marginBottom:8}}>
+                <input type="file" multiple accept=".pdf,.xlsx,.xls,.doc,.docx" style={{display:"none"}} onChange={function(e){
+                  var newFiles=Array.from(e.target.files).map(function(f2){return{name:f2.name,size:f2.size,type:f2.type,uploadedAt:todayStr()};});
+                  setForm(function(x){return Object.assign({},x,{archivos:(x.archivos||[]).concat(newFiles)});});
+                  e.target.value="";
+                }}/>
+                {"📎 Click para subir archivos (PDF, Excel, Word)"}
+              </label>
+              {(form.archivos||[]).map(function(a,i){return(
+                <div key={i} style={{display:"flex",alignItems:"center",gap:8,background:C.card,borderRadius:6,padding:"8px 12px",border:"1px solid "+C.border,marginBottom:4}}>
+                  <span style={{fontSize:14}}>{a.name.endsWith(".pdf")?"📄":a.name.match(/xlsx?/)?"📊":"📎"}</span>
+                  <span style={{flex:1,fontSize:12,color:C.text,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{a.name}</span>
+                  <span style={{fontSize:11,color:C.muted}}>{Math.round(a.size/1024)+" KB"}</span>
+                  <button style={{...S.btn("d"),padding:"2px 7px",fontSize:12}} onClick={function(){setForm(function(x){return Object.assign({},x,{archivos:x.archivos.filter(function(_,j){return j!==i;})});});}}>{"×"}</button>
+                </div>
+              );})}
+            </div>
+          </div>
+        )}
+
+        <div style={{display:"flex",justifyContent:"space-between",marginTop:20,paddingTop:16,borderTop:"1px solid "+C.border}}>
+          <div style={{display:"flex",gap:8}}>
+            {step>1&&<button style={{...S.btn("s"),padding:"8px 18px"}} onClick={function(){setStep(function(s){return s-1;});}}>{"← Anterior"}</button>}
+            <button style={{...S.btn("s"),padding:"8px 18px"}} onClick={onCancel}>Cancelar</button>
+          </div>
+          <div style={{display:"flex",gap:8}}>
+            {step<5
+              ?<button style={{...S.btn("p"),padding:"8px 22px"}} onClick={function(){setStep(function(s){return s+1;});}}>{"Siguiente →"}</button>
+              :<button style={{...S.btn("p"),padding:"8px 22px"}} onClick={function(){onSave(form);}}>{"💾 Guardar licitación"}</button>
+            }
+          </div>
+        </div>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:12}}>
+        <LicitChecklist lic={form}/>
+        {calcLicit(form.items||[]).neto>0&&(
+          <div style={{...S.card,padding:"14px 16px"}}>
+            <div style={{fontSize:12,color:C.muted,marginBottom:8,fontWeight:600,textTransform:"uppercase",letterSpacing:".05em"}}>Resumen económico</div>
+            <div style={{fontSize:12,color:C.muted,marginBottom:4}}>Neto: <span style={{color:C.text,fontWeight:600}}>{fmt(calcLicit(form.items).neto)}</span></div>
+            <div style={{fontSize:12,color:C.muted,marginBottom:4}}>IVA 19%: <span style={{color:C.text}}>{fmt(calcLicit(form.items).iva)}</span></div>
+            <div style={{fontSize:14,fontWeight:700,color:C.accent}}>{"Total: "+fmt(calcLicit(form.items).total)}</div>
+          </div>
+        )}
+        {form.fechaCierre&&(function(){
+          var dias=Math.ceil((new Date(form.fechaCierre)-new Date())/86400000);
+          var color=dias<=3?"#fb7185":dias<=7?"#fbbf24":"#4ade80";
+          return(
+            <div style={{...S.card,padding:"12px 16px",border:"1px solid "+color+"30"}}>
+              <div style={{fontSize:11,color:C.muted,marginBottom:4,textTransform:"uppercase",letterSpacing:".05em"}}>Cierre en</div>
+              <div style={{fontSize:22,fontWeight:700,color:color}}>{dias>0?dias+" días":"¡Hoy!"}</div>
+              <div style={{fontSize:11,color:C.muted}}>{form.fechaCierre}</div>
             </div>
           );
-        })}
-      </div>
-
-      <div style={{background:C.card, borderRadius:12, padding:24, minHeight:400}}>
-        {step===1 && (
-          <div style={{display:"flex", flexDirection:"column", gap:20, maxWidth:800}}>
-            <div>
-              <h2 style={{fontSize:22, fontWeight:700, color:C.text, marginBottom:8}}>Importar Licitación</h2>
-              <p style={{fontSize:14, color:C.muted}}>Ingresa el ID de la licitación para extraer automáticamente todos sus datos desde Mercado Público.</p>
-            </div>
-            <div style={{display:"flex", gap:12}}>
-              <input style={{...S.inp, flex:1, fontSize:16, padding:"12px 16px", margin:0}} placeholder="Ej: 1234-56-LE24" value={form.idMP} onChange={function(e){setForm(Object.assign({}, form, {idMP:e.target.value}))}}/>
-              <button style={{...S.btn("p"), padding:"0 24px", fontSize:14}} onClick={fetchLicitacion} disabled={loading}>
-                {loading ? "⏳ Buscando..." : "⚡ Extraer de M. Público"}
-              </button>
-            </div>
-            {form.nombreObra && (
-              <div style={{background:C.sb, border:"1px solid "+C.border, borderRadius:8, padding:24}}>
-                <div style={{marginBottom:16}}>
-                  <div style={{fontSize:12, fontWeight:700, color:C.muted, textTransform:"uppercase"}}>Nombre del Proyecto</div>
-                  <div style={{fontSize:18, fontWeight:700, color:C.text}}>{form.nombreObra}</div>
-                </div>
-                <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:16}}>
-                  <div>
-                    <div style={{fontSize:12, color:C.muted}}>Organismo Comprador</div>
-                    <div style={{fontSize:14, color:C.text}}>{form.organismo || "No disponible"}</div>
-                  </div>
-                  <div>
-                    <div style={{fontSize:12, color:C.muted}}>Región</div>
-                    <div style={{fontSize:14, color:C.text}}>{form.region || "No disponible"}</div>
-                  </div>
-                  <div>
-                    <div style={{fontSize:12, color:C.muted}}>Fecha de Cierre</div>
-                    <div style={{fontSize:14, fontWeight:700, color:"#fb7185"}}>{form.fechaCierre || "No especificada"}</div>
-                  </div>
-                  <div>
-                    <div style={{fontSize:12, color:C.muted}}>Visita a Terreno</div>
-                    <div style={{fontSize:14, color:C.text}}>{form.fechaVisita || "No especificada"}</div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {step===2 && (
-          <div style={{display:"flex", flexDirection:"column", gap:20, maxWidth:800}}>
-            <div>
-              <h2 style={{fontSize:22, fontWeight:700, color:C.text, marginBottom:8}}>Checklist Documental</h2>
-              <p style={{fontSize:14, color:C.muted}}>Marca los documentos obligatorios a medida que los vayas subiendo al portal.</p>
-            </div>
-            <div style={{display:"flex", flexDirection:"column", gap:12}}>
-              {(form.docs||[]).map(function(doc, i) {
-                return (
-                  <label key={i} style={{display:"flex", alignItems:"center", gap:12, padding:16, background:C.sb, border:"1px solid "+(doc.checked?"#4ade80":C.border), borderRadius:8, cursor:"pointer"}}>
-                    <input type="checkbox" checked={doc.checked} onChange={function(e){
-                      var nd = form.docs.slice();
-                      nd[i] = Object.assign({}, nd[i], {checked: e.target.checked});
-                      setForm(Object.assign({}, form, {docs:nd}));
-                    }} style={{width:20, height:20, cursor:"pointer"}}/>
-                    <span style={{fontSize:16, color:C.text, textDecoration: doc.checked?"line-through":"none"}}>{doc.name}</span>
-                    {doc.checked && <span style={{marginLeft:"auto", color:"#4ade80", fontWeight:700}}>✓ Listo</span>}
-                  </label>
-                );
-              })}
-            </div>
-            <button style={{...S.btn("s"), alignSelf:"flex-start"}} onClick={function(){
-              var n = prompt("Nombre del nuevo documento:");
-              if (n) setForm(Object.assign({}, form, {docs:form.docs.concat([{id:Date.now(), name:n, checked:false}])}));
-            }}>+ Añadir otro documento</button>
-          </div>
-        )}
-
-        {step===3 && (
-          <div style={{display:"flex", flexDirection:"column", gap:20}}>
-            <div>
-              <h2 style={{fontSize:22, fontWeight:700, color:C.text, marginBottom:8}}>Presupuestador (Itemizado M. Público)</h2>
-              <p style={{fontSize:14, color:C.muted}}>Ingresa tus precios unitarios netos para cada línea solicitada.</p>
-            </div>
-            {form.items && form.items.length > 0 ? (
-              <div style={{display:"flex", flexDirection:"column", gap:12}}>
-                {form.items.map(function(ln, i) {
-                  var cant = parseFloat(ln.cant) || 1;
-                  var pu = parseFloat(ln.precioNeto) || 0;
-                  var sub = cant * pu;
-                  return (
-                    <div key={i} style={{background:C.sb, border:"1px solid "+C.border, borderRadius:8, padding:16, display:"flex", flexWrap:"wrap", gap:16, alignItems:"center"}}>
-                      <div style={{flex:"1 1 250px"}}>
-                        <div style={{fontSize:11, fontWeight:700, color:C.muted}}>LÍNEA {i+1}</div>
-                        <div style={{fontSize:15, fontWeight:700, color:C.text, marginTop:4}}>{ln.desc}</div>
-                        <div style={{fontSize:13, color:C.muted, marginTop:4}}>{cant} {ln.unidad}</div>
-                      </div>
-                      <div style={{flex:"0 0 150px"}}>
-                        <div style={{fontSize:11, color:C.muted, marginBottom:4}}>Precio Unitario Neto</div>
-                        <input type="number" style={{...S.inp, width:"100%", fontSize:14, margin:0}} placeholder="0" value={pu||""} onChange={function(e){
-                          var nl = form.items.slice();
-                          nl[i] = Object.assign({}, nl[i], {precioNeto: parseFloat(e.target.value)||0});
-                          setForm(Object.assign({}, form, {items:nl}));
-                        }}/>
-                      </div>
-                      <div style={{flex:"0 0 120px", textAlign:"right"}}>
-                        <div style={{fontSize:11, color:C.muted, marginBottom:4}}>Subtotal Neto</div>
-                        <div style={{fontSize:15, fontWeight:700, color:C.accent}}>{fmt(sub)}</div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div style={{padding:32, background:C.sb, border:"1px dashed "+C.border, borderRadius:8, textAlign:"center", color:C.muted}}>
-                No hay líneas extraídas de Mercado Público aún.
-              </div>
-            )}
-          </div>
-        )}
-
-        {step===4 && (
-          <div style={{display:"flex", flexDirection:"column", gap:20, maxWidth:800}}>
-            <div>
-              <h2 style={{fontSize:22, fontWeight:700, color:C.text, marginBottom:8}}>Resumen de la Oferta</h2>
-              <p style={{fontSize:14, color:C.muted}}>Revisa tu oferta final antes de finalizar y enviarla al Kanban.</p>
-            </div>
-            <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:16}}>
-              <div style={{background:C.sb, border:"1px solid "+C.border, borderRadius:8, padding:24}}>
-                <h3 style={{fontSize:16, color:C.text, marginBottom:16, borderBottom:"1px solid "+C.border, paddingBottom:8}}>Resumen Económico</h3>
-                <div style={{display:"flex", justifyContent:"space-between", marginBottom:8}}>
-                  <span style={{color:C.muted}}>Total Neto</span>
-                  <span style={{color:C.text, fontWeight:700}}>{fmt(neto)}</span>
-                </div>
-                <div style={{display:"flex", justifyContent:"space-between", marginBottom:8}}>
-                  <span style={{color:C.muted}}>IVA (19%)</span>
-                  <span style={{color:C.text, fontWeight:700}}>{fmt(iva)}</span>
-                </div>
-                <div style={{display:"flex", justifyContent:"space-between", marginTop:16, paddingTop:16, borderTop:"1px solid "+C.border, fontSize:20, color:C.accent, fontWeight:700}}>
-                  <span>Total Oferta</span>
-                  <span>{fmt(total)}</span>
-                </div>
-              </div>
-              <div style={{background:C.sb, border:"1px solid "+C.border, borderRadius:8, padding:24}}>
-                <h3 style={{fontSize:16, color:C.text, marginBottom:16, borderBottom:"1px solid "+C.border, paddingBottom:8}}>Checklist Documental</h3>
-                <div style={{fontSize:32, fontWeight:700, color:docsListos===docsTotal?"#4ade80":C.accent, textAlign:"center", marginBottom:8}}>
-                  {docsListos} / {docsTotal}
-                </div>
-                <div style={{textAlign:"center", color:C.muted, fontSize:14}}>Documentos marcados como listos</div>
-                {docsListos < docsTotal && (
-                  <div style={{marginTop:16, padding:12, background:"rgba(251, 113, 133, 0.1)", color:"#fb7185", borderRadius:8, fontSize:13, textAlign:"center"}}>
-                    Faltan documentos obligatorios por marcar
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div style={{display:"flex", justifyContent:"space-between", marginTop:10}}>
-        <div style={{display:"flex", gap:12}}>
-          {step > 1 && <button style={{...S.btn("s"), padding:"10px 24px"}} onClick={function(){setStep(step-1);}}>← Anterior</button>}
-          <button style={{...S.btn("s"), padding:"10px 24px", background:"transparent", border:"1px solid "+C.border}} onClick={onCancel}>Cancelar</button>
-        </div>
-        <div>
-          {step < STEPS.length ? (
-            <button style={{...S.btn("p"), padding:"10px 24px"}} onClick={function(){setStep(step+1);}}>Siguiente →</button>
-          ) : (
-            <button style={{...S.btn("p"), padding:"10px 24px", background:"#4ade80", color:"#000"}} onClick={function(){
-              if(!form.nombreObra) return alert("No hay una licitación válida extraída.");
-              onSave(Object.assign({}, form, {estado: "Borrador"}));
-            }}>💾 Finalizar y Guardar</button>
-          )}
-        </div>
+        })()}
       </div>
     </div>
   );

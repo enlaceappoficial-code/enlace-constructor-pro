@@ -65650,24 +65650,61 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       Estado: "Borrador",
       Organismo: "",
       Region: "",
-      PlazoEjecucion: "",
-      FechaPublicacion: "",
-      FechaCierre: "",
-      VisitaTerreno: "",
-      PresupuestoVinculado: "",
-      Notas: ""
+      Fechas: { FechaPublicacion: "", FechaCierre: "", VisitaTerreno: "" },
+      Garantias: [],
+      Lineas: [],
+      Notas: "",
+      Adjudicacion: null,
+      Docs: [
+        { id: 1, name: "Garantía de Seriedad de la Oferta", checked: false },
+        { id: 2, name: "Anexos Administrativos", checked: false },
+        { id: 3, name: "Oferta Económica Anexo N°...", checked: false }
+      ]
     }),
       form = st[0],
       setForm = st[1];
     var stStep = V(1),
       step = stStep[0],
       setStep = stStep[1];
+    var _ld = V(false),
+      loading = _ld[0],
+      setLoading = _ld[1];
+    
+    // Auto-fetch data from API based on CodigoExterno
+    var fetchLicitacion = function() {
+      if (!form.CodigoExterno) return alert("Ingresa un Código de Licitación válido");
+      setLoading(true);
+      var tk = (props.cfg && props.cfg.apiKeyMP) || "79B6AA40-A970-4164-ADEE-47CF3F378CBA";
+      fetch("https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?ticket=" + tk + "&codigo=" + form.CodigoExterno)
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          setLoading(false);
+          if(d && d.Listado && d.Listado.length > 0) {
+            var lic = d.Listado[0];
+            var f = Object.assign({}, form, {
+              Nombre: lic.Nombre,
+              Organismo: lic.Comprador ? lic.Comprador.NombreOrganismo : "",
+              Region: lic.Comprador ? lic.Comprador.RegionUnidad : "",
+              Fechas: {
+                FechaPublicacion: lic.Fechas && lic.Fechas.FechaPublicacion ? lic.Fechas.FechaPublicacion.substring(0,10) : "",
+                FechaCierre: lic.Fechas && lic.Fechas.FechaCierre ? lic.Fechas.FechaCierre.substring(0,10) : "",
+                VisitaTerreno: lic.Fechas && lic.Fechas.FechaVisitaTerreno ? lic.Fechas.FechaVisitaTerreno.substring(0,16) : ""
+              },
+              Lineas: lic.Items && lic.Items.Listado ? lic.Items.Listado : []
+            });
+            setForm(f);
+            alert("Licitación importada con éxito");
+          } else {
+            alert("No se encontró la licitación");
+          }
+        })
+        .catch(function(e) {
+          setLoading(false);
+          alert("Error al conectar con Mercado Público");
+        });
+    };
 
-    var steps = ["General", "Itemizado", "Técnico", "Garantías", "Documentos"];
-
-    var isBaseReady = form.Nombre.trim() !== "";
-    var isFechasReady = form.FechaPublicacion !== "" && form.FechaCierre !== "";
-    var isOrgReady = form.Organismo.trim() !== "";
+    var steps = ["1. Ficha Automática", "2. Documentos", "3. Presupuesto (APUs)", "4. Resumen y Cierre"];
 
     return e.jsxs("div", {
       style: { display: "flex", flexDirection: "column", height: "100%", background: props.th.bg },
@@ -65679,7 +65716,8 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             var past = step > i + 1;
             return e.jsxs("div", {
               key: s,
-              style: { display: "flex", alignItems: "center", gap: 8, opacity: active || past ? 1 : 0.5 },
+              onClick: function() { setStep(i + 1); },
+              style: { display: "flex", alignItems: "center", gap: 8, opacity: active || past ? 1 : 0.5, cursor: "pointer" },
               children: [
                 e.jsx("div", {
                   style: {
@@ -65698,194 +65736,229 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             })
           })
         }),
-        e.jsxs("div", {
-          style: { display: "flex", flex: 1, overflow: "hidden" },
-          children: [
-            e.jsx("div", {
-              style: { flex: 1, padding: 32, overflowY: "auto" },
-              children: e.jsxs("div", {
-                style: { maxWidth: 800, margin: "0 auto" },
+        e.jsx("div", {
+          style: { flex: 1, padding: 32, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" },
+          children: e.jsxs("div", {
+            style: { width: "100%", maxWidth: 900 },
+            children: [
+              step === 1 && e.jsxs("div", {
                 children: [
-                  e.jsx("h2", { style: { color: props.th.text, marginBottom: 8, fontSize: 24, fontWeight: "bold" }, children: "Datos Generales" }),
-                  e.jsx("p", { style: { color: props.th.muted, marginBottom: 32, fontSize: 14 }, children: "Ingresa la información base de la licitación u oportunidad." }),
-                  
+                  e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: "bold", marginBottom: 8 }, children: "Importar Licitación" }),
+                  e.jsx("p", { style: { color: props.th.muted, marginBottom: 24, fontSize: 14 }, children: "Ingresa el ID de la licitación para extraer automáticamente todos sus datos desde Mercado Público." }),
                   e.jsxs("div", {
-                    style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 },
+                    style: { display: "flex", gap: 12, marginBottom: 32 },
                     children: [
-                      e.jsxs("div", {
-                        children: [
-                          e.jsx("label", { style: { display: "block", marginBottom: 8, color: props.th.text, fontSize: 13, fontWeight: 600 }, children: "Nombre de la Obra/Servicio *" }),
-                          e.jsx("input", {
-                            value: form.Nombre,
-                            onChange: function(evt) { setForm(Object.assign({}, form, { Nombre: evt.target.value })); },
-                            placeholder: "Ej: Reposición Escuela...",
-                            style: Object.assign({}, props.sty.input, { width: "100%", boxSizing: "border-box" })
-                          })
-                        ]
+                      e.jsx("input", {
+                        value: form.CodigoExterno,
+                        onChange: function(evt) { setForm(Object.assign({}, form, { CodigoExterno: evt.target.value })); },
+                        placeholder: "Ej: 1234-56-LE24",
+                        style: Object.assign({}, props.sty.input, { flex: 1, fontSize: 16 })
                       }),
-                      e.jsxs("div", {
-                        children: [
-                          e.jsx("label", { style: { display: "block", marginBottom: 8, color: props.th.text, fontSize: 13, fontWeight: 600 }, children: "ID Mercado Público" }),
-                          e.jsx("input", {
-                            value: form.CodigoExterno,
-                            onChange: function(evt) { setForm(Object.assign({}, form, { CodigoExterno: evt.target.value })); },
-                            placeholder: "XXXX-XX-XX",
-                            style: Object.assign({}, props.sty.input, { width: "100%", boxSizing: "border-box" })
-                          })
-                        ]
-                      }),
-                      e.jsxs("div", {
-                        children: [
-                          e.jsx("label", { style: { display: "block", marginBottom: 8, color: props.th.text, fontSize: 13, fontWeight: 600 }, children: "Organismo Convocante" }),
-                          e.jsx("input", {
-                            value: form.Organismo,
-                            onChange: function(evt) { setForm(Object.assign({}, form, { Organismo: evt.target.value })); },
-                            placeholder: "Ej: MOP, Municipalidad...",
-                            style: Object.assign({}, props.sty.input, { width: "100%", boxSizing: "border-box" })
-                          })
-                        ]
-                      }),
-                      e.jsxs("div", {
-                        children: [
-                          e.jsx("label", { style: { display: "block", marginBottom: 8, color: props.th.text, fontSize: 13, fontWeight: 600 }, children: "Región" }),
-                          e.jsx("input", {
-                            value: form.Region,
-                            onChange: function(evt) { setForm(Object.assign({}, form, { Region: evt.target.value })); },
-                            placeholder: "Ej: Metropolitana",
-                            style: Object.assign({}, props.sty.input, { width: "100%", boxSizing: "border-box" })
-                          })
-                        ]
-                      }),
-                      e.jsxs("div", {
-                        children: [
-                          e.jsx("label", { style: { display: "block", marginBottom: 8, color: props.th.text, fontSize: 13, fontWeight: 600 }, children: "Fecha Publicación" }),
-                          e.jsx("input", {
-                            type: "date",
-                            value: form.FechaPublicacion,
-                            onChange: function(evt) { setForm(Object.assign({}, form, { FechaPublicacion: evt.target.value })); },
-                            style: Object.assign({}, props.sty.input, { width: "100%", boxSizing: "border-box" })
-                          })
-                        ]
-                      }),
-                      e.jsxs("div", {
-                        children: [
-                          e.jsx("label", { style: { display: "block", marginBottom: 8, color: props.th.text, fontSize: 13, fontWeight: 600 }, children: "Fecha Cierre" }),
-                          e.jsx("input", {
-                            type: "date",
-                            value: form.FechaCierre,
-                            onChange: function(evt) { setForm(Object.assign({}, form, { FechaCierre: evt.target.value })); },
-                            style: Object.assign({}, props.sty.input, { width: "100%", boxSizing: "border-box" })
-                          })
-                        ]
-                      }),
-                      e.jsxs("div", {
-                        children: [
-                          e.jsx("label", { style: { display: "block", marginBottom: 8, color: props.th.text, fontSize: 13, fontWeight: 600 }, children: "Visita a Terreno" }),
-                          e.jsx("input", {
-                            type: "datetime-local",
-                            value: form.VisitaTerreno,
-                            onChange: function(evt) { setForm(Object.assign({}, form, { VisitaTerreno: evt.target.value })); },
-                            style: Object.assign({}, props.sty.input, { width: "100%", boxSizing: "border-box" })
-                          })
-                        ]
-                      }),
-                      e.jsxs("div", {
-                        children: [
-                          e.jsx("label", { style: { display: "block", marginBottom: 8, color: props.th.text, fontSize: 13, fontWeight: 600 }, children: "Plazo de Ejecución (Días)" }),
-                          e.jsx("input", {
-                            type: "number",
-                            value: form.PlazoEjecucion,
-                            onChange: function(evt) { setForm(Object.assign({}, form, { PlazoEjecucion: evt.target.value })); },
-                            placeholder: "Ej: 120",
-                            style: Object.assign({}, props.sty.input, { width: "100%", boxSizing: "border-box" })
-                          })
-                        ]
-                      }),
-                      e.jsxs("div", {
-                        style: { gridColumn: "1 / -1" },
-                        children: [
-                          e.jsx("label", { style: { display: "block", marginBottom: 8, color: props.th.text, fontSize: 13, fontWeight: 600 }, children: "Notas Internas" }),
-                          e.jsx("textarea", {
-                            value: form.Notas,
-                            onChange: function(evt) { setForm(Object.assign({}, form, { Notas: evt.target.value })); },
-                            placeholder: "Observaciones iniciales...",
-                            style: Object.assign({}, props.sty.input, { width: "100%", boxSizing: "border-box", minHeight: 100, resize: "vertical" })
-                          })
-                        ]
+                      e.jsx("button", {
+                        onClick: fetchLicitacion,
+                        disabled: loading,
+                        style: Object.assign({}, props.sty.btn("p"), { padding: "0 24px" }),
+                        children: loading ? "Buscando..." : "⚡ Extraer de M. Público"
                       })
+                    ]
+                  }),
+                  form.Nombre && e.jsxs("div", {
+                    style: { background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8, padding: 24 },
+                    children: [
+                      e.jsxs("div", { style: { marginBottom: 16 }, children: [
+                        e.jsx("div", { style: { color: props.th.muted, fontSize: 12, fontWeight: "bold", textTransform: "uppercase" }, children: "Nombre del Proyecto" }),
+                        e.jsx("div", { style: { color: props.th.text, fontSize: 18, fontWeight: "bold" }, children: form.Nombre })
+                      ]}),
+                      e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }, children: [
+                        e.jsxs("div", { children: [
+                          e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Organismo Comprador" }),
+                          e.jsx("div", { style: { color: props.th.text, fontSize: 14 }, children: form.Organismo || "No disponible" })
+                        ]}),
+                        e.jsxs("div", { children: [
+                          e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Región" }),
+                          e.jsx("div", { style: { color: props.th.text, fontSize: 14 }, children: form.Region || "No disponible" })
+                        ]}),
+                        e.jsxs("div", { children: [
+                          e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Fecha de Cierre" }),
+                          e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: "bold", color: "#e53935" }, children: form.Fechas.FechaCierre || "No especificada" })
+                        ]}),
+                        e.jsxs("div", { children: [
+                          e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Visita a Terreno" }),
+                          e.jsx("div", { style: { color: props.th.text, fontSize: 14 }, children: form.Fechas.VisitaTerreno || "No especificada" })
+                        ]})
+                      ]})
                     ]
                   })
                 ]
-              })
-            }),
-            e.jsx("div", {
-              style: { width: 320, background: props.th.surface, borderLeft: "1px solid " + props.th.border, padding: 24 },
-              children: e.jsxs("div", {
+              }),
+              step === 2 && e.jsxs("div", {
                 children: [
-                  e.jsx("h3", { style: { color: props.th.text, marginBottom: 24, fontSize: 16, fontWeight: "bold" }, children: "Checklist Oferta" }),
-                  
-                  e.jsxs("div", {
-                    style: { display: "flex", flexDirection: "column", gap: 16 },
-                    children: [
-                      e.jsxs("div", {
-                        style: { display: "flex", alignItems: "center", gap: 12 },
+                  e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: "bold", marginBottom: 8 }, children: "Checklist Documental" }),
+                  e.jsx("p", { style: { color: props.th.muted, marginBottom: 24, fontSize: 14 }, children: "Marca los documentos obligatorios a medida que los vayas subiendo al portal." }),
+                  e.jsx("div", {
+                    style: { display: "flex", flexDirection: "column", gap: 12 },
+                    children: form.Docs.map(function(doc, i) {
+                      return e.jsxs("label", {
+                        key: i,
+                        style: { display: "flex", alignItems: "center", gap: 12, padding: 16, background: props.th.surface, border: "1px solid " + (doc.checked ? "#4CAF50" : props.th.border), borderRadius: 8, cursor: "pointer" },
                         children: [
-                          e.jsx("div", { style: { width: 22, height: 22, borderRadius: 11, background: isBaseReady ? "#4CAF50" : props.th.border, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 12 }, children: isBaseReady ? "✓" : "" }),
-                          e.jsx("span", { style: { color: isBaseReady ? props.th.text : props.th.muted, fontSize: 14 }, children: "Nombre definido" })
+                          e.jsx("input", {
+                            type: "checkbox",
+                            checked: doc.checked,
+                            onChange: function(e2) {
+                              var nd = form.Docs.slice();
+                              nd[i].checked = e2.target.checked;
+                              setForm(Object.assign({}, form, { Docs: nd }));
+                            },
+                            style: { width: 20, height: 20, cursor: "pointer" }
+                          }),
+                          e.jsx("span", { style: { color: props.th.text, fontSize: 16, textDecoration: doc.checked ? "line-through" : "none" }, children: doc.name }),
+                          doc.checked && e.jsx("span", { style: { marginLeft: "auto", color: "#4CAF50", fontWeight: "bold" }, children: "✓ Listo" })
                         ]
-                      }),
-                      e.jsxs("div", {
-                        style: { display: "flex", alignItems: "center", gap: 12 },
-                        children: [
-                          e.jsx("div", { style: { width: 22, height: 22, borderRadius: 11, background: isFechasReady ? "#4CAF50" : props.th.border, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 12 }, children: isFechasReady ? "✓" : "" }),
-                          e.jsx("span", { style: { color: isFechasReady ? props.th.text : props.th.muted, fontSize: 14 }, children: "Fechas establecidas" })
-                        ]
-                      }),
-                      e.jsxs("div", {
-                        style: { display: "flex", alignItems: "center", gap: 12 },
-                        children: [
-                          e.jsx("div", { style: { width: 22, height: 22, borderRadius: 11, background: isOrgReady ? "#4CAF50" : props.th.border, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 12 }, children: isOrgReady ? "✓" : "" }),
-                          e.jsx("span", { style: { color: isOrgReady ? props.th.text : props.th.muted, fontSize: 14 }, children: "Organismo identificado" })
-                        ]
-                      })
-                    ]
+                      });
+                    })
+                  }),
+                  e.jsx("button", {
+                    onClick: function() {
+                      var n = prompt("Nombre del nuevo documento:");
+                      if (n) {
+                        setForm(Object.assign({}, form, { Docs: form.Docs.concat([{ id: Date.now(), name: n, checked: false }]) }));
+                      }
+                    },
+                    style: Object.assign({}, props.sty.btn("s"), { marginTop: 16 }),
+                    children: "+ Añadir otro documento"
                   })
                 ]
+              }),
+              step === 3 && e.jsxs("div", {
+                children: [
+                  e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: "bold", marginBottom: 8 }, children: "Presupuestador (Itemizado M. Público)" }),
+                  e.jsx("p", { style: { color: props.th.muted, marginBottom: 24, fontSize: 14 }, children: "Ingresa tus precios unitarios netos para cada línea solicitada." }),
+                  form.Lineas && form.Lineas.length > 0 ? e.jsx("div", {
+                    style: { display: "flex", flexDirection: "column", gap: 12 },
+                    children: form.Lineas.map(function(ln, i) {
+                      var cant = parseFloat(ln.Cantidad) || 1;
+                      var pu = parseFloat(ln.PrecioUnitarioNeto) || 0;
+                      var sub = cant * pu;
+                      return e.jsxs("div", {
+                        key: i,
+                        style: { background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8, padding: 16, display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center" },
+                        children: [
+                          e.jsxs("div", {
+                            style: { flex: "1 1 250px" },
+                            children: [
+                              e.jsx("div", { style: { color: props.th.muted, fontSize: 11, fontWeight: "bold" }, children: "LÍNEA " + (i+1) }),
+                              e.jsx("div", { style: { color: props.th.text, fontSize: 15, fontWeight: "bold", marginTop: 4 }, children: ln.NombreProducto }),
+                              e.jsxs("div", { style: { color: props.th.muted, fontSize: 13, marginTop: 4 }, children: [cant, " ", ln.UnidadMedida] })
+                            ]
+                          }),
+                          e.jsxs("div", {
+                            style: { flex: "0 0 150px" },
+                            children: [
+                              e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginBottom: 4 }, children: "Precio Unitario Neto" }),
+                              e.jsx("input", {
+                                type: "number",
+                                value: pu || "",
+                                placeholder: "0",
+                                onChange: function(e2) {
+                                  var n = parseFloat(e2.target.value) || 0;
+                                  var nl = form.Lineas.slice();
+                                  nl[i] = Object.assign({}, nl[i], { PrecioUnitarioNeto: n });
+                                  setForm(Object.assign({}, form, { Lineas: nl }));
+                                },
+                                style: Object.assign({}, props.sty.input, { width: "100%", fontSize: 14 })
+                              })
+                            ]
+                          }),
+                          e.jsxs("div", {
+                            style: { flex: "0 0 120px", textAlign: "right" },
+                            children: [
+                              e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginBottom: 4 }, children: "Subtotal Neto" }),
+                              e.jsx("div", { style: { color: props.th.accent, fontSize: 15, fontWeight: "bold" }, children: "$" + sub.toLocaleString("es-CL") })
+                            ]
+                          })
+                        ]
+                      })
+                    })
+                  }) : e.jsx("div", {
+                    style: { padding: 32, background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8, textAlign: "center" },
+                    children: e.jsx("p", { style: { color: props.th.muted }, children: "No hay líneas extraídas de Mercado Público aún." })
+                  })
+                ]
+              }),
+              step === 4 && (function(){
+                var totalNeto = 0;
+                (form.Lineas || []).forEach(function(ln) {
+                  totalNeto += (parseFloat(ln.Cantidad) || 1) * (parseFloat(ln.PrecioUnitarioNeto) || 0);
+                });
+                var iva = totalNeto * 0.19;
+                var total = totalNeto + iva;
+                var listos = (form.Docs || []).filter(function(d){return d.checked;}).length;
+                var totalDocs = (form.Docs || []).length;
+                return e.jsxs("div", {
+                  children: [
+                    e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: "bold", marginBottom: 8 }, children: "Resumen de la Oferta" }),
+                    e.jsx("p", { style: { color: props.th.muted, marginBottom: 24, fontSize: 14 }, children: "Revisa tu oferta final antes de finalizar y enviarla al Kanban." }),
+                    e.jsxs("div", {
+                      style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 },
+                      children: [
+                        e.jsxs("div", {
+                          style: { background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8, padding: 24 },
+                          children: [
+                            e.jsx("h3", { style: { color: props.th.text, fontSize: 16, marginBottom: 16, borderBottom: "1px solid " + props.th.border, paddingBottom: 8 }, children: "Resumen Económico" }),
+                            e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 8 }, children: [ e.jsx("span", { style: { color: props.th.muted }, children: "Total Neto" }), e.jsx("span", { style: { color: props.th.text, fontWeight: "bold" }, children: "$" + totalNeto.toLocaleString("es-CL") }) ] }),
+                            e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 8 }, children: [ e.jsx("span", { style: { color: props.th.muted }, children: "IVA (19%)" }), e.jsx("span", { style: { color: props.th.text, fontWeight: "bold" }, children: "$" + iva.toLocaleString("es-CL") }) ] }),
+                            e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginTop: 16, paddingTop: 16, borderTop: "1px solid " + props.th.border, fontSize: 20, color: props.th.accent, fontWeight: "bold" }, children: [ e.jsx("span", { children: "Total Oferta" }), e.jsx("span", { children: "$" + total.toLocaleString("es-CL") }) ] })
+                          ]
+                        }),
+                        e.jsxs("div", {
+                          style: { background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8, padding: 24 },
+                          children: [
+                            e.jsx("h3", { style: { color: props.th.text, fontSize: 16, marginBottom: 16, borderBottom: "1px solid " + props.th.border, paddingBottom: 8 }, children: "Checklist Documental" }),
+                            e.jsxs("div", { style: { fontSize: 32, fontWeight: "bold", color: listos === totalDocs ? "#4CAF50" : props.th.accent, textAlign: "center", marginBottom: 8 }, children: [listos, " / ", totalDocs] }),
+                            e.jsx("div", { style: { textAlign: "center", color: props.th.muted, fontSize: 14 }, children: "Documentos marcados como listos" }),
+                            listos < totalDocs && e.jsx("div", { style: { marginTop: 16, padding: 12, background: "rgba(244, 67, 54, 0.1)", color: "#F44336", borderRadius: 8, fontSize: 13, textAlign: "center" }, children: "Faltan documentos obligatorios por marcar" })
+                          ]
+                        })
+                      ]
+                    })
+                  ]
+                });
               })
-            })
-          ]
+            ]
+          })
         }),
         e.jsx("div", {
           style: { borderTop: "1px solid " + props.th.border, padding: "16px 32px", background: props.th.surface, display: "flex", justifyContent: "space-between", alignItems: "center" },
           children: e.jsxs("div", {
             style: { display: "flex", gap: 16, marginLeft: "auto" },
             children: [
-              e.jsx("button", {
+              step > 1 && e.jsx("button", {
                 style: Object.assign({}, props.sty.btn("s"), { padding: "10px 24px" }),
-                onClick: function() {
-                  if(props.onSuccess) props.onSuccess();
-                },
-                children: "Cancelar"
+                onClick: function() { setStep(step - 1); },
+                children: "← Anterior"
               }),
-              e.jsx("button", {
+              step < 4 ? e.jsx("button", {
                 style: Object.assign({}, props.sty.btn("p"), { padding: "10px 24px", fontWeight: "bold" }),
+                onClick: function() { setStep(step + 1); },
+                children: "Siguiente →"
+              }) : e.jsx("button", {
+                style: Object.assign({}, props.sty.btn("p"), { padding: "10px 24px", fontWeight: "bold", background: "#4CAF50", color: "#fff", border: "none" }),
                 onClick: function() {
                   if (!form.Nombre) {
-                    alert("Debes ingresar un nombre para la oportunidad.");
+                    alert("No hay una licitación válida extraída.");
                     return;
                   }
                   var n = Object.assign({}, form, {
                     estado: "Borrador",
-                    id: "man_" + Date.now().toString(),
-                    origen: "Manual",
-                    Adjudicacion: null,
-                    Fechas: { FechaCierre: form.FechaCierre, FechaPublicacion: form.FechaPublicacion }
+                    id: "lic_" + form.CodigoExterno + "_" + Date.now().toString(),
+                    origen: "API",
                   });
                   var list = props.licitaciones || [];
                   props.setLicitaciones([n].concat(list));
                   if (props.onSuccess) props.onSuccess();
                 },
-                children: "Guardar Borrador y Continuar →"
+                children: "Finalizar y Guardar ✓"
               })
             ]
           })
@@ -66017,15 +66090,15 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                         th: th,
                         sty: sty,
                       })
-                    : e.jsx(Mg, {
+                    : e.jsx(MpNuevaLicitacion, {
                         licitaciones: props.licitaciones,
                         setLicitaciones: props.setLicitaciones,
-                        budgets: props.budgets,
                         cfg: props.cfg,
-                        apus: props.apus,
-                        materiales: props.materiales,
-                        catalog: props.catalog,
-                        setToast: props.setToast,
+                        th: th,
+                        sty: sty,
+                        onSuccess: function() {
+                          setActiveTab("kanban");
+                        }
                       }),
         }),
       ],
