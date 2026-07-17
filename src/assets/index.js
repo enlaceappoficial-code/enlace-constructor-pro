@@ -65985,61 +65985,129 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       {
         id: "licit",
         icon: "⚖️",
-        label: "Análisis de Licitación",
+        label: "Preparar Postulación",
       },
     ];
     return e.jsxs("div", {
       style: { display: "flex", flexDirection: "column", height: "100%" },
       children: [
-        e.jsx("div", {
+        e.jsxs("div", {
           style: {
-            display: "flex",
-            gap: 0,
             borderBottom: "1px solid " + th.border,
-            padding: "0",
             background: th.surface,
             position: "sticky",
             top: 0,
             zIndex: 10,
           },
-          children: tabs.map(function (tb) {
-            return e.jsxs(
-              "button",
-              {
-                onClick: function () {
-                  setActiveTab(tb.id);
-                },
-                style: {
-                  padding: "14px 22px",
-                  background: tb.isAction ? accent : "transparent",
-                  border: "none",
-                  cursor: "pointer",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  fontFamily: "'DM Sans',sans-serif",
-                  color: tb.isAction ? "#000" : activeTab === tb.id ? accent : th.muted,
-                  borderBottom:
-                    tb.isAction
-                      ? "none"
-                      : activeTab === tb.id
-                        ? "3px solid " + accent
-                        : "3px solid transparent",
-                  borderRadius: tb.isAction ? 8 : 0,
-                  margin: tb.isAction ? "8px 12px" : "0",
-                  padding: tb.isAction ? "8px 16px" : "14px 22px",
-                  transition: "all 0.2s",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                },
-                children: [
-                  e.jsx("span", { children: tb.icon }),
-                  e.jsx("span", { children: tb.label }),
-                ],
+          children: [
+            e.jsxs("div", {
+              style: {
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 16,
+                padding: "14px 18px",
+                borderBottom: "1px solid " + th.border,
+                flexWrap: "wrap",
               },
-              tb.id,
-            );
-          }),
+              children: [
+                e.jsxs("div", {
+                  style: { display: "flex", alignItems: "center", gap: 12 },
+                  children: [
+                    e.jsx("div", {
+                      style: {
+                        width: 40,
+                        height: 40,
+                        borderRadius: 11,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 20,
+                        background: accent + "1f",
+                        border: "1px solid " + accent + "55",
+                        flexShrink: 0,
+                      },
+                      children: "⚖️",
+                    }),
+                    e.jsxs("div", {
+                      children: [
+                        e.jsx("div", {
+                          style: {
+                            color: th.text,
+                            fontSize: 17,
+                            fontWeight: 800,
+                            lineHeight: 1.2,
+                          },
+                          children: "Mercado Público",
+                        }),
+                        e.jsx("div", {
+                          style: { color: th.muted, fontSize: 12, marginTop: 3 },
+                          children:
+                            "Busca, prepara y sigue tus oportunidades desde un solo lugar",
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                e.jsx("button", {
+                  onClick: function () {
+                    setActiveTab("licit");
+                  },
+                  style: Object.assign({}, sty.btn("p"), {
+                    padding: "9px 16px",
+                    fontSize: 12,
+                    fontWeight: 800,
+                    whiteSpace: "nowrap",
+                  }),
+                  children: "+ Nueva postulación",
+                }),
+              ],
+            }),
+            e.jsx("div", {
+              style: {
+                display: "flex",
+                gap: 4,
+                padding: "8px 10px",
+                overflowX: "auto",
+                scrollbarWidth: "thin",
+              },
+              children: tabs.map(function (tb) {
+                var selected = activeTab === tb.id;
+                return e.jsxs(
+                  "button",
+                  {
+                    onClick: function () {
+                      setActiveTab(tb.id);
+                    },
+                    style: {
+                      background: selected ? accent + "18" : "transparent",
+                      border: "1px solid " + (selected ? accent : "transparent"),
+                      borderRadius: 8,
+                      cursor: "pointer",
+                      fontWeight: 700,
+                      fontSize: 12,
+                      fontFamily: "'DM Sans',sans-serif",
+                      color: selected ? accent : th.muted,
+                      padding: "8px 8px",
+                      transition: "all 0.2s",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 6,
+                      whiteSpace: "nowrap",
+                      flex: "1 1 130px",
+                      minWidth: 130,
+                    },
+                    children: [
+                      e.jsx("span", { children: tb.icon }),
+                      e.jsx("span", { children: tb.label }),
+                    ],
+                  },
+                  tb.id,
+                );
+              }),
+            }),
+          ],
         }),
         e.jsx("div", {
           style: { flex: 1, overflowY: "auto", padding: "0" },
@@ -70036,7 +70104,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         pide_modulo: "⚡ Pide tu Módulo",
         dashboard: "Inicio",
         indices: "Actualización de Precios — INE & Mercado",
-        licitaciones: "Mercado Público",
+        licitaciones: "Centro de Postulaciones",
         new: "Nuevo Presupuesto",
         history: "Mis Presupuestos",
         lista: "Materiales por Obra",
@@ -70839,7 +70907,7 @@ Esta acción no se puede deshacer.`) &&
                   },
                   children: se,
                 }),
-                e.jsxs("div", {
+                x !== "licitaciones" && e.jsxs("div", {
                   style: {
                     position: "absolute",
                     left: "50%",

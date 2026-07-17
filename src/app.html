@@ -17464,7 +17464,7 @@ function App(){
       {k:"backup",ic:"💾",l:"Respaldos"},
     ]},
   ];
-  const titles={backup:"💾 Respaldos",pide_modulo:"⚡ Pide tu Módulo",dashboard:"Inicio",indices:"Actualización de Precios — INE & Mercado",licitaciones:"Licitaciones — Mercado Público",new:"Nuevo Presupuesto",history:"Mis Presupuestos",lista:"Materiales por Obra",clients:"Clientes",catalog:"Partidas de Obra",materiales:"Base de Materiales",apu:"APU — Análisis de Precios Unitarios",config:"Configuración",tu_plan:"Tu Plan — Licencia y Datos",cubicacion:"Cubicación — Herramientas de Medición",gantt:"Carta Gantt",informe:"Informe de Entrega de Obra",documentos:"Documentos de Obra",mano_obra:"Presupuesto de Mano de Obra"};
+  const titles={backup:"💾 Respaldos",pide_modulo:"⚡ Pide tu Módulo",dashboard:"Inicio",indices:"Actualización de Precios — INE & Mercado",licitaciones:"Centro de Postulaciones",new:"Nuevo Presupuesto",history:"Mis Presupuestos",lista:"Materiales por Obra",clients:"Clientes",catalog:"Partidas de Obra",materiales:"Base de Materiales",apu:"APU — Análisis de Precios Unitarios",config:"Configuración",tu_plan:"Tu Plan — Licencia y Datos",cubicacion:"Cubicación — Herramientas de Medición",gantt:"Carta Gantt",informe:"Informe de Entrega de Obra",documentos:"Documentos de Obra",mano_obra:"Presupuesto de Mano de Obra"};
 
   const render=()=>{
     if(page==="new"||(page==="edit"&&editB))return <BudgetForm clients={clients} catalog={catalog} cfg={cfg} apus={apus} materiales={materiales} editing={editB} onSave={saveBudget} onCancel={()=>{setEditB(null);setPage(editB&&editB._isDuplicate?"history":"dashboard");}} plantillasUser={plantillasUser} onDeletePlantillaUser={eliminarPlantillaUser} setToast={setToast}/>;
@@ -17616,7 +17616,7 @@ function App(){
           </div>
 
           {/* CENTRO — Enlace Constructor Pro */}
-          <div style={{position:"absolute",left:"50%",transform:"translateX(-50%)",display:"flex",alignItems:"center",gap:9}}>
+          {page!=="licitaciones"&&<div style={{position:"absolute",left:"50%",transform:"translateX(-50%)",display:"flex",alignItems:"center",gap:9}}>
             {cfg.logo
               ?<img src={cfg.logo} alt="Enlace" style={{height:34,objectFit:"contain",filter:"drop-shadow(0 0 6px #2563eb99)"}}/>
               :<svg width="30" height="30" viewBox="0 0 100 100">
@@ -17629,7 +17629,7 @@ function App(){
               <div style={{fontSize:14,fontWeight:800,color:"#ffffff",letterSpacing:".08em",textTransform:"uppercase"}}>ENLACE</div>
               <div style={{fontSize:8.5,fontWeight:700,color:accent,letterSpacing:".12em",textTransform:"uppercase"}}>CONSTRUCTOR</div>
             </div>
-          </div>
+          </div>}
 
           {/* DERECHA — Botones */}
           <div style={{flex:1,display:"flex",gap:8,alignItems:"center",justifyContent:"flex-end"}}>
