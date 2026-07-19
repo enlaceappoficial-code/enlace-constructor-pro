@@ -221,7 +221,7 @@ for (const apu of apus) {
     }, 0);
     const trackQuantity = lines.reduce((sum, line) => {
       const material = materialById.get(line.materialId);
-      return sum + (/solera/.test(norm(material && material.nombre)) ? Number(line.cantidad || 0) : 0);
+      return sum + (/solera|canal tabique/.test(norm(material && material.nombre)) ? Number(line.cantidad || 0) : 0);
     }, 0);
     if (studQuantity > 0 && trackQuantity / studQuantity > 0.5) {
       issues.push(
@@ -232,6 +232,9 @@ for (const apu of apus) {
           `Montantes ${studQuantity} ml y soleras ${trackQuantity} ml por ${apu.unidad}; la relacion requiere recalculo segun altura y separacion`,
         ),
       );
+    }
+    if (!apu.baseTecnica || !(Number(apu.baseTecnica.separacionM) > 0)) {
+      issues.push(issue("medium", "METALCON_BASE_MISSING", apu, "Falta registrar altura/separación usada para calcular la perfilería"));
     }
   }
 
@@ -248,6 +251,17 @@ for (const apu of apus) {
         "El cielo usa soleras estructurales de muro 100/150 mm; falta definir el sistema portante y perimetral de cielo",
       ),
     );
+  }
+  if (/cielo.*metalcon|ampliacion cielo/.test(name)) {
+    const hasPortante = /portante 40r/.test(selectedText);
+    const hasAt = /perfil at/.test(selectedText);
+    const hasTi = /conector ti/.test(selectedText);
+    if (!(hasPortante && hasAt && hasTi)) {
+      issues.push(issue("high", "CEILING_SYSTEM_INCOMPLETE", apu, "El cielo debe incluir Portante 40R, Perfil AT y Conector TI"));
+    }
+    if (!apu.baseTecnica || !(Number(apu.baseTecnica.separacionPortantesM) > 0)) {
+      issues.push(issue("medium", "CEILING_BASE_MISSING", apu, "Falta registrar la separación usada para calcular los portantes"));
+    }
   }
 
   const gypsumBoardCoverage = lines.reduce((sum, line) => {

@@ -13345,6 +13345,13 @@ Error generating stack: ` +
         unidad: "paño",
         precio: 18500,
       },
+      { id: 435, cat: "Metalcon Tabiques", nombre: "Montante tabique 90x38mm e=0.5mm", unidad: "ml", uc: { q: 3, label: "barras 3m" }, precio: 1850 },
+      { id: 436, cat: "Metalcon Tabiques", nombre: "Canal tabique 92x30mm e=0.5mm", unidad: "ml", uc: { q: 3, label: "barras 3m" }, precio: 1650 },
+      { id: 437, cat: "Metalcon Tabiques", nombre: "Montante tabique 60x38mm e=0.5mm", unidad: "ml", uc: { q: 3, label: "barras 3m" }, precio: 1650 },
+      { id: 438, cat: "Metalcon Tabiques", nombre: "Canal tabique 61x20mm e=0.5mm", unidad: "ml", uc: { q: 3, label: "barras 3m" }, precio: 1450 },
+      { id: 439, cat: "Metalcon Cielos", nombre: "Perfil Portante 40R 40x18x10mm e=0.5mm", unidad: "ml", uc: { q: 3, label: "barras 3m" }, precio: 1450 },
+      { id: 440, cat: "Metalcon Cielos", nombre: "Perfil AT 20x25x4mm e=0.5mm", unidad: "ml", uc: { q: 3, label: "barras 3m" }, precio: 1050 },
+      { id: 441, cat: "Metalcon Cielos", nombre: "Conector TI nivelador", unidad: "unidad", precio: 850 },
     ],
     Ip = {
       Pintura: 45,
@@ -13543,9 +13550,10 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 5,
         dotacion: 3,
+        baseTecnica: { sistema: "Muro estructural", alturaM: 2.4, separacionM: 0.4, mermaPct: 10, nota: "Referencia inicial; validar perfiles y anclajes con cálculo estructural." },
         materiales: [
-          { materialId: 52, cantidad: 3.8 },
-          { materialId: 56, cantidad: 3.8 },
+          { materialId: 52, cantidad: 2.75 },
+          { materialId: 56, cantidad: 0.92 },
           { materialId: 70, cantidad: 0.06 },
           { materialId: 71, cantidad: 0.04 },
           { materialId: 129, cantidad: 0.45 },
@@ -13569,9 +13577,10 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 4,
         dotacion: 3,
+        baseTecnica: { sistema: "Muro estructural", alturaM: 2.4, separacionM: 0.4, mermaPct: 10, nota: "Referencia inicial; validar perfiles y anclajes con cálculo estructural." },
         materiales: [
-          { materialId: 53, cantidad: 3.8 },
-          { materialId: 57, cantidad: 3.8 },
+          { materialId: 53, cantidad: 2.75 },
+          { materialId: 57, cantidad: 0.92 },
           { materialId: 70, cantidad: 0.06 },
           { materialId: 71, cantidad: 0.04 },
           { materialId: 129, cantidad: 0.45 },
@@ -13595,11 +13604,12 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 6,
         dotacion: 2,
+        baseTecnica: { sistema: "Tabique no estructural", alturaM: 2.4, separacionM: 0.4, caras: 2, capasPorCara: 1, mermaPct: 10 },
         materiales: [
-          { materialId: 429, cantidad: 3.2 },
-          { materialId: 430, cantidad: 3.2 },
+          { materialId: 435, cantidad: 2.75 },
+          { materialId: 436, cantidad: 0.92 },
           { materialId: 95, cantidad: 1.05 },
-          { materialId: 80, cantidad: 0.18 },
+          { materialId: 80, cantidad: 0.73 },
           { materialId: 87, cantidad: 0.14 },
           { materialId: 85, cantidad: 0.08 },
           { materialId: 86, cantidad: 0.12 },
@@ -13620,11 +13630,12 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 7,
         dotacion: 2,
+        baseTecnica: { sistema: "Tabique no estructural", alturaM: 2.4, separacionM: 0.4, caras: 2, capasPorCara: 2, mermaPct: 10 },
         materiales: [
-          { materialId: 431, cantidad: 3 },
-          { materialId: 432, cantidad: 3 },
+          { materialId: 437, cantidad: 2.75 },
+          { materialId: 438, cantidad: 0.92 },
           { materialId: 97, cantidad: 1.05 },
-          { materialId: 81, cantidad: 0.38 },
+          { materialId: 81, cantidad: 1.46 },
           { materialId: 70, cantidad: 0.1 },
           { materialId: 85, cantidad: 0.09 },
           { materialId: 86, cantidad: 0.14 },
@@ -13647,10 +13658,11 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 8,
         dotacion: 2,
+        baseTecnica: { sistema: "Tabique no estructural", alturaM: 2.4, separacionM: 0.4, caras: 2, capasPorCara: 1, mermaPct: 10 },
         materiales: [
-          { materialId: 431, cantidad: 3 },
-          { materialId: 432, cantidad: 3 },
-          { materialId: 80, cantidad: 0.36 },
+          { materialId: 437, cantidad: 2.75 },
+          { materialId: 438, cantidad: 0.92 },
+          { materialId: 80, cantidad: 0.73 },
           { materialId: 70, cantidad: 0.1 },
           { materialId: 85, cantidad: 0.08 },
           { materialId: 86, cantidad: 0.12 },
@@ -13671,11 +13683,13 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 7,
         dotacion: 2,
+        baseTecnica: { sistema: "Tabique no estructural húmedo", alturaM: 2.4, separacionM: 0.4, caras: 2, capasPorCara: 1, mermaPct: 10, nota: "Una cara RH y una cara estándar." },
         materiales: [
-          { materialId: 429, cantidad: 3.2 },
-          { materialId: 430, cantidad: 3.2 },
+          { materialId: 435, cantidad: 2.75 },
+          { materialId: 436, cantidad: 0.92 },
           { materialId: 97, cantidad: 1.05 },
-          { materialId: 82, cantidad: 0.38 },
+          { materialId: 82, cantidad: 0.37 },
+          { materialId: 81, cantidad: 0.37 },
           { materialId: 70, cantidad: 0.12 },
           { materialId: 85, cantidad: 0.09 },
           { materialId: 86, cantidad: 0.14 },
@@ -13771,10 +13785,12 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 10,
         dotacion: 2,
+        baseTecnica: { sistema: "Cielo Metalcon", separacionPortantesM: 0.4, recintoReferenciaM: "3x4", mermaPct: 10, nota: "Placa 10 mm sobre Portante 40R, Perfil AT y Conector TI." },
         materiales: [
           { materialId: 80, cantidad: 0.36 },
-          { materialId: 54, cantidad: 0.85 },
-          { materialId: 55, cantidad: 0.4 },
+          { materialId: 439, cantidad: 2.75 },
+          { materialId: 440, cantidad: 1.28 },
+          { materialId: 441, cantidad: 2.75 },
           { materialId: 85, cantidad: 0.12 },
           { materialId: 86, cantidad: 0.05 },
           { materialId: 87, cantidad: 0.08 },
@@ -13795,9 +13811,11 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 8,
         dotacion: 2,
+        baseTecnica: { sistema: "Cielo Metalcon", separacionPortantesM: 0.4, recintoReferenciaM: "3x4", mermaPct: 10, nota: "Doble placa; revisar peso y soportación antes de ejecutar." },
         materiales: [
-          { materialId: 54, cantidad: 0.85 },
-          { materialId: 55, cantidad: 0.4 },
+          { materialId: 439, cantidad: 2.75 },
+          { materialId: 440, cantidad: 1.28 },
+          { materialId: 441, cantidad: 2.75 },
           { materialId: 80, cantidad: 0.37 },
           { materialId: 81, cantidad: 0.37 },
           { materialId: 85, cantidad: 0.15 },
@@ -13822,9 +13840,11 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 9,
         dotacion: 2,
+        baseTecnica: { sistema: "Cielo Metalcon", separacionPortantesM: 0.6, recintoReferenciaM: "3x4", mermaPct: 10, nota: "Placa RH 12,5 mm; separación máxima de referencia 60 cm." },
         materiales: [
-          { materialId: 54, cantidad: 0.85 },
-          { materialId: 55, cantidad: 0.4 },
+          { materialId: 439, cantidad: 1.84 },
+          { materialId: 440, cantidad: 1.28 },
+          { materialId: 441, cantidad: 1.84 },
           { materialId: 82, cantidad: 0.36 },
           { materialId: 85, cantidad: 0.12 },
           { materialId: 86, cantidad: 0.05 },
@@ -14552,11 +14572,12 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 5,
         dotacion: 2,
+        baseTecnica: { sistema: "Tabique no estructural en remodelación", alturaM: 2.4, separacionM: 0.4, caras: 2, capasPorCara: 1, mermaPct: 10 },
         materiales: [
-          { materialId: 431, cantidad: 3 },
-          { materialId: 432, cantidad: 3 },
+          { materialId: 437, cantidad: 2.75 },
+          { materialId: 438, cantidad: 0.92 },
           { materialId: 97, cantidad: 1.05 },
-          { materialId: 80, cantidad: 0.36 },
+          { materialId: 80, cantidad: 0.73 },
           { materialId: 70, cantidad: 0.1 },
           { materialId: 85, cantidad: 0.09 },
           { materialId: 86, cantidad: 0.12 },
@@ -14577,9 +14598,11 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 8,
         dotacion: 2,
+        baseTecnica: { sistema: "Cielo Metalcon en remodelación", separacionPortantesM: 0.4, recintoReferenciaM: "3x4", mermaPct: 10, nota: "Incluye refuerzo de juntas; revisar soporte existente." },
         materiales: [
-          { materialId: 54, cantidad: 0.85 },
-          { materialId: 55, cantidad: 0.4 },
+          { materialId: 439, cantidad: 2.75 },
+          { materialId: 440, cantidad: 1.28 },
+          { materialId: 441, cantidad: 2.75 },
           { materialId: 80, cantidad: 0.36 },
           { materialId: 85, cantidad: 0.15 },
           { materialId: 86, cantidad: 0.1 },
@@ -22457,6 +22480,35 @@ ${r.empresa}`;
                       }),
                     ],
                   }),
+                ],
+              }),
+            _.baseTecnica &&
+              e.jsxs("div", {
+                style: {
+                  background: "var(--surface)",
+                  border: "1px solid " + a.border,
+                  borderRadius: 9,
+                  padding: "10px 12px",
+                  marginBottom: 14,
+                },
+                children: [
+                  e.jsx("div", {
+                    style: { fontSize: 11, color: a.accent, textTransform: "uppercase", fontWeight: 800, letterSpacing: ".05em", marginBottom: 6 },
+                    children: "Base técnica de cálculo",
+                  }),
+                  e.jsxs("div", {
+                    style: { display: "flex", gap: 6, flexWrap: "wrap", fontSize: 12, color: a.mutedL },
+                    children: [
+                      e.jsx("span", { style: { fontWeight: 700, color: a.text }, children: _.baseTecnica.sistema }),
+                      _.baseTecnica.alturaM && e.jsxs("span", { children: ["· Altura ", _.baseTecnica.alturaM, " m"] }),
+                      _.baseTecnica.separacionM && e.jsxs("span", { children: ["· Montantes cada ", Math.round(_.baseTecnica.separacionM * 100), " cm"] }),
+                      _.baseTecnica.separacionPortantesM && e.jsxs("span", { children: ["· Portantes cada ", Math.round(_.baseTecnica.separacionPortantesM * 100), " cm"] }),
+                      _.baseTecnica.caras && e.jsxs("span", { children: ["· ", _.baseTecnica.caras, " caras"] }),
+                      _.baseTecnica.capasPorCara && e.jsxs("span", { children: ["· ", _.baseTecnica.capasPorCara, " capa", _.baseTecnica.capasPorCara > 1 ? "s" : "", " por cara"] }),
+                      _.baseTecnica.mermaPct && e.jsxs("span", { children: ["· Merma ", _.baseTecnica.mermaPct, "%"] }),
+                    ],
+                  }),
+                  _.baseTecnica.nota && e.jsxs("div", { style: { fontSize: 11, color: a.muted, marginTop: 6 }, children: ["⚠️ ", _.baseTecnica.nota] }),
                 ],
               }),
             !_.esSubcontrato &&
@@ -74284,6 +74336,19 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             65: "50:3|54:3|97:1.05|80:0.36|70:0.1|85:0.09|86:0.12",
             117: "270:1.05|273:52|274:26|275:1.8|276:3.5|278:0.5|279:40",
           },
+          firmasMetalconAnterior = {
+            10: "52:3.8|56:3.8|70:0.06|71:0.04|129:0.45|33:0.28|20:0.04|100:1.1",
+            11: "53:3.8|57:3.8|70:0.06|71:0.04|129:0.45|33:0.28|20:0.04|96:1.05",
+            12: "429:3.2|430:3.2|95:1.05|80:0.18|87:0.14|85:0.08|86:0.12",
+            13: "431:3|432:3|97:1.05|81:0.38|70:0.1|85:0.09|86:0.14|88:0.5|89:0.4",
+            14: "431:3|432:3|80:0.36|70:0.1|85:0.08|86:0.12",
+            15: "429:3.2|430:3.2|97:1.05|82:0.38|70:0.12|85:0.09|86:0.14",
+            19: "80:0.36|54:0.85|55:0.4|85:0.12|86:0.05|87:0.08",
+            20: "54:0.85|55:0.4|80:0.37|81:0.37|85:0.15|86:0.06|87:0.1|88:0.3|89:0.2",
+            21: "54:0.85|55:0.4|82:0.36|85:0.12|86:0.05|87:0.08",
+            65: "431:3|432:3|97:1.05|80:0.36|70:0.1|85:0.09|86:0.12",
+            66: "54:0.85|55:0.4|80:0.36|85:0.15|86:0.1|87:0.08|90:0.15",
+          },
           firmaTecnica = (pe) =>
             (pe.materiales || [])
               .map((item) => `${item.materialId}:${Number(item.cantidad)}`)
@@ -74302,8 +74367,18 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               esCorreccionDirecta =
                 firmaDirecta !== void 0 &&
                 firmaTecnica(guardado) === firmaDirecta &&
-                (pe.id !== 117 || Number(guardado.rendimiento) === 20);
-            return esVersionAnterior
+                (pe.id !== 117 || Number(guardado.rendimiento) === 20),
+              firmaMetalcon = firmasMetalconAnterior[pe.id],
+              esMetalconAnterior =
+                firmaMetalcon !== void 0 &&
+                firmaTecnica(guardado) === firmaMetalcon;
+            return esMetalconAnterior
+              ? Object.assign({}, base, {
+                  materiales: pe.materiales,
+                  baseTecnica: pe.baseTecnica,
+                  _reconstruccionMetalcon: "2026-07-19",
+                })
+              : esVersionAnterior
               ? u(d({}, base), {
                   unidad: pe.unidad,
                   materiales: pe.materiales,

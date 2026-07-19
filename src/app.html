@@ -927,6 +927,13 @@ const DMAT=[
   {id:432, cat:"Metalcon Estructural", nombre:"Canal U (solera) 62x30mm e=0.85mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:1900},
   {id:433, cat:"Techumbres", nombre:"Cumbrera zinc 0.5mm x2.4m", unidad:"unidad", precio:7500},
   {id:434, cat:"Madera Estructural", nombre:"Terciado estructural 9mm 1.22x2.44", unidad:"paño", precio:18500},
+  {id:435, cat:"Metalcon Tabiques", nombre:"Montante tabique 90x38mm e=0.5mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:1850},
+  {id:436, cat:"Metalcon Tabiques", nombre:"Canal tabique 92x30mm e=0.5mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:1650},
+  {id:437, cat:"Metalcon Tabiques", nombre:"Montante tabique 60x38mm e=0.5mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:1650},
+  {id:438, cat:"Metalcon Tabiques", nombre:"Canal tabique 61x20mm e=0.5mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:1450},
+  {id:439, cat:"Metalcon Cielos", nombre:"Perfil Portante 40R 40x18x10mm e=0.5mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:1450},
+  {id:440, cat:"Metalcon Cielos", nombre:"Perfil AT 20x25x4mm e=0.5mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:1050},
+  {id:441, cat:"Metalcon Cielos", nombre:"Conector TI nivelador", unidad:"unidad", precio:850},
 ];
 
 
@@ -996,37 +1003,43 @@ const DAPU=[
    nombre:"Muro perimetral Metalcon C150 + OSB + estuco ext.", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:20, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:12, pctUtilidad:15,
    rendimiento:5, dotacion:3,
-   materiales:[{materialId:52,cantidad:3.8},{materialId:56,cantidad:3.8},{materialId:70,cantidad:0.06},{materialId:71,cantidad:0.04},{materialId:129,cantidad:0.45},{materialId:33,cantidad:0.28},{materialId:20,cantidad:0.04},{materialId:100,cantidad:1.1}]},
+   baseTecnica:{sistema:"Muro estructural",alturaM:2.4,separacionM:0.4,mermaPct:10,nota:"Referencia inicial; validar perfiles y anclajes con cálculo estructural."},
+   materiales:[{materialId:52,cantidad:2.75},{materialId:56,cantidad:0.92},{materialId:70,cantidad:0.06},{materialId:71,cantidad:0.04},{materialId:129,cantidad:0.45},{materialId:33,cantidad:0.28},{materialId:20,cantidad:0.04},{materialId:100,cantidad:1.1}]},
 
   {id:11, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Muro perimetral Metalcon C200 + OSB + estuco ext.", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:21, esSubcontrato:false, precioSubcontrato:0, pctMO:54, pctGG:12, pctUtilidad:15,
    rendimiento:4, dotacion:3,
-   materiales:[{materialId:53,cantidad:3.8},{materialId:57,cantidad:3.8},{materialId:70,cantidad:0.06},{materialId:71,cantidad:0.04},{materialId:129,cantidad:0.45},{materialId:33,cantidad:0.28},{materialId:20,cantidad:0.04},{materialId:96,cantidad:1.05}]},
+   baseTecnica:{sistema:"Muro estructural",alturaM:2.4,separacionM:0.4,mermaPct:10,nota:"Referencia inicial; validar perfiles y anclajes con cálculo estructural."},
+   materiales:[{materialId:53,cantidad:2.75},{materialId:57,cantidad:0.92},{materialId:70,cantidad:0.06},{materialId:71,cantidad:0.04},{materialId:129,cantidad:0.45},{materialId:33,cantidad:0.28},{materialId:20,cantidad:0.04},{materialId:96,cantidad:1.05}]},
 
   {id:12, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Tabique Metalcon 89mm + lana mineral + 1 placa yeso", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:22, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:12, pctUtilidad:15,
    rendimiento:6, dotacion:2,
-   materiales:[{materialId:429,cantidad:3.2},{materialId:430,cantidad:3.2},{materialId:95,cantidad:1.05},{materialId:80,cantidad:0.18},{materialId:87,cantidad:0.14},{materialId:85,cantidad:0.08},{materialId:86,cantidad:0.12}]},
+   baseTecnica:{sistema:"Tabique no estructural",alturaM:2.4,separacionM:0.4,caras:2,capasPorCara:1,mermaPct:10},
+   materiales:[{materialId:435,cantidad:2.75},{materialId:436,cantidad:0.92},{materialId:95,cantidad:1.05},{materialId:80,cantidad:0.73},{materialId:87,cantidad:0.14},{materialId:85,cantidad:0.08},{materialId:86,cantidad:0.12}]},
 
   {id:13, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Tabique Metalcon 65mm doble placa yeso 13mm", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:23, esSubcontrato:false, precioSubcontrato:0, pctMO:48, pctGG:10, pctUtilidad:15,
    rendimiento:7, dotacion:2,
-   materiales:[{materialId:431,cantidad:3.0},{materialId:432,cantidad:3.0},{materialId:97,cantidad:1.05},{materialId:81,cantidad:0.38},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.14},{materialId:88,cantidad:0.5},{materialId:89,cantidad:0.4}]},
+   baseTecnica:{sistema:"Tabique no estructural",alturaM:2.4,separacionM:0.4,caras:2,capasPorCara:2,mermaPct:10},
+   materiales:[{materialId:437,cantidad:2.75},{materialId:438,cantidad:0.92},{materialId:97,cantidad:1.05},{materialId:81,cantidad:1.46},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.14},{materialId:88,cantidad:0.5},{materialId:89,cantidad:0.4}]},
 
   {id:14, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Tabique Metalcon 65mm 1 placa yeso simple", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:24, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:10, pctUtilidad:15,
    rendimiento:8, dotacion:2,
-   materiales:[{materialId:431,cantidad:3.0},{materialId:432,cantidad:3.0},{materialId:80,cantidad:0.36},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.08},{materialId:86,cantidad:0.12}]},
+   baseTecnica:{sistema:"Tabique no estructural",alturaM:2.4,separacionM:0.4,caras:2,capasPorCara:1,mermaPct:10},
+   materiales:[{materialId:437,cantidad:2.75},{materialId:438,cantidad:0.92},{materialId:80,cantidad:0.73},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.08},{materialId:86,cantidad:0.12}]},
 
   {id:15, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Tabique Metalcon 89mm placa RH baño/cocina", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:25, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:10, pctUtilidad:15,
    rendimiento:7, dotacion:2,
-   materiales:[{materialId:429,cantidad:3.2},{materialId:430,cantidad:3.2},{materialId:97,cantidad:1.05},{materialId:82,cantidad:0.38},{materialId:70,cantidad:0.12},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.14}]},
+   baseTecnica:{sistema:"Tabique no estructural húmedo",alturaM:2.4,separacionM:0.4,caras:2,capasPorCara:1,mermaPct:10,nota:"Una cara RH y una cara estándar."},
+   materiales:[{materialId:435,cantidad:2.75},{materialId:436,cantidad:0.92},{materialId:97,cantidad:1.05},{materialId:82,cantidad:0.37},{materialId:81,cantidad:0.37},{materialId:70,cantidad:0.12},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.14}]},
 
   {id:16, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Techumbre Metalcon correas C150 + omegas + zinc 0.35", categoria:"Metalcon Estructural",
@@ -1050,19 +1063,22 @@ const DAPU=[
    nombre:"Cielo yeso 1 placa 10mm Metalcon", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:35, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:10, pctUtilidad:15,
    rendimiento:10, dotacion:2,
-   materiales:[{materialId:80,cantidad:0.36},{materialId:54,cantidad:0.85},{materialId:55,cantidad:0.4},{materialId:85,cantidad:0.12},{materialId:86,cantidad:0.05},{materialId:87,cantidad:0.08}]},
+   baseTecnica:{sistema:"Cielo Metalcon",separacionPortantesM:0.4,recintoReferenciaM:"3x4",mermaPct:10,nota:"Placa 10 mm sobre Portante 40R, Perfil AT y Conector TI."},
+   materiales:[{materialId:80,cantidad:0.36},{materialId:439,cantidad:2.75},{materialId:440,cantidad:1.28},{materialId:441,cantidad:2.75},{materialId:85,cantidad:0.12},{materialId:86,cantidad:0.05},{materialId:87,cantidad:0.08}]},
 
   {id:20, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Cielo yeso doble placa 10+13mm Metalcon", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:36, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:12, pctUtilidad:15,
    rendimiento:8, dotacion:2,
-   materiales:[{materialId:54,cantidad:0.85},{materialId:55,cantidad:0.4},{materialId:80,cantidad:0.37},{materialId:81,cantidad:0.37},{materialId:85,cantidad:0.15},{materialId:86,cantidad:0.06},{materialId:87,cantidad:0.1},{materialId:88,cantidad:0.3},{materialId:89,cantidad:0.2}]},
+   baseTecnica:{sistema:"Cielo Metalcon",separacionPortantesM:0.4,recintoReferenciaM:"3x4",mermaPct:10,nota:"Doble placa; revisar peso y soportación antes de ejecutar."},
+   materiales:[{materialId:439,cantidad:2.75},{materialId:440,cantidad:1.28},{materialId:441,cantidad:2.75},{materialId:80,cantidad:0.37},{materialId:81,cantidad:0.37},{materialId:85,cantidad:0.15},{materialId:86,cantidad:0.06},{materialId:87,cantidad:0.1},{materialId:88,cantidad:0.3},{materialId:89,cantidad:0.2}]},
 
   {id:21, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Cielo yeso RH 12.5mm baño/cocina Metalcon", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:37, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:10, pctUtilidad:15,
    rendimiento:9, dotacion:2,
-   materiales:[{materialId:54,cantidad:0.85},{materialId:55,cantidad:0.4},{materialId:82,cantidad:0.36},{materialId:85,cantidad:0.12},{materialId:86,cantidad:0.05},{materialId:87,cantidad:0.08}]},
+   baseTecnica:{sistema:"Cielo Metalcon",separacionPortantesM:0.6,recintoReferenciaM:"3x4",mermaPct:10,nota:"Placa RH 12,5 mm; separación máxima de referencia 60 cm."},
+   materiales:[{materialId:439,cantidad:1.84},{materialId:440,cantidad:1.28},{materialId:441,cantidad:1.84},{materialId:82,cantidad:0.36},{materialId:85,cantidad:0.12},{materialId:86,cantidad:0.05},{materialId:87,cantidad:0.08}]},
 
   /* ════════════════════════════════════════════════
      TIPO: Nueva Construcción | ESTRUCTURA: Madera
@@ -1265,13 +1281,15 @@ const DAPU=[
    nombre:"Tabique Metalcon 65mm en remodelación", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:26, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:10, pctUtilidad:15,
    rendimiento:5, dotacion:2,
-   materiales:[{materialId:431,cantidad:3.0},{materialId:432,cantidad:3.0},{materialId:97,cantidad:1.05},{materialId:80,cantidad:0.36},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.12}]},
+   baseTecnica:{sistema:"Tabique no estructural en remodelación",alturaM:2.4,separacionM:0.4,caras:2,capasPorCara:1,mermaPct:10},
+   materiales:[{materialId:437,cantidad:2.75},{materialId:438,cantidad:0.92},{materialId:97,cantidad:1.05},{materialId:80,cantidad:0.73},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.12}]},
 
   {id:66, tipo:"Remodelación", estructura:"Metalcon",
    nombre:"Ampliación cielo yeso 1 placa en remodelación", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:38, esSubcontrato:false, precioSubcontrato:0, pctMO:58, pctGG:10, pctUtilidad:15,
    rendimiento:8, dotacion:2,
-   materiales:[{materialId:54,cantidad:0.85},{materialId:55,cantidad:0.4},{materialId:80,cantidad:0.36},{materialId:85,cantidad:0.15},{materialId:86,cantidad:0.1},{materialId:87,cantidad:0.08},{materialId:90,cantidad:0.15}]},
+   baseTecnica:{sistema:"Cielo Metalcon en remodelación",separacionPortantesM:0.4,recintoReferenciaM:"3x4",mermaPct:10,nota:"Incluye refuerzo de juntas; revisar soporte existente."},
+   materiales:[{materialId:439,cantidad:2.75},{materialId:440,cantidad:1.28},{materialId:441,cantidad:2.75},{materialId:80,cantidad:0.36},{materialId:85,cantidad:0.15},{materialId:86,cantidad:0.1},{materialId:87,cantidad:0.08},{materialId:90,cantidad:0.15}]},
 
   {id:67, tipo:"Remodelación", estructura:"General",
    nombre:"Cambio ventana PVC termopanel (inc. retiro)", categoria:"Carpintería",
@@ -4174,6 +4192,22 @@ function APUPage({apus,setApus,materiales,catalog,setCatalog,setToast}){
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
             <div style={{background:"var(--dark-surface)",borderRadius:8,padding:"10px 12px"}}><div style={{fontSize:11,color:C.muted,marginBottom:2}}>Precio subcontratista</div><div style={{fontSize:17,fontWeight:700}}>{fmt(apu.precioSubcontrato)}</div></div>
             <div style={{background:"var(--dark-surface)",borderRadius:8,padding:"10px 12px"}}><div style={{fontSize:11,color:C.muted,marginBottom:2}}>Administración ({apu.pctGG}%)</div><div style={{fontSize:17,fontWeight:700,color:C.accent}}>{fmt(r.ggTotal)}</div></div>
+          </div>
+        )}
+
+        {apu.baseTecnica&&(
+          <div style={{background:"var(--surface)",border:`1px solid ${C.border}`,borderRadius:9,padding:"10px 12px",marginBottom:14}}>
+            <div style={{fontSize:11,color:C.accent,textTransform:"uppercase",fontWeight:800,letterSpacing:".05em",marginBottom:6}}>Base técnica de cálculo</div>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap",fontSize:12,color:C.mutedL}}>
+              <span style={{fontWeight:700,color:C.text}}>{apu.baseTecnica.sistema}</span>
+              {apu.baseTecnica.alturaM&&<span>· Altura {apu.baseTecnica.alturaM} m</span>}
+              {apu.baseTecnica.separacionM&&<span>· Montantes cada {Math.round(apu.baseTecnica.separacionM*100)} cm</span>}
+              {apu.baseTecnica.separacionPortantesM&&<span>· Portantes cada {Math.round(apu.baseTecnica.separacionPortantesM*100)} cm</span>}
+              {apu.baseTecnica.caras&&<span>· {apu.baseTecnica.caras} caras</span>}
+              {apu.baseTecnica.capasPorCara&&<span>· {apu.baseTecnica.capasPorCara} capa{apu.baseTecnica.capasPorCara>1?"s":""} por cara</span>}
+              {apu.baseTecnica.mermaPct&&<span>· Merma {apu.baseTecnica.mermaPct}%</span>}
+            </div>
+            {apu.baseTecnica.nota&&<div style={{fontSize:11,color:C.muted,marginTop:6}}>⚠️ {apu.baseTecnica.nota}</div>}
           </div>
         )}
 
@@ -17356,6 +17390,19 @@ function App(){
       65:"50:3|54:3|97:1.05|80:0.36|70:0.1|85:0.09|86:0.12",
       117:"270:1.05|273:52|274:26|275:1.8|276:3.5|278:0.5|279:40"
     };
+    const firmasMetalconAnterior={
+      10:"52:3.8|56:3.8|70:0.06|71:0.04|129:0.45|33:0.28|20:0.04|100:1.1",
+      11:"53:3.8|57:3.8|70:0.06|71:0.04|129:0.45|33:0.28|20:0.04|96:1.05",
+      12:"429:3.2|430:3.2|95:1.05|80:0.18|87:0.14|85:0.08|86:0.12",
+      13:"431:3|432:3|97:1.05|81:0.38|70:0.1|85:0.09|86:0.14|88:0.5|89:0.4",
+      14:"431:3|432:3|80:0.36|70:0.1|85:0.08|86:0.12",
+      15:"429:3.2|430:3.2|97:1.05|82:0.38|70:0.12|85:0.09|86:0.14",
+      19:"80:0.36|54:0.85|55:0.4|85:0.12|86:0.05|87:0.08",
+      20:"54:0.85|55:0.4|80:0.37|81:0.37|85:0.15|86:0.06|87:0.1|88:0.3|89:0.2",
+      21:"54:0.85|55:0.4|82:0.36|85:0.12|86:0.05|87:0.08",
+      65:"431:3|432:3|97:1.05|80:0.36|70:0.1|85:0.09|86:0.12",
+      66:"54:0.85|55:0.4|80:0.36|85:0.15|86:0.1|87:0.08|90:0.15"
+    };
     const firma=a=>(a.materiales||[]).map(m=>`${m.materialId}:${Number(m.cantidad)}`).join("|");
     const merged=DAPU.map(x=>{
       const guardado=svMap.get(x.id);
@@ -17367,7 +17414,11 @@ function App(){
       const firmaDirecta=firmasCorreccionDirecta[x.id];
       const esCorreccionDirecta=firmaDirecta!==undefined&&firma(guardado)===firmaDirecta&&
         (x.id!==117||Number(guardado.rendimiento)===20);
-      return esVersionAnterior
+      const firmaMetalcon=firmasMetalconAnterior[x.id];
+      const esMetalconAnterior=firmaMetalcon!==undefined&&firma(guardado)===firmaMetalcon;
+      return esMetalconAnterior
+        ?{...base,materiales:x.materiales,baseTecnica:x.baseTecnica,_reconstruccionMetalcon:"2026-07-19"}
+        :esVersionAnterior
         ?{...base,unidad:x.unidad,materiales:x.materiales,...(x.precioMO?{precioMO:x.precioMO}:{}),_correccionTecnica:"2026-07-19"}
         :esCorreccionDirecta
           ?{...base,...(x.id===117?{rendimiento:x.rendimiento}:{materiales:x.materiales}),_correccionDirecta:"2026-07-19"}
