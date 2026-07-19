@@ -13880,7 +13880,7 @@ Error generating stack: ` +
           { materialId: 106, cantidad: 1.12 },
           { materialId: 114, cantidad: 0.022 },
           { materialId: 113, cantidad: 0.08 },
-          { materialId: 110, cantidad: 0.18 },
+          { materialId: 433, cantidad: 0.18 },
           { materialId: 133, cantidad: 0.08 },
           { materialId: 131, cantidad: 1.2 },
         ],
@@ -14553,8 +14553,8 @@ Error generating stack: ` +
         rendimiento: 5,
         dotacion: 2,
         materiales: [
-          { materialId: 50, cantidad: 3 },
-          { materialId: 54, cantidad: 3 },
+          { materialId: 431, cantidad: 3 },
+          { materialId: 432, cantidad: 3 },
           { materialId: 97, cantidad: 1.05 },
           { materialId: 80, cantidad: 0.36 },
           { materialId: 70, cantidad: 0.1 },
@@ -15456,7 +15456,7 @@ Error generating stack: ` +
         pctMO: 58,
         pctGG: 12,
         pctUtilidad: 15,
-        rendimiento: 20,
+        rendimiento: 2,
         dotacion: 2,
         materiales: [
           { materialId: 270, cantidad: 1.05 },
@@ -74279,6 +74279,11 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             141: "301:1.05|302:0.05|303:0.15|304:0.05",
             142: "301:1.05|302:0.05|303:0.15|304:0.05|305:0.1",
           },
+          firmasCorreccionDirecta = {
+            26: "126:0.18|121:2.2|124:0.5|106:1.12|114:0.022|113:0.08|110:0.18|133:0.08|131:1.2",
+            65: "50:3|54:3|97:1.05|80:0.36|70:0.1|85:0.09|86:0.12",
+            117: "270:1.05|273:52|274:26|275:1.8|276:3.5|278:0.5|279:40",
+          },
           firmaTecnica = (pe) =>
             (pe.materiales || [])
               .map((item) => `${item.materialId}:${Number(item.cantidad)}`)
@@ -74292,7 +74297,12 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                 firmaAnterior !== void 0 &&
                 firmaTecnica(guardado) === firmaAnterior &&
                 (!(pe.id === 100 || pe.id === 103) ||
-                  !(parseFloat(guardado.precioMO) > 0));
+                  !(parseFloat(guardado.precioMO) > 0)),
+              firmaDirecta = firmasCorreccionDirecta[pe.id],
+              esCorreccionDirecta =
+                firmaDirecta !== void 0 &&
+                firmaTecnica(guardado) === firmaDirecta &&
+                (pe.id !== 117 || Number(guardado.rendimiento) === 20);
             return esVersionAnterior
               ? u(d({}, base), {
                   unidad: pe.unidad,
@@ -74300,7 +74310,16 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                   ...(pe.precioMO ? { precioMO: pe.precioMO } : {}),
                   _correccionTecnica: "2026-07-19",
                 })
-              : base;
+              : esCorreccionDirecta
+                ? Object.assign(
+                    {},
+                    base,
+                    pe.id === 117
+                      ? { rendimiento: pe.rendimiento }
+                      : { materiales: pe.materiales },
+                    { _correccionDirecta: "2026-07-19" },
+                  )
+                : base;
           }),
           me = H.filter((pe) => !N.has(pe.id));
         return [...de, ...me];

@@ -1077,7 +1077,7 @@ const DAPU=[
    nombre:"Techumbre cerchas pino 1x4 + correas + zinc 0.5", categoria:"Madera Estructural",
    unidad:"m²", catalogId:41, esSubcontrato:false, precioSubcontrato:0, pctMO:58, pctGG:12, pctUtilidad:15,
    rendimiento:5, dotacion:3,
-   materiales:[{materialId:126,cantidad:0.18},{materialId:121,cantidad:2.2},{materialId:124,cantidad:0.5},{materialId:106,cantidad:1.12},{materialId:114,cantidad:0.022},{materialId:113,cantidad:0.08},{materialId:110,cantidad:0.18},{materialId:133,cantidad:0.08},{materialId:131,cantidad:1.2}]},
+   materiales:[{materialId:126,cantidad:0.18},{materialId:121,cantidad:2.2},{materialId:124,cantidad:0.5},{materialId:106,cantidad:1.12},{materialId:114,cantidad:0.022},{materialId:113,cantidad:0.08},{materialId:433,cantidad:0.18},{materialId:133,cantidad:0.08},{materialId:131,cantidad:1.2}]},
 
   {id:27, tipo:"Nueva Construcción", estructura:"Madera",
    nombre:"Techumbre correas pino 2x3 + zinc 0.35 (sencilla)", categoria:"Madera Estructural",
@@ -1265,7 +1265,7 @@ const DAPU=[
    nombre:"Tabique Metalcon 65mm en remodelación", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:26, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:10, pctUtilidad:15,
    rendimiento:5, dotacion:2,
-   materiales:[{materialId:50,cantidad:3.0},{materialId:54,cantidad:3.0},{materialId:97,cantidad:1.05},{materialId:80,cantidad:0.36},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.12}]},
+   materiales:[{materialId:431,cantidad:3.0},{materialId:432,cantidad:3.0},{materialId:97,cantidad:1.05},{materialId:80,cantidad:0.36},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.12}]},
 
   {id:66, tipo:"Remodelación", estructura:"Metalcon",
    nombre:"Ampliación cielo yeso 1 placa en remodelación", categoria:"Metalcon Estructural",
@@ -1539,7 +1539,7 @@ const DAPU=[
   {id:117, tipo:"Nueva Construcción", estructura:"Hormigón",
    nombre:"Pilar H-25 armado (cualquier sección)", categoria:"Hormigón Armado",
    unidad:"m³", catalogId:150, esSubcontrato:false, precioSubcontrato:0, pctMO:58, pctGG:12, pctUtilidad:15,
-   rendimiento:20, dotacion:2,
+   rendimiento:2, dotacion:2,
    materiales:[{materialId:270,cantidad:1.05},{materialId:273,cantidad:52},{materialId:274,cantidad:26},{materialId:275,cantidad:1.8},{materialId:276,cantidad:3.5},{materialId:278,cantidad:0.5},{materialId:279,cantidad:40}]},
 
   {id:138, tipo:"Nueva Construcción", estructura:"Hormigón",
@@ -17351,6 +17351,11 @@ function App(){
       141:"301:1.05|302:0.05|303:0.15|304:0.05",
       142:"301:1.05|302:0.05|303:0.15|304:0.05|305:0.1"
     };
+    const firmasCorreccionDirecta={
+      26:"126:0.18|121:2.2|124:0.5|106:1.12|114:0.022|113:0.08|110:0.18|133:0.08|131:1.2",
+      65:"50:3|54:3|97:1.05|80:0.36|70:0.1|85:0.09|86:0.12",
+      117:"270:1.05|273:52|274:26|275:1.8|276:3.5|278:0.5|279:40"
+    };
     const firma=a=>(a.materiales||[]).map(m=>`${m.materialId}:${Number(m.cantidad)}`).join("|");
     const merged=DAPU.map(x=>{
       const guardado=svMap.get(x.id);
@@ -17359,7 +17364,14 @@ function App(){
       const firmaAnterior=firmasAntiguas[x.id];
       const esVersionAnterior=firmaAnterior!==undefined&&firma(guardado)===firmaAnterior&&
         (!(x.id===100||x.id===103)||!(parseFloat(guardado.precioMO)>0));
-      return esVersionAnterior?{...base,unidad:x.unidad,materiales:x.materiales,...(x.precioMO?{precioMO:x.precioMO}:{}),_correccionTecnica:"2026-07-19"}:base;
+      const firmaDirecta=firmasCorreccionDirecta[x.id];
+      const esCorreccionDirecta=firmaDirecta!==undefined&&firma(guardado)===firmaDirecta&&
+        (x.id!==117||Number(guardado.rendimiento)===20);
+      return esVersionAnterior
+        ?{...base,unidad:x.unidad,materiales:x.materiales,...(x.precioMO?{precioMO:x.precioMO}:{}),_correccionTecnica:"2026-07-19"}
+        :esCorreccionDirecta
+          ?{...base,...(x.id===117?{rendimiento:x.rendimiento}:{materiales:x.materiales}),_correccionDirecta:"2026-07-19"}
+          :base;
     });
     const userOnly=sv.filter(x=>!sysIds.has(x.id));
     return[...merged,...userOnly];

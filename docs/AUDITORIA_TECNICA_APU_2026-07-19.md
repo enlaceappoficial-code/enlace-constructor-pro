@@ -13,12 +13,12 @@ La revisión técnica encontró, sin embargo, componentes que no conviene amplia
 - 198 partidas disponibles.
 - 280 materiales disponibles.
 - 124 APU canónicas revisadas.
-- 81 APU sin observaciones de las reglas actuales.
-- 43 APU con al menos una observación.
-- 17 observaciones de prioridad alta en 14 APU.
+- 83 APU sin observaciones de las reglas actuales.
+- 41 APU con al menos una observación.
+- 14 observaciones de prioridad alta en 12 APU.
 - 37 observaciones de revisión media.
 - 74 partidas todavía no tienen una APU canónica asociada.
-- 94 materiales aún no participan en ninguna APU canónica.
+- 95 materiales aún no participan en ninguna APU canónica.
 
 Una observación no significa automáticamente que una APU esté inutilizable. Indica que debe ser corregida o confirmada antes de considerarla una base técnica confiable.
 
@@ -41,17 +41,17 @@ Debe definirse explícitamente si cada APU considera una cara, ambas caras o dos
 
 Las APU 19, 20, 21 y 66 usan soleras estructurales de muro de 100 y 150 mm como estructura de cielo. La biblioteca debe incorporar o seleccionar un sistema portante y perimetral propio para cielos.
 
-### 4. Tabique de remodelación con ancho incorrecto
+### 4. Tabique de remodelación con ancho incorrecto — corregido
 
-La APU 65 se llama “Tabique Metalcon 65 mm”, pero utiliza perfiles de 100x50 mm. Debe migrarse a la familia de perfiles correspondiente y recalcular sus cantidades.
+La APU 65 se llamaba “Tabique Metalcon 65 mm”, pero utilizaba perfiles de 100x50 mm. Se migró a montante 60x38 mm y solera 62x30 mm. Sigue pendiente recalcular la relación entre montantes y soleras junto con el resto del bloque Metalcon.
 
-### 5. Espesor incompatible en techumbre
+### 5. Espesor incompatible en techumbre — corregido
 
-La APU 26 combina plancha de zinc de 0,5 mm con una cumbrera de 0,35 mm. Esta es una corrección directa y de bajo riesgo.
+La APU 26 ahora combina la plancha de zinc de 0,5 mm con una cumbrera del mismo espesor.
 
-### 6. Rendimiento anómalo en pilar armado
+### 6. Rendimiento anómalo en pilar armado — corregido
 
-La APU 117 declara un rendimiento de 20, mientras la variante equivalente H-30, APU 138, declara 2. La diferencia de diez veces parece un error de digitación y debe confirmarse antes de calcular plazos o cuadrillas.
+La APU 117 fue corregida de rendimiento 20 a 2, coherente con la variante H-30, APU 138.
 
 ### 7. Enfierradura por kilogramo
 
@@ -113,13 +113,12 @@ Esta cobertura debe ampliarse después de estabilizar el cálculo y las composic
 
 ## Orden recomendado de corrección
 
-1. Corregir los errores directos: cumbrera APU 26, perfiles APU 65 y rendimiento APU 117.
-2. Reconstruir el bloque Metalcon: alturas, separación, caras, capas y sistema de cielo.
-3. Vincular la mano de obra a cargos, jornales, dotación y rendimiento en lugar de depender del porcentaje de materiales.
-4. Completar los ocho rendimientos faltantes.
-5. Convertir materiales alternativos en opciones y permitir APU auxiliares para retiro, transporte o preparación.
-6. Revisar y ajustar los diecinueve precios atípicos.
-7. Solo entonces ampliar las 74 partidas sin APU.
+1. Reconstruir el bloque Metalcon: alturas, separación, caras, capas y sistema de cielo.
+2. Vincular la mano de obra a cargos, jornales, dotación y rendimiento en lugar de depender del porcentaje de materiales.
+3. Completar los ocho rendimientos faltantes.
+4. Convertir materiales alternativos en opciones y permitir APU auxiliares para retiro, transporte o preparación.
+5. Revisar y ajustar los diecinueve precios atípicos.
+6. Solo entonces ampliar las 74 partidas sin APU.
 
 ## Verificador reproducible
 
