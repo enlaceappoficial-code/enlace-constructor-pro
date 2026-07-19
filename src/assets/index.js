@@ -9887,8 +9887,8 @@ Error generating stack: ` +
         id: 10,
         cat: "Albañilería",
         desc: "Radier hormigón H-20",
-        unidad: "m²",
-        precio: 22e3,
+        unidad: "m³",
+        precio: 185e3,
       },
       {
         id: 11,
@@ -13299,6 +13299,52 @@ Error generating stack: ` +
         unidad: "gl",
         precio: 15e3,
       },
+      {
+        id: 429,
+        cat: "Metalcon Estructural",
+        nombre: "Perfil C (montante) 90x38mm e=0.85mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 2500,
+      },
+      {
+        id: 430,
+        cat: "Metalcon Estructural",
+        nombre: "Canal U (solera) 92x30mm e=0.85mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 2200,
+      },
+      {
+        id: 431,
+        cat: "Metalcon Estructural",
+        nombre: "Perfil C (montante) 60x38mm e=0.85mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 2100,
+      },
+      {
+        id: 432,
+        cat: "Metalcon Estructural",
+        nombre: "Canal U (solera) 62x30mm e=0.85mm",
+        unidad: "ml",
+        uc: { q: 3, label: "barras 3m" },
+        precio: 1900,
+      },
+      {
+        id: 433,
+        cat: "Techumbres",
+        nombre: "Cumbrera zinc 0.5mm x2.4m",
+        unidad: "unidad",
+        precio: 7500,
+      },
+      {
+        id: 434,
+        cat: "Madera Estructural",
+        nombre: "Terciado estructural 9mm 1.22x2.44",
+        unidad: "paño",
+        precio: 18500,
+      },
     ],
     Ip = {
       Pintura: 45,
@@ -13346,7 +13392,6 @@ Error generating stack: ` +
           { materialId: 26, cantidad: 1.05 },
           { materialId: 36, cantidad: 0.18 },
           { materialId: 39, cantidad: 0.25 },
-          { materialId: 22, cantidad: 0.4 },
         ],
       },
       {
@@ -13368,7 +13413,6 @@ Error generating stack: ` +
           { materialId: 27, cantidad: 1.05 },
           { materialId: 36, cantidad: 0.18 },
           { materialId: 39, cantidad: 0.25 },
-          { materialId: 22, cantidad: 0.4 },
         ],
       },
       {
@@ -13552,8 +13596,8 @@ Error generating stack: ` +
         rendimiento: 6,
         dotacion: 2,
         materiales: [
-          { materialId: 51, cantidad: 3.2 },
-          { materialId: 55, cantidad: 3.2 },
+          { materialId: 429, cantidad: 3.2 },
+          { materialId: 430, cantidad: 3.2 },
           { materialId: 95, cantidad: 1.05 },
           { materialId: 80, cantidad: 0.18 },
           { materialId: 87, cantidad: 0.14 },
@@ -13577,8 +13621,8 @@ Error generating stack: ` +
         rendimiento: 7,
         dotacion: 2,
         materiales: [
-          { materialId: 50, cantidad: 3 },
-          { materialId: 54, cantidad: 3 },
+          { materialId: 431, cantidad: 3 },
+          { materialId: 432, cantidad: 3 },
           { materialId: 97, cantidad: 1.05 },
           { materialId: 81, cantidad: 0.38 },
           { materialId: 70, cantidad: 0.1 },
@@ -13604,8 +13648,8 @@ Error generating stack: ` +
         rendimiento: 8,
         dotacion: 2,
         materiales: [
-          { materialId: 50, cantidad: 3 },
-          { materialId: 54, cantidad: 3 },
+          { materialId: 431, cantidad: 3 },
+          { materialId: 432, cantidad: 3 },
           { materialId: 80, cantidad: 0.36 },
           { materialId: 70, cantidad: 0.1 },
           { materialId: 85, cantidad: 0.08 },
@@ -13628,8 +13672,8 @@ Error generating stack: ` +
         rendimiento: 7,
         dotacion: 2,
         materiales: [
-          { materialId: 51, cantidad: 3.2 },
-          { materialId: 55, cantidad: 3.2 },
+          { materialId: 429, cantidad: 3.2 },
+          { materialId: 430, cantidad: 3.2 },
           { materialId: 97, cantidad: 1.05 },
           { materialId: 82, cantidad: 0.38 },
           { materialId: 70, cantidad: 0.12 },
@@ -13686,7 +13730,7 @@ Error generating stack: ` +
           { materialId: 69, cantidad: 0.05 },
           { materialId: 114, cantidad: 0.02 },
           { materialId: 113, cantidad: 0.08 },
-          { materialId: 110, cantidad: 0.15 },
+          { materialId: 433, cantidad: 0.15 },
         ],
       },
       {
@@ -13928,7 +13972,7 @@ Error generating stack: ` +
         dotacion: 2,
         materiales: [
           { materialId: 121, cantidad: 1.1 },
-          { materialId: 130, cantidad: 0.36 },
+          { materialId: 434, cantidad: 0.36 },
           { materialId: 133, cantidad: 0.06 },
           { materialId: 135, cantidad: 0.04 },
         ],
@@ -14196,7 +14240,6 @@ Error generating stack: ` +
           { materialId: 144, cantidad: 1.1 },
           { materialId: 145, cantidad: 0.25 },
           { materialId: 146, cantidad: 0.1 },
-          { materialId: 213, cantidad: 0.02 },
         ],
       },
       {
@@ -14314,7 +14357,6 @@ Error generating stack: ` +
           { materialId: 205, cantidad: 3 },
           { materialId: 206, cantidad: 1 },
           { materialId: 212, cantidad: 3 },
-          { materialId: 213, cantidad: 0.05 },
         ],
       },
       {
@@ -14337,7 +14379,6 @@ Error generating stack: ` +
           { materialId: 205, cantidad: 3 },
           { materialId: 206, cantidad: 1 },
           { materialId: 212, cantidad: 3 },
-          { materialId: 213, cantidad: 0.05 },
         ],
       },
       {
@@ -15093,6 +15134,7 @@ Error generating stack: ` +
         catalogId: 130,
         esSubcontrato: !1,
         precioSubcontrato: 0,
+        precioMO: 37e3,
         pctMO: 92,
         pctGG: 8,
         pctUtilidad: 12,
@@ -15144,6 +15186,7 @@ Error generating stack: ` +
         catalogId: 133,
         esSubcontrato: !1,
         precioSubcontrato: 0,
+        precioMO: 7e3,
         pctMO: 85,
         pctGG: 8,
         pctUtilidad: 12,
@@ -15618,7 +15661,6 @@ Error generating stack: ` +
         materiales: [
           { materialId: 272, cantidad: 0.7 },
           { materialId: 273, cantidad: 0.3 },
-          { materialId: 275, cantidad: 0.015 },
         ],
       },
       {
@@ -15919,7 +15961,6 @@ Error generating stack: ` +
         dotacion: 1,
         materiales: [
           { materialId: 301, cantidad: 1.05 },
-          { materialId: 302, cantidad: 0.05 },
           { materialId: 303, cantidad: 0.15 },
           { materialId: 304, cantidad: 0.05 },
         ],
@@ -15941,7 +15982,6 @@ Error generating stack: ` +
         dotacion: 1,
         materiales: [
           { materialId: 301, cantidad: 1.05 },
-          { materialId: 302, cantidad: 0.05 },
           { materialId: 303, cantidad: 0.15 },
           { materialId: 304, cantidad: 0.05 },
           { materialId: 305, cantidad: 0.1 },
@@ -74152,6 +74192,14 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         var ae = new Map(qi.map((je) => [je.id, je])),
           N = new Set(qi.map((je) => je.id)),
           de = H.map((je) => {
+            if (je.id === 10 && je.unidad === "m²") {
+              var refTecnico = ae.get(10);
+              return u(d({}, je), {
+                unidad: refTecnico.unidad,
+                precio: Number(je.precio) === 22e3 ? refTecnico.precio : je.precio,
+                _correccionTecnica: "2026-07-19",
+              });
+            }
             if (N.has(je.id) && (je.precio === 0 || je.precio === void 0)) {
               var ke = ae.get(je.id);
               return ke && ke.precio > 0
@@ -74213,7 +74261,47 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         if (!H || H.length === 0) return Ai;
         const ae = new Map(H.map((pe) => [pe.id, pe])),
           N = new Set(Ai.map((pe) => pe.id)),
-          de = Ai.map((pe) => (ae.has(pe.id) ? ae.get(pe.id) : pe)),
+          firmasAntiguas = {
+            1: "26:1.05|36:0.18|39:0.25|22:0.4",
+            2: "27:1.05|36:0.18|39:0.25|22:0.4",
+            12: "51:3.2|55:3.2|95:1.05|80:0.18|87:0.14|85:0.08|86:0.12",
+            13: "50:3|54:3|97:1.05|81:0.38|70:0.1|85:0.09|86:0.14|88:0.5|89:0.4",
+            14: "50:3|54:3|80:0.36|70:0.1|85:0.08|86:0.12",
+            15: "51:3.2|55:3.2|97:1.05|82:0.38|70:0.12|85:0.09|86:0.14",
+            17: "61:1.2|58:2.5|55:0.8|106:1.1|69:0.05|114:0.02|113:0.08|110:0.15",
+            30: "121:1.1|130:0.36|133:0.06|135:0.04",
+            45: "144:1.1|145:0.25|146:0.1|213:0.02",
+            50: "204:5|205:3|206:1|212:3|213:0.05",
+            51: "204:5|205:3|206:1|212:3|213:0.05",
+            100: "",
+            103: "",
+            123: "272:0.7|273:0.3|275:0.015",
+            141: "301:1.05|302:0.05|303:0.15|304:0.05",
+            142: "301:1.05|302:0.05|303:0.15|304:0.05|305:0.1",
+          },
+          firmaTecnica = (pe) =>
+            (pe.materiales || [])
+              .map((item) => `${item.materialId}:${Number(item.cantidad)}`)
+              .join("|"),
+          de = Ai.map((pe) => {
+            const guardado = ae.get(pe.id);
+            if (!guardado) return pe;
+            const base = Object.assign({}, pe, guardado, { id: pe.id }),
+              firmaAnterior = firmasAntiguas[pe.id],
+              esVersionAnterior =
+                firmaAnterior !== void 0 &&
+                firmaTecnica(guardado) === firmaAnterior &&
+                (!(pe.id === 100 || pe.id === 103) ||
+                  !(parseFloat(guardado.precioMO) > 0));
+            return esVersionAnterior
+              ? u(d({}, base), {
+                  unidad: pe.unidad,
+                  materiales: pe.materiales,
+                  ...(pe.precioMO ? { precioMO: pe.precioMO } : {}),
+                  _correccionTecnica: "2026-07-19",
+                })
+              : base;
+          }),
           me = H.filter((pe) => !N.has(pe.id));
         return [...de, ...me];
       }),

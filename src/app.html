@@ -274,7 +274,7 @@ const DCAT=[
   {id:6,  cat:"Pintura",        desc:"Pintura repaso 1 mano (mantención)",  unidad:"m²",    precio:3500},
 
   /* ═══ HORMIGÓN Y ALBAÑILERÍA ═══ */
-  {id:10, cat:"Albañilería",    desc:"Radier hormigón H-20",                 unidad:"m²",    precio:22000},
+  {id:10, cat:"Albañilería",    desc:"Radier hormigón H-20",                 unidad:"m³",    precio:185000},
   {id:11, cat:"Albañilería",    desc:"Radier hormigón H-25",                 unidad:"m³",    precio:195000},
   {id:12, cat:"Albañilería",    desc:"Muro albañilería reforzada c/bloques", unidad:"m²",    precio:48000},
   {id:13, cat:"Albañilería",    desc:"Muro albañilería ladrillo fiscal",     unidad:"m²",    precio:52000},
@@ -921,6 +921,12 @@ const DMAT=[
   {id:426, cat:"Carpintería", nombre:"Cerradura sobreponer/embutir estándar", unidad:"unidad", precio:14500},
   {id:427, cat:"Pintura", nombre:"Convertidor de óxido 1L", unidad:"litro", precio:9500},
   {id:428, cat:"Varios", nombre:"Viáticos y Movilización / Bencina", unidad:"gl", precio:15000},
+  {id:429, cat:"Metalcon Estructural", nombre:"Perfil C (montante) 90x38mm e=0.85mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:2500},
+  {id:430, cat:"Metalcon Estructural", nombre:"Canal U (solera) 92x30mm e=0.85mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:2200},
+  {id:431, cat:"Metalcon Estructural", nombre:"Perfil C (montante) 60x38mm e=0.85mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:2100},
+  {id:432, cat:"Metalcon Estructural", nombre:"Canal U (solera) 62x30mm e=0.85mm", unidad:"ml", uc:{q:3,label:"barras 3m"}, precio:1900},
+  {id:433, cat:"Techumbres", nombre:"Cumbrera zinc 0.5mm x2.4m", unidad:"unidad", precio:7500},
+  {id:434, cat:"Madera Estructural", nombre:"Terciado estructural 9mm 1.22x2.44", unidad:"paño", precio:18500},
 ];
 
 
@@ -945,13 +951,13 @@ const DAPU=[
    nombre:"Radier hormigón H-20", categoria:"Hormigón y Albañilería",
    unidad:"m³", catalogId:10, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:12, pctUtilidad:15,
    rendimiento:9, dotacion:2,
-   materiales:[{materialId:26,cantidad:1.05},{materialId:36,cantidad:0.18},{materialId:39,cantidad:0.25},{materialId:22,cantidad:0.40}]},
+   materiales:[{materialId:26,cantidad:1.05},{materialId:36,cantidad:0.18},{materialId:39,cantidad:0.25}]},
 
   {id:2, tipo:"Nueva Construcción", estructura:"Hormigón",
    nombre:"Radier hormigón H-25", categoria:"Hormigón y Albañilería",
    unidad:"m³", catalogId:11, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:12, pctUtilidad:15,
    rendimiento:8, dotacion:2,
-   materiales:[{materialId:27,cantidad:1.05},{materialId:36,cantidad:0.18},{materialId:39,cantidad:0.25},{materialId:22,cantidad:0.40}]},
+   materiales:[{materialId:27,cantidad:1.05},{materialId:36,cantidad:0.18},{materialId:39,cantidad:0.25}]},
 
   {id:3, tipo:"Nueva Construcción", estructura:"Hormigón",
    nombre:"Fundación corrida H-20 (ml)", categoria:"Hormigón y Albañilería",
@@ -1002,25 +1008,25 @@ const DAPU=[
    nombre:"Tabique Metalcon 89mm + lana mineral + 1 placa yeso", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:22, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:12, pctUtilidad:15,
    rendimiento:6, dotacion:2,
-   materiales:[{materialId:51,cantidad:3.2},{materialId:55,cantidad:3.2},{materialId:95,cantidad:1.05},{materialId:80,cantidad:0.18},{materialId:87,cantidad:0.14},{materialId:85,cantidad:0.08},{materialId:86,cantidad:0.12}]},
+   materiales:[{materialId:429,cantidad:3.2},{materialId:430,cantidad:3.2},{materialId:95,cantidad:1.05},{materialId:80,cantidad:0.18},{materialId:87,cantidad:0.14},{materialId:85,cantidad:0.08},{materialId:86,cantidad:0.12}]},
 
   {id:13, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Tabique Metalcon 65mm doble placa yeso 13mm", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:23, esSubcontrato:false, precioSubcontrato:0, pctMO:48, pctGG:10, pctUtilidad:15,
    rendimiento:7, dotacion:2,
-   materiales:[{materialId:50,cantidad:3.0},{materialId:54,cantidad:3.0},{materialId:97,cantidad:1.05},{materialId:81,cantidad:0.38},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.14},{materialId:88,cantidad:0.5},{materialId:89,cantidad:0.4}]},
+   materiales:[{materialId:431,cantidad:3.0},{materialId:432,cantidad:3.0},{materialId:97,cantidad:1.05},{materialId:81,cantidad:0.38},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.14},{materialId:88,cantidad:0.5},{materialId:89,cantidad:0.4}]},
 
   {id:14, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Tabique Metalcon 65mm 1 placa yeso simple", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:24, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:10, pctUtilidad:15,
    rendimiento:8, dotacion:2,
-   materiales:[{materialId:50,cantidad:3.0},{materialId:54,cantidad:3.0},{materialId:80,cantidad:0.36},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.08},{materialId:86,cantidad:0.12}]},
+   materiales:[{materialId:431,cantidad:3.0},{materialId:432,cantidad:3.0},{materialId:80,cantidad:0.36},{materialId:70,cantidad:0.1},{materialId:85,cantidad:0.08},{materialId:86,cantidad:0.12}]},
 
   {id:15, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Tabique Metalcon 89mm placa RH baño/cocina", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:25, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:10, pctUtilidad:15,
    rendimiento:7, dotacion:2,
-   materiales:[{materialId:51,cantidad:3.2},{materialId:55,cantidad:3.2},{materialId:97,cantidad:1.05},{materialId:82,cantidad:0.38},{materialId:70,cantidad:0.12},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.14}]},
+   materiales:[{materialId:429,cantidad:3.2},{materialId:430,cantidad:3.2},{materialId:97,cantidad:1.05},{materialId:82,cantidad:0.38},{materialId:70,cantidad:0.12},{materialId:85,cantidad:0.09},{materialId:86,cantidad:0.14}]},
 
   {id:16, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Techumbre Metalcon correas C150 + omegas + zinc 0.35", categoria:"Metalcon Estructural",
@@ -1032,7 +1038,7 @@ const DAPU=[
    nombre:"Techumbre Metalcon correas C150 + omegas + zinc 0.5", categoria:"Metalcon Estructural",
    unidad:"m²", catalogId:31, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:12, pctUtilidad:15,
    rendimiento:7, dotacion:3,
-   materiales:[{materialId:61,cantidad:1.2},{materialId:58,cantidad:2.5},{materialId:55,cantidad:0.8},{materialId:106,cantidad:1.1},{materialId:69,cantidad:0.05},{materialId:114,cantidad:0.02},{materialId:113,cantidad:0.08},{materialId:110,cantidad:0.15}]},
+   materiales:[{materialId:61,cantidad:1.2},{materialId:58,cantidad:2.5},{materialId:55,cantidad:0.8},{materialId:106,cantidad:1.1},{materialId:69,cantidad:0.05},{materialId:114,cantidad:0.02},{materialId:113,cantidad:0.08},{materialId:433,cantidad:0.15}]},
 
   {id:18, tipo:"Nueva Construcción", estructura:"Metalcon",
    nombre:"Techumbre Metalcon C150 + policarbonato 6mm", categoria:"Metalcon Estructural",
@@ -1095,7 +1101,7 @@ const DAPU=[
    nombre:"Cielo madera terciado 9mm s/vigas pino", categoria:"Madera Estructural",
    unidad:"m²", catalogId:47, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:10, pctUtilidad:15,
    rendimiento:10, dotacion:2,
-   materiales:[{materialId:121,cantidad:1.1},{materialId:130,cantidad:0.36},{materialId:133,cantidad:0.06},{materialId:135,cantidad:0.04}]},
+   materiales:[{materialId:121,cantidad:1.1},{materialId:434,cantidad:0.36},{materialId:133,cantidad:0.06},{materialId:135,cantidad:0.04}]},
 
   {id:31, tipo:"Nueva Construcción", estructura:"Madera",
    nombre:"Cielo volcanita s/correas pino", categoria:"Madera Estructural",
@@ -1169,7 +1175,7 @@ const DAPU=[
    nombre:"Cerámico muro ducha 30x60cm", categoria:"Pisos y Revestimientos",
    unidad:"m²", catalogId:63, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:10, pctUtilidad:15,
    rendimiento:6, dotacion:2,
-   materiales:[{materialId:144,cantidad:1.1},{materialId:145,cantidad:0.25},{materialId:146,cantidad:0.1},{materialId:213,cantidad:0.02}]},
+   materiales:[{materialId:144,cantidad:1.1},{materialId:145,cantidad:0.25},{materialId:146,cantidad:0.1}]},
 
   {id:46, tipo:"Nueva Construcción", estructura:"General",
    nombre:"Punto de luz foco LED empotrado", categoria:"Instalaciones Eléctricas",
@@ -1199,13 +1205,13 @@ const DAPU=[
    nombre:"Punto agua fría PPR 20mm", categoria:"Instalaciones Sanitarias",
    unidad:"unidad", catalogId:90, esSubcontrato:false, precioSubcontrato:0, pctMO:60, pctGG:12, pctUtilidad:15,
    rendimiento:4, dotacion:1,
-   materiales:[{materialId:204,cantidad:5},{materialId:205,cantidad:3},{materialId:206,cantidad:1},{materialId:212,cantidad:3},{materialId:213,cantidad:0.05}]},
+   materiales:[{materialId:204,cantidad:5},{materialId:205,cantidad:3},{materialId:206,cantidad:1},{materialId:212,cantidad:3}]},
 
   {id:51, tipo:"Nueva Construcción", estructura:"General",
    nombre:"Punto agua caliente PPR 20mm", categoria:"Instalaciones Sanitarias",
    unidad:"unidad", catalogId:91, esSubcontrato:false, precioSubcontrato:0, pctMO:62, pctGG:12, pctUtilidad:15,
    rendimiento:4, dotacion:1,
-   materiales:[{materialId:204,cantidad:5},{materialId:205,cantidad:3},{materialId:206,cantidad:1},{materialId:212,cantidad:3},{materialId:213,cantidad:0.05}]},
+   materiales:[{materialId:204,cantidad:5},{materialId:205,cantidad:3},{materialId:206,cantidad:1},{materialId:212,cantidad:3}]},
 
   {id:52, tipo:"Nueva Construcción", estructura:"General",
    nombre:"Ojalaería completa (canal + bajante + tapasol)", categoria:"Techumbres",
@@ -1418,7 +1424,7 @@ const DAPU=[
   ════════════════════════════════════════════════ */
   {id:100, tipo:"Nueva Construcción", estructura:"General",
    nombre:"Excavación manual fundaciones", categoria:"Mov. de Tierras",
-   unidad:"m³", catalogId:130, esSubcontrato:false, precioSubcontrato:0, pctMO:92, pctGG:8, pctUtilidad:12,
+   unidad:"m³", catalogId:130, esSubcontrato:false, precioSubcontrato:0, precioMO:37000, pctMO:92, pctGG:8, pctUtilidad:12,
    rendimiento:2, dotacion:2,
    materiales:[]},
 
@@ -1436,7 +1442,7 @@ const DAPU=[
 
   {id:103, tipo:"Nueva Construcción", estructura:"General",
    nombre:"Nivelación y compactación terreno", categoria:"Mov. de Tierras",
-   unidad:"m²", catalogId:133, esSubcontrato:false, precioSubcontrato:0, pctMO:85, pctGG:8, pctUtilidad:12,
+   unidad:"m²", catalogId:133, esSubcontrato:false, precioSubcontrato:0, precioMO:7000, pctMO:85, pctGG:8, pctUtilidad:12,
    rendimiento:50, dotacion:1,
    materiales:[]},
 
@@ -1582,7 +1588,7 @@ const DAPU=[
    nombre:"Enfierradura habilitada y colocada", categoria:"Hormigón Armado",
    unidad:"kg", catalogId:159, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:10, pctUtilidad:12,
    rendimiento:80, dotacion:2,
-   materiales:[{materialId:272,cantidad:0.7},{materialId:273,cantidad:0.3},{materialId:275,cantidad:0.015}]},
+   materiales:[{materialId:272,cantidad:0.7},{materialId:273,cantidad:0.3}]},
 
   /* ════════════════════════════════════════════════
      SANITARIO (amplificado)
@@ -1691,13 +1697,13 @@ const DAPU=[
    nombre:"Piso Vinílico Click — Instalación", categoria:"Pisos y Revestimientos",
    unidad:"m²", catalogId:226, esSubcontrato:false, precioSubcontrato:0, pctMO:35, pctGG:10, pctUtilidad:15,
    rendimiento:15, dotacion:1,
-   materiales:[{materialId:301,cantidad:1.05},{materialId:302,cantidad:0.05},{materialId:303,cantidad:0.15},{materialId:304,cantidad:0.05}]},
+   materiales:[{materialId:301,cantidad:1.05},{materialId:303,cantidad:0.15},{materialId:304,cantidad:0.05}]},
 
   {id:142, tipo:"Remodelación", estructura:"General",
    nombre:"Piso Vinílico Click — Con retiro piso existente", categoria:"Pisos y Revestimientos",
    unidad:"m²", catalogId:227, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:10, pctUtilidad:15,
    rendimiento:10, dotacion:1,
-   materiales:[{materialId:301,cantidad:1.05},{materialId:302,cantidad:0.05},{materialId:303,cantidad:0.15},{materialId:304,cantidad:0.05},{materialId:305,cantidad:0.10}]},
+   materiales:[{materialId:301,cantidad:1.05},{materialId:303,cantidad:0.15},{materialId:304,cantidad:0.05},{materialId:305,cantidad:0.10}]},
 
   {id:31001, tipo:"Mantención", estructura:"General",
    nombre:"Visita Técnica / Diagnóstico", categoria:"Servicios Generales",
@@ -17279,6 +17285,10 @@ function App(){
     const dcatMap=new Map(DCAT.map(x=>[x.id,x]));
     const sysIds=new Set(DCAT.map(x=>x.id));
     const merged=sv.map(x=>{
+      if(x.id===10&&x.unidad==="m²"){
+        const ref=dcatMap.get(10);
+        return{...x,unidad:ref.unidad,precio:Number(x.precio)===22000?ref.precio:x.precio,_correccionTecnica:"2026-07-19"};
+      }
       if(sysIds.has(x.id)&&(x.precio===0||x.precio===undefined)){
         const ref=dcatMap.get(x.id);
         return ref&&ref.precio>0?{...x,precio:ref.precio}:x;
@@ -17327,7 +17337,30 @@ function App(){
     /* Preserva ediciones de APU del sistema y agrega los APU del usuario. */
     const svMap=new Map(sv.map(x=>[x.id,x]));
     const sysIds=new Set(DAPU.map(x=>x.id));
-    const merged=DAPU.map(x=>svMap.has(x.id)?{...x,...svMap.get(x.id),id:x.id}:x);
+    const firmasAntiguas={
+      1:"26:1.05|36:0.18|39:0.25|22:0.4",2:"27:1.05|36:0.18|39:0.25|22:0.4",
+      12:"51:3.2|55:3.2|95:1.05|80:0.18|87:0.14|85:0.08|86:0.12",
+      13:"50:3|54:3|97:1.05|81:0.38|70:0.1|85:0.09|86:0.14|88:0.5|89:0.4",
+      14:"50:3|54:3|80:0.36|70:0.1|85:0.08|86:0.12",
+      15:"51:3.2|55:3.2|97:1.05|82:0.38|70:0.12|85:0.09|86:0.14",
+      17:"61:1.2|58:2.5|55:0.8|106:1.1|69:0.05|114:0.02|113:0.08|110:0.15",
+      30:"121:1.1|130:0.36|133:0.06|135:0.04",
+      45:"144:1.1|145:0.25|146:0.1|213:0.02",
+      50:"204:5|205:3|206:1|212:3|213:0.05",51:"204:5|205:3|206:1|212:3|213:0.05",
+      100:"",103:"",123:"272:0.7|273:0.3|275:0.015",
+      141:"301:1.05|302:0.05|303:0.15|304:0.05",
+      142:"301:1.05|302:0.05|303:0.15|304:0.05|305:0.1"
+    };
+    const firma=a=>(a.materiales||[]).map(m=>`${m.materialId}:${Number(m.cantidad)}`).join("|");
+    const merged=DAPU.map(x=>{
+      const guardado=svMap.get(x.id);
+      if(!guardado)return x;
+      const base={...x,...guardado,id:x.id};
+      const firmaAnterior=firmasAntiguas[x.id];
+      const esVersionAnterior=firmaAnterior!==undefined&&firma(guardado)===firmaAnterior&&
+        (!(x.id===100||x.id===103)||!(parseFloat(guardado.precioMO)>0));
+      return esVersionAnterior?{...base,unidad:x.unidad,materiales:x.materiales,...(x.precioMO?{precioMO:x.precioMO}:{}),_correccionTecnica:"2026-07-19"}:base;
+    });
     const userOnly=sv.filter(x=>!sysIds.has(x.id));
     return[...merged,...userOnly];
   });
