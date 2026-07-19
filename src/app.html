@@ -505,6 +505,22 @@ const DCAT=[
   {id:221,cat:"Instalaciones Sanitarias",desc:"Lavamanos + grifería (inst.)",unidad:"unidad",precio:95000},
   {id:222,cat:"Instalaciones Sanitarias",desc:"WC con bidet incluido (inst.)",unidad:"unidad",precio:145000},
   {id:223,cat:"Instalaciones Eléctricas",desc:"Cableado principal 4mm² (ml)",unidad:"ml",precio:4500},
+  {id:224,cat:"Techumbres",desc:"Reparación gotera techumbre zinc (parche)",unidad:"m²",precio:19000},
+
+  {id:226,cat:"Pisos",desc:"Cambio piso Vinílico (instalación)",unidad:"m²",precio:40500},
+  {id:227,cat:"Pisos",desc:"Cambio piso Vinílico (inc. retiro piso existente)",unidad:"m²",precio:46000},
+
+  {id:310,cat:"Servicios Generales",desc:"Visita Técnica / Diagnóstico",unidad:"gl",precio:25000},
+  {id:311,cat:"Mantención Techumbres",desc:"Reparación filtración techumbre (parche/tapagoteras)",unidad:"gl",precio:45000},
+  {id:312,cat:"Mantención Techumbres",desc:"Limpieza y destape de canaletas y bajantes",unidad:"ml",precio:2500},
+  {id:313,cat:"Mantención Pintura",desc:"Lijado y pintura esmalte/anticorrosivo reja o portón",unidad:"m²",precio:12500},
+  {id:314,cat:"Mantención Sanitaria",desc:"Cambio herrajes / flotador estanque WC",unidad:"unidad",precio:25000},
+  {id:315,cat:"Mantención Sanitaria",desc:"Destape de WC o cámara de inspección domiciliaria",unidad:"gl",precio:45000},
+  {id:316,cat:"Mantención Sanitaria",desc:"Cambio de sifón lavamanos / lavaplatos",unidad:"unidad",precio:18500},
+  {id:317,cat:"Mantención Eléctrica",desc:"Detección cortocircuito y revisión tablero",unidad:"gl",precio:35000},
+  {id:318,cat:"Mantención Eléctrica",desc:"Cambio de enchufe/interruptor en mal estado",unidad:"unidad",precio:12500},
+  {id:319,cat:"Reparaciones Generales",desc:"Cambio de chapa/cerradura puerta",unidad:"unidad",precio:28000},
+  {id:320,cat:"Reparaciones Generales",desc:"Reparación parche yeso/empaste muro dañado",unidad:"m²",precio:15000},
 
 ];
 
@@ -538,10 +554,6 @@ const DB=[
      {desc:"Radier hormigón H-25 e=10cm",cant:60,unidad:"m²",precio:28500},
      {desc:"Enfierradura",cant:60,unidad:"m²",precio:4500},
    ],descuento:false,estado:"Pendiente",notas:"⚠️ EJEMPLO — reemplaza con tu información real",_esDemo:true},
-
-
-  {id:226, cat:"Pisos", desc:"Cambio piso Vinílico (instalación)",               unidad:"m²", precio:40500},
-  {id:227, cat:"Pisos", desc:"Cambio piso Vinílico (inc. retiro piso existente)", unidad:"m²", precio:46000},
 ];
 
 /* ═══ BASE DE MATERIALES — precios referencia Chile 2025 ════════ */
@@ -899,6 +911,16 @@ const DMAT=[
   {id:303, cat:"Pisos y Revestimientos", nombre:"Guardapolvo laminado vinílico",       unidad:"ml",    precio:3500},
   {id:304, cat:"Pisos y Revestimientos", nombre:"Cubrejunta aluminio piso",            unidad:"ml",    precio:4200},
   {id:305, cat:"Pisos y Revestimientos", nombre:"Bolsa escombros retiro piso",         unidad:"un",    precio:6000},
+
+  {id:420, cat:"Techumbres", nombre:"Tapagoteras asfáltico/acrílico 1kg", unidad:"unidad", precio:8500},
+  {id:421, cat:"Techumbres", nombre:"Membrana asfáltica aluminizada adhesiva 10cm x 10m", unidad:"rollo", precio:12500},
+  {id:422, cat:"Sanitario", nombre:"Kit herrajes WC universal", unidad:"unidad", precio:7500},
+  {id:423, cat:"Sanitario", nombre:"Sifón corrugado lavamanos universal", unidad:"unidad", precio:3500},
+  {id:424, cat:"Sanitario", nombre:"Silicona antihongos baño/cocina", unidad:"tubo", precio:4200},
+  {id:425, cat:"Eléctrica", nombre:"Módulo enchufe 10A/16A + placa", unidad:"unidad", precio:4500},
+  {id:426, cat:"Carpintería", nombre:"Cerradura sobreponer/embutir estándar", unidad:"unidad", precio:14500},
+  {id:427, cat:"Pintura", nombre:"Convertidor de óxido 1L", unidad:"litro", precio:9500},
+  {id:428, cat:"Varios", nombre:"Viáticos y Movilización / Bencina", unidad:"gl", precio:15000},
 ];
 
 
@@ -1273,7 +1295,7 @@ const DAPU=[
   ════════════════════════════════════════════════ */
   {id:75, tipo:"Mantención", estructura:"General",
    nombre:"Reparación gotera techumbre zinc (parche)", categoria:"Techumbres",
-   unidad:"m²", catalogId:0, esSubcontrato:false, precioSubcontrato:0, pctMO:70, pctGG:10, pctUtilidad:15,
+   unidad:"m²", catalogId:224, esSubcontrato:false, precioSubcontrato:0, pctMO:70, pctGG:10, pctUtilidad:15,
    rendimiento:3, dotacion:1,
    materiales:[{materialId:105,cantidad:1.15},{materialId:114,cantidad:0.02},{materialId:73,cantidad:0.3},{materialId:174,cantidad:0.2},{materialId:166,cantidad:0.15}]},
 
@@ -1676,6 +1698,36 @@ const DAPU=[
    unidad:"m²", catalogId:227, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:10, pctUtilidad:15,
    rendimiento:10, dotacion:1,
    materiales:[{materialId:301,cantidad:1.05},{materialId:302,cantidad:0.05},{materialId:303,cantidad:0.15},{materialId:304,cantidad:0.05},{materialId:305,cantidad:0.10}]},
+
+  {id:31001, tipo:"Mantención", estructura:"General",
+   nombre:"Visita Técnica / Diagnóstico", categoria:"Servicios Generales",
+   unidad:"gl", catalogId:310, esSubcontrato:false, precioSubcontrato:0, pctMO:70, pctGG:15, pctUtilidad:15,
+   rendimiento:1, dotacion:1,
+   materiales:[{materialId:428,cantidad:1}]},
+
+  {id:31002, tipo:"Mantención", estructura:"General",
+   nombre:"Reparación filtración techumbre (parche/tapagoteras)", categoria:"Mantención Techumbres",
+   unidad:"gl", catalogId:311, esSubcontrato:false, precioSubcontrato:0, pctMO:60, pctGG:10, pctUtilidad:15,
+   rendimiento:2, dotacion:1,
+   materiales:[{materialId:420,cantidad:1},{materialId:421,cantidad:0.2},{materialId:428,cantidad:0.5}]},
+
+  {id:31003, tipo:"Mantención", estructura:"General",
+   nombre:"Cambio herrajes / flotador estanque WC", categoria:"Mantención Sanitaria",
+   unidad:"unidad", catalogId:314, esSubcontrato:false, precioSubcontrato:0, pctMO:65, pctGG:10, pctUtilidad:15,
+   rendimiento:2, dotacion:1,
+   materiales:[{materialId:422,cantidad:1},{materialId:424,cantidad:0.2}]},
+
+  {id:31004, tipo:"Mantención", estructura:"General",
+   nombre:"Cambio de chapa/cerradura puerta", categoria:"Reparaciones Generales",
+   unidad:"unidad", catalogId:319, esSubcontrato:false, precioSubcontrato:0, pctMO:65, pctGG:10, pctUtilidad:15,
+   rendimiento:1.5, dotacion:1,
+   materiales:[{materialId:426,cantidad:1}]},
+
+  {id:31005, tipo:"Mantención", estructura:"General",
+   nombre:"Cambio de enchufe/interruptor en mal estado", categoria:"Mantención Eléctrica",
+   unidad:"unidad", catalogId:318, esSubcontrato:false, precioSubcontrato:0, pctMO:70, pctGG:10, pctUtilidad:15,
+   rendimiento:3, dotacion:1,
+   materiales:[{materialId:425,cantidad:1}]},
 ].map(a=>({rendimiento:30, dotacion:1,...a}));
 
 
