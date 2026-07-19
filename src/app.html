@@ -1709,7 +1709,8 @@ const calcAPU=(apu,materiales)=>{
   if(apu.esSubcontrato){
     const base=parseFloat(apu.precioSubcontrato)||0;
     const adm=base*(parseFloat(apu.pctGG)||0)/100;
-    return{matTotal:0,moTotal:0,ggTotal:adm,utilTotal:0,precioFinal:base+adm,base};
+    const util=(base+adm)*(parseFloat(apu.pctUtilidad)||0)/100;
+    return{matTotal:0,moTotal:0,ggTotal:adm,utilTotal:util,precioFinal:Math.round(base+adm+util),base};
   }
   const matTotal=(apu.materiales||[]).reduce((s,l)=>{
     const m=materiales.find(x=>x.id===l.materialId);
@@ -3958,7 +3959,7 @@ function APUPage({apus,setApus,materiales,catalog,setCatalog,setToast}){
   /* Form state */
   const emptyForm=()=>({
     nombre:"",categoria:cats[0]||"",unidad:"m²",catalogId:"",
-    esSubcontrato:false,precioSubcontrato:"",
+    esSubcontrato:false,precioSubcontrato:"",precioMO:"",
     pctMO:MO_PCT_CAT[cats[0]]||50,pctGG:12,pctUtilidad:15,
     materiales:[],
   });
@@ -3991,7 +3992,7 @@ function APUPage({apus,setApus,materiales,catalog,setCatalog,setToast}){
     setForm({
       nombre:apu.nombre,categoria:apu.categoria,unidad:apu.unidad,
       catalogId:apu.catalogId||"",esSubcontrato:apu.esSubcontrato,
-      precioSubcontrato:apu.precioSubcontrato||"",
+      precioSubcontrato:apu.precioSubcontrato||"",precioMO:apu.precioMO||"",
       pctMO:apu.pctMO,pctGG:apu.pctGG,pctUtilidad:apu.pctUtilidad,
       materiales:apu.materiales.map(l=>({...l})),
     });
@@ -4002,12 +4003,18 @@ function APUPage({apus,setApus,materiales,catalog,setCatalog,setToast}){
 
   const save=()=>{
     if(!form.nombre.trim()||!form.categoria){setToast("⚠️ Completa nombre y categoría.");return;}
+    if(!form.esSubcontrato&&!form.materiales.some(l=>l.materialId&&parseFloat(l.cantidad)>0)&&!(parseFloat(form.precioMO)>0)){
+      setToast("⚠️ Agrega materiales o indica un precio base de mano de obra.");return;
+    }
+    const anterior=eid!==null?apus.find(a=>a.id===eid):null;
     const obj={
+      ...(anterior||{}),
       id:eid!==null?eid:Math.max(0,...apus.map(a=>a.id))+1,
       nombre:form.nombre.trim(),categoria:form.categoria,unidad:form.unidad,
       catalogId:form.catalogId?parseInt(form.catalogId):"",
       esSubcontrato:form.esSubcontrato,
       precioSubcontrato:parseFloat(form.precioSubcontrato)||0,
+      precioMO:parseFloat(form.precioMO)||0,
       pctMO:parseFloat(form.pctMO)||0,
       pctGG:parseFloat(form.pctGG)||0,
       pctUtilidad:parseFloat(form.pctUtilidad)||0,
@@ -4761,7 +4768,7 @@ function MaterialesPage({materiales,setMateriales,setToast}){
         hist.unshift({precio:m.precio,fecha:new Date().toISOString().split("T")[0]});
         if(hist.length>12) hist.length=12;
       }
-      return {...m,cat:finalCat,nombre:form.nombre,unidad:form.unidad,precio,
+      return {...m,cat:finalCat,nombre:form.nombre,unidad:form.unidad,precio,_precioUsuario:true,
         fechaActualizacion:new Date().toISOString().split("T")[0],
         historialPrecios:hist};
     }));}
@@ -5594,23 +5601,24 @@ function Dashboard({budgets,clients,setClients,cfg,materiales,licitaciones,apus,
    tiene un APU con materiales. Permite ajustar cantidades,
    eliminar insumos y ver el precio recalculado en tiempo real.
 ════════════════════════════════════════════════════════════════ */
-function APUAjusteModal({catItem,apu,materiales,cantItem,onConfirm,onSkip}){
+function APUAjusteModal({catItem,apu,materiales,cantItem,onConfirm,onSkip,customData}){
   /* Inicializa con los materiales del APU, permite editar */
   const[lineas,setLineas]=useState(
-    apu.materiales.map(l=>{
+    customData&&customData._customApuMaterials?customData._customApuMaterials:apu.materiales.map(l=>{
       const m=materiales.find(x=>x.id===l.materialId);
       return{...l,_activo:true,_mat:m};
     })
   );
-  const[pctMO,setPctMO]=useState(apu.pctMO);
-  const[pctGG,setPctGG]=useState(apu.pctGG);
-  const[pctUtil,setPctUtil]=useState(apu.pctUtilidad);
-  const[rendimiento,setRendimiento]=useState(apu.rendimiento||0);
-  const[dotacion,setDotacion]=useState(apu.dotacion||1);
+  const[pctMO,setPctMO]=useState(customData&&customData._customMO!==undefined?customData._customMO:apu.pctMO);
+  const[pctGG,setPctGG]=useState(customData&&customData._customGG!==undefined?customData._customGG:apu.pctGG);
+  const[pctUtil,setPctUtil]=useState(customData&&customData._customUtil!==undefined?customData._customUtil:apu.pctUtilidad);
+  const[rendimiento,setRendimiento]=useState(customData&&customData._rendimiento!==undefined?customData._rendimiento:apu.rendimiento||0);
+  const[dotacion,setDotacion]=useState(customData&&customData._dotacion!==undefined?customData._dotacion:apu.dotacion||1);
 
   /* Recalcula precio con líneas actuales */
   const matTotal=lineas.filter(l=>l._activo&&l._mat).reduce((s,l)=>s+(l._mat.precio*(parseFloat(l.cantidad)||0)),0);
-  const moTotal=matTotal*(parseFloat(pctMO)||0)/100;
+  const precioMOBase=parseFloat(apu.precioMO)||0;
+  const moTotal=precioMOBase>0?precioMOBase:matTotal*(parseFloat(pctMO)||0)/100;
   const ggTotal=(matTotal+moTotal)*(parseFloat(pctGG)||0)/100;
   const sub=matTotal+moTotal+ggTotal;
   const utilTotal=sub*(parseFloat(pctUtil)||0)/100;
@@ -5784,12 +5792,12 @@ function APUAjusteModal({catItem,apu,materiales,cantItem,onConfirm,onSkip}){
         <div style={{padding:"14px 22px",borderTop:`1px solid ${C.border}`,display:"flex",gap:10}}>
           <button
             style={{...S.btn("p"),flex:1,padding:"11px",fontSize:16}}
-            onClick={()=>onConfirm(precioFinal,rendimiento,dotacion)}>
+            onClick={()=>onConfirm(precioFinal,rendimiento,dotacion,matTotal,lineas,pctMO,pctGG,pctUtil)}>
             ✓ Usar este precio ({fmt(precioFinal)}/{apu.unidad})
           </button>
           <button
             style={{...S.btn("s"),padding:"11px 16px",fontSize:14}}
-            onClick={()=>onConfirm(catItem.precio||precioFinal,rendimiento,dotacion)}>
+            onClick={()=>onConfirm(catItem.precio||precioFinal,rendimiento,dotacion,matTotal,lineas,pctMO,pctGG,pctUtil)}>
             Precio estándar ({fmt(catItem.precio||precioFinal)})
           </button>
         </div>
@@ -6176,6 +6184,7 @@ function PlantillaModal({onSelect,onClose,plantillasUser,onDeleteUser}){
 const CatalogPanel=React.memo(function CatalogPanel({catalog,apus,form,addFromCatalog,C,S,fmt,cfg}){
   const[catSearch,setCatSearch]=useState("");
   const[catFilter,setCatFilter]=useState("Todas");
+  const[apuChoice,setApuChoice]=useState({});
   const catCats=["Todas",...new Set(catalog.map(c=>c.cat))];
   const catFiltered=catalog.filter(c=>{
     const matchCat=catFilter==="Todas"||c.cat===catFilter;
@@ -6226,7 +6235,12 @@ const CatalogPanel=React.memo(function CatalogPanel({catalog,apus,form,addFromCa
           <div style={{textAlign:"center",color:C.muted,padding:"20px",fontSize:12}}>Sin resultados</div>
         ):catFiltered.map(catItem=>{
           const inBudget=inBudgetIds.has(catItem.id);
-          const apuLink=apus&&apus.find(a=>a.catalogId===catItem.id&&!a.esSubcontrato&&a.materiales&&a.materiales.length>0);
+          const apuLinks=(apus||[]).filter(a=>a.catalogId===catItem.id&&(
+            (a.esSubcontrato&&parseFloat(a.precioSubcontrato)>0)||
+            (a.materiales&&a.materiales.length>0)||parseFloat(a.precioMO)>0
+          ));
+          const selectedApuId=parseInt(apuChoice[catItem.id]);
+          const apuLink=apuLinks.find(a=>a.id===selectedApuId)||apuLinks[0];
           return(
             <div key={catItem.id} style={{background:inBudget?"var(--bdg-comp-bg)":C.sb,border:`1px solid ${inBudget?"var(--bdg-comp-fg)":C.border}`,borderRadius:8,padding:"9px 11px",marginBottom:5,transition:"border-color .15s"}}
               onMouseEnter={e=>e.currentTarget.style.borderColor=C.accent}
@@ -6235,7 +6249,7 @@ const CatalogPanel=React.memo(function CatalogPanel({catalog,apus,form,addFromCa
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:2,flexWrap:"wrap"}}>
                     <span style={{fontSize:12,fontWeight:600,color:C.text}}>{catItem.nombre||catItem.desc}</span>
-                    {apuLink&&<span style={{fontSize:9,background:"var(--bdg-pend-bg)",color:"#60a5fa",padding:"1px 5px",borderRadius:4,fontWeight:700,flexShrink:0}}>APU</span>}
+                    {apuLink&&<span style={{fontSize:9,background:"var(--bdg-pend-bg)",color:"#60a5fa",padding:"1px 5px",borderRadius:4,fontWeight:700,flexShrink:0}}>{apuLinks.length>1?`${apuLinks.length} APUs`:"APU"}</span>}
                     {inBudget&&<span style={{fontSize:9,background:"var(--bdg-comp-bg)",color:"var(--bdg-comp-fg)",padding:"1px 5px",borderRadius:4,fontWeight:700,flexShrink:0}}>✓</span>}
                   </div>
                   <div style={{fontSize:10,color:C.muted}}>{catItem.unidad} · {catItem.cat}</div>
@@ -6245,9 +6259,16 @@ const CatalogPanel=React.memo(function CatalogPanel({catalog,apus,form,addFromCa
                   <div style={{fontSize:9,color:C.muted}}>/{catItem.unidad}{precioDesactualizado&&<span style={{color:"#fb923c",marginLeft:3}}>⚠️</span>}</div>
                 </div>
               </div>
+              {apuLinks.length>1&&(
+                <select value={apuLink.id} onClick={e=>e.stopPropagation()}
+                  onChange={e=>setApuChoice(prev=>({...prev,[catItem.id]:e.target.value}))}
+                  style={{...S.sel,width:"100%",padding:"5px 8px",fontSize:10,marginTop:7}}>
+                  {apuLinks.map(apu=><option key={apu.id} value={apu.id}>{apu.nombre}</option>)}
+                </select>
+              )}
               {!inBudget&&(
                 <button style={{...S.btn("g"),width:"100%",padding:"5px",fontSize:10,marginTop:7}}
-                  onClick={()=>addFromCatalog(catItem)}>
+                  onClick={()=>addFromCatalog(catItem,apuLink)}>
                   + Agregar al presupuesto
                 </button>
               )}
@@ -8011,10 +8032,16 @@ function BudgetForm({clients,catalog,cfg,apus,materiales,onSave,onCancel,editing
     setForm(f=>({...f,items}));
   };
 
-  const confirmarAPU=(idx,precio,rendimiento,dotacion)=>{
+  const confirmarAPU=(idx,precio,rendimiento,dotacion,matUnit,lineas,pctMO,pctGG,pctUtil)=>{
     setForm(f=>{
       const items=[...f.items];
-      items[idx]={...items[idx],precio,_rendimiento:rendimiento,_dotacion:dotacion};
+      items[idx]={
+        ...items[idx],precio,_rendimiento:rendimiento,_dotacion:dotacion,
+        _apuId:apuModal&&apuModal.apu?apuModal.apu.id:items[idx]._apuId,
+        _apuNombre:apuModal&&apuModal.apu?apuModal.apu.nombre:items[idx]._apuNombre,
+        _apuMatUnit:matUnit,_customApuMaterials:lineas,
+        _customMO:pctMO,_customGG:pctGG,_customUtil:pctUtil
+      };
       return{...f,items};
     });
     // If came from catalog panel and unit is measurable → open calc next
@@ -8026,8 +8053,11 @@ function BudgetForm({clients,catalog,cfg,apus,materiales,onSave,onCancel,editing
     }
   };
 
-  const addFromCatalog=(catItem)=>{
-    const apuLink=apus&&apus.find(a=>a.catalogId===catItem.id&&!a.esSubcontrato&&a.materiales&&a.materiales.length>0);
+  const addFromCatalog=(catItem,apuElegido)=>{
+    const apuLink=apuElegido||(apus||[]).find(a=>a.catalogId===catItem.id&&(
+      (a.esSubcontrato&&parseFloat(a.precioSubcontrato)>0)||
+      (a.materiales&&a.materiales.length>0)||parseFloat(a.precioMO)>0
+    ));
     const newItem={...ei(),_cid:String(catItem.id),desc:catItem.desc,unidad:catItem.unidad,precio:catItem.precio};
     const newItems=[...form.items,newItem];
     const newIdx=newItems.length-1;
@@ -8102,7 +8132,8 @@ function BudgetForm({clients,catalog,cfg,apus,materiales,onSave,onCancel,editing
           apu={apuModal.apu}
           materiales={materiales}
           cantItem={parseFloat(form.items[apuModal.idx]&&form.items[apuModal.idx].cant)||1}
-            onConfirm={(precio,rendimiento,dotacion)=>confirmarAPU(apuModal.idx,precio,rendimiento,dotacion)}
+          customData={form.items[apuModal.idx]}
+          onConfirm={(precio,rendimiento,dotacion,matUnit,lineas,pctMO,pctGG,pctUtil)=>confirmarAPU(apuModal.idx,precio,rendimiento,dotacion,matUnit,lineas,pctMO,pctGG,pctUtil)}
           onSkip={()=>setApuModal(null)}
         />
       )}
@@ -17214,11 +17245,40 @@ function App(){
     /* Usar precios guardados para materiales del sistema (preserva actualizaciones de precios) */
     const svMap=new Map(sv.map(x=>[x.id,x]));
     const sysIds=new Set(DMAT.map(x=>x.id));
-    const merged=DMAT.map(x=>svMap.has(x.id)?svMap.get(x.id):x);
+    /*
+      Los IDs del catalogo del sistema son reservados. Conservamos el precio
+      actualizado por el usuario, pero restablecemos nombre, categoria y unidad
+      canonicos para evitar colisiones con datos de versiones antiguas.
+    */
+    const merged=DMAT.map(x=>{
+      const guardado=svMap.get(x.id);
+      if(!guardado)return x;
+      const normalizaNombre=v=>String(v||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+      const mismaIdentidad=normalizaNombre(guardado.nombre)===normalizaNombre(x.nombre);
+      const precioGuardado=Number(guardado.precio);
+      const precioConfiable=mismaIdentidad&&Number.isFinite(precioGuardado)&&Boolean(guardado._precioUsuario||guardado.fechaActualizacion);
+      return{
+        ...x,
+        precio:precioConfiable?precioGuardado:x.precio,
+        ...(mismaIdentidad&&guardado.uc?{uc:guardado.uc}:{}),
+        ...(guardado.historialPrecios?{historialPrecios:guardado.historialPrecios}:{}),
+        ...(guardado.fechaActualizacion?{fechaActualizacion:guardado.fechaActualizacion}:{}),
+        ...(!precioConfiable&&Number.isFinite(precioGuardado)&&precioGuardado!==x.precio?{_precioAnterior:precioGuardado}:{})
+      };
+    });
     const userOnly=sv.filter(x=>!sysIds.has(x.id));
     return[...merged,...userOnly];
   });
-  const[apus,setApus]=useState(()=>{const sv=lsLoad("apus",null);if(!sv||sv.length===0)return DAPU;const sysIds=new Set(DAPU.map(x=>x.id));const userOnly=sv.filter(x=>!sysIds.has(x.id));return[...DAPU,...userOnly];});
+  const[apus,setApus]=useState(()=>{
+    const sv=lsLoad("apus",null);
+    if(!sv||sv.length===0)return DAPU;
+    /* Preserva ediciones de APU del sistema y agrega los APU del usuario. */
+    const svMap=new Map(sv.map(x=>[x.id,x]));
+    const sysIds=new Set(DAPU.map(x=>x.id));
+    const merged=DAPU.map(x=>svMap.has(x.id)?{...x,...svMap.get(x.id),id:x.id}:x);
+    const userOnly=sv.filter(x=>!sysIds.has(x.id));
+    return[...merged,...userOnly];
+  });
   const[budgets,setBudgets]=useState(()=>lsLoad("budgets",DB));
   /* Presupuestos con estado Vencido calculado automáticamente */
   const budgetsConVencidos=React.useMemo(()=>{

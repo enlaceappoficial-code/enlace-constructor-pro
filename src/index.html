@@ -564,13 +564,25 @@ body{background:var(--bg);font-family:'DM Sans',sans-serif;}
           } catch (e) {}
         }
 
-        seed();
-        setTimeout(seed, 2000);
-        setTimeout(seed, 6000);
+        /*
+         * La antigua ampliacion automatica relacionaba Partidas y APU por
+         * similitud de texto y volvia a escribir los datos al iniciar. Eso
+         * podia cambiar composiciones validas sin confirmacion del usuario.
+         *
+         * Se conserva la funcion como referencia para una futura importacion
+         * asistida, pero no se ejecuta automaticamente. Las altas se realizan
+         * desde la interfaz y los datos existentes permanecen intactos.
+         */
+        var RUN_LEGACY_APU_AUTOFILL = false;
+        if (RUN_LEGACY_APU_AUTOFILL) {
+          seed();
+          setTimeout(seed, 2000);
+          setTimeout(seed, 6000);
+        }
 
         var s = document.createElement("script");
         s.defer = true;
-        s.src = "./assets/index.js?v=20260719-card-polish-v27";
+        s.src = "./assets/index.js?v=20260719-apu-integrity-v31";
         s.onerror = function () {
           if (window.__ecpShow) {
             window.__ecpShow(

@@ -16101,13 +16101,14 @@ Error generating stack: ` +
     li = (t, i) => {
       if (t.esSubcontrato) {
         var r = parseFloat(t.precioSubcontrato) || 0,
-          n = (r * (parseFloat(t.pctGG) || 0)) / 100;
+          n = (r * (parseFloat(t.pctGG) || 0)) / 100,
+          utilidad = ((r + n) * (parseFloat(t.pctUtilidad) || 0)) / 100;
         return {
           matTotal: 0,
           moTotal: 0,
           ggTotal: n,
-          utilTotal: 0,
-          precioFinal: r + n,
+          utilTotal: utilidad,
+          precioFinal: Math.round(r + n + utilidad),
           base: r,
         };
       }
@@ -21995,6 +21996,7 @@ ${r.empresa}`;
         catalogId: "",
         esSubcontrato: !1,
         precioSubcontrato: "",
+        precioMO: "",
         pctMO: Ip[s[0]] || 50,
         pctGG: 12,
         pctUtilidad: 15,
@@ -22036,6 +22038,7 @@ ${r.empresa}`;
             catalogId: _.catalogId || "",
             esSubcontrato: _.esSubcontrato,
             precioSubcontrato: _.precioSubcontrato || "",
+            precioMO: _.precioMO || "",
             pctMO: _.pctMO,
             pctGG: _.pctGG,
             pctUtilidad: _.pctUtilidad,
@@ -22052,7 +22055,18 @@ ${r.empresa}`;
           o("⚠️ Completa nombre y categoría.");
           return;
         }
-        var _ = {
+        if (
+          !b.esSubcontrato &&
+          !b.materiales.some(
+            (linea) => linea.materialId && parseFloat(linea.cantidad) > 0,
+          ) &&
+          !(parseFloat(b.precioMO) > 0)
+        ) {
+          o("⚠️ Agrega materiales o indica un precio base de mano de obra.");
+          return;
+        }
+        var anterior = j !== null ? t.find((xe) => xe.id === j) : null,
+          _ = u(d({}, anterior || {}), {
           id: j !== null ? j : Math.max(0, ...t.map((xe) => xe.id)) + 1,
           nombre: b.nombre.trim(),
           categoria: b.categoria,
@@ -22060,6 +22074,7 @@ ${r.empresa}`;
           catalogId: b.catalogId ? parseInt(b.catalogId) : "",
           esSubcontrato: b.esSubcontrato,
           precioSubcontrato: parseFloat(b.precioSubcontrato) || 0,
+          precioMO: parseFloat(b.precioMO) || 0,
           pctMO: parseFloat(b.pctMO) || 0,
           pctGG: parseFloat(b.pctGG) || 0,
           pctUtilidad: parseFloat(b.pctUtilidad) || 0,
@@ -22078,7 +22093,7 @@ ${r.empresa}`;
                 ? void 0
                 : ue.bloqueado)) ||
             !1,
-        };
+        });
         if (
           (i(j !== null ? t.map((xe) => (xe.id === j ? _ : xe)) : [...t, _]),
           _.catalogId && n)
@@ -25246,6 +25261,7 @@ ${r.empresa}`;
                     nombre: B.nombre,
                     unidad: B.unidad,
                     precio: A,
+                    _precioUsuario: !0,
                     fechaActualizacion: new Date().toISOString().split("T")[0],
                     historialPrecios: O,
                   })
@@ -28426,7 +28442,8 @@ ${r.empresa}`;
     var v = s
         .filter((y) => y._activo && y._mat)
         .reduce((y, P) => y + P._mat.precio * (parseFloat(P.cantidad) || 0), 0),
-      x = (v * (parseFloat(p) || 0)) / 100,
+      precioMOBase = parseFloat(i.precioMO) || 0,
+      x = precioMOBase > 0 ? precioMOBase : (v * (parseFloat(p) || 0)) / 100,
       f = ((v + x) * (parseFloat(b) || 0)) / 100,
       I = v + x + f,
       D = (I * (parseFloat(j) || 0)) / 100,
@@ -30531,7 +30548,8 @@ ${r.empresa}`;
     cfg: p,
   }) {
     const [C, b] = V(""),
-      [h, j] = V("Todas");
+      [h, j] = V("Todas"),
+      [apuChoice, setApuChoice] = V({});
     var F = ["Todas", ...new Set(i.map((v) => v.cat))],
       g = i.filter((v) => {
         var x = h === "Todas" || v.cat === h,
@@ -30643,15 +30661,15 @@ ${r.empresa}`;
                 })
               : g.map((v) => {
                   var x = z.has(v.id),
-                    f =
-                      r &&
-                      r.find(
-                        (I) =>
-                          I.catalogId === v.id &&
-                          !I.esSubcontrato &&
-                          I.materiales &&
-                          I.materiales.length > 0,
-                      );
+                    apuLinks = (r || []).filter(
+                      (I) =>
+                        I.catalogId === v.id &&
+                        !I.esSubcontrato &&
+                        ((I.materiales && I.materiales.length > 0) ||
+                          parseFloat(I.precioMO) > 0),
+                    ),
+                    selectedApuId = parseInt(apuChoice[v.id]),
+                    f = apuLinks.find((I) => I.id === selectedApuId) || apuLinks[0];
                   return e.jsxs(
                     "div",
                     {
@@ -30709,7 +30727,7 @@ ${r.empresa}`;
                                           fontWeight: 700,
                                           flexShrink: 0,
                                         },
-                                        children: "APU",
+                                        children: apuLinks.length > 1 ? apuLinks.length + " APUs" : "APU",
                                       }),
                                     x &&
                                       e.jsx("span", {
@@ -30762,6 +30780,24 @@ ${r.empresa}`;
                             }),
                           ],
                         }),
+                        apuLinks.length > 1 &&
+                          e.jsx("select", {
+                            value: f.id,
+                            onClick: (I) => I.stopPropagation(),
+                            onChange: (I) =>
+                              setApuChoice((D) =>
+                                u(d({}, D), { [v.id]: I.target.value }),
+                              ),
+                            style: u(d({}, s.sel), {
+                              width: "100%",
+                              padding: "5px 8px",
+                              fontSize: 10,
+                              marginTop: 7,
+                            }),
+                            children: apuLinks.map((I) =>
+                              e.jsx("option", { value: I.id, children: I.nombre }, I.id),
+                            ),
+                          }),
                         e.jsx("button", {
                           style: u(d({}, s.btn(x ? "b" : "g")), {
                             width: "100%",
@@ -30769,7 +30805,7 @@ ${r.empresa}`;
                             fontSize: 10,
                             marginTop: 7,
                           }),
-                          onClick: () => l(v),
+                          onClick: () => l(v, f),
                           children: x
                             ? "+ Agregar otra vez"
                             : "+ Agregar al presupuesto",
@@ -35874,6 +35910,8 @@ MATERIALES:
               _customMO: pMO,
               _customGG: pGG,
               _customUtil: pUtil,
+              _apuId: k && k.apu ? k.apu.id : re[W]._apuId,
+              _apuNombre: k && k.apu ? k.apu.nombre : re[W]._apuNombre,
               _tipoCosto: "auto",
             })),
             u(d({}, J), { items: re })
@@ -35886,15 +35924,15 @@ MATERIALES:
             ["m²", "m³", "ml", "m2", "m3"].includes(q) &&
             A({ idx: W, unidad: q }));
       },
-      le = (W) => {
+      le = (W, apuElegido) => {
         var T =
-            n &&
-            n.find(
+            apuElegido ||
+            (n || []).find(
               (q) =>
                 q.catalogId === W.id &&
                 !q.esSubcontrato &&
-                q.materiales &&
-                q.materiales.length > 0,
+                ((q.materiales && q.materiales.length > 0) ||
+                  parseFloat(q.precioMO) > 0),
             ),
           L = u(d({}, f()), {
             _cid: String(W.id),
@@ -74125,7 +74163,40 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         if (!H || H.length === 0) return Qi;
         var ae = new Map(H.map((pe) => [pe.id, pe])),
           N = new Set(Qi.map((pe) => pe.id)),
-          de = Qi.map((pe) => (ae.has(pe.id) ? ae.get(pe.id) : pe)),
+          de = Qi.map((pe) => {
+            var guardado = ae.get(pe.id);
+            var nombreGuardado = String((guardado && guardado.nombre) || "")
+              .trim()
+              .toLowerCase()
+              .normalize("NFD")
+              .replace(/[̀-ͯ]/g, "");
+            var nombreCanonico = String(pe.nombre || "")
+              .trim()
+              .toLowerCase()
+              .normalize("NFD")
+              .replace(/[̀-ͯ]/g, "");
+            var mismaIdentidad = nombreGuardado === nombreCanonico;
+            var precioGuardado = Number(guardado && guardado.precio);
+            var precioConfiable =
+              mismaIdentidad &&
+              Number.isFinite(precioGuardado) &&
+              Boolean(guardado._precioUsuario || guardado.fechaActualizacion);
+            var reparado = u(d({}, pe), {
+              precio: precioConfiable ? precioGuardado : pe.precio,
+              uc: mismaIdentidad && guardado.uc ? guardado.uc : pe.uc,
+            });
+            if (guardado.historialPrecios)
+              reparado.historialPrecios = guardado.historialPrecios;
+            if (guardado.fechaActualizacion)
+              reparado.fechaActualizacion = guardado.fechaActualizacion;
+            if (
+              !precioConfiable &&
+              Number.isFinite(precioGuardado) &&
+              precioGuardado !== pe.precio
+            )
+              reparado._precioAnterior = precioGuardado;
+            return reparado;
+          }),
           me = H.filter((pe) => !N.has(pe.id));
         return [...de, ...me];
       }),
