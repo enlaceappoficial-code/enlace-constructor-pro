@@ -12171,9 +12171,10 @@ function LicitForm({licit,budgets,onSave,onCancel,cfg}){
 
   function fetchLicitacion() {
     if (!form.idMP) return alert("Ingresa un Código de Licitación válido");
+    var tk = ((cfg && cfg.apiKeyMP) || "").trim();
+    if (!tk) return alert("Configura tu Ticket API de Mercado Público antes de importar una licitación.");
     setLoading(true);
-    var tk = (cfg && cfg.apiKeyMP) || "79B6AA40-A970-4164-ADEE-47CF3F378CBA";
-    fetch("https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?ticket=" + tk + "&codigo=" + form.idMP)
+    fetch("https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?ticket=" + encodeURIComponent(tk) + "&codigo=" + encodeURIComponent(form.idMP))
       .then(function(r) { return r.json(); })
       .then(function(d) {
         setLoading(false);

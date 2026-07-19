@@ -9796,10 +9796,18 @@ Error generating stack: ` +
       telefono: "",
       email: "",
       web: "",
+      empresaRubro: "",
+      empresaAnioInicio: "",
+      empresaPresentacion: "",
+      empresaPresentacionArchivo: "",
       accentColor: "#f5a020",
       logo: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAA4cklEQVR42u29eZhdVZU2/q699znnTnVrHpNKZahMFRICSUDGSlBsERWHrmjjALQ2fHY7fJ+z7VApmm5b/ITuFkXSTqA4VNk2CNLMSYFAgikIgVRISCo1peb51h3OsPf6/ji3kqBhNKi/38N+nvs895y6de45e+01vevd6wKvj9fH6+P18fp4fbw+Xh+vj9fH6+P18fp4fbw+Xh+vj9fHazPo9Sn4004IAeCTeb3m5mbq7FxFDQ3lhI0bsXHuLxuP+9R2YDu2o3N0lBv27uWWlhbzuqABVFcvK2toaLDzxy/nBYCpqbVVNm9jRUK8qi9nZtrGrFpbW+Vfmhaq1+rC9fX1jpTS3r9/f2runGVxcnxcZQF4L+carcxysyDdthl6TpBnv/Mzi9ect6q8tLRqUWHZgsVFZaXsupn41Fh/1eL6ZV1BJoXJoUk+8NRu37F41672xw4SUR+AAACICA8++KDavn27aWlpmdNOfg2sCv+5TBAB4PWrL14MRxbu2vXrJxsbG1V7e3uw4pR1FwY5vRu2V26xRbBt2ABs28bs7CxsOwGXXVLRpJgZ7E/19h44DKDwb5tv2VS5sP4d8YqqDQxnhRUtVJYTh7AA5vBJLQVEbMCxAEsCMQWwn4bITWeFn31mfKB/x/7ugTu+9vFLHwaQK62trVlQVlsnhG1UNJJ1PZccm9iy45ianATgw7ItpNNpFMeLAQCe52EqPQXLtmBbNrx0uI6IMof3798/C4AvuODtlVoLt7399qmXY4JfMw3IGteRnm0ff851vRyZtOfNVBwum3/8XzRShVEsqT1VYuQ7ufZ2BGdd+IlT3v25H/yLKq+5LFo4v8bXFoZSQC4LBL5hIm2kAgvJEJJgKQNLGUgpIC1CLAJYTkQUROPR6lJsWLRoyYZFp+U+fsGm3uf6e/ru/OG3fvSzh+7+z8cAYNu2bWrTpk36ZGhCLFbkpFLj9ErV5aRrwPz5b5gXjXLyued27gMgALyoIyQhwMZgwYp3Vb/pyk99pWTesg+xUxEfHQZm09oQ2CibRMQhspQhKQSUBUgJkDSwFcFSgJKAZREsJ9QKSzArwawsMo4DUVokRW0hMNU3aLoPdP3iuutu+Oentv18rxAC73nPe+y2thHT2BjeU3t7OwNHzZ9AY6NAe3vw/ACjSTY2jlB391QiHo+KwtKSU0gTT03NPtnZ2Z55yed+DSIpAsArF59fL2N24TPP3N8BNAmgTZ/IPjY2Nqv29pYAAC798l3/p3rlqV90ZU15b7dB1jWBbbOMRCVJAVgWYEkCSUAohm0RhGAoweHflIGSBGkRHIdgyfAzEQewFaAEAA6MExGmMKpUVSkw2T2Y2dOx9xsf/5sLv1FeXl5VVl2XNK4bADay2dRsb++Bw8xMq1atr2Wm0rq6szqz2RI9NPTz6P79+1P19auW5EwQ074sTMQj5cmiyqWOrZCaHPifp5/ueOal/MFrFhGsXPympSTteOdzd+1+oc80Nm9T7S2bgoUr3113/t9+4fvJeRveeLiLMT3lB5GYlLYtSFoGSglI4nBl24CQBCkByzIQElCSYatwxUsloCyGY+fP20DEJtgq1BYlDGI2gYgBsC5NWrKqAHhm59PP3P7j2z7ww5u++hQRgZlBRDDGSCLSv3/vQghorf/gbw0NDVUTExN6aGho9OX4APpjTU1d3alFhYXJYiLBOeRQ6CRJa9ZpT5Rbypo3ne572jNidujg7rFFK9Ys9VKciUazo/PO+RK133xFbt3FX/7rUy++/IZALKncv9cNhCIZiwkSQoAkQdmcn7i8BtiAlASlAMtiCEWhBqhQQEoBKr/qLcmwbIZj5TVAEZQAIhZBCQ0hCYrAUkLPK5Fqqn8w9z+/uOf//NM/XnHTTTftUlddtd4HgLe//cOVK1efsrZm/oJiz5/Njo72dH7jmq8+Nxfibt68WbS1tZn8nJhXkgP9MU6YAaCwkH1jvAwAWACYPfJ9z0hDU5IdR/omE6NZL3S1VsqYlD/vnPdT+81X5DZe9sN/WLj+7TcMDJdiZCCj4wlLSUuAA4KWDEkM1gKGAa0YggEyBCaADKA49Bs897zEx7IHJjAANse/ZzABmglgCWUMWBEJkOoe9P3i8mrnik9ffmMyofquumr9b/7jOz847+zzNn50dCz3Fs1cXF5SgkiUoAMvaGr6YMfBQ/tuJKIfA9CtrSw3byb9lxCGAgAWr3tTYUFgEk899eCR5ztbCTYab7ny583lDe/YcuiQ1Nm0T9G4LYgAYRGkILAApAKUJSAlQUgDy0LoeC06GnZKKzQrtkWwbIaSoQY4DsGWgFIGzpwJEgwpGU7+O5QACNpYSnBZiZR6OoXJgYEbdt7x7S9VLLjwn88//5yPVZaXYHB4CN19I8YYcEEihtKiAllZWQzbttB7+OD2O++64xNf/cKnn2bmE5qrFxviJEY+cy8BgPTYKKX8aXl8VnvllbssNhqbPvLTa0pXvXfLvj0I0lOesGwlgoChNcNoQBsGG8AYgsmfM5qgDWCYws/4DDfH7OaMyWVYZ7JaZ7NaZ1yjsy5rN2eMHxCzEQjNPcMwwxgGa8D3mbO+0QUFliiNQo7ue+7+nb++/U1vXb/i44fHFv17yk9+DEx6dGQoSMYdnldRLAQbmUmnZSqV5tGRMZOemQmW1i/d+DebP7Dzllt++U4i0tu2bXtFVuVk5QF8wuPc0ffU2Mxqawv55773P79a1fDuL+3dPRvonFFWREL7AEkGQCBDAAMkASZACAOQgYGEzhkEgTGWAxMpEKgoEypRIKkgHiZgETt0xABgNJD1GDnf6GwANmCKKEgIIBMYXZSw5LxiyOxw/+5n9z2z5bJLLrodAP7+Czfemiyef2lvV7c3urrSqq2ppOxsFskCB6lUDKlUGtmMS44jKeu6Ymh4RCeSiei5F2z675tu+fnmTZs2tbW2tsrNmzfr10IA9Pz3zeG7pk5CW0NeCJ0EtBmtfZFDTgCgdVfepNpbyD/rbd++ovLUS1v27dF+kNFK2gJGEwSFthoEkAYgGcQCggHPC78yYudMRY0wCxY6al4FBBtGamIgID/dF9XRfbNjE+yRRlFRBFUlRSSMu9IujM4rKiq1ybEwkQGGJjR8A9NQq2RmdGiq96n+q5vO3/BtAB4R4apP/vsXSivqL01PT/jSEnZP7zDqaitgmCAgUFIch+f7cHMuPM+CpRJIJuKSyJhkRQn++pK335z51g9mmpqa7n25QlCvdqWvXLhywb7ulh4AQNuJPtqZlX4NAeCOrVf5q879zDllp77zpsMHSXszGSUjFmkDSACGQ//JhmGMAUiANUN7jKKiADU1Ri9aEpOFhRAT/T39T7V333dw//7f7npg+8Oprp/1AnBPcAPOqZdcVf2OczesWr5qxZl1tVV/tbygaAOUI3p272u7a+uPPvuDn36nh5nF1o4O6+Ebf1lXvWDRFsOsnYhUUjsYGp2B5wVw7NDZx2MOKsoLkU67mJ6ewejYOGYm0hifmhHpbMarqpkXHRgNPkNE9zRv20Yn2wmLtWvPXBItLJRSRoTrqzNiEbVrZGyi0rYiMhFPHAl8XwaBq2ynIDObma7wskF9VIk7du8eNxd/5kdPTqUX1471TRo7HhWGBYgIQhLIUgARpAJICfiuQSJpsHCR5ur5ES4oUSI91H+we/djN7Zdu/lHACaOOXXCL7SRTb93s1IIbZgBIAYgAwDXXLt1LTlc/KVPXrUNAA4cuMs5ciRKmzZtyl3/3du+Vbtwxcd6evsDz/OV7/sIfB9vPH8VFtVWIJN1UZCIYWBoDN+/+U50947CBRkmMhEVoXiiWEpLY2q06wP3/vK6W5uammRbW9tJ1QDOZuWQXSXICxwqjKrOzEww4OZSrvZ9WWDzcJAl6fuukEWFOW/Im/GBzP5n7p14498/clPONNSO9PYHdiSitNZ51yxgWEAEgJCAnwNIuKhvIFRUk7EjCcHBBB3YvuM7P7360i8D05NEBBICXwkCgS1b0NLSwpuJTpDuN4s3vOEeJ5dTC69/8uEDGwFDRLvzsbsiomDZsre6APDF5v+74tQ1qz/kesZUliVlajaHXDaHnCswMDCBuvkVsCwLQpjgmq9/332ud8apXThfFMYKRCweFQIBhJ95SmePfPreX173QFNTq2xrO/k+gPfvfzSF/eHBGy9+99iOHb+amFuNB47/5B4AoBmAB059x3UXq+iaD/fuHwpsSyk2AEQYl8PMxe6MXNogWeLhtDNjcD2j/SAizVTX5MHtP//bB3/2pdvmkh4i4qJksrCFKjQwOvvCt9vCO3Ygu2bNmuwmogAAmpubRdMqKCLy5s9vKPnxP1/yubFUoqJ07Vsunj+vLDk8NMpcmCBBEpIYUhJSsznMpNJcmEzQ9FTGP9g1JCOJcsXawE1PHBE+HvAy47+8s/Xf7gHgMbMgIj13r69ZFJTNpK0XNmHN1MxbcENZWbys5rzvjg8Y1sYVYAfM+ThVEFgEACxkMj7qFjMa1sbQfcjTBcUJGdXPHH7kR//4wb0dd+zc8M4PlnqHe/WaNefRunVvMlOzmdNLSnRBdfUZDwPTiEQiZnLSjUWjyZxtZ+3JyUyBUkrIIDAyJuNNTU2FXV1d/paN2z3a1O7d+k9Xnntmyb4fL5n3zMJ00UU4pAR0kOOIo+B5PpeVOFRUFEE67WFoaATjkymKRSIciUblwtrCJ/fuP/gIefF7up65Y+fk5OT082w6kWm64uPlRDT6moah/mzAL5TtNTZvlC1EQeP7/+vTWp0yf3p8MLCiEWWMARODOfxX1gK+66LhdAvzFkbRsTOraxYWyrjZceA/P/+hi+rL2Ft56jnLZ/btDmzbgVExQY42xVRaDHChbUerg8BlraVRUZWwbZ0lSjjxuEhaliWDIBfEYjE7m9VuZdLO0qb2njv++V3vO2fRvh8WW6ORbN9h34gl5JtlUsQqKBKNIF5QgOGhUXQf7EP7Q49m09lAVldebM+rKtdOLGZv+czlv9rwhlOv7RMEbY49fvPXv1Vz1vq1l1ZX17wXUPVvOGXNhk9/+u8ONjc3ixcrib56DTCZF0jimkX7lo163q3vn4/4qs+O9UwaKaQ0QQCQAEBgIrAx0EGAU892UFQaxc72rKmsLZBl8X09P/rC37+ZvIM9BwcAHDnY//vfUF29bDwej9GuXbtfcpXV1dUt7Ovt6TYM/Obqt1163uKxW2P+IE+OGVNQUWCJXDcKY+NwtQfXyw3/9+33IR6Pl7m+kbuf2R+dV7MQg4NTWLhgVihlQUO9H8C12jCqq6tj3/z3H711xYqFf11cXHJhSWlZidEBIo7CPUJcCODgxo0bXxsB6MxU9sSrf4toJwoWvu+OTwS6LpbNDgaWLRXnYRohNIKAQORi/XlJWFEHHTtdjiQTZkHNQPDgLV/7QG7qyZ48TK1PBADG4zGKRrVzXCbPx8xhM5rz6ck999zjRINJp6cH+NmXL7j8/MVTNznZfnPo3jSGn/TEwneVoOqcfpTYg+ibHcKXv/azASlE/aXvfaucTc3ilFMaAJLo6x9Cw8r5wg8AJ55Y/ZGPfq11dDo3dtkHL7qw8ezT6yMRC7lsDqnpqSAWj5pHdx5WT3eOuACwffv218YE7du3r+dEYW371SKoqn9LuRVd+Hdjw2OsFEtjGJQHKXQgQNLF6eclIWwHnXtcaCPNyuW+6tr1688feOTHv73yypusrVuv8l8oGPA8HQBZ5JHHOdQxbw9a0NICbNvWrK5u2ZFlYP+2/3j3Z88sG74W00d4+LkMKjbYVLkhjr4nApSOTyJe3APLm+HMrHfawPAgBoZGcfYZp+BAdy8eeqgDUcvG0NAEFi6KQhumi976lqZnDw+jZl4d3Fxa57IEZiNisYjq6h0y97XvFoJoOBTAnwYLmsP3JZixYO3l7w9MbZGbSWsCKAQCDNgQApPDmnMLYMeiONDpwfOkXlAXld7oYw/d95//cH3zNlZbt14VvFgimEjoNICZP4RBmLZt26YEETZtagk2nNGcfOKHV/2gsXbkWkz366leH8WLohQps+FUGJQvsTHTH0DMdqAyNk4bTlsSxBJx89SeZ71n9x3EKSuWYNnyJegfHMThngEIEmCWqKst1ItqkoEFbXQAyWRkLBKhdDrLv/r1o5TOZbKDwz17AKB9+xZ9MgRAITLDBDQLAFRZuSa+bt0663ggbiM2GgCQscWXTU2lmaAFGwMwgwzB9XJYti6OWCKO557JAYFixwaVlx4x+x669fNEwu/8Thu/FJTb2dnpHTx48Gj229zcLEIQjHjTpk2BYZZtP/zF3/3y6pJdp5U+d0X2SK9OZ0gWNZSQqioAawP2gEhVgGxWgCcGkMz9DuesW6T8XCB6jwyrZHFBtrQ4yrnZGZCKYGQ8hdlUBiBGLBqTFWXFyg+M8AONmO3A931cf8MvzfgMw3j+Y/fefmNfM7PAS4SiL1cAfDRgR4sBwI4zlezo6MBx6s8tLWSWnPfZ0xklq3PTkxDEwugQr3dzHhYsj6GsugSH9mXguQq+r/X8RVGhJztvf+L+7+346oMPqJebwADNorWVJTNTS0uL2bRpU1BXV1f0y18+fOX+HU88/p61Q1tr1W1LdW5QO/XzZVHDQlgVxaDCclDEAQiwowZRi+BN58ATT6I2PoNFi5aCSVDbbe1+YWERvfGNZ2N4oBc7d+3G4OgUoo4N3w8QjdmYmJhCxHGQTnvmS//yIxzqn2XHkjQ22H89AHRubqM/Ogy98MIL445TVSplOWsdkO+7wrLY9A0On15evWEwEUkMW1bGDE9pNbnrV4OlVWe/xbhJafyZQAtbQWgELqG4xsGCFWXoP5RDJiXDSpdRoqRozAw8sutrYKbOzW0vlbhQU1OraGptwmYivXlzCwDgqqu+0bC28ZwPr11R89cNZWZBYvinmN75I+2PpCmbUZKlh5rzq8CRIhAkRLIIzGMgzVBxhmuiiGT7UFu0DytWLsG99/XR1Mho8sc/+TWfdtoqajx7HZ47PIx0Og1AwAs8FBYlIKXAoa4+/5s3/NxMZaVcUl+vhge67vnFj1vubG5m0dJCfzwU4TgOC2EFzC6EAIi0EMIYIp5VsLJSsm8MEBVR8zRg6mTV+VMzGQBMYEYQADKisfTUCowNEqbGGcoScHNGVy2wJTLdHXff+o+/4598kejEq5+am5tp1aot9N73Ct3Wtlm3ERCPn1J52RevuXjhkmWX1VWVnLWwPGFZRx5F1723avvQ/aTIl9EIEK10MHUki94HhrD4nYXwjA2RrADYwKTG4DgefItg/ACFuSfw1rPOx9DAYqRnRrMXvrmRGlYuiaxeuwrTUxmUlSTheTlIS0JJie7DhzNfu/5ndrS4TC6oq1VT40cODw88+cHm5mYBbDk59YA777wzMwdmPS8WL16sBie7ho9HIivXXBj3OHKal54FCSIGQ3selp5WC1c7GD2SAcgCAzBacEWVwfSRrjYQYcuW7XKOvXZ0pTc14b3vkzpksLUAQOyvLv/OeYvWnHppxfz5by2uXFCms0BXz2GM7nwwqJp+RNaaXlm1shBlNS60EhDSRvmGQvQ8NI2ZvlHE6+rAKAQVEqA1xOJSxHJj0Okx2Nl+1CQ6cPkVmxGzdJSkwPDoNALfRyyqkHNzgLAhOKxTazYiYGnmz6uzOTdxuP/gzr/a+dCvRt945osnX68mDKXfj8UTZTWqvrTMOXjwca+xsVm2t7fouiVvqdfaLvP9LCslhJd1UVKTRLKyBL2HMwg0QyiNwBCsCKmIHNLPHnr0NjBTZ+coNzW1SjQ1oW1upYcwt2h8x9dPL1xc/8malaeclShcuETbNrpGDTJdaV1EM6ix0mJeskhVly7GvKiPpCOQ1dOYHvNQUKIRzWRRVh/F1CAjXicBUiCrBFSchAMPOnMEgiSkzKFC78Rg8DYY6cCShFjUhkuApw0kETIZHxHHwsR4CosXL7SXLl8q4KUfGTqy7292PvSrvpfKfF+tAP6g4qWU1saovAPeCKCFScw/AyYqjEkHWpNSUmD+qhqMjfvIpQxIhgGT72lTMz8uLDPas+vx3T15Cog+rraQXP+Oa8+omL/4nUWLTjnXipedqiKlGJoEJrtd43ouRyIkygshkwkbCSuCqIogYiUQGBujI4yymjgipTFMdQ0BVQ7iSQ8FwoVBMiSBZQ7BmR2EPz0Fk9bIzlpwu7MYxBj2JjqQ5gIUlBQj4ig4EQsRRyGZcBCLRTkajVAsaumSohJZV2Xf++9f+/jbAXhNTU2ypaXlFdWEX3Uilk770rYFAcDs8gJCO8BW1SpvVkAYAzcwWNBQAVIJTI9kQgiCCWwIJmBTWQ0Rj/Pd6GnPEREixatqG8768FmFtWvfHktWv8kpm18lrQQmp4Dxbhc5L6uVLSgStYTtAFbEQEgLmjSYLGgZgR8thTtbiIKi+fAmn4FhD8Xz43CsNPyMgb30HJAJQF3tSA9OYeIA0N+lMTAMTHg2Ju1C7i+q4AOR3Zz2JbQUVFJSSK4bkOvnAEMoK09SIuGgpLiQG88+DSWFkQcAeM2trXbL5s3eK53HVyMABgDfPzLU27vMA4C3Va/THQBIOisC14M2GlZUorS2HBNjPgJXg4hCiogwAEPEExpPPvr0GQ1v+cm/FVXWnS+d0mUqNi9uZBwj0wbugGcCkzKkpLCjUjiOksoWEIIBFoARAAdgQ3DZhosYstpBSawCKddHNDaKInUE7E3CzxXAXnIxpDeKkfvvQc9jaR4Zt3jCJZ5SSU7FS2i2qlSkC2poyllEccQQkQq5XBbFRTEEhtDVP6RdL+1nujOz8+fXRJ49sM/+7Y79OHfDwnoANHj/JJ8YHW4SDQ17ZWdnp38ii/KqNWBwcDADDAIAtmwBt7RAQouaIHDh+4GoXVoGFjFkpjMwzJAU3hsbQCkICymMT65cz9F569OzAtmxAIE/rUnNsuXYUjq2sGwppC1ACDVHa4AEg4QBMxAYAc9IZIwNT0SR8W3MqiQq41OwjEB2ygMSq5BYth66rwPPtD7CXXulno0UKa6OkxuvRlqUYtLEMK0jmPDtXMZ3h2dz6T438HJOJFr3zFB/VUFhsiASTchMKi0PH9httB4/9O73bK6TsWJZ4qRXA+Ct//m/TgidrFvXJSYnUQWg97ViRcwVHiKsRXngeVA2qGReJWanNXTOB0HBsAFBwGjAcgAlDSaOzBg/cI1lR4RUERKRmLSVBRIAs4ExAtAGAgQyDMqbMDaMQBM8TcgEAra0MeFHUBErgC+LMTXTD99LoqjuEiRLi3Dk4V9jz22dwVSuVIllVWrSSvCEKezOmMjusZx5csaYvZPp2f6hoYmhzs47h47bvyDrGt5azqmSSlFAC6Mivnpx/apTcn5uTf+RoeTSlRXY+8z+XQ0Nbyix7USpMW6QgwuHbWL209mstnM5VMXjxWVLV69Xtl1AQZDR0k8NdHZ2eieVnt7Y2Kg9Fdd+dhrJigRkJIH0eAaaDSBMOHkEaGNQEGEYduG7rrAiCUFKAoJg2CBgAxkyUWAMgzTDgCGIwdrA5FERIRl+wMi4DAlgWtroD+KY9YC65CJUNCyDP7ILD/zkh+ZgZ0ZEa09Rs8WV/bNUvLXHx+03PnpkPw62uSfMsfNxfMvVQvd03jUEYAjAUwBun/tMRTk2edmhwp/c+NU7Fy48bZ5nvOVKKeYAEHEC+9aYHaMClnaFbUWTbISIRhOUy5EWiEzlhUwnQQCh6csUnxIXxLHAeCiuroaXEwhyfh6vFEeto9Ehh1MHAQLPQDkapBkMBhkDaA0WGtACLAgsCBAAM4cOPI88aR/wPUIWEoYZOsOguIUlq5YiEcngkft/wQcfuFsbp1bRyhpOF8Wu26eq/uX717ccLei3NjXJvSMN1FnRyQDQ1tbAQEt+T1nLsfC7uZkat0NEoxPyoosuwic/+Vb30bt+sO3R/HW6u5/sAXAidBhr164tz6a9RZ2dOx4/0eSdBAFsIQA83j1RUrzELbQsQrSoCNm0gfE0wOEECRCQn0SlBHQQoqPEAIwJafiCQ65nYMDQoSkSAjwH90mAETLcQIDvCbgZg6z0sXKthdPr56G38yB+c889emZkXFbXvVPFi2XHDJtPf+Nb/9QezmWjAjaalpYW3vzSrAVubm4W2LhRXHPNmwKtdXD33d9CNFpb883v3fBBFvHTW7/7T+/fuHGjaWnpPOaAmwC0tQFo5lTql5EgIImmJtk4MkLtFRWMkMjLJ9UExaviWWZ2I7F4VNoxeJNuWLIjBpkALCQEi5AEZADtaxijARgY1iAGhJEwQUiJIzAMUV55NBgKGgaQAkISPB/IZXKom2/whjMcyIzB1u/s5f1PD+ia8lPU/Kr57pBMXf/bA2bLwbs/6TY3N6uWlhbd0tIeAO0v6ddaW1tFU1MTE5FBPrG69KqWc87bdP7fVi+cf8nSU+pLf9sxuau9vT3YuH27wPG4T9tcwtrCQdDgKxV4aGvT7SfYqHIyNICBFqy4cOX4oUftSSdpRw0rBH46XNlSgsHh6mcGM4Xkq/zWJGM0ICTIAKwDsPQR4qcGyFNQwCrk67MAAkbG1Sgs8bHujAhKioBH/mcQv3toTAeGZXXJPGXoyMNTU+Mfb/3Np58CgHyCFLycp2lllu8VQs+x2lae9ta6933w/e+vX7XqnYU18zbEKsuQyQLPjiCYyvghRLPlhcP1XE6lHCc7+UKM6ZMggFDz9t98s1BLzpNOogiBb6C9AMShI2UKw0fOF7GDwEApFVYZWAMmgCEBQRJGCxDzXHwFIgIMg1nBuAGIDBavcrBwcRS9eydx+2PDJj2pOVkclUkxNqGyz16zY9un/g0ANzc2q5b2Fv1yCFLH0V40gMQ1132vcdGKFR8qqFrw1sLq2sR0AEzNgCdHfB2LEMbTStnCE0cF0HLia0YiZBnLppORiNELQxSEPXv2BOuXZGadaLKSA8McBBRuV2AQhbF8CM8BrotwM92cUMgHQwAkIPyQGwoGQk/A4CAA54CiijiWrIzDz+Zw70+7eXzA1ZGYpUpKU3CwtzUW3P25J3f8tAfM1Lxli8jDAi+Hp0/5yTff/MFtV5922qmXobBqgetEMDhh0NuvtRSGbIuELYWa9QI9MaOQGxuh4+e/sbFRzc7OUkdHhz+HmWntC1vCPynErBdeOIaIyCVljdmxxBJf+2yMAXNeBkdrNqFt97IG0nJg2YDWAYQUoc0PApDKl3jZgE0AnfNgJWKoWlSKRAx4esdhHj40Y5StZHGRVjZ3PRVMP/Wv+/dc8/MwHG5W7URByyvY8diaJ1N9ouWHn9v0rku+sqcPGB8ITEA+WxIioiBBAoEm2DZhcNiwkEA8hoHjr+O6blIIQQDG5+arv79z4jgq5aszQfPnz49asaKl8AHLiiOggNkzpPXsrOtGh9df1eEB8F0vNV0UJeSmvDz3J9xrxZijPwsIAbhZBgmFSFRgZiaAEBaYDSCC8GNgBIEPCIniqmoUlBRium8AB3oHNWuWiWShFH7/hErv+Yba/ZXrDgBeUxPLtrYtPLfhL6SknFrU0/PUNACxbt0654T1jnmnyrbNlHnT33z+3Asuuejrjx2ENzadU7GoEookhNFhBo4wIJhJGwwMMFY0AKl+v68e9c4HPvEJ521ve1swM6MqjZLW2952WjaVmhQFBVkzOAj4fi9ZlsXDw8Pc39+fe8VQRH9/f66xcUlnO4BG5GOIdgB40gDg+fnr2MR7hcCbWTPnuYdhXSbvhMEhI87LMYyWSJZEMDnuwrIENAsIDuBrBvk+rIIiFBYVw89NoWvXU8b3BNvxQulEx90YDn3HTP/gm889t+MIQEDTL2Rb2/OqTwSAZcTUAk2pysr9kUwmWOg4DjMz2bYN8om1FNJxj5jb7l+ofnjv390yoyrNkSM5lYjZwvPCTX2GwgRSgAFB6O72EE0IKAJys9NHxoszFX37DiWiUgqPsV5oSvr+qEqnJ5dqbXULEcwSOchkPMRVPADw3KvBgrg9vz/2RAHcHBin/bFnTN7qMuuQZs5hFhwSsgyIBQJtkElLlFZHcKhzBiALQEjUshwHseJKEAUY7d3LudSoEU5SRmMMS/fdY/sHvrh/z3VPHjU37S0af1hJYwDo2v/008DTGB5GengYe/+gIC4ljNa44TdP3R2tXLLo4adcXRBXMpcDhAp342giGMNwIgKDIz4yGYPqElv4WYYTx77JyYG+hx8cAhuDU8+8JO1mhkseffrhJwA88WrQUNnQ0CABoLy83IyOjgoAtsgWxNPHgGgQCc5mLVNcnM1NTkbN1jvfjoaGhmBsYM+e5KIJBiwJ/r39anzMjwsCxkeBytokjO6FMQ40E2IFpbCiUWSnu5GeGAogSUWitiQzeEDN9n6l98C1rWFYybKtDaa9nYKXMJ0l/f39k88nboUIJXMrEVHwle/f+7OahjV/df8OL4hFlHI9hHuPQeHiIQYpQjpr0NenUVsrEXgW+Txlhp7b2wuATv/IR1TH1q2BpXNOIFUk/K5GCbTrl/KlxwtA1NXVlc/kTJkNpq6umXEirygSiRdbMVkV04rBTIEGWMggkQgCY4omkkn4ubG+IBeROv3sT4fMuo8OSqu2BgaGBAvmY7s2iQWYGJYlMDToYf1Z5bAjEkI6KIwm4QUpTPTu1Rx4UjoJJTEzIs3Br3Pnv363D8igmQVatuD3zM0LRWxM8XjkD4lbzUKpf9ZEhE996zffXXPehe974BE/gFDK9wxIhn7KGMBSAhABiIBDXQGSSYJFggMCed7syMO333o43IBSrcNgRGdt0nmBtxu8wm2qpqenZw54mhsDLz9IlQBrBO74HrtoUU24Le44kTOHxFxtIKTC2JAPYcVRs7AIE0MaUxN7je+moayotOy0Vmbou1F/59VdXfeNzNl5tLzsHYgMAH379z/v/puaWuV//ep9OghM5AtbH7zu9E2brrp/R+B7nrQc20dOK0gVhstahvvMrKjAoS4NoxllxTbSWW0SRZDpwYmujo6OTJ6OzmEUlHJ9XwYvETW+KC/oRD17REjGOv6F418EgNb93U4LAKVnuh4VDBBJpnBZHIUfwGE0ARj4OcbooI1la4owMvg0G+2KqC2FCroeEO6uswf3X/Oxrq77RtDYrAAmvGy+0AlzF2rexqqtbbM22sz7/Lf/p331eZs+es92N5hJhSyBXE7B8wmex/A9wPMYhjR6D2vMTGksqLORzTE8LVkRkJ2Y/m2eenh0Dj1vUvv+bPBKblC9jFifXzDNO250bL1DA+DJA/dtLyg/n6WyhA68vPLnmblztHQDWLbEob05vGHTEi5K7iTSo4ct7/Dnjhy+5Zfhcm2VaNts0N4S4NUPDlf93+iWTRSc+uaPb7r0w5ffXLr09Npf/08u8MlSUUXIZgEh8lGPCHOVSIxwpBeYmgywZq1CNhvmNYYhTDaHiZHuuwHgO6PHmHwHDhwYfxl506veI/ZyU3k64wO7nvX00qW5iTFjSAowgUmGCkMCTARlKeTSrnlTUyX1/O4n++/73mXrQMiAOc+peR6z4ES7z3//3POOm5pa5RyBC4Dzt9f8/B83NJ73jyOpGvXIzpx2IkoqBYBFnu8Utr0RgmFFGNNTQGrCxbozLLiegBcISBWwZdsUzR4evO8zTfUdQ09kwPxHtWU7qeTcjVvCTY8m2//fUccBE5kQbmaQ4aPaQMxgo6Esm/bumuVVF7y9orrhg6eDgaYmUFPTKvq9xXE8X1Sc4NzR48bmbUpIiba2zXozkT7tTZ9941du2fn4+jc3ffWRJ8rVgw+6Rgpbak/Aywh4PsP1AdcHci5Da8JwP2F0MIdT11nwPEZq1oA1w8uxidjg6ZGBbR2DHZlWYyT+yB5D6uVqyLp169R0ebk4ePfdL1j5b2/ZYgBgoufBH5etPO1TgqSc6+XAbMJolCQEMaAJlgUa6s3wyHB5yZIzmtpm+4LPt7XRLccqUyy+++M3l7nTw2dKoYsg+IgjpTCGkkRWhIVWUsneSMT2AoO6manxyfaWTY8BmF506vs/cPHll727evkp75qYrUbrL7I60EpE4kr4bjhrggAKCJAhWKgEMDQEsEnjDefa8D2B8SnAsQV8X4NhEedcGu87cEtYwGk7SVDmyxgLl69eHpNR2dn5eOeLUmZDTqRZ/9ftD2lafd7sxLgGkQQkmEITRCRBUkIQYKDgRD1ee14xPdp2L7ypnp3FVda1Izv+78NDswdHX8Gz2MUVFy2/YPPmTQuWLb2sZtnS01NeBXbuyPLoMHGswBJE+YRAEIgQ7lmgsOMKWGByxENhURYbzo5iJgVMTkpIO1QuIjYFcUs47jPd37ryogbmvhyFRIPXRgPq6uoiUkbrY7GoKCgoMz6iZ/ieX3bmmRdHg8B4vh/k6SkBW1aKJiamJ/v7nzuyfft2AcCkx5++oXh+w3mpuRSIQycWGpAwMmIiKGWQnZV0eH+aN7z9DeaBn/CZs+nkfyVP/9ZUkqb3RSLyQc4MdHv2xEGDSC8H5EmwYs6UR2xaUb2ovrqguOi8upVLayKRyOpo4QJrZJRwzwOuHhrMQNmWtKOCPDdfHKJjk89EEIoRpIGZiRSWLGOsWRdD3xGD6RmFSIRggpBSE7AwsRjE6MH9PwT6s1dt7bAABE1NTfLxxx+3enp6vBcPZF65BlB9fb3t+/No5coop9PREiCIxOMLB/bt20OWFX3eRQsLR80cDNvczNTSQnTWe3+3ZyZTu9KfmTZGSHm8BkBICCFAgiCUgOtqrFgfg8UT5qGfP4pIslTEi8oQTRTBdggqAthRDhJxW1sOCStiWZFEDBEnCsMCs7Ma4+MexkcCncuAVMwWjk1h+YlEftI5DIPnhCAMMjMMmCzWnSNRU+vgwHMGWdeB7YQ+SxIDHLAVc1Bidacf3/qpZR1P3DZ4LMsBamuXrOrrO7T3ZPsADjdBHERPD7BgwYJcLBbDww/f4b5UMLR9e0i0TY3u/I941ZLvTkxzuE+BTVjZEiGzgfO9f1gDlkM48EQWq86qEOdfeh4e+dUunhoeMNnpUdZGwrLiQkVjSjkRJaUFUMCaPM0mBW0MkVSkbJssR0onIgBm+LkQQCMyYWGHOFxxZBBohpv2UDXPx+nnxOH6CrufNGC2IG0Dz0XeRAKBFrqsEiq1f/f3Ozr+e7Cx6e8TPXsenhdxEpZtxyw24ux4PE7MTDlmX/iYtG1L5nImw2yovNyezS/OPyoMlY2NjdR+rGndSxU4QETRde9++Llsblm1lx5jkC0Y4cqHUOB8yVHIkJYihETAHpafHkNRgY/Hbn8SU6MuIgUxSEEAbBYyApI2SEmSlgMhFUhIkAyvCRIh91Pki0AizBVDQhdBBwK5rIdEQYDV6yVq6qLo7WEMDRJsW4VFIwqrcQIAc8BOzOayaFf2oa0fXXnwmXv6a2rWR+Nxb40VTcSjkbiSKnZabnbwd0HAFEB7wohJrX2lFdKccykWk0c6Oztn/9iCjG5vb39R7OX4WHzzZkgAGXf6qc9Fq5f+xJ0WBpYBswiR6Xx9gI4D6wxrWMrBs7syWLgihguuOAf7HzmIfTsHwXAQKxAkZJ6mAkAbDQMBYRhkFCB1mGoYDjuuCIIw4W25OQHPyyIa01i7wUH9KTFMTgh0PM7wPRUWh0K3FmolGCQEtAtdPR9qorPj3w7tvbdvyxaowcGODIAdcw+/YsWZ5tlnf/fAaxoFvZoRopak177zgYcCs/rc2fERI5QtiVSYmJGAUBJCCsx5RikFhBTwfYOiSonVZ8bBbgrPPHIYRw5lEXgOLCcCFVEQlgUpLAhBYbMJoUIOKhEMSwQ+IwgCSItQXM5YstLCgqVReDkLBw/4mJpQkI4KtcOE2frRCp4AjM+msMSipNgz+Isvv3dNM++bbMl3+wvzkSZqaID0vK7agwcXd+cpEXwC5/uCTli+AkEJAFRdvS66fHkNBgcH51Y81dfXJxctWmSi0WhBPF4dn5kZzQJA56pOgX37GIHoKlmw/opc1jLMRswh02EUFxbej4JP+f6h0hJwMwL93R6kY2HVGdVYeloJEkWACTx4bgAvZ+DlfPiuhuczPM9H4PlgDmA7PiqqGCtXC6w9J4qla2KQykb3IcZz+wXcrAVlCUADHOT7yRkRdukyYfKofTY183wx1nX/B7p2fW83sFH2tN9sji3cTh4d7dQTE4OTQCeATn6R+aMTLfhXrAFLliypdV13rL+/P3t8yXLJkiX+008fiSUSnuzt7Z38Ay14881fl8WXfG64t1fbtiMZoa0WQgHSyoeHBJJhGxsSAqQEhCUQ+GGT1qoFArVLHBQU+6AgALwcjK+RywEMCSUFlMOw4wpWREFIidSMxOARYGTIwM0KSELY3TXfnyhcnpy3gpSP+QluVgfz621FY+233XH9xnfN9bo72ePlCEBu2PDGosk0V1qKHEvaywLCaDQqDwovm56eDiiVms3k7eIJv6OpiUVbG8l1Tb/tyGTqT8mOj2jhRGToHBVIWflQ8ZgAQBQKQEkIaUGIuaomwYkKJIoIhUWMeEG+sZ8KGRa+Z5DOSMxMA24G8DwJCEBZHHbmCkJW9ZzfCaPJfP+K/PoNvIBjSYcrCp/1n7r1s8svO/ybvu/XrioyiTglARQUJAEUhBi+CShH09EY2RnAsZJJ289kSOYopUqi1e7MTApACinMAKkUgiDwDx48OPNKnDAZY4qSiURSOpYNjXlRRb6lrKK09mzYGWVZvgvg8AuAZtyGNoDIG+/6749ULPuHHZlUhKE1s1AU0hUNwCavEcetCZPvokUBGBLSElAKYBZITRJSUwCTAMNAiFCDhAhjfiHDIrrtMIwBTMDQHNLatTEhJRIMw8hTJEPInJmgmXVNta+ee/i2f+juvqunc3ObDIJMQdx3LOE4CAIJx8lrg6OFyFqJQMmZCAkVBFYQiUBqPyYDmfNkTMN1AwhXwvUFPE9mcGyT+Ss3QcuXL1+YTqeHjzdBL489vU21t28KVr/xxi2J2g829+07FFi2UiTsMHwEhRCBUsdMkAghC5J5c6UEhJAgCUhFkErkG/vhmNYcL3mT15q5bolz7Lx8Y0Awh2UKw2EJjCS8nBfUry5Qmb67vr/t+xd/pKmVZdtm0q9VoPIKnHCTbG5uoqeeOqSUKuKJiY/4QDu9XCH29NzMTa0st127ob1i8elvLqjYUJcaGtHStgV4LkNFPhoKt4QfA2zy7Lp8OSdEgMM5NHOTbMIK1tyxMWGCx/kWmKzDfnTHzpn8MePoZvLZnK5ZUqgieu/D99xwblNTK1PbZjIvUqw6vlXncUhtswA2Up7C8AI/TPEnCENPANUJ5i1MBUvLznlP2+9mZ+bXjfcf0VY8IYkNiAT4qEMWgAh9AChsYyylBKTMJ28hhAEOTc3xpivMukW46vMFoGOrPzRJc1LTHGqPn3VN+bwCUVY63Lf7N18+q2/3zQNEW+j36hJ/Ng14WVrS0NBgL1iwQBQXF6vy8nI59350tIGAHgbauaWzU2L3I7Psjz9auXLD+zWV2e7UNAsr9AfHJvH56yVP7/q9kkyeqg4+ttKNyTdoRb7pKx/txhiueBOeNxo6z872sj7HiyJcXZMKhvb96sL92//1QGfnKtnZ+bHX/Ldn5MmKpCorK+OBKFiantFlKTcoC9gqS8/oMpdFWcxJOQUFljc7O+ujs5MbG5vV07u+00cUPFu36tz3uLk4e+kZkpYi4rxDnJv5sN3K0fAwPOLnpTp8XERjjra/zO+oMQbGcF4YBsbo0OQYDYJBkNUcKZSmfinJ3id+fvmTd3zsnsbGbequu96m/xQ24c/2gzbrrtxldWxd7zc0fvOK+es+/IPDnTOBNzMllRPLt7eZMzeUd9Ai75CPOWmhZIgnzcHLeSrkXASljQ7ZqPlIay7UNGwgAASuYSep9KrTEqp/962ferztw9c3NrNqb6HgTzUP8jUQKL2U4wGAwY6tZt2VN1l7fvXxjlhBaW7Zaee8eSoltDubJstSZPLsxnBy875N0NF84dhV873+wWA9F88zjNZHTQ8bA5hQA0IVYfg5nyNJGaw+s8g68mTblp1tl//ruit3WY9dNy/4Uy5EiT/jGOy40zQ2s3r8B+c8XFBem16+4Yy3pLMwmaksKUeF6L0AKJ81U14AR0PWufaXYa0z9ANHHW2+6JOffOh8rkEEP+NyoiSm15xZZPU98dNv7mj90Jcam1k9dt08/aeegz+rAACgp73FNDazeuy7Z/y2oLAu1XDO+rf4OmqmR1JkxyQR5U2OlCBJedg5TNhIhhmtEKEN4jlOMDjsSQpzjBiMEB11szkum58wqzYkVPfvWq/Z2XrZF//UZucvSgBzQmhuZnXrTRseceLFR5ZtWH2JEy/HyGDGRKKWIEn5kFRAyJC9JhTyx3Q06yXBeZN1jI3Ief9AEnAzxixcVUKLlweiu6Ptk4+3Xv6vf87J/7M64RNmy/nflFl1/uffvu6Sy37l8nL11CPjgVRCCUkwEhCk8nlAiEBzft8b5/cVs2HoACGnXxuAGEHA0LlccMo5FaowPuDu+vUPrnx2W8stf+7J/4sTAADMpf7FdU1nveezW75XUN7Q8NCD49rPWMJJSGIGSCiEORmDIUBkYExYUNE6nHAThFqQy3rsKKPP2FSqePrZ3vaffvvSro4bHvlLmPy/SAGEmtCs2sNdjUUfufbB79dvaHz3rsddHOpiXVRkSSFD46nUXE3NQLOB5xECP8Tyg4AwPe2aefMEbTgzQaNdT9z2vf/97o8CPUNzmvaX8KzyL1EAPe3tpqmpST777LPZjnt/1FpVUT9z4YU15yxcUhLpGggCaQsqKRSUiAPRKCEaZdgOwbIEnCjBMwTNJnjjBTG5atm0eW7nti/f/MWNHyOamW1qapV3fedt+i/lWf/Sf9+XWpnFZiJ90aVfXn3ZJz/07eKqpec9uMND74gx5SWOUCKkXQdaIO0yRid9vaCExPlnOzTQt//p1u/+4h8e/a/mh0Ma+Ra81tjO/y9Hc/PRH8ZRN965/UtPHBnN3NvNfO09rvmPbQHf+EjA194bcMsdLt93iHn7oWF99fd+cz2AKAA0v8If1nl9nFAIzWIO8fzYP21d9NuOJ+7umc6anUOBfqDX54d7c+bQyLS/r6fnliu+eGMDEP7aXVNTq3x99k7SqF7csGDtuRc0JMvLl1TUNdx89fXf5pGZaT3r+zw8MaY/veVrwbzFDZ9fvnz5wuVnNi78/4CJxf8DZHrcN02KpVYAAAAASUVORK5CYII=",
       logoPDF: "",
       firma: "",
+      firmaNombre: "",
+      firmaRut: "",
+      firmaCargo: "",
+      firmaImg: "",
       logoCliente: "",
       logoPDFCliente: "",
       onboardingDone: !1,
@@ -16376,6 +16384,17 @@ Error generating stack: ` +
         decimales: 2,
       },
       {
+        pais: "Brasil",
+        codigo: "BR",
+        moneda: "Real Brasileño",
+        currency: "BRL",
+        simbolo: "R$",
+        locale: "pt-BR",
+        impuesto: 0,
+        nombreImp: "Impuesto",
+        decimales: 2,
+      },
+      {
         pais: "Personalizado",
         codigo: "XX",
         moneda: "Personalizado",
@@ -17434,6 +17453,27 @@ Error generating stack: ` +
         ".pdf",
     );
   }
+  function EcpCompanyProfileForClientLetter(r) {
+    var escapeProfile = (value) => String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+    var profile = String((r && r.empresaPresentacion) || "").trim();
+    if (!profile) {
+      var company = (r && r.empresa) || "Nuestra empresa";
+      var industry = String((r && r.empresaRubro) || "servicios, construcción y mantenimiento").trim();
+      var startYear = parseInt(r && r.empresaAnioInicio, 10);
+      var currentYear = new Date().getFullYear();
+      profile = company + " desarrolla trabajos en el ámbito de " + industry + ".";
+      if (startYear > 1900 && startYear <= currentYear) {
+        profile += " Inició sus actividades en " + startYear + " y cuenta con " + (currentYear - startYear) + " años de trayectoria.";
+      }
+      profile += " Para cada propuesta organiza el alcance, los costos, los plazos y los recursos necesarios antes de iniciar los trabajos.";
+    }
+    return escapeProfile(profile).replace(/\r?\n/g, "<br/>");
+  }
   function Ef(t, i, r) {
     const { total: n, anticipo: l } = Ee(t.items, r, t.descuento, t.modoCosteo);
     var o = (r && r.accentColor) || "#f5a020",
@@ -17443,6 +17483,7 @@ Error generating stack: ` +
       C = (r && r.firmaNombre) || s,
       b = (r && r.firmaCargo) || "Representante Legal",
       h = (t && t.plazoEjecucion) || (r && r.plazoEjecucion) || 30,
+      companyProfile = EcpCompanyProfileForClientLetter(r),
       j = new Date().toLocaleDateString("es-CL", {
         day: "numeric",
         month: "long",
@@ -17481,9 +17522,11 @@ Error generating stack: ` +
         s +
         "</strong> tiene el agrado de presentar su propuesta técnica y económica para la ejecución de los trabajos correspondientes a <strong>" +
         (t.descripcion || "los trabajos solicitados") +
-        '</strong>.</p><p style="margin-bottom:10px">Contamos con amplia experiencia en proyectos de construcción y remodelación en la Región de Coquimbo, con un equipo de profesionales y maestros especializados comprometidos con la calidad, los plazos y la seguridad en cada obra que ejecutamos.</p><p style="margin-bottom:14px">Nuestra propuesta ha sido elaborada considerando materiales de primera calidad, mano de obra certificada y un plazo de ejecución de <strong>' +
+        '</strong>.</p><div style="margin-bottom:10px">' +
+        companyProfile +
+        '</div><p style="margin-bottom:14px">Esta propuesta fue preparada a partir del alcance y los ítems registrados en el presupuesto, considerando un plazo estimado de <strong>' +
         h +
-        ' días hábiles</strong> desde la recepción del anticipo correspondiente.</p><div style="background:#f0f4f8;border-left:4px solid ' +
+        ' días hábiles</strong>. Los materiales, condiciones de ejecución y forma de pago aplicables son los detallados en la propuesta adjunta.</p><div style="background:#f0f4f8;border-left:4px solid ' +
         o +
         ';padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:14px;page-break-inside:avoid"><div style="font-family:Arial,sans-serif;font-size:11px;color:#666;margin-bottom:10px;text-transform:uppercase;font-weight:bold;letter-spacing:.08em">Resumen de la Propuesta</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-family:Arial,sans-serif"><div><div style="font-size:11px;color:#888;margin-bottom:3px">Proyecto:</div><strong style="color:#1a3060;font-size:13px">' +
         (t.descripcion || "") +
@@ -17524,6 +17567,7 @@ Error generating stack: ` +
       C = (r && r.firmaNombre) || s,
       b = (r && r.firmaCargo) || "Representante Legal",
       h = (t && t.plazoEjecucion) || (r && r.plazoEjecucion) || 30,
+      companyProfile = EcpCompanyProfileForClientLetter(r),
       j = new Date().toLocaleDateString("es-CL", {
         day: "numeric",
         month: "long",
@@ -17562,9 +17606,11 @@ Error generating stack: ` +
         s +
         "</strong> tiene el agrado de presentar su propuesta técnica y económica para la ejecución de los trabajos correspondientes a <strong>" +
         (t.descripcion || "los trabajos solicitados") +
-        '</strong>.</p><p style="margin-bottom:10px">Contamos con amplia experiencia en proyectos de construcción y remodelación en la Región de Coquimbo, con un equipo de profesionales y maestros especializados comprometidos con la calidad, los plazos y la seguridad en cada obra que ejecutamos.</p><p style="margin-bottom:14px">Nuestra propuesta ha sido elaborada considerando materiales de primera calidad, mano de obra certificada y un plazo de ejecución de <strong>' +
+        '</strong>.</p><div style="margin-bottom:10px">' +
+        companyProfile +
+        '</div><p style="margin-bottom:14px">Esta propuesta fue preparada a partir del alcance y los ítems registrados en el presupuesto, considerando un plazo estimado de <strong>' +
         h +
-        ' días hábiles</strong> desde la recepción del anticipo correspondiente.</p><div style="background:#f0f4f8;border-left:4px solid ' +
+        ' días hábiles</strong>. Los materiales, condiciones de ejecución y forma de pago aplicables son los detallados en la propuesta adjunta.</p><div style="background:#f0f4f8;border-left:4px solid ' +
         o +
         ';padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:14px;page-break-inside:avoid"><div style="font-family:Arial,sans-serif;font-size:11px;color:#666;margin-bottom:10px;text-transform:uppercase;font-weight:bold;letter-spacing:.08em">Resumen de la Propuesta</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-family:Arial,sans-serif"><div><div style="font-size:11px;color:#888;margin-bottom:3px">Proyecto:</div><strong style="color:#1a3060;font-size:13px">' +
         (t.descripcion || "") +
@@ -35741,9 +35787,16 @@ MATERIALES:
               descuento: m.descuento,
               estado: m.estado,
               notas: m.notas,
+              notasInternas: m.notasInternas || m.notas || "",
               plazoEjecucion: m.plazoEjecucion || r.plazoEjecucion || 30,
               modoCosteo: m.modoCosteo || "completo",
               customId: m.id,
+              licitacionIdMP: m.licitacionIdMP || "",
+              licitacionOpportunityId: m.licitacionOpportunityId || "",
+              licitacionNombre: m.licitacionNombre || "",
+              licitacionOrganismo: m.licitacionOrganismo || "",
+              _pendingClientName: m._pendingClientName || "",
+              _isTenderDraft: !!m._isTenderDraft,
             }
           : {
               clienteId: (t[0] && t[0].id) || "",
@@ -35753,9 +35806,16 @@ MATERIALES:
               descuento: !1,
               estado: "Pendiente",
               notas: "",
+              notasInternas: "",
               plazoEjecucion: r.plazoEjecucion || 30,
               modoCosteo: "completo",
               customId: null,
+              licitacionIdMP: "",
+              licitacionOpportunityId: "",
+              licitacionNombre: "",
+              licitacionOrganismo: "",
+              _pendingClientName: "",
+              _isTenderDraft: false,
             },
       ),
       [k, R] = V(null),
@@ -35949,9 +36009,11 @@ MATERIALES:
                 e.jsx("div", {
                   style: { fontSize: 19, fontWeight: 700 },
                   children: m
-                    ? X
-                      ? `Duplicado de N° ${m._srcId} → N° ${m._newId}`
-                      : `Editando N° ${m.id}`
+                    ? I._isTenderDraft
+                      ? `Nuevo presupuesto vinculado — N° ${m.id || r.nextNum || 1}`
+                      : X
+                        ? `Duplicado de N° ${m._srcId} → N° ${m._newId}`
+                        : `Editando N° ${m.id}`
                     : `Nuevo Presupuesto — N° ${r.nextNum || 1}`,
                 }),
                 X &&
@@ -35977,6 +36039,27 @@ MATERIALES:
                 }),
               ],
             }),
+          ],
+        }),
+        I.licitacionIdMP && e.jsxs("div", {
+          style: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+            padding: "10px 14px",
+            marginBottom: 14,
+            borderRadius: 9,
+            background: "rgba(245,160,32,.10)",
+            border: "1px solid rgba(245,160,32,.48)",
+          },
+          children: [
+            e.jsxs("div", { children: [
+              e.jsx("div", { style: { color: a.accent, fontSize: 12, fontWeight: 900 }, children: "🔒 PRESUPUESTO VINCULADO A LICITACIÓN" }),
+              e.jsx("div", { style: { color: a.text, fontSize: 13, fontWeight: 700, marginTop: 3 }, children: "ID Mercado Público " + I.licitacionIdMP }),
+              I.licitacionNombre && e.jsx("div", { style: { color: a.muted, fontSize: 11, marginTop: 2 }, children: I.licitacionNombre }),
+            ] }),
+            e.jsx("span", { style: { color: a.muted, fontSize: 11, textAlign: "right" }, children: "Los precios guardados actualizarán la oferta vinculada" }),
           ],
         }),
         e.jsxs("div", {
@@ -36015,14 +36098,17 @@ MATERIALES:
                           children: e.jsx(Mi, {
                             value: I.clienteId,
                             onChange: (W) =>
-                              D((T) => u(d({}, T), { clienteId: parseInt(W) })),
-                            children: t.map((W) =>
+                              D((T) => u(d({}, T), {
+                                clienteId: String(W).indexOf("mp:") === 0 ? W : parseInt(W),
+                                _pendingClientName: String(W).indexOf("mp:") === 0 ? T._pendingClientName : "",
+                              })),
+                            children: [e.jsx("option", { value: "", children: "— Selecciona un cliente —" }), I._pendingClientName && e.jsx("option", { value: I.clienteId, children: I._pendingClientName + " · Organismo Mercado Público" })].concat(t.map((W) =>
                               e.jsx(
                                 "option",
                                 { value: W.id, children: W.nombre },
                                 W.id,
                               ),
-                            ),
+                            )),
                           }),
                         }),
                         e.jsx(ze, {
@@ -38436,8 +38522,8 @@ MATERIALES:
         {
           id: "carta",
           icon: "✉️",
-          label: "Carta de Presentación",
-          desc: "Documento formal para acompañar el presupuesto al cliente",
+          label: "Carta para cliente / mandante",
+          desc: "Presentación comercial para acompañar un presupuesto particular",
           etapa: "Al presentar",
           color: "#3b82f6",
         },
@@ -39666,8 +39752,11 @@ MATERIALES:
     guardarPlantilla: F,
     eliminarPlantillaUser: g,
     setToast: z,
+    licitaciones: tenderOptions,
+    onLinkLicitacion: linkTender,
   }) {
     const [ocBudget, setOcBudget] = Re.useState(null);
+    const [linkingBudget, setLinkingBudget] = Re.useState(null);
     const [B, w] = V("Todos"),
       [v, x] = V(null),
       [f, I] = V(null),
@@ -39783,6 +39872,41 @@ MATERIALES:
                 ],
               }),
             }),
+          linkingBudget && e.jsx("div", {
+            onClick: function () { setLinkingBudget(null); },
+            style: { position: "fixed", inset: 0, zIndex: 9200, background: "rgba(5,15,30,.72)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18 },
+            children: e.jsxs("div", {
+              onClick: function (event) { event.stopPropagation(); },
+              style: { width: "min(520px,94vw)", background: a.card, border: "1px solid " + a.border, borderRadius: 13, boxShadow: "0 20px 60px rgba(0,0,0,.45)", padding: 20 },
+              children: [
+                e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start", marginBottom: 16 }, children: [
+                  e.jsxs("div", { children: [
+                    e.jsx("div", { style: { color: a.text, fontSize: 17, fontWeight: 900 }, children: "🔗 Vincular presupuesto a licitación" }),
+                    e.jsx("div", { style: { color: a.muted, fontSize: 12, marginTop: 4 }, children: "Presupuesto N° " + linkingBudget.id + " · " + (linkingBudget.descripcion || "Sin descripción") }),
+                  ] }),
+                  e.jsx("button", { type: "button", onClick: function () { setLinkingBudget(null); }, style: u(d({}, c.btn("s")), { padding: "5px 9px", fontSize: 16 }), children: "×" }),
+                ] }),
+                linkingBudget.licitacionIdMP && e.jsxs("div", { style: { padding: "10px 12px", marginBottom: 13, background: "rgba(245,160,32,.10)", border: "1px solid rgba(245,160,32,.45)", borderRadius: 8 }, children: [
+                  e.jsx("div", { style: { color: a.accent, fontSize: 11, fontWeight: 900 }, children: "🔒 VÍNCULO ACTUAL" }),
+                  e.jsx("div", { style: { color: a.text, fontSize: 13, fontWeight: 700, marginTop: 3 }, children: "Licitación " + linkingBudget.licitacionIdMP }),
+                  linkingBudget.licitacionNombre && e.jsx("div", { style: { color: a.muted, fontSize: 11, marginTop: 2 }, children: linkingBudget.licitacionNombre }),
+                ] }),
+                e.jsx("label", { style: u(d({}, c.lbl), { display: "block", marginBottom: 7 }), children: "Selecciona una oportunidad guardada" }),
+                e.jsx("select", {
+                  value: linkingBudget.licitacionIdMP || "",
+                  onChange: function (event) {
+                    var selectedIdMP = event.target.value;
+                    var selectedOpportunity = (tenderOptions || []).find(function (opportunity) { return String(opportunity.idMP || "") === selectedIdMP; }) || null;
+                    if (linkTender) linkTender(linkingBudget, selectedOpportunity);
+                    setLinkingBudget(null);
+                  },
+                  style: u(d({}, c.sel), { width: "100%", marginBottom: 12 }),
+                  children: [e.jsx("option", { value: "", children: "— Sin vincular —" }), (tenderOptions || []).filter(function (opportunity) { return opportunity && !opportunity._deleted && opportunity.idMP; }).map(function (opportunity) { return e.jsx("option", { value: opportunity.idMP, children: opportunity.idMP + " · " + (opportunity.nombreObra || "Sin nombre") }, opportunity.id); })],
+                }),
+                e.jsx("div", { style: { color: a.muted, fontSize: 11, lineHeight: 1.5 }, children: "Al vincularlo, el presupuesto mostrará un candado y sus precios podrán alimentar las líneas correspondientes de la oferta." }),
+              ],
+            }),
+          }),
           T &&
             e.jsxs("div", {
               style: {
@@ -39953,12 +40077,12 @@ MATERIALES:
                               e.jsx("td", {
                                 style: u(d({}, c.td), {
                                   color: a.muted,
-                                  maxWidth: 130,
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
+                                  maxWidth: 190,
                                 }),
-                                children: Q.descripcion,
+                                children: e.jsxs("div", { children: [
+                                  e.jsx("div", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: Q.descripcion }),
+                                  Q.licitacionIdMP && e.jsxs("div", { title: Q.licitacionNombre || "Presupuesto vinculado a Mercado Público", style: { display: "inline-flex", alignItems: "center", gap: 4, marginTop: 4, padding: "2px 6px", borderRadius: 999, background: "rgba(245,160,32,.10)", border: "1px solid rgba(245,160,32,.4)", color: a.accent, fontSize: 9.5, fontWeight: 800, whiteSpace: "nowrap" }, children: [e.jsx("span", { children: "🔒" }), e.jsx("span", { children: "Licitación " + Q.licitacionIdMP })] }),
+                                ] }),
                               }),
                               e.jsx("td", {
                                 style: u(d({}, c.td), {
@@ -40037,6 +40161,12 @@ MATERIALES:
                                       style: c.btn("g"),
                                       onClick: () => l(Q),
                                       children: "✏",
+                                    }),
+                                    e.jsx("button", {
+                                      title: Q.licitacionIdMP ? "Cambiar licitación vinculada" : "Vincular a licitación",
+                                      style: u(d({}, c.btn("g")), { color: Q.licitacionIdMP ? a.accent : a.muted }),
+                                      onClick: function () { setLinkingBudget(Q); },
+                                      children: Q.licitacionIdMP ? "🔒" : "🔗",
                                     }),
                                     e.jsx("button", {
                                       title: "Más acciones",
@@ -40165,6 +40295,14 @@ MATERIALES:
                                             color: "#f5a020",
                                             action: () => {
                                               (setOcBudget(Q), I(null));
+                                            },
+                                          },
+                                          {
+                                            icon: Q.licitacionIdMP ? "🔒" : "🔗",
+                                            label: Q.licitacionIdMP ? "Cambiar licitación vinculada" : "Vincular a licitación",
+                                            color: "#f5a020",
+                                            action: () => {
+                                              (setLinkingBudget(Q), I(null));
                                             },
                                           },
                                           {
@@ -49402,36 +49540,40 @@ MATERIALES:
         p.setFont("helvetica", "normal"),
         p.setFontSize(9),
         p.setTextColor(40, 50, 65));
+      var companyProfilePdf = String(r.empresaPresentacion || "").trim();
+      if (!companyProfilePdf) {
+        var companyStartPdf = parseInt(r.empresaAnioInicio, 10),
+          companyYearsPdf = companyStartPdf > 1900 && companyStartPdf <= new Date().getFullYear() ? new Date().getFullYear() - companyStartPdf : 0;
+        companyProfilePdf = (r.empresa || "Nuestra empresa") + " desarrolla trabajos en el ámbito de " + (r.empresaRubro || "servicios, construcción y mantenimiento") + ".";
+        if (companyYearsPdf > 0) companyProfilePdf += " Cuenta con " + companyYearsPdf + " años de trayectoria desde " + companyStartPdf + ".";
+        if ((t.companyBudgetCount || 0) > 0) companyProfilePdf += " En Enlace Constructor mantiene un historial de " + t.companyBudgetCount + " presupuestos preparados, utilizado como referencia de su experiencia comercial y capacidad de estudio de proyectos.";
+      }
       var v =
-        `Estimados señores,
-
-Por medio de la presente, ` +
+        "Estimados señores,\n\n" +
+        companyProfilePdf +
+        "\n\nPor medio de la presente, " +
         (r.empresa || "nuestra empresa") +
         ", RUT " +
         (r.rut || "—") +
+        ", representada para estos efectos por " +
+        (r.firmaNombre || "representante pendiente de configurar") +
         ", se permite presentar oferta para la Licitación ID " +
         (t.idMP || "") +
         ' denominada "' +
         (t.nombreObra || "") +
         '" convocada por ' +
         (t.organismo || "") +
-        `.
-
-El plazo de ejecución ofertado es de ` +
+        ".\n\nEl plazo de ejecución ofertado es de " +
         (t.plazoEjecucion || 0) +
         " días corridos. El monto total de nuestra oferta es de " +
         l(m) +
         " (IVA incluido), con valor neto de " +
         l(o) +
-        `.
-
-Quedamos a disposición al teléfono ` +
+        ".\n\nQuedamos a disposición al teléfono " +
         (r.telefono || "") +
         " o correo " +
         (r.email || "") +
-        `.
-
-Saluda atentamente,`;
+        ".\n\nSaluda atentamente,";
       (p.splitTextToSize(v, 182).forEach(function (I) {
         (g > 270 && (p.addPage(), (g = 20)), p.text(I, 14, g), (g += 5));
       }),
@@ -49458,6 +49600,7 @@ Saluda atentamente,`;
       var x =
         "Yo, " +
         (r.firmaNombre || "_______________________________") +
+        (r.firmaRut ? ", RUT " + r.firmaRut : "") +
         ", " +
         (r.firmaCargo || "Representante Legal") +
         ", en representación de " +
@@ -55918,14 +56061,117 @@ Saluda atentamente,`;
     setMateriales: p,
     apus: C,
     setApus: b,
+    initialTab: initialTab,
   }) {
     const [h, j] = V(t),
-      [F, g] = V("identidad");
+      [F, g] = V(initialTab || "identidad");
     var z = (x) => {
         (j(x), s && s(!0));
       },
       B = (x) => (f) => {
         z((I) => u(d({}, I), { [x]: f }));
+      },
+      applyCountryConfig = (countryName) => {
+        var country = es.find((item) => item.pais === countryName) || es[0];
+        z((current) =>
+          u(d({}, current), {
+            moneda: d({}, country),
+            iva: country.impuesto / 100,
+            impuestoNombre: country.nombreImp,
+            paisRegion: country.pais,
+          }),
+        );
+      },
+      suggestCompanyPresentation = () => {
+        var company = String(h.empresa || "Nuestra empresa").trim();
+        var industry = String(h.empresaRubro || "servicios, construcción y mantenimiento").trim();
+        var startYear = parseInt(h.empresaAnioInicio, 10);
+        var currentYear = new Date().getFullYear();
+        var years = startYear > 1900 && startYear <= currentYear ? currentYear - startYear : 0;
+        var budgets = (r && r.budgets || []).filter((budget) => budget && !budget._deleted);
+        var clients = (r && r.clients || []).filter(Boolean);
+        var descriptions = budgets.map((budget) => String(budget.descripcion || "").trim()).filter(Boolean).slice(-5);
+        var specialties = descriptions.length ? descriptions.slice(0, 3).join(", ") : industry;
+        var text = company + " desarrolla trabajos en el ámbito de " + industry + ".";
+        if (years > 0) text += " Cuenta con " + years + " años de trayectoria desde " + startYear + ".";
+        if (budgets.length > 0) text += " En Enlace Constructor mantiene un historial de " + budgets.length + " presupuestos preparados" + (clients.length ? " para " + clients.length + " clientes registrados" : "") + ", con experiencia comercial asociada a " + specialties + ".";
+        text += " Para esta postulación, la empresa pone a disposición su capacidad de planificación, control de costos y coordinación de recursos, ajustándose a las bases administrativas y técnicas de la contratación.";
+        z((current) => u(d({}, current), { empresaPresentacion: text }));
+        o("✨ Presentación sugerida. Revísala y ajusta cualquier afirmación antes de guardarla.");
+      },
+      importCompanyPresentation = (event) => {
+        var file = event.target.files && event.target.files[0];
+        event.target.value = "";
+        if (!file) return;
+        var metadata = { empresaPresentacionArchivo: file.name };
+        if (/\.txt$/i.test(file.name)) {
+          var reader = new FileReader();
+          reader.onload = () => {
+            z((current) => u(d({}, current), { empresaPresentacionArchivo: file.name, empresaPresentacion: String(reader.result || "").trim() }));
+            o("📄 Presentación de texto importada. Revísala antes de guardar.");
+          };
+          reader.readAsText(file);
+          return;
+        }
+        z((current) => u(d({}, current), metadata));
+        o("📎 Archivo asociado. Para usar su contenido en las cartas, pega o resume el texto en Presentación estándar.");
+      },
+      buildCompanyAiPrompt = () => {
+        var budgets = (r && r.budgets || []).filter((budget) => budget && !budget._deleted);
+        var clients = (r && r.clients || []).filter(Boolean);
+        var recentWork = budgets.map((budget) => String(budget.descripcion || "").trim()).filter(Boolean).slice(-8);
+        var country = (h.moneda && h.moneda.pais) || h.paisRegion || "Chile";
+        var currency = h.moneda || es.find((item) => item.pais === country) || es[0];
+        var languageInstruction = country === "Brasil" ? "Usa portugués de Brasil" : "Usa español profesional adaptado a " + country;
+        return [
+          "Actúa como especialista en comunicación corporativa y propuestas para licitaciones públicas y contratación con organismos en " + country + ".",
+          "",
+          "Necesito redactar la presentación profesional de una empresa para utilizarla en cartas de presentación y ofertas en Mercado Público. El texto debe transmitir confianza, capacidad y orden, pero NO debe inventar obras ejecutadas, certificaciones, clientes, adjudicaciones, años de experiencia ni capacidades que no estén expresamente indicadas.",
+          "",
+          "DATOS DISPONIBLES:",
+          "- Empresa: " + (h.empresa || "[completar]"),
+          "- RUT empresa: " + (h.rut || "[completar]"),
+          "- País de operación: " + country,
+          "- Ciudad: " + (h.ciudad || "[completar]"),
+          "- Moneda configurada: " + ((currency.moneda || currency.currency || "[completar]") + " (" + (currency.currency || currency.simbolo || "") + ")"),
+          "- Rubro o especialidad: " + (h.empresaRubro || "[completar]"),
+          "- Año de inicio: " + (h.empresaAnioInicio || "[completar]"),
+          "- Presupuestos preparados en el software: " + budgets.length,
+          "- Clientes registrados: " + clients.length,
+          "- Tipos de trabajos presupuestados: " + (recentWork.length ? recentWork.join("; ") : "[sin información todavía]"),
+          "- Presentación o borrador actual: " + (h.empresaPresentacion || "[sin borrador]"),
+          "",
+          "INSTRUCCIONES:",
+          "1. Antes de redactar, identifica qué información falta y hazme un máximo de 7 preguntas concretas para no inventar datos.",
+          "2. Si decido continuar sin responder alguna pregunta, omite esa afirmación o redacta de forma prudente.",
+          "3. Distingue claramente entre trabajos presupuestados y obras realmente ejecutadas o adjudicadas.",
+          "4. Evita frases vacías como ‘somos líderes’ o ‘tenemos vasta experiencia’ si no existe evidencia.",
+          "5. " + languageInstruction + ", con tono profesional, cercano y fácil de entender. Ajusta vocabulario e instituciones al país indicado sin inventar normas ni requisitos legales.",
+          "6. No incluyas precios, información confidencial ni nombres de clientes salvo que yo los autorice.",
+          "",
+          "ENTREGA FINAL:",
+          "- Versión breve de 70 a 100 palabras para una carta de presentación.",
+          "- Versión institucional de 150 a 220 palabras para el perfil de la empresa.",
+          "- Versión enfocada en esta licitación, con espacios [entre corchetes] para agregar requisitos específicos.",
+          "- Una lista final de afirmaciones que debo respaldar con documentos antes de utilizar el texto.",
+          "",
+          "No redactes la versión final hasta realizar primero las preguntas de validación.",
+        ].join("\n");
+      },
+      copyCompanyAiPrompt = () => {
+        var promptText = buildCompanyAiPrompt();
+        var fallback = () => {
+          var area = document.createElement("textarea");
+          area.value = promptText;
+          area.style.position = "fixed";
+          area.style.opacity = "0";
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand("copy");
+          document.body.removeChild(area);
+        };
+        var copyPromise = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(promptText) : Promise.resolve().then(fallback);
+        copyPromise.then(() => o("📋 Prompt copiado. Pégalo en ChatGPT, Gemini o la IA que prefieras.")).catch(() => { fallback(); o("📋 Prompt copiado. Pégalo en tu IA preferida."); });
       },
       w = [
         "#f5a020",
@@ -56629,6 +56875,18 @@ Saluda atentamente,`;
                     }),
                   }),
                   e.jsx(ze, {
+                    label: "País de operación",
+                    children: e.jsxs("div", { children: [
+                      e.jsx("select", {
+                        style: c.inp,
+                        value: (h.moneda && h.moneda.pais) || h.paisRegion || "Chile",
+                        onChange: (event) => applyCountryConfig(event.target.value),
+                        children: es.map((country) => e.jsx("option", { value: country.pais, children: country.pais }, country.codigo)),
+                      }),
+                      e.jsx("div", { style: { fontSize: 10.5, color: a.muted, marginTop: 4, lineHeight: 1.4 }, children: "Define el país usado en documentos y en el prompt. También actualiza moneda e impuesto en Presupuesto." }),
+                    ] }),
+                  }),
+                  e.jsx(ze, {
                     label: "Teléfono",
                     children: e.jsx(Pe, {
                       value: h.telefono,
@@ -56650,6 +56908,38 @@ Saluda atentamente,`;
                       placeholder: "www.tuempresa.cl",
                     }),
                   }),
+                ],
+              }),
+              e.jsxs("div", {
+                style: { marginTop: 16, paddingTop: 16, borderTop: `1px solid ${a.border}` },
+                children: [
+                  e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start", flexWrap: "wrap", marginBottom: 10 }, children: [
+                    e.jsxs("div", { children: [
+                      e.jsx("div", { style: { fontSize: 13, fontWeight: 700, color: a.text }, children: "Perfil para licitaciones y cartas" }),
+                      e.jsx("div", { style: { fontSize: 11, color: a.muted, marginTop: 3, lineHeight: 1.5 }, children: "Este texto es la presentación maestra de tu empresa. Se reutiliza en cartas para clientes particulares y en cartas de licitación, sin prometer experiencia que no puedas acreditar." }),
+                    ] }),
+                    e.jsx("button", { type: "button", onClick: suggestCompanyPresentation, style: u(d({}, c.btn("p")), { padding: "7px 11px", fontSize: 11 }), children: "✨ Sugerir desde mi historial" }),
+                  ] }),
+                  e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 180px", gap: 13 }, children: [
+                    e.jsx(ze, { label: "Rubro o especialidad principal", children: e.jsx(Pe, { value: h.empresaRubro || "", onChange: B("empresaRubro"), placeholder: "Ej: obras civiles, mantención de áreas verdes" }) }),
+                    e.jsx(ze, { label: "Año de inicio de actividades", children: e.jsx(Pe, { type: "number", min: "1900", max: String(new Date().getFullYear()), value: h.empresaAnioInicio || "", onChange: B("empresaAnioInicio"), placeholder: "Ej: 2018" }) }),
+                  ] }),
+                  e.jsx(ze, { label: "Presentación estándar de la empresa", children: e.jsx("textarea", { value: h.empresaPresentacion || "", onChange: B("empresaPresentacion"), placeholder: "Describe experiencia, especialidades, forma de trabajo y fortalezas comprobables...", rows: 6, style: u(d({}, c.inp), { width: "100%", resize: "vertical", lineHeight: 1.55 }) }) }),
+                  e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginTop: 9 }, children: [
+                    e.jsxs("label", { style: u(d({}, c.btn("s")), { padding: "7px 11px", fontSize: 11, cursor: "pointer" }), children: ["📎 Asociar presentación existente", e.jsx("input", { type: "file", accept: ".txt,.pdf,.doc,.docx", onChange: importCompanyPresentation, style: { display: "none" } })] }),
+                    h.empresaPresentacionArchivo && e.jsx("span", { style: { color: a.text, fontSize: 11 }, children: "Archivo asociado: " + h.empresaPresentacionArchivo }),
+                    e.jsx("span", { style: { color: a.muted, fontSize: 10.5 }, children: "Los TXT se importan. En PDF o Word se conserva la referencia y debes pegar o resumir el contenido." }),
+                  ] }),
+                  e.jsx("div", { style: { marginTop: 9, padding: 9, background: "rgba(245,160,32,.08)", border: "1px solid rgba(245,160,32,.32)", borderRadius: 7, color: a.muted, fontSize: 10.5, lineHeight: 1.45 }, children: "💡 La sugerencia usa rubro, antigüedad y el historial de presupuestos guardado en ECP. Un presupuesto demuestra experiencia comercial registrada, no necesariamente una obra ejecutada; revisa el texto antes de usarlo." }),
+                  e.jsxs("details", { style: { marginTop: 11, background: a.sb, border: `1px solid ${a.border}`, borderRadius: 9, padding: 11 }, children: [
+                    e.jsx("summary", { style: { color: a.text, fontSize: 12, fontWeight: 800, cursor: "pointer" }, children: "🤖 Crear una mejor presentación con ChatGPT, Gemini u otra IA" }),
+                    e.jsx("div", { style: { color: a.muted, fontSize: 10.5, lineHeight: 1.5, marginTop: 9 }, children: "ECP prepara un prompt con tus datos actuales. La IA primero deberá preguntarte lo que falta, no podrá inventar experiencia y entregará tres versiones para distintos usos." }),
+                    e.jsx("textarea", { readOnly: true, value: buildCompanyAiPrompt(), "aria-label": "Prompt sugerido para crear presentación empresarial", rows: 12, style: u(d({}, c.inp), { width: "100%", resize: "vertical", lineHeight: 1.45, fontSize: 10.5, marginTop: 9, fontFamily: "ui-monospace,Consolas,monospace" }) }),
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 9, flexWrap: "wrap", marginTop: 9 }, children: [
+                      e.jsx("span", { style: { color: a.muted, fontSize: 10 }, children: "Puedes revisarlo antes de copiar. No envía información automáticamente a ningún servicio externo." }),
+                      e.jsx("button", { type: "button", onClick: copyCompanyAiPrompt, style: u(d({}, c.btn("p")), { padding: "8px 12px", fontSize: 11, fontWeight: 800 }), children: "📋 Copiar prompt para IA" }),
+                    ] }),
+                  ] }),
                 ],
               }),
               e.jsxs("div", {
@@ -56766,7 +57056,7 @@ Saluda atentamente,`;
                   e.jsxs("div", {
                     style: {
                       display: "grid",
-                      gridTemplateColumns: "1fr 1fr",
+                      gridTemplateColumns: "1fr 1fr 1fr",
                       gap: 13,
                     },
                     children: [
@@ -56776,6 +57066,14 @@ Saluda atentamente,`;
                           value: h.firmaNombre || "",
                           onChange: B("firmaNombre"),
                           placeholder: "Ej: Juan Pérez González",
+                        }),
+                      }),
+                      e.jsx(ze, {
+                        label: "RUT del representante",
+                        children: e.jsx(Pe, {
+                          value: h.firmaRut || "",
+                          onChange: B("firmaRut"),
+                          placeholder: "Ej: 12.345.678-9",
                         }),
                       }),
                       e.jsx(ze, {
@@ -57083,19 +57381,7 @@ Saluda atentamente,`;
                         children: e.jsx("select", {
                           style: c.inp,
                           value: (h.moneda && h.moneda.pais) || "Chile",
-                          onChange: (x) => {
-                            var f =
-                              es.find((I) => I.pais === x.target.value) ||
-                              es[0];
-                            z((I) =>
-                              u(d({}, I), {
-                                moneda: d({}, f),
-                                iva: f.impuesto / 100,
-                                impuestoNombre: f.nombreImp,
-                                paisRegion: f.pais,
-                              }),
-                            );
-                          },
+                          onChange: (x) => applyCountryConfig(x.target.value),
                           children: es.map((x) =>
                             e.jsx(
                               "option",
@@ -60069,10 +60355,10 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         {
           id: "carta",
           icon: "✉️",
-          label: "Carta de Presentación",
+          label: "Carta para cliente / mandante",
           etapa: "🚀 Al presentar",
           color: "#3b82f6",
-          desc: "Documento formal para acompañar el presupuesto al cliente",
+          desc: "Presentación comercial para acompañar un presupuesto particular",
         },
         {
           id: "resumen",
@@ -65643,15 +65929,199 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       }),
     });
   }
+  function mpDisplayText(value, fallback) {
+    var emptyText = fallback == null ? "" : String(fallback);
+    if (value == null || value === "") return emptyText;
+    if (
+      typeof value === "string" ||
+      typeof value === "number" ||
+      typeof value === "boolean"
+    )
+      return String(value);
+    if (Array.isArray(value)) {
+      var readableItems = value
+        .map(function (entry) {
+          return mpDisplayText(entry, "");
+        })
+        .filter(Boolean);
+      return readableItems.length ? readableItems.join(", ") : emptyText;
+    }
+    if (typeof value === "object") {
+      var preferredKeys = [
+        "glosa",
+        "Glosa",
+        "nombre",
+        "Nombre",
+        "descripcion",
+        "Descripcion",
+        "codigo",
+        "Codigo",
+        "label",
+        "texto",
+        "id_estado",
+      ];
+      for (var keyIndex = 0; keyIndex < preferredKeys.length; keyIndex++) {
+        var candidate = value[preferredKeys[keyIndex]];
+        if (candidate != null && candidate !== "" && typeof candidate !== "object")
+          return String(candidate);
+      }
+      return emptyText;
+    }
+    return String(value);
+  }
+
+  function detectMpProjectRegion(item) {
+    item = item || {};
+    var sourceText = [
+      item.Nombre,
+      item.nombre,
+      item.Descripcion,
+      item.descripcion,
+      item.DireccionVisita,
+      item.LugarVisita,
+      item.DireccionEntrega,
+      item.LugarEntrega,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+    var regions = [
+      ["arica y parinacota", "Región de Arica y Parinacota"],
+      ["tarapaca", "Región de Tarapacá"],
+      ["antofagasta", "Región de Antofagasta"],
+      ["atacama", "Región de Atacama"],
+      ["coquimbo", "Región de Coquimbo"],
+      ["valparaiso", "Región de Valparaíso"],
+      ["ohiggins", "Región de O'Higgins"],
+      ["o'higgins", "Región de O'Higgins"],
+      ["maule", "Región del Maule"],
+      ["nuble", "Región de Ñuble"],
+      ["biobio", "Región del Biobío"],
+      ["araucania", "Región de La Araucanía"],
+      ["los rios", "Región de Los Ríos"],
+      ["los lagos", "Región de Los Lagos"],
+      ["aysen", "Región de Aysén"],
+      ["magallanes", "Región de Magallanes"],
+      ["metropolitana", "Región Metropolitana de Santiago"],
+    ];
+    for (var i = 0; i < regions.length; i++) {
+      var key = regions[i][0];
+      if (
+        sourceText.indexOf("region de " + key) > -1 ||
+        sourceText.indexOf("region del " + key) > -1 ||
+        sourceText.indexOf("region " + key) > -1
+      )
+        return regions[i][1];
+    }
+    if (
+      sourceText.indexOf("provincia de elqui") > -1 ||
+      sourceText.indexOf("provincia de limari") > -1 ||
+      sourceText.indexOf("provincia de choapa") > -1
+    )
+      return "Región de Coquimbo";
+    return item.Comprador && item.Comprador.RegionUnidad
+      ? item.Comprador.RegionUnidad
+      : item.region || item.Region || "";
+  }
+
+  function copyMpCodeExact(code, setToast) {
+    var exactCode = String(code || "").trim();
+    if (!exactCode) return;
+    var notify = function () {
+      if (setToast) setToast("📋 Código copiado: " + exactCode);
+    };
+    var fallback = function () {
+      try {
+        var field = document.createElement("textarea");
+        field.value = exactCode;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.opacity = "0";
+        document.body.appendChild(field);
+        field.select();
+        document.execCommand("copy");
+        document.body.removeChild(field);
+        notify();
+      } catch (error) {
+        if (setToast) setToast("⚠️ No fue posible copiar. Selecciona el código manualmente.");
+      }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(exactCode).then(notify).catch(fallback);
+    } else fallback();
+  }
+
+  function MpCopyCodeButton(props) {
+    var code = String(props.code || "").trim();
+    if (!code) return null;
+    var compact = props.compact !== false;
+    return e.jsx("button", {
+      type: "button",
+      title: "Copiar código exacto " + code,
+      "aria-label": "Copiar código " + code,
+      onClick: function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        copyMpCodeExact(code, props.setToast);
+      },
+      style: {
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 4,
+        minWidth: compact ? 27 : 74,
+        height: compact ? 25 : 29,
+        padding: compact ? "3px 7px" : "5px 9px",
+        borderRadius: 7,
+        border: "1px solid " + (props.border || "rgba(100,140,180,.35)"),
+        background: props.surface || "rgba(80,120,160,.08)",
+        color: props.accent || "#f5a020",
+        fontSize: compact ? 12 : 10.5,
+        fontWeight: 900,
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+      },
+      children: compact ? "📋" : "📋 Copiar",
+    });
+  }
+
   function MpNuevaLicitacion(props) {
     var st = V({ 
       CodigoExterno: "", 
       Nombre: "", 
       Estado: "Borrador",
+      EstadoMP: "",
       Organismo: "",
       Region: "",
+      Descripcion: "",
+      Tipo: "",
+      MontoEstimado: "",
+      PlazoEjecucion: "",
+      PresupuestoVinculado: "",
+      NotasInternas: "",
       Fechas: { FechaPublicacion: "", FechaCierre: "", VisitaTerreno: "" },
-      Garantias: [],
+      Garantias: {},
+      Antecedentes: [],
+      HallazgosAntecedentes: [],
+      AntecedentesRevisados: false,
+      DecisionEstudio: "Por decidir",
+      DecisionJustificacion: "",
+      DecisionConfirmada: false,
+      OfertaTecnica: {
+        metodologia: "",
+        etapas: [],
+        equipo: [],
+        recursos: [],
+        experiencia: [],
+        subcontratos: [],
+        sinSubcontratos: false,
+      },
+      Archivos: [],
+      PreparacionEstado: "Borrador",
+      GarantiasRevisadas: false,
+      RevisionFinal: false,
       Lineas: [],
       Notas: "",
       Adjudicacion: null,
@@ -65669,22 +66139,111 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     var _ld = V(false),
       loading = _ld[0],
       setLoading = _ld[1];
+    var _savedAt = V(""),
+      savedAt = _savedAt[0],
+      setSavedAt = _savedAt[1];
+    var _dirtyDraft = V(false),
+      dirtyDraft = _dirtyDraft[0],
+      setDirtyDraft = _dirtyDraft[1];
+    var _opportunityQuery = V(""),
+      opportunityQuery = _opportunityQuery[0],
+      setOpportunityQuery = _opportunityQuery[1];
+    var _selectedPreparation = V(""),
+      selectedPreparationId = _selectedPreparation[0],
+      setSelectedPreparationId = _selectedPreparation[1];
+    var _documentPreview = V(null),
+      documentPreviewKey = _documentPreview[0],
+      setDocumentPreviewKey = _documentPreview[1];
+    var _antecedentGuide = V(false),
+      antecedentGuideOpen = _antecedentGuide[0],
+      setAntecedentGuideOpen = _antecedentGuide[1];
+    var _antecedentGuideShown = V(false),
+      antecedentGuideShown = _antecedentGuideShown[0],
+      setAntecedentGuideShown = _antecedentGuideShown[1];
+
+    ct(function () {
+      if (!props.initialCode && !props.initialItem) return;
+      setForm(function (current) {
+        var incoming = props.initialItem || {};
+        var preparation = incoming.preparacion || {};
+        var savedFicha = preparation.ficha || {};
+        var hydrated = Object.assign({}, current, savedFicha, {
+          CodigoExterno: props.initialCode || incoming.idMP || savedFicha.CodigoExterno || "",
+          Nombre: savedFicha.Nombre || incoming.nombreObra || current.Nombre,
+          Organismo: savedFicha.Organismo || incoming.organismo || current.Organismo,
+          Region: savedFicha.Region || incoming.region || current.Region,
+          MontoEstimado:
+            savedFicha.MontoEstimado || incoming.montoEstimado || current.MontoEstimado,
+          Descripcion:
+            savedFicha.Descripcion || incoming.descripcion || current.Descripcion,
+          Tipo: savedFicha.Tipo || incoming.tipo || current.Tipo,
+          EstadoMP: mpDisplayText(
+            savedFicha.EstadoMP || incoming.estadoMP || current.EstadoMP,
+            "",
+          ),
+          Lineas:
+            savedFicha.Lineas || incoming.items || incoming.Lineas || current.Lineas,
+        });
+        hydrated.Fechas = Object.assign(
+          {},
+          current.Fechas,
+          savedFicha.Fechas || {},
+          {
+            FechaCierre:
+              (savedFicha.Fechas && savedFicha.Fechas.FechaCierre) ||
+              (incoming.fechaCierre ? String(incoming.fechaCierre).slice(0, 10) : "") ||
+              current.Fechas.FechaCierre,
+          },
+        );
+        return hydrated;
+      });
+      setSavedAt(
+        props.initialItem && props.initialItem.preparacion
+          ? props.initialItem.preparacion.actualizadoEn || ""
+          : "",
+      );
+      setDirtyDraft(false);
+      var savedStep = parseInt(props.initialItem && props.initialItem.preparacion && props.initialItem.preparacion.paso) || 1;
+      setStep(Math.max(1, Math.min(9, savedStep)));
+    }, [props.initialCode, props.initialItem && props.initialItem.id]);
+
+    ct(function () {
+      if (step === 2 && !antecedentGuideShown && !(form.Antecedentes || []).length) {
+        setAntecedentGuideShown(true);
+        setAntecedentGuideOpen(true);
+      }
+    }, [step]);
     
     // Auto-fetch data from API based on CodigoExterno
     var fetchLicitacion = function() {
       if (!form.CodigoExterno) return alert("Ingresa un Código de Licitación válido");
+      var tk = ((props.cfg && props.cfg.apiKeyMP) || "").trim();
+      if (!tk) {
+        if (props.onNeedApi) props.onNeedApi();
+        return alert(
+          "Necesitas un Ticket API de Mercado Público. Revisa Primeros Pasos para solicitarlo y configurarlo.",
+        );
+      }
       setLoading(true);
-      var tk = (props.cfg && props.cfg.apiKeyMP) || "79B6AA40-A970-4164-ADEE-47CF3F378CBA";
-      fetch("https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?ticket=" + tk + "&codigo=" + form.CodigoExterno)
-        .then(function(r) { return r.json(); })
+      var normalizedCode = form.CodigoExterno.trim().toUpperCase().replace(/\s+/g, "");
+      fetch("https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?ticket=" + encodeURIComponent(tk) + "&codigo=" + encodeURIComponent(normalizedCode))
+        .then(function(r) {
+          if (!r.ok) throw new Error("Mercado Público respondió " + r.status);
+          return r.json();
+        })
         .then(function(d) {
           setLoading(false);
           if(d && d.Listado && d.Listado.length > 0) {
             var lic = d.Listado[0];
             var f = Object.assign({}, form, {
+              CodigoExterno: normalizedCode,
               Nombre: lic.Nombre,
               Organismo: lic.Comprador ? lic.Comprador.NombreOrganismo : "",
-              Region: lic.Comprador ? lic.Comprador.RegionUnidad : "",
+              Region: detectMpProjectRegion(lic),
+              Descripcion: lic.Descripcion || "",
+              Tipo: lic.Tipo || "",
+              EstadoMP: mpDisplayText(lic.Estado || lic.estado, ""),
+              MontoEstimado: lic.MontoEstimado || "",
               Fechas: {
                 FechaPublicacion: lic.Fechas && lic.Fechas.FechaPublicacion ? lic.Fechas.FechaPublicacion.substring(0,10) : "",
                 FechaCierre: lic.Fechas && lic.Fechas.FechaCierre ? lic.Fechas.FechaCierre.substring(0,10) : "",
@@ -65693,31 +66252,1313 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               Lineas: lic.Items && lic.Items.Listado ? lic.Items.Listado : []
             });
             setForm(f);
-            alert("Licitación importada con éxito");
+            setDirtyDraft(true);
+            if (props.setToast)
+              props.setToast("✅ Datos actualizados desde Mercado Público. Revisa y guarda el borrador.");
           } else {
-            alert("No se encontró la licitación");
+            if (props.setToast) props.setToast("⚠️ No se encontró la licitación");
           }
         })
         .catch(function(e) {
           setLoading(false);
-          alert("Error al conectar con Mercado Público");
+          if (props.setToast)
+            props.setToast("❌ Error al conectar con Mercado Público: " + e.message);
         });
     };
 
-    var steps = ["1. Ficha Automática", "2. Documentos", "3. Presupuesto (APUs)", "4. Resumen y Cierre"];
+    var updateFichaField = function (field, value) {
+      setForm(function (current) {
+        var next = Object.assign({}, current);
+        next[field] = value;
+        return next;
+      });
+      setDirtyDraft(true);
+    };
+    var updateFichaDate = function (field, value) {
+      setForm(function (current) {
+        var dates = Object.assign({}, current.Fechas);
+        dates[field] = value;
+        return Object.assign({}, current, { Fechas: dates });
+      });
+      setDirtyDraft(true);
+    };
+    var createBlankLine = function () {
+      return {
+        NombreProducto: "",
+        Cantidad: 1,
+        UnidadMedida: "m2",
+        PrecioUnitarioNeto: 0,
+      };
+    };
+    var updateItemLine = function (index, field, value) {
+      setForm(function (current) {
+        var lines = (current.Lineas || []).slice();
+        lines[index] = Object.assign({}, lines[index] || {}, { [field]: value });
+        return Object.assign({}, current, { Lineas: lines });
+      });
+      setDirtyDraft(true);
+    };
+    var addItemLine = function () {
+      setForm(function (current) {
+        return Object.assign({}, current, {
+          Lineas: (current.Lineas || []).concat([createBlankLine()]),
+        });
+      });
+      setDirtyDraft(true);
+    };
+    var removeItemLine = function (index) {
+      setForm(function (current) {
+        return Object.assign({}, current, {
+          Lineas: (current.Lineas || []).filter(function (_, lineIndex) {
+            return lineIndex !== index;
+          }),
+        });
+      });
+      setDirtyDraft(true);
+    };
+    var importItemizedExcel = function (file) {
+      if (!file) return;
+      if (!window.XLSX) {
+        if (props.setToast) props.setToast("⚠️ El lector Excel no está disponible. Recarga la aplicación.");
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        try {
+          var workbook = window.XLSX.read(event.target.result, { type: "array" });
+          var sheet = workbook.Sheets[workbook.SheetNames[0]];
+          var rows = window.XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+          var headerIndex = rows.findIndex(function (row) {
+            var normalized = row.map(function (cell) {
+              return String(cell || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            });
+            return normalized.some(function (cell) { return cell.indexOf("descripcion") >= 0; }) &&
+              normalized.some(function (cell) { return cell === "cant" || cell.indexOf("cantidad") >= 0; });
+          });
+          if (headerIndex < 0) headerIndex = 0;
+          var headers = (rows[headerIndex] || []).map(function (cell) {
+            return String(cell || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          });
+          var findColumn = function (terms, fallback) {
+            var index = headers.findIndex(function (header) {
+              return terms.some(function (term) { return header.indexOf(term) >= 0; });
+            });
+            return index >= 0 ? index : fallback;
+          };
+          var descriptionColumn = findColumn(["descripcion", "producto", "item"], 0);
+          var quantityColumn = findColumn(["cantidad", "cant"], 1);
+          var unitColumn = findColumn(["unidad"], 2);
+          var priceColumn = findColumn(["p.unit", "precio unitario", "precio neto", "unitario"], 3);
+          var imported = rows.slice(headerIndex + 1).map(function (row) {
+            return {
+              NombreProducto: String(row[descriptionColumn] || "").trim(),
+              Cantidad: parseFloat(String(row[quantityColumn] || "1").replace(",", ".")) || 1,
+              UnidadMedida: String(row[unitColumn] || "un").trim() || "un",
+              PrecioUnitarioNeto: parseFloat(String(row[priceColumn] || "0").replace(/[^0-9,.-]/g, "").replace(",", ".")) || 0,
+            };
+          }).filter(function (line) { return line.NombreProducto; });
+          if (!imported.length) throw new Error("No se encontraron filas con descripción");
+          setForm(function (current) {
+            return Object.assign({}, current, { Lineas: imported });
+          });
+          setDirtyDraft(true);
+          if (props.setToast) props.setToast("✅ Itemizado importado: " + imported.length + " filas");
+        } catch (error) {
+          if (props.setToast) props.setToast("❌ No fue posible importar el Excel: " + error.message);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    };
+    var updateTechnicalField = function (field, value) {
+      setForm(function (current) {
+        var technical = Object.assign({}, current.OfertaTecnica || {});
+        technical[field] = value;
+        return Object.assign({}, current, { OfertaTecnica: technical });
+      });
+      setDirtyDraft(true);
+    };
+    var technicalRowDefaults = {
+      etapas: { actividad: "", duracion: "", responsable: "", entregable: "" },
+      equipo: { nombre: "", cargo: "", experiencia: "" },
+      recursos: { recurso: "", cantidad: 1, detalle: "" },
+      experiencia: { obra: "", mandante: "", monto: "", anio: new Date().getFullYear(), contacto: "" },
+      subcontratos: { especialidad: "", empresa: "", alcance: "", porcentaje: "" },
+    };
+    var updateTechnicalRow = function (listName, index, field, value) {
+      setForm(function (current) {
+        var technical = Object.assign({}, current.OfertaTecnica || {});
+        var rows = (technical[listName] || []).slice();
+        rows[index] = Object.assign({}, rows[index] || {}, { [field]: value });
+        technical[listName] = rows;
+        return Object.assign({}, current, { OfertaTecnica: technical });
+      });
+      setDirtyDraft(true);
+    };
+    var addTechnicalRow = function (listName) {
+      setForm(function (current) {
+        var technical = Object.assign({}, current.OfertaTecnica || {});
+        technical[listName] = (technical[listName] || []).concat([
+          Object.assign({}, technicalRowDefaults[listName]),
+        ]);
+        return Object.assign({}, current, { OfertaTecnica: technical });
+      });
+      setDirtyDraft(true);
+    };
+    var removeTechnicalRow = function (listName, index) {
+      setForm(function (current) {
+        var technical = Object.assign({}, current.OfertaTecnica || {});
+        technical[listName] = (technical[listName] || []).filter(function (_, rowIndex) {
+          return rowIndex !== index;
+        });
+        return Object.assign({}, current, { OfertaTecnica: technical });
+      });
+      setDirtyDraft(true);
+    };
+    var applyTechnicalTemplate = function () {
+      var project = form.Nombre || "la contratación";
+      var term = form.PlazoEjecucion ? form.PlazoEjecucion + " días corridos" : "plazo establecido en las bases";
+      updateTechnicalField(
+        "metodologia",
+        "La ejecución de " + project + " se desarrollará mediante una etapa inicial de coordinación y revisión de antecedentes, seguida por la planificación de recursos, ejecución controlada, verificación de calidad y entrega final. El equipo mantendrá coordinación permanente con la contraparte técnica, aplicará las medidas de seguridad correspondientes y registrará cada avance. Todas las actividades se ejecutarán dentro del " + term + ", asegurando trazabilidad, control de calidad y corrección oportuna de observaciones."
+      );
+    };
+    var generateBaseStages = function () {
+      updateTechnicalField("etapas", [
+        { actividad: "Inicio y coordinación", duracion: "10% del plazo", responsable: "Jefe de proyecto", entregable: "Acta de inicio y plan de trabajo" },
+        { actividad: "Ejecución del servicio", duracion: "75% del plazo", responsable: "Equipo ejecutor", entregable: "Avances y registros de control" },
+        { actividad: "Control, correcciones y entrega", duracion: "15% del plazo", responsable: "Jefe de proyecto", entregable: "Informe y recepción final" },
+      ]);
+    };
+    var generateItemSpecification = function (index) {
+      setForm(function (current) {
+        var lines = (current.Lineas || []).slice();
+        var line = Object.assign({}, lines[index] || {});
+        var itemName = line.NombreProducto || line.Descripcion || "la partida solicitada";
+        line.EspecificacionTecnica = "Para " + itemName + ", la empresa realizará una revisión inicial de los antecedentes y coordinará la ejecución con la contraparte técnica. Los trabajos se desarrollarán con personal competente, materiales y recursos adecuados, respetando las especificaciones de las bases, las medidas de seguridad y el plazo comprometido. Se controlará la calidad durante la ejecución, se registrarán los avances y se corregirán oportunamente las observaciones antes de la entrega y recepción conforme.";
+        lines[index] = line;
+        return Object.assign({}, current, { Lineas: lines });
+      });
+      setDirtyDraft(true);
+      if (props.setToast) props.setToast("✨ Texto base creado. Revísalo y adáptalo a las bases antes de postular.");
+    };
+    var normalizeTechnicalSuggestion = function (value) {
+      return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    };
+    var deriveBudgetTechnicalSuggestions = function () {
+      var budget = (props.budgets || []).find(function (candidate) { return String(candidate.id) === String(form.PresupuestoVinculado || ""); });
+      var result = { budget: budget || null, totalHH: 0, withApu: 0, maxCrew: 1, roles: [], resources: [], itemCount: budget ? (budget.items || []).filter(function (item) { return !!String(item.desc || "").trim(); }).length : 0 };
+      if (!budget) return result;
+      var roleMap = {};
+      var resourceMap = {};
+      var addResource = function (name, detail) {
+        var key = normalizeTechnicalSuggestion(name);
+        if (!resourceMap[key]) resourceMap[key] = { recurso: name, cantidad: 1, detalle: detail };
+      };
+      (budget.items || []).forEach(function (item) {
+        if (!String(item.desc || "").trim()) return;
+        var catalogItem = (props.catalog || []).find(function (candidate) { return parseInt(candidate.id) === parseInt(item._cid); });
+        var apu = (props.apus || []).find(function (candidate) { return parseInt(candidate.catalogId) === parseInt(item._cid) && !candidate.esSubcontrato; });
+        var searchable = normalizeTechnicalSuggestion((catalogItem && catalogItem.cat || "") + " " + (catalogItem && catalogItem.desc || "") + " " + (item.desc || ""));
+        var role = "Maestro/a ejecutor/a";
+        if (/pintur|empaste|esmalte/.test(searchable)) role = "Pintor/a";
+        else if (/electric|cable|tablero|enchufe|iluminacion/.test(searchable)) role = "Electricista";
+        else if (/sanitari|alcantarill|agua|wc|lavaman|gas/.test(searchable)) role = "Instalador/a sanitario/a";
+        else if (/metal|sold|reja|porton|baranda/.test(searchable)) role = "Maestro/a en estructuras metálicas";
+        else if (/carpint|madera|puerta|ventana|mueble/.test(searchable)) role = "Carpintero/a";
+        else if (/hormigon|albanil|radier|ceramic|piso|muro/.test(searchable)) role = "Maestro/a de obras civiles";
+        else if (/jardin|parque|forest|poda|area verde/.test(searchable)) role = "Especialista en áreas verdes";
+        var rendimiento = apu ? parseFloat(apu.rendimiento) || 0 : 0;
+        var dotacion = apu ? parseFloat(apu.dotacion) || 1 : 1;
+        var cantidad = parseFloat(item.cant) || 0;
+        var hh = rendimiento > 0 ? Math.round((cantidad / rendimiento) * dotacion * 8 * 10) / 10 : 0;
+        if (hh > 0) { result.totalHH += hh; result.withApu += 1; }
+        result.maxCrew = Math.max(result.maxCrew, Math.ceil(dotacion));
+        var roleKey = normalizeTechnicalSuggestion(role);
+        if (!roleMap[roleKey]) roleMap[roleKey] = { cargo: role, hh: 0, dotacion: 0, partidas: 0 };
+        roleMap[roleKey].hh += hh;
+        roleMap[roleKey].dotacion = Math.max(roleMap[roleKey].dotacion, Math.ceil(dotacion));
+        roleMap[roleKey].partidas += 1;
+        if (/pintur|empaste|esmalte/.test(searchable)) addResource("Equipo de preparación y aplicación de pintura", "Rodillos, brochas, bandejas, lijado y protección de superficies");
+        else if (/electric|cable|tablero|enchufe|iluminacion/.test(searchable)) addResource("Instrumentos y herramientas eléctricas", "Medición, aislación y herramientas certificadas según la tarea");
+        else if (/sanitari|alcantarill|agua|wc|lavaman|gas/.test(searchable)) addResource("Herramientas de instalación sanitaria", "Corte, unión, prueba y control de estanqueidad");
+        else if (/metal|sold|reja|porton|baranda/.test(searchable)) addResource("Soldadora, esmeril y herramientas de montaje", "Equipos con sus protecciones y consumibles correspondientes");
+        else if (/jardin|parque|forest|poda|area verde/.test(searchable)) addResource("Herramientas y maquinaria para áreas verdes", "Equipos definidos según terreno, vegetación y alcance de las bases");
+        else if (/hormigon|albanil|radier|ceramic|piso|muro/.test(searchable)) addResource("Herramientas y equipos para obras civiles", "Preparación, mezclado, nivelación, corte y control de terminaciones");
+        else addResource("Herramientas menores de ejecución", "Herramientas adecuadas para las partidas incluidas en el presupuesto");
+      });
+      addResource("Elementos de protección personal (EPP)", "Según riesgos de las partidas y exigencias de las bases");
+      result.totalHH = Math.round(result.totalHH * 10) / 10;
+      result.roles = Object.keys(roleMap).map(function (key) { var row = roleMap[key]; row.hh = Math.round(row.hh * 10) / 10; return row; });
+      result.resources = Object.keys(resourceMap).map(function (key) { return resourceMap[key]; });
+      return result;
+    };
+    var suggestTeamFromBudget = function () {
+      var data = deriveBudgetTechnicalSuggestions();
+      if (!data.budget) { if (props.setToast) props.setToast("⚠️ Vincula primero un presupuesto para calcular equipo y HH"); return; }
+      setForm(function (current) {
+        var technical = Object.assign({}, current.OfertaTecnica || {});
+        var existing = (technical.equipo || []).slice();
+        var existingRoles = existing.map(function (row) { return normalizeTechnicalSuggestion(row.cargo); });
+        data.roles.forEach(function (role) {
+          if (existingRoles.indexOf(normalizeTechnicalSuggestion(role.cargo)) >= 0) return;
+          existing.push({ nombre: "", cargo: role.cargo, experiencia: role.hh > 0 ? "Carga estimada: " + role.hh.toLocaleString("es-CL") + " HH · Dotación APU: " + role.dotacion + ". Completa experiencia o certificación." : "Oficio sugerido por las partidas. Completa experiencia o certificación." });
+        });
+        technical.equipo = existing;
+        return Object.assign({}, current, { OfertaTecnica: technical });
+      });
+      setDirtyDraft(true);
+      if (props.setToast) props.setToast("👷 Equipo sugerido desde presupuesto N° " + data.budget.id + ". Completa los nombres antes de guardar.");
+    };
+    var suggestResourcesFromBudget = function () {
+      var data = deriveBudgetTechnicalSuggestions();
+      if (!data.budget) { if (props.setToast) props.setToast("⚠️ Vincula primero un presupuesto para sugerir recursos"); return; }
+      setForm(function (current) {
+        var technical = Object.assign({}, current.OfertaTecnica || {});
+        var existing = (technical.recursos || []).slice();
+        var existingResources = existing.map(function (row) { return normalizeTechnicalSuggestion(row.recurso); });
+        data.resources.forEach(function (resource) {
+          if (existingResources.indexOf(normalizeTechnicalSuggestion(resource.recurso)) >= 0) return;
+          existing.push(Object.assign({}, resource, { cantidad: resource.recurso.indexOf("EPP") >= 0 ? data.maxCrew : resource.cantidad }));
+        });
+        technical.recursos = existing;
+        return Object.assign({}, current, { OfertaTecnica: technical });
+      });
+      setDirtyDraft(true);
+      if (props.setToast) props.setToast("🧰 Recursos sugeridos desde las partidas del presupuesto. Revisa disponibilidad y exigencias.");
+    };
+
+    var getConfiguredLaborRoles = function () {
+      return ((props.cfg && props.cfg.moItems) || []).filter(function (role) { return !!String(role.rol || "").trim(); });
+    };
+    var createCrewRoleSnapshot = function (role, quantity) {
+      return { roleId: role.id, rol: role.rol || "Cargo", cantidad: quantity == null ? 1 : quantity, jornal: parseFloat(role.jornal) || 0, horasJornada: parseFloat(role.horasJornada) || 8, hhAsignadas: 0, origenConfiguracion: true };
+    };
+    var rebalanceCrewHours = function (rows, totalHH) {
+      var result = (rows || []).map(function (row) { return Object.assign({}, row); });
+      var active = result.filter(function (row) { return (parseFloat(row.cantidad) || 0) > 0 && (parseFloat(row.horasJornada) || 0) > 0; });
+      var capacity = active.reduce(function (sum, row) { return sum + (parseFloat(row.cantidad) || 0) * (parseFloat(row.horasJornada) || 0); }, 0);
+      var assigned = 0;
+      result.forEach(function (row) {
+        var isLastActive = active.length && row === active[active.length - 1];
+        var rowCapacity = (parseFloat(row.cantidad) || 0) * (parseFloat(row.horasJornada) || 0);
+        var hours = capacity > 0 && rowCapacity > 0 ? (isLastActive ? Math.max(0, totalHH - assigned) : Math.round((totalHH * rowCapacity / capacity) * 10) / 10) : 0;
+        row.hhAsignadas = Math.round(hours * 10) / 10;
+        assigned += row.hhAsignadas;
+      });
+      return result;
+    };
+    var getDefaultCrewRows = function (totalHH) {
+      var roles = getConfiguredLaborRoles();
+      return roles.length ? rebalanceCrewHours([createCrewRoleSnapshot(roles[0], 1)], totalHH) : [];
+    };
+    var setCrewRoleRows = function (updater, rebalance) {
+      var data = deriveBudgetTechnicalSuggestions();
+      setForm(function (current) {
+        var technical = Object.assign({}, current.OfertaTecnica || {});
+        var baseRows = (technical.cuadrillaRoles || []).length ? technical.cuadrillaRoles.map(function (row) { return Object.assign({}, row); }) : getDefaultCrewRows(data.totalHH);
+        var nextRows = updater(baseRows);
+        technical.cuadrillaRoles = rebalance ? rebalanceCrewHours(nextRows, data.totalHH) : nextRows;
+        technical.cuadrillaPlan = null;
+        return Object.assign({}, current, { OfertaTecnica: technical });
+      });
+      setDirtyDraft(true);
+    };
+    var updateCrewRoleRow = function (index, field, value, shouldRebalance) {
+      setCrewRoleRows(function (rows) {
+        var updated = rows.slice();
+        if (field === "roleId") {
+          var configured = getConfiguredLaborRoles().find(function (role) { return String(role.id) === String(value); });
+          if (configured) updated[index] = Object.assign({}, updated[index], createCrewRoleSnapshot(configured, updated[index].cantidad), { hhAsignadas: updated[index].hhAsignadas });
+        } else updated[index] = Object.assign({}, updated[index], { [field]: value });
+        return updated;
+      }, shouldRebalance);
+    };
+    var addCrewRoleRow = function () {
+      var configuredRoles = getConfiguredLaborRoles();
+      var data = deriveBudgetTechnicalSuggestions();
+      setCrewRoleRows(function (rows) {
+        var used = rows.map(function (row) { return String(row.roleId); });
+        var available = configuredRoles.find(function (role) { return used.indexOf(String(role.id)) < 0; });
+        if (!available) { if (props.setToast) props.setToast("ℹ️ Todos los cargos configurados ya están incluidos; aumenta la cantidad en su fila."); return rows; }
+        return rows.concat([createCrewRoleSnapshot(available, 1)]);
+      }, true);
+    };
+    var addTemporaryCrewRoleRow = function () {
+      var temporaryRole = { roleId: "local_" + Date.now(), rol: "Nuevo maestro / cargo", cantidad: 1, jornal: 0, horasJornada: 8, hhAsignadas: 0, origenConfiguracion: false };
+      setCrewRoleRows(function (rows) { return rows.concat([temporaryRole]); }, true);
+      if (props.setToast) props.setToast("➕ Cargo temporal agregado solo a esta licitación. Completa nombre y jornal.");
+    };
+    var removeCrewRoleRow = function (index) {
+      setCrewRoleRows(function (rows) { return rows.filter(function (_, rowIndex) { return rowIndex !== index; }); }, true);
+    };
+    var applyCrewPreset = function (preset) {
+      var roles = getConfiguredLaborRoles();
+      var data = deriveBudgetTechnicalSuggestions();
+      if (!roles.length) { if (props.setToast) props.setToast("⚠️ Agrega cargos en Configuración → Costos → Mano de Obra Real"); return; }
+      var helper = roles.find(function (role) { return /ayudante/i.test(role.rol || ""); });
+      var masters = roles.filter(function (role) { return !/ayudante/i.test(role.rol || ""); });
+      var master = masters[0] || roles[0];
+      var rows = [];
+      if (preset === "solo_maestro") rows.push(createCrewRoleSnapshot(master, 1));
+      if (preset === "maestro_ayudante") { rows.push(createCrewRoleSnapshot(master, 1)); if (helper) rows.push(createCrewRoleSnapshot(helper, 1)); }
+      if (preset === "maestro_dos_ayudantes") { rows.push(createCrewRoleSnapshot(master, 1)); if (helper) rows.push(createCrewRoleSnapshot(helper, 2)); }
+      if (preset === "dos_maestros_ayudante") { rows.push(createCrewRoleSnapshot(master, 2)); if (helper) rows.push(createCrewRoleSnapshot(helper, 1)); }
+      if (!rows.length) rows.push(createCrewRoleSnapshot(master, 1));
+      setForm(function (current) { var technical = Object.assign({}, current.OfertaTecnica || {}); technical.cuadrillaRoles = rebalanceCrewHours(rows, data.totalHH); technical.cuadrillaPlan = null; return Object.assign({}, current, { OfertaTecnica: technical }); });
+      setDirtyDraft(true);
+    };
+    var calculateBudgetLaborAmount = function (budget) {
+      return (budget && budget.items || []).reduce(function (sum, item) {
+        var quantity = parseFloat(item.cant) || 0;
+        var unitPrice = parseFloat(item.precio) || 0;
+        var type = item._tipoCosto || (item._cid ? "auto" : "mo");
+        if (type === "mat") return sum;
+        if (type === "mo") return sum + quantity * unitPrice;
+        return sum + quantity * Math.max(0, unitPrice - (parseFloat(item._apuMatUnit) || 0));
+      }, 0);
+    };
+    var applyCrewPlanToTechnical = function (rows, estimatedDays, directCost, signature) {
+      var data = deriveBudgetTechnicalSuggestions();
+      var activeRows = (rows || []).filter(function (row) { return (parseFloat(row.cantidad) || 0) > 0 && (parseFloat(row.hhAsignadas) || 0) > 0; });
+      var assignedHH = activeRows.reduce(function (sum, row) { return sum + (parseFloat(row.hhAsignadas) || 0); }, 0);
+      if (!data.budget || data.totalHH <= 0) { if (props.setToast) props.setToast("⚠️ El presupuesto no tiene HH calculables desde APU"); return; }
+      if (Math.abs(assignedHH - data.totalHH) > .11) { if (props.setToast) props.setToast("⚠️ Distribuye exactamente las " + data.totalHH.toLocaleString("es-CL") + " HH antes de aplicar"); return; }
+      setForm(function (current) {
+        var technical = Object.assign({}, current.OfertaTecnica || {});
+        var manualTeam = (technical.equipo || []).filter(function (row) { return !row._fromCrewPlan; });
+        var generatedTeam = [];
+        activeRows.forEach(function (row) {
+          var quantity = Math.max(1, parseInt(row.cantidad) || 1);
+          for (var personIndex = 0; personIndex < quantity; personIndex++) generatedTeam.push({ nombre: "", cargo: row.rol, experiencia: "Parte de " + row.hhAsignadas.toLocaleString("es-CL") + " HH asignadas al cargo · Jornal de referencia " + Math.round(parseFloat(row.jornal) || 0).toLocaleString("es-CL") + ". Completa nombre y experiencia.", _fromCrewPlan: true, _crewRoleId: row.roleId });
+        });
+        var stages = (technical.etapas || []).slice();
+        var composition = activeRows.map(function (row) { return (parseInt(row.cantidad) || 0) + " " + row.rol; }).join(" + ");
+        var crewStage = { actividad: "Ejecución de partidas presupuestadas", duracion: estimatedDays.toLocaleString("es-CL") + " días estimados", responsable: composition, entregable: "Partidas ejecutadas, controles de calidad y registro de avance", _fromBudgetCrewPlan: true };
+        var existingStageIndex = stages.findIndex(function (row) { return !!row._fromBudgetCrewPlan; });
+        if (existingStageIndex >= 0) stages[existingStageIndex] = crewStage; else stages.push(crewStage);
+        technical.equipo = manualTeam.concat(generatedTeam);
+        technical.etapas = stages;
+        technical.cuadrillaRoles = activeRows.map(function (row) { return Object.assign({}, row); });
+        technical.cuadrillaPersonas = activeRows.reduce(function (sum, row) { return sum + (parseInt(row.cantidad) || 0); }, 0);
+        technical.cuadrillaPlan = { roles: activeRows.map(function (row) { return Object.assign({}, row); }), diasEstimados: estimatedDays, hhTotales: data.totalHH, costoDirecto: directCost, presupuestoId: data.budget.id, firma: signature };
+        return Object.assign({}, current, { OfertaTecnica: technical });
+      });
+      setDirtyDraft(true);
+      if (props.setToast) props.setToast("✅ Cuadrilla por cargos aplicada al equipo y a las etapas. Completa los nombres antes de guardar.");
+    };
+
+    var guaranteeDefaults = {
+      decision: "pendiente",
+      exigida: false,
+      montoTipo: "monto",
+      monto: "",
+      tipo: "Boleta bancaria",
+      institucion: "",
+      beneficiario: "",
+      glosa: "",
+      vigenciaDias: "",
+      vencimiento: "",
+      costo: "",
+      estado: "Pendiente",
+      referenciaBases: "",
+    };
+    var getGuarantee = function (kind) {
+      var guarantees = form.Garantias && !Array.isArray(form.Garantias) ? form.Garantias : {};
+      return Object.assign({}, guaranteeDefaults, guarantees[kind] || {});
+    };
+    var updateGuarantee = function (kind, field, value) {
+      setForm(function (current) {
+        var guarantees = current.Garantias && !Array.isArray(current.Garantias)
+          ? Object.assign({}, current.Garantias)
+          : {};
+        guarantees[kind] = Object.assign({}, guaranteeDefaults, guarantees[kind] || {}, { [field]: value });
+        return Object.assign({}, current, { Garantias: guarantees, GarantiasRevisadas: false });
+      });
+      setDirtyDraft(true);
+    };
+    var normalizeAntecedentText = function (value) {
+      return String(value || "").replace(/\r/g, "").replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+    };
+    var classifyAntecedent = function (name) {
+      var normalized = String(name || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      if (/bases?.*administr|administr.*bases?/.test(normalized)) return "Bases administrativas";
+      if (/bases?.*tecn|especificacion|terminos.*referencia/.test(normalized)) return "Bases técnicas";
+      if (/anexo|formulario|declaracion/.test(normalized)) return "Anexo o formulario";
+      if (/aclaracion|respuesta|pregunta|modificacion/.test(normalized)) return "Aclaración o modificación";
+      if (/plano|itemizado|presupuesto/.test(normalized)) return "Plano o itemizado";
+      return "Otro antecedente";
+    };
+    var antecedentEvidence = function (text, index, size) {
+      var start = Math.max(0, index - Math.round((size || 360) * 0.35));
+      return normalizeAntecedentText(text.slice(start, start + (size || 360))).replace(/\n/g, " ");
+    };
+    var analyzeAntecedentDocument = function (document) {
+      var text = normalizeAntecedentText(document.textoAnalisis || "");
+      if (!text) return [];
+      var lower = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      var findings = [];
+      var addFinding = function (finding) {
+        findings.push(Object.assign({
+          id: Date.now() + Math.random(),
+          documentId: document.id,
+          source: document.nombre,
+          status: "pendiente",
+        }, finding));
+      };
+      var parseDate = function (context) {
+        var match = context.match(/(?:vencimiento|vigencia|hasta)[^0-9]{0,35}(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/i);
+        if (!match) return "";
+        return match[3] + "-" + String(match[2]).padStart(2, "0") + "-" + String(match[1]).padStart(2, "0");
+      };
+      var inspectGuarantee = function (key, terms, title) {
+        var index = -1;
+        for (var termIndex = 0; termIndex < terms.length && index < 0; termIndex++) index = lower.indexOf(terms[termIndex]);
+        if (index < 0) return;
+        var contextStart = Math.max(0, index - 220);
+        var context = text.slice(contextStart, index + 1400);
+        var contextLower = context.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        var localIndex = index - contextStart;
+        var decisionContext = contextLower.slice(Math.max(0, localIndex - 140), localIndex + 520);
+        var noRequired = key === "seriedad"
+          ? /no se (?:exige|requiere|solicita)[^.\n]{0,110}(?:garantia de seriedad|seriedad de la oferta)|(?:garantia de seriedad|seriedad de la oferta)[^.\n]{0,110}no se (?:exige|requiere|solicita)/.test(decisionContext)
+          : /no se (?:exige|requiere|solicita)[^.\n]{0,110}(?:garantia de fiel cumplimiento|fiel cumplimiento del contrato)|(?:garantia de fiel cumplimiento|fiel cumplimiento del contrato)[^.\n]{0,110}no se (?:exige|requiere|solicita)/.test(decisionContext);
+        var amountMatch = context.match(/\$\s*([0-9][0-9. ]{2,})/);
+        var percentMatch = context.match(/([0-9]+(?:[,.][0-9]+)?)\s*%/);
+        var daysMatch = context.match(/(?:vigencia|plazo)[^0-9]{0,45}([0-9]{1,4})\s*d[ií]as/i);
+        var beneficiaryMatch = context.match(/beneficiari[oa]\s*:?\s*([^\n.;]{4,140})/i);
+        var clauseMatch = context.match(/glosa\s*:?\s*[“"]?([^\n”"]{5,220})/i);
+        var fields = {
+          decision: noRequired ? "no_exigida" : "exigida",
+          exigida: !noRequired,
+        };
+        if (!noRequired && percentMatch) {
+          fields.montoTipo = "porcentaje";
+          fields.monto = String(percentMatch[1]).replace(",", ".");
+        } else if (!noRequired && amountMatch) {
+          fields.montoTipo = "monto";
+          fields.monto = String(amountMatch[1]).replace(/[^0-9]/g, "");
+        }
+        if (daysMatch) fields.vigenciaDias = daysMatch[1];
+        if (beneficiaryMatch) fields.beneficiario = beneficiaryMatch[1].trim();
+        if (clauseMatch) fields.glosa = clauseMatch[1].trim();
+        var parsedDate = parseDate(context);
+        if (parsedDate) fields.vencimiento = parsedDate;
+        var confidence = noRequired || fields.monto || fields.vencimiento ? "Alta" : "Media";
+        addFinding({
+          type: "garantia",
+          guaranteeKey: key,
+          title: title,
+          value: noRequired ? "Las bases indican que no se exige" : "Garantía detectada como exigida",
+          detail: noRequired ? "No se completarán montos ni vigencias." : [fields.monto ? (fields.montoTipo === "porcentaje" ? fields.monto + "%" : "$" + Number(fields.monto).toLocaleString("es-CL")) : "Monto por revisar", fields.vigenciaDias ? fields.vigenciaDias + " días de vigencia" : "Vigencia por revisar"].join(" · "),
+          fields: fields,
+          confidence: confidence,
+          evidence: antecedentEvidence(text, contextStart + Math.min(index - contextStart, 220), 430),
+        });
+      };
+      inspectGuarantee("seriedad", ["garantia de seriedad", "seriedad de la oferta"], "Garantía de seriedad de la oferta");
+      inspectGuarantee("fiel", ["garantia de fiel cumplimiento", "fiel cumplimiento del contrato"], "Garantía de fiel cumplimiento");
+      var visitIndex = lower.indexOf("visita a terreno");
+      if (visitIndex >= 0) {
+        var visitContext = lower.slice(Math.max(0, visitIndex - 100), visitIndex + 420);
+        addFinding({ type: "requisito", title: "Visita a terreno", value: /obligatori|excluyente/.test(visitContext) ? "Aparentemente obligatoria" : "Mencionada en las bases", detail: "Revisa fecha, lugar y si la inasistencia deja fuera la oferta.", confidence: /obligatori|excluyente/.test(visitContext) ? "Alta" : "Media", evidence: antecedentEvidence(text, visitIndex, 380) });
+      }
+      var deadlineMatch = text.match(/plazo (?:de )?ejecuci[oó]n[^0-9]{0,70}([0-9]{1,4})\s*d[ií]as/i);
+      if (deadlineMatch) addFinding({ type: "plazo", title: "Plazo de ejecución", value: deadlineMatch[1] + " días", detail: "Puede aplicarse al campo General después de verificar la unidad y condiciones.", confidence: "Alta", evidence: antecedentEvidence(text, deadlineMatch.index, 360), fields: { PlazoEjecucion: deadlineMatch[1] } });
+      var annexMatches = [];
+      var annexRegex = /(?:anexo|formulario)\s*(?:n[°ºo]?\s*)?([0-9]{1,2})[^\n.;]{0,100}/gi;
+      var annexMatch;
+      while ((annexMatch = annexRegex.exec(text)) && annexMatches.length < 8) annexMatches.push(normalizeAntecedentText(annexMatch[0]));
+      if (annexMatches.length) addFinding({ type: "documento", title: "Anexos o formularios mencionados", value: annexMatches.length + " referencias detectadas", detail: annexMatches.join(" · "), confidence: "Media", evidence: antecedentEvidence(text, lower.indexOf("anexo") >= 0 ? lower.indexOf("anexo") : lower.indexOf("formulario"), 420) });
+      return findings;
+    };
+    var readAntecedentText = function (selectedFile) {
+      var extension = String(selectedFile.name || "").split(".").pop().toLowerCase();
+      if (["txt", "csv", "json", "xml"].indexOf(extension) >= 0) return selectedFile.text();
+      if (["xlsx", "xls"].indexOf(extension) >= 0 && window.XLSX) {
+        return selectedFile.arrayBuffer().then(function (buffer) {
+          var workbook = window.XLSX.read(buffer, { type: "array" });
+          return workbook.SheetNames.map(function (sheetName) { return "HOJA " + sheetName + "\n" + window.XLSX.utils.sheet_to_csv(workbook.Sheets[sheetName]); }).join("\n\n");
+        });
+      }
+      return Promise.resolve("");
+    };
+    var addAntecedentFiles = function (fileList) {
+      var selectedFiles = Array.prototype.slice.call(fileList || []);
+      if (!selectedFiles.length) return;
+      Promise.all(selectedFiles.map(function (selectedFile) {
+        return readAntecedentText(selectedFile).catch(function () { return ""; }).then(function (text) {
+          var document = {
+            id: Date.now() + Math.random(),
+            nombre: selectedFile.name,
+            tipo: selectedFile.type || "Archivo",
+            tamano: selectedFile.size || 0,
+            clasificacion: classifyAntecedent(selectedFile.name),
+            origen: "Carga manual",
+            textoAnalisis: normalizeAntecedentText(text),
+            estado: text ? "analizado" : "requiere_texto",
+            actualizadoEn: new Date().toISOString(),
+          };
+          return { document: document, findings: analyzeAntecedentDocument(document) };
+        });
+      })).then(function (results) {
+        setForm(function (current) {
+          var documentIds = results.map(function (result) { return result.document.id; });
+          var previousFindings = (current.HallazgosAntecedentes || []).filter(function (finding) { return documentIds.indexOf(finding.documentId) < 0; });
+          return Object.assign({}, current, {
+            Antecedentes: (current.Antecedentes || []).concat(results.map(function (result) { return result.document; })),
+            HallazgosAntecedentes: previousFindings.concat(results.reduce(function (all, result) { return all.concat(result.findings); }, [])),
+            AntecedentesRevisados: false,
+          });
+        });
+        setDirtyDraft(true);
+        if (props.setToast) props.setToast("📚 " + results.length + " antecedente(s) agregado(s). Revisa los hallazgos antes de aplicarlos.");
+      });
+    };
+    var updateAntecedent = function (documentId, field, value) {
+      setForm(function (current) {
+        return Object.assign({}, current, {
+          Antecedentes: (current.Antecedentes || []).map(function (document) { return document.id === documentId ? Object.assign({}, document, { [field]: value, actualizadoEn: new Date().toISOString() }) : document; }),
+          AntecedentesRevisados: false,
+        });
+      });
+      setDirtyDraft(true);
+    };
+    var analyzeStoredAntecedent = function (documentId) {
+      setForm(function (current) {
+        var documents = (current.Antecedentes || []).map(function (document) { return document.id === documentId ? Object.assign({}, document, { estado: "analizado", textoAnalisis: normalizeAntecedentText(document.textoAnalisis || ""), actualizadoEn: new Date().toISOString() }) : document; });
+        var document = documents.find(function (candidate) { return candidate.id === documentId; });
+        var findings = (current.HallazgosAntecedentes || []).filter(function (finding) { return finding.documentId !== documentId; }).concat(document ? analyzeAntecedentDocument(document) : []);
+        return Object.assign({}, current, { Antecedentes: documents, HallazgosAntecedentes: findings, AntecedentesRevisados: false });
+      });
+      setDirtyDraft(true);
+      if (props.setToast) props.setToast("🔎 Análisis actualizado. Confirma cada hallazgo antes de usarlo.");
+    };
+    var removeAntecedent = function (documentId) {
+      setForm(function (current) {
+        return Object.assign({}, current, {
+          Antecedentes: (current.Antecedentes || []).filter(function (document) { return document.id !== documentId; }),
+          HallazgosAntecedentes: (current.HallazgosAntecedentes || []).filter(function (finding) { return finding.documentId !== documentId; }),
+          AntecedentesRevisados: false,
+        });
+      });
+      setDirtyDraft(true);
+    };
+    var applyAntecedentFinding = function (findingId) {
+      setForm(function (current) {
+        var findings = (current.HallazgosAntecedentes || []).map(function (finding) { return finding.id === findingId ? Object.assign({}, finding, { status: "aplicado" }) : finding; });
+        var finding = findings.find(function (candidate) { return candidate.id === findingId; });
+        var next = Object.assign({}, current, { HallazgosAntecedentes: findings, AntecedentesRevisados: false });
+        if (finding && finding.type === "garantia") {
+          var guarantees = current.Garantias && !Array.isArray(current.Garantias) ? Object.assign({}, current.Garantias) : {};
+          guarantees[finding.guaranteeKey] = Object.assign({}, guaranteeDefaults, guarantees[finding.guaranteeKey] || {}, finding.fields || {});
+          next.Garantias = guarantees;
+          next.GarantiasRevisadas = false;
+        }
+        if (finding && finding.type === "plazo" && finding.fields && finding.fields.PlazoEjecucion) next.PlazoEjecucion = finding.fields.PlazoEjecucion;
+        if (finding && finding.type === "documento") {
+          var existingDocuments = (current.Docs || []).slice();
+          var details = String(finding.detail || "").split(" · ").filter(Boolean);
+          details.forEach(function (name) { if (!existingDocuments.some(function (document) { return String(document.name || "").toLowerCase() === name.toLowerCase(); })) existingDocuments.push({ id: Date.now() + Math.random(), name: name, checked: false }); });
+          next.Docs = existingDocuments;
+        }
+        return next;
+      });
+      setDirtyDraft(true);
+      if (props.setToast) props.setToast("✅ Hallazgo aplicado. Revisa el campo completado antes de postular.");
+    };
+    var dismissAntecedentFinding = function (findingId) {
+      setForm(function (current) { return Object.assign({}, current, { HallazgosAntecedentes: (current.HallazgosAntecedentes || []).map(function (finding) { return finding.id === findingId ? Object.assign({}, finding, { status: "descartado" }) : finding; }), AntecedentesRevisados: false }); });
+      setDirtyDraft(true);
+    };
+    var updateDocument = function (index, field, value) {
+      setForm(function (current) {
+        var documents = (current.Docs || []).slice();
+        documents[index] = Object.assign({}, documents[index] || {}, { [field]: value });
+        return Object.assign({}, current, { Docs: documents });
+      });
+      setDirtyDraft(true);
+    };
+    var addChecklistDocument = function (document) {
+      setForm(function (current) {
+        var documents = (current.Docs || []).slice();
+        var normalizedName = String(document && document.name || '').trim().toLowerCase();
+        if (!normalizedName || documents.some(function (candidate) { return String(candidate.name || '').trim().toLowerCase() === normalizedName; })) return current;
+        documents.push(Object.assign({
+          id: Date.now() + Math.random(),
+          checked: false,
+          category: 'Administrativo',
+          requirement: 'por_confirmar',
+          explanation: 'Confirma en las bases si este documento corresponde y cuál es su formato oficial.',
+          origin: 'Revisar bases y anexos en Mercado Público',
+          responsible: '',
+          format: '',
+          sourceRef: '',
+        }, document || {}));
+        return Object.assign({}, current, { Docs: documents });
+      });
+      setDirtyDraft(true);
+    };
+    var addOwnFiles = function (fileList) {
+      var files = Array.prototype.slice.call(fileList || []).map(function (selectedFile) {
+        return {
+          id: Date.now() + Math.random(),
+          nombre: selectedFile.name,
+          tipo: selectedFile.type || "Archivo",
+          tamano: selectedFile.size || 0,
+          ultimaModificacion: selectedFile.lastModified || Date.now(),
+        };
+      });
+      if (!files.length) return;
+      setForm(function (current) {
+        return Object.assign({}, current, { Archivos: (current.Archivos || []).concat(files) });
+      });
+      setDirtyDraft(true);
+    };
+    var removeOwnFile = function (fileId) {
+      setForm(function (current) {
+        return Object.assign({}, current, {
+          Archivos: (current.Archivos || []).filter(function (storedFile) {
+            return storedFile.id !== fileId;
+          }),
+        });
+      });
+      setDirtyDraft(true);
+    };
+    var requiredFicha = [
+      !!form.CodigoExterno,
+      !!form.Nombre,
+      !!form.Organismo,
+      !!form.Region,
+      !!(form.Fechas && form.Fechas.FechaCierre),
+      !!form.PlazoEjecucion,
+    ];
+    var fichaProgress = Math.round(
+      (requiredFicha.filter(function (ready) {
+        return ready;
+      }).length /
+        requiredFicha.length) *
+        100,
+    );
+    var savePreparationDraft = function (goNext, nextStep) {
+      if (!form.CodigoExterno || !form.Nombre) {
+        if (props.setToast)
+          props.setToast("⚠️ Importa o completa el código y nombre de la licitación");
+        return;
+      }
+      var updatedAt = new Date().toISOString();
+      var normalizedCode = form.CodigoExterno.trim().toUpperCase().replace(/\s+/g, "");
+      var ficha = Object.assign({}, form, { CodigoExterno: normalizedCode });
+      var destinationStep = nextStep || step || 1;
+      var workflowState = destinationStep >= 5 && ficha.DecisionEstudio === "Conviene" && ficha.DecisionConfirmada
+        ? "En Preparación"
+        : "En Estudio";
+      if (goNext && (!ficha.Lineas || !ficha.Lineas.length))
+        ficha.Lineas = [createBlankLine()];
+      props.setLicitaciones(function (previous) {
+        var list = previous || [];
+        var targetId = props.initialItem && props.initialItem.id;
+        var found = false;
+        var updated = list.map(function (saved) {
+          var isTarget = targetId
+            ? saved.id === targetId
+            : saved.idMP === normalizedCode;
+          if (!isTarget) return saved;
+          found = true;
+          return Object.assign({}, saved, {
+            estado: ["Postulada", "Adjudicada", "Perdida"].indexOf(saved.estado) >= 0 ? saved.estado : workflowState,
+            idMP: normalizedCode,
+            nombreObra: ficha.Nombre,
+            organismo: ficha.Organismo,
+            region: ficha.Region,
+            montoEstimado: ficha.MontoEstimado || saved.montoEstimado || 0,
+            fechaCierre:
+              (ficha.Fechas && ficha.Fechas.FechaCierre) || saved.fechaCierre || "",
+            preparacion: Object.assign({}, saved.preparacion || {}, {
+              paso: destinationStep,
+              ficha: ficha,
+              actualizadoEn: updatedAt,
+            }),
+          });
+        });
+        if (!found) {
+          updated.unshift({
+            id: Date.now(),
+            idMP: normalizedCode,
+            nombreObra: ficha.Nombre,
+            organismo: ficha.Organismo,
+            region: ficha.Region,
+            montoEstimado: ficha.MontoEstimado || 0,
+            fechaCierre: ficha.Fechas ? ficha.Fechas.FechaCierre || "" : "",
+            estado: workflowState,
+            notas: "",
+            fechaGuardado: new Date().toISOString().slice(0, 10),
+            canal: "licitacion",
+            preparacion: {
+              paso: destinationStep,
+              ficha: ficha,
+              actualizadoEn: updatedAt,
+            },
+          });
+        }
+        return updated;
+      });
+      setForm(ficha);
+      setSavedAt(updatedAt);
+      setDirtyDraft(false);
+      if (props.setToast) props.setToast("💾 Borrador de preparación guardado");
+      if (goNext) setStep(destinationStep);
+    };
+    var saveAndExitPreparation = function () {
+      if (!form.CodigoExterno || !form.Nombre) {
+        if (props.setToast) props.setToast("⚠️ Completa el código y nombre antes de guardar");
+        return;
+      }
+      savePreparationDraft(false, step);
+      if (props.onExitToList) props.onExitToList();
+    };
+    var finalizePreparation = function () {
+      if (!form.RevisionFinal) {
+        if (props.setToast) props.setToast("⚠️ Confirma la revisión final antes de cerrar el borrador");
+        return;
+      }
+      var updatedAt = new Date().toISOString();
+      var normalizedCode = String(form.CodigoExterno || "").trim().toUpperCase().replace(/\s+/g, "");
+      props.setLicitaciones(function (previous) {
+        return (previous || []).map(function (opportunity) {
+          var isTarget = props.initialItem && props.initialItem.id
+            ? opportunity.id === props.initialItem.id
+            : opportunity.idMP === normalizedCode;
+          if (!isTarget) return opportunity;
+          return Object.assign({}, opportunity, {
+            preparacion: Object.assign({}, opportunity.preparacion || {}, {
+              paso: 9,
+              estado: form.PreparacionEstado || "Borrador",
+              ficha: Object.assign({}, form, { CodigoExterno: normalizedCode }),
+              actualizadoEn: updatedAt,
+              cierreRevisadoEn: updatedAt,
+            }),
+          });
+        });
+      });
+      setSavedAt(updatedAt);
+      setDirtyDraft(false);
+      if (props.setToast) props.setToast("✅ Preparación guardada como " + (form.PreparacionEstado || "Borrador"));
+      if (props.onSuccess) props.onSuccess();
+    };
+    var confirmSubmittedOffer = function () {
+      if (!form.RevisionFinal || form.PreparacionEstado !== "Lista para postular") {
+        if (props.setToast) props.setToast("Primero confirma la revisión final y selecciona Lista para postular");
+        return;
+      }
+      if (!window.confirm("Confirma únicamente si la oferta ya fue enviada en Mercado Público y tienes su comprobante. ¿Marcar esta oportunidad como Postulada?")) return;
+      var submittedAt = new Date().toISOString();
+      var normalizedCode = String(form.CodigoExterno || "").trim().toUpperCase().replace(/\s+/g, "");
+      props.setLicitaciones(function (previous) {
+        return (previous || []).map(function (opportunity) {
+          var isTarget = props.initialItem && props.initialItem.id
+            ? opportunity.id === props.initialItem.id
+            : opportunity.idMP === normalizedCode;
+          if (!isTarget) return opportunity;
+          return Object.assign({}, opportunity, {
+            estado: "Postulada",
+            postuladaEn: submittedAt,
+            preparacion: Object.assign({}, opportunity.preparacion || {}, {
+              paso: 9,
+              estado: "Postulada",
+              ficha: Object.assign({}, form, { CodigoExterno: normalizedCode }),
+              actualizadoEn: submittedAt,
+              cierreRevisadoEn: submittedAt,
+              postuladaEn: submittedAt,
+            }),
+          });
+        });
+      });
+      if (props.setToast) props.setToast("📤 Oferta marcada como Postulada. Conserva el comprobante de Mercado Público.");
+      if (props.onSuccess) props.onSuccess();
+    };
+
+    var linkBudgetFromTender = function (budgetId) {
+      var normalizedBudgetId = String(budgetId || "");
+      var tenderCode = String(form.CodigoExterno || "").trim().toUpperCase();
+      if (!tenderCode) {
+        if (props.setToast) props.setToast("⚠️ Guarda primero el ID de Mercado Público");
+        return;
+      }
+      var selectedBudget = (props.budgets || []).find(function (budget) { return String(budget.id) === normalizedBudgetId; });
+      setForm(function (current) { return Object.assign({}, current, { PresupuestoVinculado: selectedBudget ? normalizedBudgetId : "" }); });
+      setDirtyDraft(true);
+      if (props.setBudgets) {
+        props.setBudgets(function (previous) {
+          return (previous || []).map(function (budget) {
+            if (selectedBudget && budget.id !== selectedBudget.id && String(budget.licitacionIdMP || "").toUpperCase() === tenderCode) {
+              return Object.assign({}, budget, { licitacionIdMP: "", licitacionOpportunityId: "", licitacionNombre: "" });
+            }
+            if (selectedBudget && budget.id === selectedBudget.id) {
+              return Object.assign({}, budget, { licitacionIdMP: tenderCode, licitacionOpportunityId: props.initialItem && props.initialItem.id || "", licitacionNombre: form.Nombre || "" });
+            }
+            if (!selectedBudget && String(budget.id) === String(form.PresupuestoVinculado || "") && String(budget.licitacionIdMP || "").toUpperCase() === tenderCode) {
+              return Object.assign({}, budget, { licitacionIdMP: "", licitacionOpportunityId: "", licitacionNombre: "" });
+            }
+            return budget;
+          });
+        });
+      }
+      props.setLicitaciones(function (previous) {
+        return (previous || []).map(function (opportunity) {
+          var isTarget = props.initialItem && props.initialItem.id ? opportunity.id === props.initialItem.id : String(opportunity.idMP || "").toUpperCase() === tenderCode;
+          if (!isTarget) return opportunity;
+          var preparation = Object.assign({}, opportunity.preparacion || {});
+          var ficha = Object.assign({}, preparation.ficha || form, { PresupuestoVinculado: selectedBudget ? normalizedBudgetId : "" });
+          preparation.ficha = ficha;
+          preparation.actualizadoEn = new Date().toISOString();
+          return Object.assign({}, opportunity, { preparacion: preparation });
+        });
+      });
+      if (props.setToast) props.setToast(selectedBudget ? "🔒 Presupuesto N° " + selectedBudget.id + " vinculado a licitación " + tenderCode : "🔓 Presupuesto desvinculado; puedes continuar con el itemizado básico");
+    };
+    var createBudgetFromTender = function () {
+      if (!form.CodigoExterno || !form.Nombre) {
+        if (props.setToast) props.setToast("⚠️ Completa y guarda primero la ficha General");
+        setStep(1);
+        return;
+      }
+      savePreparationDraft(false, step);
+      var draft = {
+        clienteId: "mp:" + String(form.CodigoExterno || "").trim().toUpperCase(),
+        _pendingClientName: form.Organismo || "Organismo comprador Mercado Público",
+        descripcion: form.Nombre,
+        fecha: new Date().toISOString().slice(0, 10),
+        items: (form.Lineas || []).map(function (line, lineIndex) {
+          return {
+            desc: line.NombreProducto || line.Descripcion || "",
+            cant: parseFloat(line.Cantidad) || 1,
+            unidad: line.UnidadMedida || "unidad",
+            precio: parseFloat(line.PrecioUnitarioNeto) || 0,
+            _cid: "",
+            _tipoCosto: "mo",
+            _licitacionLineaIndex: lineIndex,
+          };
+        }),
+        descuento: false,
+        estado: "Pendiente",
+        notas: "Presupuesto creado desde licitación " + form.CodigoExterno,
+        notasInternas: "Origen: Mercado Público · Licitación " + form.CodigoExterno + " · Organismo: " + (form.Organismo || "No informado") + (form.Fechas && form.Fechas.FechaCierre ? " · Cierre: " + form.Fechas.FechaCierre : ""),
+        plazoEjecucion: parseInt(form.PlazoEjecucion) || (props.cfg && props.cfg.plazoEjecucion) || 30,
+        modoCosteo: "completo",
+        licitacionIdMP: String(form.CodigoExterno || "").trim().toUpperCase(),
+        licitacionOpportunityId: props.initialItem && props.initialItem.id || "",
+        licitacionNombre: form.Nombre || "",
+        licitacionOrganismo: form.Organismo || "",
+        _isTenderDraft: true,
+      };
+      if (props.onCreateBudget) props.onCreateBudget(draft);
+    };
+    var openLinkedBudget = function () {
+      var selectedBudget = (props.budgets || []).find(function (budget) { return String(budget.id) === String(form.PresupuestoVinculado || ""); });
+      if (!selectedBudget || !props.onOpenBudget) return;
+      var enrichedBudget = Object.assign({}, selectedBudget);
+      var isLegacyTenderBudget = !selectedBudget.licitacionOrganismo && String(selectedBudget.notas || "").toLowerCase().indexOf("presupuesto creado desde licitación") === 0;
+      if (form.Organismo && (!enrichedBudget.clienteId || isLegacyTenderBudget)) {
+        enrichedBudget.clienteId = "mp:" + String(form.CodigoExterno || "").trim().toUpperCase();
+        enrichedBudget._pendingClientName = form.Organismo;
+      }
+      if (!enrichedBudget.descripcion) enrichedBudget.descripcion = form.Nombre || "";
+      if (!enrichedBudget.plazoEjecucion) enrichedBudget.plazoEjecucion = parseInt(form.PlazoEjecucion) || (props.cfg && props.cfg.plazoEjecucion) || 30;
+      if (!enrichedBudget.notasInternas) enrichedBudget.notasInternas = "Origen: Mercado Público · Licitación " + form.CodigoExterno + " · Organismo: " + (form.Organismo || "No informado") + (form.Fechas && form.Fechas.FechaCierre ? " · Cierre: " + form.Fechas.FechaCierre : "");
+      enrichedBudget.licitacionIdMP = enrichedBudget.licitacionIdMP || String(form.CodigoExterno || "").trim().toUpperCase();
+      enrichedBudget.licitacionOpportunityId = enrichedBudget.licitacionOpportunityId || (props.initialItem && props.initialItem.id) || "";
+      enrichedBudget.licitacionNombre = enrichedBudget.licitacionNombre || form.Nombre || "";
+      enrichedBudget.licitacionOrganismo = enrichedBudget.licitacionOrganismo || form.Organismo || "";
+      props.onOpenBudget(enrichedBudget);
+    };
+    var linkedBudget = (props.budgets || []).find(function (budget) { return String(budget.id) === String(form.PresupuestoVinculado || ""); });
+    var linkedBudgetTotals = linkedBudget ? Ee(linkedBudget.items || [], props.cfg || {}, linkedBudget.descuento, linkedBudget.modoCosteo) : { sub: 0, iva: 0, total: 0 };
+
+    var steps = [
+      "Ficha oficial",
+      "Bases y antecedentes",
+      "Itemizado y viabilidad",
+      "Decisión informada",
+      "Oferta económica final",
+      "Oferta técnica",
+      "Garantías",
+      "Documentos",
+      "Resumen y cierre",
+    ];
+    var studyDecisionApproved = form.DecisionEstudio === "Conviene" && !!form.DecisionConfirmada;
+    var canOpenPreparationStep = function (targetStep) {
+      if (targetStep === 1) return true;
+      if (!savedAt) return false;
+      if (targetStep <= 4) return true;
+      return studyDecisionApproved;
+    };
+    var normalizedOpportunityQuery = opportunityQuery.trim().toLowerCase();
+    var studiedOpportunities = (props.licitaciones || [])
+      .filter(function (opportunity) {
+        if (!opportunity || opportunity._deleted) return false;
+        var workflowState = String(opportunity.estado || "").toLowerCase();
+        if (workflowState !== "en estudio" && workflowState !== "en preparación") return false;
+        if (!normalizedOpportunityQuery) return true;
+        var searchable = [
+          opportunity.nombreObra,
+          opportunity.idMP,
+          opportunity.organismo,
+          opportunity.region,
+        ].join(" ").toLowerCase();
+        return searchable.indexOf(normalizedOpportunityQuery) >= 0;
+      })
+      .sort(function (left, right) {
+        var leftDate = Date.parse(left.fechaCierre || "") || Number.MAX_SAFE_INTEGER;
+        var rightDate = Date.parse(right.fechaCierre || "") || Number.MAX_SAFE_INTEGER;
+        return leftDate - rightDate;
+      });
+    var selectedPreparationOpportunity = studiedOpportunities.find(function (opportunity) {
+      return String(opportunity.id) === String(selectedPreparationId);
+    }) || studiedOpportunities[0] || null;
+    var checklistTechnical = form.OfertaTecnica || {};
+    var checklistLines = linkedBudget
+      ? (linkedBudget.items || []).filter(function (item) { return !!String(item.desc || "").trim(); }).map(function (item) {
+          return {
+            NombreProducto: item.desc || "",
+            Cantidad: item.cant == null ? 1 : item.cant,
+            UnidadMedida: item.unidad || "unidad",
+            PrecioUnitarioNeto: parseFloat(item.precio) || 0,
+          };
+        })
+      : (form.Lineas || []);
+    var checklistNet = linkedBudget ? (parseFloat(linkedBudgetTotals.sub) || 0) : checklistLines.reduce(function (sum, line) {
+      return sum + (parseFloat(line.Cantidad) || 0) * (parseFloat(line.PrecioUnitarioNeto) || 0);
+    }, 0);
+    var checklistDocuments = form.Docs || [];
+    var checklistAntecedents = form.Antecedentes || [];
+    var checklistFindings = form.HallazgosAntecedentes || [];
+    var checklistGuarantees = [getGuarantee("seriedad"), getGuarantee("fiel")];
+    var guaranteeDecision = function (guarantee) {
+      if (guarantee.decision && guarantee.decision !== "pendiente") return guarantee.decision;
+      if (guarantee.exigida) return "exigida";
+      return "pendiente";
+    };
+    var guaranteeComplete = function (guarantee) {
+      var decision = guaranteeDecision(guarantee);
+      if (decision === "no_exigida") return true;
+      if (decision !== "exigida") return false;
+      var requiredReady = !!(
+        (parseFloat(guarantee.monto) || 0) > 0 &&
+        String(guarantee.tipo || "").trim() &&
+        String(guarantee.beneficiario || "").trim() &&
+        String(guarantee.glosa || "").trim() &&
+        String(guarantee.vencimiento || "").trim()
+      );
+      if (!requiredReady) return false;
+      var closingTime = Date.parse(form.Fechas && form.Fechas.FechaCierre || "");
+      var expirationTime = Date.parse(guarantee.vencimiento || "");
+      return !Number.isFinite(closingTime) || !Number.isFinite(expirationTime) || expirationTime > closingTime;
+    };
+    var checklistGroups = [
+      { step: 1, title: "Ficha oficial", items: [
+        { label: "ID Mercado Público ingresado", ready: !!form.CodigoExterno },
+        { label: "Organismo convocante definido", ready: !!form.Organismo },
+        { label: "Región del proyecto definida", ready: !!form.Region },
+        { label: "Fecha de cierre definida", ready: !!(form.Fechas && form.Fechas.FechaCierre) },
+        { label: "Plazo de ejecución definido", ready: !!form.PlazoEjecucion },
+      ] },
+      { step: 2, title: "Bases y antecedentes", items: [
+        { label: "Al menos un antecedente incorporado", ready: checklistAntecedents.length > 0 },
+        { label: "Archivos clasificados", ready: checklistAntecedents.length > 0 && checklistAntecedents.every(function (document) { return !!document.clasificacion; }) },
+        { label: "Hallazgos revisados", ready: checklistAntecedents.length > 0 && checklistFindings.every(function (finding) { return finding.status === "aplicado" || finding.status === "descartado"; }) },
+        { label: "Revisión de antecedentes confirmada", ready: !!form.AntecedentesRevisados },
+      ] },
+      { step: 3, title: "Itemizado y viabilidad", items: [
+        { label: "Al menos un ítem agregado", ready: checklistLines.length > 0 },
+        { label: "Descripción y cantidad completas", ready: checklistLines.length > 0 && checklistLines.every(function (line) { return !!(line.NombreProducto || line.Descripcion) && (parseFloat(line.Cantidad) || 0) > 0; }) },
+        { label: "Costos o precios preliminares", ready: checklistLines.length > 0 && checklistLines.every(function (line) { return (parseFloat(line.PrecioUnitarioNeto) || 0) > 0; }) },
+        { label: "Monto preliminar mayor a 0", ready: checklistNet > 0 },
+      ] },
+      { step: 4, title: "Decisión informada", items: [
+        { label: "Resultado del estudio seleccionado", ready: !!form.DecisionEstudio && form.DecisionEstudio !== "Por decidir" },
+        { label: "Motivo o conclusión registrada", ready: !!String(form.DecisionJustificacion || "").trim() },
+        { label: "Decisión confirmada", ready: !!form.DecisionConfirmada },
+      ] },
+      { step: 5, title: "Oferta económica final", items: [
+        { label: "Decisión de avanzar aprobada", ready: studyDecisionApproved },
+        { label: "Todos los ítems con precio final", ready: checklistLines.length > 0 && checklistLines.every(function (line) { return (parseFloat(line.PrecioUnitarioNeto) || 0) > 0; }) },
+        { label: "Monto final de oferta definido", ready: checklistNet > 0 },
+      ] },
+      { step: 6, title: "Oferta técnica", items: [
+        { label: "Metodología desarrollada", ready: !!String(checklistTechnical.metodologia || "").trim() },
+        { label: "Etapas y plazos declarados", ready: (checklistTechnical.etapas || []).length > 0 },
+        { label: "Especificaciones por ítem", ready: checklistLines.length > 0 && checklistLines.every(function (line) { return !!String(line.EspecificacionTecnica || "").trim(); }) },
+        { label: "Equipo de trabajo declarado", ready: (checklistTechnical.equipo || []).some(function (row) { return !!String(row.nombre || "").trim() && !!String(row.cargo || "").trim(); }) },
+        { label: "Experiencia empresa declarada", ready: (checklistTechnical.experiencia || []).some(function (row) { return !!String(row.obra || "").trim() && !!String(row.mandante || "").trim(); }) },
+      ] },
+      { step: 7, title: "Garantías", items: [
+        { label: "Decisión registrada para ambas garantías", ready: checklistGuarantees.every(function (guarantee) { return guaranteeDecision(guarantee) !== "pendiente"; }) },
+        { label: "Datos de garantías exigidas completos", ready: checklistGuarantees.every(guaranteeComplete) },
+        { label: "Revisión de las bases confirmada", ready: !!form.GarantiasRevisadas },
+      ] },
+      { step: 8, title: "Documentos", items: [
+        { label: "Lista documental inicial definida", ready: checklistDocuments.length > 0 },
+        { label: "Importancia confirmada en bases", ready: checklistDocuments.length > 0 && checklistDocuments.every(function (document) { return !!document.requirement && document.requirement !== "por_confirmar"; }) },
+        { label: "Responsable y formato definidos", ready: checklistDocuments.length > 0 && checklistDocuments.every(function (document) { return !!String(document.responsible || "").trim() && !!String(document.format || "").trim(); }) },
+        { label: "Archivo final asociado", ready: checklistDocuments.length > 0 && checklistDocuments.every(function (document) { return !!String(document.sourceRef || "").trim(); }) },
+        { label: "Revisión final de documentos completa", ready: checklistDocuments.length > 0 && checklistDocuments.every(function (document) { return !!document.checked; }) },
+      ] },
+      { step: 9, title: "Resumen y cierre", items: [
+        { label: "Estado de preparación definido", ready: !!form.PreparacionEstado },
+        { label: "Revisión final confirmada", ready: !!form.RevisionFinal },
+      ] },
+    ];
+    var selectedPreparationProgress = !form.Nombre && selectedPreparationOpportunity
+      ? MpPreparationProgress(selectedPreparationOpportunity, props.budgets || [], props.cfg || {})
+      : null;
+    if (selectedPreparationProgress && selectedPreparationProgress.groups) {
+      checklistGroups = selectedPreparationProgress.groups;
+    }
+    var checklistItems = checklistGroups.reduce(function (all, group) {
+      return all.concat(group.items);
+    }, []);
+    var checklistReady = checklistItems.filter(function (item) { return item.ready; }).length;
+    var checklistProgress = checklistItems.length
+      ? Math.round(checklistReady / checklistItems.length * 100)
+      : 0;
+    var documentTechnical = form.OfertaTecnica || {};
+    var documentCategoryMeta = {
+      Administrativo: { icon: '🏛️', color: '#60a5fa', help: 'Identidad, declaraciones, certificados y anexos legales.' },
+      Técnico: { icon: '🛠️', color: '#a78bfa', help: 'Metodología, experiencia, equipo y respuesta técnica.' },
+      Económico: { icon: '💰', color: '#f5a020', help: 'Oferta, itemizado, precios y formularios económicos.' },
+      Garantías: { icon: '🔐', color: '#34d399', help: 'Instrumentos exigidos para ofertar o contratar.' },
+    };
+    var documentRequirementMeta = {
+      esencial: { label: 'Esencial', color: '#fb7185', help: 'Su ausencia puede dejar la oferta fuera. Verifica esta condición en las bases.' },
+      subsanable: { label: 'Subsanable', color: '#60a5fa', help: 'Podría aclararse o corregirse si el organismo lo permite; no confíes en que siempre será aceptado.' },
+      condicional: { label: 'Condicional', color: '#a78bfa', help: 'Solo corresponde si se cumple la condición indicada en las bases.' },
+      por_confirmar: { label: 'Por confirmar', color: '#fbbf24', help: 'Aún no existe evidencia suficiente para clasificarlo. Revisa la cláusula exacta.' },
+    };
+    var inferDocumentCategory = function (document) {
+      if (document && document.category && documentCategoryMeta[document.category]) return document.category;
+      var name = String(document && document.name || '').toLowerCase();
+      if (/garant|boleta|póliza|poliza/.test(name)) return 'Garantías';
+      if (/económ|econom|precio|itemizado|oferta.*anexo/.test(name)) return 'Económico';
+      if (/técnic|tecnic|metodolog|experiencia|equipo/.test(name)) return 'Técnico';
+      return 'Administrativo';
+    };
+    var inferDocumentExplanation = function (document, category) {
+      if (document && document.explanation) return document.explanation;
+      var name = String(document && document.name || '').toLowerCase();
+      if (/garant/.test(name)) return 'Respalda la seriedad o el cumplimiento cuando las bases la exigen. No la emitas sin confirmar monto, vigencia, beneficiario y glosa.';
+      if (/anexo/.test(name)) return 'Formulario oficial entregado por el organismo. Descarga la versión vigente, complétala sin cambiar su estructura y revisa si requiere firma.';
+      if (/económ|econom|precio|itemizado/.test(name)) return 'Declara precios y monto de la oferta. Debe coincidir con Mercado Público y con el presupuesto vinculado.';
+      if (category === 'Técnico') return 'Demuestra cómo ejecutarás el trabajo y cómo cumples los requisitos técnicos de las bases.';
+      return 'Acredita un requisito administrativo de la oferta. Confirma formato, vigencia y firma exigida en las bases.';
+    };
+    var normalizedChecklistDocuments = (form.Docs || []).map(function (document) {
+      var category = inferDocumentCategory(document);
+      return Object.assign({}, document, {
+        category: category,
+        requirement: document.requirement || 'por_confirmar',
+        explanation: inferDocumentExplanation(document, category),
+        origin: document.origin || (/anexo/i.test(String(document.name || '')) ? 'Descargar el anexo oficial desde Mercado Público' : 'Revisar bases y anexos en Mercado Público'),
+        responsible: document.responsible || '',
+        format: document.format || '',
+        sourceRef: document.sourceRef || '',
+      });
+    });
+    var suggestedChecklistDocuments = [];
+    (form.HallazgosAntecedentes || []).filter(function (finding) { return finding.type === 'documento' && finding.status !== 'descartado'; }).forEach(function (finding) {
+      String(finding.detail || '').split(/ · | Â· /).filter(Boolean).forEach(function (name) {
+        suggestedChecklistDocuments.push({
+          name: name,
+          category: inferDocumentCategory({ name: name }),
+          requirement: 'por_confirmar',
+          explanation: 'Este documento fue mencionado en los antecedentes analizados. Confirma en la fuente si es obligatorio, su formato y la firma requerida.',
+          origin: 'Antecedente analizado: ' + (finding.source || 'revisar evidencia'),
+          sourceRef: finding.documentId || '',
+        });
+      });
+    });
+    [['seriedad', 'Garantía de Seriedad de la Oferta'], ['fiel', 'Garantía de Fiel Cumplimiento']].forEach(function (entry) {
+      var guarantee = getGuarantee(entry[0]);
+      if (guaranteeDecision(guarantee) === 'exigida') suggestedChecklistDocuments.push({
+        name: entry[1], category: 'Garantías', requirement: 'esencial',
+        explanation: 'Las bases fueron registradas como exigentes de esta garantía. Verifica monto, vigencia, beneficiario y glosa antes de solicitarla.',
+        origin: 'Datos confirmados en la etapa Garantías', format: guarantee.tipo || 'Instrumento indicado en las bases',
+      });
+    });
+    suggestedChecklistDocuments = suggestedChecklistDocuments.filter(function (suggestion, index, all) {
+      var normalized = String(suggestion.name || '').trim().toLowerCase();
+      return normalized && all.findIndex(function (candidate) { return String(candidate.name || '').trim().toLowerCase() === normalized; }) === index && !normalizedChecklistDocuments.some(function (document) { return String(document.name || '').trim().toLowerCase() === normalized; });
+    });
+    var documentChecklistReady = normalizedChecklistDocuments.filter(function (document) { return !!document.checked; }).length;
+    var companyConfig = props.cfg || {};
+    var automaticDocuments = [
+      { key: "tecnica", icon: "📋", title: "Oferta técnica", pdfTitle: "OFERTA TÉCNICA", desc: "Metodología, etapas, especificaciones, equipo y experiencia", ready: !!String(documentTechnical.metodologia || "").trim(), editStep: 4 },
+      { key: "economica", icon: "💰", title: "Oferta económica", pdfTitle: "OFERTA ECONÓMICA", desc: "Itemizado, precios netos, IVA y total", ready: checklistLines.length > 0 && checklistLines.every(function (line) { return (parseFloat(line.PrecioUnitarioNeto) || 0) > 0; }), editStep: 3 },
+      { key: "carta", icon: "📜", title: "Carta de presentación", pdfTitle: "CARTA DE PRESENTACIÓN", desc: "Perfil de empresa, datos de la oportunidad y representante legal", ready: !!form.Nombre && !!form.Organismo && !!String(companyConfig.empresa || "").trim() && !!String(companyConfig.rut || "").trim() && !!String(companyConfig.firmaNombre || "").trim(), editStep: 1, editCompany: true },
+      { key: "djurada", icon: "📄", title: "Declaración jurada", pdfTitle: "DECLARACIÓN JURADA", desc: "Empresa, RUT, representante, cargo y firma configurada", ready: !!form.Nombre && !!String(companyConfig.empresa || "").trim() && !!String(companyConfig.rut || "").trim() && !!String(companyConfig.firmaNombre || "").trim() && !!String(companyConfig.firmaRut || "").trim() && !!String(companyConfig.firmaCargo || "").trim(), editStep: 1, editCompany: true },
+    ];
+    var documentPreviewDefinition = automaticDocuments.find(function (document) {
+      return document.key === documentPreviewKey;
+    });
+    var documentMoney = function (value) {
+      return new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 }).format(parseFloat(value) || 0);
+    };
+    var escapeDocumentHtml = function (value) {
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    };
+    var buildLegacyDocumentData = function () {
+      var technical = form.OfertaTecnica || {};
+      return {
+        idMP: form.CodigoExterno || "",
+        organismo: form.Organismo || "",
+        nombreObra: form.Nombre || "",
+        region: form.Region || "",
+        fechaPublicacion: form.Fechas && form.Fechas.FechaPublicacion || "",
+        fechaCierre: form.Fechas && form.Fechas.FechaCierre || "",
+        plazoEjecucion: form.PlazoEjecucion || 0,
+        companyBudgetCount: (props.budgets || []).filter(function (budget) { return budget && !budget._deleted; }).length,
+        metodologia: technical.metodologia || "",
+        experiencia: (technical.experiencia || []).map(function (row) {
+          return { obra: row.obra || "", mandante: row.mandante || "", monto: row.monto || 0, año: row.anio || row.año || "" };
+        }),
+        items: checklistLines.map(function (line) {
+          return {
+            desc: line.NombreProducto || line.Descripcion || "",
+            cant: line.Cantidad || 0,
+            unidad: line.UnidadMedida || "",
+            precioNeto: line.PrecioUnitarioNeto || 0,
+            especTecnica: line.EspecificacionTecnica || "",
+          };
+        }),
+      };
+    };
+    var buildDocumentPreviewHtml = function (key) {
+      var cfg = props.cfg || {};
+      var technical = form.OfertaTecnica || {};
+      var lines = checklistLines;
+      var net = linkedBudget ? (parseFloat(linkedBudgetTotals.sub) || 0) : lines.reduce(function (sum, line) { return sum + (parseFloat(line.Cantidad) || 0) * (parseFloat(line.PrecioUnitarioNeto) || 0); }, 0);
+      var iva = linkedBudget ? (parseFloat(linkedBudgetTotals.iva) || 0) : net * 0.19;
+      var total = linkedBudget ? (parseFloat(linkedBudgetTotals.total) || 0) : net + iva;
+      var definition = automaticDocuments.find(function (document) { return document.key === key; }) || automaticDocuments[0];
+      var rawCompany = String(cfg.empresa || "Tu Empresa Constructora");
+      var company = escapeDocumentHtml(rawCompany);
+      var representativeName = escapeDocumentHtml(cfg.firmaNombre || "Representante pendiente de configurar");
+      var representativeRole = escapeDocumentHtml(cfg.firmaCargo || "Representante Legal");
+      var companyStartYear = parseInt(cfg.empresaAnioInicio, 10);
+      var companyYears = companyStartYear > 1900 && companyStartYear <= new Date().getFullYear() ? new Date().getFullYear() - companyStartYear : 0;
+      var companyBudgets = (props.budgets || []).filter(function (budget) { return budget && !budget._deleted; });
+      var companyProfileRaw = String(cfg.empresaPresentacion || "").trim();
+      if (!companyProfileRaw) {
+        companyProfileRaw = rawCompany + " desarrolla trabajos en el ámbito de " + String(cfg.empresaRubro || "servicios, construcción y mantenimiento") + ".";
+        if (companyYears > 0) companyProfileRaw += " Cuenta con " + companyYears + " años de trayectoria desde " + companyStartYear + ".";
+        if (companyBudgets.length > 0) companyProfileRaw += " En Enlace Constructor mantiene un historial de " + companyBudgets.length + " presupuestos preparados, utilizado como referencia de su experiencia comercial y capacidad de estudio de proyectos.";
+        companyProfileRaw += " Para esta postulación pone a disposición su capacidad de planificación, control de costos y coordinación de recursos.";
+      }
+      var companyProfile = escapeDocumentHtml(companyProfileRaw).replace(/\n/g, "<br/>");
+      var logo = cfg.logoCliente || cfg.logo || "";
+      var logoHtml = logo ? '<img src="' + escapeDocumentHtml(logo) + '" alt="Logo empresa" style="width:58px;height:58px;object-fit:contain;background:#fff;border-radius:8px;padding:4px;margin-right:12px"/>' : '';
+      var header = '<div style="background:#1a3a5c;color:#fff;padding:20px 24px;display:flex;justify-content:space-between;align-items:flex-start;gap:18px">' +
+        '<div style="display:flex;align-items:center">' + logoHtml + '<div><div style="font-size:20px;font-weight:800">' + company + '</div>' +
+        '<div style="font-size:11px;color:#aac4dc;margin-top:4px">' + escapeDocumentHtml(cfg.ciudad || "") + (cfg.rut ? ' · RUT: ' + escapeDocumentHtml(cfg.rut) : '') + (cfg.telefono ? ' · ' + escapeDocumentHtml(cfg.telefono) : '') + '</div>' +
+        (cfg.email ? '<div style="font-size:11px;color:#aac4dc;margin-top:2px">' + escapeDocumentHtml(cfg.email) + '</div>' : '') + '</div></div>' +
+        '<div style="text-align:right"><div style="font-size:19px;font-weight:900;color:#f5a020">' + escapeDocumentHtml(definition.pdfTitle) + '</div>' +
+        '<div style="font-size:11px;color:#aac4dc;margin-top:5px">Licitación N° ' + escapeDocumentHtml(form.CodigoExterno || "—") + '</div>' +
+        '<div style="font-size:11px;color:#aac4dc;margin-top:2px">' + escapeDocumentHtml(form.Fechas && form.Fechas.FechaPublicacion || new Date().toLocaleDateString("es-CL")) + '</div></div></div>' +
+        '<div style="height:5px;background:#f5a020"></div>';
+      var info = '<div style="margin:20px 24px 18px"><div style="font-size:11px;font-weight:900;color:#1a3a5c;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Datos de la licitación</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#dbe4ef;border:1px solid #dbe4ef;border-radius:8px;overflow:hidden">' +
+        [['Organismo', form.Organismo || '—'], ['Región', form.Region || '—'], ['Contratación', form.Nombre || '—'], ['Fecha de cierre', form.Fechas && form.Fechas.FechaCierre || '—']].map(function (row) {
+          return '<div style="background:#f7f9fc;padding:10px 12px"><div style="font-size:9px;color:#64748b;text-transform:uppercase;letter-spacing:.06em">' + row[0] + '</div><div style="font-size:12px;color:#142337;font-weight:700;margin-top:3px">' + escapeDocumentHtml(row[1]) + '</div></div>';
+        }).join('') + '</div></div>';
+      var section = function (title, content) {
+        return '<section style="margin:0 24px 18px"><div style="font-size:11px;font-weight:900;color:#1a3a5c;letter-spacing:.08em;text-transform:uppercase;border-bottom:2px solid #f5a020;padding-bottom:5px;margin-bottom:9px">' + title + '</div>' + content + '</section>';
+      };
+      var table = function (headers, rows) {
+        return '<table style="width:100%;border-collapse:collapse;font-size:11px"><thead><tr>' + headers.map(function (header) { return '<th style="background:#1a3a5c;color:#fff;text-align:left;padding:8px 9px;font-size:10px;text-transform:uppercase">' + header + '</th>'; }).join('') + '</tr></thead><tbody>' + rows.map(function (cells, index) { return '<tr style="background:' + (index % 2 ? '#fff' : '#f4f8fc') + '">' + cells.map(function (cell) { return '<td style="padding:8px 9px;border-bottom:1px solid #dbe4ef;vertical-align:top">' + cell + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>';
+      };
+      var body = '';
+      if (key === "tecnica") {
+        body += section('Metodología de trabajo', '<div style="font-size:12px;line-height:1.65;color:#334155;white-space:pre-line">' + escapeDocumentHtml(technical.metodologia || 'Pendiente de desarrollar') + '</div>');
+        body += section('Etapas y plazos', table(['Actividad', 'Duración', 'Responsable', 'Entregable'], (technical.etapas || []).map(function (row) { return [escapeDocumentHtml(row.actividad || '—'), escapeDocumentHtml(row.duracion || '—'), escapeDocumentHtml(row.responsable || '—'), escapeDocumentHtml(row.entregable || '—')]; })));
+        body += section('Especificaciones técnicas por ítem', table(['N°', 'Descripción', 'Cant.', 'Unidad', 'Especificación técnica'], lines.map(function (line, index) { return [String(index + 1), escapeDocumentHtml(line.NombreProducto || line.Descripcion || '—'), escapeDocumentHtml(line.Cantidad || 0), escapeDocumentHtml(line.UnidadMedida || '—'), escapeDocumentHtml(line.EspecificacionTecnica || 'Pendiente')]; })));
+        if ((technical.equipo || []).length) body += section('Equipo de trabajo', table(['Nombre', 'Cargo / función', 'Experiencia'], technical.equipo.map(function (row) { return [escapeDocumentHtml(row.nombre || '—'), escapeDocumentHtml(row.cargo || '—'), escapeDocumentHtml(row.experiencia || '—')]; })));
+        if ((technical.experiencia || []).length) body += section('Experiencia de la empresa', table(['Obra / proyecto', 'Mandante', 'Monto', 'Año'], technical.experiencia.map(function (row) { return [escapeDocumentHtml(row.obra || '—'), escapeDocumentHtml(row.mandante || '—'), documentMoney(row.monto), escapeDocumentHtml(row.anio || row.año || '—')]; })));
+      } else if (key === "economica") {
+        body += section('Itemizado de la oferta', table(['N°', 'Descripción', 'Cant.', 'Unidad', 'P. unitario neto', 'Subtotal neto'], lines.map(function (line, index) { var subtotal = (parseFloat(line.Cantidad) || 0) * (parseFloat(line.PrecioUnitarioNeto) || 0); return [String(index + 1), escapeDocumentHtml(line.NombreProducto || line.Descripcion || '—'), escapeDocumentHtml(line.Cantidad || 0), escapeDocumentHtml(line.UnidadMedida || '—'), documentMoney(line.PrecioUnitarioNeto), '<strong>' + documentMoney(subtotal) + '</strong>']; })));
+        body += '<div style="display:flex;justify-content:flex-end;margin:0 24px 22px"><div style="width:310px;border:1px solid #dbe4ef;border-radius:8px;overflow:hidden">' + [['Subtotal neto', net], ['IVA (19%)', iva], ['TOTAL OFERTA', total]].map(function (row, index) { return '<div style="display:flex;justify-content:space-between;padding:' + (index === 2 ? '12px' : '9px 12px') + ';background:' + (index === 2 ? '#1a3a5c' : '#f7f9fc') + ';color:' + (index === 2 ? '#fff' : '#334155') + ';font-size:' + (index === 2 ? '14px' : '12px') + ';font-weight:' + (index === 2 ? '900' : '500') + '"><span>' + row[0] + '</span><span style="color:' + (index === 2 ? '#f5a020' : 'inherit') + '">' + documentMoney(row[1]) + '</span></div>'; }).join('') + '</div></div>';
+      } else if (key === "carta") {
+        body += '<div style="margin:24px;font-size:13px;line-height:1.8;color:#263649"><div>' + escapeDocumentHtml(form.Fechas && form.Fechas.FechaPublicacion || new Date().toLocaleDateString("es-CL")) + '</div><p><strong>Señores<br/>' + escapeDocumentHtml(form.Organismo || 'Organismo convocante') + '<br/>Presente</strong></p><p style="color:#1a3a5c"><strong>Ref.: Licitación ID ' + escapeDocumentHtml(form.CodigoExterno || '') + ' — ' + escapeDocumentHtml(form.Nombre || '') + '</strong></p><p>' + companyProfile + '</p><p>Por medio de la presente, <strong>' + company + '</strong>' + (cfg.rut ? ', RUT ' + escapeDocumentHtml(cfg.rut) : '') + ', representada para estos efectos por <strong>' + representativeName + '</strong>, presenta su oferta para la contratación indicada, declarando conocer y aceptar los antecedentes y condiciones de la convocatoria.</p><p>El plazo de ejecución ofertado es de <strong>' + escapeDocumentHtml(form.PlazoEjecucion || '—') + ' días corridos</strong>. El monto total de la oferta corresponde a <strong>' + documentMoney(total) + '</strong>, IVA incluido.</p><p>Quedamos a disposición para cualquier aclaración o antecedente adicional.</p><p>Saluda atentamente,</p></div>';
+      } else {
+        body += '<div style="margin:24px;font-size:13px;line-height:1.8;color:#263649"><h2 style="text-align:center;color:#1a3a5c;font-size:16px;margin:0 0 22px">DECLARACIÓN JURADA SIMPLE</h2><p>Yo, <strong>' + representativeName + '</strong>' + (cfg.firmaRut ? ', RUT ' + escapeDocumentHtml(cfg.firmaRut) : '') + ', ' + representativeRole + ', en representación de <strong>' + company + '</strong>' + (cfg.rut ? ', RUT ' + escapeDocumentHtml(cfg.rut) : '') + ', declaro bajo juramento:</p><ol style="padding-left:22px"><li>No encontrarme afectado por inhabilidades para contratar con organismos del Estado.</li><li>Que la empresa cumple sus obligaciones laborales y previsionales.</li><li>Que la información incorporada en la oferta es fidedigna y verificable.</li><li>Que conocemos y aceptamos las bases de la licitación ID ' + escapeDocumentHtml(form.CodigoExterno || '—') + '.</li><li>Que los antecedentes entregados se mantienen vigentes a la fecha de presentación.</li></ol></div>';
+      }
+      var signature = '<div style="margin:30px 24px 18px;width:280px;text-align:center">' + (cfg.firmaImg ? '<img src="' + escapeDocumentHtml(cfg.firmaImg) + '" alt="Firma" style="max-width:220px;max-height:70px;object-fit:contain"/>' : '<div style="height:55px"></div>') + '<div style="border-top:1px solid #64748b;padding-top:7px;font-size:11px;color:#334155"><strong>' + representativeName + '</strong><br/>' + representativeRole + '<br/>' + company + '</div></div>';
+      var footer = '<div style="margin:22px 24px 0;border-top:1px solid #dbe4ef;padding:10px 0 18px;text-align:center;font-size:9px;color:#64748b">Generado por Enlace Constructor Pro — ' + company + ' · Vista previa del borrador</div>';
+      return '<div style="font-family:Arial,sans-serif;color:#0f172a;background:#fff;min-height:100%">' + header + info + body + signature + footer + '</div>';
+    };
+    var goToCompanyConfiguration = function () {
+      setDocumentPreviewKey(null);
+      if (props.onGoCompanyConfig) props.onGoCompanyConfig();
+      else if (props.setToast) props.setToast("⚠️ Completa Empresa y Representante Legal en Configuración");
+    };
+    var openAutomaticDocument = function (document) {
+      if (document.ready) {
+        setDocumentPreviewKey(document.key);
+        return;
+      }
+      if (document.editCompany) {
+        goToCompanyConfiguration();
+        if (props.setToast) props.setToast("⚙️ Completa empresa, RUT y representante legal para generar este documento");
+        return;
+      }
+      setStep(document.editStep);
+      if (props.setToast) props.setToast("⚠️ Completa los datos señalados antes de revisar este documento");
+    };
+    var editAutomaticDocument = function () {
+      if (!documentPreviewDefinition) return;
+      if (documentPreviewDefinition.editCompany) {
+        goToCompanyConfiguration();
+        return;
+      }
+      setDocumentPreviewKey(null);
+      setStep(documentPreviewDefinition.editStep);
+    };
+    var downloadAutomaticDocument = function () {
+      if (!documentPreviewKey) return;
+      if (props.setToast) props.setToast("📄 Generando documento con el formato institucional...");
+      Promise.resolve(ha(buildLegacyDocumentData(), documentPreviewKey, props.cfg || {})).catch(function (error) {
+        if (props.setToast) props.setToast("❌ No fue posible generar el PDF: " + error.message);
+      });
+    };
 
     return e.jsxs("div", {
       style: { display: "flex", flexDirection: "column", height: "100%", background: props.th.bg },
       children: [
         e.jsx("div", {
-          style: { display: "flex", borderBottom: "1px solid " + props.th.border, padding: "16px 24px", background: props.th.surface, alignItems: "center", gap: 16 },
+          style: { display: "flex", borderBottom: "1px solid " + props.th.border, padding: "16px 24px", background: props.th.surface, alignItems: "center", gap: 12, overflowX: "auto", flexShrink: 0 },
           children: steps.map(function(s, i) {
             var active = step === i + 1;
             var past = step > i + 1;
             return e.jsxs("div", {
               key: s,
-              onClick: function() { setStep(i + 1); },
-              style: { display: "flex", alignItems: "center", gap: 8, opacity: active || past ? 1 : 0.5, cursor: "pointer" },
+              onClick: function() {
+                if (canOpenPreparationStep(i + 1)) setStep(i + 1);
+                else if (i + 1 > 4 && props.setToast)
+                  props.setToast("Completa el estudio y confirma que Conviene antes de preparar la oferta");
+                else if (props.setToast)
+                  props.setToast("⚠️ Guarda primero la ficha automática");
+              },
+              style: {
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                minWidth: "max-content",
+                opacity: active || past ? 1 : 0.5,
+                cursor: canOpenPreparationStep(i + 1) ? "pointer" : "not-allowed",
+              },
               children: [
                 e.jsx("div", {
                   style: {
@@ -65739,194 +67580,1365 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         e.jsx("div", {
           style: { flex: 1, padding: 32, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center" },
           children: e.jsxs("div", {
-            style: { width: "100%", maxWidth: 900 },
+            style: { width: "100%", maxWidth: 1180, display: "flex", gap: 16, alignItems: "flex-start", flexWrap: "wrap" },
             children: [
+              e.jsxs("div", {
+                style: { flex: "1 1 650px", minWidth: 0 },
+                children: [
               step === 1 && e.jsxs("div", {
                 children: [
-                  e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: "bold", marginBottom: 8 }, children: "Importar Licitación" }),
-                  e.jsx("p", { style: { color: props.th.muted, marginBottom: 24, fontSize: 14 }, children: "Ingresa el ID de la licitación para extraer automáticamente todos sus datos desde Mercado Público." }),
                   e.jsxs("div", {
-                    style: { display: "flex", gap: 12, marginBottom: 32 },
+                    style: {
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      gap: 12,
+                      marginBottom: 22,
+                    },
+                    children: [
+                      e.jsxs("div", {
+                        children: [
+                          e.jsx("h2", {
+                            style: {
+                              color: props.th.text,
+                              fontSize: 22,
+                              fontWeight: "bold",
+                              marginBottom: 6,
+                            },
+                            children: "Ficha automática de la postulación",
+                          }),
+                          e.jsx("p", {
+                            style: { color: props.th.muted, fontSize: 13 },
+                            children:
+                              "Importa los datos oficiales, revísalos y guarda un borrador antes de preparar documentos y costos.",
+                          }),
+                        ],
+                      }),
+                      e.jsx("div", {
+                        style: {
+                          padding: "6px 10px",
+                          borderRadius: 999,
+                          fontSize: 11,
+                          fontWeight: 800,
+                          whiteSpace: "nowrap",
+                          color: dirtyDraft ? "#fbbf24" : savedAt ? "#34d399" : props.th.muted,
+                          border:
+                            "1px solid " +
+                            (dirtyDraft
+                              ? "rgba(251,191,36,.45)"
+                              : savedAt
+                                ? "rgba(52,211,153,.45)"
+                                : props.th.border),
+                          background: dirtyDraft
+                            ? "rgba(251,191,36,.08)"
+                            : savedAt
+                              ? "rgba(52,211,153,.08)"
+                              : props.th.surface,
+                        },
+                        children: dirtyDraft
+                          ? "● Cambios sin guardar"
+                          : savedAt
+                            ? "✓ Borrador guardado"
+                            : "○ Borrador nuevo",
+                      }),
+                    ],
+                  }),
+                  e.jsxs("div", {
+                    style: {
+                      display: "grid",
+                      gridTemplateColumns: "minmax(240px,1fr) auto auto",
+                      gap: 10,
+                      padding: 14,
+                      background: props.th.surface,
+                      border: "1px solid " + props.th.border,
+                      borderRadius: 10,
+                      marginBottom: 18,
+                    },
                     children: [
                       e.jsx("input", {
                         value: form.CodigoExterno,
-                        onChange: function(evt) { setForm(Object.assign({}, form, { CodigoExterno: evt.target.value })); },
-                        placeholder: "Ej: 1234-56-LE24",
-                        style: Object.assign({}, props.sty.input, { flex: 1, fontSize: 16 })
+                        onChange: function(evt) {
+                          updateFichaField("CodigoExterno", evt.target.value);
+                        },
+                        placeholder: "Código Mercado Público · Ej: 1234-56-LE24",
+                        "aria-label": "Código Mercado Público",
+                        style: Object.assign({}, props.sty.inp, { fontSize: 14 })
                       }),
+                      e.jsx(MpCopyCodeButton, { code: form.CodigoExterno, setToast: props.setToast, accent: props.th.accent, border: props.th.border, surface: props.th.card, compact: false }),
                       e.jsx("button", {
                         onClick: fetchLicitacion,
                         disabled: loading,
-                        style: Object.assign({}, props.sty.btn("p"), { padding: "0 24px" }),
-                        children: loading ? "Buscando..." : "⚡ Extraer de M. Público"
+                        style: Object.assign({}, props.sty.btn("p"), {
+                          padding: "9px 18px",
+                          whiteSpace: "nowrap",
+                        }),
+                        children: loading
+                          ? "⏳ Consultando..."
+                          : form.Nombre
+                            ? "↻ Actualizar desde MP"
+                            : "⚡ Importar desde MP"
                       })
                     ]
                   }),
-                  form.Nombre && e.jsxs("div", {
-                    style: { background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8, padding: 24 },
-                    children: [
-                      e.jsxs("div", { style: { marginBottom: 16 }, children: [
-                        e.jsx("div", { style: { color: props.th.muted, fontSize: 12, fontWeight: "bold", textTransform: "uppercase" }, children: "Nombre del Proyecto" }),
-                        e.jsx("div", { style: { color: props.th.text, fontSize: 18, fontWeight: "bold" }, children: form.Nombre })
-                      ]}),
-                      e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }, children: [
-                        e.jsxs("div", { children: [
-                          e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Organismo Comprador" }),
-                          e.jsx("div", { style: { color: props.th.text, fontSize: 14 }, children: form.Organismo || "No disponible" })
-                        ]}),
-                        e.jsxs("div", { children: [
-                          e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Región" }),
-                          e.jsx("div", { style: { color: props.th.text, fontSize: 14 }, children: form.Region || "No disponible" })
-                        ]}),
-                        e.jsxs("div", { children: [
-                          e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Fecha de Cierre" }),
-                          e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: "bold", color: "#e53935" }, children: form.Fechas.FechaCierre || "No especificada" })
-                        ]}),
-                        e.jsxs("div", { children: [
-                          e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Visita a Terreno" }),
-                          e.jsx("div", { style: { color: props.th.text, fontSize: 14 }, children: form.Fechas.VisitaTerreno || "No especificada" })
-                        ]})
-                      ]})
-                    ]
-                  })
-                ]
-              }),
-              step === 2 && e.jsxs("div", {
-                children: [
-                  e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: "bold", marginBottom: 8 }, children: "Checklist Documental" }),
-                  e.jsx("p", { style: { color: props.th.muted, marginBottom: 24, fontSize: 14 }, children: "Marca los documentos obligatorios a medida que los vayas subiendo al portal." }),
-                  e.jsx("div", {
-                    style: { display: "flex", flexDirection: "column", gap: 12 },
-                    children: form.Docs.map(function(doc, i) {
-                      return e.jsxs("label", {
-                        key: i,
-                        style: { display: "flex", alignItems: "center", gap: 12, padding: 16, background: props.th.surface, border: "1px solid " + (doc.checked ? "#4CAF50" : props.th.border), borderRadius: 8, cursor: "pointer" },
+                  form.Nombre
+                    ? e.jsxs("div", {
+                        style: {
+                          display: "grid",
+                          gridTemplateColumns: "minmax(0,1fr) 250px",
+                          gap: 16,
+                          alignItems: "start",
+                        },
                         children: [
-                          e.jsx("input", {
-                            type: "checkbox",
-                            checked: doc.checked,
-                            onChange: function(e2) {
-                              var nd = form.Docs.slice();
-                              nd[i].checked = e2.target.checked;
-                              setForm(Object.assign({}, form, { Docs: nd }));
+                          e.jsxs("div", {
+                            style: {
+                              background: props.th.surface,
+                              border: "1px solid " + props.th.border,
+                              borderRadius: 10,
+                              padding: 18,
                             },
-                            style: { width: 20, height: 20, cursor: "pointer" }
+                            children: [
+                              e.jsxs("label", {
+                                style: { display: "block", marginBottom: 12 },
+                                children: [
+                                  e.jsx("div", {
+                                    style: { color: props.th.muted, fontSize: 11, fontWeight: 700, marginBottom: 5 },
+                                    children: "NOMBRE DE LA CONTRATACIÓN",
+                                  }),
+                                  e.jsx("textarea", {
+                                    rows: 2,
+                                    value: form.Nombre,
+                                    onChange: function (evt) {
+                                      updateFichaField("Nombre", evt.target.value);
+                                    },
+                                    style: Object.assign({}, props.sty.inp, {
+                                      width: "100%",
+                                      resize: "vertical",
+                                      fontWeight: 700,
+                                    }),
+                                  }),
+                                ],
+                              }),
+                              e.jsxs("label", {
+                                style: { display: "block", marginBottom: 12 },
+                                children: [
+                                  e.jsx("div", {
+                                    style: { color: props.th.muted, fontSize: 11, fontWeight: 700, marginBottom: 5 },
+                                    children: "DESCRIPCIÓN",
+                                  }),
+                                  e.jsx("textarea", {
+                                    rows: 4,
+                                    value: form.Descripcion || "",
+                                    onChange: function (evt) {
+                                      updateFichaField("Descripcion", evt.target.value);
+                                    },
+                                    placeholder: "Descripción obtenida desde Mercado Público...",
+                                    style: Object.assign({}, props.sty.inp, {
+                                      width: "100%",
+                                      resize: "vertical",
+                                    }),
+                                  }),
+                                ],
+                              }),
+                              e.jsx("div", {
+                                style: {
+                                  display: "grid",
+                                  gridTemplateColumns: "1fr 1fr",
+                                  gap: 10,
+                                  marginBottom: 12,
+                                },
+                                children: [
+                                  ["Organismo comprador", "Organismo"],
+                                  ["Región del proyecto", "Region"],
+                                ].map(function (entry) {
+                                  return e.jsxs("label", {
+                                    style: { color: props.th.muted, fontSize: 11 },
+                                    children: [
+                                      entry[0],
+                                      e.jsx("input", {
+                                        value: form[entry[1]] || "",
+                                        onChange: function (evt) {
+                                          updateFichaField(entry[1], evt.target.value);
+                                        },
+                                        style: Object.assign({}, props.sty.inp, {
+                                          width: "100%",
+                                          marginTop: 5,
+                                        }),
+                                      }),
+                                    ],
+                                  }, entry[1]);
+                                }),
+                              }),
+                              e.jsx("div", {
+                                style: {
+                                  display: "grid",
+                                  gridTemplateColumns: "repeat(3,1fr)",
+                                  gap: 10,
+                                  marginBottom: 12,
+                                },
+                                children: [
+                                  ["Publicación", "FechaPublicacion", "date"],
+                                  ["Cierre", "FechaCierre", "date"],
+                                  ["Visita a terreno", "VisitaTerreno", "datetime-local"],
+                                ].map(function (entry) {
+                                  return e.jsxs("label", {
+                                    style: { color: props.th.muted, fontSize: 11 },
+                                    children: [
+                                      entry[0],
+                                      e.jsx("input", {
+                                        type: entry[2],
+                                        value: form.Fechas[entry[1]] || "",
+                                        onChange: function (evt) {
+                                          updateFichaDate(entry[1], evt.target.value);
+                                        },
+                                        style: Object.assign({}, props.sty.inp, {
+                                          width: "100%",
+                                          marginTop: 5,
+                                        }),
+                                      }),
+                                    ],
+                                  }, entry[1]);
+                                }),
+                              }),
+                              e.jsx("div", {
+                                style: {
+                                  display: "grid",
+                                  gridTemplateColumns: "repeat(3,1fr)",
+                                  gap: 10,
+                                },
+                                children: [
+                                  ["Monto disponible", "MontoEstimado", "number"],
+                                  ["Tipo de licitación", "Tipo", "text"],
+                                  ["Estado en MP", "EstadoMP", "text"],
+                                ].map(function (entry) {
+                                  return e.jsxs("label", {
+                                    style: { color: props.th.muted, fontSize: 11 },
+                                    children: [
+                                      entry[0],
+                                      e.jsx("input", {
+                                        type: entry[2],
+                                        value: form[entry[1]] || "",
+                                        onChange: function (evt) {
+                                          updateFichaField(entry[1], evt.target.value);
+                                        },
+                                        style: Object.assign({}, props.sty.inp, {
+                                          width: "100%",
+                                          marginTop: 5,
+                                        }),
+                                      }),
+                                    ],
+                                  }, entry[1]);
+                                }),
+                              }),
+                              e.jsx("div", {
+                                style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginTop: 12 },
+                                children: [
+                                  e.jsxs("label", {
+                                    style: { color: props.th.muted, fontSize: 11 },
+                                    children: [
+                                      "Estado de trabajo",
+                                      e.jsx("div", {
+                                        style: Object.assign({}, props.sty.inp, { width: "100%", marginTop: 5, minHeight: 38, display: "flex", alignItems: "center", color: "#fbbf24", fontWeight: 700, cursor: "default" }),
+                                        children: mpDisplayText(
+                                          (props.initialItem && props.initialItem.estado) || form.Estado,
+                                          "Borrador",
+                                        ),
+                                      }),
+                                    ],
+                                  }),
+                                  e.jsxs("label", {
+                                    style: { color: props.th.muted, fontSize: 11 },
+                                    children: [
+                                      "Plazo de ejecución (días corridos)",
+                                      e.jsx("input", {
+                                        type: "number", min: 1, value: form.PlazoEjecucion || "", placeholder: "Ej: 30",
+                                        onChange: function (evt) { updateFichaField("PlazoEjecucion", evt.target.value); },
+                                        style: Object.assign({}, props.sty.inp, { width: "100%", marginTop: 5 }),
+                                      }),
+                                    ],
+                                  }),
+                                  e.jsxs("label", {
+                                    style: { color: props.th.muted, fontSize: 11 },
+                                    children: [
+                                      "Vincular presupuesto (opcional)",
+                                      e.jsx("select", {
+                                        value: form.PresupuestoVinculado || "",
+                                        onChange: function (evt) { linkBudgetFromTender(evt.target.value); },
+                                        style: Object.assign({}, props.sty.inp, { width: "100%", marginTop: 5 }),
+                                        children: [e.jsx("option", { value: "", children: "— Sin vincular —" })].concat((props.budgets || []).map(function (budget) {
+                                          var budgetId = String(budget.id || "");
+                                          var budgetName = budget.descripcion || budget.nombreObra || budget.nombre || "Presupuesto";
+                                          return e.jsx("option", { value: budgetId, children: "N° " + budgetId + " · " + budgetName }, budgetId);
+                                        })),
+                                      }),
+                                    ],
+                                  }),
+                                ],
+                              }),
+                              e.jsxs("label", {
+                                style: { display: "block", marginTop: 12 },
+                                children: [
+                                  e.jsx("div", { style: { color: props.th.muted, fontSize: 11, fontWeight: 700, marginBottom: 5 }, children: "NOTAS INTERNAS" }),
+                                  e.jsx("textarea", {
+                                    rows: 3, value: form.NotasInternas || "", placeholder: "Acuerdos, responsables, dudas pendientes o datos que revisar...",
+                                    onChange: function (evt) { updateFichaField("NotasInternas", evt.target.value); },
+                                    style: Object.assign({}, props.sty.inp, { width: "100%", resize: "vertical" }),
+                                  }),
+                                ],
+                              }),
+                              e.jsx("div", {
+                                style: {
+                                  marginTop: 16,
+                                  paddingTop: 14,
+                                  borderTop: "1px solid " + props.th.border,
+                                },
+                                children: [
+                                  e.jsx("div", {
+                                    style: { color: props.th.text, fontSize: 12, fontWeight: 800, marginBottom: 8 },
+                                    children:
+                                      "Ítems importados desde Mercado Público (" +
+                                      (form.Lineas || []).length +
+                                      ")",
+                                  }),
+                                  (form.Lineas || []).length
+                                    ? (form.Lineas || []).slice(0, 6).map(function (line, index) {
+                                        return e.jsx("div", {
+                                          style: {
+                                            color: props.th.muted,
+                                            fontSize: 11,
+                                            padding: "6px 0",
+                                            borderBottom: "1px solid " + props.th.border,
+                                          },
+                                          children:
+                                            line.NombreProducto ||
+                                            line.nombre ||
+                                            "Ítem " + (index + 1),
+                                        }, index);
+                                      })
+                                    : e.jsx("div", {
+                                        style: { color: props.th.muted, fontSize: 11 },
+                                        children: "La API no entregó un itemizado para esta oportunidad.",
+                                      }),
+                                ],
+                              }),
+                            ],
                           }),
-                          e.jsx("span", { style: { color: props.th.text, fontSize: 16, textDecoration: doc.checked ? "line-through" : "none" }, children: doc.name }),
-                          doc.checked && e.jsx("span", { style: { marginLeft: "auto", color: "#4CAF50", fontWeight: "bold" }, children: "✓ Listo" })
-                        ]
-                      });
-                    })
-                  }),
-                  e.jsx("button", {
-                    onClick: function() {
-                      var n = prompt("Nombre del nuevo documento:");
-                      if (n) {
-                        setForm(Object.assign({}, form, { Docs: form.Docs.concat([{ id: Date.now(), name: n, checked: false }]) }));
-                      }
-                    },
-                    style: Object.assign({}, props.sty.btn("s"), { marginTop: 16 }),
-                    children: "+ Añadir otro documento"
-                  })
-                ]
-              }),
-              step === 3 && e.jsxs("div", {
-                children: [
-                  e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: "bold", marginBottom: 8 }, children: "Presupuestador (Itemizado M. Público)" }),
-                  e.jsx("p", { style: { color: props.th.muted, marginBottom: 24, fontSize: 14 }, children: "Ingresa tus precios unitarios netos para cada línea solicitada." }),
-                  form.Lineas && form.Lineas.length > 0 ? e.jsx("div", {
-                    style: { display: "flex", flexDirection: "column", gap: 12 },
-                    children: form.Lineas.map(function(ln, i) {
-                      var cant = parseFloat(ln.Cantidad) || 1;
-                      var pu = parseFloat(ln.PrecioUnitarioNeto) || 0;
-                      var sub = cant * pu;
-                      return e.jsxs("div", {
-                        key: i,
-                        style: { background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8, padding: 16, display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center" },
+                          e.jsxs("aside", {
+                            style: {
+                              background: props.th.surface,
+                              border: "1px solid " + props.th.border,
+                              borderRadius: 10,
+                              padding: 16,
+                              position: "sticky",
+                              top: 0,
+                            },
+                            children: [
+                              e.jsx("div", {
+                                style: { color: props.th.text, fontSize: 13, fontWeight: 800 },
+                                children: "Estado de la ficha",
+                              }),
+                              e.jsxs("div", {
+                                style: {
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  color: props.th.muted,
+                                  fontSize: 11,
+                                  marginTop: 12,
+                                  marginBottom: 5,
+                                },
+                                children: ["Campos esenciales", fichaProgress + "%"],
+                              }),
+                              e.jsx("div", {
+                                style: {
+                                  height: 7,
+                                  background: props.th.bg,
+                                  borderRadius: 999,
+                                  overflow: "hidden",
+                                  marginBottom: 14,
+                                },
+                                children: e.jsx("div", {
+                                  style: {
+                                    width: fichaProgress + "%",
+                                    height: "100%",
+                                    background: fichaProgress === 100 ? "#34d399" : props.th.accent,
+                                  },
+                                }),
+                              }),
+                              e.jsx("div", {
+                                style: {
+                                  padding: 10,
+                                  color: props.th.muted,
+                                  fontSize: 11,
+                                  lineHeight: 1.5,
+                                  background: props.th.bg,
+                                  borderRadius: 8,
+                                  marginBottom: 12,
+                                },
+                                children:
+                                  "Revisa especialmente fechas, región, monto e ítems. Los cambios quedarán asociados a esta oportunidad.",
+                              }),
+                              e.jsx("button", {
+                                type: "button",
+                                onClick: function () {
+                                  savePreparationDraft(false);
+                                },
+                                style: Object.assign({}, props.sty.btn("p"), {
+                                  width: "100%",
+                                  marginBottom: 8,
+                                }),
+                                children: "💾 Guardar borrador",
+                              }),
+                              savedAt &&
+                                e.jsx("div", {
+                                  style: {
+                                    color: props.th.muted,
+                                    fontSize: 10,
+                                    textAlign: "center",
+                                    lineHeight: 1.4,
+                                  },
+                                  children:
+                                    "Último guardado: " +
+                                    new Date(savedAt).toLocaleString("es-CL"),
+                                }),
+                            ],
+                          }),
+                        ],
+                      })
+                    : e.jsxs("div", {
+                        style: {
+                          background: props.th.card,
+                          border: "1px solid " + props.th.border,
+                          borderRadius: 10,
+                          padding: 18,
+                        },
                         children: [
                           e.jsxs("div", {
-                            style: { flex: "1 1 250px" },
+                            style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 14 },
                             children: [
-                              e.jsx("div", { style: { color: props.th.muted, fontSize: 11, fontWeight: "bold" }, children: "LÍNEA " + (i+1) }),
-                              e.jsx("div", { style: { color: props.th.text, fontSize: 15, fontWeight: "bold", marginTop: 4 }, children: ln.NombreProducto }),
-                              e.jsxs("div", { style: { color: props.th.muted, fontSize: 13, marginTop: 4 }, children: [cant, " ", ln.UnidadMedida] })
-                            ]
+                              e.jsxs("div", { children: [
+                                e.jsx("div", { style: { color: props.th.text, fontSize: 15, fontWeight: 800 }, children: "Oportunidades en estudio y preparación" }),
+                                e.jsx("div", { style: { color: props.th.muted, fontSize: 12, marginTop: 4 }, children: "Revisa el avance, los pendientes y continúa desde el punto donde quedaste." }),
+                              ] }),
+                              e.jsx("div", {
+                                style: { padding: "5px 9px", borderRadius: 999, background: props.th.surface, border: "1px solid " + props.th.border, color: props.th.muted, fontSize: 11, whiteSpace: "nowrap" },
+                                children: studiedOpportunities.length + " visibles",
+                              }),
+                            ],
                           }),
-                          e.jsxs("div", {
-                            style: { flex: "0 0 150px" },
-                            children: [
-                              e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginBottom: 4 }, children: "Precio Unitario Neto" }),
-                              e.jsx("input", {
-                                type: "number",
-                                value: pu || "",
-                                placeholder: "0",
-                                onChange: function(e2) {
-                                  var n = parseFloat(e2.target.value) || 0;
-                                  var nl = form.Lineas.slice();
-                                  nl[i] = Object.assign({}, nl[i], { PrecioUnitarioNeto: n });
-                                  setForm(Object.assign({}, form, { Lineas: nl }));
-                                },
-                                style: Object.assign({}, props.sty.input, { width: "100%", fontSize: 14 })
+                          e.jsx("input", {
+                            type: "search",
+                            value: opportunityQuery,
+                            onChange: function (event) { setOpportunityQuery(event.target.value); },
+                            placeholder: "Buscar por nombre, organismo, región o ID MP...",
+                            "aria-label": "Buscar postulaciones en preparación",
+                            style: Object.assign({}, props.sty.inp, { width: "100%", marginBottom: 12, fontSize: 13 }),
+                          }),
+                          studiedOpportunities.length
+                            ? e.jsx("div", {
+                                style: { display: "flex", flexDirection: "column", gap: 8, maxHeight: 310, overflowY: "auto", paddingRight: 3 },
+                                children: studiedOpportunities.map(function (opportunity) {
+                                  var isAgile = String(opportunity.canal || "").toLowerCase().indexOf("agil") >= 0;
+                                   var progress = MpPreparationProgress(opportunity, props.budgets || [], props.cfg || {});
+                                   var savedStepNumber = Math.max(1, Math.min(9, parseInt(opportunity.preparacion && opportunity.preparacion.paso) || 1));
+                                   var savedStage = steps[savedStepNumber - 1];
+                                  var closeLabel = opportunity.fechaCierre
+                                    ? new Date(opportunity.fechaCierre).toLocaleDateString("es-CL")
+                                    : "Sin fecha";
+                                  return e.jsxs("div", {
+                                    onClick: function () {
+                                      setSelectedPreparationId(opportunity.id);
+                                    },
+                                    style: {
+                                      display: "grid",
+                                      gridTemplateColumns: "minmax(0,1fr) auto",
+                                      gap: 12,
+                                      alignItems: "center",
+                                      padding: "12px 13px",
+                                      background: props.th.surface,
+                                      border: "1px solid " + (selectedPreparationOpportunity && selectedPreparationOpportunity.id === opportunity.id ? props.th.accent : props.th.border),
+                                      borderRadius: 9,
+                                      cursor: "pointer",
+                                      boxShadow: selectedPreparationOpportunity && selectedPreparationOpportunity.id === opportunity.id ? "0 0 0 2px " + props.th.accent + "22" : "none",
+                                    },
+                                    children: [
+                                      e.jsxs("div", { style: { minWidth: 0 }, children: [
+                                        e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap", marginBottom: 5 }, children: [
+                                          e.jsx("span", {
+                                            style: { padding: "3px 7px", borderRadius: 999, background: isAgile ? "rgba(96,165,250,.12)" : "rgba(245,160,32,.12)", color: isAgile ? "#60a5fa" : props.th.accent, fontSize: 10, fontWeight: 800 },
+                                            children: isAgile ? "🛒 Compra Ágil" : "⚖️ Licitación",
+                                          }),
+                                          e.jsxs("span", { style: { display: "inline-flex", alignItems: "center", gap: 5, color: props.th.muted, fontSize: 11, fontWeight: 700 }, children: [opportunity.idMP || "Sin ID MP", e.jsx(MpCopyCodeButton, { code: opportunity.idMP, setToast: props.setToast, accent: props.th.accent, border: props.th.border, surface: props.th.surface })] }),
+                                          e.jsx("span", { style: { color: props.th.muted, fontSize: 10 }, children: "Cierre: " + closeLabel }),
+                                        ] }),
+                                        e.jsx("div", {
+                                          style: { color: props.th.text, fontSize: 13, fontWeight: 800, lineHeight: 1.35, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
+                                          title: opportunity.nombreObra || "",
+                                          children: opportunity.nombreObra || "Oportunidad sin nombre",
+                                        }),
+                                        e.jsx("div", {
+                                          style: { color: props.th.muted, fontSize: 11, marginTop: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
+                                          children: [opportunity.organismo, opportunity.region].filter(Boolean).join(" · ") || "Organismo no informado",
+                                        }),
+                                        e.jsxs("div", { style: { marginTop: 9 }, children: [
+                                          e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, color: props.th.text, fontSize: 10.5, fontWeight: 800 }, children: [e.jsx("span", { children: "Continuar desde: " + savedStage }), e.jsx("span", { style: { color: progress.percent === 100 ? "#34d399" : props.th.accent }, children: progress.percent + "% · " + progress.ready + "/" + progress.total })] }),
+                                          e.jsx("div", { style: { height: 7, borderRadius: 999, background: props.th.card, overflow: "hidden", marginTop: 6 }, children: e.jsx("div", { style: { width: progress.percent + "%", height: "100%", background: progress.percent === 100 ? "#34d399" : props.th.accent } }) }),
+                                          progress.pending.length > 0 && e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, lineHeight: 1.4, marginTop: 6 }, children: "Primer bloque pendiente: " + progress.stage + " · " + progress.pending.join(" · ") }),
+                                          progress.updatedAt && e.jsx("div", { style: { color: props.th.muted, fontSize: 9, marginTop: 4 }, children: "Último guardado: " + new Date(progress.updatedAt).toLocaleString("es-CL") }),
+                                        ] }),
+                                      ] }),
+                                      e.jsx("button", {
+                                        type: "button",
+                                        onClick: function () {
+                                          if (props.onSelectOpportunity)
+                                            props.onSelectOpportunity(opportunity);
+                                        },
+                                        style: Object.assign({}, props.sty.btn("p"), { padding: "8px 12px", fontSize: 11, whiteSpace: "nowrap" }),
+                                        children: opportunity.preparacion ? "🧭 Continuar flujo →" : "Comenzar estudio →",
+                                      }),
+                                    ],
+                                  }, opportunity.id);
+                                }),
                               })
-                            ]
-                          }),
-                          e.jsxs("div", {
-                            style: { flex: "0 0 120px", textAlign: "right" },
-                            children: [
-                              e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginBottom: 4 }, children: "Subtotal Neto" }),
-                              e.jsx("div", { style: { color: props.th.accent, fontSize: 15, fontWeight: "bold" }, children: "$" + sub.toLocaleString("es-CL") })
-                            ]
-                          })
-                        ]
+                            : e.jsxs("div", {
+                                style: { padding: 24, textAlign: "center", background: props.th.surface, border: "1px dashed " + props.th.border, borderRadius: 9 },
+                                children: [
+                                  e.jsx("div", { style: { fontSize: 25, marginBottom: 7 }, children: "⚖️" }),
+                                  e.jsx("div", { style: { color: props.th.text, fontSize: 13, fontWeight: 800 }, children: normalizedOpportunityQuery ? "No hay coincidencias" : "No hay oportunidades en estudio" }),
+                                  e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginTop: 4 }, children: normalizedOpportunityQuery ? "Prueba con otro nombre, organismo o ID." : "Guarda una oportunidad y comienza su estudio guiado para incorporarla aquí." }),
+                                ],
+                              }),
+                        ],
                       })
-                    })
-                  }) : e.jsx("div", {
-                    style: { padding: 32, background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8, textAlign: "center" },
-                    children: e.jsx("p", { style: { color: props.th.muted }, children: "No hay líneas extraídas de Mercado Público aún." })
-                  })
                 ]
               }),
-              step === 4 && (function(){
-                var totalNeto = 0;
-                (form.Lineas || []).forEach(function(ln) {
-                  totalNeto += (parseFloat(ln.Cantidad) || 1) * (parseFloat(ln.PrecioUnitarioNeto) || 0);
+              step === 2 && (function () {
+                var antecedents = form.Antecedentes || [];
+                var findings = form.HallazgosAntecedentes || [];
+                var pendingFindings = findings.filter(function (finding) { return finding.status === "pendiente"; }).length;
+                var analyzedDocuments = antecedents.filter(function (document) { return document.estado === "analizado"; }).length;
+                var apiDocuments = props.initialItem && (props.initialItem.documentos || props.initialItem.Documentos) || [];
+                var classifications = ["Bases administrativas", "Bases técnicas", "Anexo o formulario", "Aclaración o modificación", "Plano o itemizado", "Otro antecedente"];
+                return e.jsxs("div", { children: [
+                  e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: 800, marginBottom: 6 }, children: "Antecedentes y análisis" }),
+                  e.jsx("p", { style: { color: props.th.muted, marginBottom: 14, fontSize: 13, lineHeight: 1.55 }, children: "Reúne aquí las bases y anexos de la oportunidad. ECP propone hallazgos, pero tú decides qué información se aplica a la postulación." }),
+                  e.jsxs("section", { style: { padding: 14, marginBottom: 14, borderRadius: 10, background: props.th.card, border: "1px solid " + props.th.border }, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start", flexWrap: "wrap" }, children: [
+                      e.jsxs("div", { style: { flex: "1 1 460px" }, children: [
+                        e.jsx("div", { style: { color: props.th.text, fontSize: 13.5, fontWeight: 900 }, children: "1. Obtén los documentos oficiales" }),
+                        e.jsx("div", { style: { color: props.th.muted, fontSize: 11, lineHeight: 1.5, marginTop: 4 }, children: apiDocuments.length ? "La API informó " + apiDocuments.length + " referencia(s). Si el archivo no puede descargarse, ábrelo desde la ficha oficial." : "La API tradicional de licitaciones no entrega las bases adjuntas. Abre Mercado Público, busca el código y descarga Bases, Anexos y Aclaraciones." }),
+                        e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap", marginTop: 6 }, children: [e.jsx("div", { style: { color: props.th.accent, fontSize: 10.5, fontWeight: 800 }, children: "Código para buscar: " + (form.CodigoExterno || "Guarda primero la ficha General") }), e.jsx(MpCopyCodeButton, { code: form.CodigoExterno, setToast: props.setToast, accent: props.th.accent, border: props.th.border, surface: props.th.surface })] }),
+                      ] }),
+                      e.jsxs("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }, children: [
+                        e.jsx("button", { type: "button", onClick: function () { setAntecedentGuideOpen(true); }, style: Object.assign({}, props.sty.btn("s"), { padding: "9px 13px", fontWeight: 800 }), children: "📘 ¿Qué debo descargar?" }),
+                        e.jsx("button", { type: "button", onClick: function () { window.open("https://www.mercadopublico.cl/", "_blank", "noopener,noreferrer"); }, style: Object.assign({}, props.sty.btn("p"), { padding: "9px 13px", fontWeight: 800 }), children: "↗ Abrir Mercado Público" }),
+                      ] }),
+                    ] }),
+                    apiDocuments.length > 0 && e.jsx("div", { style: { display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }, children: apiDocuments.map(function (document, index) { return e.jsx("span", { style: { padding: "5px 8px", borderRadius: 999, background: props.th.surface, border: "1px solid " + props.th.border, color: props.th.text, fontSize: 10.5 }, children: "📎 " + (document.nombre || document.name || "Documento " + (index + 1)) }, document.id || index); }) }),
+                  ] }),
+                  e.jsxs("section", { style: { padding: 14, marginBottom: 14, borderRadius: 10, background: props.th.card, border: "1px solid " + props.th.border }, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginBottom: 10, flexWrap: "wrap" }, children: [
+                      e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 13.5, fontWeight: 900 }, children: "2. Biblioteca de antecedentes" }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 3 }, children: antecedents.length + " archivos · " + analyzedDocuments + " con texto analizado" })] }),
+                      e.jsxs("label", { style: Object.assign({}, props.sty.btn("p"), { padding: "8px 12px", cursor: "pointer", fontWeight: 800 }), children: ["📎 Cargar documentos", e.jsx("input", { type: "file", multiple: true, accept: ".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.json,.xml,.jpg,.jpeg,.png", style: { display: "none" }, onChange: function (event) { addAntecedentFiles(event.target.files); event.target.value = ""; } })] }),
+                    ] }),
+                    antecedents.length === 0 ? e.jsxs("div", { style: { padding: 24, textAlign: "center", border: "1px dashed " + props.th.border, borderRadius: 9, background: props.th.surface }, children: [e.jsx("div", { style: { fontSize: 27, marginBottom: 7 }, children: "📚" }), e.jsx("div", { style: { color: props.th.text, fontSize: 13, fontWeight: 900 }, children: "Carga las bases antes de preparar la oferta" }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 4 }, children: "PDF, Word, Excel, imágenes o texto. Los Excel y archivos de texto se leen automáticamente." })] }) : e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 9 }, children: antecedents.map(function (document) {
+                      var requiresText = !String(document.textoAnalisis || "").trim();
+                      return e.jsxs("div", { style: { padding: 11, borderRadius: 9, background: props.th.surface, border: "1px solid " + props.th.border }, children: [
+                        e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "minmax(0,1fr) 190px auto", gap: 9, alignItems: "center" }, children: [
+                          e.jsxs("div", { style: { minWidth: 0 }, children: [e.jsx("div", { style: { color: props.th.text, fontSize: 12.5, fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, title: document.nombre, children: "📄 " + document.nombre }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10, marginTop: 3 }, children: Math.max(1, Math.round((document.tamano || 0) / 1024)) + " KB · " + document.origen })] }),
+                          e.jsx("select", { value: document.clasificacion || "Otro antecedente", onChange: function (event) { updateAntecedent(document.id, "clasificacion", event.target.value); }, style: Object.assign({}, props.sty.sel, { padding: "7px 8px", fontSize: 10.5 }), children: classifications.map(function (classification) { return e.jsx("option", { value: classification, children: classification }, classification); }) }),
+                          e.jsx("button", { type: "button", onClick: function () { removeAntecedent(document.id); }, style: Object.assign({}, props.sty.btn("d"), { padding: "6px 9px" }), children: "×" }),
+                        ] }),
+                        requiresText && e.jsxs("div", { style: { marginTop: 9, padding: 9, borderRadius: 7, background: "rgba(245,160,32,.07)", border: "1px solid rgba(245,160,32,.28)" }, children: [
+                          e.jsx("div", { style: { color: props.th.text, fontSize: 10.5, lineHeight: 1.45, marginBottom: 7 }, children: "Este formato requiere extracción adicional. Abre el documento, copia el texto relevante de las bases y pégalo aquí. Los PDF escaneados pueden necesitar OCR." }),
+                          e.jsx("textarea", { value: document.textoAnalisis || "", onChange: function (event) { updateAntecedent(document.id, "textoAnalisis", event.target.value); }, placeholder: "Pega el texto de garantías, plazos, visita a terreno, anexos y requisitos...", style: Object.assign({}, props.sty.inp, { minHeight: 76, resize: "vertical", fontSize: 11 }) }),
+                          e.jsx("button", { type: "button", onClick: function () { analyzeStoredAntecedent(document.id); }, disabled: !String(document.textoAnalisis || "").trim(), style: Object.assign({}, props.sty.btn("p"), { marginTop: 7, padding: "7px 11px", fontSize: 10.5 }), children: "🔎 Analizar texto" }),
+                        ] }),
+                        !requiresText && e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginTop: 8 }, children: [e.jsx("span", { style: { color: "#34d399", fontSize: 10.5, fontWeight: 800 }, children: "✓ Texto disponible para análisis" }), e.jsx("button", { type: "button", onClick: function () { analyzeStoredAntecedent(document.id); }, style: Object.assign({}, props.sty.btn("s"), { padding: "5px 9px", fontSize: 10 }), children: "Volver a analizar" })] }),
+                      ] }, document.id);
+                    }) }),
+                  ] }),
+                  e.jsxs("section", { style: { padding: 14, borderRadius: 10, background: props.th.card, border: "1px solid " + props.th.border }, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginBottom: 10 }, children: [e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 13.5, fontWeight: 900 }, children: "3. Hallazgos para revisar" }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 3 }, children: pendingFindings + " pendientes · aplicar nunca sobrescribe sin tu confirmación" })] }), e.jsx("span", { style: { padding: "5px 8px", borderRadius: 999, color: pendingFindings ? "#fbbf24" : "#34d399", background: pendingFindings ? "rgba(251,191,36,.09)" : "rgba(52,211,153,.09)", fontSize: 10, fontWeight: 900 }, children: pendingFindings ? "REVISIÓN PENDIENTE" : "SIN PENDIENTES" })] }),
+                    findings.length === 0 ? e.jsx("div", { style: { padding: 18, textAlign: "center", color: props.th.muted, background: props.th.surface, borderRadius: 8, fontSize: 11 }, children: antecedents.length ? "Todavía no hay hallazgos. Agrega texto analizable o revisa manualmente las bases." : "Los hallazgos aparecerán después de cargar y analizar antecedentes." }) : e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: findings.map(function (finding) {
+                      var applied = finding.status === "aplicado";
+                      var dismissed = finding.status === "descartado";
+                      return e.jsxs("div", { style: { padding: 11, borderRadius: 8, background: props.th.surface, border: "1px solid " + (applied ? "rgba(52,211,153,.5)" : dismissed ? props.th.border : "rgba(245,160,32,.38)"), opacity: dismissed ? .62 : 1 }, children: [
+                        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "flex-start" }, children: [e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 12.5, fontWeight: 900 }, children: (finding.type === "garantia" ? "🛡️ " : finding.type === "documento" ? "📎 " : "🔎 ") + finding.title }), e.jsx("div", { style: { color: applied ? "#34d399" : props.th.accent, fontSize: 11, fontWeight: 800, marginTop: 3 }, children: finding.value })] }), e.jsx("span", { style: { color: finding.confidence === "Alta" ? "#34d399" : "#fbbf24", fontSize: 9.5, fontWeight: 900 }, children: "CONFIANZA " + finding.confidence.toUpperCase() })] }),
+                        e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 5, lineHeight: 1.45 }, children: finding.detail }),
+                        e.jsxs("details", { style: { marginTop: 7 }, children: [e.jsx("summary", { style: { color: props.th.muted, fontSize: 10, cursor: "pointer", fontWeight: 800 }, children: "Ver evidencia · " + finding.source }), e.jsx("div", { style: { color: props.th.text, fontSize: 10.5, lineHeight: 1.5, marginTop: 6, padding: 8, borderLeft: "3px solid " + props.th.accent, background: props.th.card }, children: finding.evidence || "Evidencia no disponible" })] }),
+                        finding.status === "pendiente" && e.jsxs("div", { style: { display: "flex", justifyContent: "flex-end", gap: 7, marginTop: 8 }, children: [e.jsx("button", { type: "button", onClick: function () { dismissAntecedentFinding(finding.id); }, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 10 }), children: "Descartar" }), e.jsx("button", { type: "button", onClick: function () { applyAntecedentFinding(finding.id); }, style: Object.assign({}, props.sty.btn("p"), { padding: "6px 10px", fontSize: 10, fontWeight: 800 }), children: finding.type === "garantia" ? "Aplicar a Garantías" : finding.type === "plazo" ? "Aplicar a General" : finding.type === "documento" ? "Agregar a Documentos" : "Marcar revisado" })] }),
+                        applied && e.jsx("div", { style: { color: "#34d399", fontSize: 10.5, fontWeight: 800, marginTop: 7 }, children: "✓ Aplicado; revisa el campo de destino antes de postular." }),
+                        dismissed && e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 7 }, children: "Hallazgo descartado por el usuario." }),
+                      ] }, finding.id);
+                    }) }),
+                  ] }),
+                  e.jsxs("label", { style: { display: "flex", gap: 8, alignItems: "flex-start", marginTop: 12, padding: 12, background: props.th.card, border: "1px solid " + (form.AntecedentesRevisados ? "rgba(52,211,153,.5)" : props.th.border), borderRadius: 9, color: antecedents.length && pendingFindings === 0 ? props.th.text : props.th.muted, fontSize: 12, cursor: antecedents.length && pendingFindings === 0 ? "pointer" : "not-allowed" }, children: [e.jsx("input", { type: "checkbox", disabled: !antecedents.length || pendingFindings > 0, checked: !!form.AntecedentesRevisados, onChange: function (event) { updateFichaField("AntecedentesRevisados", event.target.checked); }, style: { width: 18, height: 18 } }), e.jsx("span", { children: antecedents.length && pendingFindings === 0 ? "Confirmo que revisé los antecedentes y los hallazgos. Los campos aplicados deberán verificarse nuevamente antes del envío en Mercado Público." : "Carga al menos un antecedente y resuelve todos los hallazgos para confirmar la revisión." })] }),
+                ] });
+              })(),
+              step === 8 && (function () {
+                var referenceOptions = (form.Antecedentes || []).map(function (document) { return { value: 'antecedente:' + document.id, label: 'Antecedente: ' + document.nombre }; }).concat((form.Archivos || []).map(function (file) { return { value: 'archivo:' + file.id, label: 'Archivo propio: ' + file.nombre }; }));
+                return e.jsxs("div", { children: [
+                  e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: 800, marginBottom: 6 }, children: "Documentos y expediente" }),
+                  e.jsx("p", { style: { color: props.th.muted, marginBottom: 14, fontSize: 13 }, children: "Reúne lo que debes presentar, entiende para qué sirve y comprueba cada archivo antes de subirlo a Mercado Público." }),
+                  e.jsxs("section", { style: { background: "rgba(96,165,250,.08)", border: "1px solid rgba(96,165,250,.38)", borderRadius: 10, padding: 14, marginBottom: 14 }, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }, children: [
+                      e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontWeight: 900, fontSize: 14 }, children: "🧭 Tu ruta documental, sin experiencia previa" }), e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginTop: 4 }, children: "ECP organiza y prepara; tú confirmas la exigencia en las bases antes de enviar." })] }),
+                      e.jsx("div", { style: { color: documentChecklistReady === normalizedChecklistDocuments.length && normalizedChecklistDocuments.length ? "#34d399" : props.th.accent, fontWeight: 900, fontSize: 13 }, children: documentChecklistReady + " / " + normalizedChecklistDocuments.length + " documentos listos" }),
+                    ] }),
+                    e.jsx("div", { style: { height: 6, borderRadius: 999, background: props.th.surface, overflow: "hidden", marginTop: 10 }, children: e.jsx("div", { style: { width: (normalizedChecklistDocuments.length ? Math.round(documentChecklistReady / normalizedChecklistDocuments.length * 100) : 0) + "%", height: "100%", background: documentChecklistReady === normalizedChecklistDocuments.length && normalizedChecklistDocuments.length ? "#34d399" : props.th.accent } }) }),
+                    e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 8, marginTop: 12 }, children: [
+                      ["1", "Identifica", "Revisa qué pide la versión vigente de las bases y anexos."],
+                      ["2", "Prepara", "Completa, firma y respalda cada documento en su formato oficial."],
+                      ["3", "Comprueba", "Marca Listo solo después de abrir el archivo final y revisarlo."],
+                    ].map(function (guide) { return e.jsxs("div", { style: { background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 8, padding: 10 }, children: [e.jsx("span", { style: { display: "inline-flex", width: 22, height: 22, borderRadius: 99, alignItems: "center", justifyContent: "center", background: props.th.accent, color: "#111", fontWeight: 900, fontSize: 11 }, children: guide[0] }), e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 11, marginTop: 7 }, children: guide[1] }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10, lineHeight: 1.4, marginTop: 3 }, children: guide[2] })] }, guide[0]); }) }),
+                    e.jsx("div", { style: { color: "#fbbf24", fontSize: 10.5, marginTop: 10, lineHeight: 1.45 }, children: "⚠️ ‘Borrador listo’ no significa ‘listo para enviar’: todavía debes revisar la versión final, firmas, fechas, vigencias y coincidencia con las bases." }),
+                  ] }),
+                  suggestedChecklistDocuments.length > 0 && e.jsxs("section", { style: { background: "rgba(245,160,32,.07)", border: "1px solid rgba(245,160,32,.4)", borderRadius: 10, padding: 14, marginBottom: 14 }, children: [
+                    e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 900 }, children: "💡 Sugerencias encontradas en tus antecedentes" }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 3, marginBottom: 9 }, children: "No se agregan ni se consideran obligatorias hasta que tú las confirmes." }),
+                    e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 7 }, children: suggestedChecklistDocuments.map(function (suggestion, suggestionIndex) { return e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 8, padding: "8px 10px" }, children: [e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 11.5 }, children: suggestion.name }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10, marginTop: 2 }, children: suggestion.origin })] }), e.jsx("button", { type: "button", onClick: function () { addChecklistDocument(suggestion); }, style: Object.assign({}, props.sty.btn("p"), { padding: "6px 10px", fontSize: 10.5, whiteSpace: "nowrap" }), children: "+ Incorporar" })] }, suggestion.name + suggestionIndex); }) }),
+                  ] }),
+                  e.jsxs("section", { style: { background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 10, padding: 16, marginBottom: 14 }, children: [
+                    e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 800, marginBottom: 10 }, children: "Documentos que ECP puede preparar" }),
+                    e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 10 }, children: automaticDocuments.map(function (document) { return e.jsxs("div", { style: { padding: 13, background: props.th.surface, border: "1px solid " + (document.ready ? "rgba(52,211,153,.45)" : props.th.border), borderRadius: 8 }, children: [
+                      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8 }, children: [e.jsx("div", { style: { fontSize: 20 }, children: document.icon }), e.jsx("span", { style: { color: document.ready ? "#34d399" : "#fbbf24", fontSize: 10, fontWeight: 800 }, children: document.ready ? "BORRADOR PARA REVISAR" : "FALTAN DATOS" })] }),
+                      e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 13, marginTop: 5 }, children: document.title }),
+                      e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginTop: 4, lineHeight: 1.4 }, children: document.desc }),
+                      e.jsx("button", { type: "button", onClick: function () { openAutomaticDocument(document); }, style: Object.assign({}, props.sty.btn(document.ready ? "s" : "p"), { width: "100%", marginTop: 9, padding: "7px 9px", fontSize: 11 }), children: document.ready ? "👁 Abrir y revisar borrador" : "✏️ Completar datos faltantes" }),
+                    ] }, document.key); }) }),
+                  ] }),
+                  e.jsxs("section", { style: { background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 10, padding: 16, marginBottom: 14 }, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginBottom: 10 }, children: [
+                      e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 800 }, children: "Checklist documental inteligente" }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 3 }, children: "Clasifica cada documento y deja evidencia de dónde salió la exigencia." })] }),
+                      e.jsx("button", { type: "button", onClick: function () { var name = prompt("Nombre del documento:"); if (name) addChecklistDocument({ name: name }); }, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11 }), children: "+ Documento" }),
+                    ] }),
+                    normalizedChecklistDocuments.length === 0 && e.jsx("div", { style: { color: props.th.muted, padding: 16, textAlign: "center", border: "1px dashed " + props.th.border, borderRadius: 8, fontSize: 11 }, children: "Aún no hay documentos definidos. Revisa Antecedentes o agrega uno manualmente." }),
+                    e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 9 }, children: normalizedChecklistDocuments.map(function (document, index) {
+                      var categoryMeta = documentCategoryMeta[document.category] || documentCategoryMeta.Administrativo;
+                      var requirementMeta = documentRequirementMeta[document.requirement] || documentRequirementMeta.por_confirmar;
+                      return e.jsxs("div", { style: { padding: 11, background: props.th.surface, border: "1px solid " + (document.checked ? "rgba(52,211,153,.55)" : props.th.border), borderLeft: "4px solid " + categoryMeta.color, borderRadius: 8 }, children: [
+                        e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "24px minmax(0,1fr) auto auto", gap: 8, alignItems: "center" }, children: [
+                          e.jsx("input", { type: "checkbox", "aria-label": "Marcar listo " + document.name, checked: !!document.checked, onChange: function (event) { updateDocument(index, "checked", event.target.checked); }, style: { width: 18, height: 18 } }),
+                          e.jsx("input", { "aria-label": "Nombre del documento", value: document.name || "", onChange: function (event) { updateDocument(index, "name", event.target.value); }, style: Object.assign({}, props.sty.inp, { padding: "6px 8px", fontSize: 12, fontWeight: 700, textDecoration: document.checked ? "line-through" : "none" }) }),
+                          e.jsx("span", { title: categoryMeta.help, style: { color: categoryMeta.color, border: "1px solid " + categoryMeta.color, borderRadius: 99, padding: "4px 7px", fontSize: 9.5, fontWeight: 800, whiteSpace: "nowrap" }, children: categoryMeta.icon + " " + document.category }),
+                          e.jsx("button", { type: "button", "aria-label": "Eliminar " + document.name, onClick: function () { setForm(function (current) { return Object.assign({}, current, { Docs: (current.Docs || []).filter(function (_, documentIndex) { return documentIndex !== index; }) }); }); setDirtyDraft(true); }, style: Object.assign({}, props.sty.btn("d"), { padding: "5px 8px" }), children: "×" }),
+                        ] }),
+                        e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, lineHeight: 1.45, margin: "8px 0" }, children: document.explanation }),
+                        e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(4,minmax(0,1fr))", gap: 7 }, children: [
+                          e.jsxs("label", { style: { color: props.th.muted, fontSize: 9.5 }, children: ["Categoría", e.jsx("select", { value: document.category, onChange: function (event) { updateDocument(index, "category", event.target.value); }, style: Object.assign({}, props.sty.sel || props.sty.inp, { display: "block", width: "100%", marginTop: 3, padding: "6px 7px", fontSize: 10.5 }), children: Object.keys(documentCategoryMeta).map(function (category) { return e.jsx("option", { value: category, children: category }, category); }) })] }),
+                          e.jsxs("label", { style: { color: props.th.muted, fontSize: 9.5 }, children: ["Importancia", e.jsx("select", { title: requirementMeta.help, value: document.requirement, onChange: function (event) { updateDocument(index, "requirement", event.target.value); }, style: Object.assign({}, props.sty.sel || props.sty.inp, { display: "block", width: "100%", marginTop: 3, padding: "6px 7px", fontSize: 10.5, color: requirementMeta.color }), children: Object.keys(documentRequirementMeta).map(function (requirement) { return e.jsx("option", { value: requirement, children: documentRequirementMeta[requirement].label }, requirement); }) })] }),
+                          e.jsxs("label", { style: { color: props.th.muted, fontSize: 9.5 }, children: ["Responsable / firma", e.jsx("input", { value: document.responsible, placeholder: "Ej: representante legal", onChange: function (event) { updateDocument(index, "responsible", event.target.value); }, style: Object.assign({}, props.sty.inp, { display: "block", width: "100%", marginTop: 3, padding: "6px 7px", fontSize: 10.5 }) })] }),
+                          e.jsxs("label", { style: { color: props.th.muted, fontSize: 9.5 }, children: ["Formato exigido", e.jsx("input", { value: document.format, placeholder: "Ej: PDF firmado", onChange: function (event) { updateDocument(index, "format", event.target.value); }, style: Object.assign({}, props.sty.inp, { display: "block", width: "100%", marginTop: 3, padding: "6px 7px", fontSize: 10.5 }) })] }),
+                        ] }),
+                        e.jsx("div", { style: { display: "grid", gridTemplateColumns: "minmax(220px,1fr) minmax(220px,1fr)", gap: 7, marginTop: 7 }, children: [
+                          e.jsxs("label", { style: { color: props.th.muted, fontSize: 9.5 }, children: ["Dónde obtenerlo / referencia", e.jsx("input", { value: document.origin, onChange: function (event) { updateDocument(index, "origin", event.target.value); }, style: Object.assign({}, props.sty.inp, { display: "block", width: "100%", marginTop: 3, padding: "6px 7px", fontSize: 10.5 }) })] }),
+                          e.jsxs("label", { style: { color: props.th.muted, fontSize: 9.5 }, children: ["Archivo o antecedente asociado", e.jsx("select", { value: document.sourceRef, onChange: function (event) { updateDocument(index, "sourceRef", event.target.value); }, style: Object.assign({}, props.sty.sel || props.sty.inp, { display: "block", width: "100%", marginTop: 3, padding: "6px 7px", fontSize: 10.5 }), children: [e.jsx("option", { value: "", children: "— Sin asociar —" })].concat(referenceOptions.map(function (reference) { return e.jsx("option", { value: reference.value, children: reference.label }, reference.value); })) })] }),
+                        ] }),
+                        e.jsx("div", { style: { color: requirementMeta.color, fontSize: 9.5, marginTop: 7 }, children: "ℹ " + requirementMeta.help }),
+                      ] }, document.id || index);
+                    }) }),
+                  ] }),
+                  e.jsxs("section", { style: { background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 10, padding: 16 }, children: [
+                    e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 800 }, children: "Archivos finales y respaldos" }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginTop: 4, marginBottom: 10 }, children: "Agrega los archivos que realmente revisarás y subirás. En este prototipo se conserva su referencia; el archivo definitivo se integrará con Tauri." }),
+                    e.jsxs("label", { style: Object.assign({}, props.sty.btn("s"), { display: "block", textAlign: "center", padding: 16, borderStyle: "dashed", cursor: "pointer" }), children: ["📎 Seleccionar archivos (PDF, Excel o Word)", e.jsx("input", { type: "file", multiple: true, accept: ".pdf,.xlsx,.xls,.doc,.docx", style: { display: "none" }, onChange: function (event) { addOwnFiles(event.target.files); event.target.value = ""; } })] }),
+                    e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 7, marginTop: 10 }, children: (form.Archivos || []).map(function (storedFile) { return e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", padding: "8px 10px", background: props.th.surface, borderRadius: 7, border: "1px solid " + props.th.border }, children: [
+                      e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 12, fontWeight: 700 }, children: storedFile.nombre }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10 }, children: Math.max(1, Math.round((storedFile.tamano || 0) / 1024)) + " KB" })] }),
+                      e.jsx("button", { type: "button", onClick: function () { removeOwnFile(storedFile.id); }, style: Object.assign({}, props.sty.btn("d"), { padding: "5px 8px" }), children: "×" }),
+                    ] }, storedFile.id); }) }),
+                  ] }),
+                ] });
+              })(),
+              step === 4 && e.jsxs("div", {
+                children: [
+                  e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: 800, marginBottom: 6 }, children: "Decisión informada" }),
+                  e.jsx("p", { style: { color: props.th.muted, fontSize: 13, lineHeight: 1.5, marginBottom: 16 }, children: "Decide después de revisar la ficha oficial, las bases y la viabilidad económica. Esta decisión separa el estudio de la construcción de la oferta." }),
+                  e.jsxs("section", { style: { padding: 16, borderRadius: 11, background: props.th.card, border: "1px solid " + props.th.border, marginBottom: 14 }, children: [
+                    e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 900, marginBottom: 10 }, children: "Lo que ya deberías conocer" }),
+                    e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(190px,1fr))", gap: 8 }, children: [
+                      ["Ficha y fechas oficiales", fichaProgress === 100],
+                      ["Bases y antecedentes revisados", !!form.AntecedentesRevisados],
+                      ["Ítems, costos y monto preliminar", checklistLines.length > 0 && checklistNet > 0],
+                    ].map(function (review) { return e.jsxs("div", { style: { padding: "10px 11px", borderRadius: 8, background: props.th.surface, border: "1px solid " + (review[1] ? "rgba(52,211,153,.45)" : props.th.border), color: review[1] ? "#34d399" : props.th.muted, fontSize: 11.5, fontWeight: 800 }, children: [review[1] ? "✓ " : "▫ ", review[0]] }, review[0]); }) }),
+                  ] }),
+                  e.jsxs("section", { style: { padding: 16, borderRadius: 11, background: props.th.card, border: "1px solid " + props.th.border, marginBottom: 14 }, children: [
+                    e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 900, marginBottom: 5 }, children: "¿Conviene preparar esta oferta?" }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 11, lineHeight: 1.45, marginBottom: 11 }, children: "Conviene habilita la preparación final. Requiere revisión mantiene la licitación En estudio. No conviene permite detener el trabajo sin marcarla como postulada." }),
+                    e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,minmax(150px,1fr))", gap: 8 }, children: [["Conviene", "#34d399", "✓"], ["Requiere revisión", "#fbbf24", "⚠"], ["No conviene", "#f87171", "×"]].map(function (decision) { var active = form.DecisionEstudio === decision[0]; return e.jsx("button", { type: "button", onClick: function () { updateFichaField("DecisionEstudio", decision[0]); updateFichaField("DecisionConfirmada", false); }, style: { padding: "11px 9px", borderRadius: 8, cursor: "pointer", border: "1px solid " + (active ? decision[1] : props.th.border), background: active ? decision[1] + "18" : props.th.surface, color: active ? decision[1] : props.th.muted, fontWeight: 900 }, children: decision[2] + " " + decision[0] }, decision[0]); }) }),
+                    e.jsx("textarea", { rows: 4, value: form.DecisionJustificacion || "", onChange: function (event) { updateFichaField("DecisionJustificacion", event.target.value); }, placeholder: "Explica brevemente por qué conviene, qué falta revisar o por qué no participar...", style: Object.assign({}, props.sty.inp, { width: "100%", marginTop: 12, resize: "vertical" }) }),
+                    e.jsxs("label", { style: { display: "flex", gap: 9, alignItems: "flex-start", padding: 11, marginTop: 10, borderRadius: 8, background: props.th.surface, border: "1px solid " + (form.DecisionConfirmada ? "rgba(52,211,153,.5)" : props.th.border), color: props.th.text, fontSize: 11.5 }, children: [e.jsx("input", { type: "checkbox", disabled: !form.DecisionEstudio || form.DecisionEstudio === "Por decidir", checked: !!form.DecisionConfirmada, onChange: function (event) { updateFichaField("DecisionConfirmada", event.target.checked); } }), e.jsx("span", { children: "Confirmo que esta decisión se basa en la ficha, las bases y el itemizado preliminar." })] }),
+                  ] }),
+                  studyDecisionApproved && e.jsx("div", { style: { padding: 12, borderRadius: 9, background: "rgba(52,211,153,.09)", border: "1px solid rgba(52,211,153,.45)", color: "#34d399", fontSize: 12, fontWeight: 900 }, children: "✓ Estudio aprobado. Al continuar comenzarás la oferta económica final." }),
+                ],
+              }),
+              (step === 3 || step === 5) && (function () {
+                var itemLines = linkedBudget
+                  ? (linkedBudget.items || []).filter(function (item) { return !!String(item.desc || "").trim(); }).map(function (item, budgetLineIndex) {
+                      return {
+                        NombreProducto: item.desc || "",
+                        Cantidad: item.cant == null ? 1 : item.cant,
+                        UnidadMedida: item.unidad || "unidad",
+                        PrecioUnitarioNeto: parseFloat(item.precio) || 0,
+                        _budgetLineIndex: budgetLineIndex,
+                      };
+                    })
+                  : (form.Lineas || []);
+                var subtotalNeto = linkedBudget ? (parseFloat(linkedBudgetTotals.sub) || 0) : itemLines.reduce(function (sum, line) {
+                  return sum + (parseFloat(line.Cantidad) || 0) * (parseFloat(line.PrecioUnitarioNeto) || 0);
+                }, 0);
+                var itemIva = linkedBudget ? (parseFloat(linkedBudgetTotals.iva) || 0) : subtotalNeto * 0.19;
+                var itemTotal = linkedBudget ? (parseFloat(linkedBudgetTotals.total) || 0) : subtotalNeto + itemIva;
+                var money = function (value) {
+                  return "$" + Math.round(value || 0).toLocaleString("es-CL");
+                };
+                return e.jsxs("div", {
+                  style: {
+                    background: props.th.card,
+                    border: "1px solid " + props.th.border,
+                    borderRadius: 12,
+                    padding: 20,
+                  },
+                  children: [
+                    e.jsxs("div", { style: { padding: 13, marginBottom: 14, borderRadius: 9, background: step === 3 ? "rgba(59,130,246,.08)" : "rgba(52,211,153,.08)", border: "1px solid " + (step === 3 ? "rgba(59,130,246,.4)" : "rgba(52,211,153,.4)") }, children: [e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 900 }, children: step === 3 ? "Itemizado preliminar para estudiar la viabilidad" : "Oferta económica final" }), e.jsx("div", { style: { color: props.th.muted, fontSize: 11, lineHeight: 1.45, marginTop: 4 }, children: step === 3 ? "Estima cantidades, costos, mano de obra, APU y margen. Aún no estás fijando una oferta para postular." : "Confirma precios de venta, subtotales, impuestos y total final usando el mismo itemizado ya estudiado." })] }),
+                    e.jsxs("section", {
+                      style: { padding: 14, marginBottom: 16, borderRadius: 10, background: linkedBudget ? "rgba(245,160,32,.08)" : props.th.surface, border: "1px solid " + (linkedBudget ? "rgba(245,160,32,.48)" : props.th.border) },
+                      children: [
+                        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }, children: [
+                          e.jsxs("div", { children: [
+                            linkedBudget ? e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }, children: [e.jsx("div", { style: { color: props.th.accent, fontSize: 14, fontWeight: 900 }, children: "🔒 Presupuesto vinculado a licitación " + form.CodigoExterno }), e.jsx(MpCopyCodeButton, { code: form.CodigoExterno, setToast: props.setToast, accent: props.th.accent, border: props.th.border, surface: props.th.surface })] }) : e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 900 }, children: "Motor de costos del presupuesto" }),
+                            e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginTop: 4, maxWidth: 620, lineHeight: 1.5 }, children: linkedBudget ? "Trabaja materiales, mano de obra, APU, gastos generales y utilidad en el presupuesto. Al guardarlo, los precios asociados regresan a esta oferta." : "Vincula un presupuesto existente, crea uno desde el itemizado oficial o continúa con precios básicos en esta pantalla." }),
+                          ] }),
+                          linkedBudget && e.jsxs("div", { style: { textAlign: "right" }, children: [e.jsx("div", { style: { color: props.th.muted, fontSize: 10 }, children: "TOTAL PRESUPUESTO N° " + linkedBudget.id }), e.jsx("div", { style: { color: props.th.accent, fontSize: 17, fontWeight: 900, marginTop: 2 }, children: money(linkedBudgetTotals.total) })] }),
+                        ] }),
+                        e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "minmax(220px,1fr) auto auto", gap: 8, marginTop: 12, alignItems: "center" }, children: [
+                          e.jsx("select", { value: form.PresupuestoVinculado || "", onChange: function (event) { linkBudgetFromTender(event.target.value); }, style: Object.assign({}, props.sty.sel || props.sty.inp, { width: "100%" }), children: [e.jsx("option", { value: "", children: "— Itemizado básico, sin presupuesto —" })].concat((props.budgets || []).filter(function (budget) { return !budget._deleted; }).map(function (budget) { return e.jsx("option", { value: String(budget.id), children: "Presupuesto N° " + budget.id + " · " + (budget.descripcion || "Sin descripción") }, budget.id); })) }),
+                          linkedBudget ? e.jsx("button", { type: "button", onClick: openLinkedBudget, style: Object.assign({}, props.sty.btn("p"), { padding: "8px 12px", whiteSpace: "nowrap" }), children: "✏️ Abrir presupuesto" }) : e.jsx("button", { type: "button", onClick: createBudgetFromTender, style: Object.assign({}, props.sty.btn("p"), { padding: "8px 12px", whiteSpace: "nowrap" }), children: "+ Crear presupuesto" }),
+                          linkedBudget ? e.jsx("button", { type: "button", onClick: function () { linkBudgetFromTender(""); }, style: Object.assign({}, props.sty.btn("s"), { padding: "8px 10px", whiteSpace: "nowrap" }), children: "🔓 Desvincular" }) : e.jsx("span", { style: { color: props.th.muted, fontSize: 10, whiteSpace: "nowrap" }, children: "También puedes ingresar precios abajo" }),
+                        ] }),
+                      ],
+                    }),
+                    e.jsxs("div", {
+                      style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginBottom: 10 },
+                      children: [
+                        e.jsx("div", { style: { fontSize: 13, fontWeight: 700, color: props.th.text }, children: linkedBudget ? "Partidas del presupuesto vinculado N° " + linkedBudget.id : "Ítems del itemizado" }),
+                        !linkedBudget && e.jsxs("label", {
+                          style: Object.assign({}, props.sty.btn("s"), { fontSize: 12, padding: "5px 12px", cursor: "pointer", display: "inline-block", whiteSpace: "nowrap" }),
+                          children: [
+                            "📊 Importar desde Excel",
+                            e.jsx("input", {
+                              type: "file", accept: ".xlsx,.xls,.csv", style: { display: "none" },
+                              onChange: function (event) {
+                                importItemizedExcel(event.target.files && event.target.files[0]);
+                                event.target.value = "";
+                              },
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                    e.jsx("div", {
+                      style: { overflowX: "auto" },
+                      children: e.jsxs("table", {
+                        style: { width: "100%", borderCollapse: "collapse", minWidth: 700 },
+                        children: [
+                          e.jsx("thead", {
+                            children: e.jsx("tr", {
+                              children: ["N°", "Descripción", "Cant", "Unidad", "P.Unit Neto", "Subtotal", ""].map(function (title) {
+                                return e.jsx("th", { style: Object.assign({}, props.sty.th, { fontSize: 11 }), children: title }, title || "acciones");
+                              }),
+                            }),
+                          }),
+                          e.jsx("tbody", {
+                            children: itemLines.length ? itemLines.map(function (line, index) {
+                              var quantity = line.Cantidad === "" ? "" : line.Cantidad == null ? 1 : line.Cantidad;
+                              var unitPrice = line.PrecioUnitarioNeto === "" ? "" : line.PrecioUnitarioNeto || 0;
+                              var lineSubtotal = (parseFloat(quantity) || 0) * (parseFloat(unitPrice) || 0);
+                              return e.jsxs("tr", {
+                                style: { borderBottom: "1px solid " + props.th.border },
+                                children: [
+                                  e.jsx("td", { style: Object.assign({}, props.sty.td, { color: props.th.muted, fontSize: 12, width: 30 }), children: index + 1 }),
+                                  e.jsx("td", { style: props.sty.td, children: e.jsx("input", {
+                                    style: Object.assign({}, props.sty.inp, { margin: 0, padding: "5px 8px", fontSize: 12 }),
+                                    value: line.NombreProducto || line.Descripcion || "", placeholder: "Descripción",
+                                    readOnly: !!linkedBudget,
+                                    onChange: function (event) { updateItemLine(index, "NombreProducto", event.target.value); },
+                                  }) }),
+                                  e.jsx("td", { style: props.sty.td, children: e.jsx("input", {
+                                    style: Object.assign({}, props.sty.inp, { margin: 0, padding: "5px 8px", width: 60, fontSize: 12, textAlign: "right" }),
+                                    type: "number", min: 0, step: "any", value: quantity,
+                                    readOnly: !!linkedBudget,
+                                    onChange: function (event) { updateItemLine(index, "Cantidad", event.target.value); },
+                                  }) }),
+                                  e.jsx("td", { style: props.sty.td, children: e.jsx("input", {
+                                    style: Object.assign({}, props.sty.inp, { margin: 0, padding: "5px 8px", width: 70, fontSize: 12 }),
+                                    value: line.UnidadMedida || "", placeholder: "m2",
+                                    readOnly: !!linkedBudget,
+                                    onChange: function (event) { updateItemLine(index, "UnidadMedida", event.target.value); },
+                                  }) }),
+                                  e.jsx("td", { style: props.sty.td, children: e.jsx("input", {
+                                    style: Object.assign({}, props.sty.inp, { margin: 0, padding: "5px 8px", width: 110, fontSize: 12, textAlign: "right" }),
+                                    type: "number", min: 0, step: "any", value: unitPrice,
+                                    readOnly: !!linkedBudget,
+                                    onChange: function (event) { updateItemLine(index, "PrecioUnitarioNeto", event.target.value); },
+                                  }) }),
+                                  e.jsx("td", { style: Object.assign({}, props.sty.td, { fontWeight: 600, color: props.th.accent, fontSize: 12, whiteSpace: "nowrap" }), children: money(lineSubtotal) }),
+                                  e.jsx("td", { style: props.sty.td, children: !linkedBudget && e.jsx("button", {
+                                    style: Object.assign({}, props.sty.btn("d"), { padding: "3px 7px", fontSize: 13 }),
+                                    title: "Eliminar ítem", onClick: function () { removeItemLine(index); }, children: "×",
+                                  }) }),
+                                ],
+                              }, index);
+                            }) : e.jsx("tr", { children: e.jsx("td", {
+                              colSpan: 7,
+                              style: Object.assign({}, props.sty.td, { padding: 22, textAlign: "center", color: props.th.muted, fontSize: 12 }),
+                              children: "No hay partidas. Agrega una fila o importa un archivo Excel.",
+                            }) }),
+                          }),
+                        ],
+                      }),
+                    }),
+                    !linkedBudget && e.jsx("button", {
+                      style: Object.assign({}, props.sty.btn("s"), { marginTop: 10, fontSize: 13 }),
+                      onClick: addItemLine,
+                      children: "+ Agregar ítem",
+                    }),
+                    e.jsxs("div", {
+                      style: { marginTop: 16, background: props.th.surface, borderRadius: 10, padding: "14px 16px", maxWidth: 360, marginLeft: "auto" },
+                      children: [
+                        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 13 }, children: [
+                          e.jsx("span", { style: { color: props.th.muted }, children: "Subtotal Neto" }),
+                          e.jsx("span", { style: { fontWeight: 600, color: props.th.text }, children: money(subtotalNeto) }),
+                        ] }),
+                        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 13 }, children: [
+                          e.jsx("span", { style: { color: props.th.muted }, children: "IVA (19%)" }),
+                          e.jsx("span", { style: { color: props.th.text }, children: money(itemIva) }),
+                        ] }),
+                        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 15, fontWeight: 700, color: props.th.accent, borderTop: "1px solid " + props.th.border, paddingTop: 8 }, children: [
+                          e.jsx("span", { children: "Total Oferta" }), e.jsx("span", { children: money(itemTotal) }),
+                        ] }),
+                        e.jsx("div", { style: { fontSize: 11, color: props.th.muted, marginTop: 6 }, children: linkedBudget ? "* Valores sincronizados desde el presupuesto vinculado. Para editar, usa Abrir presupuesto." : "* Precios netos — formato Mercado Público" }),
+                      ],
+                    }),
+                  ],
                 });
+              })(),
+              step === 6 && (function () {
+                var technical = form.OfertaTecnica || {};
+                var sectionStyle = { background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 10, padding: 16, marginBottom: 14 };
+                var smallInput = Object.assign({}, props.sty.inp, { padding: "7px 9px", fontSize: 12 });
+                var methodologyReady = !!String(technical.metodologia || "").trim();
+                var specsReady = (form.Lineas || []).length > 0 && (form.Lineas || []).every(function (line) { return !!String(line.EspecificacionTecnica || "").trim(); });
+                var technicalChecks = [methodologyReady, (technical.etapas || []).length > 0, specsReady, (technical.equipo || []).some(function (row) { return !!String(row.nombre || "").trim() && !!String(row.cargo || "").trim(); }), (technical.experiencia || []).some(function (row) { return !!String(row.obra || "").trim() && !!String(row.mandante || "").trim(); })];
+                var budgetTechnicalData = deriveBudgetTechnicalSuggestions();
+                var configuredLaborRoles = getConfiguredLaborRoles();
+                var crewRows = (technical.cuadrillaRoles || []).length ? technical.cuadrillaRoles.map(function (row) { return Object.assign({}, row); }) : getDefaultCrewRows(budgetTechnicalData.totalHH);
+                var crewAssignedHH = Math.round(crewRows.reduce(function (sum, row) { return sum + (parseFloat(row.hhAsignadas) || 0); }, 0) * 10) / 10;
+                var crewRemainingHH = Math.round((budgetTechnicalData.totalHH - crewAssignedHH) * 10) / 10;
+                var crewDays = crewRows.reduce(function (maxDays, row) { var capacity = (parseFloat(row.cantidad) || 0) * (parseFloat(row.horasJornada) || 0); var days = capacity > 0 ? (parseFloat(row.hhAsignadas) || 0) / capacity : 0; return Math.max(maxDays, days); }, 0);
+                crewDays = Math.ceil(crewDays * 10) / 10;
+                var crewTotalPeople = crewRows.reduce(function (sum, row) { return sum + (parseInt(row.cantidad) || 0); }, 0);
+                var crewDirectCost = Math.round(crewRows.reduce(function (sum, row) { var dailyHours = parseFloat(row.horasJornada) || 8; return sum + (parseFloat(row.hhAsignadas) || 0) * ((parseFloat(row.jornal) || 0) / dailyHours); }, 0));
+                var budgetLaborAmount = Math.round(calculateBudgetLaborAmount(budgetTechnicalData.budget));
+                var declaredExecutionDays = parseFloat(form.PlazoEjecucion) || 0;
+                var crewFitsTerm = declaredExecutionDays > 0 && crewDays > 0 ? crewDays <= declaredExecutionDays : null;
+                var crewSignature = crewRows.map(function (row) { return [row.roleId, row.cantidad, row.horasJornada, row.jornal, row.hhAsignadas].join(":"); }).join("|") + "@" + budgetTechnicalData.totalHH;
+                var crewPlanApplied = !!(technical.cuadrillaPlan && technical.cuadrillaPlan.firma === crewSignature);
+                var activeCrewRows = crewRows.filter(function (row) { return (parseFloat(row.cantidad) || 0) > 0; });
+                var crewRowsValid = activeCrewRows.length > 0 && activeCrewRows.every(function (row) { return !!String(row.rol || "").trim() && (parseFloat(row.jornal) || 0) > 0 && (parseFloat(row.horasJornada) || 0) > 0; });
+                var technicalProgress = Math.round(technicalChecks.filter(Boolean).length / technicalChecks.length * 100);
+                return e.jsxs("div", { children: [
+                  e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 18 }, children: [
+                    e.jsxs("div", { children: [
+                      e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: 800, marginBottom: 6 }, children: "Oferta técnica" }),
+                      e.jsx("p", { style: { color: props.th.muted, fontSize: 13 }, children: "Construye el contenido que respaldará la propuesta y alimentará el expediente final." }),
+                    ] }),
+                    e.jsx("div", { style: { padding: "6px 10px", borderRadius: 999, background: props.th.surface, border: "1px solid " + props.th.border, color: technicalProgress === 100 ? "#34d399" : props.th.accent, fontSize: 11, fontWeight: 800 }, children: technicalProgress + "% completo" }),
+                  ] }),
+                  e.jsxs("section", { style: Object.assign({}, sectionStyle, { borderColor: "rgba(59,130,246,.45)", background: "linear-gradient(135deg, " + props.th.card + ", rgba(59,130,246,.07))" }), children: [
+                    e.jsxs("div", { style: { display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 12 }, children: [
+                      e.jsx("div", { style: { fontSize: 24, lineHeight: 1 }, children: "🧭" }),
+                      e.jsxs("div", { children: [
+                        e.jsx("div", { style: { color: props.th.text, fontWeight: 900, fontSize: 15 }, children: "Tu primera oferta técnica, paso a paso" }),
+                        e.jsx("div", { style: { color: props.th.muted, fontSize: 11.5, lineHeight: 1.55, marginTop: 4 }, children: "Aquí explicarás cómo cumplirás lo solicitado. No necesitas escribir como abogado: describe con claridad qué harás, quién lo hará, con qué recursos, cómo controlarás la calidad y qué entregarás." }),
+                      ] }),
+                    ] }),
+                    e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(4,minmax(0,1fr))", gap: 7 }, children: [
+                      ["1", "Explica el método"], ["2", "Ordena las etapas"], ["3", "Responde por partida"], ["4", "Respalda capacidad"]
+                    ].map(function (guide) { return e.jsxs("div", { style: { padding: "9px 10px", borderRadius: 8, background: props.th.surface, border: "1px solid " + props.th.border, display: "flex", gap: 7, alignItems: "center" }, children: [e.jsx("span", { style: { width: 21, height: 21, borderRadius: 999, background: props.th.accent, color: "#08111f", fontWeight: 900, fontSize: 11, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }, children: guide[0] }), e.jsx("span", { style: { color: props.th.text, fontSize: 10.5, fontWeight: 700 }, children: guide[1] })] }, guide[0]); }) }),
+                    e.jsxs("div", { style: { marginTop: 10, padding: "9px 11px", borderRadius: 7, background: "rgba(245,160,32,.09)", border: "1px solid rgba(245,160,32,.35)", color: props.th.text, fontSize: 10.5, lineHeight: 1.45 }, children: [e.jsx("strong", { children: "Importante: " }), "las ayudas generan borradores. Compara siempre cada texto con las bases y anexos oficiales de esta licitación."] }),
+                  ] }),
+                  e.jsxs("section", { style: sectionStyle, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginBottom: 10 }, children: [
+                      e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14 }, children: "1. Metodología de trabajo" }), e.jsx("div", { style: { color: "#ef4444", fontSize: 9.5, fontWeight: 800, marginTop: 2 }, children: "OBLIGATORIO PARA EL BORRADOR" })] }),
+                      e.jsx("button", { type: "button", onClick: applyTechnicalTemplate, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11 }), children: "✨ Ayúdame a redactar" }),
+                    ] }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 11, lineHeight: 1.5, marginBottom: 9 }, children: "Responde en un solo relato: cómo comenzarás, cómo ejecutarás, qué controles aplicarás y cómo entregarás el trabajo. La plantilla es un punto de partida editable." }),
+                    e.jsx("textarea", { rows: 7, value: technical.metodologia || "", onChange: function (event) { updateTechnicalField("metodologia", event.target.value); }, placeholder: "Describe el enfoque, las fases, el procedimiento, seguridad, control de calidad, coordinación y entregables...", style: Object.assign({}, props.sty.inp, { width: "100%", resize: "vertical", lineHeight: 1.5 }) }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 10, marginTop: 6, textAlign: "right" }, children: String(technical.metodologia || "").length + " caracteres" }),
+                  ] }),
+                  e.jsxs("section", { style: sectionStyle, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }, children: [
+                      e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14 }, children: "2. Plan de etapas y plazos" }),
+                      e.jsxs("div", { style: { display: "flex", gap: 6 }, children: [
+                        e.jsx("button", { type: "button", onClick: generateBaseStages, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11 }), children: "✨ Generar etapas base" }),
+                        e.jsx("button", { type: "button", onClick: function () { addTechnicalRow("etapas"); }, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11 }), children: "+ Etapa" }),
+                      ] }),
+                    ] }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 11, lineHeight: 1.45, marginBottom: 9 }, children: "Divide el plazo total en actividades comprensibles. Cada fila debe indicar qué se hará, cuánto durará, quién responde y qué evidencia se entregará." }),
+                    e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (technical.etapas || []).length ? (technical.etapas || []).map(function (row, index) {
+                      return e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1.4fr .75fr 1fr 1.2fr 30px", gap: 7, alignItems: "center" }, children: [
+                        e.jsx("input", { value: row.actividad || "", placeholder: "Actividad", onChange: function (event) { updateTechnicalRow("etapas", index, "actividad", event.target.value); }, style: smallInput }),
+                        e.jsx("input", { value: row.duracion || "", placeholder: "Duración", onChange: function (event) { updateTechnicalRow("etapas", index, "duracion", event.target.value); }, style: smallInput }),
+                        e.jsx("input", { value: row.responsable || "", placeholder: "Responsable", onChange: function (event) { updateTechnicalRow("etapas", index, "responsable", event.target.value); }, style: smallInput }),
+                        e.jsx("input", { value: row.entregable || "", placeholder: "Entregable", onChange: function (event) { updateTechnicalRow("etapas", index, "entregable", event.target.value); }, style: smallInput }),
+                        e.jsx("button", { type: "button", onClick: function () { removeTechnicalRow("etapas", index); }, style: Object.assign({}, props.sty.btn("d"), { padding: "5px" }), children: "×" }),
+                      ] }, index);
+                    }) : e.jsx("div", { style: { color: props.th.muted, fontSize: 12, padding: 12, textAlign: "center" }, children: "Agrega las etapas o utiliza la plantilla base." }) }),
+                  ] }),
+                  e.jsxs("section", { style: sectionStyle, children: [
+                    e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14, marginBottom: 5 }, children: "3. Especificaciones técnicas por ítem" }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginBottom: 12 }, children: "Explica exactamente qué entregarás y cómo cumplirá cada partida." }),
+                    (form.Lineas || []).length ? e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: (form.Lineas || []).map(function (line, index) {
+                      return e.jsxs("div", { style: { padding: 12, background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8 }, children: [
+                        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center", marginBottom: 7 }, children: [
+                          e.jsx("div", { style: { color: props.th.text, fontSize: 12, fontWeight: 800 }, children: (index + 1) + ". " + (line.NombreProducto || line.Descripcion || "Ítem sin descripción") }),
+                          e.jsx("button", { type: "button", onClick: function () { generateItemSpecification(index); }, style: Object.assign({}, props.sty.btn("s"), { padding: "5px 8px", fontSize: 10.5, whiteSpace: "nowrap" }), children: "✨ Proponer texto" }),
+                        ] }),
+                        e.jsx("textarea", { rows: 3, value: line.EspecificacionTecnica || "", onChange: function (event) { updateItemLine(index, "EspecificacionTecnica", event.target.value); }, placeholder: "Solución ofrecida, materiales, marca/modelo, procedimiento, calidad, cumplimiento y respaldo...", style: Object.assign({}, props.sty.inp, { width: "100%", resize: "vertical", fontSize: 12 }) }),
+                      ] }, index);
+                    }) }) : e.jsx("div", { style: { color: props.th.muted, padding: 16, textAlign: "center", background: props.th.surface, borderRadius: 8 }, children: "Completa primero el Itemizado para generar estas especificaciones." }),
+                  ] }),
+                  e.jsxs("section", { style: sectionStyle, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 10, gap: 8, alignItems: "center", flexWrap: "wrap" }, children: [
+                      e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14 }, children: "4. Equipo de trabajo" }),
+                      e.jsxs("div", { style: { display: "flex", gap: 6, flexWrap: "wrap" }, children: [
+                        e.jsx("button", { type: "button", disabled: !budgetTechnicalData.budget, onClick: suggestTeamFromBudget, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11, opacity: budgetTechnicalData.budget ? 1 : .55 }), children: "👷 Sugerir desde presupuesto / HH" }),
+                        e.jsx("button", { type: "button", onClick: function () { addTechnicalRow("equipo"); }, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11 }), children: "+ Persona" }),
+                      ] }),
+                    ] }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, lineHeight: 1.45, marginBottom: 9 }, children: "Agrega a quienes realmente participarán. Si las bases exigen títulos o certificados, indícalos y luego adjúntalos en Documentos." }),
+                    budgetTechnicalData.budget && e.jsxs("div", { style: { display: "flex", gap: 12, flexWrap: "wrap", padding: "9px 11px", marginBottom: 10, borderRadius: 8, background: "rgba(59,130,246,.08)", border: "1px solid rgba(59,130,246,.32)", color: props.th.text, fontSize: 10.5 }, children: [
+                      e.jsxs("span", { children: [e.jsx("strong", { children: "Presupuesto N° " + budgetTechnicalData.budget.id }), " · ", budgetTechnicalData.itemCount, " partidas"] }),
+                      e.jsxs("span", { children: [e.jsx("strong", { children: budgetTechnicalData.totalHH.toLocaleString("es-CL") + " HH estimadas" }), " · ", budgetTechnicalData.withApu, " partidas con rendimiento APU"] }),
+                      e.jsxs("span", { children: ["Dotación máxima detectada: ", e.jsx("strong", { children: budgetTechnicalData.maxCrew })] }),
+                    ] }),
+                    budgetTechnicalData.budget && e.jsxs("div", { style: { padding: 13, marginBottom: 11, borderRadius: 9, background: props.th.surface, border: "1px solid " + props.th.border }, children: [
+                      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, flexWrap: "wrap", marginBottom: 10 }, children: [
+                        e.jsxs("div", { children: [
+                          e.jsx("div", { style: { color: props.th.text, fontSize: 12.5, fontWeight: 900 }, children: "👥 Constructor de cuadrilla por cargos" }),
+                          e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 3, lineHeight: 1.45 }, children: "Usa los cargos, jornales y jornadas de Configuración. Al aplicar, estos valores quedan copiados en la licitación y no cambian retroactivamente." }),
+                        ] }),
+                        crewPlanApplied && e.jsx("span", { style: { color: "#34d399", background: "rgba(52,211,153,.09)", border: "1px solid rgba(52,211,153,.35)", borderRadius: 999, padding: "4px 8px", fontSize: 9.5, fontWeight: 900 }, children: "✓ PLAN APLICADO" }),
+                      ] }),
+                      configuredLaborRoles.length ? e.jsxs("div", { children: [
+                        e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, fontWeight: 800, textTransform: "uppercase", marginBottom: 5 }, children: "Combinaciones rápidas" }),
+                        e.jsx("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }, children: [
+                          ["solo_maestro", "1 maestro"], ["maestro_ayudante", "1 maestro + 1 ayudante"], ["maestro_dos_ayudantes", "1 maestro + 2 ayudantes"], ["dos_maestros_ayudante", "2 maestros + 1 ayudante"]
+                        ].map(function (preset) { return e.jsx("button", { type: "button", onClick: function () { applyCrewPreset(preset[0]); }, style: Object.assign({}, props.sty.btn("s"), { padding: "5px 8px", fontSize: 10 }), children: preset[1] }, preset[0]); }) }),
+                        e.jsx("div", { style: { overflowX: "auto" }, children: e.jsxs("div", { style: { minWidth: 790 }, children: [
+                          e.jsx("div", { style: { display: "grid", gridTemplateColumns: "1.5fr 70px 82px 105px 100px 72px 105px 30px", gap: 6, padding: "0 3px 5px", color: props.th.muted, fontSize: 9.5, fontWeight: 800, textTransform: "uppercase" }, children: ["Cargo", "Cant.", "Jornada", "Jornal", "HH asignadas", "Días", "Costo directo", ""].map(function (title) { return e.jsx("div", { children: title }, title || "acciones"); }) }),
+                          e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 6 }, children: crewRows.map(function (row, rowIndex) {
+                            var capacity = (parseFloat(row.cantidad) || 0) * (parseFloat(row.horasJornada) || 0);
+                            var rowDays = capacity > 0 ? Math.ceil(((parseFloat(row.hhAsignadas) || 0) / capacity) * 10) / 10 : 0;
+                            var rowCost = Math.round((parseFloat(row.hhAsignadas) || 0) * ((parseFloat(row.jornal) || 0) / (parseFloat(row.horasJornada) || 8)));
+                            return e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1.5fr 70px 82px 105px 100px 72px 105px 30px", gap: 6, alignItems: "center" }, children: [
+                              row.origenConfiguracion === false
+                                ? e.jsxs("div", { children: [
+                                    e.jsx("input", { value: row.rol || "", onChange: function (event) { updateCrewRoleRow(rowIndex, "rol", event.target.value, false); }, placeholder: "Ej: Maestro jardinero", style: Object.assign({}, smallInput, { padding: "6px 7px" }) }),
+                                    e.jsx("div", { style: { color: props.th.accent, fontSize: 8.5, marginTop: 2, fontWeight: 800 }, children: "SOLO ESTA LICITACIÓN" }),
+                                  ] })
+                                : e.jsx("select", { value: String(row.roleId), onChange: function (event) { updateCrewRoleRow(rowIndex, "roleId", event.target.value, true); }, style: Object.assign({}, smallInput, { padding: "6px 7px" }), children: configuredLaborRoles.map(function (role) { return e.jsx("option", { value: String(role.id), children: role.rol }, role.id); }) }),
+                              e.jsx("input", { type: "number", min: 0, max: 20, value: row.cantidad, onChange: function (event) { updateCrewRoleRow(rowIndex, "cantidad", Math.max(0, parseInt(event.target.value) || 0), true); }, style: Object.assign({}, smallInput, { textAlign: "right" }) }),
+                              e.jsx("input", { type: "number", min: 1, max: 12, step: .5, value: row.horasJornada, onChange: function (event) { updateCrewRoleRow(rowIndex, "horasJornada", Math.max(1, parseFloat(event.target.value) || 8), true); }, style: Object.assign({}, smallInput, { textAlign: "right" }) }),
+                              e.jsx("input", { type: "number", min: 0, value: row.jornal, onChange: function (event) { updateCrewRoleRow(rowIndex, "jornal", Math.max(0, parseFloat(event.target.value) || 0), false); }, style: Object.assign({}, smallInput, { textAlign: "right" }) }),
+                              e.jsx("input", { type: "number", min: 0, step: .1, value: row.hhAsignadas, onChange: function (event) { updateCrewRoleRow(rowIndex, "hhAsignadas", Math.max(0, parseFloat(event.target.value) || 0), false); }, style: Object.assign({}, smallInput, { textAlign: "right", borderColor: Math.abs(crewRemainingHH) > .11 ? "#f59e0b" : props.th.border }) }),
+                              e.jsx("div", { style: { color: props.th.text, textAlign: "right", fontSize: 10.5, fontWeight: 800 }, children: rowDays.toLocaleString("es-CL") }),
+                              e.jsx("div", { style: { color: props.th.text, textAlign: "right", fontSize: 10.5, fontWeight: 700 }, children: "$" + rowCost.toLocaleString("es-CL") }),
+                              e.jsx("button", { type: "button", onClick: function () { removeCrewRoleRow(rowIndex); }, style: Object.assign({}, props.sty.btn("d"), { padding: "4px 6px" }), children: "×" }),
+                            ] }, rowIndex);
+                          }) }),
+                        ] }) }),
+                        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center", marginTop: 8, flexWrap: "wrap" }, children: [
+                          e.jsxs("div", { style: { display: "flex", gap: 6, flexWrap: "wrap" }, children: [
+                            e.jsx("button", { type: "button", onClick: addCrewRoleRow, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 9px", fontSize: 10.5 }), children: "+ Agregar cargo configurado" }),
+                            e.jsx("button", { type: "button", onClick: addTemporaryCrewRoleRow, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 9px", fontSize: 10.5, borderColor: props.th.accent, color: props.th.accent }), children: "+ Cargo temporal para esta licitación" }),
+                          ] }),
+                          e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, maxWidth: 330, textAlign: "right" }, children: "Para más trabajadores del mismo cargo aumenta Cant. Los cargos temporales no modifican Configuración." }),
+                        ] }),
+                        e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(4,minmax(0,1fr))", gap: 7, marginTop: 10 }, children: [
+                          ["HH presupuestadas", budgetTechnicalData.totalHH.toLocaleString("es-CL")],
+                          ["HH asignadas", crewAssignedHH.toLocaleString("es-CL")],
+                          ["Duración de cuadrilla", crewDays.toLocaleString("es-CL") + " días"],
+                          ["Costo directo estimado", "$" + crewDirectCost.toLocaleString("es-CL")]
+                        ].map(function (metric) { return e.jsxs("div", { style: { padding: "8px 9px", borderRadius: 7, background: props.th.card, border: "1px solid " + props.th.border }, children: [e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5 }, children: metric[0] }), e.jsx("div", { style: { color: props.th.text, fontSize: 12, fontWeight: 900, marginTop: 3 }, children: metric[1] })] }, metric[0]); }) }),
+                        e.jsxs("div", { style: { marginTop: 9, padding: "9px 10px", borderRadius: 7, background: Math.abs(crewRemainingHH) <= .11 ? "rgba(52,211,153,.08)" : "rgba(245,158,11,.09)", border: "1px solid " + (Math.abs(crewRemainingHH) <= .11 ? "rgba(52,211,153,.35)" : "rgba(245,158,11,.4)"), color: props.th.text, fontSize: 10.5, lineHeight: 1.45 }, children: [
+                          e.jsx("strong", { children: Math.abs(crewRemainingHH) <= .11 ? "✓ Todas las HH están distribuidas. " : crewRemainingHH > 0 ? "⚠ Faltan asignar " + crewRemainingHH.toLocaleString("es-CL") + " HH. " : "⚠ Hay " + Math.abs(crewRemainingHH).toLocaleString("es-CL") + " HH asignadas de más. " }),
+                          crewFitsTerm === true ? "La duración cabe dentro del plazo declarado de " + declaredExecutionDays + " días." : crewFitsTerm === false ? "La duración supera el plazo declarado de " + declaredExecutionDays + " días." : "Define el plazo de ejecución en General para comprobar la factibilidad."
+                        ] }),
+                        !crewRowsValid && e.jsx("div", { style: { marginTop: 8, padding: "8px 10px", borderRadius: 7, background: "rgba(239,68,68,.08)", border: "1px solid rgba(239,68,68,.35)", color: "#ef4444", fontSize: 10.5, fontWeight: 800 }, children: "⚠ Completa el nombre, jornal y jornada de todos los cargos activos antes de aplicar." }),
+                        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginTop: 9, flexWrap: "wrap" }, children: [
+                          e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, lineHeight: 1.4 }, children: budgetLaborAmount > 0 ? "Referencia: componente MO del presupuesto $" + budgetLaborAmount.toLocaleString("es-CL") + ". El costo directo de jornales no incluye necesariamente GG, utilidad u otros factores del APU." : "El presupuesto no expone un componente de mano de obra comparable." }),
+                          e.jsx("button", { type: "button", disabled: Math.abs(crewRemainingHH) > .11 || !crewRowsValid, onClick: function () { applyCrewPlanToTechnical(crewRows, crewDays, crewDirectCost, crewSignature); }, style: Object.assign({}, props.sty.btn("p"), { padding: "8px 12px", opacity: Math.abs(crewRemainingHH) <= .11 && crewRowsValid ? 1 : .55 }), children: "Aplicar cuadrilla a equipo y etapas" }),
+                        ] }),
+                      ] }) : e.jsxs("div", { style: { padding: 12, borderRadius: 8, background: "rgba(245,158,11,.09)", border: "1px solid rgba(245,158,11,.4)", color: props.th.text, fontSize: 11 }, children: [e.jsx("strong", { children: "No hay cargos configurados. " }), "Agrega primero tus cargos y jornales en Configuración → Costos → Mano de Obra Real."] }),
+                    ] }),
+                    e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (technical.equipo || []).length ? (technical.equipo || []).map(function (row, index) { return e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1.4fr 30px", gap: 7 }, children: [
+                      e.jsx("input", { value: row.nombre || "", placeholder: "Nombre", onChange: function (event) { updateTechnicalRow("equipo", index, "nombre", event.target.value); }, style: smallInput }),
+                      e.jsx("input", { value: row.cargo || "", placeholder: "Cargo / función", onChange: function (event) { updateTechnicalRow("equipo", index, "cargo", event.target.value); }, style: smallInput }),
+                      e.jsx("input", { value: row.experiencia || "", placeholder: "Experiencia o certificación", onChange: function (event) { updateTechnicalRow("equipo", index, "experiencia", event.target.value); }, style: smallInput }),
+                      e.jsx("button", { type: "button", onClick: function () { removeTechnicalRow("equipo", index); }, style: Object.assign({}, props.sty.btn("d"), { padding: 5 }), children: "×" }),
+                    ] }, index); }) : e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Aún no se ha declarado el equipo responsable." }) }),
+                  ] }),
+                  e.jsxs("section", { style: sectionStyle, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 10, gap: 8, alignItems: "center", flexWrap: "wrap" }, children: [
+                      e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14 }, children: "5. Recursos, maquinaria y herramientas" }),
+                      e.jsxs("div", { style: { display: "flex", gap: 6, flexWrap: "wrap" }, children: [
+                        e.jsx("button", { type: "button", disabled: !budgetTechnicalData.budget, onClick: suggestResourcesFromBudget, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11, opacity: budgetTechnicalData.budget ? 1 : .55 }), children: "🧰 Sugerir desde partidas / APU" }),
+                        e.jsx("button", { type: "button", onClick: function () { addTechnicalRow("recursos"); }, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11 }), children: "+ Recurso" }),
+                      ] }),
+                    ] }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, lineHeight: 1.45, marginBottom: 9 }, children: "Incluye herramientas, vehículos, maquinaria, software o instalaciones relevantes. No agregues recursos que no podrás acreditar o disponer." }),
+                    e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (technical.recursos || []).length ? (technical.recursos || []).map(function (row, index) { return e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 90px 1.7fr 30px", gap: 7 }, children: [
+                      e.jsx("input", { value: row.recurso || "", placeholder: "Recurso", onChange: function (event) { updateTechnicalRow("recursos", index, "recurso", event.target.value); }, style: smallInput }),
+                      e.jsx("input", { type: "number", min: 0, value: row.cantidad || "", placeholder: "Cant.", onChange: function (event) { updateTechnicalRow("recursos", index, "cantidad", event.target.value); }, style: smallInput }),
+                      e.jsx("input", { value: row.detalle || "", placeholder: "Características o disponibilidad", onChange: function (event) { updateTechnicalRow("recursos", index, "detalle", event.target.value); }, style: smallInput }),
+                      e.jsx("button", { type: "button", onClick: function () { removeTechnicalRow("recursos", index); }, style: Object.assign({}, props.sty.btn("d"), { padding: 5 }), children: "×" }),
+                    ] }, index); }) : e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Agrega los recursos necesarios para ejecutar la oferta." }) }),
+                  ] }),
+                  e.jsxs("section", { style: sectionStyle, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 10 }, children: [e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14 }, children: "6. Experiencia de la empresa" }), e.jsx("button", { type: "button", onClick: function () { addTechnicalRow("experiencia"); }, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11 }), children: "+ Experiencia" })] }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, lineHeight: 1.45, marginBottom: 9 }, children: "Registra trabajos comparables y un contacto verificable. Revisa en las bases si exigen cantidad mínima, antigüedad, montos o certificados." }),
+                    e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (technical.experiencia || []).length ? (technical.experiencia || []).map(function (row, index) { return e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1.3fr 1fr 110px 75px 1fr 30px", gap: 7 }, children: [
+                      e.jsx("input", { value: row.obra || "", placeholder: "Obra / servicio", onChange: function (event) { updateTechnicalRow("experiencia", index, "obra", event.target.value); }, style: smallInput }),
+                      e.jsx("input", { value: row.mandante || "", placeholder: "Mandante", onChange: function (event) { updateTechnicalRow("experiencia", index, "mandante", event.target.value); }, style: smallInput }),
+                      e.jsx("input", { type: "number", min: 0, value: row.monto || "", placeholder: "Monto", onChange: function (event) { updateTechnicalRow("experiencia", index, "monto", event.target.value); }, style: smallInput }),
+                      e.jsx("input", { type: "number", value: row.anio || "", placeholder: "Año", onChange: function (event) { updateTechnicalRow("experiencia", index, "anio", event.target.value); }, style: smallInput }),
+                      e.jsx("input", { value: row.contacto || "", placeholder: "Contacto de referencia", onChange: function (event) { updateTechnicalRow("experiencia", index, "contacto", event.target.value); }, style: smallInput }),
+                      e.jsx("button", { type: "button", onClick: function () { removeTechnicalRow("experiencia", index); }, style: Object.assign({}, props.sty.btn("d"), { padding: 5 }), children: "×" }),
+                    ] }, index); }) : e.jsx("div", { style: { color: props.th.muted, fontSize: 12 }, children: "Declara contratos similares que respalden la capacidad de la empresa." }) }),
+                  ] }),
+                  e.jsxs("section", { style: sectionStyle, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, gap: 10 }, children: [
+                      e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14 }, children: "7. Subcontratos" }),
+                      e.jsxs("label", { style: { color: props.th.muted, fontSize: 11, display: "flex", gap: 6, alignItems: "center" }, children: [e.jsx("input", { type: "checkbox", checked: !!technical.sinSubcontratos, onChange: function (event) { updateTechnicalField("sinSubcontratos", event.target.checked); } }), "No se utilizarán subcontratos"] }),
+                    ] }),
+                    !technical.sinSubcontratos && e.jsxs("div", { children: [
+                      e.jsx("button", { type: "button", onClick: function () { addTechnicalRow("subcontratos"); }, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11, marginBottom: 8 }), children: "+ Subcontrato" }),
+                      e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: (technical.subcontratos || []).map(function (row, index) { return e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1.4fr 90px 30px", gap: 7 }, children: [
+                        e.jsx("input", { value: row.especialidad || "", placeholder: "Especialidad", onChange: function (event) { updateTechnicalRow("subcontratos", index, "especialidad", event.target.value); }, style: smallInput }),
+                        e.jsx("input", { value: row.empresa || "", placeholder: "Empresa", onChange: function (event) { updateTechnicalRow("subcontratos", index, "empresa", event.target.value); }, style: smallInput }),
+                        e.jsx("input", { value: row.alcance || "", placeholder: "Alcance", onChange: function (event) { updateTechnicalRow("subcontratos", index, "alcance", event.target.value); }, style: smallInput }),
+                        e.jsx("input", { type: "number", min: 0, max: 100, value: row.porcentaje || "", placeholder: "%", onChange: function (event) { updateTechnicalRow("subcontratos", index, "porcentaje", event.target.value); }, style: smallInput }),
+                        e.jsx("button", { type: "button", onClick: function () { removeTechnicalRow("subcontratos", index); }, style: Object.assign({}, props.sty.btn("d"), { padding: 5 }), children: "×" }),
+                      ] }, index); }) }),
+                    ] }),
+                  ] }),
+                  e.jsxs("section", { style: Object.assign({}, sectionStyle, { borderColor: technicalProgress === 100 ? "rgba(52,211,153,.55)" : "rgba(245,160,32,.5)" }), children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }, children: [
+                      e.jsxs("div", { children: [
+                        e.jsx("div", { style: { color: props.th.text, fontWeight: 900, fontSize: 14 }, children: "Revisión antes de continuar" }),
+                        e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 4, lineHeight: 1.45 }, children: technicalProgress === 100 ? "El borrador contiene las cinco secciones principales. Revisa la vista previa y compárala con las bases." : "Puedes guardar el avance, pero completa las secciones pendientes antes de cerrar la postulación." }),
+                      ] }),
+                      e.jsx("button", { type: "button", onClick: function () { setDocumentPreviewKey("tecnica"); }, style: Object.assign({}, props.sty.btn("p"), { padding: "8px 13px", fontWeight: 800 }), children: "👁 Vista previa de la oferta técnica" }),
+                    ] }),
+                    e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(5,minmax(0,1fr))", gap: 6, marginTop: 11 }, children: [
+                      ["Metodología", technicalChecks[0]], ["Etapas", technicalChecks[1]], ["Partidas", technicalChecks[2]], ["Equipo", technicalChecks[3]], ["Experiencia", technicalChecks[4]]
+                    ].map(function (check) { return e.jsxs("div", { style: { padding: "7px 8px", borderRadius: 7, background: props.th.surface, border: "1px solid " + (check[1] ? "rgba(52,211,153,.45)" : props.th.border), color: check[1] ? "#34d399" : props.th.muted, fontSize: 10, fontWeight: 800, textAlign: "center" }, children: [check[1] ? "✓ " : "○ ", check[0]] }, check[0]); }) }),
+                  ] }),
+                ] });
+              })(),
+              step === 7 && (function () {
+                var guaranteeKinds = [
+                  {
+                    key: "seriedad",
+                    icon: "🏦",
+                    title: "Garantía de seriedad de la oferta",
+                    moment: "SE PRESENTA JUNTO CON LA OFERTA",
+                    momentColor: "#ef4444",
+                    explanation: "Asegura que mantendrás tu propuesta. Si las bases la exigen y no la entregas correctamente, la oferta puede quedar fuera.",
+                    help: "Busca en las bases: garantía de seriedad, monto o porcentaje, vigencia, beneficiario y glosa exacta.",
+                  },
+                  {
+                    key: "fiel",
+                    icon: "🛡️",
+                    title: "Garantía de fiel cumplimiento",
+                    moment: "SE TRAMITA SOLO SI RESULTAS ADJUDICADO",
+                    momentColor: "#3b82f6",
+                    explanation: "Respalda el cumplimiento del contrato. Normalmente no debes emitirla para postular, pero conviene conocer desde ahora su costo y condiciones.",
+                    help: "Busca en las bases: porcentaje del contrato, plazo para entregarla, vigencia y condiciones para su devolución.",
+                  },
+                ];
+                var guaranteeCost = guaranteeKinds.reduce(function (sum, definition) {
+                  var guarantee = getGuarantee(definition.key);
+                  return sum + (guaranteeDecision(guarantee) === "exigida" ? parseFloat(guarantee.costo) || 0 : 0);
+                }, 0);
+                var decisionsReady = guaranteeKinds.every(function (definition) {
+                  return guaranteeDecision(getGuarantee(definition.key)) !== "pendiente";
+                });
+                var guaranteesReady = guaranteeKinds.every(function (definition) {
+                  return guaranteeComplete(getGuarantee(definition.key));
+                });
+                var selectGuaranteeDecision = function (kind, decision) {
+                  setForm(function (current) {
+                    var guarantees = current.Garantias && !Array.isArray(current.Garantias) ? Object.assign({}, current.Garantias) : {};
+                    guarantees[kind] = Object.assign({}, guaranteeDefaults, guarantees[kind] || {}, {
+                      decision: decision,
+                      exigida: decision === "exigida",
+                    });
+                    return Object.assign({}, current, { Garantias: guarantees, GarantiasRevisadas: false });
+                  });
+                  setDirtyDraft(true);
+                };
+                return e.jsxs("div", { children: [
+                  e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: 800, marginBottom: 6 }, children: "Garantías" }),
+                  e.jsx("p", { style: { color: props.th.muted, marginBottom: 14, fontSize: 13, lineHeight: 1.55 }, children: "No necesitas conocer estos documentos de memoria. Revisa las bases y responde primero si cada garantía es exigida; el formulario te mostrará solamente lo que debes completar." }),
+                  e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 9, padding: 12, marginBottom: 14, borderRadius: 10, background: props.th.card, border: "1px solid " + props.th.border }, children: [
+                    ["1", "Busca el capítulo", "Garantías, cauciones o requisitos de la oferta"],
+                    ["2", "Registra la exigencia", "No se exige o sí se exige, sin asumir"],
+                    ["3", "Copia literalmente", "Monto, beneficiario, glosa y vigencia"],
+                  ].map(function (guide) { return e.jsxs("div", { style: { display: "flex", gap: 8, alignItems: "flex-start" }, children: [
+                    e.jsx("span", { style: { width: 22, height: 22, borderRadius: 999, display: "grid", placeItems: "center", flexShrink: 0, background: props.th.accent, color: "#101820", fontSize: 11, fontWeight: 900 }, children: guide[0] }),
+                    e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 11.5, fontWeight: 900 }, children: guide[1] }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10, lineHeight: 1.4, marginTop: 2 }, children: guide[2] })] }),
+                  ] }, guide[0]); }),
+                  }),
+                  e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(2,minmax(0,1fr))", gap: 14 }, children: guaranteeKinds.map(function (definition) {
+                    var guarantee = getGuarantee(definition.key);
+                    var decision = guaranteeDecision(guarantee);
+                    var closingTime = Date.parse(form.Fechas && form.Fechas.FechaCierre || "");
+                    var expirationTime = Date.parse(guarantee.vencimiento || "");
+                    var invalidExpiry = !!(decision === "exigida" && Number.isFinite(closingTime) && Number.isFinite(expirationTime) && expirationTime <= closingTime);
+                    var cardReady = guaranteeComplete(guarantee) && !invalidExpiry;
+                    return e.jsxs("section", { style: { background: props.th.card, border: "1px solid " + (invalidExpiry ? "#ef4444" : cardReady ? "rgba(52,211,153,.55)" : props.th.border), borderRadius: 11, padding: 15, minWidth: 0 }, children: [
+                      e.jsxs("div", { style: { display: "flex", gap: 9, alignItems: "flex-start", marginBottom: 9 }, children: [
+                        e.jsx("span", { style: { fontSize: 21 }, children: definition.icon }),
+                        e.jsxs("div", { children: [
+                          e.jsx("div", { style: { color: props.th.text, fontWeight: 900, fontSize: 13.5 }, children: definition.title }),
+                          e.jsx("div", { style: { color: definition.momentColor, fontSize: 9, fontWeight: 900, marginTop: 3, letterSpacing: ".25px" }, children: definition.moment }),
+                        ] }),
+                      ] }),
+                      e.jsx("div", { style: { color: props.th.muted, fontSize: 11, lineHeight: 1.5, minHeight: 50 }, children: definition.explanation }),
+                      e.jsx("div", { style: { color: props.th.text, fontSize: 10.5, lineHeight: 1.45, background: props.th.surface, borderRadius: 7, padding: 9, margin: "9px 0 11px", border: "1px solid " + props.th.border }, children: "🔎 " + definition.help }),
+                      e.jsx("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7, marginBottom: decision === "exigida" ? 12 : 0 }, children: [
+                        e.jsx("button", { type: "button", onClick: function () { selectGuaranteeDecision(definition.key, "no_exigida"); }, style: Object.assign({}, props.sty.btn("s"), { padding: "9px 8px", borderColor: decision === "no_exigida" ? "#34d399" : props.th.border, background: decision === "no_exigida" ? "rgba(52,211,153,.12)" : props.th.surface, color: decision === "no_exigida" ? "#34d399" : props.th.text, fontWeight: 800 }), children: decision === "no_exigida" ? "✓ No se exige" : "No se exige" }),
+                        e.jsx("button", { type: "button", onClick: function () { selectGuaranteeDecision(definition.key, "exigida"); }, style: Object.assign({}, props.sty.btn("s"), { padding: "9px 8px", borderColor: decision === "exigida" ? props.th.accent : props.th.border, background: decision === "exigida" ? "rgba(250,162,32,.13)" : props.th.surface, color: decision === "exigida" ? props.th.accent : props.th.text, fontWeight: 800 }), children: decision === "exigida" ? "✓ Sí se exige" : "Sí se exige" }),
+                      ] }),
+                      decision === "pendiente" && e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, padding: 10, textAlign: "center", background: props.th.surface, borderRadius: 7 }, children: "Selecciona una opción después de revisar las bases." }),
+                      decision === "no_exigida" && e.jsx("div", { style: { color: "#34d399", fontSize: 10.5, padding: 10, textAlign: "center", background: "rgba(52,211,153,.08)", borderRadius: 7 }, children: definition.key === "fiel" ? "Registrado: las bases no contemplan esta garantía en caso de adjudicación." : "Registrado: esta garantía no debe acompañar la oferta." }),
+                      decision === "exigida" && e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 }, children: [
+                        e.jsxs("label", { style: props.sty.lbl, children: ["Forma del monto", e.jsx("select", { value: guarantee.montoTipo || "monto", onChange: function (event) { updateGuarantee(definition.key, "montoTipo", event.target.value); }, style: Object.assign({}, props.sty.sel, { marginTop: 5 }), children: [e.jsx("option", { value: "monto", children: "Monto fijo ($)" }), e.jsx("option", { value: "porcentaje", children: "Porcentaje (%)" })] })] }),
+                        e.jsxs("label", { style: props.sty.lbl, children: [guarantee.montoTipo === "porcentaje" ? "Porcentaje exigido (%) *" : "Monto exigido ($) *", e.jsx("input", { type: "number", min: 0, value: guarantee.monto || "", placeholder: guarantee.montoTipo === "porcentaje" ? "Ej: 5" : "Ej: 500000", onChange: function (event) { updateGuarantee(definition.key, "monto", event.target.value); }, style: Object.assign({}, props.sty.inp, { marginTop: 5 }) })] }),
+                        e.jsxs("label", { style: props.sty.lbl, children: ["Tipo de documento *", e.jsx("select", { value: guarantee.tipo || "", onChange: function (event) { updateGuarantee(definition.key, "tipo", event.target.value); }, style: Object.assign({}, props.sty.sel, { marginTop: 5 }), children: ["Boleta bancaria", "Vale vista", "Póliza de seguro", "Certificado de fianza", "Depósito a la vista", "Otro"].map(function (option) { return e.jsx("option", { value: option, children: option }, option); }) })] }),
+                        e.jsxs("label", { style: props.sty.lbl, children: ["Vencimiento *", e.jsx("input", { type: "date", value: guarantee.vencimiento || "", onChange: function (event) { updateGuarantee(definition.key, "vencimiento", event.target.value); }, style: Object.assign({}, props.sty.inp, { marginTop: 5 }) })] }),
+                        e.jsxs("label", { style: Object.assign({}, props.sty.lbl, { gridColumn: "1 / -1" }), children: ["Beneficiario exacto *", e.jsx("input", { value: guarantee.beneficiario || "", placeholder: "Copia el nombre o RUT indicado en las bases", onChange: function (event) { updateGuarantee(definition.key, "beneficiario", event.target.value); }, style: Object.assign({}, props.sty.inp, { marginTop: 5 }) })] }),
+                        e.jsxs("label", { style: Object.assign({}, props.sty.lbl, { gridColumn: "1 / -1" }), children: ["Glosa exacta *", e.jsx("textarea", { value: guarantee.glosa || "", placeholder: "Copia literalmente la glosa exigida; no la resumas", onChange: function (event) { updateGuarantee(definition.key, "glosa", event.target.value); }, style: Object.assign({}, props.sty.inp, { marginTop: 5, minHeight: 58, resize: "vertical" }) })] }),
+                        e.jsxs("label", { style: props.sty.lbl, children: ["Banco / institución", e.jsx("input", { value: guarantee.institucion || "", placeholder: "Completar al solicitarla", onChange: function (event) { updateGuarantee(definition.key, "institucion", event.target.value); }, style: Object.assign({}, props.sty.inp, { marginTop: 5 }) })] }),
+                        e.jsxs("label", { style: props.sty.lbl, children: ["Vigencia indicada (días)", e.jsx("input", { type: "number", min: 0, value: guarantee.vigenciaDias || "", placeholder: "Ej: 60", onChange: function (event) { updateGuarantee(definition.key, "vigenciaDias", event.target.value); }, style: Object.assign({}, props.sty.inp, { marginTop: 5 }) })] }),
+                        e.jsxs("label", { style: props.sty.lbl, children: ["Costo financiero estimado ($)", e.jsx("input", { type: "number", min: 0, value: guarantee.costo || "", onChange: function (event) { updateGuarantee(definition.key, "costo", event.target.value); }, style: Object.assign({}, props.sty.inp, { marginTop: 5 }) })] }),
+                        e.jsxs("label", { style: props.sty.lbl, children: ["Estado", e.jsx("select", { value: guarantee.estado || "Pendiente", onChange: function (event) { updateGuarantee(definition.key, "estado", event.target.value); }, style: Object.assign({}, props.sty.sel, { marginTop: 5 }), children: ["Pendiente", "Cotizada", "Solicitada", "Emitida", "Entregada"].map(function (option) { return e.jsx("option", { value: option, children: option }, option); }) })] }),
+                        e.jsxs("label", { style: Object.assign({}, props.sty.lbl, { gridColumn: "1 / -1" }), children: ["Referencia en las bases", e.jsx("input", { value: guarantee.referenciaBases || "", placeholder: "Ej: Bases administrativas, punto 8.2", onChange: function (event) { updateGuarantee(definition.key, "referenciaBases", event.target.value); }, style: Object.assign({}, props.sty.inp, { marginTop: 5 }) })] }),
+                        invalidExpiry && e.jsx("div", { style: { gridColumn: "1 / -1", color: "#ef4444", background: "rgba(239,68,68,.08)", border: "1px solid rgba(239,68,68,.3)", borderRadius: 7, padding: 9, fontSize: 11, fontWeight: 700 }, children: "⚠️ El vencimiento debe ser posterior al cierre de la licitación." }),
+                        !cardReady && !invalidExpiry && e.jsx("div", { style: { gridColumn: "1 / -1", color: props.th.muted, background: props.th.surface, borderRadius: 7, padding: 9, fontSize: 10.5 }, children: "Completa los campos con * para dejar esta garantía lista." }),
+                      ] }),
+                    ] }, definition.key);
+                  }) }),
+                  e.jsxs("div", { style: { marginTop: 14, display: "grid", gridTemplateColumns: "1fr auto", gap: 12, alignItems: "center", padding: 13, background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 10 }, children: [
+                    e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 12.5, fontWeight: 900 }, children: guaranteesReady ? "✓ Registro de garantías completo" : decisionsReady ? "Faltan datos de una garantía exigida" : "Falta indicar qué exigen las bases" }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 3 }, children: "El costo financiero se registra para considerarlo en la rentabilidad; no cambia automáticamente tu oferta." })] }),
+                    e.jsxs("div", { style: { textAlign: "right", color: props.th.text, fontSize: 11 }, children: [e.jsx("div", { children: "Costo financiero estimado" }), e.jsx("strong", { style: { display: "block", color: props.th.accent, fontSize: 17, marginTop: 2 }, children: "$" + Math.round(guaranteeCost).toLocaleString("es-CL") })] }),
+                  ] }),
+                  e.jsxs("label", {
+                    style: { display: "flex", gap: 8, alignItems: "flex-start", marginTop: 12, padding: 12, background: props.th.card, border: "1px solid " + (form.GarantiasRevisadas ? "rgba(52,211,153,.5)" : props.th.border), borderRadius: 9, color: guaranteesReady ? props.th.text : props.th.muted, fontSize: 12, cursor: guaranteesReady ? "pointer" : "not-allowed" },
+                    children: [
+                      e.jsx("input", { type: "checkbox", disabled: !guaranteesReady, checked: !!form.GarantiasRevisadas, onChange: function (event) { updateFichaField("GarantiasRevisadas", event.target.checked); }, style: { width: 18, height: 18 } }),
+                      e.jsx("span", { children: guaranteesReady ? "Confirmo que revisé las bases y que este registro reproduce correctamente todas las garantías exigidas, o que no se solicitan." : "Completa la decisión y los datos obligatorios de ambas garantías para confirmar la revisión." }),
+                    ],
+                  }),
+                ] });
+              })(),
+              step === 9 && (function () {
+                var totalNeto = (form.Lineas || []).reduce(function (sum, line) { return sum + (parseFloat(line.Cantidad) || 0) * (parseFloat(line.PrecioUnitarioNeto) || 0); }, 0);
                 var iva = totalNeto * 0.19;
                 var total = totalNeto + iva;
-                var listos = (form.Docs || []).filter(function(d){return d.checked;}).length;
-                var totalDocs = (form.Docs || []).length;
-                return e.jsxs("div", {
-                  children: [
-                    e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: "bold", marginBottom: 8 }, children: "Resumen de la Oferta" }),
-                    e.jsx("p", { style: { color: props.th.muted, marginBottom: 24, fontSize: 14 }, children: "Revisa tu oferta final antes de finalizar y enviarla al Kanban." }),
-                    e.jsxs("div", {
-                      style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 },
-                      children: [
-                        e.jsxs("div", {
-                          style: { background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8, padding: 24 },
-                          children: [
-                            e.jsx("h3", { style: { color: props.th.text, fontSize: 16, marginBottom: 16, borderBottom: "1px solid " + props.th.border, paddingBottom: 8 }, children: "Resumen Económico" }),
-                            e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 8 }, children: [ e.jsx("span", { style: { color: props.th.muted }, children: "Total Neto" }), e.jsx("span", { style: { color: props.th.text, fontWeight: "bold" }, children: "$" + totalNeto.toLocaleString("es-CL") }) ] }),
-                            e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 8 }, children: [ e.jsx("span", { style: { color: props.th.muted }, children: "IVA (19%)" }), e.jsx("span", { style: { color: props.th.text, fontWeight: "bold" }, children: "$" + iva.toLocaleString("es-CL") }) ] }),
-                            e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", marginTop: 16, paddingTop: 16, borderTop: "1px solid " + props.th.border, fontSize: 20, color: props.th.accent, fontWeight: "bold" }, children: [ e.jsx("span", { children: "Total Oferta" }), e.jsx("span", { children: "$" + total.toLocaleString("es-CL") }) ] })
-                          ]
-                        }),
-                        e.jsxs("div", {
-                          style: { background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 8, padding: 24 },
-                          children: [
-                            e.jsx("h3", { style: { color: props.th.text, fontSize: 16, marginBottom: 16, borderBottom: "1px solid " + props.th.border, paddingBottom: 8 }, children: "Checklist Documental" }),
-                            e.jsxs("div", { style: { fontSize: 32, fontWeight: "bold", color: listos === totalDocs ? "#4CAF50" : props.th.accent, textAlign: "center", marginBottom: 8 }, children: [listos, " / ", totalDocs] }),
-                            e.jsx("div", { style: { textAlign: "center", color: props.th.muted, fontSize: 14 }, children: "Documentos marcados como listos" }),
-                            listos < totalDocs && e.jsx("div", { style: { marginTop: 16, padding: 12, background: "rgba(244, 67, 54, 0.1)", color: "#F44336", borderRadius: 8, fontSize: 13, textAlign: "center" }, children: "Faltan documentos obligatorios por marcar" })
-                          ]
-                        })
-                      ]
-                    })
-                  ]
-                });
-              })
+                var technical = form.OfertaTecnica || {};
+                var documentsReady = (form.Docs || []).filter(function (document) { return document.checked; }).length;
+                var requiredDocuments = (form.Docs || []).length;
+                var checks = [
+                  { label: "Ficha general", ready: fichaProgress === 100, detail: fichaProgress + "% completa" },
+                  { label: "Antecedentes analizados", ready: !!form.AntecedentesRevisados, detail: (form.Antecedentes || []).length + " documento(s)" },
+                  { label: "Oferta económica", ready: (form.Lineas || []).length > 0 && (form.Lineas || []).every(function (line) { return (parseFloat(line.PrecioUnitarioNeto) || 0) > 0; }), detail: (form.Lineas || []).length + " ítems" },
+                  { label: "Metodología técnica", ready: !!String(technical.metodologia || "").trim(), detail: String(technical.metodologia || "").length + " caracteres" },
+                  { label: "Especificaciones", ready: (form.Lineas || []).length > 0 && (form.Lineas || []).every(function (line) { return !!String(line.EspecificacionTecnica || "").trim(); }), detail: "Una por ítem" },
+                  { label: "Garantías revisadas", ready: !!form.GarantiasRevisadas && [getGuarantee("seriedad"), getGuarantee("fiel")].every(guaranteeComplete), detail: form.GarantiasRevisadas ? "Exigencias confirmadas" : "Revisar bases" },
+                  { label: "Checklist documental", ready: requiredDocuments > 0 && documentsReady === requiredDocuments, detail: documentsReady + " / " + requiredDocuments + " listos" },
+                ];
+                var readyCount = checks.filter(function (check) { return check.ready; }).length;
+                var completion = Math.round(readyCount / checks.length * 100);
+                return e.jsxs("div", { children: [
+                  e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 18 }, children: [
+                    e.jsxs("div", { children: [e.jsx("h2", { style: { color: props.th.text, fontSize: 22, fontWeight: 800, marginBottom: 6 }, children: "Resumen y cierre" }), e.jsx("p", { style: { color: props.th.muted, fontSize: 13 }, children: "Revisa el expediente antes de declararlo listo para postular en Mercado Público." })] }),
+                    e.jsx("div", { style: { padding: "7px 11px", borderRadius: 999, background: props.th.surface, border: "1px solid " + props.th.border, color: completion === 100 ? "#34d399" : props.th.accent, fontSize: 12, fontWeight: 900 }, children: completion + "% completo" }),
+                  ] }),
+                  e.jsx("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }, children: [
+                    e.jsxs("section", { style: { background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 10, padding: 16 }, children: [
+                      e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14, marginBottom: 12 }, children: "Control del expediente" }),
+                      e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: checks.map(function (check) { return e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", padding: "8px 9px", background: props.th.surface, borderRadius: 7, border: "1px solid " + props.th.border }, children: [
+                        e.jsxs("div", { style: { display: "flex", gap: 7, alignItems: "center" }, children: [e.jsx("span", { children: check.ready ? "✅" : "⚠️" }), e.jsx("span", { style: { color: props.th.text, fontSize: 12, fontWeight: 700 }, children: check.label })] }),
+                        e.jsx("span", { style: { color: props.th.muted, fontSize: 10, textAlign: "right" }, children: check.detail }),
+                      ] }, check.label); }) }),
+                    ] }),
+                    e.jsxs("section", { style: { background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 10, padding: 16 }, children: [
+                      e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14, marginBottom: 12 }, children: "Resumen económico" }),
+                      [["Subtotal neto", totalNeto], ["IVA (19%)", iva], ["Total oferta", total]].map(function (row, index) { return e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", padding: "8px 0", borderTop: index === 2 ? "1px solid " + props.th.border : "none", color: index === 2 ? props.th.accent : props.th.muted, fontSize: index === 2 ? 16 : 13, fontWeight: index === 2 ? 900 : 500 }, children: [e.jsx("span", { children: row[0] }), e.jsx("span", { children: "$" + Math.round(row[1]).toLocaleString("es-CL") })] }, row[0]); }),
+                      e.jsxs("div", { style: { marginTop: 14 }, children: [e.jsx("label", { style: props.sty.lbl, children: "Estado interno de la preparación" }), e.jsx("select", { value: form.PreparacionEstado || "Borrador", onChange: function (event) { updateFichaField("PreparacionEstado", event.target.value); }, style: props.sty.sel, children: ["Borrador", "En revisión", "Lista para postular"].map(function (option) { return e.jsx("option", { value: option, children: option }, option); }) })] }),
+                    ] }),
+                  ] }),
+                  e.jsxs("label", { style: { display: "flex", gap: 9, alignItems: "flex-start", padding: 13, background: props.th.card, border: "1px solid " + (form.RevisionFinal ? "rgba(52,211,153,.5)" : props.th.border), borderRadius: 9, color: props.th.text, fontSize: 12, cursor: "pointer" }, children: [e.jsx("input", { type: "checkbox", checked: !!form.RevisionFinal, onChange: function (event) { updateFichaField("RevisionFinal", event.target.checked); }, style: { width: 18, height: 18 } }), e.jsx("span", { children: "Confirmo que revisé los antecedentes, precios, oferta técnica, garantías y documentos. Guardar este cierre no marca la oportunidad como postulada; esa acción se realizará cuando la oferta sea enviada efectivamente en Mercado Público." })] }),
+                  e.jsxs("section", { style: { marginTop: 14, padding: 16, borderRadius: 10, background: "rgba(59,130,246,.07)", border: "1px solid rgba(59,130,246,.35)" }, children: [
+                    e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 900 }, children: "Último paso: enviar la oferta en Mercado Público" }),
+                    e.jsx("div", { style: { color: props.th.muted, fontSize: 11, lineHeight: 1.5, marginTop: 5 }, children: "ECP prepara y controla el expediente, pero la postulación oficial se envía en Mercado Público. No marques la oportunidad como Postulada hasta completar el envío y obtener su comprobante." }),
+                    e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,minmax(170px,1fr))", gap: 8, marginTop: 12 }, children: [
+                      ["1", "Declara Lista para postular", form.PreparacionEstado === "Lista para postular"],
+                      ["2", "Carga y valida los archivos en MP", false],
+                      ["3", "Conserva el comprobante", false],
+                    ].map(function (submissionStep) { return e.jsxs("div", { style: { padding: 10, borderRadius: 8, background: props.th.surface, border: "1px solid " + (submissionStep[2] ? "rgba(52,211,153,.45)" : props.th.border) }, children: [e.jsx("div", { style: { color: submissionStep[2] ? "#34d399" : props.th.accent, fontSize: 11, fontWeight: 900 }, children: submissionStep[0] + ". " + submissionStep[1] }), e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, marginTop: 3 }, children: submissionStep[0] === "1" ? "Selecciona el estado en el resumen económico." : submissionStep[0] === "2" ? "Revisa anexos, firmas, formatos y monto antes de enviar." : "Guárdalo como respaldo de la fecha y hora de postulación." })] }, submissionStep[0]); }) }),
+                    e.jsxs("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }, children: [
+                      e.jsx("button", { type: "button", onClick: function () { window.open("https://www.mercadopublico.cl/", "_blank", "noopener,noreferrer"); }, style: Object.assign({}, props.sty.btn("s"), { padding: "9px 13px", fontWeight: 800 }), children: "↗ Abrir Mercado Público" }),
+                      e.jsx(MpCopyCodeButton, { code: form.CodigoExterno, setToast: props.setToast, accent: props.th.accent, border: props.th.border, surface: props.th.surface }),
+                      e.jsx("button", { type: "button", disabled: !form.RevisionFinal || form.PreparacionEstado !== "Lista para postular", onClick: confirmSubmittedOffer, style: Object.assign({}, props.sty.btn("p"), { padding: "9px 14px", fontWeight: 900, opacity: !form.RevisionFinal || form.PreparacionEstado !== "Lista para postular" ? 0.5 : 1, cursor: !form.RevisionFinal || form.PreparacionEstado !== "Lista para postular" ? "not-allowed" : "pointer" }), children: "📤 Ya envié la oferta · Marcar Postulada" }),
+                    ] }),
+                  ] }),
+                ] });
+              })()
+                ]
+              }),
+              e.jsxs("aside", {
+                style: {
+                  flex: "0 0 260px",
+                  width: 260,
+                  position: "sticky",
+                  top: 0,
+                  maxHeight: "calc(100vh - 330px)",
+                  overflowY: "auto",
+                  background: props.th.card,
+                  border: "1px solid " + props.th.border,
+                  borderRadius: 11,
+                  padding: "14px 14px 84px",
+                  boxSizing: "border-box",
+                },
+                children: [
+                  e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }, children: [
+                    e.jsx("div", { style: { color: props.th.text, fontSize: 13, fontWeight: 900 }, children: "Checklist de la oferta" }),
+                    e.jsx("div", { style: { color: checklistProgress === 100 ? "#34d399" : props.th.accent, fontSize: 12, fontWeight: 900 }, children: checklistReady + "/" + checklistItems.length }),
+                  ] }),
+                  !form.Nombre && selectedPreparationOpportunity && e.jsxs("div", {
+                    style: { marginTop: 8, padding: "8px 9px", borderRadius: 7, background: props.th.surface, border: "1px solid " + props.th.border },
+                    children: [
+                      e.jsx("div", { style: { color: props.th.accent, fontSize: 9.5, fontWeight: 900, marginBottom: 3 }, children: selectedPreparationOpportunity.idMP || "Sin ID MP" }),
+                      e.jsx("div", { style: { color: props.th.text, fontSize: 10.5, fontWeight: 800, lineHeight: 1.3 }, children: selectedPreparationOpportunity.nombreObra || "Oportunidad sin nombre" }),
+                    ],
+                  }),
+                  e.jsx("div", { style: { height: 6, borderRadius: 999, background: props.th.surface, overflow: "hidden", marginTop: 9, marginBottom: 12 }, children: e.jsx("div", { style: { width: checklistProgress + "%", height: "100%", background: checklistProgress === 100 ? "#34d399" : props.th.accent, transition: "width .2s" } }) }),
+                  e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 11 }, children: checklistGroups.map(function (group) {
+                    var groupReady = group.items.filter(function (item) { return item.ready; }).length;
+                    var activeGroup = step === group.step;
+                    return e.jsxs("div", { children: [
+                      e.jsxs("button", {
+                        type: "button",
+                        onClick: function () {
+                          if (canOpenPreparationStep(group.step)) setStep(group.step);
+                          else if (group.step > 4 && props.setToast) props.setToast("Primero completa el estudio y aprueba la decisión de avanzar");
+                          else if (props.setToast) props.setToast("⚠️ Guarda primero la ficha oficial");
+                        },
+                        style: { width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, border: "none", background: activeGroup ? props.th.surface : "transparent", color: activeGroup ? props.th.accent : props.th.text, borderRadius: 6, padding: "5px 6px", cursor: canOpenPreparationStep(group.step) ? "pointer" : "not-allowed", opacity: canOpenPreparationStep(group.step) ? 1 : 0.48, fontSize: 11, fontWeight: 900, textAlign: "left" },
+                        children: [e.jsx("span", { children: group.step + ". " + group.title }), e.jsx("span", { style: { color: groupReady === group.items.length ? "#34d399" : props.th.muted, fontSize: 10 }, children: groupReady + "/" + group.items.length })],
+                      }),
+                      e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 5, padding: "6px 5px 0" }, children: group.items.map(function (item) {
+                        return e.jsxs("div", { style: { display: "flex", gap: 6, alignItems: "flex-start", color: item.ready ? "#34d399" : props.th.muted, fontSize: 10.5, lineHeight: 1.3 }, children: [e.jsx("span", { style: { width: 12, flexShrink: 0, fontWeight: 900 }, children: item.ready ? "✓" : "○" }), e.jsx("span", { children: item.label })] }, item.label);
+                      }) }),
+                    ] }, group.step);
+                  }) }),
+                ],
+              }),
             ]
           })
+        }),
+        antecedentGuideOpen && e.jsx("div", {
+          role: "presentation",
+          onClick: function () { setAntecedentGuideOpen(false); },
+          style: { position: "fixed", inset: 0, zIndex: 2600, background: "rgba(4,12,24,.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18 },
+          children: e.jsxs("div", {
+            role: "dialog",
+            "aria-modal": "true",
+            "aria-label": "Guía para descargar documentos de Mercado Público",
+            onClick: function (event) { event.stopPropagation(); },
+            style: { width: "min(940px,96vw)", maxHeight: "92vh", background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 14, overflow: "hidden", boxShadow: "0 26px 80px rgba(0,0,0,.5)", display: "flex", flexDirection: "column" },
+            children: [
+              e.jsxs("div", { style: { padding: "15px 18px", borderBottom: "1px solid " + props.th.border, background: props.th.card, display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }, children: [
+                e.jsxs("div", { children: [
+                  e.jsx("div", { style: { color: props.th.text, fontSize: 18, fontWeight: 900 }, children: "📘 Cómo obtener los documentos de la licitación" }),
+                  e.jsx("div", { style: { color: props.th.muted, fontSize: 11.5, lineHeight: 1.45, marginTop: 4 }, children: "No necesitas conocer Mercado Público. Sigue estas instrucciones y vuelve a ECP con los archivos descargados." }),
+                ] }),
+                e.jsx("button", { type: "button", "aria-label": "Cerrar guía de documentos", onClick: function () { setAntecedentGuideOpen(false); }, style: { border: "none", background: "transparent", color: props.th.muted, fontSize: 23, cursor: "pointer", padding: "1px 6px" }, children: "×" }),
+              ] }),
+              e.jsx("div", { style: { padding: 18, overflowY: "auto", flex: 1 }, children: e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "minmax(0,1.15fr) minmax(310px,.85fr)", gap: 15, alignItems: "start" }, children: [
+                e.jsxs("section", { children: [
+                  e.jsx("div", { style: { display: "flex", flexWrap: "wrap", gap: 5, alignItems: "center", padding: 10, borderRadius: 9, background: props.th.card, border: "1px solid " + props.th.border, marginBottom: 12 }, children: ["Mercado Público", "Buscar", "Ficha de la licitación", "Archivos adjuntos"].map(function (crumb, index) { return e.jsxs("span", { style: { display: "flex", gap: 5, alignItems: "center", color: index === 3 ? props.th.accent : props.th.text, fontSize: 10.5, fontWeight: index === 3 ? 900 : 700 }, children: [index > 0 && e.jsx("span", { style: { color: props.th.muted }, children: "→" }), crumb] }, crumb); }) }),
+                  [
+                    { n: "1", title: "Abre Mercado Público", text: "Usa el botón de esta guía. Se abrirá el sitio oficial en otra pestaña." },
+                    { n: "2", title: "Busca el código de la licitación", text: "Copia el código que aparece abajo y pégalo en el buscador de Mercado Público." },
+                    { n: "3", title: "Entra a la ficha correcta", text: "Comprueba que el nombre y el organismo coincidan con los que ves en ECP." },
+                    { n: "4", title: "Ubica Archivos adjuntos", text: "Dentro de la ficha busca Archivos adjuntos, Bases, Documentos o Anexos de la licitación." },
+                    { n: "5", title: "Descarga todos los antecedentes", text: "No abras solamente las bases. Descarga también anexos, aclaraciones, itemizados y modificaciones." },
+                    { n: "6", title: "Regresa a ECP", text: "Cierra esta guía y presiona Cargar documentos. Puedes seleccionar varios archivos al mismo tiempo." },
+                  ].map(function (guideStep) { return e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "32px minmax(0,1fr)", gap: 10, padding: "10px 0", borderBottom: "1px solid " + props.th.border }, children: [
+                    e.jsx("span", { style: { width: 28, height: 28, borderRadius: 999, display: "grid", placeItems: "center", background: props.th.accent, color: "#101820", fontSize: 12, fontWeight: 900 }, children: guideStep.n }),
+                    e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 12.5, fontWeight: 900 }, children: guideStep.title }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, lineHeight: 1.5, marginTop: 3 }, children: guideStep.text })] }),
+                  ] }, guideStep.n); }),
+                ] }),
+                e.jsxs("aside", { style: { padding: 14, borderRadius: 10, background: props.th.card, border: "1px solid " + props.th.border }, children: [
+                  e.jsx("div", { style: { color: props.th.text, fontSize: 13.5, fontWeight: 900, marginBottom: 9 }, children: "✅ Lista de documentos que debes buscar" }),
+                  [
+                    ["Bases administrativas o generales", "Reglas, plazos, garantías y documentos obligatorios"],
+                    ["Bases técnicas o especificaciones", "Qué se debe ejecutar, suministrar o construir"],
+                    ["Todos los anexos y formularios", "Aunque parezcan repetidos o estén en Word/Excel"],
+                    ["Aclaraciones, respuestas y modificaciones", "Pueden cambiar lo indicado en las bases originales"],
+                    ["Itemizado o presupuesto oficial", "Especialmente si existe un archivo Excel"],
+                    ["Planos y antecedentes técnicos", "Cuando la contratación corresponda a una obra o instalación"],
+                    ["Modelo de contrato y garantías", "Si aparecen como documentos separados"],
+                  ].map(function (requiredDocument) { return e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "17px minmax(0,1fr)", gap: 7, marginBottom: 9 }, children: [e.jsx("span", { style: { color: "#34d399", fontWeight: 900 }, children: "✓" }), e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 11, fontWeight: 800 }, children: requiredDocument[0] }), e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, lineHeight: 1.4, marginTop: 2 }, children: requiredDocument[1] })] })] }, requiredDocument[0]); }),
+                  e.jsxs("div", { style: { marginTop: 11, padding: 10, borderRadius: 8, background: "rgba(239,68,68,.07)", border: "1px solid rgba(239,68,68,.28)" }, children: [e.jsx("div", { style: { color: "#ef4444", fontSize: 10.5, fontWeight: 900 }, children: "⚠ Antes de salir de Mercado Público" }), e.jsx("div", { style: { color: props.th.text, fontSize: 9.8, lineHeight: 1.5, marginTop: 4 }, children: "Revisa las fechas y descarga la versión más reciente. Una modificación o aclaración posterior puede reemplazar una condición de las bases originales." })] }),
+                  e.jsxs("div", { style: { marginTop: 10, padding: 10, borderRadius: 8, background: "rgba(59,130,246,.07)", border: "1px solid rgba(59,130,246,.25)" }, children: [e.jsx("div", { style: { color: "#60a5fa", fontSize: 10.5, fontWeight: 900 }, children: "Estos son antecedentes de entrada" }), e.jsx("div", { style: { color: props.th.text, fontSize: 9.8, lineHeight: 1.5, marginTop: 4 }, children: "Aquí no debes subir todavía tu oferta firmada. Primero cargamos lo publicado por el organismo para que ECP pueda ayudarte a preparar la respuesta." })] }),
+                ] }),
+              ] }) }),
+              e.jsxs("div", { style: { padding: "12px 18px", borderTop: "1px solid " + props.th.border, background: props.th.card, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }, children: [
+                e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, fontWeight: 800 }, children: "CÓDIGO A BUSCAR" }), e.jsxs("div", { style: { display: "flex", gap: 7, alignItems: "center", marginTop: 3 }, children: [e.jsx("strong", { style: { color: props.th.accent, fontSize: 14 }, children: form.CodigoExterno || "Sin código" }), e.jsx("button", { type: "button", disabled: !form.CodigoExterno, onClick: function () { if (navigator.clipboard && form.CodigoExterno) navigator.clipboard.writeText(form.CodigoExterno); if (props.setToast) props.setToast("📋 Código copiado: " + form.CodigoExterno); }, style: Object.assign({}, props.sty.btn("s"), { padding: "4px 8px", fontSize: 9.5 }), children: "Copiar código" })] })] }),
+                e.jsxs("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" }, children: [
+                  e.jsx("button", { type: "button", onClick: function () { setAntecedentGuideOpen(false); }, style: Object.assign({}, props.sty.btn("s"), { padding: "9px 13px" }), children: "Ya los descargué · Ir a cargar" }),
+                  e.jsx("button", { type: "button", onClick: function () { window.open("https://www.mercadopublico.cl/", "_blank", "noopener,noreferrer"); }, style: Object.assign({}, props.sty.btn("p"), { padding: "9px 14px", fontWeight: 900 }), children: "↗ Abrir Mercado Público" }),
+                ] }),
+              ] }),
+            ],
+          }),
+        }),
+        documentPreviewDefinition && e.jsx("div", {
+          onClick: function () { setDocumentPreviewKey(null); },
+          style: { position: "fixed", inset: 0, zIndex: 2500, background: "rgba(5,15,30,.78)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18 },
+          children: e.jsxs("div", {
+            onClick: function (event) { event.stopPropagation(); },
+            style: { width: "min(980px,96vw)", maxHeight: "94vh", background: props.th.surface, border: "1px solid " + props.th.border, borderRadius: 13, overflow: "hidden", boxShadow: "0 24px 80px rgba(0,0,0,.45)", display: "flex", flexDirection: "column" },
+            children: [
+              e.jsxs("div", { style: { padding: "13px 16px", borderBottom: "1px solid " + props.th.border, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }, children: [
+                e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 16, fontWeight: 900 }, children: "Vista previa · " + documentPreviewDefinition.title }), e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginTop: 3 }, children: "Mismo formato institucional usado por los informes de Enlace Constructor" })] }),
+                e.jsx("button", { type: "button", onClick: function () { setDocumentPreviewKey(null); }, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 16 }), children: "×" }),
+              ] }),
+              e.jsx("div", { style: { flex: 1, overflowY: "auto", background: "#dfe7f0", padding: 18 }, children: e.jsx("div", { style: { width: "min(760px,100%)", minHeight: 880, margin: "0 auto", background: "#fff", boxShadow: "0 8px 28px rgba(15,35,60,.18)" }, dangerouslySetInnerHTML: { __html: buildDocumentPreviewHtml(documentPreviewKey) } }) }),
+              e.jsxs("div", { style: { padding: "12px 16px", borderTop: "1px solid " + props.th.border, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }, children: [
+                e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5 }, children: "Vista previa del borrador. Revisa el contenido antes de descargar o firmar." }),
+                e.jsxs("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" }, children: [
+                  e.jsx("button", { type: "button", onClick: editAutomaticDocument, style: Object.assign({}, props.sty.btn("s"), { padding: "8px 12px" }), children: "✏️ Editar datos de origen" }),
+                  e.jsx("button", { type: "button", onClick: downloadAutomaticDocument, style: Object.assign({}, props.sty.btn("p"), { padding: "8px 14px", fontWeight: 800 }), children: "⬇ Descargar PDF" }),
+                ] }),
+              ] }),
+            ],
+          }),
         }),
         e.jsx("div", {
           style: { borderTop: "1px solid " + props.th.border, padding: "16px 32px", background: props.th.surface, display: "flex", justifyContent: "space-between", alignItems: "center" },
@@ -65938,27 +68950,27 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                 onClick: function() { setStep(step - 1); },
                 children: "← Anterior"
               }),
-              step < 4 ? e.jsx("button", {
+              e.jsx("button", {
+                style: Object.assign({}, props.sty.btn("s"), { padding: "10px 18px" }),
+                disabled: !form.CodigoExterno || !form.Nombre,
+                onClick: saveAndExitPreparation,
+                children: "💾 Guardar y salir al listado"
+              }),
+              step < 9 ? e.jsx("button", {
                 style: Object.assign({}, props.sty.btn("p"), { padding: "10px 24px", fontWeight: "bold" }),
-                onClick: function() { setStep(step + 1); },
-                children: "Siguiente →"
-              }) : e.jsx("button", {
-                style: Object.assign({}, props.sty.btn("p"), { padding: "10px 24px", fontWeight: "bold", background: "#4CAF50", color: "#fff", border: "none" }),
+                disabled: (step === 1 && (!form.CodigoExterno || !form.Nombre)) || (step === 4 && !studyDecisionApproved),
                 onClick: function() {
-                  if (!form.Nombre) {
-                    alert("No hay una licitación válida extraída.");
+                  if (step === 4 && !studyDecisionApproved) {
+                    if (props.setToast) props.setToast("Selecciona Conviene y confirma la decisión para iniciar la preparación final");
                     return;
                   }
-                  var n = Object.assign({}, form, {
-                    estado: "Borrador",
-                    id: "lic_" + form.CodigoExterno + "_" + Date.now().toString(),
-                    origen: "API",
-                  });
-                  var list = props.licitaciones || [];
-                  props.setLicitaciones([n].concat(list));
-                  if (props.onSuccess) props.onSuccess();
+                  savePreparationDraft(true, step + 1);
                 },
-                children: "Finalizar y Guardar ✓"
+                children: step === 4 ? "✓ Aprobar estudio y preparar oferta →" : "💾 Guardar y continuar →"
+              }) : e.jsx("button", {
+                style: Object.assign({}, props.sty.btn("p"), { padding: "10px 24px", fontWeight: "bold", background: "#4CAF50", color: "#fff", border: "none" }),
+                onClick: finalizePreparation,
+                children: "✅ Guardar cierre y volver al listado"
               })
             ]
           })
@@ -65970,6 +68982,16 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     var _t = V(props.cfg && props.cfg.apiKeyMP ? "buscar" : "primeros_pasos"),
       activeTab = _t[0],
       setActiveTab = _t[1];
+    var _prepareItem = V(null),
+      prepareItem = _prepareItem[0],
+      setPrepareItem = _prepareItem[1];
+    var _apiGuide = V(false),
+      apiGuideOpen = _apiGuide[0],
+      setApiGuideOpen = _apiGuide[1];
+    var openApiGuide = function () {
+      setActiveTab("primeros_pasos");
+      setApiGuideOpen(true);
+    };
     var accent = (props.cfg && props.cfg.accentColor) || "#f5a020";
     var th = props.th;
     var sty = props.sty;
@@ -66109,66 +69131,153 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             }),
           ],
         }),
-        e.jsx("div", {
-          style: { flex: 1, overflowY: "auto", padding: "0" },
-          children:
-            activeTab === "primeros_pasos"
-              ? e.jsx(MpOnboarding, {
-                  th: props.th,
-                  sty: props.sty,
-                  cfg: props.cfg,
-                  onGoConfig: function () {
-                    props.setPage("config");
-                  },
-                })
-              : activeTab === "nueva_licitacion"
-              ? e.jsx(MpNuevaLicitacion, {
-                  th: props.th,
-                  sty: props.sty,
-                  cfg: props.cfg,
-                  licitaciones: props.licitaciones,
-                  setLicitaciones: props.setLicitaciones,
-                  onSuccess: function() {
-                    setActiveTab("kanban");
-                  }
-                })
-              : activeTab === "buscar"
-                ? e.jsx(MpBuscador, {
-                    licitaciones: props.licitaciones,
-                    setLicitaciones: props.setLicitaciones,
-                    cfg: props.cfg,
-                    setToast: props.setToast,
-                    th: th,
-                    sty: sty,
-                    setActiveTab: setActiveTab,
-                  })
-                : activeTab === "kanban"
-                  ? e.jsx(MpKanban, {
-                      licitaciones: props.licitaciones,
-                      setLicitaciones: props.setLicitaciones,
-                      cfg: props.cfg,
-                      setToast: props.setToast,
-                      th: th,
-                      sty: sty,
-                      setPage: props.setPage,
-                    })
-                  : activeTab === "analisis"
-                    ? e.jsx(MpAnalisis, {
-                        licitaciones: props.licitaciones,
-                        th: th,
-                        sty: sty,
-                      })
-                    : e.jsx(MpNuevaLicitacion, {
-                        licitaciones: props.licitaciones,
-                        setLicitaciones: props.setLicitaciones,
-                        cfg: props.cfg,
-                        th: th,
-                        sty: sty,
-                        onSuccess: function() {
-                          setActiveTab("kanban");
-                        }
-                      }),
+        e.jsxs("div", {
+          style: { flex: 1, overflow: "hidden", padding: 0 },
+          children: [
+            e.jsx("div", {
+              style: {
+                display: activeTab === "primeros_pasos" ? "block" : "none",
+                height: "100%",
+                overflowY: "auto",
+              },
+              children: e.jsx(MpOnboarding, {
+                th: props.th,
+                sty: props.sty,
+                cfg: props.cfg,
+                licitaciones: props.licitaciones,
+                onGoSearch: function () {
+                  setActiveTab("buscar");
+                },
+                onGoOpportunities: function () {
+                  setActiveTab("kanban");
+                },
+                onOpenApiGuide: openApiGuide,
+                onGoConfig: function () {
+                  props.setPage("config");
+                },
+              }),
+            }),
+            e.jsx("div", {
+              style: {
+                display: activeTab === "buscar" ? "block" : "none",
+                height: "100%",
+                overflowY: "auto",
+              },
+              children: e.jsx(MpBuscador, {
+                licitaciones: props.licitaciones,
+                setLicitaciones: props.setLicitaciones,
+                cfg: props.cfg,
+                setToast: props.setToast,
+                th: th,
+                sty: sty,
+                setActiveTab: setActiveTab,
+                onNeedApi: openApiGuide,
+              }),
+            }),
+            e.jsx("div", {
+              style: {
+                display: activeTab === "kanban" ? "block" : "none",
+                height: "100%",
+                overflowY: "auto",
+              },
+              children: e.jsx(MpKanban, {
+                licitaciones: props.licitaciones,
+                setLicitaciones: props.setLicitaciones,
+                budgets: props.budgets,
+                cfg: props.cfg,
+                setToast: props.setToast,
+                th: th,
+                sty: sty,
+                onPrepare: function (item) {
+                  setPrepareItem(item);
+                  setActiveTab("licit");
+                },
+              }),
+            }),
+            e.jsx("div", {
+              style: {
+                display: activeTab === "analisis" ? "block" : "none",
+                height: "100%",
+                overflowY: "auto",
+              },
+              children: e.jsx(MpAnalisis, {
+                licitaciones: props.licitaciones,
+                budgets: props.budgets,
+                cfg: props.cfg,
+                setToast: props.setToast,
+                th: th,
+                sty: sty,
+                onGoOpportunities: function () {
+                  setActiveTab("kanban");
+                },
+                onPrepare: function (item) {
+                  setPrepareItem(item);
+                  setActiveTab("licit");
+                },
+              }),
+            }),
+            e.jsx("div", {
+              style: {
+                display:
+                  activeTab === "licit" || activeTab === "nueva_licitacion"
+                    ? "block"
+                    : "none",
+                height: "100%",
+                overflowY: "auto",
+              },
+              children: e.jsx(MpNuevaLicitacion, {
+                key: prepareItem && prepareItem.id
+                  ? "preparation-" + prepareItem.id
+                  : "preparation-list",
+                licitaciones: props.licitaciones,
+                setLicitaciones: props.setLicitaciones,
+                budgets: props.budgets,
+                setBudgets: props.setBudgets,
+                apus: props.apus,
+                catalog: props.catalog,
+                onOpenBudget: props.onOpenBudget,
+                onCreateBudget: props.onCreateBudget,
+                initialCode: prepareItem && prepareItem.idMP,
+                initialItem: prepareItem,
+                onSelectOpportunity: function (opportunity) {
+                  var savedFicha = opportunity.preparacion && opportunity.preparacion.ficha || {};
+                  var isPreparing = savedFicha.DecisionEstudio === "Conviene" && savedFicha.DecisionConfirmada && (opportunity.preparacion && opportunity.preparacion.paso || 1) >= 5;
+                  var workflowState = isPreparing ? "En Preparación" : "En Estudio";
+                  var activeOpportunity = Object.assign({}, opportunity, { estado: workflowState });
+                  props.setLicitaciones(function (previous) { return (previous || []).map(function (saved) { return saved.id === opportunity.id ? Object.assign({}, saved, { estado: workflowState }) : saved; }); });
+                  setPrepareItem(activeOpportunity);
+                },
+                onExitToList: function () {
+                  setPrepareItem(null);
+                  setActiveTab("licit");
+                },
+                cfg: props.cfg,
+                onGoCompanyConfig: props.onGoCompanyConfig,
+                th: th,
+                sty: sty,
+                setToast: props.setToast,
+                onNeedApi: openApiGuide,
+                onSuccess: function () {
+                  setPrepareItem(null);
+                  setActiveTab("licit");
+                },
+              }),
+            }),
+          ],
         }),
+        apiGuideOpen &&
+          e.jsx(MpApiGuideModal, {
+            th: props.th,
+            sty: props.sty,
+            cfg: props.cfg,
+            onClose: function () {
+              setApiGuideOpen(false);
+            },
+            onGoConfig: function () {
+              setApiGuideOpen(false);
+              props.setPage("config");
+            },
+          }),
       ],
     });
   }
@@ -66176,154 +69285,230 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
   // ======================== BUSCADOR ========================
   function MpOnboarding(props) {
     var th = props.th,
-      sty = props.sty;
-    var steps = [
+      sty = props.sty,
+      cfg = props.cfg || {};
+    var companyName = String(cfg.empresa || "").trim();
+    var companyReady = !!companyName && companyName !== "Tu Empresa Constructora" && !!String(cfg.rut || "").trim();
+    var representativeReady = !!String(cfg.firmaNombre || "").trim() && !!String(cfg.firmaRut || "").trim() && !!String(cfg.firmaCargo || "").trim();
+    var currency = cfg.moneda || {};
+    var countryReady = !!String(currency.pais || cfg.paisRegion || "").trim() && !!String(currency.currency || currency.simbolo || "").trim();
+    var apiReady = !!String(cfg.apiKeyMP || "").trim();
+    var firstSearchReady = (props.licitaciones || []).some(function (opportunity) { return opportunity && !opportunity._deleted; });
+    var checks = [companyReady, representativeReady, countryReady, apiReady, firstSearchReady];
+    var readyCount = checks.filter(Boolean).length;
+    var progress = Math.round(readyCount / checks.length * 100);
+    var openExternal = function (url) { window.open(url, "_blank", "noopener,noreferrer"); };
+    var actionButton = function (action, index) {
+      return e.jsx("button", {
+        type: "button",
+        onClick: action.onClick || function () { openExternal(action.url); },
+        style: Object.assign({}, sty.btn(action.primary ? "p" : "s"), { padding: "8px 12px", fontSize: 11.5, fontWeight: 800 }),
+        children: action.label,
+      }, index);
+    };
+    var route = [
       {
-        title: "¡El Estado es tu mejor cliente!",
-        desc: "Mercado Público mueve millones a diario en construcción, mantenimiento y obras civiles. ¡No te quedes fuera! Enlace Constructor Pro (ECP) te simplifica el proceso: busca, analiza y genera presupuestos al instante para participar y ganar más licitaciones.",
-        icon: "🚀",
+        number: 1,
+        icon: "🏢",
+        title: "Completa los datos de tu empresa",
+        desc: "Estos datos identifican al proveedor y alimentan cartas, declaraciones y documentos de la oferta.",
+        ready: companyReady && representativeReady && countryReady,
+        status: companyReady && representativeReady && countryReady ? "Configuración completa" : "Faltan datos de configuración",
+        details: [
+          ["Empresa y RUT", companyReady],
+          ["Representante legal", representativeReady],
+          ["País y moneda", countryReady],
+        ],
+        actions: [{ label: "⚙️ Completar configuración", onClick: props.onGoConfig, primary: !companyReady || !representativeReady }],
       },
       {
-        title: "1. Regístrate en Mercado Público",
-        desc: "Para empezar a venderle al Estado, primero debes registrarte como proveedor oficial. El trámite es sencillo y te abre las puertas a miles de oportunidades a nivel nacional.",
-        actionText: "Ir a Mercado Público",
-        actionUrl: "https://www.mercadopublico.cl/Home/",
+        number: 2,
         icon: "📝",
+        title: "Regístrate como proveedor del Estado",
+        desc: "Para participar debes contar con una cuenta habilitada en Mercado Público. Este trámite se realiza fuera de ECP.",
+        external: true,
+        status: "Verificación externa",
+        details: [
+          ["Crear o revisar tu cuenta de proveedor", null],
+          ["Confirmar que puedes ingresar a Mercado Público", null],
+        ],
+        actions: [{ label: "↗ Ir a Mercado Público", url: "https://www.mercadopublico.cl/Home/", primary: false }],
       },
       {
-        title: "2. Solicita tu Acceso API",
-        desc: "Para conectar ECP y buscar oportunidades en tiempo real, necesitas solicitar tu acceso a la API de Mercado Público (Ticket). Con esta clave privada, nosotros buscamos las oportunidades por ti.",
-        actionText: "Solicitar API",
-        actionUrl: "https://www.chilecompra.cl/api/",
+        number: 3,
         icon: "🔑",
+        title: "Solicita y conecta tu Ticket API",
+        desc: "El Ticket permite que ECP consulte oportunidades reales. Es una clave privada: no la compartas ni la incluyas en documentos.",
+        ready: apiReady,
+        status: apiReady ? "Ticket API configurado" : "Ticket API pendiente",
+        details: [
+          ["Solicitar el acceso en ChileCompra", apiReady ? true : null],
+          ["Copiar el Ticket recibido", apiReady ? true : null],
+          ["Pegarlo en Configuración → Integraciones", apiReady],
+        ],
+        actions: [
+          { label: "↗ Solicitar Ticket API", url: "https://www.chilecompra.cl/api/", primary: false },
+          { label: apiReady ? "✓ Revisar integración" : "⚙️ Integrar Ticket en ECP", onClick: props.onGoConfig, primary: !apiReady },
+        ],
       },
       {
-        title: "3. Configura tu Clave en ECP",
-        desc: "Pega el código generado (Ticket) en la Configuración de Enlace Constructor Pro. ¡Una vez hecho, estarás listo para cotizar y ganar más negocios directamente desde aquí!",
-        actionText: "Ir a Configuración",
-        actionFn: props.onGoConfig,
-        icon: "⚙️",
-        isPrimary: true,
+        number: 4,
+        icon: "🔎",
+        title: "Realiza tu primera búsqueda",
+        desc: "Cuando la API esté conectada, busca por región, organismo, palabras clave o código de licitación.",
+        ready: firstSearchReady,
+        blocked: !apiReady,
+        status: firstSearchReady ? "Primera oportunidad guardada" : apiReady ? "Listo para buscar" : "Primero conecta la API",
+        details: [
+          ["Buscar oportunidades reales", firstSearchReady],
+          ["Guardar al menos una en Mis oportunidades", firstSearchReady],
+        ],
+        actions: [{ label: apiReady ? "🔎 Ir a Buscar oportunidades" : "🔑 Configurar API primero", onClick: apiReady ? (props.onGoSearch || props.onGoConfig) : (props.onOpenApiGuide || props.onGoConfig), primary: true }],
+      },
+      {
+        number: 5,
+        icon: "🧭",
+        title: "Estudia antes de preparar",
+        desc: "ECP te guiará por ficha oficial, bases, itemizado y decisión informada. Guardar una oportunidad no significa que ya estés postulando.",
+        ready: firstSearchReady,
+        status: firstSearchReady ? "Ruta de trabajo habilitada" : "Disponible después de guardar una oportunidad",
+        details: [
+          ["Revisar antecedentes oficiales", null],
+          ["Estimar costos y viabilidad", null],
+          ["Decidir si conviene participar", null],
+        ],
+        actions: [{ label: "📋 Ir a Mis oportunidades", onClick: props.onGoOpportunities || props.onGoSearch || props.onGoConfig, primary: false }],
       },
     ];
 
     return e.jsxs("div", {
-      style: {
-        padding: "30px 40px",
-        maxWidth: 900,
-        margin: "0 auto",
-        fontFamily: "'DM Sans',sans-serif",
-      },
+      style: { padding: "26px 30px 40px", maxWidth: 1120, margin: "0 auto", fontFamily: "'DM Sans',sans-serif" },
       children: [
-        e.jsxs("div", {
-          style: { textAlign: "center", marginBottom: 40 },
-          children: [
-            e.jsx("div", {
-              style: { fontSize: 48, marginBottom: 16 },
-              children: "🎓",
-            }),
-            e.jsx("h2", {
-              style: {
-                fontSize: 24,
-                color: th.text,
-                fontWeight: 800,
-                marginBottom: 8,
-              },
-              children: "Primeros Pasos con Mercado Público",
-            }),
-            e.jsx("p", {
-              style: {
-                fontSize: 15,
-                color: th.muted,
-                maxWidth: 600,
-                margin: "0 auto",
-                lineHeight: 1.5,
-              },
-              children:
-                "Sigue esta breve guía para conectar tu cuenta y empezar a descubrir oportunidades de negocio.",
-            }),
-          ],
-        }),
-        e.jsx("div", {
-          style: { display: "flex", flexDirection: "column", gap: 24 },
-          children: steps.map(function (s, idx) {
-            return e.jsxs("div", {
-              key: idx,
-              style: {
-                background: th.card,
-                border: "1px solid " + th.border,
-                borderRadius: 12,
-                padding: "24px",
-                display: "flex",
-                gap: 20,
-                alignItems: "flex-start",
-              },
-              children: [
-                e.jsx("div", {
-                  style: {
-                    width: 48,
-                    height: 48,
-                    borderRadius: 12,
-                    background: "rgba(245,160,32,0.1)",
-                    color: th.accent,
-                    fontSize: 24,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  },
-                  children: s.icon,
-                }),
-                e.jsxs("div", {
-                  style: { flex: 1 },
-                  children: [
-                    e.jsx("h3", {
-                      style: {
-                        fontSize: 16,
-                        color: th.text,
-                        fontWeight: 700,
-                        marginBottom: 8,
-                      },
-                      children: s.title,
-                    }),
-                    e.jsx("p", {
-                      style: {
-                        fontSize: 14,
-                        color: th.muted,
-                        lineHeight: 1.6,
-                        marginBottom: s.actionText ? 16 : 0,
-                      },
-                      children: s.desc,
-                    }),
-                    s.actionText &&
-                      e.jsx("button", {
-                        onClick: s.actionFn
-                          ? s.actionFn
-                          : function () {
-                              window.open(s.actionUrl, "_blank");
-                            },
-                        style: {
-                          background: s.isPrimary ? th.accent : "transparent",
-                          color: s.isPrimary ? "#000" : th.text,
-                          border: s.isPrimary
-                            ? "none"
-                            : "1px solid " + th.border,
-                          padding: "8px 16px",
-                          borderRadius: 8,
-                          fontWeight: 700,
-                          fontSize: 13,
-                          cursor: "pointer",
-                          transition: "all 0.2s",
-                        },
-                        children: s.actionText,
-                      }),
-                  ],
-                }),
-              ],
-            });
-          }),
-        }),
+        e.jsxs("section", { style: { padding: 20, borderRadius: 14, background: "linear-gradient(135deg," + th.card + ",rgba(59,130,246,.08))", border: "1px solid " + th.border, marginBottom: 16 }, children: [
+          e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 18, alignItems: "flex-start", flexWrap: "wrap" }, children: [
+            e.jsxs("div", { style: { flex: "1 1 560px" }, children: [
+              e.jsx("div", { style: { color: th.accent, fontSize: 11, fontWeight: 900, textTransform: "uppercase", letterSpacing: 1 }, children: "Tu próxima oportunidad puede estar en Mercado Público" }),
+              e.jsx("h2", { style: { color: th.text, fontSize: 25, fontWeight: 900, margin: "7px 0 6px", lineHeight: 1.25 }, children: "Anímate a licitar: ECP será tu compañero en cada paso" }),
+              e.jsx("p", { style: { color: th.muted, fontSize: 13, lineHeight: 1.6, margin: 0, maxWidth: 740 }, children: "No necesitas haber participado antes ni conocer todos los trámites. Te ayudaremos a encontrar oportunidades, entender las bases, calcular tus costos, preparar los documentos y revisar la oferta antes de enviarla. Tú tomas las decisiones; ECP te guía para avanzar con claridad y confianza." }),
+              e.jsx("button", { type: "button", onClick: readyCount === checks.length ? (props.onGoSearch || props.onGoConfig) : props.onGoConfig, style: Object.assign({}, sty.btn("p"), { marginTop: 13, padding: "9px 15px", fontWeight: 900 }), children: readyCount === checks.length ? "🔎 Quiero buscar oportunidades" : "🚀 Comenzar mi preparación" }),
+            ] }),
+            e.jsxs("div", { style: { minWidth: 170, padding: 13, borderRadius: 10, background: th.surface, border: "1px solid " + th.border, textAlign: "center" }, children: [
+              e.jsx("div", { style: { color: progress === 100 ? "#34d399" : th.accent, fontSize: 23, fontWeight: 900 }, children: progress + "%" }),
+              e.jsx("div", { style: { color: th.muted, fontSize: 10.5, marginTop: 2 }, children: readyCount + " de " + checks.length + " verificaciones listas" }),
+            ] }),
+          ] }),
+          e.jsx("div", { style: { height: 8, borderRadius: 999, background: th.surface, overflow: "hidden", marginTop: 16 }, children: e.jsx("div", { style: { height: "100%", width: progress + "%", background: progress === 100 ? "#34d399" : th.accent, transition: "width .2s" } }) }),
+        ] }),
+        e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(5,minmax(130px,1fr))", gap: 8, marginBottom: 18 }, children: [
+          ["Empresa", companyReady], ["Representante", representativeReady], ["País y moneda", countryReady], ["Ticket API", apiReady], ["Primera búsqueda", firstSearchReady]
+        ].map(function (check) { return e.jsxs("div", { style: { padding: "9px 10px", borderRadius: 8, background: th.card, border: "1px solid " + (check[1] ? "rgba(52,211,153,.45)" : th.border) }, children: [e.jsx("div", { style: { color: check[1] ? "#34d399" : th.muted, fontSize: 10.5, fontWeight: 900 }, children: (check[1] ? "✓ " : "▫ ") + check[0] }), e.jsx("div", { style: { color: th.muted, fontSize: 9.5, marginTop: 2 }, children: check[1] ? "Verificado por ECP" : "Pendiente" })] }, check[0]); }) }),
+        e.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: route.map(function (item) {
+          var statusColor = item.ready ? "#34d399" : item.external ? "#60a5fa" : item.blocked ? th.muted : th.accent;
+          return e.jsxs("section", { style: { display: "grid", gridTemplateColumns: "52px minmax(0,1fr)", gap: 14, padding: 16, borderRadius: 11, background: th.card, border: "1px solid " + (item.ready ? "rgba(52,211,153,.4)" : th.border), opacity: item.blocked ? .72 : 1 }, children: [
+            e.jsx("div", { style: { width: 46, height: 46, borderRadius: 11, background: item.ready ? "rgba(52,211,153,.12)" : "rgba(245,160,32,.1)", color: item.ready ? "#34d399" : th.accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, fontWeight: 900 }, children: item.ready ? "✓" : item.icon }),
+            e.jsxs("div", { children: [
+              e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "flex-start", flexWrap: "wrap" }, children: [
+                e.jsxs("div", { children: [e.jsx("div", { style: { color: th.text, fontSize: 14.5, fontWeight: 900 }, children: item.number + ". " + item.title }), e.jsx("div", { style: { color: th.muted, fontSize: 11.5, lineHeight: 1.5, marginTop: 4, maxWidth: 760 }, children: item.desc })] }),
+                e.jsx("span", { style: { padding: "5px 8px", borderRadius: 999, background: statusColor + "16", border: "1px solid " + statusColor + "55", color: statusColor, fontSize: 9.5, fontWeight: 900, whiteSpace: "nowrap" }, children: item.status }),
+              ] }),
+              e.jsx("div", { style: { display: "flex", gap: 7, flexWrap: "wrap", marginTop: 10 }, children: item.details.map(function (detail) { var color = detail[1] === true ? "#34d399" : detail[1] === false ? th.muted : "#60a5fa"; return e.jsx("span", { style: { padding: "5px 7px", borderRadius: 7, background: th.surface, border: "1px solid " + th.border, color: color, fontSize: 9.8, fontWeight: 700 }, children: (detail[1] === true ? "✓ " : detail[1] === false ? "▫ " : "↗ ") + detail[0] }, detail[0]); }) }),
+              e.jsx("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", marginTop: 11 }, children: (item.actions || []).map(actionButton) }),
+            ] }),
+          ] }, item.number);
+        }) }),
+        e.jsxs("section", { style: { marginTop: 16, padding: 14, borderRadius: 10, background: "rgba(245,160,32,.07)", border: "1px solid rgba(245,160,32,.35)" }, children: [
+          e.jsx("div", { style: { color: th.text, fontSize: 13, fontWeight: 900 }, children: "Importante para tu primera postulación" }),
+          e.jsx("div", { style: { color: th.muted, fontSize: 11, lineHeight: 1.55, marginTop: 5 }, children: "ECP te ayuda a buscar, estudiar y preparar. La oferta oficial siempre se envía en Mercado Público. Una oportunidad solo debe marcarse como Postulada después del envío y de guardar su comprobante." }),
+        ] }),
       ],
+    });
+  }
+
+  function MpApiGuideModal(props) {
+    var th = props.th;
+    return e.jsx("div", {
+      role: "presentation",
+      onClick: props.onClose,
+      style: {
+        position: "fixed",
+        inset: 0,
+        zIndex: 1200,
+        background: "rgba(4,12,24,.82)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 20,
+      },
+      children: e.jsxs("div", {
+        role: "dialog",
+        "aria-modal": "true",
+        "aria-label": "Cómo conectar la API de Mercado Público",
+        onClick: function (ev) {
+          ev.stopPropagation();
+        },
+        style: {
+          width: "min(920px,100%)",
+          maxHeight: "90vh",
+          background: th.surface,
+          border: "1px solid " + th.border,
+          borderRadius: 14,
+          boxShadow: "0 24px 70px rgba(0,0,0,.5)",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+        },
+        children: [
+          e.jsxs("div", {
+            style: {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 12,
+              padding: "15px 18px",
+              borderBottom: "1px solid " + th.border,
+              background: th.card,
+            },
+            children: [
+              e.jsxs("div", {
+                children: [
+                  e.jsx("div", {
+                    style: { fontSize: 17, fontWeight: 800, color: th.text },
+                    children: "🔑 Conecta tu API de Mercado Público",
+                  }),
+                  e.jsx("div", {
+                    style: { fontSize: 11, color: th.muted, marginTop: 3 },
+                    children:
+                      "Completa estos pasos para buscar oportunidades desde ECP.",
+                  }),
+                ],
+              }),
+              e.jsx("button", {
+                type: "button",
+                "aria-label": "Cerrar guía de API",
+                onClick: props.onClose,
+                style: {
+                  border: "none",
+                  background: "transparent",
+                  color: th.muted,
+                  fontSize: 22,
+                  cursor: "pointer",
+                  padding: "2px 6px",
+                },
+                children: "×",
+              }),
+            ],
+          }),
+          e.jsx("div", {
+            style: { overflowY: "auto", flex: 1 },
+            children: e.jsx(MpOnboarding, {
+              th: props.th,
+              sty: props.sty,
+              cfg: props.cfg,
+              onGoConfig: props.onGoConfig,
+            }),
+          }),
+        ],
+      }),
     });
   }
 
@@ -66334,6 +69519,9 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     var _q = V(""),
       query = _q[0],
       setQuery = _q[1];
+    var _directCode = V(""),
+      directCode = _directCode[0],
+      setDirectCode = _directCode[1];
     var _neg = V(""),
       neg = _neg[0],
       setNeg = _neg[1];
@@ -66352,6 +69540,9 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     var _searched = V(false),
       searched = _searched[0],
       setSearched = _searched[1];
+    var _selected = V({}),
+      selected = _selected[0],
+      setSelected = _selected[1];
     var _pg = V(1),
       page = _pg[0],
       setPage = _pg[1];
@@ -66384,10 +69575,14 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       setCheckedSteps = _chk[1];
 
     ct(function () {
-      var tk = (cfg && cfg.apiKeyMP) || "79B6AA40-A970-4164-ADEE-47CF3F378CBA";
+      var tk = ((cfg && cfg.apiKeyMP) || "").trim();
+      if (!tk) {
+        setOrganismosList([]);
+        return;
+      }
       fetch(
         "https://api.mercadopublico.cl/servicios/v1/Publico/Empresas/BuscarComprador?ticket=" +
-          tk,
+          encodeURIComponent(tk),
       )
         .then(function (r) {
           return r.json();
@@ -66396,7 +69591,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
           if (data && data.listaEmpresas) setOrganismosList(data.listaEmpresas);
         })
         .catch(function () {});
-    }, []);
+    }, [cfg && cfg.apiKeyMP]);
 
     var regiones = [
       "Todas",
@@ -66470,15 +69665,19 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     };
 
     var handleSearch = function () {
-      if (!query.trim() && !organismoSel && region === "Todas")
-        return props.setToast(
-          "\u26A0\uFE0F Selecciona una regi\u00F3n, organismo o ingresa palabras clave",
+      var tk = ((cfg && cfg.apiKeyMP) || "").trim();
+      if (!tk) {
+        props.setToast(
+          "🔑 Necesitas un Ticket API. Revisa Primeros Pasos para solicitarlo.",
         );
+        if (props.onNeedApi) props.onNeedApi();
+        else if (props.setActiveTab) props.setActiveTab("primeros_pasos");
+        return;
+      }
       setSearched(true);
       setLoading(true);
       setPage(1);
       setResults([]);
-      var tk = (cfg && cfg.apiKeyMP) || "79B6AA40-A970-4164-ADEE-47CF3F378CBA";
       var qLow = query
         .toLowerCase()
         .split(" ")
@@ -66531,7 +69730,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       {
         var urlLic =
           "https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?estado=activas&ticket=" +
-          tk;
+          encodeURIComponent(tk);
         promises.push(
           fetch(urlLic)
             .then(function (r) {
@@ -66649,9 +69848,11 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             var regLower = regLiteral.toLowerCase();
 
             all = all.filter(function (it) {
-              var reg = it.Comprador
-                ? it.Comprador.RegionUnidad || ""
-                : it.regionComprador || "";
+              var reg =
+                detectMpProjectRegion(it) ||
+                (it.Comprador ? it.Comprador.RegionUnidad || "" : "") ||
+                it.regionComprador ||
+                "";
               var orgName = (
                 it.Comprador ? it.Comprador.NombreOrganismo : it.proveedor || ""
               ).toLowerCase();
@@ -66750,12 +69951,78 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         });
     };
 
+    var handleDirectCodeSearch = function () {
+      var tk = ((cfg && cfg.apiKeyMP) || "").trim();
+      if (!tk) {
+        props.setToast(
+          "🔑 Necesitas un Ticket API. Revisa Primeros Pasos para solicitarlo.",
+        );
+        if (props.onNeedApi) props.onNeedApi();
+        else if (props.setActiveTab) props.setActiveTab("primeros_pasos");
+        return;
+      }
+      var code = directCode.trim().toUpperCase().replace(/\s+/g, "");
+      if (!code) {
+        props.setToast("⚠️ Ingresa el código de la licitación");
+        return;
+      }
+      if (code.split("-").length < 3) {
+        props.setToast("⚠️ Revisa el formato del código. Ejemplo: 1067476-21-L126");
+        return;
+      }
+      setDirectCode(code);
+      setSearched(true);
+      setLoading(true);
+      setPage(1);
+      setSelected({});
+      setResults([]);
+      fetch(
+        "https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo=" +
+          encodeURIComponent(code) +
+          "&ticket=" +
+          encodeURIComponent(tk),
+      )
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Mercado Público respondió " + response.status);
+          }
+          return response.json();
+        })
+        .then(function (data) {
+          var found = data && data.Listado ? data.Listado : [];
+          found = found.map(function (item) {
+            return u(d({}, item), { _source: "licitacion" });
+          });
+          setResults(found);
+          setCanal("licitaciones");
+          setLoading(false);
+          props.setToast(
+            found.length
+              ? "✅ Licitación encontrada: " + code
+              : "⚠️ No encontramos una licitación con el código " + code,
+          );
+        })
+        .catch(function (error) {
+          setLoading(false);
+          props.setToast("❌ No fue posible consultar el código: " + error.message);
+        });
+    };
+
     var openDetail = function (item) {
       setDetailView(item);
       setDetailLoading(true);
       setDetailTab("resumen");
       setCheckedSteps({});
-      var tk = (cfg && cfg.apiKeyMP) || "79B6AA40-A970-4164-ADEE-47CF3F378CBA";
+      var tk = ((cfg && cfg.apiKeyMP) || "").trim();
+      if (!tk) {
+        setDetailLoading(false);
+        props.setToast(
+          "🔑 Necesitas un Ticket API. Revisa Primeros Pasos para solicitarlo.",
+        );
+        if (props.onNeedApi) props.onNeedApi();
+        else if (props.setActiveTab) props.setActiveTab("primeros_pasos");
+        return;
+      }
       if (item._source === "compra_agil") {
         var url =
           "https://api2.mercadopublico.cl/v2/compra-agil/" +
@@ -66777,7 +70044,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
           "https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo=" +
           item.CodigoExterno +
           "&ticket=" +
-          tk;
+          encodeURIComponent(tk);
         fetch(url)
           .then(function (r) {
             return r.json();
@@ -66827,7 +70094,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         idMP: idField,
         nombreObra: item.Nombre || "",
         organismo: item.Comprador ? item.Comprador.NombreOrganismo : "",
-        region: item.Comprador ? item.Comprador.RegionUnidad : "",
+        region: detectMpProjectRegion(item),
         montoEstimado: item.MontoEstimado || 0,
         fechaCierre: item.Fechas ? item.Fechas.FechaCierre : "",
         estado: estadoOpc || "Pendiente",
@@ -66844,6 +70111,61 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       if (props.setActiveTab) {
         props.setActiveTab("kanban");
       }
+    };
+
+    var selectedItems = results.filter(function (item) {
+      return !!selected[item.CodigoExterno];
+    });
+    var toggleSelected = function (item) {
+      var id = item.CodigoExterno;
+      setSelected(function (prev) {
+        var next = d({}, prev);
+        if (next[id]) delete next[id];
+        else next[id] = true;
+        return next;
+      });
+    };
+    var saveSelectedToKanban = function () {
+      var existing = {};
+      (props.licitaciones || []).forEach(function (item) {
+        existing[item.idMP] = true;
+      });
+      var now = Date.now();
+      var additions = selectedItems
+        .filter(function (item) {
+          return !existing[item.CodigoExterno];
+        })
+        .map(function (item, idx) {
+          return {
+            id: now + idx,
+            idMP: item.CodigoExterno || "",
+            nombreObra: item.Nombre || "",
+            organismo: item.Comprador
+              ? item.Comprador.NombreOrganismo || ""
+              : "",
+            region: detectMpProjectRegion(item),
+            montoEstimado: item.MontoEstimado || 0,
+            fechaCierre: item.Fechas ? item.Fechas.FechaCierre || "" : "",
+            estado: "En Estudio",
+            notas: "",
+            fechaGuardado: new Date().toISOString().split("T")[0],
+            tipo: item.Tipo || "",
+            canal: item._source || "licitacion",
+            items: item.Items ? item.Items.Listado || [] : [],
+          };
+        });
+      if (!additions.length) {
+        props.setToast("⚠️ Las oportunidades seleccionadas ya están guardadas");
+        return;
+      }
+      props.setLicitaciones(function (prev) {
+        return additions.concat(prev);
+      });
+      setSelected({});
+      props.setToast(
+        "✅ " + additions.length + " oportunidades enviadas a Mis Oportunidades",
+      );
+      if (props.setActiveTab) props.setActiveTab("kanban");
     };
 
     var perPage = 12;
@@ -67368,6 +70690,67 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             }),
             e.jsxs("div", {
               style: {
+                padding: 12,
+                marginBottom: 14,
+                border: "1px solid " + th.accent,
+                borderRadius: 10,
+                background: "rgba(245,160,32,.07)",
+              },
+              children: [
+                e.jsx("div", {
+                  style: {
+                    fontSize: 11,
+                    color: th.accent,
+                    fontWeight: 800,
+                    marginBottom: 6,
+                    textTransform: "uppercase",
+                    letterSpacing: ".05em",
+                  },
+                  children: "🔢 Búsqueda directa por código de licitación",
+                }),
+                e.jsxs("div", {
+                  style: {
+                    display: "grid",
+                    gridTemplateColumns: "minmax(220px,1fr) auto",
+                    gap: 8,
+                  },
+                  children: [
+                    e.jsx("input", {
+                      style: d({}, sty.inp),
+                      value: directCode,
+                      onChange: function (ev) {
+                        setDirectCode(ev.target.value);
+                      },
+                      placeholder: "Ej: 1067476-21-L126",
+                      "aria-label": "Código de licitación",
+                      onKeyDown: function (ev) {
+                        ev.key === "Enter" && handleDirectCodeSearch();
+                      },
+                    }),
+                    e.jsx("button", {
+                      type: "button",
+                      style: u(d({}, sty.btn("p")), {
+                        padding: "10px 18px",
+                        whiteSpace: "nowrap",
+                        fontWeight: 800,
+                        opacity: loading ? 0.7 : 1,
+                        cursor: loading ? "wait" : "pointer",
+                      }),
+                      disabled: loading,
+                      onClick: handleDirectCodeSearch,
+                      children: loading ? "⏳ Buscando..." : "🔎 Buscar código",
+                    }),
+                  ],
+                }),
+                e.jsx("div", {
+                  style: { fontSize: 10, color: th.muted, marginTop: 6 },
+                  children:
+                    "Úsalo cuando ya conoces el ID de Mercado Público y quieres ir directamente a esa oportunidad.",
+                }),
+              ],
+            }),
+            e.jsxs("div", {
+              style: {
                 display: "grid",
                 gridTemplateColumns: "repeat(3,minmax(0,1fr))",
                 gap: 8,
@@ -67748,10 +71131,10 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                     alignItems: "center",
                   },
                   children: [
-                    e.jsx("div", {
-                      style: { fontWeight: 800, fontSize: 18, color: th.text },
-                      children: "Detalle de la Oportunidad",
-                    }),
+                    e.jsxs("div", { children: [
+                      e.jsx("div", { style: { fontWeight: 800, fontSize: 18, color: th.text }, children: "Vista previa de la oportunidad" }),
+                      e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 6, marginTop: 4, color: th.muted, fontSize: 10.5 }, children: ["ID MP · " + (detailView.CodigoExterno || "No informado"), e.jsx(MpCopyCodeButton, { code: detailView.CodigoExterno, setToast: props.setToast, accent: th.accent, border: th.border, surface: th.bg })] }),
+                    ] }),
                     e.jsx("button", {
                       style: {
                         background: "transparent",
@@ -67804,7 +71187,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                         onClick: function () {
                           setDetailTab("resumen");
                         },
-                        children: "\uD83D\uDCCA Resumen de Licitación",
+                        children: "\uD83D\uDCCA Datos oficiales",
                       }),
                       e.jsx("button", {
                         style: {
@@ -67827,7 +71210,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                         onClick: function () {
                           setDetailTab("guia");
                         },
-                        children: "\u200D\uD83C\uDFEB Asistente de Postulación",
+                        children: "\uD83E\uDDED Antes de guardarla",
                       }),
                     ],
                   }),
@@ -67855,7 +71238,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                 marginBottom: 16,
                               },
                               children:
-                                "Asistente de Postulación: Guía Paso a Paso",
+                                "Antes de guardar esta oportunidad",
                             }),
                             e.jsx("p", {
                               style: {
@@ -67865,7 +71248,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                 lineHeight: 1.5,
                               },
                               children:
-                                "Sigue estos pasos dentro de Mercado Público para evitar quedar fuera por errores administrativos. Marca las casillas a medida que avanzas.",
+                                "Esta revisión es orientativa: te ayuda a decidir si vale la pena guardar la oportunidad. Las casillas no significan que ya estés postulando.",
                             }),
 
                             e.jsxs("div", {
@@ -67879,7 +71262,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                     marginBottom: 12,
                                   },
                                   children:
-                                    "1. Documentos Obligatorios a Descargar",
+                                    "1. Revisión rápida antes de analizar",
                                 }),
                                 e.jsx("div", {
                                   style: {
@@ -67890,23 +71273,23 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                   children: [
                                     {
                                       id: "doc1",
-                                      title: "Bases Administrativas",
-                                      desc: "Lee los 'Requisitos Excluyentes', multas y plazos exactos de entrega.",
+                                      title: "El trabajo corresponde a mi actividad",
+                                      desc: "Confirma que tu empresa realmente puede ejecutar el servicio, obra o suministro solicitado.",
                                     },
                                     {
                                       id: "doc2",
-                                      title: "Bases Técnicas",
-                                      desc: "Verifica si exigen marcas específicas, certificaciones de materiales o planos.",
+                                      title: "La oportunidad sigue abierta",
+                                      desc: "Revisa la fecha y hora de cierre. Una oportunidad cerrada solo sirve como referencia.",
                                     },
                                     {
                                       id: "doc3",
-                                      title: "Anexos Editables",
-                                      desc: "Descarga los Word/Excel. Deberás llenarlos, firmarlos y volver a subirlos.",
+                                      title: "Ubico la ficha y sus bases en Mercado Público",
+                                      desc: "Abre la ficha oficial y localiza Bases Administrativas, Bases Técnicas y anexos descargables.",
                                     },
                                     {
                                       id: "doc4",
-                                      title: "Foro de Preguntas",
-                                      desc: "Lee las aclaraciones. A veces el organismo cambia las reglas ahí.",
+                                      title: "Quiero estudiarla en ECP",
+                                      desc: "Al guardarla pasará a Mis oportunidades con estado En estudio. Todavía no estará postulada.",
                                     },
                                   ].map(function (st) {
                                     var isChecked = checkedSteps[st.id];
@@ -68127,11 +71510,10 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                     width: "100%",
                                     fontSize: 15,
                                   }),
-                                  children: "⭐ Guardar y Analizar Licitación",
+                                  children: "⭐ Guardar en Mis oportunidades y comenzar análisis",
                                 }),
                                 e.jsx("button", {
                                   onClick: function () {
-                                    saveToKanban(detailView, "Postulada");
                                     window.open(
                                       detailView._source === "compra_agil"
                                         ? "https://www.mercadopublico.cl/Portal/Modules/Site/ComprasMicro/DetalleCompraMicro.aspx?qs=" +
@@ -68140,7 +71522,6 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                           detailView.CodigoExterno,
                                       "_blank"
                                     );
-                                    setDetailView(null);
                                   },
                                   style: u(d({}, sty.btn("s")), {
                                     display: "block",
@@ -68149,7 +71530,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                     width: "100%",
                                     cursor: "pointer",
                                   }),
-                                  children: "🚀 Ir a Mercado Público y Marcar en Postulación",
+                                  children: "↗ Abrir ficha en Mercado Público",
                                 }),
                               ],
                             }),
@@ -68157,6 +71538,19 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                         })
                       : e.jsxs("div", {
                           children: [
+                            e.jsxs("div", {
+                              style: {
+                                padding: 12,
+                                marginBottom: 16,
+                                borderRadius: 8,
+                                border: "1px solid rgba(96,165,250,.4)",
+                                background: "rgba(96,165,250,.08)",
+                              },
+                              children: [
+                                e.jsx("div", { style: { color: "#60a5fa", fontSize: 12, fontWeight: 800, marginBottom: 4 }, children: "Vista previa · todavía no está guardada" }),
+                                e.jsx("div", { style: { color: th.muted, fontSize: 11.5, lineHeight: 1.45 }, children: "Revisa qué se compra, quién compra, dónde se ejecuta y cuándo cierra. Si te interesa estudiarla, guárdala en Mis oportunidades." }),
+                              ],
+                            }),
                             e.jsx("h3", {
                               style: {
                                 fontSize: 18,
@@ -68340,7 +71734,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                 ],
                               });
                             })(),
-                            e.jsxs("div", {
+                            false && e.jsxs("div", {
                               style: {
                                 background: "rgba(52,211,153,0.1)",
                                 border: "1px solid #34d399",
@@ -68472,6 +71866,19 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                               ],
                             }),
                             e.jsxs("div", {
+                              style: {
+                                background: "rgba(96,165,250,0.08)",
+                                border: "1px solid rgba(96,165,250,0.4)",
+                                padding: 14,
+                                borderRadius: 8,
+                                marginBottom: 24,
+                              },
+                              children: [
+                                e.jsx("div", { style: { fontSize: 13, fontWeight: 800, color: "#60a5fa", marginBottom: 5 }, children: "¿Qué ocurre al guardarla?" }),
+                                e.jsx("div", { style: { fontSize: 12, color: th.muted, lineHeight: 1.5 }, children: "La oportunidad pasará a Mis oportunidades con estado En estudio. Allí podrás revisar requisitos, costos, riesgos y decidir si conviene comenzar su preparación." }),
+                              ],
+                            }),
+                            e.jsxs("div", {
                               style: { display: "flex", gap: 12, flexDirection: "column" },
                               children: [
                                 e.jsx("button", {
@@ -68486,11 +71893,10 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                     width: "100%",
                                     fontSize: 15,
                                   }),
-                                  children: "⭐ Guardar y Analizar Licitación",
+                                  children: "⭐ Guardar en Mis oportunidades y comenzar análisis",
                                 }),
                                 e.jsx("button", {
                                   onClick: function () {
-                                    saveToKanban(detailView, "Postulada");
                                     window.open(
                                       detailView._source === "compra_agil"
                                         ? "https://www.mercadopublico.cl/Portal/Modules/Site/ComprasMicro/DetalleCompraMicro.aspx?qs=" +
@@ -68499,7 +71905,6 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                           detailView.CodigoExterno,
                                       "_blank"
                                     );
-                                    setDetailView(null);
                                   },
                                   style: u(d({}, sty.btn("s")), {
                                     display: "block",
@@ -68508,7 +71913,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                     width: "100%",
                                     cursor: "pointer",
                                   }),
-                                  children: "🚀 Ir a Mercado Público y Marcar en Postulación",
+                                  children: "↗ Abrir ficha en Mercado Público",
                                 }),
                               ],
                             }),
@@ -68650,6 +72055,60 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               }),
             ],
           }),
+        selectedItems.length > 0 &&
+          e.jsxs("div", {
+            style: {
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 12,
+              flexWrap: "wrap",
+              marginBottom: 14,
+              padding: "11px 13px",
+              border: "1px solid " + th.accent,
+              borderRadius: 10,
+              background: "rgba(245,160,32,.12)",
+            },
+            children: [
+              e.jsxs("div", {
+                children: [
+                  e.jsx("div", {
+                    style: { color: th.text, fontSize: 13, fontWeight: 800 },
+                    children:
+                      selectedItems.length +
+                      (selectedItems.length === 1
+                        ? " oportunidad seleccionada"
+                        : " oportunidades seleccionadas"),
+                  }),
+                  e.jsx("div", {
+                    style: { color: th.muted, fontSize: 11, marginTop: 2 },
+                    children:
+                      "Se guardarán juntas en la etapa En Estudio.",
+                  }),
+                ],
+              }),
+              e.jsxs("div", {
+                style: { display: "flex", gap: 8 },
+                children: [
+                  e.jsx("button", {
+                    type: "button",
+                    onClick: function () {
+                      setSelected({});
+                    },
+                    style: u(d({}, sty.btn("s")), { padding: "8px 11px" }),
+                    children: "Limpiar",
+                  }),
+                  e.jsx("button", {
+                    type: "button",
+                    onClick: saveSelectedToKanban,
+                    style: u(d({}, sty.btn("p")), { padding: "8px 13px" }),
+                    children:
+                      "Guardar " + selectedItems.length + " en Mis Oportunidades",
+                  }),
+                ],
+              }),
+            ],
+          }),
         e.jsx("div", {
           style: {
             display: "grid",
@@ -68659,6 +72118,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
           children: paged.map(function (it, idx) {
             var cd = countdown(it.Fechas ? it.Fechas.FechaCierre : null);
             var badge = srcBadge(it._source);
+            var projectRegion = detectMpProjectRegion(it);
             return e.jsxs(
               "div",
               {
@@ -68675,63 +72135,41 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                   flexDirection: "column",
                 }),
                 children: [
-                  cd &&
-                    e.jsx("div", {
-                      style: {
-                        position: "absolute",
-                        top: 12,
-                        right: 14,
-                        background: cd.color + "22",
-                        color: cd.color,
-                        padding: "3px 10px",
-                        borderRadius: 20,
-                        fontSize: 11,
-                        fontWeight: 700,
-                      },
-                      children: "\u23F1 " + cd.txt,
-                    }),
-                  cd &&
-                    cd.badge &&
-                    e.jsx("div", {
-                      style: {
-                        position: "absolute",
-                        top: 36,
-                        right: 14,
-                        background: cd.color,
-                        color: "#fff",
-                        padding: "3px 8px",
-                        borderRadius: 12,
-                        fontSize: 10,
-                        fontWeight: 800,
-                        boxShadow: "0 2px 4px rgba(0,0,0,0.15)",
-                        zIndex: 1,
-                      },
-                      children: cd.badge,
-                    }),
-                  e.jsx("div", {
-                    style: {
-                      fontSize: 11,
-                      background: badge.bg,
-                      color: badge.color,
-                      padding: "4px 8px",
-                      borderRadius: 4,
-                      fontWeight: 800,
-                      marginBottom: 10,
-                      display: "inline-block",
-                      alignSelf: "flex-start",
-                    },
-                    children: badge.label,
+                  e.jsxs("div", {
+                    style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 12, paddingRight: cd ? 96 : 0 },
+                    children: [
+                      e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }, children: [
+                        e.jsx("button", {
+                          type: "button",
+                          "aria-label": selected[it.CodigoExterno] ? "Quitar de la selección" : "Seleccionar oportunidad",
+                          onClick: function (ev) {
+                            ev.stopPropagation();
+                            toggleSelected(it);
+                          },
+                          style: { padding: "5px 9px", borderRadius: 999, border: "1px solid " + (selected[it.CodigoExterno] ? th.accent : th.border), background: selected[it.CodigoExterno] ? "rgba(245,160,32,.14)" : "transparent", color: selected[it.CodigoExterno] ? th.accent : th.muted, fontSize: 10.5, fontWeight: 750, cursor: "pointer", whiteSpace: "nowrap" },
+                          children: selected[it.CodigoExterno] ? "✓ Seleccionada" : "□ Seleccionar",
+                        }),
+                        e.jsx("div", {
+                          style: { fontSize: 10.5, background: badge.bg, color: badge.color, padding: "5px 9px", borderRadius: 999, fontWeight: 850, whiteSpace: "nowrap" },
+                          children: badge.label,
+                        }),
+                      ] }),
+                      e.jsxs("div", {
+                        title: "Haz clic en cualquier parte de la tarjeta para abrir el detalle",
+                        style: { display: "inline-flex", alignItems: "center", gap: 6, marginLeft: "auto", color: th.accent, fontSize: 10.5, fontWeight: 800, whiteSpace: "nowrap" },
+                        children: [e.jsx("span", { style: { fontSize: 13 }, children: "👁" }), e.jsx("span", { children: "Abrir vista previa" })],
+                      }),
+                    ],
                   }),
-                  e.jsx("div", {
-                    style: {
-                      fontSize: 10,
-                      color: th.muted,
-                      fontWeight: 700,
-                      letterSpacing: ".04em",
-                      marginBottom: 6,
-                    },
-                    children: "ID MP · " + (it.CodigoExterno || "No informado"),
+                  cd && e.jsx("div", {
+                    style: { position: "absolute", top: 12, right: 14, background: cd.color + "22", color: cd.color, padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700 },
+                    children: "⏱ " + cd.txt,
                   }),
+                  cd && cd.badge && e.jsx("div", {
+                    style: { position: "absolute", top: 36, right: 14, background: cd.color, color: "#fff", padding: "3px 8px", borderRadius: 12, fontSize: 10, fontWeight: 800, boxShadow: "0 2px 4px rgba(0,0,0,0.15)", zIndex: 1 },
+                    children: cd.badge,
+                  }),
+                  e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 6, color: th.muted, fontSize: 10, fontWeight: 700, letterSpacing: ".04em", marginBottom: 6 }, children: ["ID MP · " + (it.CodigoExterno || "No informado"), e.jsx(MpCopyCodeButton, { code: it.CodigoExterno, setToast: props.setToast, accent: th.accent, border: th.border, surface: th.card })] }),
                   e.jsx("div", {
                     style: {
                       fontSize: 15,
@@ -68762,8 +72200,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                       marginBottom: 10,
                     },
                     children: [
-                      it.Comprador &&
-                        it.Comprador.RegionUnidad &&
+                      projectRegion &&
                         e.jsx("span", {
                           style: {
                             fontSize: 11,
@@ -68773,7 +72210,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                             borderRadius: 12,
                             fontWeight: 600,
                           },
-                          children: "\uD83D\uDCCD " + it.Comprador.RegionUnidad,
+                          children: "\uD83D\uDCCD " + projectRegion,
                         }),
                       it.Fechas &&
                         it.Fechas.FechaCierre &&
@@ -68827,11 +72264,21 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                     style: {
                       display: "flex",
                       gap: 8,
+                      flexWrap: "wrap",
                       marginTop: "auto",
                       paddingTop: 12,
                       borderTop: "1px solid " + th.border,
                     },
                     children: [
+                      e.jsx("button", {
+                        type: "button",
+                        onClick: function (ev) {
+                          ev.stopPropagation();
+                          openDetail(it);
+                        },
+                        style: u(d({}, sty.btn("s")), { flexBasis: "100%", width: "100%", padding: "8px", fontSize: 11.5, fontWeight: 800, borderColor: "rgba(59,130,246,.45)" }),
+                        children: "👁 Vista previa de la oportunidad",
+                      }),
                       e.jsx("button", {
                         style: u(d({}, sty.btn("p")), {
                           flex: 1,
@@ -68873,14 +72320,91 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     });
   }
 
+  function MpPreparationProgress(opportunity, budgets, cfg) {
+    var preparation = opportunity && opportunity.preparacion || {};
+    var form = preparation.ficha || {};
+    var linkedBudget = (budgets || []).find(function (budget) {
+      return String(budget.id) === String(form.PresupuestoVinculado || "");
+    });
+    var linkedTotals = linkedBudget ? Ee(linkedBudget.items || [], cfg || {}, linkedBudget.descuento, linkedBudget.modoCosteo) : { sub: 0 };
+    var lines = linkedBudget
+      ? (linkedBudget.items || []).filter(function (item) { return !!String(item.desc || "").trim(); }).map(function (item) {
+          return { NombreProducto: item.desc || "", Cantidad: item.cant == null ? 1 : item.cant, UnidadMedida: item.unidad || "unidad", PrecioUnitarioNeto: parseFloat(item.precio) || 0, EspecificacionTecnica: item.especTecnica || "" };
+        })
+      : (form.Lineas || []);
+    var net = linkedBudget ? (parseFloat(linkedTotals.sub) || 0) : lines.reduce(function (sum, line) {
+      return sum + (parseFloat(line.Cantidad) || 0) * (parseFloat(line.PrecioUnitarioNeto) || 0);
+    }, 0);
+    var technical = form.OfertaTecnica || {};
+    var antecedents = form.Antecedentes || [];
+    var findings = form.HallazgosAntecedentes || [];
+    var documents = form.Docs || [];
+    var guaranteeDefaults = { decision: "pendiente", exigida: false, monto: 0, tipo: "", beneficiario: "", glosa: "", vencimiento: "" };
+    var guaranteesSource = form.Garantias && !Array.isArray(form.Garantias) ? form.Garantias : {};
+    var guarantees = [Object.assign({}, guaranteeDefaults, guaranteesSource.seriedad || {}), Object.assign({}, guaranteeDefaults, guaranteesSource.fiel || {})];
+    var guaranteeDecision = function (guarantee) {
+      if (guarantee.decision && guarantee.decision !== "pendiente") return guarantee.decision;
+      return guarantee.exigida ? "exigida" : "pendiente";
+    };
+    var guaranteeComplete = function (guarantee) {
+      var decision = guaranteeDecision(guarantee);
+      if (decision === "no_exigida") return true;
+      if (decision !== "exigida") return false;
+      return (parseFloat(guarantee.monto) || 0) > 0 && !!String(guarantee.tipo || "").trim() && !!String(guarantee.beneficiario || "").trim() && !!String(guarantee.glosa || "").trim() && !!String(guarantee.vencimiento || "").trim();
+    };
+    var groups = [
+      { title: "Ficha oficial", items: [["ID Mercado Público", !!form.CodigoExterno], ["Organismo convocante", !!form.Organismo], ["Región del proyecto", !!form.Region], ["Fecha de cierre", !!(form.Fechas && form.Fechas.FechaCierre)], ["Plazo de ejecución", !!form.PlazoEjecucion]] },
+      { title: "Bases y antecedentes", items: [["Incorporar antecedentes", antecedents.length > 0], ["Clasificar archivos", antecedents.length > 0 && antecedents.every(function (document) { return !!document.clasificacion; })], ["Revisar hallazgos", antecedents.length > 0 && findings.every(function (finding) { return finding.status === "aplicado" || finding.status === "descartado"; })], ["Confirmar revisión", !!form.AntecedentesRevisados]] },
+      { title: "Itemizado y viabilidad", items: [["Agregar al menos un ítem", lines.length > 0], ["Completar descripción y cantidad", lines.length > 0 && lines.every(function (line) { return !!(line.NombreProducto || line.Descripcion) && (parseFloat(line.Cantidad) || 0) > 0; })], ["Estimar costos o precios", lines.length > 0 && lines.every(function (line) { return (parseFloat(line.PrecioUnitarioNeto) || 0) > 0; })], ["Definir monto preliminar", net > 0]] },
+      { title: "Decisión informada", items: [["Seleccionar resultado", !!form.DecisionEstudio && form.DecisionEstudio !== "Por decidir"], ["Registrar conclusión", !!String(form.DecisionJustificacion || "").trim()], ["Confirmar decisión", !!form.DecisionConfirmada]] },
+      { title: "Oferta económica final", items: [["Aprobar decisión de avanzar", form.DecisionEstudio === "Conviene" && !!form.DecisionConfirmada], ["Confirmar precios finales", lines.length > 0 && lines.every(function (line) { return (parseFloat(line.PrecioUnitarioNeto) || 0) > 0; })], ["Definir monto final", net > 0]] },
+      { title: "Oferta técnica", items: [["Desarrollar metodología", !!String(technical.metodologia || "").trim()], ["Declarar etapas y plazos", (technical.etapas || []).length > 0], ["Completar especificaciones por ítem", lines.length > 0 && lines.every(function (line) { return !!String(line.EspecificacionTecnica || "").trim(); })], ["Declarar equipo de trabajo", (technical.equipo || []).some(function (row) { return !!String(row.nombre || "").trim() && !!String(row.cargo || "").trim(); })], ["Registrar experiencia de empresa", (technical.experiencia || []).some(function (row) { return !!String(row.obra || "").trim() && !!String(row.mandante || "").trim(); })]] },
+      { title: "Garantías", items: [["Decidir ambas garantías", guarantees.every(function (guarantee) { return guaranteeDecision(guarantee) !== "pendiente"; })], ["Completar garantías exigidas", guarantees.every(guaranteeComplete)], ["Confirmar revisión de garantías", !!form.GarantiasRevisadas]] },
+      { title: "Documentos", items: [["Definir lista documental", documents.length > 0], ["Confirmar importancia en bases", documents.length > 0 && documents.every(function (document) { return !!document.requirement && document.requirement !== "por_confirmar"; })], ["Definir responsable y formato", documents.length > 0 && documents.every(function (document) { return !!String(document.responsible || "").trim() && !!String(document.format || "").trim(); })], ["Asociar archivos finales", documents.length > 0 && documents.every(function (document) { return !!String(document.sourceRef || "").trim(); })], ["Completar revisión documental", documents.length > 0 && documents.every(function (document) { return !!document.checked; })]] },
+      { title: "Resumen y cierre", items: [["Definir estado de preparación", !!form.PreparacionEstado], ["Confirmar revisión final", !!form.RevisionFinal]] },
+    ];
+    var all = groups.reduce(function (items, group) { return items.concat(group.items); }, []);
+    var ready = all.filter(function (item) { return item[1]; }).length;
+    var currentGroupIndex = groups.findIndex(function (group) { return group.items.some(function (item) { return !item[1]; }); });
+    if (currentGroupIndex < 0) currentGroupIndex = groups.length - 1;
+    var pending = groups.reduce(function (items, group) { return items.concat(group.items.filter(function (item) { return !item[1]; }).map(function (item) { return item[0]; })); }, []);
+    return {
+      ready: ready,
+      total: all.length,
+      percent: all.length ? Math.round(ready / all.length * 100) : 0,
+      stage: groups[currentGroupIndex].title,
+      pending: pending.slice(0, 3),
+      updatedAt: preparation.actualizadoEn || "",
+      groups: groups.map(function (group, index) {
+        return {
+          step: index + 1,
+          title: group.title,
+          items: group.items.map(function (item) {
+            return { label: item[0], ready: item[1] };
+          }),
+        };
+      }),
+    };
+  }
+
   // ======================== KANBAN MEJORADO ========================
   function MpKanban(props) {
     var th = props.th,
       sty = props.sty;
     var lics = props.licitaciones || [];
+    var _boardQuery = V(""),
+      boardQuery = _boardQuery[0],
+      setBoardQuery = _boardQuery[1];
+    var _boardChannel = V("todos"),
+      boardChannel = _boardChannel[0],
+      setBoardChannel = _boardChannel[1];
+    var _workItem = V(null),
+      workItem = _workItem[0],
+      setWorkItem = _workItem[1];
     var estados = [
       { id: "Pendiente", color: "#8892a4", icon: "\u23F3" },
       { id: "En Estudio", color: "#f5a020", icon: "\uD83D\uDD0D" },
+      { id: "En Preparación", color: "#a78bfa", icon: "🛠️" },
       { id: "Postulada", color: "#60a5fa", icon: "\uD83D\uDCE4" },
       { id: "Adjudicada", color: "#34d399", icon: "\u2705" },
       { id: "Perdida", color: "#f87171", icon: "\u274C" },
@@ -68944,6 +72468,28 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       }
     };
 
+    var boardQueryLow = boardQuery.trim().toLowerCase();
+    var visibleLics = lics.filter(function (item) {
+      var matchesChannel =
+        boardChannel === "todos" ||
+        (boardChannel === "compra_agil"
+          ? item.canal === "compra_agil"
+          : item.canal !== "compra_agil");
+      var searchable = (
+        (item.nombreObra || item.Nombre || "") +
+        " " +
+        (item.organismo || "") +
+        " " +
+        (item.idMP || "") +
+        " " +
+        (item.region || "")
+      ).toLowerCase();
+      return (
+        matchesChannel &&
+        (!boardQueryLow || searchable.indexOf(boardQueryLow) > -1)
+      );
+    });
+
     var totalVal = lics
       .filter(function (x) {
         return x.estado !== "Perdida";
@@ -68969,8 +72515,99 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       children: [
         e.jsxs("div", {
           style: {
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            gap: 16,
+            flexWrap: "wrap",
+            marginBottom: 18,
+          },
+          children: [
+            e.jsxs("div", {
+              children: [
+                e.jsx("div", {
+                  style: { fontSize: 21, fontWeight: 800, color: th.text },
+                  children: "Mis oportunidades",
+                }),
+                e.jsx("div", {
+                  style: { fontSize: 12, color: th.muted, marginTop: 4 },
+                  children:
+                    "Organiza cada oportunidad según su avance y mantén visibles los próximos cierres.",
+                }),
+              ],
+            }),
+            e.jsx("div", {
+              style: {
+                fontSize: 12,
+                color: th.muted,
+                padding: "7px 10px",
+                border: "1px solid " + th.border,
+                borderRadius: 9,
+                background: th.surface,
+              },
+              children:
+                visibleLics.length +
+                (visibleLics.length === 1
+                  ? " oportunidad visible"
+                  : " oportunidades visibles"),
+            }),
+          ],
+        }),
+        e.jsxs("div", {
+          style: u(d({}, sty.card), {
+            display: "flex",
+            gap: 10,
+            alignItems: "center",
+            flexWrap: "wrap",
+            padding: 12,
+            marginBottom: 14,
+          }),
+          children: [
+            e.jsx("input", {
+              type: "search",
+              value: boardQuery,
+              onChange: function (ev) {
+                setBoardQuery(ev.target.value);
+              },
+              placeholder: "Buscar por nombre, organismo, región o ID MP...",
+              style: u(d({}, sty.inp), { flex: "1 1 280px", minWidth: 220 }),
+            }),
+            [
+              { id: "todos", label: "Todos" },
+              { id: "licitacion", label: "Licitaciones" },
+              { id: "compra_agil", label: "Compra Ágil" },
+            ].map(function (channel) {
+              var active = boardChannel === channel.id;
+              return e.jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: function () {
+                    setBoardChannel(channel.id);
+                  },
+                  style: {
+                    border: active
+                      ? "1px solid " + th.accent
+                      : "1px solid " + th.border,
+                    background: active ? "rgba(245,160,32,.14)" : th.surface,
+                    color: active ? th.accent : th.muted,
+                    borderRadius: 8,
+                    padding: "8px 11px",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  },
+                  children: channel.label,
+                },
+                channel.id,
+              );
+            }),
+          ],
+        }),
+        e.jsxs("div", {
+          style: {
             display: "grid",
-            gridTemplateColumns: "repeat(4,1fr)",
+            gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
             gap: 12,
             marginBottom: 20,
           },
@@ -69078,12 +72715,15 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         e.jsx("div", {
           style: {
             display: "grid",
-            gridTemplateColumns: "repeat(" + estados.length + ",1fr)",
+            gridTemplateColumns:
+              "repeat(" + estados.length + ",minmax(235px,1fr))",
             gap: 10,
             alignItems: "start",
+            overflowX: "auto",
+            paddingBottom: 8,
           },
           children: estados.map(function (est) {
-            var colItems = lics.filter(function (x) {
+            var colItems = visibleLics.filter(function (x) {
               return x.estado === est.id;
             });
             return e.jsxs(
@@ -69150,6 +72790,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                       })
                     : colItems.map(function (it) {
                         var cd = countdown(it.fechaCierre);
+                        var preparationProgress = MpPreparationProgress(it, props.budgets || [], props.cfg || {});
                         return e.jsxs(
                           "div",
                           {
@@ -69162,6 +72803,29 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                               transition: "transform .15s",
                             },
                             children: [
+                              e.jsx("div", {
+                                style: {
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  borderRadius: 999,
+                                  padding: "3px 7px",
+                                  marginBottom: 7,
+                                  background:
+                                    it.canal === "compra_agil"
+                                      ? "rgba(52,211,153,.14)"
+                                      : "rgba(96,165,250,.14)",
+                                  color:
+                                    it.canal === "compra_agil"
+                                      ? "#34d399"
+                                      : "#60a5fa",
+                                  fontSize: 10,
+                                  fontWeight: 800,
+                                },
+                                children:
+                                  it.canal === "compra_agil"
+                                    ? "🛒 Compra Ágil"
+                                    : "⚖️ Licitación",
+                              }),
                               cd &&
                                 e.jsxs("div", {
                                   style: {
@@ -69214,19 +72878,36 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                                   })
                                 : null,
                               it.idMP
-                                ? e.jsx("a", {
-                                    href: "https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=/K4x+FXMm/TmT4Myr/hLGQ==",
-                                    target: "_blank",
-                                    rel: "noopener",
-                                    style: {
-                                      fontSize: 11,
-                                      color: "#60a5fa",
-                                      textDecoration: "none",
-                                      fontWeight: 600,
-                                    },
-                                    children: "\uD83C\uDFDB\uFE0F " + it.idMP,
-                                  })
+                                ? e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
+                                    e.jsx("a", { href: "https://www.mercadopublico.cl/", target: "_blank", rel: "noopener", style: { fontSize: 11, color: "#60a5fa", textDecoration: "none", fontWeight: 600 }, children: "🏛️ " + it.idMP }),
+                                    e.jsx(MpCopyCodeButton, { code: it.idMP, setToast: props.setToast, accent: th.accent, border: th.border, surface: th.card }),
+                                  ] })
                                 : null,
+                              (it.estado === "En Preparación" || it.preparacion) && e.jsxs("div", { style: { marginTop: 9, padding: "8px 9px", borderRadius: 8, background: th.surface, border: "1px solid " + th.border }, children: [
+                                e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, color: th.text, fontSize: 10.5, fontWeight: 800 }, children: [e.jsx("span", { children: preparationProgress.stage }), e.jsx("span", { style: { color: preparationProgress.percent === 100 ? "#34d399" : "#a78bfa" }, children: preparationProgress.percent + "% · " + preparationProgress.ready + "/" + preparationProgress.total })] }),
+                                e.jsx("div", { style: { height: 6, borderRadius: 999, background: th.card, overflow: "hidden", marginTop: 6 }, children: e.jsx("div", { style: { width: preparationProgress.percent + "%", height: "100%", background: preparationProgress.percent === 100 ? "#34d399" : "#a78bfa" } }) }),
+                                preparationProgress.pending.length > 0 && e.jsx("div", { style: { color: th.muted, fontSize: 9.5, marginTop: 6, lineHeight: 1.35 }, children: "Falta: " + preparationProgress.pending.join(" · ") }),
+                              ] }),
+                              e.jsx("button", {
+                                type: "button",
+                                onClick: function () {
+                                  if (it.estado === "En Preparación" && props.onPrepare) props.onPrepare(it);
+                                  else setWorkItem(it);
+                                },
+                                style: u(d({}, sty.btn("p")), {
+                                  width: "100%",
+                                  marginTop: 9,
+                                  padding: "7px 9px",
+                                  fontSize: 11,
+                                  fontWeight: 800,
+                                }),
+                                children:
+                                  it.estado === "En Estudio"
+                                    ? "🔎 Continuar análisis"
+                                    : it.estado === "En Preparación"
+                                      ? "🛠️ Continuar preparación"
+                                      : "📂 Abrir oportunidad",
+                              }),
                               e.jsx("textarea", {
                                 rows: 2,
                                 style: u(d({}, sty.inp), {
@@ -69294,351 +72975,1000 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             );
           }),
         }),
+        workItem &&
+          e.jsx(MpSavedOpportunityModal, {
+            item: workItem,
+            cfg: props.cfg,
+            th: th,
+            sty: sty,
+            setToast: props.setToast,
+            onClose: function () {
+              setWorkItem(null);
+            },
+            onChangeState: function (newState) {
+              changeState(workItem.id, newState);
+              setWorkItem(u(d({}, workItem), { estado: newState }));
+            },
+            onNotes: function (notes) {
+              updateNotes(workItem.id, notes);
+              setWorkItem(u(d({}, workItem), { notas: notes }));
+            },
+            onSaveAnalysis: function (analysis) {
+              props.setLicitaciones(function (prev) {
+                return prev.map(function (saved) {
+                  return saved.id === workItem.id
+                    ? u(d({}, saved), { analisis: analysis })
+                    : saved;
+                });
+              });
+              setWorkItem(u(d({}, workItem), { analisis: analysis }));
+              props.setToast("✅ Análisis guardado en la oportunidad");
+            },
+            onPrepare: function (preparedItem) {
+              if (props.onPrepare) props.onPrepare(preparedItem);
+              setWorkItem(null);
+            },
+          }),
       ],
+    });
+  }
+
+  function MpSavedOpportunityModal(props) {
+    var th = props.th,
+      sty = props.sty,
+      item = props.item;
+    var _tab = V("resumen"),
+      tab = _tab[0],
+      setTab = _tab[1];
+    var _full = V(null),
+      full = _full[0],
+      setFull = _full[1];
+    var _loading = V(true),
+      loading = _loading[0],
+      setLoading = _loading[1];
+    var _error = V(""),
+      error = _error[0],
+      setError = _error[1];
+    var _analysis = V(
+        Object.assign(
+          {
+            decision: "Por decidir",
+            requisitos: "Por revisar",
+            capacidad: "Por revisar",
+            documentos: "Por revisar",
+            plazo: "Por revisar",
+            costoEstimado: "",
+            riesgos: "",
+            ventajas: "",
+            conclusion: item.notas || "",
+            checklist: {
+              bases: false,
+              administrativo: false,
+              tecnico: false,
+              economico: false,
+              plazo: false,
+            },
+          },
+          item.analisis || {},
+        ),
+      ),
+      analysis = _analysis[0],
+      setAnalysis = _analysis[1];
+
+    var updateAnalysis = function (field, value) {
+      setAnalysis(function (current) {
+        var next = d({}, current);
+        next[field] = value;
+        return next;
+      });
+    };
+    var toggleAnalysisCheck = function (key) {
+      setAnalysis(function (current) {
+        var checklist = d({}, current.checklist || {});
+        checklist[key] = !checklist[key];
+        return u(d({}, current), { checklist: checklist });
+      });
+    };
+
+    ct(function () {
+      var ticket = ((props.cfg && props.cfg.apiKeyMP) || "").trim();
+      if (!ticket || !item.idMP) {
+        setLoading(false);
+        setError(
+          ticket ? "Esta oportunidad no tiene ID MP." : "Falta configurar el Ticket API.",
+        );
+        return;
+      }
+      setLoading(true);
+      setError("");
+      if (item.canal === "compra_agil") {
+        var apiUrl =
+          "https://api2.mercadopublico.cl/v2/compra-agil/" +
+          encodeURIComponent(item.idMP);
+        var hasTauri =
+          window.__TAURI__ &&
+          window.__TAURI__.http &&
+          window.__TAURI__.http.fetch;
+        var request = hasTauri
+          ? window.__TAURI__.http
+              .fetch(apiUrl, {
+                method: "GET",
+                headers: { ticket: ticket },
+                responseType: 1,
+              })
+              .then(function (response) {
+                return response.data;
+              })
+          : fetch("http://localhost:8081/" + apiUrl, {
+              headers: { ticket: ticket },
+            }).then(function (response) {
+              if (!response.ok) throw new Error("Respuesta " + response.status);
+              return response.json();
+            });
+        request
+          .then(function (data) {
+            setFull(data.data || data.payload || data);
+            setLoading(false);
+          })
+          .catch(function (reason) {
+            setError(reason.message || "No fue posible actualizar el detalle.");
+            setLoading(false);
+          });
+      } else {
+        fetch(
+          "https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo=" +
+            encodeURIComponent(item.idMP) +
+            "&ticket=" +
+            encodeURIComponent(ticket),
+        )
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            setFull(data.Listado && data.Listado[0] ? data.Listado[0] : null);
+            if (!data.Listado || !data.Listado.length)
+              setError("Mercado Público no devolvió el detalle.");
+            setLoading(false);
+          })
+          .catch(function (reason) {
+            setError(reason.message || "No fue posible actualizar el detalle.");
+            setLoading(false);
+          });
+      }
+    }, [item.idMP, item.canal, props.cfg && props.cfg.apiKeyMP]);
+
+    var name = mpDisplayText(
+      item.nombreObra || (full && (full.Nombre || full.nombre)),
+      "Sin nombre",
+    );
+    var organismo = mpDisplayText(
+      item.organismo ||
+      (full && full.Comprador && full.Comprador.NombreOrganismo) ||
+      (full && full.institucion && full.institucion.organismo_comprador),
+      "No informado",
+    );
+    var projectRegionSource = full
+      ? Object.assign({}, full, {
+          Nombre: full.Nombre || full.nombre || item.nombreObra || "",
+          Comprador:
+            full.Comprador ||
+            {
+              RegionUnidad:
+                (full.institucion && full.institucion.nombre_region) ||
+                item.region ||
+                "",
+            },
+        })
+      : {
+          Nombre: item.nombreObra || "",
+          Descripcion: item.descripcion || "",
+          Comprador: { RegionUnidad: item.region || "" },
+        };
+    var region = mpDisplayText(
+      detectMpProjectRegion(projectRegionSource) ||
+      item.region,
+      "No informada",
+    );
+    var fecha =
+      item.fechaCierre ||
+      (full && full.Fechas && full.Fechas.FechaCierre) ||
+      (full && full.fechas && full.fechas.fecha_cierre) ||
+      "";
+    var description = mpDisplayText(
+      (full && (full.Descripcion || full.descripcion)) ||
+      item.descripcion,
+      "",
+    );
+    var publicationDate =
+      (full && full.Fechas && full.Fechas.FechaPublicacion) ||
+      (full && full.fechas && full.fechas.fecha_publicacion) ||
+      "";
+    var visitDate =
+      (full && full.Fechas && full.Fechas.FechaVisitaTerreno) ||
+      (full && full.fechas && full.fechas.fecha_visita_terreno) ||
+      "";
+    var opportunityStatus = mpDisplayText(
+      (full && (full.Estado || full.estado)) || item.estado,
+      "No informado",
+    );
+    var daysRemaining = fecha
+      ? Math.ceil((new Date(fecha).getTime() - new Date().getTime()) / 86400000)
+      : null;
+    var amount =
+      parseFloat(item.montoEstimado) ||
+      parseFloat(full && full.MontoEstimado) ||
+      parseFloat(full && full.montos && full.montos.monto_disponible_clp) ||
+      0;
+    var fullItems =
+      (full && full.Items && full.Items.Listado) ||
+      (full && (full.items || full.lineas)) ||
+      item.items ||
+      [];
+    var costNumber = parseFloat(analysis.costoEstimado) || 0;
+    var margin = amount > 0 && costNumber > 0 ? amount - costNumber : null;
+    var marginPct =
+      margin !== null && amount > 0 ? Math.round((margin / amount) * 100) : null;
+    var evaluationChecks = [
+      analysis.requisitos && analysis.requisitos !== "Por revisar",
+      analysis.capacidad && analysis.capacidad !== "Por revisar",
+      analysis.documentos && analysis.documentos !== "Por revisar",
+      analysis.plazo && analysis.plazo !== "Por revisar",
+      !!(analysis.checklist && analysis.checklist.bases),
+      !!(analysis.checklist && analysis.checklist.administrativo),
+      !!(analysis.checklist && analysis.checklist.tecnico),
+      !!(analysis.checklist && analysis.checklist.economico),
+      !!(analysis.checklist && analysis.checklist.plazo),
+      costNumber > 0,
+    ];
+    var studyStep = Math.max(1, Math.min(4, parseInt(item.preparacion && item.preparacion.paso) || 1));
+    var evaluationCompleted = item.preparacion ? Math.max(0, studyStep - 1) : 0;
+    var evaluationPending = 4 - evaluationCompleted;
+    var nextActionText = item.preparacion
+      ? "Continúa desde el paso " + studyStep + " de 4. La oportunidad seguirá En estudio hasta que confirmes la decisión."
+      : "Comienza por la ficha oficial. ECP te guiará antes de pedirte una decisión.";
+    var saveCurrentAnalysis = function (nextState) {
+      if (props.onSaveAnalysis) props.onSaveAnalysis(analysis);
+      if (props.onNotes) props.onNotes(analysis.conclusion || "");
+      if (nextState && props.onChangeState) props.onChangeState(nextState);
+    };
+    var beginPreparation = function () {
+      saveCurrentAnalysis("En Estudio");
+      if (props.onPrepare)
+        props.onPrepare(
+          u(d({}, item), {
+            estado: "En Estudio",
+            analisis: analysis,
+          }),
+        );
+    };
+
+    return e.jsx("div", {
+      role: "presentation",
+      onClick: props.onClose,
+      style: {
+        position: "fixed",
+        inset: 0,
+        zIndex: 1250,
+        background: "rgba(4,12,24,.84)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 20,
+      },
+      children: e.jsxs("div", {
+        role: "dialog",
+        "aria-modal": "true",
+        "aria-label": "Análisis de oportunidad",
+        onClick: function (ev) {
+          ev.stopPropagation();
+        },
+        style: {
+          width: "min(980px,100%)",
+          maxHeight: "90vh",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          background: th.surface,
+          border: "1px solid " + th.border,
+          borderRadius: 14,
+          boxShadow: "0 24px 70px rgba(0,0,0,.5)",
+        },
+        children: [
+          e.jsxs("div", {
+            style: {
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "15px 18px",
+              background: th.card,
+              borderBottom: "1px solid " + th.border,
+            },
+            children: [
+              e.jsxs("div", {
+                children: [
+                  e.jsx("div", {
+                    style: { color: th.text, fontSize: 17, fontWeight: 800 },
+                    children: "Evaluar oportunidad",
+                  }),
+                  e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 6, color: th.muted, fontSize: 11, marginTop: 3 }, children: ["ID MP · " + (item.idMP || "No informado"), e.jsx(MpCopyCodeButton, { code: item.idMP, setToast: props.setToast, accent: th.accent, border: th.border, surface: th.card })] }),
+                ],
+              }),
+              e.jsx("button", {
+                type: "button",
+                "aria-label": "Cerrar análisis",
+                onClick: props.onClose,
+                style: {
+                  border: "none",
+                  background: "transparent",
+                  color: th.muted,
+                  fontSize: 22,
+                  cursor: "pointer",
+                },
+                children: "×",
+              }),
+            ],
+          }),
+          e.jsxs("div", {
+            style: { display: "flex", gap: 6, padding: 12, borderBottom: "1px solid " + th.border },
+            children: [
+              ["resumen", "🧭 Ruta de estudio de la oportunidad"],
+            ].map(function (entry) {
+              return e.jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: function () {
+                    setTab(entry[0]);
+                  },
+                  style: u(d({}, sty.btn(tab === entry[0] ? "p" : "s")), {
+                    flex: 1,
+                    padding: "9px 12px",
+                  }),
+                  children: entry[1],
+                },
+                entry[0],
+              );
+            }),
+          }),
+          e.jsxs("div", {
+            style: { padding: 18, overflowY: "auto" },
+            children: [
+              loading &&
+                e.jsx("div", {
+                  style: { color: th.muted, fontSize: 12, marginBottom: 12 },
+                  children: "⏳ Actualizando información desde Mercado Público...",
+                }),
+              error &&
+                e.jsx("div", {
+                  style: {
+                    color: "#fbbf24",
+                    fontSize: 12,
+                    padding: 9,
+                    border: "1px solid rgba(251,191,36,.35)",
+                    borderRadius: 8,
+                    marginBottom: 12,
+                  },
+                  children: "⚠️ " + error + " Se muestran los datos guardados.",
+                }),
+              e.jsx("h3", {
+                style: { color: th.text, fontSize: 17, lineHeight: 1.35, marginBottom: 14 },
+                children: name,
+              }),
+              e.jsxs("div", {
+                style: {
+                  display: "grid",
+                  gridTemplateColumns: "minmax(0,1fr) auto",
+                  gap: 12,
+                  alignItems: "center",
+                  padding: "11px 13px",
+                  marginBottom: 14,
+                  borderRadius: 9,
+                  border: "1px solid rgba(96,165,250,.4)",
+                  background: "rgba(96,165,250,.07)",
+                },
+                children: [
+                  e.jsxs("div", { children: [
+                    e.jsx("div", { style: { color: th.text, fontSize: 12, fontWeight: 800, marginBottom: 3 }, children: "Estado del trabajo: En estudio \u00b7 a\u00fan no est\u00e1s postulando" }),
+                    e.jsx("div", { style: { color: th.muted, fontSize: 11, lineHeight: 1.4 }, children: nextActionText }),
+                  ] }),
+                  e.jsxs("div", { style: { color: evaluationPending === 0 ? "#34d399" : th.accent, fontSize: 12, fontWeight: 900, whiteSpace: "nowrap" }, children: [evaluationCompleted, "/4 etapas"] }),
+                ],
+              }),
+              tab === "resumen"
+                ? e.jsxs("div", {
+                    children: [
+                      e.jsxs("div", {
+                        style: {
+                          display: "grid",
+                          gridTemplateColumns: "repeat(auto-fit,minmax(190px,1fr))",
+                          gap: 10,
+                          marginBottom: 14,
+                        },
+                        children: [
+                          ["Organismo", organismo],
+                          ["Región del proyecto", region],
+                          ["Cierre", fecha ? String(fecha).slice(0, 16) : "No informado"],
+                          ["Monto", amount > 0 ? "$ " + amount.toLocaleString("es-CL") : "No informado"],
+                        ].map(function (entry) {
+                          return e.jsxs("div", {
+                            style: {
+                              padding: 11,
+                              background: th.card,
+                              border: "1px solid " + th.border,
+                              borderRadius: 8,
+                            },
+                            children: [
+                              e.jsx("div", { style: { color: th.muted, fontSize: 10 }, children: entry[0] }),
+                              e.jsx("div", { style: { color: th.text, fontSize: 12, fontWeight: 700, marginTop: 3 }, children: entry[1] }),
+                            ],
+                          }, entry[0]);
+                        }),
+                      }),
+                      daysRemaining !== null &&
+                        e.jsx("div", {
+                          style: {
+                            padding: "9px 11px",
+                            marginBottom: 12,
+                            borderRadius: 8,
+                            border:
+                              "1px solid " +
+                              (daysRemaining < 0
+                                ? "rgba(248,113,113,.45)"
+                                : daysRemaining <= 3
+                                  ? "rgba(251,191,36,.45)"
+                                  : "rgba(96,165,250,.35)"),
+                            background:
+                              daysRemaining < 0
+                                ? "rgba(248,113,113,.08)"
+                                : daysRemaining <= 3
+                                  ? "rgba(251,191,36,.08)"
+                                  : "rgba(96,165,250,.07)",
+                            color:
+                              daysRemaining < 0
+                                ? "#f87171"
+                                : daysRemaining <= 3
+                                  ? "#fbbf24"
+                                  : "#60a5fa",
+                            fontSize: 12,
+                            fontWeight: 800,
+                          },
+                          children:
+                            daysRemaining < 0
+                              ? "🔴 Esta oportunidad ya cerró"
+                              : daysRemaining === 0
+                                ? "🔥 Cierra hoy"
+                                : "⏱ Quedan " + daysRemaining + " días para el cierre",
+                        }),
+                      description &&
+                        e.jsxs("div", {
+                          style: {
+                            padding: 12,
+                            background: th.card,
+                            border: "1px solid " + th.border,
+                            borderRadius: 8,
+                            marginBottom: 12,
+                          },
+                          children: [
+                            e.jsx("div", {
+                              style: { color: th.text, fontSize: 12, fontWeight: 800, marginBottom: 5 },
+                              children: "Descripción de la contratación",
+                            }),
+                            e.jsx("div", {
+                              style: { color: th.muted, fontSize: 12, lineHeight: 1.5 },
+                              children: description,
+                            }),
+                          ],
+                        }),
+                      e.jsx("div", {
+                        style: {
+                          display: "grid",
+                          gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
+                          gap: 8,
+                          marginBottom: 14,
+                        },
+                        children: [
+                          ["Estado en Mercado Público", opportunityStatus],
+                          ["Publicación", publicationDate ? String(publicationDate).slice(0, 16) : "No informada"],
+                          ["Visita a terreno", visitDate ? String(visitDate).slice(0, 16) : "No informada"],
+                        ].map(function (entry) {
+                          return e.jsxs("div", {
+                            style: {
+                              padding: "8px 10px",
+                              border: "1px solid " + th.border,
+                              borderRadius: 8,
+                            },
+                            children: [
+                              e.jsx("div", { style: { color: th.muted, fontSize: 10 }, children: entry[0] }),
+                              e.jsx("div", { style: { color: th.text, fontSize: 11, fontWeight: 700, marginTop: 3 }, children: entry[1] }),
+                            ],
+                          }, entry[0]);
+                        }),
+                      }),
+                      e.jsx("div", {
+                        style: { color: th.text, fontSize: 13, fontWeight: 800, marginBottom: 8 },
+                        children: "Ítems solicitados (" + fullItems.length + ")",
+                      }),
+                      fullItems.length
+                        ? fullItems.slice(0, 20).map(function (line, idx) {
+                            return e.jsx("div", {
+                              style: {
+                                padding: "8px 10px",
+                                borderBottom: "1px solid " + th.border,
+                                color: th.muted,
+                                fontSize: 12,
+                              },
+                              children:
+                                line.NombreProducto || line.nombre || line.descripcion || "Ítem " + (idx + 1),
+                            }, idx);
+                          })
+                        : e.jsx("div", { style: { color: th.muted, fontSize: 12 }, children: "No hay ítems detallados." }),
+                      e.jsx("button", {
+                        type: "button",
+                        onClick: beginPreparation,
+                        style: u(d({}, sty.btn("p")), {
+                          width: "100%",
+                          marginTop: 14,
+                        }),
+                        children: item.preparacion ? "🧭 Continuar estudio guiado →" : "🧭 Comenzar estudio guiado →",
+                      }),
+                    ],
+                  })
+                : e.jsxs("div", {
+                    children: [
+                      e.jsxs("div", {
+                        style: {
+                          padding: 14,
+                          border: "1px solid " + th.border,
+                          borderRadius: 10,
+                          background: th.card,
+                          marginBottom: 14,
+                        },
+                        children: [
+                          e.jsx("div", {
+                            style: {
+                              color: th.text,
+                              fontWeight: 800,
+                              fontSize: 14,
+                              marginBottom: 4,
+                            },
+                            children: "1. Decisión preliminar",
+                          }),
+                          e.jsx("div", {
+                            style: { color: th.muted, fontSize: 11, marginBottom: 10 },
+                            children: "Registra si la oportunidad conviene antes de comenzar a preparar la oferta.",
+                          }),
+                          e.jsxs("div", {
+                            style: {
+                              display: "grid",
+                              gridTemplateColumns: "repeat(4,minmax(120px,1fr))",
+                              gap: 7,
+                            },
+                            children: [
+                              ["Por decidir", "⚪", th.muted],
+                              ["Conviene", "✅", "#34d399"],
+                              ["Requiere revisión", "⚠️", "#fbbf24"],
+                              ["No conviene", "❌", "#f87171"],
+                            ].map(function (decision) {
+                              var active = analysis.decision === decision[0];
+                              return e.jsx(
+                                "button",
+                                {
+                                  type: "button",
+                                  onClick: function () {
+                                    updateAnalysis("decision", decision[0]);
+                                  },
+                                  style: {
+                                    padding: "9px 7px",
+                                    borderRadius: 8,
+                                    cursor: "pointer",
+                                    border:
+                                      "1px solid " + (active ? decision[2] : th.border),
+                                    background: active ? decision[2] + "18" : th.surface,
+                                    color: active ? decision[2] : th.muted,
+                                    fontWeight: 800,
+                                    fontSize: 11,
+                                  },
+                                  children: decision[1] + " " + decision[0],
+                                },
+                                decision[0],
+                              );
+                            }),
+                          }),
+                          e.jsx("div", {
+                            style: { color: th.muted, fontSize: 10.5, marginTop: 9, lineHeight: 1.4 },
+                            children:
+                              analysis.decision === "Conviene"
+                                ? "Conviene: habilita el inicio de la preparación."
+                                : analysis.decision === "Requiere revisión"
+                                  ? "Requiere revisión: guarda el avance y mantiene la oportunidad En estudio."
+                                  : analysis.decision === "No conviene"
+                                    ? "No conviene: registra el motivo y luego descarta la oportunidad."
+                                    : "Por decidir: puedes guardar avances, pero todavía no comenzar la preparación.",
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        style: {
+                          padding: 14,
+                          border: "1px solid " + th.border,
+                          borderRadius: 10,
+                          background: th.card,
+                          marginBottom: 14,
+                        },
+                        children: [
+                          e.jsx("div", {
+                            style: { color: th.text, fontWeight: 800, fontSize: 14, marginBottom: 10 },
+                            children: "2. Revisión de viabilidad",
+                          }),
+                          e.jsx("div", {
+                            style: { color: th.muted, fontSize: 10.5, lineHeight: 1.4, marginBottom: 10 },
+                            children: "Cumple: puedes demostrarlo con antecedentes. Cumple parcialmente: falta confirmar o conseguir documentos. No cumple: el requisito puede impedir la postulación.",
+                          }),
+                          e.jsx("div", {
+                            style: {
+                              display: "grid",
+                              gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
+                              gap: 10,
+                            },
+                            children: [
+                              ["requisitos", "Requisitos habilitantes"],
+                              ["capacidad", "Capacidad técnica"],
+                              ["documentos", "Documentos disponibles"],
+                              ["plazo", "Plazo suficiente"],
+                            ].map(function (criterion) {
+                              return e.jsxs("label", {
+                                style: { color: th.muted, fontSize: 11 },
+                                children: [
+                                  e.jsx("span", { children: criterion[1] }),
+                                  e.jsx("select", {
+                                    value: analysis[criterion[0]] || "Por revisar",
+                                    onChange: function (ev) {
+                                      updateAnalysis(criterion[0], ev.target.value);
+                                    },
+                                    style: u(d({}, sty.inp), { marginTop: 5 }),
+                                    children: ["Por revisar", "Cumple", "Cumple parcialmente", "No cumple"].map(function (option) {
+                                      return e.jsx("option", { value: option, children: option }, option);
+                                    }),
+                                  }),
+                                ],
+                              }, criterion[0]);
+                            }),
+                          }),
+                          e.jsx("div", {
+                            style: {
+                              display: "grid",
+                              gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))",
+                              gap: 7,
+                              marginTop: 12,
+                            },
+                            children: [
+                              ["bases", "Bases revisadas"],
+                              ["administrativo", "Antecedentes administrativos"],
+                              ["tecnico", "Oferta técnica evaluada"],
+                              ["economico", "Costos estimados"],
+                              ["plazo", "Fechas y visitas revisadas"],
+                            ].map(function (check) {
+                              return e.jsxs("label", {
+                                style: {
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 7,
+                                  color: th.muted,
+                                  fontSize: 11,
+                                  cursor: "pointer",
+                                },
+                                children: [
+                                  e.jsx("input", {
+                                    type: "checkbox",
+                                    checked: !!(analysis.checklist && analysis.checklist[check[0]]),
+                                    onChange: function () {
+                                      toggleAnalysisCheck(check[0]);
+                                    },
+                                  }),
+                                  check[1],
+                                ],
+                              }, check[0]);
+                            }),
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        style: {
+                          padding: 14,
+                          border: "1px solid rgba(52,211,153,.45)",
+                          borderRadius: 10,
+                          background: "rgba(52,211,153,.06)",
+                          marginBottom: 14,
+                        },
+                        children: [
+                          e.jsx("div", {
+                            style: { color: "#34d399", fontWeight: 800, fontSize: 14, marginBottom: 10 },
+                            children: "3. Evaluación económica preliminar",
+                          }),
+                          e.jsxs("div", {
+                            style: {
+                              display: "grid",
+                              gridTemplateColumns: "minmax(180px,1fr) repeat(2,minmax(150px,.7fr))",
+                              gap: 10,
+                              alignItems: "stretch",
+                            },
+                            children: [
+                              e.jsx("input", {
+                                type: "number",
+                                value: analysis.costoEstimado || "",
+                                onChange: function (ev) {
+                                  updateAnalysis("costoEstimado", ev.target.value);
+                                },
+                                placeholder: "Costo estimado total",
+                                style: d({}, sty.inp),
+                              }),
+                              e.jsxs("div", {
+                                style: {
+                                  padding: 9,
+                                  background: th.surface,
+                                  border: "1px solid " + th.border,
+                                  borderRadius: 8,
+                                },
+                                children: [
+                                  e.jsx("div", { style: { color: th.muted, fontSize: 10 }, children: "Margen estimado" }),
+                                  e.jsx("div", {
+                                    style: {
+                                      color: margin === null ? th.muted : margin >= 0 ? "#34d399" : "#f87171",
+                                      fontSize: 13,
+                                      fontWeight: 800,
+                                      marginTop: 3,
+                                    },
+                                    children: margin === null ? "Pendiente" : "$ " + margin.toLocaleString("es-CL"),
+                                  }),
+                                ],
+                              }),
+                              e.jsxs("div", {
+                                style: {
+                                  padding: 9,
+                                  background: th.surface,
+                                  border: "1px solid " + th.border,
+                                  borderRadius: 8,
+                                },
+                                children: [
+                                  e.jsx("div", { style: { color: th.muted, fontSize: 10 }, children: "Margen sobre monto" }),
+                                  e.jsx("div", {
+                                    style: {
+                                      color: marginPct === null ? th.muted : marginPct >= 0 ? "#34d399" : "#f87171",
+                                      fontSize: 13,
+                                      fontWeight: 800,
+                                      marginTop: 3,
+                                    },
+                                    children: marginPct === null ? "Pendiente" : marginPct + "%",
+                                  }),
+                                ],
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        style: {
+                          display: "grid",
+                          gridTemplateColumns: "1fr 1fr",
+                          gap: 10,
+                          marginBottom: 10,
+                        },
+                        children: [
+                          e.jsx("textarea", {
+                            rows: 3,
+                            value: analysis.ventajas || "",
+                            onChange: function (ev) {
+                              updateAnalysis("ventajas", ev.target.value);
+                            },
+                            placeholder: "Ventajas y fortalezas para competir...",
+                            style: u(d({}, sty.inp), { resize: "vertical" }),
+                          }),
+                          e.jsx("textarea", {
+                            rows: 3,
+                            value: analysis.riesgos || "",
+                            onChange: function (ev) {
+                              updateAnalysis("riesgos", ev.target.value);
+                            },
+                            placeholder: "Riesgos, restricciones y documentos pendientes...",
+                            style: u(d({}, sty.inp), { resize: "vertical" }),
+                          }),
+                        ],
+                      }),
+                      e.jsx("textarea", {
+                        rows: 3,
+                        value: analysis.conclusion || "",
+                        onChange: function (ev) {
+                          updateAnalysis("conclusion", ev.target.value);
+                        },
+                        placeholder: "Conclusión y próximos pasos...",
+                        style: u(d({}, sty.inp), {
+                          width: "100%",
+                          resize: "vertical",
+                          marginBottom: 12,
+                        }),
+                      }),
+                      e.jsxs("div", {
+                        style: {
+                          display: "grid",
+                          gridTemplateColumns: "repeat(3,minmax(150px,1fr))",
+                          gap: 8,
+                        },
+                        children: [
+                          e.jsx("button", {
+                            type: "button",
+                            onClick: function () {
+                              if (!window.confirm("Esta oportunidad se moverá a Perdida como No conveniente. ¿Deseas continuar?")) return;
+                              var discarded = u(d({}, analysis), { decision: "No conviene" });
+                              if (props.onSaveAnalysis) props.onSaveAnalysis(discarded);
+                              if (props.onNotes) props.onNotes(discarded.conclusion || "");
+                              props.onChangeState("Perdida");
+                              props.onClose();
+                            },
+                            style: u(d({}, sty.btn("s")), { color: "#f87171" }),
+                            children: "❌ Marcar como no conveniente",
+                          }),
+                          e.jsx("button", {
+                            type: "button",
+                            onClick: function () {
+                              saveCurrentAnalysis("En Estudio");
+                            },
+                            style: d({}, sty.btn("s")),
+                            children: "💾 Guardar y seguir en estudio",
+                          }),
+                          e.jsx("button", {
+                            type: "button",
+                            onClick: beginPreparation,
+                            disabled: analysis.decision !== "Conviene",
+                            style: u(d({}, sty.btn("p")), {
+                              opacity: analysis.decision !== "Conviene" ? 0.5 : 1,
+                              cursor: analysis.decision !== "Conviene" ? "not-allowed" : "pointer",
+                            }),
+                            children: "⚖️ Comenzar preparación",
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+            ],
+          }),
+        ],
+      }),
     });
   }
 
   // ======================== ANÁLISIS ========================
   function MpAnalisis(props) {
     var th = props.th,
-      sty = props.sty;
-    var lics = props.licitaciones || [];
-    var estados = [
-      "Pendiente",
-      "En Estudio",
-      "Postulada",
-      "Adjudicada",
-      "Perdida",
-    ];
-    var estColors = {
-      Pendiente: "#8892a4",
-      "En Estudio": "#f5a020",
-      Postulada: "#60a5fa",
-      Adjudicada: "#34d399",
-      Perdida: "#f87171",
+      sty = props.sty,
+      cfg = props.cfg || {};
+    var opportunities = (props.licitaciones || []).filter(function (item) { return item && !item._deleted; });
+    var activeStates = ["Pendiente", "En Estudio", "En Preparación"];
+    var colors = { Pendiente: "#8892a4", "En Estudio": "#f5a020", "En Preparación": "#a78bfa", Postulada: "#60a5fa", Adjudicada: "#34d399", Perdida: "#f87171" };
+    var currencySymbol = cfg.moneda && cfg.moneda.simbolo || "$";
+    var money = function (value) { return currencySymbol + " " + Math.round(parseFloat(value) || 0).toLocaleString((cfg.moneda && cfg.moneda.locale) || "es-CL"); };
+    var now = new Date().getTime();
+    var deadlineInfo = function (item) {
+      var time = Date.parse(item.fechaCierre || "");
+      if (!Number.isFinite(time)) return { days: null, label: "Sin fecha de cierre", color: th.muted };
+      var days = Math.ceil((time - now) / 86400000);
+      if (days < 0) return { days: days, label: "Cerrada", color: "#f87171" };
+      if (days === 0) return { days: 0, label: "Cierra hoy", color: "#ef4444" };
+      if (days <= 3) return { days: days, label: "Cierra en " + days + " día" + (days === 1 ? "" : "s"), color: "#ef4444" };
+      if (days <= 7) return { days: days, label: "Cierra en " + days + " días", color: "#fbbf24" };
+      return { days: days, label: "Cierra en " + days + " días", color: "#34d399" };
     };
-
-    var total = lics.length;
-    var adjudicadas = lics.filter(function (x) {
-      return x.estado === "Adjudicada";
-    }).length;
-    var postuladas = lics.filter(function (x) {
-      return (
-        x.estado === "Postulada" ||
-        x.estado === "Adjudicada" ||
-        x.estado === "Perdida"
-      );
-    }).length;
-    var tasa =
-      postuladas > 0 ? Math.round((adjudicadas / postuladas) * 100) : 0;
-    var montoAdj = lics
-      .filter(function (x) {
-        return x.estado === "Adjudicada";
-      })
-      .reduce(function (s, x) {
-        return s + (parseFloat(x.montoEstimado) || 0);
-      }, 0);
-    var montoTotal = lics.reduce(function (s, x) {
-      return s + (parseFloat(x.montoEstimado) || 0);
-    }, 0);
-
-    var porEstado = estados.map(function (est) {
-      return {
-        est: est,
-        count: lics.filter(function (x) {
-          return x.estado === est;
-        }).length,
-      };
+    var enriched = opportunities.map(function (item) {
+      var progress = MpPreparationProgress(item, props.budgets || [], cfg);
+      var deadline = deadlineInfo(item);
+      var savedStepNumber = Math.max(1, Math.min(9, parseInt(item.preparacion && item.preparacion.paso) || 1));
+      var savedStage = ["Ficha oficial", "Bases y antecedentes", "Itemizado y viabilidad", "Decisión informada", "Oferta económica final", "Oferta técnica", "Garantías", "Documentos", "Resumen y cierre"][savedStepNumber - 1];
+      var active = activeStates.indexOf(item.estado) >= 0;
+      var readyToSubmit = !!(item.preparacion && item.preparacion.estado === "Lista para postular");
+      var score = 0;
+      if (active) score += 20;
+      if (item.estado === "En Preparación") score += 18;
+      if (item.estado === "En Estudio") score += 12;
+      if (deadline.days !== null && deadline.days >= 0 && deadline.days <= 3) score += 45;
+      else if (deadline.days !== null && deadline.days <= 7) score += 30;
+      else if (deadline.days !== null && deadline.days <= 14) score += 15;
+      if (readyToSubmit) score += 35;
+      if (item.preparacion && progress.percent < 60) score += 8;
+      return { item: item, progress: progress, savedStage: savedStage, deadline: deadline, active: active, readyToSubmit: readyToSubmit, score: score };
     });
-    var maxCount = Math.max.apply(
-      null,
-      porEstado
-        .map(function (x) {
-          return x.count;
-        })
-        .concat([1]),
-    );
-
-    var meses = {};
-    lics.forEach(function (x) {
-      if (x.fechaGuardado) {
-        var m = x.fechaGuardado.substring(0, 7);
-        meses[m] = (meses[m] || 0) + 1;
-      }
+    var active = enriched.filter(function (row) { return row.active && (row.deadline.days === null || row.deadline.days >= 0); });
+    var urgent = active.filter(function (row) { return row.deadline.days !== null && row.deadline.days <= 7; });
+    var preparing = active.filter(function (row) { return row.item.estado === "En Preparación"; });
+    var readyToSubmit = active.filter(function (row) { return row.readyToSubmit; });
+    var prioritized = active.slice().sort(function (left, right) {
+      if (right.score !== left.score) return right.score - left.score;
+      var ld = left.deadline.days === null ? 99999 : left.deadline.days;
+      var rd = right.deadline.days === null ? 99999 : right.deadline.days;
+      return ld - rd;
     });
-    var mesesArr = Object.keys(meses).sort().slice(-6);
-    var maxMes = Math.max.apply(
-      null,
-      mesesArr
-        .map(function (m) {
-          return meses[m];
-        })
-        .concat([1]),
-    );
+    var submitted = opportunities.filter(function (item) { return ["Postulada", "Adjudicada", "Perdida"].indexOf(item.estado) >= 0; });
+    var awarded = opportunities.filter(function (item) { return item.estado === "Adjudicada"; });
+    var lost = opportunities.filter(function (item) { return item.estado === "Perdida"; });
+    var awardRate = submitted.length ? Math.round(awarded.length / submitted.length * 100) : 0;
+    var trackedValue = active.reduce(function (sum, row) { return sum + (parseFloat(row.item.montoEstimado) || 0); }, 0);
+    var awardedValue = awarded.reduce(function (sum, item) { return sum + (parseFloat(item.montoEstimado) || 0); }, 0);
+    var states = ["Pendiente", "En Estudio", "En Preparación", "Postulada", "Adjudicada", "Perdida"];
+    var stateCounts = states.map(function (state) { return { state: state, count: opportunities.filter(function (item) { return item.estado === state; }).length }; });
+    var maxStateCount = Math.max.apply(null, stateCounts.map(function (row) { return row.count; }).concat([1]));
+    var kpis = [
+      { icon: "🎯", value: active.length, label: "Oportunidades activas", help: "Pendientes, en estudio o preparación", color: th.accent },
+      { icon: "⏰", value: urgent.length, label: "Cierran en 7 días", help: urgent.length ? "Requieren atención prioritaria" : "No hay cierres urgentes", color: urgent.length ? "#ef4444" : "#34d399" },
+      { icon: "🛠️", value: preparing.length, label: "En preparación", help: readyToSubmit.length + " lista(s) para postular", color: "#a78bfa" },
+      { icon: "💰", value: money(trackedValue), label: "Valor activo", help: "Monto referencial monitoreado", color: "#34d399", compact: true },
+    ];
+    function renderKpi(kpi) {
+      return e.jsxs("div", { style: Object.assign({}, sty.card, { padding: 15, borderLeft: "4px solid " + kpi.color }), children: [
+        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center" }, children: [e.jsx("span", { style: { fontSize: 20 }, children: kpi.icon }), e.jsx("span", { style: { color: kpi.color, fontSize: kpi.compact ? 19 : 28, fontWeight: 900, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: kpi.value })] }),
+        e.jsx("div", { style: { color: th.text, fontSize: 11.5, fontWeight: 900, marginTop: 7 }, children: kpi.label }),
+        e.jsx("div", { style: { color: th.muted, fontSize: 9.8, marginTop: 3 }, children: kpi.help }),
+      ] }, kpi.label);
+    }
 
-    return e.jsxs("div", {
-      style: { padding: "24px 32px", maxWidth: 1200, margin: "0 auto" },
-      children: [
-        e.jsx("div", {
-          style: {
-            fontSize: 18,
-            fontWeight: 800,
-            color: th.text,
-            marginBottom: 20,
-          },
-          children: "\uD83D\uDCCA An\u00E1lisis de Oportunidades",
-        }),
-        e.jsxs("div", {
-          style: {
-            display: "grid",
-            gridTemplateColumns: "repeat(4,1fr)",
-            gap: 12,
-            marginBottom: 24,
-          },
-          children: [
-            e.jsxs("div", {
-              style: u(d({}, sty.card), {
-                textAlign: "center",
-                padding: "20px",
-                borderLeft: "4px solid " + th.accent,
-              }),
-              children: [
-                e.jsx("div", {
-                  style: { fontSize: 32, fontWeight: 800, color: th.text },
-                  children: total,
-                }),
-                e.jsx("div", {
-                  style: {
-                    fontSize: 11,
-                    color: th.muted,
-                    fontWeight: 600,
-                    textTransform: "uppercase",
-                  },
-                  children: "Total Oportunidades",
-                }),
-              ],
-            }),
-            e.jsxs("div", {
-              style: u(d({}, sty.card), {
-                textAlign: "center",
-                padding: "20px",
-                borderLeft: "4px solid #34d399",
-              }),
-              children: [
-                e.jsxs("div", {
-                  style: { fontSize: 32, fontWeight: 800, color: "#34d399" },
-                  children: [tasa + "%"],
-                }),
-                e.jsx("div", {
-                  style: {
-                    fontSize: 11,
-                    color: th.muted,
-                    fontWeight: 600,
-                    textTransform: "uppercase",
-                  },
-                  children: "Tasa Adjudicaci\u00F3n",
-                }),
-              ],
-            }),
-            e.jsxs("div", {
-              style: u(d({}, sty.card), {
-                textAlign: "center",
-                padding: "20px",
-                borderLeft: "4px solid #60a5fa",
-              }),
-              children: [
-                e.jsx("div", {
-                  style: { fontSize: 22, fontWeight: 800, color: "#60a5fa" },
-                  children: "$ " + Number(montoAdj).toLocaleString("es-CL"),
-                }),
-                e.jsx("div", {
-                  style: {
-                    fontSize: 11,
-                    color: th.muted,
-                    fontWeight: 600,
-                    textTransform: "uppercase",
-                  },
-                  children: "Monto Adjudicado",
-                }),
-              ],
-            }),
-            e.jsxs("div", {
-              style: u(d({}, sty.card), {
-                textAlign: "center",
-                padding: "20px",
-                borderLeft: "4px solid " + th.accent,
-              }),
-              children: [
-                e.jsx("div", {
-                  style: { fontSize: 22, fontWeight: 800, color: th.accent },
-                  children: "$ " + Number(montoTotal).toLocaleString("es-CL"),
-                }),
-                e.jsx("div", {
-                  style: {
-                    fontSize: 11,
-                    color: th.muted,
-                    fontWeight: 600,
-                    textTransform: "uppercase",
-                  },
-                  children: "Valor Total Monitoreado",
-                }),
-              ],
-            }),
-          ],
-        }),
-        e.jsxs("div", {
-          style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 },
-          children: [
-            e.jsxs("div", {
-              style: u(d({}, sty.card), { padding: "20px" }),
-              children: [
-                e.jsx("div", {
-                  style: {
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: th.text,
-                    marginBottom: 16,
-                  },
-                  children: "Oportunidades por Estado",
-                }),
-                porEstado.map(function (pe) {
-                  return e.jsxs(
-                    "div",
-                    {
-                      style: { marginBottom: 10 },
-                      children: [
-                        e.jsxs("div", {
-                          style: {
-                            display: "flex",
-                            justifyContent: "space-between",
-                            marginBottom: 4,
-                          },
-                          children: [
-                            e.jsx("span", {
-                              style: {
-                                fontSize: 12,
-                                fontWeight: 600,
-                                color: estColors[pe.est] || th.muted,
-                              },
-                              children: pe.est,
-                            }),
-                            e.jsx("span", {
-                              style: {
-                                fontSize: 12,
-                                fontWeight: 700,
-                                color: th.text,
-                              },
-                              children: pe.count,
-                            }),
-                          ],
-                        }),
-                        e.jsx("div", {
-                          style: {
-                            height: 8,
-                            background: "rgba(255,255,255,.06)",
-                            borderRadius: 4,
-                            overflow: "hidden",
-                          },
-                          children: e.jsx("div", {
-                            style: {
-                              width:
-                                Math.round((pe.count / maxCount) * 100) + "%",
-                              height: "100%",
-                              background: estColors[pe.est] || th.accent,
-                              borderRadius: 4,
-                              transition: "width .4s ease",
-                            },
-                          }),
-                        }),
-                      ],
-                    },
-                    pe.est,
-                  );
-                }),
-              ],
-            }),
-            e.jsxs("div", {
-              style: u(d({}, sty.card), { padding: "20px" }),
-              children: [
-                e.jsx("div", {
-                  style: {
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: th.text,
-                    marginBottom: 16,
-                  },
-                  children: "Oportunidades Guardadas por Mes",
-                }),
-                mesesArr.length === 0
-                  ? e.jsx("div", {
-                      style: {
-                        fontSize: 12,
-                        color: th.muted,
-                        textAlign: "center",
-                        padding: "30px 0",
-                      },
-                      children: "A\u00FAn no hay datos hist\u00F3ricos",
-                    })
-                  : e.jsx("div", {
-                      style: {
-                        display: "flex",
-                        gap: 8,
-                        alignItems: "flex-end",
-                        height: 140,
-                      },
-                      children: mesesArr.map(function (m) {
-                        var pct = Math.round((meses[m] / maxMes) * 100);
-                        return e.jsxs(
-                          "div",
-                          {
-                            style: {
-                              flex: 1,
-                              display: "flex",
-                              flexDirection: "column",
-                              alignItems: "center",
-                              gap: 4,
-                            },
-                            children: [
-                              e.jsx("span", {
-                                style: {
-                                  fontSize: 11,
-                                  fontWeight: 700,
-                                  color: th.text,
-                                },
-                                children: meses[m],
-                              }),
-                              e.jsx("div", {
-                                style: {
-                                  width: "100%",
-                                  height: pct + "%",
-                                  minHeight: 4,
-                                  background:
-                                    "linear-gradient(180deg," +
-                                    th.accent +
-                                    ",rgba(245,160,32,.4))",
-                                  borderRadius: 4,
-                                  transition: "height .4s ease",
-                                },
-                              }),
-                              e.jsx("span", {
-                                style: { fontSize: 10, color: th.muted },
-                                children:
-                                  m.split("-")[1] +
-                                  "/" +
-                                  m.split("-")[0].slice(2),
-                              }),
-                            ],
-                          },
-                          m,
-                        );
-                      }),
-                    }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    });
+    return e.jsxs("div", { style: { padding: "24px 28px 42px", maxWidth: 1240, margin: "0 auto" }, children: [
+      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-start", flexWrap: "wrap", marginBottom: 17 }, children: [
+        e.jsxs("div", { children: [
+          e.jsx("div", { style: { color: th.accent, fontSize: 10.5, fontWeight: 900, textTransform: "uppercase", letterSpacing: 1 }, children: "Centro de control" }),
+          e.jsx("h2", { style: { color: th.text, fontSize: 23, fontWeight: 900, margin: "6px 0 5px" }, children: "Análisis y prioridades" }),
+          e.jsx("p", { style: { color: th.muted, fontSize: 12.5, lineHeight: 1.5, margin: 0, maxWidth: 720 }, children: "Aquí no decides a ciegas: identifica cierres próximos, preparaciones incompletas y ofertas listas para enviar. Abre cada oportunidad para continuar desde su etapa actual." }),
+        ] }),
+        e.jsx("button", { type: "button", onClick: props.onGoOpportunities, style: Object.assign({}, sty.btn("s"), { padding: "9px 13px", fontWeight: 800 }), children: "📋 Ver todas en Mis oportunidades" }),
+      ] }),
+      e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(190px,1fr))", gap: 10, marginBottom: 17 }, children: kpis.map(renderKpi) }),
+      e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "minmax(0,1.65fr) minmax(280px,.75fr)", gap: 14, alignItems: "start" }, children: [
+        e.jsxs("section", { style: Object.assign({}, sty.card, { padding: 17 }) , children: [
+          e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginBottom: 12 }, children: [
+            e.jsxs("div", { children: [e.jsx("div", { style: { color: th.text, fontSize: 14.5, fontWeight: 900 }, children: "Qué debes atender ahora" }), e.jsx("div", { style: { color: th.muted, fontSize: 10.5, marginTop: 3 }, children: "Ordenado por cierre, estado y avance de preparación." })] }),
+            e.jsx("span", { style: { padding: "5px 8px", borderRadius: 999, background: th.surface, border: "1px solid " + th.border, color: th.muted, fontSize: 10, fontWeight: 800 }, children: prioritized.length + " activas" }),
+          ] }),
+          prioritized.length ? e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: prioritized.slice(0, 7).map(function (row) {
+            var item = row.item;
+            var canPrepare = !!item.preparacion || item.estado === "En Preparación";
+            var missing = row.progress.pending || [];
+            return e.jsxs("article", { style: { padding: 12, borderRadius: 9, background: th.surface, border: "1px solid " + (row.deadline.days !== null && row.deadline.days <= 3 ? "rgba(239,68,68,.45)" : th.border) }, children: [
+              e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start", flexWrap: "wrap" }, children: [
+                e.jsxs("div", { style: { flex: "1 1 420px", minWidth: 0 }, children: [
+                  e.jsxs("div", { style: { display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }, children: [
+                    e.jsx("span", { style: { padding: "4px 7px", borderRadius: 999, background: (colors[item.estado] || th.accent) + "18", color: colors[item.estado] || th.accent, fontSize: 9.5, fontWeight: 900 }, children: item.estado || "Pendiente" }),
+                    e.jsx("span", { style: { color: row.deadline.color, fontSize: 9.8, fontWeight: 900 }, children: row.deadline.label }),
+                    e.jsx("span", { style: { color: th.muted, fontSize: 9.5 }, children: item.idMP || "Sin ID MP" }),
+                  ] }),
+                  e.jsx("div", { style: { color: th.text, fontSize: 12.5, fontWeight: 900, marginTop: 6, lineHeight: 1.35 }, children: item.nombreObra || "Oportunidad sin nombre" }),
+                  e.jsx("div", { style: { color: th.muted, fontSize: 9.8, marginTop: 3 }, children: (item.organismo || "Organismo no informado") + (item.montoEstimado ? " · " + money(item.montoEstimado) : "") }),
+                ] }),
+                e.jsx("button", { type: "button", onClick: canPrepare ? function () { if (props.onPrepare) props.onPrepare(item); } : props.onGoOpportunities, style: Object.assign({}, sty.btn(canPrepare ? "p" : "s"), { padding: "8px 11px", fontSize: 10.5, fontWeight: 900, whiteSpace: "nowrap" }), children: canPrepare ? "🛠️ Continuar flujo →" : "🔎 Revisar oportunidad →" }),
+              ] }),
+              e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "minmax(120px,1fr) auto", gap: 10, alignItems: "center", marginTop: 9 }, children: [
+                e.jsx("div", { style: { height: 6, borderRadius: 999, background: th.card, overflow: "hidden" }, children: e.jsx("div", { style: { height: "100%", width: row.progress.percent + "%", background: row.progress.percent === 100 ? "#34d399" : th.accent } }) }),
+                e.jsx("div", { style: { color: row.progress.percent === 100 ? "#34d399" : th.muted, fontSize: 9.8, fontWeight: 900 }, children: row.progress.percent + "% · Continúa: " + row.savedStage }),
+              ] }),
+              e.jsx("div", { style: { color: th.muted, fontSize: 9.5, marginTop: 6 }, children: row.readyToSubmit ? "✓ Expediente declarado listo para postular" : missing.length ? "Primer bloque pendiente: " + row.progress.stage + " · " + missing.join(" · ") : "Sin pendientes registrados" }),
+            ] }, item.id);
+          }) }) : e.jsxs("div", { style: { padding: 28, textAlign: "center", background: th.surface, borderRadius: 9, border: "1px dashed " + th.border }, children: [e.jsx("div", { style: { fontSize: 28 }, children: "🎯" }), e.jsx("div", { style: { color: th.text, fontSize: 12.5, fontWeight: 900, marginTop: 7 }, children: "No hay oportunidades activas" }), e.jsx("div", { style: { color: th.muted, fontSize: 10.5, marginTop: 4 }, children: "Busca y guarda oportunidades para comenzar a priorizarlas aquí." })] }),
+        ] }),
+        e.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 14 }, children: [
+          e.jsxs("section", { style: Object.assign({}, sty.card, { padding: 16 }), children: [
+            e.jsx("div", { style: { color: th.text, fontSize: 13.5, fontWeight: 900, marginBottom: 11 }, children: "Flujo de oportunidades" }),
+            e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 9 }, children: stateCounts.map(function (row) { return e.jsxs("div", { children: [
+              e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, marginBottom: 4 }, children: [e.jsx("span", { style: { color: colors[row.state], fontSize: 10.5, fontWeight: 800 }, children: row.state }), e.jsx("span", { style: { color: th.text, fontSize: 10.5, fontWeight: 900 }, children: row.count })] }),
+              e.jsx("div", { style: { height: 6, borderRadius: 999, background: th.surface, overflow: "hidden" }, children: e.jsx("div", { style: { height: "100%", width: Math.round(row.count / maxStateCount * 100) + "%", background: colors[row.state] } }) }),
+            ] }, row.state); }) }),
+          ] }),
+          e.jsxs("section", { style: Object.assign({}, sty.card, { padding: 16 }), children: [
+            e.jsx("div", { style: { color: th.text, fontSize: 13.5, fontWeight: 900 }, children: "Resultados históricos" }),
+            e.jsx("div", { style: { color: th.muted, fontSize: 10, lineHeight: 1.45, marginTop: 4 }, children: submitted.length ? "La tasa se calcula solo con oportunidades ya postuladas y resueltas." : "Aún no hay suficientes postulaciones para medir resultados." }),
+            e.jsx("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 11 }, children: [
+              ["Postuladas / resueltas", submitted.length, "#60a5fa"], ["Adjudicadas", awarded.length, "#34d399"], ["No adjudicadas", lost.length, "#f87171"], ["Tasa adjudicación", awardRate + "%", th.accent]
+            ].map(function (metric) { return e.jsxs("div", { style: { padding: 9, borderRadius: 8, background: th.surface, border: "1px solid " + th.border }, children: [e.jsx("div", { style: { color: metric[2], fontSize: 16, fontWeight: 900 }, children: metric[1] }), e.jsx("div", { style: { color: th.muted, fontSize: 9, marginTop: 2 }, children: metric[0] })] }, metric[0]); }) }),
+            e.jsx("div", { style: { marginTop: 10, padding: 10, borderRadius: 8, background: "rgba(52,211,153,.07)", border: "1px solid rgba(52,211,153,.3)" }, children: e.jsxs("div", { children: [e.jsx("div", { style: { color: "#34d399", fontSize: 9.5, fontWeight: 900 }, children: "MONTO ADJUDICADO" }), e.jsx("div", { style: { color: th.text, fontSize: 17, fontWeight: 900, marginTop: 3 }, children: money(awardedValue) })] }) }),
+          ] }),
+          e.jsxs("section", { style: { padding: 14, borderRadius: 10, background: "rgba(59,130,246,.07)", border: "1px solid rgba(59,130,246,.3)" }, children: [e.jsx("div", { style: { color: th.text, fontSize: 12.5, fontWeight: 900 }, children: "Cómo usar este panel" }), e.jsx("div", { style: { color: th.muted, fontSize: 10, lineHeight: 1.5, marginTop: 5 }, children: "Empieza por las alertas rojas, continúa las preparaciones con cierre cercano y evita comenzar nuevas ofertas si tienes documentos pendientes en una licitación urgente." })] }),
+        ] }),
+      ] }),
+    ] });
   }
 
   function Jg() {
@@ -69646,6 +73976,9 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     ct(() => {
       const syncAlertas = async () => {
         try {
+          const savedCfg = pt("cfg", Ct) || {};
+          const apiTicket = (savedCfg.apiKeyMP || "").trim();
+          if (!apiTicket) return;
           if (!window.licList) window.licList = [];
           const fStr = localStorage.getItem("ecp_licit_alertas");
           if (!fStr) return;
@@ -69659,7 +73992,8 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
           const res = await fetch(
             "https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?estado=publicada&fecha=" +
               dateStr +
-              "&ticket=79B6AA40-A970-4164-ADEE-47CF3F378CBA",
+              "&ticket=" +
+              encodeURIComponent(apiTicket),
           );
           const data = await res.json();
           if (!data || !data.Listado) return;
@@ -69691,8 +74025,9 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               for (let m of matches) {
                 const dRes = await fetch(
                   "https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?codigo=" +
-                    m.CodigoExterno +
-                    "&ticket=79B6AA40-A970-4164-ADEE-47CF3F378CBA",
+                    encodeURIComponent(m.CodigoExterno) +
+                    "&ticket=" +
+                    encodeURIComponent(apiTicket),
                 );
                 const dData = await dRes.json();
                 if (dData && dData.Listado && dData.Listado.length > 0) {
@@ -69814,6 +74149,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       });
     }, [B, l.validez]);
     const [x, f] = V("dashboard"),
+      [configStartTab, setConfigStartTab] = V("identidad"),
       [I, D] = V(() => !pt("welcomeSeen", !1)),
       [k, R] = V(null),
       [K, y] = V(null),
@@ -69896,8 +74232,88 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       [q, J] = V(!1),
       [re, Q] = V(null);
     var G = wp(null),
-      ie = Fp(B, p, l, s),
-      oe = (H) => {
+      ie = Fp(B, p, l, s);
+    var syncBudgetToTender = function (budgetRecord, budgetId) {
+      if (!budgetRecord || !budgetRecord.licitacionIdMP) return;
+      var normalizeText = function (value) {
+        return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+      };
+      m(function (previous) {
+        return (previous || []).map(function (opportunity) {
+          var matchesOpportunity = String(opportunity.idMP || "").toUpperCase() === String(budgetRecord.licitacionIdMP || "").toUpperCase() ||
+            (budgetRecord.licitacionOpportunityId && String(opportunity.id) === String(budgetRecord.licitacionOpportunityId));
+          if (!matchesOpportunity) return opportunity;
+          var preparation = Object.assign({}, opportunity.preparacion || {});
+          var ficha = Object.assign({}, preparation.ficha || {});
+          var budgetItems = budgetRecord.items || [];
+          ficha.Lineas = (ficha.Lineas || opportunity.items || []).map(function (line, lineIndex) {
+            var lineDescription = normalizeText(line.NombreProducto || line.Descripcion || "");
+            var matched = budgetItems.find(function (budgetItem) {
+              return parseInt(budgetItem._licitacionLineaIndex) === lineIndex ||
+                (lineDescription && normalizeText(budgetItem.desc) === lineDescription);
+            });
+            if (!matched) return line;
+            return Object.assign({}, line, { PrecioUnitarioNeto: parseFloat(matched.precio) || 0 });
+          });
+          ficha.PresupuestoVinculado = String(budgetId);
+          preparation.ficha = ficha;
+          preparation.actualizadoEn = new Date().toISOString();
+          return Object.assign({}, opportunity, { preparacion: preparation });
+        });
+      });
+    };
+    var linkBudgetToOpportunity = function (budgetRecord, opportunity) {
+      if (!budgetRecord) return;
+      var targetIdMP = opportunity ? opportunity.idMP || "" : "";
+      var targetOpportunityId = opportunity ? opportunity.id : "";
+      var previousIdMP = budgetRecord.licitacionIdMP || "";
+      var updatedBudget = Object.assign({}, budgetRecord, {
+        licitacionIdMP: targetIdMP,
+        licitacionOpportunityId: targetOpportunityId,
+        licitacionNombre: opportunity ? opportunity.nombreObra || "" : "",
+      });
+      w(function (previous) {
+        return (previous || []).map(function (budget) {
+          if (opportunity && budget.id !== budgetRecord.id && String(budget.licitacionIdMP || "").toUpperCase() === String(targetIdMP).toUpperCase()) {
+            return Object.assign({}, budget, { licitacionIdMP: "", licitacionOpportunityId: "", licitacionNombre: "" });
+          }
+          return budget.id === budgetRecord.id ? updatedBudget : budget;
+        });
+      });
+      m(function (previous) {
+        return (previous || []).map(function (item) {
+          var itemIdMP = String(item.idMP || "").toUpperCase();
+          var preparation = Object.assign({}, item.preparacion || {});
+          var ficha = Object.assign({}, preparation.ficha || {});
+          if (previousIdMP && itemIdMP === String(previousIdMP).toUpperCase() && (!targetIdMP || itemIdMP !== String(targetIdMP).toUpperCase()) && String(ficha.PresupuestoVinculado || "") === String(budgetRecord.id)) {
+            ficha.PresupuestoVinculado = "";
+            preparation.ficha = ficha;
+            return Object.assign({}, item, { preparacion: preparation });
+          }
+          if (opportunity && (item.id === targetOpportunityId || itemIdMP === String(targetIdMP).toUpperCase())) {
+            ficha.PresupuestoVinculado = String(budgetRecord.id);
+            preparation.ficha = ficha;
+            preparation.actualizadoEn = new Date().toISOString();
+            return Object.assign({}, item, { preparacion: preparation });
+          }
+          return item;
+        });
+      });
+      if (opportunity) syncBudgetToTender(updatedBudget, budgetRecord.id);
+      Q(opportunity ? "🔒 Presupuesto N° " + budgetRecord.id + " vinculado a licitación " + targetIdMP : "🔓 Presupuesto N° " + budgetRecord.id + " desvinculado");
+    };
+    var oe = (H) => {
+        if (H && H._pendingClientName) {
+          var pendingClientName = String(H._pendingClientName || "").trim();
+          var normalizeClientName = function (value) { return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim(); };
+          var existingClient = p.find(function (client) { return normalizeClientName(client.nombre) === normalizeClientName(pendingClientName); });
+          var resolvedClientId = existingClient && existingClient.id;
+          if (!resolvedClientId) {
+            resolvedClientId = Math.max(0, ...p.map(function (client) { return parseInt(client.id) || 0; })) + 1;
+            C(function (previous) { return (previous || []).concat([{ id: resolvedClientId, tipo: "empresa", rut: "", nombre: pendingClientName, contacto: "Mercado Público", email: "", telefono: "", origen: "mercado_publico", licitacionIdMP: H.licitacionIdMP || "" }]); });
+          }
+          H = u(d({}, H), { clienteId: resolvedClientId, _pendingClientName: void 0 });
+        }
         H = u(d({}, H), {
           items: (H.items || []).map((Me) => {
             if (
@@ -70014,7 +74430,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               H._newId && parseInt(H._newId) !== parseInt(k.id)
                 ? parseInt(H._newId)
                 : k.id,
-            Zg = u(d({}, H), { id: Kg, _newId: void 0, customId: void 0 });
+            Zg = u(d({}, H), { id: Kg, _newId: void 0, customId: void 0, _isTenderDraft: void 0, _pendingClientName: void 0 });
           if (
             parseInt(Kg) !== parseInt(k.id) &&
             B.some(
@@ -70027,6 +74443,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             return;
           }
           w(B.map((Me) => (parseInt(Me.id) === parseInt(k.id) ? Zg : Me)));
+          syncBudgetToTender(Zg, Kg);
         } else {
           var Ln = Fe[l.version || "starter"] || Fe.basico;
           if (Ln.limite && Ln.limite.presupuestos) {
@@ -70041,17 +74458,19 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             }
           }
           var Qp = l.nextNum;
-          (w((Me) => [
-            ...Me,
-            u(d({}, H), {
-              id: Qp,
-              _isDuplicate: void 0,
-              _srcId: void 0,
-              _newId: void 0,
-              changelog: [{ fecha: Wt(), accion: "📋 Creado" }],
-            }),
-          ]),
+          var createdBudget = u(d({}, H), {
+            id: Qp,
+            _isDuplicate: void 0,
+            _srcId: void 0,
+            _newId: void 0,
+            _isTenderDraft: void 0,
+            _pendingClientName: void 0,
+            customId: void 0,
+            changelog: [{ fecha: Wt(), accion: "📋 Creado" }],
+          });
+          (w((Me) => [...Me, createdBudget]),
             o((Me) => u(d({}, Me), { nextNum: Qp + 1 })));
+          syncBudgetToTender(createdBudget, Qp);
         }
         (R(null), f("history"), Q("✅ Presupuesto guardado"));
       },
@@ -70314,7 +74733,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             editing: k,
             onSave: oe,
             onCancel: () => {
-              (R(null), f(k && k._isDuplicate ? "history" : "dashboard"));
+              (R(null), f(k && k._isDuplicate ? "history" : k && k._isTenderDraft ? "licitaciones" : "dashboard"));
             },
             plantillasUser: P,
             onDeletePlantillaUser: O,
@@ -70381,6 +74800,8 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
             guardarPlantilla: S,
             eliminarPlantillaUser: O,
             setToast: Q,
+            licitaciones: s,
+            onLinkLicitacion: linkBudgetToOpportunity,
           });
         if (x === "lista")
           return e.jsx(Dp, {
@@ -70514,6 +74935,7 @@ Esta acción no se puede deshacer.`) &&
             cfg: l,
             setCfg: o,
             setToast: Q,
+            initialTab: configStartTab,
             setConfigDirty: n,
             materiales: j,
             setMateriales: F,
@@ -70574,12 +74996,28 @@ Esta acción no se puede deshacer.`) &&
                 licitaciones: s,
                 setLicitaciones: m,
                 budgets: B,
+                setBudgets: w,
                 cfg: l,
                 apus: g,
                 materiales: j,
                 catalog: b,
                 setToast: Q,
                 setPage: f,
+                onGoCompanyConfig: function () {
+                  setConfigStartTab("empresa");
+                  f("config");
+                },
+                onOpenBudget: function (budget) {
+                  R(u(d({}, budget), { _isDuplicate: !1 }));
+                  f("edit");
+                },
+                onCreateBudget: function (draft) {
+                  var normalizeDraftClient = function (value) { return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim(); };
+                  var matchedClient = p.find(function (client) { return draft._pendingClientName && normalizeDraftClient(client.nombre) === normalizeDraftClient(draft._pendingClientName); });
+                  var preparedDraft = matchedClient ? u(d({}, draft), { clienteId: matchedClient.id, _pendingClientName: "" }) : draft;
+                  R(u(d({}, preparedDraft), { id: l.nextNum, _isTenderDraft: !0 }));
+                  f("edit");
+                },
                 th: a,
                 sty: c,
               })
