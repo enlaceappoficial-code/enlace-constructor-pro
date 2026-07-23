@@ -9881,7 +9881,7 @@ Error generating stack: ` +
         cat: "Pintura",
         desc: "Pintura repaso 1 mano (mantención)",
         unidad: "m²",
-        precio: 3500,
+        precio: 7500,
       },
       {
         id: 10,
@@ -11155,7 +11155,7 @@ Error generating stack: ` +
         cat: "Servicios Generales",
         desc: "Visita Técnica / Diagnóstico",
         unidad: "gl",
-        precio: 25000,
+        precio: 82000,
       },
       {
         id: 311,
@@ -11211,14 +11211,14 @@ Error generating stack: ` +
         cat: "Mantención Eléctrica",
         desc: "Cambio de enchufe/interruptor en mal estado",
         unidad: "unidad",
-        precio: 12500,
+        precio: 25500,
       },
       {
         id: 319,
         cat: "Reparaciones Generales",
         desc: "Cambio de chapa/cerradura puerta",
         unidad: "unidad",
-        precio: 28000,
+        precio: 58000,
       },
       {
         id: 320,
@@ -11227,6 +11227,31 @@ Error generating stack: ` +
         unidad: "m²",
         precio: 15000,
       },
+      /* ═══ AMPLIACIÓN PROFESIONAL 1 — VIVIENDA, EDIFICIO Y LOCAL ═══ */
+      {id:321,cat:"Obras Provisorias",desc:"Cierre provisorio de obra en placa OSB",unidad:"ml",precio:28500},
+      {id:322,cat:"Demolición",desc:"Demolición tabique liviano con retiro a botadero",unidad:"m²",precio:14500},
+      {id:323,cat:"Mov. de Tierras",desc:"Excavación manual de fundación hasta 0,80 m",unidad:"m³",precio:29500},
+      {id:324,cat:"Hormigón Armado",desc:"Fundación aislada de hormigón armado",unidad:"m³",precio:385000},
+      {id:325,cat:"Hormigón Armado",desc:"Pilar de hormigón armado",unidad:"m³",precio:565000},
+      {id:326,cat:"Hormigón Armado",desc:"Viga de hormigón armado",unidad:"m³",precio:595000},
+      {id:327,cat:"Fachadas y Vidrios",desc:"Muro cortina aluminio y vidrio termopanel",unidad:"m²",precio:285000},
+      {id:328,cat:"Fachadas y Vidrios",desc:"Ventana PVC termopanel instalada",unidad:"m²",precio:165000},
+      {id:329,cat:"Accesibilidad",desc:"Rampa accesible de hormigón con pasamanos",unidad:"m²",precio:145000},
+      {id:330,cat:"Accesibilidad",desc:"Pavimento podotáctil de alerta o avance",unidad:"m²",precio:68000},
+      {id:331,cat:"Protección Incendio",desc:"Red húmeda interior completa por gabinete",unidad:"unidad",precio:890000},
+      {id:332,cat:"Protección Incendio",desc:"Extintor PQS 6 kg instalado y señalizado",unidad:"unidad",precio:78000},
+      {id:333,cat:"Protección Incendio",desc:"Puerta cortafuego F-60 instalada",unidad:"unidad",precio:485000},
+      {id:334,cat:"Corrientes Débiles",desc:"Punto de red Cat 6 certificado",unidad:"punto",precio:72000},
+      {id:335,cat:"Corrientes Débiles",desc:"Punto cámara CCTV IP canalizado",unidad:"punto",precio:115000},
+      {id:336,cat:"Corrientes Débiles",desc:"Sistema citofonía o videoportero básico",unidad:"unidad",precio:325000},
+      {id:337,cat:"Equipamiento",desc:"Mueble base de cocina melamina con cubierta",unidad:"ml",precio:245000},
+      {id:338,cat:"Equipamiento",desc:"Mueble aéreo de cocina melamina",unidad:"ml",precio:155000},
+      {id:339,cat:"Equipamiento Comercial",desc:"Mesón de atención comercial laminado",unidad:"ml",precio:295000},
+      {id:340,cat:"Eficiencia Energética",desc:"Sistema solar fotovoltaico on-grid 1 kWp",unidad:"kWp",precio:1350000},
+      {id:341,cat:"Eficiencia Energética",desc:"Termo solar domiciliario 200 L instalado",unidad:"unidad",precio:1250000},
+      {id:342,cat:"Mantención Preventiva",desc:"Mantención preventiva tablero eléctrico",unidad:"unidad",precio:85000},
+      {id:343,cat:"Mantención Preventiva",desc:"Limpieza y mantención equipo split mural",unidad:"unidad",precio:65000},
+      {id:344,cat:"Mantención Preventiva",desc:"Sellado preventivo de juntas y fisuras exteriores",unidad:"ml",precio:6500},
     ],
     Rn = [
       {
@@ -13352,6 +13377,30 @@ Error generating stack: ` +
       { id: 439, cat: "Metalcon Cielos", nombre: "Perfil Portante 40R 40x18x10mm e=0.5mm", unidad: "ml", uc: { q: 3, label: "barras 3m" }, precio: 1450 },
       { id: 440, cat: "Metalcon Cielos", nombre: "Perfil AT 20x25x4mm e=0.5mm", unidad: "ml", uc: { q: 3, label: "barras 3m" }, precio: 1050 },
       { id: 441, cat: "Metalcon Cielos", nombre: "Conector TI nivelador", unidad: "unidad", precio: 850 },
+      {id:442, cat:"Obras Provisorias", nombre:"Placa OSB 11,1 mm 1,22x2,44 m", unidad:"plancha", precio:24500},
+      {id:443, cat:"Obras Provisorias", nombre:"Pie derecho pino 2x3 pulgadas 3,2 m", unidad:"unidad", precio:5200},
+      {id:444, cat:"Hormigón Armado", nombre:"Hormigón premezclado H-25", unidad:"m³", precio:118000},
+      {id:445, cat:"Hormigón Armado", nombre:"Acero de refuerzo A630-420H", unidad:"kg", precio:1150},
+      {id:446, cat:"Hormigón Armado", nombre:"Moldaje fenólico reutilizable", unidad:"m²", precio:18500},
+      {id:447, cat:"Fachadas y Vidrios", nombre:"Muro cortina aluminio con termopanel", unidad:"m²", precio:205000},
+      {id:448, cat:"Fachadas y Vidrios", nombre:"Ventana PVC con termopanel", unidad:"m²", precio:118000},
+      {id:449, cat:"Accesibilidad", nombre:"Pasamanos tubular acero galvanizado", unidad:"ml", precio:38500},
+      {id:450, cat:"Accesibilidad", nombre:"Baldosa podotáctil 40x40 cm", unidad:"unidad", precio:7200},
+      {id:451, cat:"Protección Incendio", nombre:"Gabinete red húmeda equipado", unidad:"unidad", precio:465000},
+      {id:452, cat:"Protección Incendio", nombre:"Extintor PQS 6 kg certificado", unidad:"unidad", precio:46500},
+      {id:453, cat:"Protección Incendio", nombre:"Señalética extintor fotoluminiscente", unidad:"unidad", precio:6500},
+      {id:454, cat:"Protección Incendio", nombre:"Puerta cortafuego F-60 con marco", unidad:"unidad", precio:325000},
+      {id:455, cat:"Corrientes Débiles", nombre:"Cable UTP Cat 6", unidad:"ml", precio:650},
+      {id:456, cat:"Corrientes Débiles", nombre:"Módulo RJ45 Cat 6 con placa", unidad:"unidad", precio:8500},
+      {id:457, cat:"Corrientes Débiles", nombre:"Cámara IP PoE 4 MP", unidad:"unidad", precio:68000},
+      {id:458, cat:"Corrientes Débiles", nombre:"Kit videoportero residencial", unidad:"kit", precio:225000},
+      {id:459, cat:"Equipamiento", nombre:"Mueble base melamina 18 mm con herrajes", unidad:"ml", precio:148000},
+      {id:460, cat:"Equipamiento", nombre:"Cubierta postformada cocina", unidad:"ml", precio:58000},
+      {id:461, cat:"Equipamiento", nombre:"Mueble aéreo melamina 18 mm con herrajes", unidad:"ml", precio:96000},
+      {id:462, cat:"Eficiencia Energética", nombre:"Kit fotovoltaico on-grid 1 kWp", unidad:"kit", precio:980000},
+      {id:463, cat:"Eficiencia Energética", nombre:"Termo solar 200 L con colector", unidad:"kit", precio:885000},
+      {id:464, cat:"Mantención", nombre:"Limpiador técnico para evaporadores", unidad:"litro", precio:12500},
+      {id:465, cat:"Impermeabilización", nombre:"Sellante poliuretano para juntas 600 ml", unidad:"unidad", precio:9800},
     ],
     Ip = {
       Pintura: 45,
@@ -14035,11 +14084,12 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 12,
         dotacion: 2,
-        materiales: [
-          { materialId: 33, cantidad: 0.35 },
-          { materialId: 20, cantidad: 0.05 },
-          { materialId: 22, cantidad: 0.015 },
-        ],
+        baseTecnica: {
+          metodo: "Sistema de estuco exterior premezclado",
+          supuestos: "No combina cemento y arena adicionales; ajustar consumo a ficha del fabricante",
+          editable: !0,
+        },
+        materiales: [{ materialId: 33, cantidad: 0.35 }],
       },
       {
         id: 36,
@@ -14056,11 +14106,13 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 15,
         dotacion: 2,
+        baseTecnica: {
+          metodo: "Sistema de estuco interior premezclado con yeso",
+          supuestos: "No combina cemento y arena adicionales; ajustar consumo a ficha del fabricante",
+          editable: !0,
+        },
         materiales: [
-          { materialId: 20, cantidad: 0.12 },
-          { materialId: 21, cantidad: 0.025 },
-          { materialId: 32, cantidad: 0.08 },
-          { materialId: 34, cantidad: 0.05 },
+          { materialId: 34, cantidad: 0.35 },
           { materialId: 35, cantidad: 0.03 },
         ],
       },
@@ -14077,6 +14129,13 @@ Error generating stack: ` +
         pctMO: 45,
         pctGG: 12,
         pctUtilidad: 15,
+        rendimiento: 10,
+        dotacion: 2,
+        baseTecnica: {
+          metodo: "Aplicación de membrana con imprimación y traslapos",
+          supuestos: "Cuadrilla de 2 personas; superficie preparada y despejada",
+          editable: !0,
+        },
         materiales: [
           { materialId: 170, cantidad: 1.15 },
           { materialId: 118, cantidad: 1.1 },
@@ -14437,6 +14496,13 @@ Error generating stack: ` +
         pctMO: 40,
         pctGG: 12,
         pctUtilidad: 15,
+        rendimiento: 12,
+        dotacion: 2,
+        baseTecnica: {
+          metodo: "Preparación de sustrato y aplicación de sistema cristalizante",
+          supuestos: "Cuadrilla de 2 personas; soporte accesible y sin reparación mayor",
+          editable: !0,
+        },
         materiales: [
           { materialId: 172, cantidad: 0.55 },
           { materialId: 173, cantidad: 1.05 },
@@ -14514,6 +14580,13 @@ Error generating stack: ` +
         pctMO: 90,
         pctGG: 10,
         pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 2,
+        baseTecnica: {
+          metodo: "Demolición manual controlada y retiro interior inmediato",
+          supuestos: "Muro no estructural, acceso normal y sin residuos peligrosos",
+          editable: !0,
+        },
         materiales: [],
       },
       {
@@ -14531,10 +14604,16 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 4,
         dotacion: 2,
+        baseTecnica: {
+          metodo: "Retiro de piso existente, embolsado e instalación de piso flotante nuevo",
+          supuestos: "Incluye bolsas para retiro interior; transporte a botadero se presupuesta según distancia",
+          editable: !0,
+        },
         materiales: [
           { materialId: 140, cantidad: 1.08 },
           { materialId: 149, cantidad: 1.1 },
           { materialId: 150, cantidad: 1.05 },
+          { materialId: 305, cantidad: 0.1 },
         ],
       },
       {
@@ -14550,11 +14629,19 @@ Error generating stack: ` +
         pctMO: 60,
         pctGG: 10,
         pctUtilidad: 15,
+        rendimiento: 4,
+        dotacion: 2,
+        baseTecnica: {
+          metodo: "Retiro de revestimiento, limpieza de base e instalación nueva",
+          supuestos: "Cuadrilla de 2 personas; base recuperable sin regularización mayor",
+          editable: !0,
+        },
         materiales: [
           { materialId: 142, cantidad: 1.1 },
           { materialId: 145, cantidad: 0.35 },
           { materialId: 146, cantidad: 0.12 },
           { materialId: 148, cantidad: 0.5 },
+          { materialId: 305, cantidad: 0.1 },
         ],
       },
       {
@@ -14625,10 +14712,15 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 3,
         dotacion: 2,
+        baseTecnica: {
+          metodo: "Retiro e instalación de ventana con sello perimetral de poliuretano",
+          supuestos: "Sellante canónico único; sustituible por producto compatible según especificación",
+          editable: !0,
+        },
         materiales: [
           { materialId: 162, cantidad: 1 },
-          { materialId: 166, cantidad: 0.3 },
-          { materialId: 175, cantidad: 0.2 },
+          { materialId: 175, cantidad: 0.3 },
+          { materialId: 305, cantidad: 0.1 },
         ],
       },
       {
@@ -14644,6 +14736,13 @@ Error generating stack: ` +
         pctMO: 62,
         pctGG: 12,
         pctUtilidad: 15,
+        rendimiento: 10,
+        dotacion: 2,
+        baseTecnica: {
+          metodo: "Retiro de cubierta existente e instalación de planchas sobre estructura conservada",
+          supuestos: "Cuadrilla de 2 personas; estructura de madera reparable y acceso seguro",
+          editable: !0,
+        },
         materiales: [
           { materialId: 105, cantidad: 1.08 },
           { materialId: 114, cantidad: 0.015 },
@@ -14710,12 +14809,16 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 3,
         dotacion: 1,
+        baseTecnica: {
+          metodo: "Parche de zinc fijado y sellado con poliuretano tipo Sikaflex",
+          supuestos: "No acumula sellantes alternativos; revisar origen de filtración antes de ejecutar",
+          editable: !0,
+        },
         materiales: [
           { materialId: 105, cantidad: 1.15 },
           { materialId: 114, cantidad: 0.02 },
           { materialId: 73, cantidad: 0.3 },
-          { materialId: 174, cantidad: 0.2 },
-          { materialId: 166, cantidad: 0.15 },
+          { materialId: 174, cantidad: 0.25 },
         ],
       },
       {
@@ -14731,10 +14834,15 @@ Error generating stack: ` +
         pctMO: 75,
         pctGG: 10,
         pctUtilidad: 15,
+        rendimiento: 20,
+        dotacion: 1,
+        baseTecnica: {
+          metodo: "Apertura, limpieza, imprimación y sellado lineal",
+          supuestos: "Fisura no estructural y acceso a nivel de piso o andamio disponible",
+          editable: !0,
+        },
         materiales: [
-          { materialId: 174, cantidad: 0.15 },
-          { materialId: 166, cantidad: 0.1 },
-          { materialId: 175, cantidad: 0.08 },
+          { materialId: 175, cantidad: 0.25 },
           { materialId: 33, cantidad: 0.02 },
         ],
       },
@@ -14753,10 +14861,13 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 10,
         dotacion: 2,
+        baseTecnica: {
+          metodo: "Reparación localizada con estuco exterior premezclado y puente adherente",
+          supuestos: "No combina dosificación artesanal con producto premezclado",
+          editable: !0,
+        },
         materiales: [
-          { materialId: 33, cantidad: 0.3 },
-          { materialId: 20, cantidad: 0.04 },
-          { materialId: 21, cantidad: 0.01 },
+          { materialId: 33, cantidad: 0.35 },
           { materialId: 35, cantidad: 0.02 },
           { materialId: 90, cantidad: 0.05 },
         ],
@@ -14774,6 +14885,13 @@ Error generating stack: ` +
         pctMO: 50,
         pctGG: 10,
         pctUtilidad: 15,
+        rendimiento: 20,
+        dotacion: 2,
+        baseTecnica: {
+          metodo: "Limpieza, reparación menor y aplicación de repaso impermeabilizante",
+          supuestos: "Cuadrilla de 2 personas; cubierta transitable y sin levantamiento total",
+          editable: !0,
+        },
         materiales: [
           { materialId: 171, cantidad: 0.8 },
           { materialId: 6, cantidad: 0.12 },
@@ -14795,6 +14913,11 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 12,
         dotacion: 1,
+        baseTecnica: {
+          metodo: "Repaso de una mano sobre superficie compatible y preparada",
+          supuestos: "Precio mínimo coherente con material, protección y jornal configurado",
+          editable: !0,
+        },
         materiales: [
           { materialId: 6, cantidad: 0.12 },
           { materialId: 7, cantidad: 0.02 },
@@ -14876,6 +14999,13 @@ Error generating stack: ` +
         pctMO: 65,
         pctGG: 10,
         pctUtilidad: 15,
+        rendimiento: 12,
+        dotacion: 2,
+        baseTecnica: {
+          metodo: "Retiro y reposición de canal y bajante con soportes y sellos",
+          supuestos: "Cuadrilla de 2 personas; geometría simple y acceso seguro",
+          editable: !0,
+        },
         materiales: [
           { materialId: 115, cantidad: 1.05 },
           { materialId: 116, cantidad: 0.33 },
@@ -15037,8 +15167,13 @@ Error generating stack: ` +
         pctMO: 65,
         pctGG: 12,
         pctUtilidad: 15,
-        rendimiento: 2,
+        rendimiento: 0.6,
         dotacion: 2,
+        baseTecnica: {
+          metodo: "Fabricación, soldadura, terminación e instalación en obra",
+          supuestos: "Rendimiento por metro lineal de desarrollo; diseño estructural y anclajes especiales se ajustan por proyecto",
+          editable: !0,
+        },
         materiales: [
           { materialId: 237, cantidad: 2.2 },
           { materialId: 232, cantidad: 3 },
@@ -15062,8 +15197,13 @@ Error generating stack: ` +
         pctMO: 62,
         pctGG: 12,
         pctUtilidad: 15,
-        rendimiento: 5,
+        rendimiento: 1.5,
         dotacion: 2,
+        baseTecnica: {
+          metodo: "Fabricación soldada, protección anticorrosiva e instalación",
+          supuestos: "Geometría recta estándar; curvas, vidrio y anclajes especiales se ajustan por proyecto",
+          editable: !0,
+        },
         materiales: [
           { materialId: 230, cantidad: 1.2 },
           { materialId: 231, cantidad: 2.5 },
@@ -15174,12 +15314,17 @@ Error generating stack: ` +
         unidad: "m³",
         catalogId: 131,
         esSubcontrato: !0,
-        precioSubcontrato: 85e3,
+        precioSubcontrato: 19600,
         pctMO: 0,
         pctGG: 12,
         pctUtilidad: 0,
         rendimiento: 40,
         dotacion: 1,
+        baseTecnica: {
+          metodo: "Costo de equipo y operador prorrateado por rendimiento",
+          supuestos: "Valor unitario por m³; movilización, entibación, roca y retiro se presupuestan aparte",
+          editable: !0,
+        },
         materiales: [],
       },
       {
@@ -15249,6 +15394,12 @@ Error generating stack: ` +
         pctUtilidad: 12,
         rendimiento: 8,
         dotacion: 3,
+        capaBaseIndependiente: !0,
+        baseTecnica: {
+          metodo: "Hormigón premezclado sobre cama de arena y refuerzo",
+          supuestos: "La arena es una capa de apoyo independiente, no un agregado añadido al hormigón",
+          editable: !0,
+        },
         materiales: [
           { materialId: 249, cantidad: 0.08 },
           { materialId: 253, cantidad: 0.18 },
@@ -15311,6 +15462,12 @@ Error generating stack: ` +
         pctUtilidad: 12,
         rendimiento: 6,
         dotacion: 3,
+        capaBaseIndependiente: !0,
+        baseTecnica: {
+          metodo: "Hormigón premezclado sobre base de piedra chancada compactada",
+          supuestos: "La piedra es una capa de base independiente, no un agregado añadido al hormigón",
+          editable: !0,
+        },
         materiales: [
           { materialId: 249, cantidad: 0.11 },
           { materialId: 253, cantidad: 0.2 },
@@ -15681,9 +15838,14 @@ Error generating stack: ` +
         pctUtilidad: 12,
         rendimiento: 80,
         dotacion: 2,
+        baseTecnica: {
+          metodo: "Acero habilitado, amarrado y colocado medido por kilogramo instalado",
+          supuestos: "5% de pérdida de acero y 1,5% de alambre de amarre; cuadrilla de 2 personas",
+          editable: !0,
+        },
         materiales: [
-          { materialId: 272, cantidad: 0.7 },
-          { materialId: 273, cantidad: 0.3 },
+          { materialId: 272, cantidad: 1.05 },
+          { materialId: 40, cantidad: 0.015 },
         ],
       },
       {
@@ -15720,8 +15882,13 @@ Error generating stack: ` +
         pctMO: 55,
         pctGG: 12,
         pctUtilidad: 15,
-        rendimiento: 10,
+        rendimiento: 4,
         dotacion: 2,
+        baseTecnica: {
+          metodo: "Tendido, unión, alineación y prueba de colector",
+          supuestos: "Excavación, cama de apoyo, relleno y cámaras se presupuestan por separado",
+          editable: !0,
+        },
         materiales: [
           { materialId: 281, cantidad: 0.34 },
           { materialId: 283, cantidad: 0.05 },
@@ -15740,8 +15907,13 @@ Error generating stack: ` +
         pctMO: 55,
         pctGG: 12,
         pctUtilidad: 15,
-        rendimiento: 8,
+        rendimiento: 3.5,
         dotacion: 2,
+        baseTecnica: {
+          metodo: "Tendido, unión, alineación y prueba de colector",
+          supuestos: "Excavación, cama de apoyo, relleno y cámaras se presupuestan por separado",
+          editable: !0,
+        },
         materiales: [{ materialId: 282, cantidad: 0.34 }],
       },
       {
@@ -15905,12 +16077,15 @@ Error generating stack: ` +
         pctMO: 45,
         pctGG: 10,
         pctUtilidad: 12,
-        rendimiento: 20,
-        dotacion: 1,
-        rendimiento: 20,
-        dotacion: 1,
+        rendimiento: 6,
+        dotacion: 2,
+        baseTecnica: {
+          metodo: "Dos aplicaciones de emulsión con gravilla y compactación entre capas",
+          supuestos: "Superficie base preparada; consumo ajustable por absorción y especificación vial",
+          editable: !0,
+        },
         materiales: [
-          { materialId: 295, cantidad: 0.003 },
+          { materialId: 295, cantidad: 0.012 },
           { materialId: 296, cantidad: 0.012 },
         ],
       },
@@ -15963,8 +16138,13 @@ Error generating stack: ` +
         pctMO: 50,
         pctGG: 10,
         pctUtilidad: 12,
-        rendimiento: 30,
+        rendimiento: 10,
         dotacion: 1,
+        baseTecnica: {
+          metodo: "Replanteo, enmascarado y aplicación de pintura vial",
+          supuestos: "Línea estándar sobre superficie limpia; símbolos y demarcaciones especiales se miden aparte",
+          editable: !0,
+        },
         materiales: [{ materialId: 297, cantidad: 0.06 }],
       },
       {
@@ -16010,6 +16190,530 @@ Error generating stack: ` +
           { materialId: 305, cantidad: 0.1 },
         ],
       },
+      /* ═══ COBERTURA COMERCIAL — REPARACIONES Y ESPECIALIDADES PRIORITARIAS ═══ */
+      {id:40001, tipo:"Mantención", estructura:"General",
+       nombre:"Reparación cerámico pisos/sócalos", categoria:"Pisos y Revestimientos",
+       unidad:"gl", catalogId:66, esSubcontrato:true, precioSubcontrato:84821, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Reparación localizada por alcance cerrado",supuestos:"Precio referencial global; cantidad de piezas, retiro y regularización se confirman en visita",editable:true},
+       materiales:[]},
+    
+      {id:40002, tipo:"Mantención", estructura:"General",
+       nombre:"Reparación cerámico muros", categoria:"Pisos y Revestimientos",
+       unidad:"gl", catalogId:67, esSubcontrato:true, precioSubcontrato:84821, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Reparación localizada por alcance cerrado",supuestos:"Precio referencial global; cantidad de piezas, retiro e impermeabilización se confirman en visita",editable:true},
+       materiales:[]},
+    
+      {id:40003, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Puerta interior HDF 80x200cm + marcos", categoria:"Carpintería",
+       unidad:"unidad", catalogId:70, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:10, pctUtilidad:12,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Instalación de hoja, marco, bisagras y cerradura",supuestos:"Vano aplomado y sin reparación estructural; pintura se presupuesta aparte",editable:true},
+       materiales:[{materialId:155,cantidad:1},{materialId:157,cantidad:1},{materialId:158,cantidad:1},{materialId:159,cantidad:2}]},
+    
+      {id:40004, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Puerta exterior madera sólida 90x200cm", categoria:"Carpintería",
+       unidad:"unidad", catalogId:71, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:10, pctUtilidad:12,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Instalación de puerta exterior, herrajes y ajuste",supuestos:"Marco compatible y vano preparado; protección final y cerradura especial se ajustan",editable:true},
+       materiales:[{materialId:156,cantidad:1},{materialId:157,cantidad:1},{materialId:158,cantidad:1},{materialId:159,cantidad:2}]},
+    
+      {id:40005, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Ventana PVC corredera 100x100cm", categoria:"Carpintería",
+       unidad:"unidad", catalogId:72, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:10, pctUtilidad:12,
+       rendimiento:2, dotacion:2,
+       baseTecnica:{metodo:"Presentación, fijación, aplome y sello perimetral",supuestos:"Vano terminado y accesible; retiro de ventana existente se mide aparte",editable:true},
+       materiales:[{materialId:160,cantidad:1},{materialId:175,cantidad:0.25}]},
+    
+      {id:40006, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Ventana PVC termopanel 100x100cm", categoria:"Carpintería",
+       unidad:"unidad", catalogId:73, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:10, pctUtilidad:12,
+       rendimiento:2, dotacion:2,
+       baseTecnica:{metodo:"Presentación, fijación, aplome y sello perimetral",supuestos:"Vano terminado y accesible; retiro de ventana existente se mide aparte",editable:true},
+       materiales:[{materialId:162,cantidad:1},{materialId:175,cantidad:0.3}]},
+    
+      {id:40007, tipo:"Mantención", estructura:"General",
+       nombre:"Reparación muebles cocina", categoria:"Carpintería",
+       unidad:"gl", catalogId:75, esSubcontrato:true, precioSubcontrato:133929, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Reparación global definida después de inspección",supuestos:"Frentes, cubiertas y herrajes especiales se valorizan según daño efectivo",editable:true},
+       materiales:[]},
+    
+      {id:40008, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Cornisas perfil MDF", categoria:"Carpintería",
+       unidad:"ml", catalogId:76, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:10, pctUtilidad:12,
+       rendimiento:20, dotacion:1,
+       baseTecnica:{metodo:"Corte, encuentro, fijación y terminación básica",supuestos:"Trazado recto; pintura y reparación de soporte se miden aparte",editable:true},
+       materiales:[{materialId:164,cantidad:1.05}]},
+    
+      {id:40009, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Guardapolvos MDF", categoria:"Carpintería",
+       unidad:"ml", catalogId:77, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:10, pctUtilidad:12,
+       rendimiento:20, dotacion:1,
+       baseTecnica:{metodo:"Corte, encuentro, fijación y terminación básica",supuestos:"Muro y piso terminados; pintura y reparación de soporte se miden aparte",editable:true},
+       materiales:[{materialId:165,cantidad:1.05}]},
+    
+      {id:40010, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Instalación eléctrica completa vivienda 60m²", categoria:"Instalaciones Eléctricas",
+       unidad:"gl", catalogId:84, esSubcontrato:true, precioSubcontrato:758929, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Subcontrato eléctrico por alcance y planos aprobados",supuestos:"Referencia para vivienda de 60m²; empalme, proyecto SEC y aumentos de potencia se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40011, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Instalación sanitaria completa baño", categoria:"Instalaciones Sanitarias",
+       unidad:"gl", catalogId:92, esSubcontrato:true, precioSubcontrato:401786, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Subcontrato sanitario por recinto y puntos definidos",supuestos:"Artefactos, roturas, cámaras y conexión exterior se ajustan al proyecto",editable:true},
+       materiales:[]},
+    
+      {id:40012, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Artefactos sanitarios con cubículos", categoria:"Instalaciones Sanitarias",
+       unidad:"unidad", catalogId:93, esSubcontrato:true, precioSubcontrato:254464, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:2, dotacion:2,
+       baseTecnica:{metodo:"Suministro e instalación según artefacto seleccionado",supuestos:"Precio referencial por unidad; modelo, grifería y cubículo se confirman antes de comprar",editable:true},
+       materiales:[]},
+    
+      {id:40013, tipo:"Remodelación", estructura:"General",
+       nombre:"Demolición radier / solera", categoria:"Demolición",
+       unidad:"m²", catalogId:103, esSubcontrato:false, precioSubcontrato:0, precioMO:16000, pctMO:0, pctGG:10, pctUtilidad:12,
+       rendimiento:4, dotacion:2,
+       baseTecnica:{metodo:"Demolición manual o con herramienta menor y embolsado",supuestos:"Espesor hasta 10 cm; retiro a botadero, acero y hormigón reforzado se ajustan",editable:true},
+       materiales:[{materialId:305,cantidad:0.1}]},
+    
+      {id:40014, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Canal PVC 3m + bajante", categoria:"Techumbres",
+       unidad:"ml", catalogId:105, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:10, pctUtilidad:12,
+       rendimiento:12, dotacion:2,
+       baseTecnica:{metodo:"Instalación de canal, soportes, bajante y sellos",supuestos:"Trazado recto y acceso seguro; andamios y modificaciones de alero se ajustan",editable:true},
+       materiales:[{materialId:115,cantidad:0.34},{materialId:116,cantidad:0.33},{materialId:117,cantidad:1},{materialId:114,cantidad:0.008}]},
+    
+      {id:40015, tipo:"Mantención", estructura:"General",
+       nombre:"Reinstalación citófono", categoria:"Reparaciones Generales",
+       unidad:"unidad", catalogId:115, esSubcontrato:true, precioSubcontrato:25884, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:3, dotacion:1,
+       baseTecnica:{metodo:"Reinstalación y prueba de equipo existente",supuestos:"Cableado y fuente operativos; equipo nuevo y reparación de red se cotizan aparte",editable:true},
+       materiales:[]},
+    
+      {id:40016, tipo:"Remodelación", estructura:"General",
+       nombre:"Celosías y cambio de ventanas", categoria:"Carpintería",
+       unidad:"unidad", catalogId:116, esSubcontrato:true, precioSubcontrato:571429, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Subcontrato por dimensiones y solución aprobada",supuestos:"Referencia global; cantidad, material, medidas, retiro y terminaciones se confirman en terreno",editable:true},
+       materiales:[]},
+
+      /* ═══ COBERTURA COMERCIAL — SANITARIO, MANTENCIONES Y ESPECIALIDADES ═══ */
+      {id:40101, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Red alcantarillado vivienda completa", categoria:"Sanitario",
+       unidad:"gl", catalogId:163, esSubcontrato:true, precioSubcontrato:758929, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Subcontrato por trazado, diámetros y cámaras aprobadas",supuestos:"Referencia global; excavaciones, empalme público y roturas especiales se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40102, tipo:"Mantención", estructura:"General",
+       nombre:"Llave de paso esfera 3/4 pulgada (reemplazo)", categoria:"Sanitario",
+       unidad:"unidad", catalogId:165, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:10, pctUtilidad:12,
+       rendimiento:3, dotacion:1,
+       baseTecnica:{metodo:"Corte de suministro, retiro, instalación y prueba",supuestos:"Conexión accesible y sin modificación de red; rotura y reposición se miden aparte",editable:true},
+       materiales:[{materialId:286,cantidad:1}]},
+    
+      {id:40103, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Medidor agua fría 1/2 pulgada + conexión", categoria:"Sanitario",
+       unidad:"unidad", catalogId:166, esSubcontrato:true, precioSubcontrato:84821, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:2, dotacion:1,
+       baseTecnica:{metodo:"Suministro, montaje y conexión por instalador sanitario",supuestos:"Nicho, permisos, derechos y modificación de matriz no incluidos",editable:true},
+       materiales:[]},
+    
+      {id:40104, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Estanque elevado 500L + estructura", categoria:"Sanitario",
+       unidad:"unidad", catalogId:167, esSubcontrato:true, precioSubcontrato:343750, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Suministro e instalación de estanque con estructura calculada",supuestos:"Altura, fundación, impulsión y exigencia estructural se confirman por proyecto",editable:true},
+       materiales:[]},
+    
+      {id:40105, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Ducha + grifería termostática instalada", categoria:"Instalaciones Sanitarias",
+       unidad:"unidad", catalogId:220, esSubcontrato:true, precioSubcontrato:165179, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:2, dotacion:1,
+       baseTecnica:{metodo:"Suministro, conexión y prueba de conjunto termostático",supuestos:"Redes existentes compatibles; nicho, impermeabilización y revestimiento se miden aparte",editable:true},
+       materiales:[]},
+    
+      {id:40106, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Lavamanos + grifería instalado", categoria:"Instalaciones Sanitarias",
+       unidad:"unidad", catalogId:221, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:10, pctUtilidad:12,
+       rendimiento:2, dotacion:1,
+       baseTecnica:{metodo:"Montaje, conexión de agua y desagüe, sellado y prueba",supuestos:"Puntos existentes en posición y presión normal; mueble o cubierta se ajustan",editable:true},
+       materiales:[{materialId:208,cantidad:1},{materialId:423,cantidad:1},{materialId:424,cantidad:0.1}]},
+    
+      {id:40107, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"WC con bidet incluido instalado", categoria:"Instalaciones Sanitarias",
+       unidad:"unidad", catalogId:222, esSubcontrato:true, precioSubcontrato:129464, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:2, dotacion:1,
+       baseTecnica:{metodo:"Suministro, fijación, conexión y prueba del conjunto",supuestos:"Modelo y tipo de bidet se confirman; modificaciones de alimentación y desagüe se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40108, tipo:"Nueva Construcción", estructura:"Hormigón",
+       nombre:"Moldaje metálico pilar (arriendo + instalación)", categoria:"Hormigón Armado",
+       unidad:"m²", catalogId:158, esSubcontrato:true, precioSubcontrato:25000, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:12, dotacion:2,
+       baseTecnica:{metodo:"Arriendo, montaje, aplome, desmolde y devolución",supuestos:"Geometría repetitiva estándar; transporte, grúa y pérdidas se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40109, tipo:"Nueva Construcción", estructura:"Hormigón",
+       nombre:"Enfierradura malla electrosoldada colocada", categoria:"Hormigón Armado",
+       unidad:"m²", catalogId:211, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:10, pctUtilidad:12,
+       rendimiento:30, dotacion:2,
+       baseTecnica:{metodo:"Corte, traslapo, amarre y colocación de malla",supuestos:"Malla 2,4x6 m con 5% de merma; separadores y diámetro se ajustan por cálculo",editable:true},
+       materiales:[{materialId:36,cantidad:0.073},{materialId:40,cantidad:0.02}]},
+    
+      {id:40110, tipo:"Nueva Construcción", estructura:"Hormigón",
+       nombre:"Enfierradura malla electrosoldada - solo mano de obra", categoria:"Hormigón Armado",
+       unidad:"m²", catalogId:215, esSubcontrato:false, precioSubcontrato:0, precioMO:2500, pctMO:0, pctGG:10, pctUtilidad:12,
+       rendimiento:30, dotacion:2,
+       baseTecnica:{metodo:"Corte, traslapo, amarre y colocación con material suministrado",supuestos:"Descarga, grúa y reparación de malla no incluidos",editable:true},
+       materiales:[]},
+    
+      {id:40111, tipo:"Mantención", estructura:"General",
+       nombre:"Destape de WC o cámara domiciliaria", categoria:"Mantención Sanitaria",
+       unidad:"gl", catalogId:315, esSubcontrato:true, precioSubcontrato:40179, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:2, dotacion:1,
+       baseTecnica:{metodo:"Destape mecánico básico y prueba de escurrimiento",supuestos:"No incluye videoinspección, hidrojet, rotura, extracción de raíces ni reparación de tubería",editable:true},
+       materiales:[]},
+    
+      {id:40112, tipo:"Mantención", estructura:"General",
+       nombre:"Cambio de sifón lavamanos o lavaplatos", categoria:"Mantención Sanitaria",
+       unidad:"unidad", catalogId:316, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:10, pctUtilidad:12,
+       rendimiento:4, dotacion:1,
+       baseTecnica:{metodo:"Retiro, instalación, sellado y prueba de sifón",supuestos:"Descarga existente compatible y accesible; reparación de mueble no incluida",editable:true},
+       materiales:[{materialId:423,cantidad:1},{materialId:424,cantidad:0.1}]},
+    
+      {id:40113, tipo:"Mantención", estructura:"General",
+       nombre:"Detección cortocircuito y revisión tablero", categoria:"Mantención Eléctrica",
+       unidad:"gl", catalogId:317, esSubcontrato:false, precioSubcontrato:0, precioMO:25000, pctMO:0, pctGG:10, pctUtilidad:12,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Inspección, mediciones básicas, aislamiento de falla y diagnóstico",supuestos:"Incluye diagnóstico; repuestos, recableado y certificación se cotizan después",editable:true},
+       materiales:[]},
+    
+      {id:40114, tipo:"Mantención", estructura:"General",
+       nombre:"Lijado y pintura esmalte/anticorrosivo reja o portón", categoria:"Mantención Pintura",
+       unidad:"m²", catalogId:313, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:10, pctUtilidad:12,
+       rendimiento:8, dotacion:1,
+       baseTecnica:{metodo:"Lijado manual, tratamiento puntual y una mano de terminación",supuestos:"Corrosión superficial; arenado, reparación soldada y segunda mano se miden aparte",editable:true},
+       materiales:[{materialId:427,cantidad:0.05},{materialId:243,cantidad:0.15},{materialId:12,cantidad:0.2}]},
+    
+      {id:40115, tipo:"Mantención", estructura:"General",
+       nombre:"Reparación parche yeso/empaste muro dañado", categoria:"Reparaciones Generales",
+       unidad:"m²", catalogId:320, esSubcontrato:false, precioSubcontrato:0, pctMO:60, pctGG:10, pctUtilidad:12,
+       rendimiento:6, dotacion:1,
+       baseTecnica:{metodo:"Saneo, relleno, malla puntual, empaste y lijado",supuestos:"Daño localizado no estructural; pintura final y humedad activa se tratan aparte",editable:true},
+       materiales:[{materialId:34,cantidad:0.1},{materialId:85,cantidad:0.2},{materialId:90,cantidad:0.02}]},
+    
+      {id:40116, tipo:"Mantención", estructura:"General",
+       nombre:"Limpieza y destape de canaletas y bajantes", categoria:"Mantención Techumbres",
+       unidad:"ml", catalogId:312, esSubcontrato:false, precioSubcontrato:0, pctMO:80, pctGG:10, pctUtilidad:12,
+       rendimiento:25, dotacion:1,
+       baseTecnica:{metodo:"Retiro manual de residuos y prueba de descarga",supuestos:"Acceso seguro existente; andamio, hidrolavado, reparación y retiro voluminoso se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40117, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Agua provisoria faena (conexión + punto)", categoria:"Obras Provisorias",
+       unidad:"gl", catalogId:175, esSubcontrato:true, precioSubcontrato:111607, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Habilitación temporal desde punto autorizado",supuestos:"Derechos, medidor, extensión extraordinaria y consumo no incluidos",editable:true},
+       materiales:[]},
+    
+      {id:40118, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Cableado principal 4mm²", categoria:"Instalaciones Eléctricas",
+       unidad:"ml", catalogId:223, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:10, pctUtilidad:12,
+       rendimiento:30, dotacion:1,
+       baseTecnica:{metodo:"Tendido de conductor en canalización existente y prueba",supuestos:"Cantidad de conductores y colores se ajustan al circuito; canalización y protecciones se miden aparte",editable:true},
+       materiales:[{materialId:181,cantidad:1.05}]},
+
+      /* ═══ COBERTURA COMERCIAL — ÁREAS EXTERIORES Y PISCINAS ═══ */
+      {id:40201, tipo:"Nueva Construcción", estructura:"Madera",
+       nombre:"Quincho estructura madera (fabricación + instalación)", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:196, esSubcontrato:true, precioSubcontrato:165179, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:3, dotacion:2,
+       baseTecnica:{metodo:"Subcontrato según planta, luces, fundaciones y cubierta",supuestos:"Referencia por m²; cálculo estructural, instalaciones y terminaciones se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40202, tipo:"Nueva Construcción", estructura:"Estructuras Metálicas",
+       nombre:"Quincho estructura metálica (fabricación + instalación)", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:197, esSubcontrato:true, precioSubcontrato:200893, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:3, dotacion:2,
+       baseTecnica:{metodo:"Subcontrato fabricado según cálculo, anclajes y cubierta",supuestos:"Referencia por m²; fundaciones, instalaciones y terminaciones se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40203, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Cubierta zinc quincho o pérgola", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:198, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:10, pctUtilidad:12,
+       rendimiento:3, dotacion:2,
+       baseTecnica:{metodo:"Instalación de plancha, fijaciones y remates sobre estructura preparada",supuestos:"No incluye estructura portante; altura, pendientes y hojalaterías especiales se ajustan",editable:true},
+       materiales:[{materialId:105,cantidad:1.08},{materialId:114,cantidad:0.015},{materialId:112,cantidad:0.12}]},
+    
+      {id:40204, tipo:"Nueva Construcción", estructura:"Madera",
+       nombre:"Pérgola madera tratada (fabricación + instalación)", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:199, esSubcontrato:true, precioSubcontrato:111607, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:3, dotacion:2,
+       baseTecnica:{metodo:"Subcontrato según modulación, escuadrías, anclajes y protección",supuestos:"Cubierta, fundaciones especiales e instalaciones se cotizan aparte",editable:true},
+       materiales:[]},
+    
+      {id:40205, tipo:"Nueva Construcción", estructura:"Madera",
+       nombre:"Deck madera tratada exterior", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:200, esSubcontrato:true, precioSubcontrato:60714, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:6, dotacion:2,
+       baseTecnica:{metodo:"Suministro e instalación sobre subestructura nivelada",supuestos:"Especie, tratamiento, altura y fundaciones se confirman; protección periódica no incluida",editable:true},
+       materiales:[]},
+    
+      {id:40206, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Deck composite WPC exterior", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:201, esSubcontrato:true, precioSubcontrato:84821, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:6, dotacion:2,
+       baseTecnica:{metodo:"Sistema WPC completo según modulación del fabricante",supuestos:"Incluye tabla y fijación estándar; subestructura, bordes y escalones se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40207, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Terraza hormigón pulido exterior", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:202, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:10, pctUtilidad:12,
+       rendimiento:6, dotacion:3,
+       capaBaseIndependiente:true,
+       baseTecnica:{metodo:"Hormigón premezclado sobre base preparada, nivelado y pulido",supuestos:"Espesor 10 cm; excavación, juntas especiales y endurecedor se ajustan",editable:true},
+       materiales:[{materialId:249,cantidad:0.11},{materialId:253,cantidad:0.20},{materialId:254,cantidad:0.05}]},
+    
+      {id:40208, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Pavimento adoquín jardín con base", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:203, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:10, pctUtilidad:12,
+       rendimiento:10, dotacion:2,
+       baseTecnica:{metodo:"Base granular, cama de arena, adoquín y compactación",supuestos:"Terreno perfilado; excavación profunda, soleras y drenajes se miden aparte",editable:true},
+       materiales:[{materialId:250,cantidad:1.05},{materialId:252,cantidad:0.10},{materialId:255,cantidad:0.03}]},
+    
+      {id:40209, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Hormigón estampado o decorativo", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:204, esSubcontrato:true, precioSubcontrato:42857, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:8, dotacion:3,
+       baseTecnica:{metodo:"Subcontrato de hormigón, color, estampado, curado y sello",supuestos:"Diseño y color estándar; base, malla y juntas se confirman por proyecto",editable:true},
+       materiales:[]},
+    
+      {id:40210, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Gravilla volcánica decorativa e=5cm", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:205, esSubcontrato:true, precioSubcontrato:7589, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:25, dotacion:2,
+       baseTecnica:{metodo:"Suministro, extendido y nivelación a 5 cm",supuestos:"Geotextil, bordes, excavación y transporte extraordinario se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40211, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Jardín: preparación de terreno + pasto", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:206, esSubcontrato:true, precioSubcontrato:16518, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:20, dotacion:2,
+       baseTecnica:{metodo:"Preparación superficial, tierra vegetal y provisión de césped",supuestos:"Especie, espesor vegetal, retiro y riego se confirman según terreno",editable:true},
+       materiales:[]},
+    
+      {id:40212, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Sistema riego automático por zona", categoria:"Áreas Exteriores",
+       unidad:"unidad", catalogId:207, esSubcontrato:true, precioSubcontrato:165179, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Subcontrato diseñado por caudal, presión y cobertura",supuestos:"Referencia por zona; controlador, matriz, bomba y obras civiles se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40213, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Muro jardín albañilería decorativa", categoria:"Áreas Exteriores",
+       unidad:"m²", catalogId:208, esSubcontrato:true, precioSubcontrato:51786, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:5, dotacion:2,
+       baseTecnica:{metodo:"Albañilería según altura, aparejo, fundación y terminación",supuestos:"Referencia no estructural; contención, drenaje y cálculo se cotizan aparte",editable:true},
+       materiales:[]},
+    
+      {id:40214, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Iluminación exterior por punto", categoria:"Instalaciones Eléctricas",
+       unidad:"unidad", catalogId:209, esSubcontrato:true, precioSubcontrato:58036, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:3, dotacion:1,
+       baseTecnica:{metodo:"Punto exterior estanco con canalización y prueba",supuestos:"Luminaria, distancia, zanja, protección y tablero se confirman antes de ejecutar",editable:true},
+       materiales:[]},
+    
+      {id:40215, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Excavación piscina con maquinaria", categoria:"Piscinas",
+       unidad:"m³", catalogId:187, esSubcontrato:true, precioSubcontrato:19643, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:40, dotacion:1,
+       baseTecnica:{metodo:"Excavación mecánica según geometría y cotas de proyecto",supuestos:"Suelo normal; movilización, roca, entibación, agotamiento y retiro se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40216, tipo:"Nueva Construcción", estructura:"Hormigón",
+       nombre:"Estructura hormigón armado piscina H-25", categoria:"Piscinas",
+       unidad:"m³", catalogId:188, esSubcontrato:true, precioSubcontrato:254464, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:2, dotacion:3,
+       baseTecnica:{metodo:"Estructura ejecutada según cálculo, juntas y pasadas hidráulicas",supuestos:"Cuantías, moldaje, bombeo y sistema constructivo se validan por proyecto",editable:true},
+       materiales:[]},
+    
+      {id:40217, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Impermeabilización piscina con membrana", categoria:"Piscinas",
+       unidad:"m²", catalogId:189, esSubcontrato:true, precioSubcontrato:49107, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:12, dotacion:2,
+       baseTecnica:{metodo:"Sistema continuo compatible con inmersión permanente",supuestos:"Soporte curado, regularizado y seco; encuentros, pruebas y garantía se confirman",editable:true},
+       materiales:[]},
+    
+      {id:40218, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Revestimiento gresite o cerámico piscina", categoria:"Piscinas",
+       unidad:"m²", catalogId:190, esSubcontrato:true, precioSubcontrato:58036, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:6, dotacion:2,
+       baseTecnica:{metodo:"Adhesivo y fragüe aptos para inmersión permanente",supuestos:"Formato, diseño, base e impermeabilización se confirman antes de instalar",editable:true},
+       materiales:[]},
+    
+      {id:40219, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Sistema filtración + bomba piscina instalado", categoria:"Piscinas",
+       unidad:"unidad", catalogId:191, esSubcontrato:true, precioSubcontrato:758929, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Dimensionamiento, suministro, montaje hidráulico y puesta en marcha",supuestos:"Caudal, volumen, distancia y sala técnica determinan el equipo definitivo",editable:true},
+       materiales:[]},
+    
+      {id:40220, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Iluminación subacuática LED por punto", categoria:"Piscinas",
+       unidad:"unidad", catalogId:192, esSubcontrato:true, precioSubcontrato:165179, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:2, dotacion:1,
+       baseTecnica:{metodo:"Luminaria certificada, nicho, transformador y prueba de aislación",supuestos:"Canalización, tablero y automatización se ajustan según normativa y proyecto",editable:true},
+       materiales:[]},
+    
+      {id:40221, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Escalera acero inoxidable piscina", categoria:"Piscinas",
+       unidad:"unidad", catalogId:193, esSubcontrato:true, precioSubcontrato:343750, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Suministro, anclaje y puesta a tierra de escalera inoxidable",supuestos:"Grado de acero, peldaños, anclajes y geometría se confirman por proyecto",editable:true},
+       materiales:[]},
+    
+      {id:40222, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Vereda perimetral piscina hormigón", categoria:"Piscinas",
+       unidad:"m²", catalogId:194, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:10, pctUtilidad:12,
+       rendimiento:6, dotacion:3,
+       capaBaseIndependiente:true,
+       baseTecnica:{metodo:"Hormigón sobre base preparada con terminación antideslizante",supuestos:"Espesor 10 cm; pendientes, juntas, drenaje y borde de piscina se ajustan",editable:true},
+       materiales:[{materialId:249,cantidad:0.11},{materialId:253,cantidad:0.20},{materialId:254,cantidad:0.05}]},
+    
+      {id:40223, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Canaleta perimetral piscina para drenaje", categoria:"Piscinas",
+       unidad:"ml", catalogId:195, esSubcontrato:true, precioSubcontrato:25000, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:8, dotacion:2,
+       baseTecnica:{metodo:"Canaleta, rejilla, pendientes, conexión y prueba",supuestos:"Sección, material, descarga y encuentro con impermeabilización se confirman",editable:true},
+       materiales:[]},
+
+      /* ═══ COBERTURA COMERCIAL — LOTE FINAL ═══ */
+      {id:40301, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Instalación cilindros 45KL casino", categoria:"Gas",
+       unidad:"unidad", catalogId:96, esSubcontrato:true, precioSubcontrato:3169643, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Subcontrato ejecutado y certificado por instalador autorizado",supuestos:"Proyecto, gabinete, reguladores, red, pruebas y tramitación se confirman según SEC",editable:true},
+       materiales:[]},
+    
+      {id:40302, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Sello verde y prueba de hermeticidad", categoria:"Gas",
+       unidad:"unidad", catalogId:97, esSubcontrato:true, precioSubcontrato:308036, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Inspección, prueba y tramitación por instalador autorizado",supuestos:"Correcciones de la instalación y repuestos no están incluidos",editable:true},
+       materiales:[]},
+    
+      {id:40303, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Gestión convenio Gasco", categoria:"Gas",
+       unidad:"unidad", catalogId:98, esSubcontrato:true, precioSubcontrato:267857, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Gestión documental y coordinación con proveedor",supuestos:"Derechos, obras, equipos y exigencias adicionales del proveedor se pagan aparte",editable:true},
+       materiales:[]},
+    
+      {id:40304, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Revalses: moldaje contorno radier", categoria:"Hormigón y Albañilería",
+       unidad:"ml", catalogId:210, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:10, pctUtilidad:12,
+       rendimiento:20, dotacion:2,
+       baseTecnica:{metodo:"Trazado, moldaje lateral, fijación y retiro",supuestos:"Altura hasta 15 cm y geometría recta; curvas y desniveles se ajustan",editable:true},
+       materiales:[{materialId:122,cantidad:0.4},{materialId:134,cantidad:0.03}]},
+    
+      {id:40305, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Revalses - solo mano de obra", categoria:"Hormigón y Albañilería",
+       unidad:"ml", catalogId:214, esSubcontrato:false, precioSubcontrato:0, precioMO:2800, pctMO:0, pctGG:10, pctUtilidad:12,
+       rendimiento:20, dotacion:2,
+       baseTecnica:{metodo:"Trazado, instalación y retiro con materiales suministrados",supuestos:"Altura hasta 15 cm y geometría recta",editable:true},
+       materiales:[]},
+    
+      {id:40306, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Radier H-20 e=8cm completo", categoria:"Hormigón y Albañilería",
+       unidad:"m²", catalogId:218, esSubcontrato:true, precioSubcontrato:33929, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:8, dotacion:3,
+       baseTecnica:{metodo:"Excavación, relleno, revalses y hormigonado como alcance integrado",supuestos:"Suelo normal; retiro, bombeo, malla y terminaciones especiales se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40307, tipo:"Nueva Construcción", estructura:"Hormigón",
+       nombre:"Radier H-25 e=10cm armado completo", categoria:"Hormigón Armado",
+       unidad:"m²", catalogId:219, esSubcontrato:true, precioSubcontrato:46429, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:6, dotacion:3,
+       baseTecnica:{metodo:"Preparación, malla, hormigón H-25, nivelado y curado",supuestos:"Suelo normal; cálculo, bombeo, juntas y terminaciones especiales se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40308, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Nivelación y compactación terreno con máquina", categoria:"Mov. de Tierras",
+       unidad:"m²", catalogId:213, esSubcontrato:true, precioSubcontrato:3125, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:100, dotacion:1,
+       baseTecnica:{metodo:"Perfilado y compactación mecánica de superficie",supuestos:"Sin aporte de material; humectación, ensayos y movilización mínima se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40309, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Nivelación y compactación terreno - solo mano de obra", categoria:"Mov. de Tierras",
+       unidad:"m²", catalogId:217, esSubcontrato:false, precioSubcontrato:0, precioMO:1450, pctMO:0, pctGG:10, pctUtilidad:12,
+       rendimiento:35, dotacion:1,
+       baseTecnica:{metodo:"Perfilado manual y compactación con equipo suministrado",supuestos:"Sin aporte ni retiro de material; superficie accesible",editable:true},
+       materiales:[]},
+    
+      {id:40310, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Impermeabilización bajo radier con polietileno", categoria:"Impermeabilización",
+       unidad:"m²", catalogId:212, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:10, pctUtilidad:12,
+       rendimiento:30, dotacion:1,
+       baseTecnica:{metodo:"Extendido, traslapo y sello de barrera bajo radier",supuestos:"Base limpia y nivelada; encuentros y pasadas especiales se ajustan",editable:true},
+       materiales:[{materialId:100,cantidad:1.1}]},
+    
+      {id:40311, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Impermeabilización bajo radier - solo mano de obra", categoria:"Impermeabilización",
+       unidad:"m²", catalogId:216, esSubcontrato:false, precioSubcontrato:0, precioMO:1200, pctMO:0, pctGG:10, pctUtilidad:12,
+       rendimiento:30, dotacion:1,
+       baseTecnica:{metodo:"Extendido y traslapo con polietileno suministrado",supuestos:"Base limpia, material disponible y geometría regular",editable:true},
+       materiales:[]},
+    
+      {id:40312, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Tachón reflectante instalado", categoria:"Pavimentos",
+       unidad:"unidad", catalogId:185, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:10, pctUtilidad:12,
+       rendimiento:30, dotacion:1,
+       baseTecnica:{metodo:"Replanteo, perforación, adhesivo y fijación",supuestos:"Pavimento sano y señalización estándar; gestión de tránsito se ajusta",editable:true},
+       materiales:[{materialId:298,cantidad:1}]},
+    
+      {id:40313, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Berma HEB o piedra bolón", categoria:"Pavimentos",
+       unidad:"ml", catalogId:186, esSubcontrato:true, precioSubcontrato:19643, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:12, dotacion:2,
+       baseTecnica:{metodo:"Conformación según sección, confinamiento y drenaje definidos",supuestos:"Material, excavación, transporte y compactación se confirman por proyecto",editable:true},
+       materiales:[]},
+    
+      {id:40314, tipo:"Regularización", estructura:"General",
+       nombre:"Carpeta Seremi Salud", categoria:"Regularización",
+       unidad:"unidad", catalogId:110, esSubcontrato:true, precioSubcontrato:133929, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Preparación y coordinación documental según actividad",supuestos:"Derechos, análisis, proyectos, correcciones y obras de adecuación no incluidos",editable:true},
+       materiales:[]},
+    
+      {id:40315, tipo:"Regularización", estructura:"General",
+       nombre:"Carpeta Registro Patentes", categoria:"Regularización",
+       unidad:"unidad", catalogId:111, esSubcontrato:true, precioSubcontrato:133929, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Preparación y coordinación de antecedentes municipales",supuestos:"Derechos, certificados externos, correcciones y obras no incluidos",editable:true},
+       materiales:[]},
+    
+      {id:40316, tipo:"Nueva Construcción", estructura:"Hormigón",
+       nombre:"Muro contención hormigón armado H-25", categoria:"Obras Exteriores",
+       unidad:"m²", catalogId:139, esSubcontrato:true, precioSubcontrato:147321, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:3, dotacion:3,
+       baseTecnica:{metodo:"Ejecución según cálculo estructural, fundación y drenaje",supuestos:"Geotecnia, excavación, entibación, bombeo y terminaciones se ajustan",editable:true},
+       materiales:[]},
+    
+      {id:40317, tipo:"Nueva Construcción", estructura:"Estructuras Metálicas",
+       nombre:"Cerco perimetral poste HEB con cadena", categoria:"Obras Exteriores",
+       unidad:"ml", catalogId:140, esSubcontrato:true, precioSubcontrato:37500, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:12, dotacion:2,
+       baseTecnica:{metodo:"Replanteo, fundación, postes, cadena y terminación",supuestos:"Separación, altura, terreno, portones y protección anticorrosiva se confirman",editable:true},
+       materiales:[]},
+
       {
         id: 31001,
         tipo: "Mantención",
@@ -16025,6 +16729,11 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 1,
         dotacion: 1,
+        baseTecnica: {
+          metodo: "Visita en terreno, levantamiento básico y diagnóstico",
+          supuestos: "Incluye movilización local y hasta una jornada profesional; estudios o ensayos se cotizan aparte",
+          editable: !0,
+        },
         materiales: [{ materialId: 428, cantidad: 1 }],
       },
       {
@@ -16083,6 +16792,11 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 1.5,
         dotacion: 1,
+        baseTecnica: {
+          metodo: "Retiro, ajuste e instalación de cerradura estándar",
+          supuestos: "Incluye visita y ajuste menor; reparación de hoja o marco se presupuesta aparte",
+          editable: !0,
+        },
         materiales: [{ materialId: 426, cantidad: 1 }],
       },
       {
@@ -16100,8 +16814,38 @@ Error generating stack: ` +
         pctUtilidad: 15,
         rendimiento: 3,
         dotacion: 1,
+        baseTecnica: {
+          metodo: "Desenergización, reemplazo de módulo, conexión y prueba",
+          supuestos: "Circuito existente operativo; canalización y reparación de cableado se presupuesta aparte",
+          editable: !0,
+        },
         materiales: [{ materialId: 425, cantidad: 1 }],
       },
+      /* ═══ AMPLIACIÓN PROFESIONAL 1 — VIVIENDA, EDIFICIO Y LOCAL ═══ */
+      {id:40401,tipo:"Nueva Construcción",estructura:"General",nombre:"Cierre provisorio de obra en placa OSB",categoria:"Obras Provisorias",unidad:"ml",catalogId:321,esSubcontrato:false,precioSubcontrato:0,pctMO:55,pctGG:12,pctUtilidad:15,rendimiento:12,dotacion:2,materiales:[{materialId:442,cantidad:0.34},{materialId:443,cantidad:0.45}]},
+      {id:40402,tipo:"Remodelación",estructura:"General",nombre:"Demolición tabique liviano con retiro a botadero",categoria:"Demolición",unidad:"m²",catalogId:322,esSubcontrato:false,precioSubcontrato:0,precioMO:10000,pctMO:88,pctGG:12,pctUtilidad:15,rendimiento:18,dotacion:2,materiales:[{materialId:428,cantidad:0.06}]},
+      {id:40403,tipo:"Nueva Construcción",estructura:"General",nombre:"Excavación manual de fundación hasta 0,80 m",categoria:"Mov. de Tierras",unidad:"m³",catalogId:323,esSubcontrato:false,precioSubcontrato:0,pctMO:90,pctGG:12,pctUtilidad:15,rendimiento:3,dotacion:2,materiales:[]},
+      {id:40404,tipo:"Nueva Construcción",estructura:"Hormigón",nombre:"Fundación aislada de hormigón armado",categoria:"Hormigón Armado",unidad:"m³",catalogId:324,esSubcontrato:false,precioSubcontrato:0,pctMO:55,pctGG:12,pctUtilidad:15,rendimiento:3,dotacion:3,materiales:[{materialId:444,cantidad:1.05},{materialId:445,cantidad:95},{materialId:446,cantidad:4}]},
+      {id:40405,tipo:"Nueva Construcción",estructura:"Hormigón",nombre:"Pilar de hormigón armado",categoria:"Hormigón Armado",unidad:"m³",catalogId:325,esSubcontrato:false,precioSubcontrato:0,pctMO:58,pctGG:12,pctUtilidad:15,rendimiento:2,dotacion:3,materiales:[{materialId:444,cantidad:1.05},{materialId:445,cantidad:145},{materialId:446,cantidad:10}]},
+      {id:40406,tipo:"Nueva Construcción",estructura:"Hormigón",nombre:"Viga de hormigón armado",categoria:"Hormigón Armado",unidad:"m³",catalogId:326,esSubcontrato:false,precioSubcontrato:0,pctMO:60,pctGG:12,pctUtilidad:15,rendimiento:1.8,dotacion:3,materiales:[{materialId:444,cantidad:1.05},{materialId:445,cantidad:165},{materialId:446,cantidad:12}]},
+      {id:40407,tipo:"Nueva Construcción",estructura:"General",nombre:"Muro cortina aluminio y vidrio termopanel",categoria:"Fachadas y Vidrios",unidad:"m²",catalogId:327,esSubcontrato:false,precioSubcontrato:0,pctMO:38,pctGG:12,pctUtilidad:15,rendimiento:4,dotacion:2,materiales:[{materialId:447,cantidad:1.05},{materialId:465,cantidad:0.12}]},
+      {id:40408,tipo:"Nueva Construcción",estructura:"General",nombre:"Ventana PVC termopanel instalada",categoria:"Fachadas y Vidrios",unidad:"m²",catalogId:328,esSubcontrato:false,precioSubcontrato:0,pctMO:38,pctGG:12,pctUtilidad:15,rendimiento:4,dotacion:2,materiales:[{materialId:448,cantidad:1},{materialId:465,cantidad:0.1}]},
+      {id:40409,tipo:"Nueva Construcción",estructura:"General",nombre:"Rampa accesible de hormigón con pasamanos",categoria:"Accesibilidad",unidad:"m²",catalogId:329,esSubcontrato:false,precioSubcontrato:0,pctMO:55,pctGG:12,pctUtilidad:15,rendimiento:3,dotacion:3,materiales:[{materialId:444,cantidad:0.12},{materialId:445,cantidad:8},{materialId:449,cantidad:1.2}]},
+      {id:40410,tipo:"Nueva Construcción",estructura:"General",nombre:"Pavimento podotáctil de alerta o avance",categoria:"Accesibilidad",unidad:"m²",catalogId:330,esSubcontrato:false,precioSubcontrato:0,pctMO:48,pctGG:12,pctUtilidad:15,rendimiento:8,dotacion:2,materiales:[{materialId:450,cantidad:6.5},{materialId:20,cantidad:0.08}]},
+      {id:40411,tipo:"Nueva Construcción",estructura:"General",nombre:"Red húmeda interior completa por gabinete",categoria:"Protección Incendio",unidad:"unidad",catalogId:331,esSubcontrato:false,precioSubcontrato:0,pctMO:50,pctGG:12,pctUtilidad:15,rendimiento:0.5,dotacion:2,materiales:[{materialId:451,cantidad:1}]},
+      {id:40412,tipo:"Nueva Construcción",estructura:"General",nombre:"Extintor PQS 6 kg instalado y señalizado",categoria:"Protección Incendio",unidad:"unidad",catalogId:332,esSubcontrato:false,precioSubcontrato:0,pctMO:30,pctGG:12,pctUtilidad:15,rendimiento:6,dotacion:1,materiales:[{materialId:452,cantidad:1},{materialId:453,cantidad:1}]},
+      {id:40413,tipo:"Nueva Construcción",estructura:"General",nombre:"Puerta cortafuego F-60 instalada",categoria:"Protección Incendio",unidad:"unidad",catalogId:333,esSubcontrato:false,precioSubcontrato:0,pctMO:38,pctGG:12,pctUtilidad:15,rendimiento:1,dotacion:2,materiales:[{materialId:454,cantidad:1},{materialId:465,cantidad:0.15}]},
+      {id:40414,tipo:"Nueva Construcción",estructura:"General",nombre:"Punto de red Cat 6 certificado",categoria:"Corrientes Débiles",unidad:"punto",catalogId:334,esSubcontrato:false,precioSubcontrato:0,pctMO:62,pctGG:12,pctUtilidad:15,rendimiento:4,dotacion:1,materiales:[{materialId:455,cantidad:18},{materialId:456,cantidad:1}]},
+      {id:40415,tipo:"Nueva Construcción",estructura:"General",nombre:"Punto cámara CCTV IP canalizado",categoria:"Corrientes Débiles",unidad:"punto",catalogId:335,esSubcontrato:false,precioSubcontrato:0,pctMO:55,pctGG:12,pctUtilidad:15,rendimiento:2,dotacion:1,materiales:[{materialId:455,cantidad:22},{materialId:457,cantidad:1}]},
+      {id:40416,tipo:"Nueva Construcción",estructura:"General",nombre:"Sistema citofonía o videoportero básico",categoria:"Corrientes Débiles",unidad:"unidad",catalogId:336,esSubcontrato:false,precioSubcontrato:0,pctMO:45,pctGG:12,pctUtilidad:15,rendimiento:0.8,dotacion:1,materiales:[{materialId:458,cantidad:1},{materialId:455,cantidad:20}]},
+      {id:40417,tipo:"Remodelación",estructura:"General",nombre:"Mueble base de cocina melamina con cubierta",categoria:"Equipamiento",unidad:"ml",catalogId:337,esSubcontrato:false,precioSubcontrato:0,pctMO:42,pctGG:12,pctUtilidad:15,rendimiento:2,dotacion:2,materiales:[{materialId:459,cantidad:1},{materialId:460,cantidad:1}]},
+      {id:40418,tipo:"Remodelación",estructura:"General",nombre:"Mueble aéreo de cocina melamina",categoria:"Equipamiento",unidad:"ml",catalogId:338,esSubcontrato:false,precioSubcontrato:0,pctMO:42,pctGG:12,pctUtilidad:15,rendimiento:2.5,dotacion:2,materiales:[{materialId:461,cantidad:1}]},
+      {id:40419,tipo:"Remodelación",estructura:"General",nombre:"Mesón de atención comercial laminado",categoria:"Equipamiento Comercial",unidad:"ml",catalogId:339,esSubcontrato:false,precioSubcontrato:0,pctMO:45,pctGG:12,pctUtilidad:15,rendimiento:1.5,dotacion:2,materiales:[{materialId:459,cantidad:1.15},{materialId:460,cantidad:1.15}]},
+      {id:40420,tipo:"Nueva Construcción",estructura:"General",nombre:"Sistema solar fotovoltaico on-grid 1 kWp",categoria:"Eficiencia Energética",unidad:"kWp",catalogId:340,esSubcontrato:false,precioSubcontrato:0,pctMO:35,pctGG:12,pctUtilidad:15,rendimiento:0.5,dotacion:2,materiales:[{materialId:462,cantidad:1}]},
+      {id:40421,tipo:"Nueva Construcción",estructura:"General",nombre:"Termo solar domiciliario 200 L instalado",categoria:"Eficiencia Energética",unidad:"unidad",catalogId:341,esSubcontrato:false,precioSubcontrato:0,pctMO:35,pctGG:12,pctUtilidad:15,rendimiento:0.5,dotacion:2,materiales:[{materialId:463,cantidad:1}]},
+      {id:40422,tipo:"Mantención",estructura:"General",nombre:"Mantención preventiva tablero eléctrico",categoria:"Mantención Preventiva",unidad:"unidad",catalogId:342,esSubcontrato:false,precioSubcontrato:0,precioMO:60000,pctMO:85,pctGG:10,pctUtilidad:15,rendimiento:1.5,dotacion:1,materiales:[]},
+      {id:40423,tipo:"Mantención",estructura:"General",nombre:"Limpieza y mantención equipo split mural",categoria:"Mantención Preventiva",unidad:"unidad",catalogId:343,esSubcontrato:false,precioSubcontrato:0,pctMO:72,pctGG:10,pctUtilidad:15,rendimiento:2,dotacion:1,materiales:[{materialId:464,cantidad:0.2}]},
+      {id:40424,tipo:"Mantención",estructura:"General",nombre:"Sellado preventivo de juntas y fisuras exteriores",categoria:"Mantención Preventiva",unidad:"ml",catalogId:344,esSubcontrato:false,precioSubcontrato:0,pctMO:55,pctGG:10,pctUtilidad:15,rendimiento:25,dotacion:1,materiales:[{materialId:465,cantidad:0.12}]},
     ].map((t) => d({ rendimiento: 30, dotacion: 1 }, t)),
     Kl = (t) => {
       window.__isElectron &&
@@ -16168,38 +16912,47 @@ Error generating stack: ` +
         noMatSub: Math.round(noMatS),
       };
     },
-    li = (t, i) => {
+    calculaMO = (t, i) => {
+      var r = parseFloat(t.rendimiento) || 0,
+        n = Math.max(0, parseInt(t.dotacion) || 0),
+        l = (i && Array.isArray(i.moItems) ? i.moItems : []).filter((b) => (parseFloat(b.jornal) || 0) > 0);
+      if (!(r > 0) || !(n > 0) || l.length === 0) return null;
+      var o = [];
+      if (Array.isArray(t.cuadrilla) && t.cuadrilla.length > 0)
+        o = t.cuadrilla.map((b) => {
+          var h = l.find((j) => String(j.id) === String(b.rolId)) || l.find((j) => String(j.rol || "").toLowerCase() === String(b.rol || "").toLowerCase());
+          return h ? { rol: h.rol, cantidad: Math.max(0, parseInt(b.cantidad) || 0), jornal: parseFloat(h.jornal) || 0 } : null;
+        }).filter((b) => b && b.cantidad > 0);
+      if (o.length === 0) {
+        var s = l.find((b) => /maestro/i.test(b.rol || "")) || l[0],
+          m = l.find((b) => /ayudante/i.test(b.rol || "")) || l.find((b) => b.id !== s.id) || s;
+        o = [{ rol: s.rol, cantidad: 1, jornal: parseFloat(s.jornal) || 0 }];
+        n > 1 && o.push({ rol: m.rol, cantidad: n - 1, jornal: parseFloat(m.jornal) || 0 });
+      }
+      var p = o.reduce((b, h) => b + h.jornal * h.cantidad, 0);
+      return p > 0 ? { total: p / r, costoCuadrillaDia: p, cuadrilla: o, label: o.map((b) => `${b.cantidad} ${b.rol}`).join(" + ") } : null;
+    },
+    li = (t, i, r) => {
       if (t.esSubcontrato) {
-        var r = parseFloat(t.precioSubcontrato) || 0,
-          n = (r * (parseFloat(t.pctGG) || 0)) / 100,
-          utilidad = ((r + n) * (parseFloat(t.pctUtilidad) || 0)) / 100;
-        return {
-          matTotal: 0,
-          moTotal: 0,
-          ggTotal: n,
-          utilTotal: utilidad,
-          precioFinal: Math.round(r + n + utilidad),
-          base: r,
-        };
+        var costoBase = parseFloat(t.precioSubcontrato) || 0,
+          n = (costoBase * (parseFloat(t.pctGG) || 0)) / 100,
+          utilidad = ((costoBase + n) * (parseFloat(t.pctUtilidad) || 0)) / 100;
+        return { matTotal: 0, moTotal: 0, ggTotal: n, utilTotal: utilidad, precioFinal: Math.round(costoBase + n + utilidad), base: costoBase, moSource: "subcontrato", moLabel: "Subcontrato" };
       }
       var l = (t.materiales || []).reduce((h, j) => {
           var F = i.find((g) => g.id === j.materialId);
           return h + (F ? F.precio : 0) * (parseFloat(j.cantidad) || 0);
         }, 0),
         o = parseFloat(t.precioMO) || 0,
-        s = o > 0 ? o : (l * (parseFloat(t.pctMO) || 0)) / 100,
+        manoObra = o > 0 ? null : calculaMO(t, r),
+        s = o > 0 ? o : manoObra ? manoObra.total : (l * (parseFloat(t.pctMO) || 0)) / 100,
         m = ((l + s) * (parseFloat(t.pctGG) || 0)) / 100,
         p = l + s + m,
         C = (p * (parseFloat(t.pctUtilidad) || 0)) / 100,
-        b = Math.round(p + C);
-      return {
-        matTotal: l,
-        moTotal: s,
-        ggTotal: m,
-        utilTotal: C,
-        precioFinal: b,
-        base: l,
-      };
+        b = Math.round(p + C),
+        fuenteMO = o > 0 ? "manual" : manoObra ? "jornales" : "porcentaje",
+        etiquetaMO = o > 0 ? "Precio manual" : manoObra ? "Jornales / rendimiento" : `Porcentaje ${parseFloat(t.pctMO) || 0}%`;
+      return { matTotal: l, moTotal: s, ggTotal: m, utilTotal: C, precioFinal: b, base: l, moSource: fuenteMO, moLabel: etiquetaMO, costoCuadrillaDia: manoObra && manoObra.costoCuadrillaDia, cuadrillaCalculada: manoObra && manoObra.cuadrilla, cuadrillaLabel: manoObra && manoObra.label };
     },
     Zl = (t) => {
       if (t instanceof Date) return t;
@@ -22041,6 +22794,7 @@ ${r.empresa}`;
     catalog: n,
     setCatalog: l,
     setToast: o,
+    cfg: cfgApu,
   }) {
     var s = [...new Set(r.map((_) => _.cat))].sort(),
       m = [
@@ -22168,7 +22922,7 @@ ${r.empresa}`;
           (i(j !== null ? t.map((xe) => (xe.id === j ? _ : xe)) : [...t, _]),
           _.catalogId && n)
         ) {
-          const { precioFinal: xe } = li(_, r);
+          const { precioFinal: xe } = li(_, r, cfgApu);
           l(
             n.map((se) =>
               se.id === _.catalogId ? u(d({}, se), { precio: xe }) : se,
@@ -22198,6 +22952,7 @@ ${r.empresa}`;
             })),
         }),
         r,
+        cfgApu,
       );
     const [G, ie] = V("Todos"),
       [oe, ce] = V("Todos"),
@@ -22226,11 +22981,11 @@ ${r.empresa}`;
         h((ue) => u(d({}, ue), { categoria: _, pctMO: Ip[_] || 50 }));
       },
       Ce = ({ apu: _ }) => {
-        var ue = li(_, r),
+        var ue = li(_, r, cfgApu),
           xe = [
             { label: "Materiales", val: ue.matTotal, color: "#60a5fa" },
             {
-              label: "Mano de Obra (" + _.pctMO + "%)",
+              label: "Mano de Obra - " + ue.moLabel,
               val: ue.moTotal,
               color: "#34d399",
             },
@@ -22703,7 +23458,7 @@ ${r.empresa}`;
                 !n.some((je) => je.apuId === he.id)
               );
             }).length,
-            H = t.map((he) => li(he, r).precioFinal).filter((he) => he > 0),
+            H = t.map((he) => li(he, r, cfgApu).precioFinal).filter((he) => he > 0),
             ae = H.length
               ? Math.round(H.reduce((he, je) => he + je, 0) / H.length)
               : 0,
@@ -23166,7 +23921,7 @@ ${r.empresa}`;
                 A &&
                   (() => {
                     var _ = A.apu,
-                      ue = li(_, r),
+                      ue = li(_, r, cfgApu),
                       xe = W.trim()
                         ? n.filter(
                             (se) =>
@@ -24126,7 +24881,7 @@ ${r.empresa}`;
                             e.jsxs("tbody", {
                               children: [
                                 ve.map((_) => {
-                                  var ue = li(_, r);
+                                  var ue = li(_, r, cfgApu);
                                   return e.jsxs(
                                     "tr",
                                     {
@@ -24209,7 +24964,7 @@ ${r.empresa}`;
                                                     onClick: (xe) => {
                                                       (xe.stopPropagation(),
                                                         ee("crear"));
-                                                      const se = li(_, r);
+                                                      const se = li(_, r, cfgApu);
                                                       (X({
                                                         apu: se.precioFinal,
                                                         custom: "",
@@ -25077,7 +25832,7 @@ ${r.empresa}`;
                                 [
                                   ["Materiales", Q.matTotal, "#60a5fa"],
                                   [
-                                    "Mano de Obra (" + b.pctMO + "%)",
+                                    "Mano de Obra - " + Q.moLabel,
                                     Q.moTotal,
                                     "#34d399",
                                   ],
@@ -26776,7 +27531,12 @@ ${r.empresa}`;
     onGoIndices: F,
     onClearDemo: g,
   }) {
-    const [z, B] = V(!1),
+    const currH = new Date().getHours(),
+      baseGreeting = currH < 12 ? "Buenos días" : currH < 20 ? "Buenas tardes" : "Buenas noches",
+      userName = n.firmaNombre ? n.firmaNombre.split(" ")[0] : "",
+      greetingTxt = userName ? `${baseGreeting}, ${userName} 👋` : `${baseGreeting} ☀️`,
+      dateStr = new Date().toLocaleDateString("es-ES", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).replace(/^./, (str) => str.toUpperCase()),
+      [z, B] = V(!1),
       [w, v] = V(null),
       [x, f] = V(() => {
         try {
@@ -27167,6 +27927,51 @@ ${r.empresa}`;
       };
     return e.jsxs(Re.Fragment, {
       children: [
+        e.jsxs("div", {
+          style: {
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 20,
+          },
+          children: [
+            e.jsxs("div", {
+              children: [
+                e.jsx("div", { style: { fontSize: 28, fontWeight: 800, color: a.text, letterSpacing: "-0.5px" }, children: greetingTxt }),
+                e.jsx("div", { style: { fontSize: 14, color: a.muted, marginTop: 4 }, children: dateStr })
+              ]
+            }),
+          ]
+        }),
+        e.jsx("div", {
+          style: { display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20 },
+          children: [
+            { ic: "📝", t: "Nuevo Presupuesto", act: C },
+            { ic: "🧱", t: "Base de Materiales", act: j },
+            { ic: "👥", t: "Mis Clientes", act: b },
+            { ic: "📋", t: "Ver Historial", act: h } 
+          ].map((btn, i) => e.jsxs("div", {
+            key: i,
+            onClick: btn.act,
+            onMouseEnter: (ev) => { ev.currentTarget.style.background = "rgba(255,255,255,0.03)"; ev.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; ev.currentTarget.style.transform = "translateY(-1px)"; },
+            onMouseLeave: (ev) => { ev.currentTarget.style.background = a.sb; ev.currentTarget.style.borderColor = a.border; ev.currentTarget.style.transform = "translateY(0)"; },
+            style: {
+              background: a.sb,
+              border: `1px solid ${a.border}`,
+              borderRadius: 8,
+              padding: "16px 18px",
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              cursor: "pointer",
+              transition: "all 0.15s ease"
+            },
+            children: [
+              e.jsx("div", { style: { fontSize: 19, filter: "grayscale(10%) opacity(0.9)" }, children: btn.ic }),
+              e.jsx("div", { style: { fontSize: 14, fontWeight: 600, color: a.text, letterSpacing: "0.2px" }, children: btn.t })
+            ]
+          }))
+        }),
         !x &&
           (() => {
             var L = t.filter((J) => !J._esDemo).length,
@@ -27481,7 +28286,11 @@ ${r.empresa}`;
                 e.jsxs(
                   "div",
                   {
-                    style: c.sc,
+                    style: u(d({}, c.sc), {
+                      transition: "transform 0.2s, box-shadow 0.2s",
+                    }),
+                    onMouseEnter: (ev) => { ev.currentTarget.style.transform = "translateY(-4px)"; ev.currentTarget.style.boxShadow = "0 10px 25px rgba(0,0,0,0.5)"; },
+                    onMouseLeave: (ev) => { ev.currentTarget.style.transform = "translateY(0)"; ev.currentTarget.style.boxShadow = "none"; },
                     children: [
                       e.jsx("div", {
                         style: { fontSize: 24, marginBottom: 6 },
@@ -28520,6 +29329,7 @@ ${r.empresa}`;
     onConfirm: l,
     onSkip: o,
     customData: cd,
+    cfg: cfgModal,
   }) {
     const [s, m] = V(
         cd && cd._customApuMaterials ? cd._customApuMaterials :
@@ -28538,15 +29348,14 @@ ${r.empresa}`;
       [manualUnit, setManualUnit] = V("und"),
       [manualPrice, setManualPrice] = V("0"),
       [manualSave, setManualSave] = V(true);
-    var v = s
-        .filter((y) => y._activo && y._mat)
-        .reduce((y, P) => y + P._mat.precio * (parseFloat(P.cantidad) || 0), 0),
-      precioMOBase = parseFloat(i.precioMO) || 0,
-      x = precioMOBase > 0 ? precioMOBase : (v * (parseFloat(p) || 0)) / 100,
-      f = ((v + x) * (parseFloat(b) || 0)) / 100,
+    var materialesActivos = s.filter((y) => y._activo && y._mat).map((y) => ({ materialId: y.materialId, cantidad: y.cantidad })),
+      calculoModal = li(u(d({}, i), { materiales: materialesActivos, pctMO: p, pctGG: b, pctUtilidad: j, rendimiento: g, dotacion: B }), r, cfgModal),
+      v = calculoModal.matTotal,
+      x = calculoModal.moTotal,
+      f = calculoModal.ggTotal,
       I = v + x + f,
-      D = (I * (parseFloat(j) || 0)) / 100,
-      k = Math.round(I + D),
+      D = calculoModal.utilTotal,
+      k = calculoModal.precioFinal,
       R = (y) =>
         m((P) =>
           P.map((A, S) => (S === y ? u(d({}, A), { _activo: !A._activo }) : A)),
@@ -28960,7 +29769,7 @@ ${r.empresa}`;
                   }),
                   [
                     ["Materiales", v, "#60a5fa"],
-                    [`MO (${p}%)`, x, "#34d399"],
+                    [`MO - ${calculoModal.moLabel}`, x, "#34d399"],
                     [`GG (${b}%)`, f, "#c084fc"],
                     [`Utilidad (${j}%)`, D, a.accent],
                   ].map(([y, P, A]) =>
@@ -36040,7 +36849,7 @@ MATERIALES:
             precio: W.precio,
             _tipoCosto: "auto",
           });
-        T && (L._apuMatUnit = parseFloat(li(T, l || []).matTotal) || 0);
+        T && (L._apuMatUnit = parseFloat(li(T, l || [], r).matTotal) || 0);
         var E = [...I.items, L],
           M = E.length - 1;
         (D((q) => u(d({}, q), { items: E })),
@@ -36128,6 +36937,7 @@ MATERIALES:
             apu: k.apu,
             materiales: l,
             setMateriales: setMateriales,
+            cfg: r,
             cantItem: parseFloat(I.items[k.idx] && I.items[k.idx].cant) || 1,
             onConfirm: (W, T, L, E, customMats, pMO, pGG, pUtil) => Y(k.idx, W, T, L, E, customMats, pMO, pGG, pUtil),
             onSkip: () => R(null),
@@ -36700,7 +37510,7 @@ MATERIALES:
                                                     At.materiales.length > 0,
                                                 );
                                               if (je) {
-                                                var ke = li(je, l || []),
+                                                var ke = li(je, l || [], r),
                                                   At =
                                                     (ke && ke.precioFinal) ||
                                                     ie,
@@ -36969,7 +37779,7 @@ MATERIALES:
                             At.materiales.length > 0,
                         );
                       if (je) {
-                        var ke = li(je, l || []),
+                        var ke = li(je, l || [], r),
                           At = (ke && ke.precioFinal) || ie,
                           ci = (ke && ke.matTotal) || 0;
                         if (At > 0 && ie > 0) {
@@ -46204,76 +47014,76 @@ MATERIALES:
         },
         {
           ic: "🗂️",
-          t: "Partidas de Obra",
-          d: "Catálogo de partidas para armar presupuestos más rápido",
+          t: "Partidas y APU",
+          d: "Catálogo de partidas y análisis de precios unitarios (Materiales+MO+GG+Utilidad)",
         },
         {
           ic: "🧱",
-          t: "Base de Materiales",
-          d: "Crea/actualiza materiales para cálculos más realistas",
-        },
-        {
-          ic: "🔧",
-          t: "APU",
-          d: "Precios unitarios: materiales + MO + GG + utilidad",
-        },
-        {
-          ic: "🏢",
-          t: "Proveedores y OC",
-          d: "Cotiza materiales y genera Órdenes de Compra PDF/Excel",
+          t: "Materiales y Proveedores",
+          d: "Crea materiales, cotiza con proveedores locales y genera Órdenes de Compra (OC)",
         },
         {
           ic: "⚖️",
-          t: "Licitaciones",
-          d: "Gestión integral de propuestas y ofertas para Mercado Público",
+          t: "Licitaciones M. Público",
+          d: "Búsqueda activa, análisis de conveniencia inteligente y gestión de ofertas",
         },
         {
-          ic: "🛒",
-          t: "Compra Ágil",
-          d: "Genera presupuestos rápidos tipo Compra Ágil",
+          ic: "📐",
+          t: "Cubicación Inteligente",
+          d: "Calcula cantidades de obra automáticamente a partir de dimensiones",
+        },
+        {
+          ic: "📊",
+          t: "Planificación",
+          d: "Carta Gantt y Calendario. Visualiza el progreso de la obra y gestiona hitos",
+        },
+        {
+          ic: "📈",
+          t: "Informes y Avances",
+          d: "Genera reportes de avance y estados de pago para tus clientes",
         },
         {
           ic: "📁",
           t: "Documentos",
-          d: "Plantillas y documentos asociados a la ejecución",
+          d: "Plantillas de contratos y documentos asociados a la ejecución",
         },
       ],
       F = [
         {
           n: "1",
           ic: "📋",
-          t: "Nuevo presupuesto",
-          d: "Crea el presupuesto y asigna cliente y fechas",
+          t: "Crea o Busca",
+          d: "Arma un nuevo presupuesto desde cero, o busca licitaciones en Mercado Público",
         },
         {
           n: "2",
           ic: "🗂️",
-          t: "Agrega partidas",
-          d: "Usa Partidas/Materiales/APU para calcular costos",
+          t: "Costea (APU/Material)",
+          d: "Usa tu base de datos y cotiza con proveedores para obtener costos reales",
         },
         {
           n: "3",
           ic: "📄",
-          t: "Genera PDF",
-          d: "Descarga el PDF y compártelo con tu cliente",
+          t: "Propuesta (PDF/Excel)",
+          d: "Genera tu presupuesto en PDF o expórtalo a Excel para postular",
         },
         {
           n: "4",
           ic: "✅",
-          t: "Gestiona estados",
-          d: "Aprobado, en progreso, completado y vencidos",
+          t: "Adjudicación y Contratos",
+          d: "Cambia el estado a 'Aprobado' y genera el contrato de obra",
         },
         {
           n: "5",
           ic: "📊",
-          t: "Planifica la obra",
-          d: "Carta Gantt y Calendario para seguimiento",
+          t: "Planificación (Gantt)",
+          d: "Ordena las partidas en el tiempo y programa tu calendario de trabajo",
         },
         {
           n: "6",
-          ic: "💾",
-          t: "Respalda tus datos",
-          d: "Usa Respaldos para no perder tu información",
+          ic: "📈",
+          t: "Ejecución y Cobro",
+          d: "Emite informes de avance y estados de pago conforme avanza la obra",
         },
       ];
     return e.jsx("div", {
@@ -47347,6 +48157,7 @@ MATERIALES:
       catalog: l,
       setCatalog: o,
       setToast: C,
+      cfg: s,
     });
   }
   var si = {
@@ -47549,7 +48360,7 @@ MATERIALES:
           Y = null;
         if (O && U) {
           var le = u(d({}, O), { pctGG: p, pctUtilidad: b }),
-            Z = li(le, r),
+            Z = li(le, r, l),
             X = Z.moTotal * (j / 100);
           (($ = Math.round(Z.precioFinal + X)),
             (ee = !0),
@@ -48473,7 +49284,7 @@ MATERIALES:
             cat: P,
           };
         var U = u(d({}, A), { pctGG: p, pctUtilidad: b }),
-          $ = li(U, r),
+          $ = li(U, r, l),
           ee = $.moTotal * (j / 100),
           Y = $.precioFinal + ee,
           le = Y * S,
@@ -54632,6 +55443,7 @@ MATERIALES:
           "documentos",
           "catalog",
           "materiales",
+          "proveedores",
           "apu",
         ],
         desc: "Plan anual · Básico + APU + Catálogo + Materiales",
@@ -54650,6 +55462,7 @@ MATERIALES:
           "documentos",
           "catalog",
           "materiales",
+          "proveedores",
           "apu",
           "lista",
           "cubicacion",
@@ -54673,6 +55486,7 @@ MATERIALES:
           "documentos",
           "catalog",
           "materiales",
+          "proveedores",
           "apu",
           "lista",
           "cubicacion",
@@ -54697,6 +55511,7 @@ MATERIALES:
           "documentos",
           "catalog",
           "materiales",
+          "proveedores",
           "apu",
           "lista",
           "cubicacion",
@@ -54714,6 +55529,7 @@ MATERIALES:
     Bg = {
       catalog: "constructor",
       materiales: "constructor",
+      proveedores: "constructor",
       apu: "constructor",
       lista: "pro",
       cubicacion: "pro",
@@ -56378,7 +57194,7 @@ MATERIALES:
                     }),
               ),
             ),
-          o("Ô£à Configuraci├│n guardada"),
+          o("✅ Configuración guardada"),
           s && s(!1));
       };
     return e.jsxs("div", {
@@ -58779,6 +59595,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
           no: [
             "APU y Análisis de Precios Unitarios",
             "Catálogo de partidas y Base de materiales",
+            "Directorio de Proveedores",
             "Cubicación y Carta Gantt",
             "Licitaciones Mercado Público",
           ],
@@ -58799,6 +59616,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
           no: [
             "APU y Análisis de Precios Unitarios",
             "Catálogo de partidas y Base de materiales",
+            "Directorio de Proveedores",
             "Cubicación y Carta Gantt",
             "Licitaciones Mercado Público",
           ],
@@ -58814,6 +59632,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             "Todo del plan Básico",
             "Catálogo de partidas",
             "Base de materiales propia",
+            "Directorio de Proveedores",
             "Análisis de Precios Unitarios",
           ],
           no: ["Cubicación y Carta Gantt", "Licitaciones Mercado Público"],
@@ -74592,7 +75411,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                     tx.materiales.length > 0,
                 );
               if (Ht) {
-                var Yp = li(Ht, j || []),
+                var Yp = li(Ht, j || [], l),
                   Xp = (Yp && Yp.precioFinal) || 0,
                   Jp = (Yp && Yp.matTotal) || 0,
                   Kp = parseFloat(Me.precio) || 0;
@@ -74910,6 +75729,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               ic: "⚖️",
               l: "Mercado Público",
               locked: !ye("licitaciones"),
+              actualizado: !0,
             },
           ],
         },
@@ -74936,7 +75756,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         {
           g: "Gestión",
           items: [
-            { k: "proveedores", ic: "🚚", l: "Proveedores" },
+            { k: "proveedores", ic: "🚚", l: "Proveedores", nuevo: !0 },
             { k: "clients", ic: "👥", l: "Clientes" },
             {
               k: "catalog",
@@ -75493,6 +76313,32 @@ Esta acción no se puede deshacer.`) &&
                                       letterSpacing: ".04em",
                                     },
                                     children: "BETA",
+                                  }),
+                                ae.nuevo &&
+                                  e.jsx("span", {
+                                    style: {
+                                      fontSize: 9,
+                                      fontWeight: 800,
+                                      background: "rgba(245,160,32,.2)",
+                                      color: "#f5a020",
+                                      padding: "1px 5px",
+                                      borderRadius: 4,
+                                      letterSpacing: ".04em",
+                                    },
+                                    children: "NUEVO",
+                                  }),
+                                ae.actualizado &&
+                                  e.jsx("span", {
+                                    style: {
+                                      fontSize: 9,
+                                      fontWeight: 800,
+                                      background: "rgba(16,185,129,.2)",
+                                      color: "#10b981",
+                                      padding: "1px 5px",
+                                      borderRadius: 4,
+                                      letterSpacing: ".04em",
+                                    },
+                                    children: "ACTUALIZADO",
                                   }),
                               ],
                             },
