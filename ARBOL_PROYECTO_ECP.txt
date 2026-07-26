@@ -1,0 +1,79 @@
+ENLACE CONSTRUCTOR PRO
+|
+|-- package.json                         Scripts npm y dependencias
+|-- package-lock.json                    Resolución de dependencias npm
+|-- AGENTS.md                            Reglas de fuente canónica
+|-- .gitignore
+|-- config/
+|   `-- canonical-baseline.json          Hashes y mínimos aceptados
+|
+|-- src/                                 Frontend servido/empaquetado directamente
+|   |-- index.html                       ENTRADA CANÓNICA
+|   |-- app.html                         Redirección a index.html
+|   |-- Enlace_Constructor_Pro.html      Cargador alternativo histórico
+|   |-- app.backup.html                  PROTOTIPO/FUENTE JSX LEGIBLE
+|   |-- audit_apu.html                   Herramienta de auditoría
+|   |-- claude_pack.js                   Paquete DMAT/DCAT/DAPU para migración
+|   |-- xlsx.full.min.js                 Dependencia vendorizada
+|   |-- jspdf.umd.min.js                 Dependencia vendorizada
+|   |-- apu_detail.js                    Fuente intermedia no cargada
+|   |-- materiales_tabs.js               Fuente intermedia no cargada
+|   |-- partidas_detail.js               Fuente intermedia no cargada
+|   |-- mp_api_tutorial.js               Fuente intermedia/no cargada
+|   |-- _legacy/
+|   |   `-- app_legacy_2026-07-23.html   Versión histórica JSX archivada
+|   `-- assets/
+|       |-- index.js                     JAVASCRIPT CANÓNICO VIGENTE
+|       |-- chunk.js                     Fragmento histórico no referenciado
+|       |-- index.js.test                Variante de prueba
+|       |-- index_backup.js              Respaldo histórico
+|       |-- index_backup_jul12.js        Respaldo histórico
+|       |-- index_backup_12_jul_2026.js  Respaldo histórico
+|       |-- index_ESTABLE_JULIO.js.bak   Respaldo histórico
+|       |-- generador_oc_modulo.js       Fuente intermedia integrada en index.js
+|       |-- modulo_proveedores.js        Fuente intermedia integrada en index.js
+|       |-- proveedores_module.js        Variante no cargada
+|       `-- proveedores_module_redesign.js
+|
+|-- src-tauri/                           Contenedor de escritorio Tauri 1.x
+|   |-- tauri.conf.json                  devPath/distDir -> ../src
+|   |-- Cargo.toml
+|   |-- Cargo.lock
+|   |-- build.rs
+|   |-- icons/
+|   `-- src/
+|       `-- main.rs
+|
+|-- scripts/
+|   |-- verify_canonical.js              Guarda de hashes, sintaxis y cobertura
+|   |-- accept_canonical_baseline.js      Aceptación explícita de línea base
+|   |-- audit_apu_technical.js            Auditoría de catálogo/materiales/APU
+|   |-- compare_index_variants.js         Comparación de variantes históricas
+|   |-- recover_tauri_brotli_asset.js     Recuperación de activo Tauri
+|   |-- serve_src_static.js               Servidor local de src/
+|   `-- [múltiples patch_*, fix_*, inject_*, sync_*]
+|
+|-- apus.json                             Exportación/insumo histórico
+|-- materiales.json                       Exportación/insumo histórico
+|-- catalog.json                          Exportación/insumo histórico
+|-- [múltiples scripts raíz de parche e inspección]
+|
+|-- auditoria_extractos/                  Copias legibles de secciones canónicas
+|-- DIAGNOSTICO_ORIGEN_ECP.md             Informe de origen
+|-- INVENTARIO_LOGICA_ECP.md              Inventario funcional
+|-- ARBOL_PROYECTO_ECP.txt                Este árbol
+`-- ECP_DIAGNOSTICO_CODIGO.zip            Paquete entregable
+
+CARPETAS DETECTADAS PERO OMITIDAS DE ESTE ÁRBOL DETALLADO
+
+- .git, .claude, .agents
+- node_modules
+- target, src-tauri/target, src-tauri/target_build, src-tauri/target_tmp
+- dist y cachés
+- release_installers y ejecutables
+- backup_localstorage, exports, _backups, _parches_aplicados
+- cdn_tmp, .wrangler
+- auditorías anteriores
+
+No se encontraron archivos fuente .jsx, .ts o .tsx activos. El JSX legible está
+embebido en los HTML históricos indicados arriba.
