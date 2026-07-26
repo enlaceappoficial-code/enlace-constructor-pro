@@ -5,6 +5,9 @@
   "scripts": {
     "tauri": "tauri",
     "dev": "tauri dev",
+    "verify:canonical": "node scripts/verify_canonical.js",
+    "canonical:accept": "node scripts/accept_canonical_baseline.js",
+    "prebuild": "npm run verify:canonical",
     "build": "tauri build"
   },
   "dependencies": {
@@ -15,6 +18,7 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.6.0",
-    "acorn": "^8.17.0"
+    "acorn": "^8.17.0",
+    "playwright-core": "^1.62.0"
   }
 }

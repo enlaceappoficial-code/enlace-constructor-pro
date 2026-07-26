@@ -5,9 +5,9 @@ use tauri::Manager;
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            let window = app.get_window("main").unwrap();
+            let _window = app.get_window("main").unwrap();
             #[cfg(debug_assertions)]
-            window.open_devtools();
+            _window.open_devtools();
             Ok(())
         })
         .run(tauri::generate_context!())

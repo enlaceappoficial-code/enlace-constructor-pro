@@ -21,6 +21,150 @@ var eu = (Mt, at, nt) =>
   u = (Mt, at) => rx(Mt, ax(at));
 (function () {
   "use strict";
+
+window.renderHitosSidebar = function(e, I, D, r, ne, J, a, c, ze, Pe, u, d, Re) {
+    if (!e || !e.jsxs) return null;
+    const hitos = I.hitosPago || [{ desc: "Anticipo", tipo: "porcentaje", valor: Math.round(r.anticipo * 100) }];
+    const total = J / (r.anticipo || 0.6); 
+    
+    const React = window.React || (typeof Re !== "undefined" ? Re : { useState: function(init) { let val = init; return [val, function(newVal) { val = newVal; }]; }});
+    return e.jsx(window.HitosEditor, { e, I, D, r, ne, J, a, c, ze, Pe, u, d, hitos, total, Re });
+};
+
+window.HitosEditor = function(props) {
+    const { e, I, D, r, ne, a, u, d, Re } = props;
+    const hitos = I.hitosPago || [{ desc: "Anticipo", tipo: "porcentaje", valor: Math.round(r.anticipo * 100) }];
+    
+    // We try to use Ee to get the exact total.
+    const eeRes = window.__Ee ? window.__Ee(I.items, r, I.descuento, I.modoCosteo, I.sinIva) : null;
+    const total = eeRes ? eeRes.total : (props.J / (r.anticipo || 0.6) || 1);
+    
+    const calculateAmount = (hito) => {
+        if (hito.tipo === 'monto') return parseFloat(hito.valor) || 0;
+        return Math.round((parseFloat(hito.valor) || 0) / 100 * total);
+    };
+    
+    return e.jsxs("div", {
+        style: { background: a.sb, padding: "12px", borderRadius: 8, marginBottom: 14, border: "1px solid " + a.border },
+        children: [
+            e.jsx("div", { style: { fontWeight: "bold", marginBottom: "8px", color: a.text, fontSize: 13 }, children: "Plan de Pagos (Hitos)" }),
+            ...hitos.map((hito, idx) => {
+                return e.jsxs("div", {
+                    style: { display: "flex", gap: "4px", marginBottom: "8px", alignItems: "center", flexWrap: "nowrap" },
+                    children: [
+                        e.jsx("input", {
+                            value: hito.desc,
+                            placeholder: "Descripción",
+                            onChange: (ev) => {
+                                const nh = JSON.parse(JSON.stringify(hitos)); nh[idx].desc = ev.target.value;
+                                D(Q => u(d({}, Q), { hitosPago: nh }));
+                            },
+                            style: { flex: 1, minWidth: "40px", padding: "4px 6px", fontSize: "12px", borderRadius: "4px", border: "1px solid " + a.border, background: a.bg, color: a.text }
+                        }),
+                        e.jsx("select", {
+                            value: hito.tipo,
+                            onChange: (ev) => {
+                                const nh = JSON.parse(JSON.stringify(hitos)); nh[idx].tipo = ev.target.value;
+                                D(Q => u(d({}, Q), { hitosPago: nh }));
+                            },
+                            style: { padding: "4px", fontSize: "12px", borderRadius: "4px", border: "1px solid " + a.border, background: a.bg, color: a.text },
+                            children: [
+                                e.jsx("option", { value: "porcentaje", children: "%" }),
+                                e.jsx("option", { value: "monto", children: "$" })
+                            ]
+                        }),
+                        e.jsx("input", {
+                            type: "number",
+                            value: hito.valor,
+                            onChange: (ev) => {
+                                const nh = JSON.parse(JSON.stringify(hitos)); nh[idx].valor = parseFloat(ev.target.value) || 0;
+                                D(Q => u(d({}, Q), { hitosPago: nh }));
+                            },
+                            style: { width: "60px", padding: "4px", fontSize: "12px", borderRadius: "4px", border: "1px solid " + a.border, background: a.bg, color: a.text }
+                        }),
+                        e.jsx("button", {
+                            onClick: () => {
+                                const nh = hitos.filter((_, i) => i !== idx);
+                                D(Q => u(d({}, Q), { hitosPago: nh }));
+                            },
+                            style: { background: "#ef4444", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", padding: "4px 8px", fontWeight: "bold", flexShrink: 0 },
+                            children: "X"
+                        })
+                    ]
+                });
+            }),
+            e.jsx("button", {
+                onClick: () => {
+                    const nh = [...hitos, { desc: "Nuevo Avance", tipo: "porcentaje", valor: 10 }];
+                    D(Q => u(d({}, Q), { hitosPago: nh }));
+                },
+                style: { display: "block", width: "100%", padding: "8px", background: "var(--btn-b-color, #3b82f6)", color: "white", borderRadius: "4px", border: "none", cursor: "pointer", fontSize: "13px", marginTop: "4px", fontWeight: "bold" },
+                children: "+ Agregar Hito"
+            })
+        ]
+    });
+};
+
+window.renderHitosModal = function(e, h, n, ne, j) {
+    const hitos = h.hitosPago || [{ desc: "Anticipo", tipo: "porcentaje", valor: Math.round(n.anticipo * 100) }];
+    const total = j / (n.anticipo || 0.6);
+    const calculateAmount = (hito) => {
+        if (hito.tipo === 'monto') return parseFloat(hito.valor) || 0;
+        return Math.round((parseFloat(hito.valor) || 0) / 100 * total);
+    };
+
+    return e.jsx("div", {
+        style: { marginTop: 7 },
+        children: hitos.map((hito, idx) => e.jsxs("div", {
+            style: {
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "8px 12px",
+                background: "#e8f5e9",
+                borderRadius: 6,
+                border: "1px solid #c8e6c9",
+                marginBottom: 4
+            },
+            children: [
+                e.jsx("span", { style: { fontSize: 14, color: "#2e7d32" }, children: hito.desc + (hito.tipo === 'porcentaje' ? ' (' + hito.valor + '%)' : '') }),
+                e.jsx("span", { style: { fontSize: 14, fontWeight: 700, color: "#2e7d32" }, children: ne(calculateAmount(hito)) })
+            ]
+        }))
+    });
+};
+
+window.renderHitosPdf = function(o, J, M, s, h, r, t) {
+    const hitos = t.hitosPago || [{ desc: "Anticipo", tipo: "porcentaje", valor: Math.round(r.anticipo * 100) }];
+    const total = h / (r.anticipo || 0.6) || 0;
+    
+    const calculateAmount = (hito) => {
+        if (hito.tipo === 'monto') return parseFloat(hito.valor) || 0;
+        return Math.round((parseFloat(hito.valor) || 0) / 100 * total);
+    };
+
+    let curM = M;
+    hitos.forEach(hito => {
+        o.setFillColor(240, 248, 241);
+        o.setDrawColor(180, 220, 185);
+        o.setLineWidth(0.3);
+        o.roundedRect(J - 2, curM, 196 - J + 2, 10, 2, 2, "FD");
+        o.setFont("helvetica", "normal");
+        o.setFontSize(9);
+        o.setTextColor(30, 110, 65);
+        o.text(
+            hito.desc + (hito.tipo === 'porcentaje' ? ' (' + hito.valor + '%)' : ''),
+            J + 2,
+            curM + 6.5
+        );
+        o.setFont("helvetica", "bold");
+        o.text(s(calculateAmount(hito)), 193, curM + 6.5, { align: "right" });
+        curM += 12; 
+    });
+    
+    return curM + 2;
+};
+
   function Mt(t) {
     return t &&
       t.__esModule &&
@@ -11252,6 +11396,108 @@ Error generating stack: ` +
       {id:342,cat:"Mantención Preventiva",desc:"Mantención preventiva tablero eléctrico",unidad:"unidad",precio:85000},
       {id:343,cat:"Mantención Preventiva",desc:"Limpieza y mantención equipo split mural",unidad:"unidad",precio:65000},
       {id:344,cat:"Mantención Preventiva",desc:"Sellado preventivo de juntas y fisuras exteriores",unidad:"ml",precio:6500},
+      /* ═══ CIERRE PERIMETRAL ACMA — DEMOLICIÓN, RETIRO Y REPOSICIÓN ═══ */
+      {id:345,cat:"Demolición",desc:"Demolición controlada cierre pandereta H=2,0 m",unidad:"m²",precio:29500},
+      {id:346,cat:"Demolición",desc:"Retiro poste hormigón prefabricado de cierre",unidad:"unidad",precio:42000},
+      {id:347,cat:"Demolición",desc:"Demolición selectiva dado de fundación existente",unidad:"unidad",precio:85000},
+      {id:348,cat:"Retiro de Escombros",desc:"Traslado interno de escombros en pendiente hasta 25 m",unidad:"m³",precio:44000},
+      {id:349,cat:"Retiro de Escombros",desc:"Retiro escombros camión tolva con carguío y botadero",unidad:"viaje",precio:320000},
+      {id:350,cat:"Estructuras Metálicas",desc:"Reutilización dado existente con platina y anclaje químico",unidad:"unidad",precio:72000},
+      {id:351,cat:"Hormigón y Albañilería",desc:"Fundación nueva para poste metálico de cierre",unidad:"unidad",precio:70000},
+      {id:352,cat:"Estructuras Metálicas",desc:"Poste perfil acero 40x40x4 mm fabricado e instalado",unidad:"unidad",precio:52000},
+      {id:353,cat:"Estructuras Metálicas",desc:"Paño malla ACMA 1G 3,00x1,85 m marco ángulo 25x25x3 mm",unidad:"unidad",precio:105000},
+      {id:354,cat:"Estructuras Metálicas",desc:"Paño malla ACMA 1G 3,00x1,85 m marco ángulo 25x25x4 mm",unidad:"unidad",precio:115000},
+      {id:355,cat:"Estructuras Metálicas",desc:"Paño corto escalonado malla ACMA 1G 1,50x1,85 m marco 3 mm",unidad:"unidad",precio:68000},
+      {id:356,cat:"Estructuras Metálicas",desc:"Paño corto escalonado malla ACMA 1G 1,50x1,85 m marco 4 mm",unidad:"unidad",precio:74000},
+      {id:357,cat:"Obras Exteriores",desc:"Limpieza y perfilado final de franja de cierre",unidad:"ml",precio:3200},
+      {id:358,cat:"Estructuras Metálicas",desc:"Cierre Acmafor 3D 2.5m verde c/postes",unidad:"ml",precio:75000},
+      /* ═══ AMPLIACIÓN 2026-07-25 — MANTENCIÓN PINTURA, SERVICIOS GENERALES, EQUIPAMIENTO COMERCIAL ═══ */
+      {id:359,cat:"Mantención Pintura",desc:"Repintado interior con tratamiento de humedad/hongos",unidad:"m²",precio:9200},
+      {id:360,cat:"Mantención Pintura",desc:"Pintura de cielo americano o placa yeso-cartón",unidad:"m²",precio:6500},
+      {id:361,cat:"Mantención Pintura",desc:"Lavado a presión y pintura de fachada exterior",unidad:"m²",precio:9800},
+      {id:362,cat:"Servicios Generales",desc:"Limpieza fina post obra o entrega",unidad:"m²",precio:2200},
+      {id:363,cat:"Servicios Generales",desc:"Traslado y acarreo de mobiliario (mudanza interna)",unidad:"gl",precio:85000},
+      {id:364,cat:"Servicios Generales",desc:"Jornada adicional de especialista a trato",unidad:"jornada",precio:45000},
+      {id:365,cat:"Equipamiento Comercial",desc:"Letrero acrílico luminoso con letras corpóreas",unidad:"m²",precio:185000},
+      {id:366,cat:"Equipamiento Comercial",desc:"Vitrina exhibidora de melamina con vidrio",unidad:"ml",precio:210000},
+      {id:367,cat:"Equipamiento Comercial",desc:"Mueble para punto de venta o caja registradora",unidad:"unidad",precio:280000},
+      /* ═══ AMPLIACIÓN 2026-07-25 (2) — SANITARIO Y GAS RESIDENCIAL ═══ */
+      {id:368,cat:"Instalaciones Sanitarias",desc:"Instalación de WC estándar con cisterna",unidad:"unidad",precio:165000},
+      {id:369,cat:"Instalaciones Sanitarias",desc:"Instalación de ducha con mezcladora simple",unidad:"unidad",precio:130000},
+      {id:370,cat:"Instalaciones Sanitarias",desc:"Instalación de tina o bañera",unidad:"unidad",precio:320000},
+      {id:371,cat:"Instalaciones Sanitarias",desc:"Ampliación de red de desagüe PVC interior",unidad:"ml",precio:8500},
+      {id:372,cat:"Gas",desc:"Instalación de calefont a gas 10L",unidad:"unidad",precio:320000},
+      {id:373,cat:"Gas",desc:"Ampliación de red de gas residencial en cobre",unidad:"ml",precio:9500},
+      {id:374,cat:"Gas",desc:"Instalación de regulador y manguera de gas licuado",unidad:"unidad",precio:58000},
+      {id:375,cat:"Gas",desc:"Instalación de detector de gas GLP",unidad:"unidad",precio:55000},
+      /* ═══ AMPLIACIÓN 2026-07-26 — METALCON ESTRUCTURAL ═══ */
+      {id:382,cat:"Metalcon Estructural",desc:"Correa Metalcon omega 100x30mm e=0.85mm instalada",unidad:"ml",precio:4200},
+      {id:383,cat:"Metalcon Estructural",desc:"Correa Metalcon omega 100x30mm e=1.5mm reforzada instalada",unidad:"ml",precio:5900},
+      {id:384,cat:"Metalcon Estructural",desc:"Correa Metalcon C200x50mm e=2.0mm (techo de mayor luz) instalada",unidad:"ml",precio:12800},
+      {id:385,cat:"Metalcon Estructural",desc:"Viga cajón Metalcon 2xC 150mm soldada (dintel/viga)",unidad:"ml",precio:19500},
+      {id:386,cat:"Metalcon Estructural",desc:"Viga cajón Metalcon 2xC 200mm soldada (luces mayores)",unidad:"ml",precio:27500},
+      {id:387,cat:"Metalcon Estructural",desc:"Perfil Z 150mm e=2.0mm instalado (correa o refuerzo)",unidad:"ml",precio:10800},
+      {id:388,cat:"Metalcon Estructural",desc:"Perfil angular acero 50x50x3mm instalado (arriostramiento)",unidad:"ml",precio:6900},
+      {id:389,cat:"Metalcon Estructural",desc:"Base de poste o columna metálica con placa y pernos de anclaje",unidad:"unidad",precio:19800},
+      {id:390,cat:"Metalcon Estructural",desc:"Tabique Metalcon estructural reforzado 90x38mm (muro de carga liviano)",unidad:"m²",precio:75000},
+      {id:391,cat:"Metalcon Estructural",desc:"Tabique Metalcon estructural liviano 60x38mm",unidad:"m²",precio:48000},
+      {id:392,cat:"Metalcon Estructural",desc:"Muro Metalcon perimetral económico 100x50mm e=0.85mm",unidad:"m²",precio:72000},
+      {id:393,cat:"Metalcon Estructural",desc:"Muro Metalcon perimetral reforzado 150x50mm e=1.0mm",unidad:"m²",precio:80000},
+      /* ═══ AMPLIACIÓN 2026-07-26 (2) — HORMIGÓN Y ALBAÑILERÍA ═══ */
+      {id:394,cat:"Albañilería",desc:"Muro albañilería bloques 14cm (sin refuerzo)",unidad:"m²",precio:32000},
+      {id:395,cat:"Albañilería",desc:"Hormigón elaborado en obra (dosificación artesanal)",unidad:"m³",precio:165000},
+      {id:396,cat:"Albañilería",desc:"Base granular compactada para radier o pavimento",unidad:"m²",precio:8500},
+      {id:397,cat:"Albañilería",desc:"Relleno o enrocado con piedra bolón",unidad:"m³",precio:68000},
+      {id:398,cat:"Albañilería",desc:"Enlucido o relleno con yeso en muros interiores",unidad:"m²",precio:6500},
+      /* ═══ AMPLIACIÓN 2026-07-26 (3) — MADERA ESTRUCTURAL ═══ */
+      {id:399,cat:"Madera NC",desc:"Instalación de cercha prefabricada pino 8m de luz",unidad:"par",precio:95000},
+      {id:400,cat:"Madera NC",desc:"Entramado o refuerzo con polín pino 2x2\"",unidad:"ml",precio:3500},
+      {id:401,cat:"Madera NC",desc:"Viga o dintel de madera pino 2x8\"",unidad:"ml",precio:9500},
+      {id:402,cat:"Madera NC",desc:"Cielo o entrepiso con terciado estructural 12mm",unidad:"m²",precio:12500},
+      /* ═══ AMPLIACIÓN 2026-07-26 (4) — TECHUMBRES ═══ */
+      {id:403,cat:"Techumbres",desc:"Cubierta zinc teja española instalada",unidad:"m²",precio:16500},
+      {id:404,cat:"Techumbres",desc:"Cubierta policarbonato alveolar 8mm instalada",unidad:"m²",precio:26000},
+      {id:405,cat:"Techumbres",desc:"Limatesa de zinc instalada",unidad:"unidad",precio:9800},
+      {id:406,cat:"Techumbres",desc:"Impermeabilización acrílica de techumbre",unidad:"m²",precio:3800},
+      /* ═══ AMPLIACIÓN 2026-07-26 (5) — PISOS Y REVESTIMIENTOS ═══ */
+      {id:407,cat:"Pisos",desc:"Piso flotante laminado AC5 (uso comercial)",unidad:"m²",precio:27000},
+      {id:408,cat:"Pisos",desc:"Renovación de fragua en juntas de piso o revestimiento",unidad:"m²",precio:3800},
+      {id:409,cat:"Pisos",desc:"Fijación de piso de parquet con adhesivo (madera de cargo del cliente)",unidad:"m²",precio:14500},
+      {id:410,cat:"Pisos",desc:"Piso vinílico adherido con adhesivo acrílico (instalación pegada)",unidad:"m²",precio:24000},
+      /* ═══ AMPLIACIÓN 2026-07-26 (6) — CLIMATIZACIÓN ═══ */
+      {id:411,cat:"Climatización",desc:"Suministro de equipo split 9.000 BTU (sin instalación)",unidad:"unidad",precio:310000},
+      {id:412,cat:"Climatización",desc:"Suministro de equipo split 12.000 BTU (sin instalación)",unidad:"unidad",precio:420000},
+      {id:413,cat:"Climatización",desc:"Suministro de equipo split 18.000 BTU (sin instalación)",unidad:"unidad",precio:570000},
+      {id:414,cat:"Climatización",desc:"Instalación de split (mano de obra, equipo de cliente o comprado aparte)",unidad:"unidad",precio:95000},
+      /* ═══ AMPLIACIÓN 2026-07-26 (7) — AISLACIÓN E IMPERMEABILIZACIÓN ═══ */
+      {id:415,cat:"Aislación",desc:"Aislación térmica de muro con poliestireno EPS 50mm",unidad:"m²",precio:6800},
+      {id:416,cat:"Aislación",desc:"Aislación térmica de muro o techo con poliestireno EPS 100mm",unidad:"m²",precio:11500},
+      {id:417,cat:"Impermeabilización",desc:"Impermeabilización de muro bajo nivel con membrana deltaforce",unidad:"m²",precio:9200},
+      /* ═══ AMPLIACIÓN 2026-07-26 (8) — CARPINTERÍA ═══ */
+      {id:418,cat:"Carpintería",desc:"Ventana proyectante PVC 60x60cm instalada",unidad:"unidad",precio:88000},
+      {id:419,cat:"Carpintería",desc:"Perfil de terminación de aluminio instalado",unidad:"ml",precio:5200},
+      /* ═══ AMPLIACIÓN 2026-07-26 (9) — CIERRE DE BIBLIOTECA (categorías con 1 material) ═══ */
+      {id:420,cat:"Tabiquería",desc:"Tabique cortafuego con placa yeso RF 15mm",unidad:"m²",precio:32000},
+      {id:421,cat:"Impermeabilización",desc:"Impermeabilización de muro con manta drenante geodren",unidad:"m²",precio:11500},
+      {id:422,cat:"Mantención Eléctrica",desc:"Cambio de ampolleta o foco LED",unidad:"unidad",precio:6500},
+      {id:423,cat:"Instalaciones Sanitarias",desc:"Red de desagüe PVC 4\" (colector principal)",unidad:"ml",precio:9500},
+      {id:424,cat:"Gas",desc:"Red de gas en cobre 3/4\" (matriz o alimentación principal)",unidad:"ml",precio:13500},
+      {id:425,cat:"Estructuras Metálicas",desc:"Fijación con tornillo autorroscante en perfil metálico (por caja)",unidad:"caja",precio:4200},
+      {id:426,cat:"Mov. de Tierras",desc:"Entibación de excavación con plancha metálica",unidad:"unidad",precio:52000},
+      {id:427,cat:"Obras Exteriores",desc:"Poste HEB de acero para cierre o estructura exterior",unidad:"unidad",precio:32000},
+      {id:428,cat:"Seguridad",desc:"Instalación de alarma domiciliaria básica",unidad:"unidad",precio:118000},
+      {id:429,cat:"Hormigón Armado",desc:"Refuerzo puntual con fierro corrugado 8mm",unidad:"ml",precio:1200},
+      {id:430,cat:"Sanitario",desc:"Instalación de estanque elevado 500L (base existente)",unidad:"unidad",precio:105000},
+      {id:431,cat:"Obras Provisorias",desc:"Arriendo de baño químico (mensual)",unidad:"mes",precio:110000},
+      {id:432,cat:"Servicios",desc:"Transporte en camión tolva 8 m³ (flete general)",unidad:"viaje",precio:320000},
+      {id:433,cat:"Pintura",desc:"Kit de insumos para pintura (brochas, bandejas, lijas, masilla)",unidad:"gl",precio:15000},
+      /* ═══ AMPLIACIÓN 2026-07-25 (3) — ELÉCTRICA ═══ */
+      {id:376,cat:"Instalaciones Eléctricas",desc:"Tablero de distribución 4 circuitos",unidad:"unidad",precio:65000},
+      {id:377,cat:"Instalaciones Eléctricas",desc:"Tablero de distribución 12 circuitos",unidad:"unidad",precio:140000},
+      {id:378,cat:"Instalaciones Eléctricas",desc:"Cableado de circuito reforzado 6mm² (calefont/A.A.)",unidad:"ml",precio:4200},
+      {id:379,cat:"Instalaciones Eléctricas",desc:"Cableado de circuito industrial/hornillas 10mm²",unidad:"ml",precio:6000},
+      {id:380,cat:"Instalaciones Eléctricas",desc:"Instalación de luminaria LED panel embutido 24W",unidad:"unidad",precio:32000},
+      {id:381,cat:"Instalaciones Eléctricas",desc:"Instalación de barra LED bajo mueble",unidad:"unidad",precio:16000},
     ],
     Rn = [
       {
@@ -13401,6 +13647,24 @@ Error generating stack: ` +
       {id:463, cat:"Eficiencia Energética", nombre:"Termo solar 200 L con colector", unidad:"kit", precio:885000},
       {id:464, cat:"Mantención", nombre:"Limpiador técnico para evaporadores", unidad:"litro", precio:12500},
       {id:465, cat:"Impermeabilización", nombre:"Sellante poliuretano para juntas 600 ml", unidad:"unidad", precio:9800},
+      /* ═══ MATERIALES — CIERRE PERIMETRAL ACMA ═══ */
+      {id:466, cat:"Estructuras Metálicas", nombre:"Perfil tubular cuadrado acero 40x40x4 mm", unidad:"ml", uc:{q:6,label:"barras 6m"}, precio:7000},
+      {id:467, cat:"Estructuras Metálicas", nombre:"Ángulo laminado acero 25x25x3 mm", unidad:"ml", uc:{q:6,label:"barras 6m"}, precio:2005},
+      {id:468, cat:"Estructuras Metálicas", nombre:"Ángulo laminado acero 25x25x4 mm", unidad:"ml", uc:{q:6,label:"barras 6m"}, precio:2700},
+      {id:469, cat:"Estructuras Metálicas", nombre:"Malla cerco galvanizada ACMA 1G 1,85x3,00 m", unidad:"unidad", precio:17500},
+      {id:470, cat:"Anclajes", nombre:"Anclaje químico bicomponente para hormigón", unidad:"cartucho", precio:22000},
+      {id:471, cat:"Anclajes", nombre:"Varilla roscada galvanizada M12 con tuerca y golilla", unidad:"unidad", precio:1800},
+      {id:472, cat:"Demolición", nombre:"Saco reforzado para escombros de hormigón", unidad:"unidad", precio:450},
+      {id:473, cat:"Servicios", nombre:"Camión tolva 8 m³ con carguío y botadero autorizado", unidad:"viaje", precio:280000},
+      {id:474, cat:"Equipos", nombre:"Martillo demoledor eléctrico con desgaste y energía", unidad:"día", precio:25000},
+      {id:475, cat:"Estructuras Metálicas", nombre:"Imprimante anticorrosivo rico en zinc", unidad:"litro", precio:13500},
+      {id:476, cat:"Estructuras Metálicas", nombre:"Malla Acmafor 3D 2.5m x 2.5m verde", unidad:"unidad", precio:25000},
+      {id:477, cat:"Estructuras Metálicas", nombre:"Poste Acmafor 3D 60x60 verde 3m", unidad:"unidad", precio:15000},
+      {id:478, cat:"Estructuras Metálicas", nombre:"Kit fijaciones Acmafor verde", unidad:"unidad", precio:1500},
+      /* ═══ AMPLIACIÓN 2026-07-25 — MANTENCIÓN PINTURA, SERVICIOS GENERALES, EQUIPAMIENTO COMERCIAL ═══ */
+      {id:479, cat:"Pintura", nombre:"Fungicida/sellador antihongos para muros", unidad:"galón", precio:9500},
+      {id:480, cat:"Servicios Generales", nombre:"Kit insumos limpieza fina post obra", unidad:"gl", precio:18000},
+      {id:481, cat:"Fachadas y Vidrios", nombre:"Vidrio templado 6mm", unidad:"m²", precio:55000},
     ],
     Ip = {
       Pintura: 45,
@@ -16846,6 +17110,553 @@ Error generating stack: ` +
       {id:40422,tipo:"Mantención",estructura:"General",nombre:"Mantención preventiva tablero eléctrico",categoria:"Mantención Preventiva",unidad:"unidad",catalogId:342,esSubcontrato:false,precioSubcontrato:0,precioMO:60000,pctMO:85,pctGG:10,pctUtilidad:15,rendimiento:1.5,dotacion:1,materiales:[]},
       {id:40423,tipo:"Mantención",estructura:"General",nombre:"Limpieza y mantención equipo split mural",categoria:"Mantención Preventiva",unidad:"unidad",catalogId:343,esSubcontrato:false,precioSubcontrato:0,pctMO:72,pctGG:10,pctUtilidad:15,rendimiento:2,dotacion:1,materiales:[{materialId:464,cantidad:0.2}]},
       {id:40424,tipo:"Mantención",estructura:"General",nombre:"Sellado preventivo de juntas y fisuras exteriores",categoria:"Mantención Preventiva",unidad:"ml",catalogId:344,esSubcontrato:false,precioSubcontrato:0,pctMO:55,pctGG:10,pctUtilidad:15,rendimiento:25,dotacion:1,materiales:[{materialId:465,cantidad:0.12}]},
+      /* ═══ CIERRE PERIMETRAL ACMA — DEMOLICIÓN, RETIRO Y REPOSICIÓN ═══ */
+      {id:40501,tipo:"Remodelación",estructura:"General",
+       nombre:"Demolición controlada cierre pandereta H=2,0 m",categoria:"Demolición",
+       unidad:"m²",catalogId:345,esSubcontrato:false,precioSubcontrato:0,pctMO:88,pctGG:12,pctUtilidad:12,
+       rendimiento:5,dotacion:2,
+       baseTecnica:{metodo:"Control del paño, picado con demoledor, trozado, ensacado y acopio inmediato dentro del frente",supuestos:"Cierre prefabricado de placas de hormigón hasta 2,0 m; traslado en pendiente y retiro en camión se miden aparte",editable:true},
+       materiales:[{materialId:472,cantidad:5},{materialId:474,cantidad:0.2}]},
+      {id:40502,tipo:"Remodelación",estructura:"General",
+       nombre:"Retiro poste hormigón prefabricado de cierre",categoria:"Demolición",
+       unidad:"unidad",catalogId:346,esSubcontrato:false,precioSubcontrato:0,pctMO:88,pctGG:12,pctUtilidad:12,
+       rendimiento:3,dotacion:2,
+       baseTecnica:{metodo:"Estabilización, liberación de placas, corte o picado en la base y retiro controlado del poste",supuestos:"Todos los postes del tramo se retiran; la demolición del dado y el traslado a acopio se miden aparte",editable:true},
+       materiales:[{materialId:472,cantidad:4},{materialId:474,cantidad:0.25}]},
+      {id:40503,tipo:"Remodelación",estructura:"Hormigón",
+       nombre:"Demolición selectiva dado de fundación existente",categoria:"Demolición",
+       unidad:"unidad",catalogId:347,esSubcontrato:false,precioSubcontrato:0,pctMO:88,pctGG:12,pctUtilidad:12,
+       rendimiento:1.5,dotacion:2,
+       baseTecnica:{metodo:"Picado y demolición localizada del dado que interfiere con el nuevo trazado",supuestos:"Partida provisional sólo para dados que efectivamente interfieran o no sean reutilizables; volumen referencial hasta 0,25 m³ por unidad",editable:true},
+       materiales:[{materialId:472,cantidad:10},{materialId:474,cantidad:0.5}]},
+      {id:40504,tipo:"Remodelación",estructura:"General",
+       nombre:"Traslado interno de escombros en pendiente hasta 25 m",categoria:"Retiro de Escombros",
+       unidad:"m³",catalogId:348,esSubcontrato:false,precioSubcontrato:0,precioMO:35000,pctMO:0,pctGG:12,pctUtilidad:12,
+       rendimiento:2,dotacion:3,
+       baseTecnica:{metodo:"Extracción desde el cierre hasta el punto accesible de acopio mediante el método interno más eficiente",supuestos:"Recorrido aproximado de 25 m en pendiente; no incluye carguío, transporte ni derecho de botadero",editable:true},
+       materiales:[]},
+      {id:40505,tipo:"Remodelación",estructura:"General",
+       nombre:"Retiro escombros camión tolva con carguío y botadero",categoria:"Retiro de Escombros",
+       unidad:"viaje",catalogId:349,esSubcontrato:true,precioSubcontrato:280000,pctMO:0,pctGG:8,pctUtilidad:5,
+       rendimiento:1,dotacion:1,
+       baseTecnica:{metodo:"Carguío desde acopio superior, transporte y descarga en recinto autorizado",supuestos:"Referencia para tolva de hasta 8 m³; la carga efectiva queda limitada por peso legal, accesibilidad y tarifa local",editable:true},
+       materiales:[]},
+      {id:40506,tipo:"Remodelación",estructura:"Estructuras Metálicas",
+       nombre:"Reutilización dado existente con platina y anclaje químico",categoria:"Estructuras Metálicas",
+       unidad:"unidad",catalogId:350,esSubcontrato:false,precioSubcontrato:0,pctMO:60,pctGG:12,pctUtilidad:12,
+       rendimiento:2,dotacion:2,
+       baseTecnica:{metodo:"Saneo superficial, perforación, limpieza, anclaje químico de cuatro pernos y fijación de platina soldada al poste",supuestos:"Sólo para dados sanos, estables y con dimensiones compatibles; separación a bordes, diámetro y profundidad se validan antes de perforar",editable:true},
+       materiales:[{materialId:240,cantidad:1},{materialId:470,cantidad:0.25},{materialId:471,cantidad:4},{materialId:234,cantidad:0.12},{materialId:235,cantidad:0.2},{materialId:475,cantidad:0.12},{materialId:243,cantidad:0.12}]},
+      {id:40507,tipo:"Nueva Construcción",estructura:"Hormigón",
+       nombre:"Fundación nueva para poste metálico de cierre",categoria:"Hormigón y Albañilería",
+       unidad:"unidad",catalogId:351,esSubcontrato:false,precioSubcontrato:0,pctMO:55,pctGG:12,pctUtilidad:12,
+       rendimiento:2,dotacion:2,
+       baseTecnica:{metodo:"Replanteo, excavación, armadura mínima, posicionamiento del poste o anclajes, hormigonado y curado",supuestos:"Volumen referencial 0,10 m³ de H-25 y 4 kg de acero; dimensiones definitivas según terreno, altura, viento y solución de anclaje",editable:true},
+       materiales:[{materialId:444,cantidad:0.1},{materialId:445,cantidad:4}]},
+      {id:40508,tipo:"Nueva Construcción",estructura:"Estructuras Metálicas",
+       nombre:"Poste perfil acero 40x40x4 mm fabricado e instalado",categoria:"Estructuras Metálicas",
+       unidad:"unidad",catalogId:352,esSubcontrato:false,precioSubcontrato:0,pctMO:60,pctGG:12,pctUtilidad:12,
+       rendimiento:4,dotacion:2,
+       baseTecnica:{metodo:"Corte, preparación, soldadura a platina cuando corresponda, aplome, fijación y protección anticorrosiva",supuestos:"Largo referencial 2,40 m; perfil 40x40x4 mm como mínimo solicitado, sujeto a verificación por altura, modulación, viento y exposición costera",editable:true},
+       materiales:[{materialId:466,cantidad:2.4},{materialId:234,cantidad:0.08},{materialId:235,cantidad:0.2},{materialId:475,cantidad:0.15},{materialId:243,cantidad:0.15},{materialId:244,cantidad:0.08}]},
+      {id:40509,tipo:"Nueva Construcción",estructura:"Estructuras Metálicas",
+       nombre:"Paño malla ACMA 1G 3,00x1,85 m marco ángulo 25x25x3 mm",categoria:"Estructuras Metálicas",
+       unidad:"unidad",catalogId:353,esSubcontrato:false,precioSubcontrato:0,pctMO:60,pctGG:12,pctUtilidad:12,
+       rendimiento:2,dotacion:2,
+       baseTecnica:{metodo:"Corte a escuadra, fabricación del marco, soldadura de malla, limpieza, protección anticorrosiva y montaje",supuestos:"Paño nominal 3,00x1,85 m; considera 5% de merma de ángulo, encuentros rectos y fundaciones/postes medidos aparte",editable:true},
+       materiales:[{materialId:469,cantidad:1},{materialId:467,cantidad:10.2},{materialId:234,cantidad:0.25},{materialId:235,cantidad:1.5},{materialId:236,cantidad:0.25},{materialId:475,cantidad:0.3},{materialId:243,cantidad:0.3},{materialId:244,cantidad:0.15}]},
+      {id:40510,tipo:"Nueva Construcción",estructura:"Estructuras Metálicas",
+       nombre:"Paño malla ACMA 1G 3,00x1,85 m marco ángulo 25x25x4 mm",categoria:"Estructuras Metálicas",
+       unidad:"unidad",catalogId:354,esSubcontrato:false,precioSubcontrato:0,pctMO:60,pctGG:12,pctUtilidad:12,
+       rendimiento:1.8,dotacion:2,
+       baseTecnica:{metodo:"Corte a escuadra, fabricación del marco reforzado, soldadura de malla, limpieza, protección anticorrosiva y montaje",supuestos:"Paño nominal 3,00x1,85 m; considera 5% de merma de ángulo, encuentros rectos y fundaciones/postes medidos aparte",editable:true},
+       materiales:[{materialId:469,cantidad:1},{materialId:468,cantidad:10.2},{materialId:234,cantidad:0.3},{materialId:235,cantidad:1.5},{materialId:236,cantidad:0.3},{materialId:475,cantidad:0.32},{materialId:243,cantidad:0.32},{materialId:244,cantidad:0.16}]},
+      {id:40511,tipo:"Nueva Construcción",estructura:"Estructuras Metálicas",
+       nombre:"Paño corto escalonado malla ACMA 1G 1,50x1,85 m marco 3 mm",categoria:"Estructuras Metálicas",
+       unidad:"unidad",catalogId:355,esSubcontrato:false,precioSubcontrato:0,pctMO:60,pctGG:12,pctUtilidad:12,
+       rendimiento:3,dotacion:2,
+       baseTecnica:{metodo:"Corte del panel, fabricación de marco corto, soldadura, protección anticorrosiva y montaje escalonado",supuestos:"Dos paños cortos se obtienen de una malla 1,85x3,00 m; considera 5% de merma de ángulo y postes/fundaciones aparte",editable:true},
+       materiales:[{materialId:469,cantidad:0.5},{materialId:467,cantidad:7.05},{materialId:234,cantidad:0.18},{materialId:235,cantidad:1},{materialId:236,cantidad:0.18},{materialId:475,cantidad:0.22},{materialId:243,cantidad:0.22},{materialId:244,cantidad:0.11}]},
+      {id:40512,tipo:"Nueva Construcción",estructura:"Estructuras Metálicas",
+       nombre:"Paño corto escalonado malla ACMA 1G 1,50x1,85 m marco 4 mm",categoria:"Estructuras Metálicas",
+       unidad:"unidad",catalogId:356,esSubcontrato:false,precioSubcontrato:0,pctMO:60,pctGG:12,pctUtilidad:12,
+       rendimiento:2.7,dotacion:2,
+       baseTecnica:{metodo:"Corte del panel, fabricación de marco corto reforzado, soldadura, protección anticorrosiva y montaje escalonado",supuestos:"Dos paños cortos se obtienen de una malla 1,85x3,00 m; considera 5% de merma de ángulo y postes/fundaciones aparte",editable:true},
+       materiales:[{materialId:469,cantidad:0.5},{materialId:468,cantidad:7.05},{materialId:234,cantidad:0.2},{materialId:235,cantidad:1},{materialId:236,cantidad:0.2},{materialId:475,cantidad:0.24},{materialId:243,cantidad:0.24},{materialId:244,cantidad:0.12}]},
+      {id:40513,tipo:"Remodelación",estructura:"General",
+       nombre:"Limpieza y perfilado final de franja de cierre",categoria:"Obras Exteriores",
+       unidad:"ml",catalogId:357,esSubcontrato:false,precioSubcontrato:0,precioMO:2500,pctMO:0,pctGG:12,pctUtilidad:12,
+       rendimiento:30,dotacion:2,
+       baseTecnica:{metodo:"Retiro de residuos menores, perfilado manual y entrega continua de la franja intervenida",supuestos:"No incluye excavación masiva, estabilización de talud ni aporte de relleno",editable:true},
+       materiales:[]},
+      {id:40515,tipo:"Nueva Construcción",estructura:"Estructuras Metálicas",
+        nombre:"Cierre Acmafor 3D 2.5m verde c/postes",categoria:"Estructuras Metálicas",
+        unidad:"ml",catalogId:358,esSubcontrato:false,precioSubcontrato:0,pctMO:60.1,pctGG:19.6,pctUtilidad:17,
+        rendimiento:4,dotacion:2,
+        baseTecnica:{metodo:"Excavación, hormigonado de dados, instalación de postes metálicos y montaje de malla Acmafor 3D 2.5m verde",supuestos:"Considera malla, postes y dados de fundación",editable:true},
+        materiales:[{materialId:475,cantidad:0.1},{materialId:476,cantidad:0.15},{materialId:477,cantidad:0.05},{materialId:478,cantidad:0.05},{materialId:444,cantidad:0.25},{materialId:234,cantidad:0.35}]},
+      /* ═══ AMPLIACIÓN 2026-07-25 — MANTENCIÓN PINTURA, SERVICIOS GENERALES, EQUIPAMIENTO COMERCIAL ═══ */
+      {id:40516, tipo:"Mantención", estructura:"General",
+       nombre:"Repintado interior con tratamiento de humedad/hongos", categoria:"Mantención Pintura",
+       unidad:"m²", catalogId:359, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:10, pctUtilidad:12,
+       rendimiento:10, dotacion:1,
+       baseTecnica:{metodo:"Lavado de la zona afectada, sellado antihongos, empaste puntual y dos manos de pintura látex",supuestos:"No incluye reparación de la causa de la humedad (filtración, napa, condensación); solo tratamiento superficial y repintado",editable:true},
+       materiales:[{materialId:1,cantidad:0.1},{materialId:479,cantidad:0.08},{materialId:5,cantidad:0.05},{materialId:12,cantidad:0.3}]},
+      {id:40517, tipo:"Mantención", estructura:"General",
+       nombre:"Pintura de cielo americano o placa yeso-cartón", categoria:"Mantención Pintura",
+       unidad:"m²", catalogId:360, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:10, pctUtilidad:12,
+       rendimiento:14, dotacion:1,
+       baseTecnica:{metodo:"Empaste de juntas y clavos, lijado y dos manos de pintura látex sobre placa existente",supuestos:"Considera placa en buen estado; el reemplazo de placas dañadas se cotiza aparte",editable:true},
+       materiales:[{materialId:1,cantidad:0.09},{materialId:5,cantidad:0.03},{materialId:12,cantidad:0.2}]},
+      {id:40518, tipo:"Mantención", estructura:"General",
+       nombre:"Lavado a presión y pintura de fachada exterior", categoria:"Mantención Pintura",
+       unidad:"m²", catalogId:361, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:12, pctUtilidad:14,
+       rendimiento:9, dotacion:2,
+       baseTecnica:{metodo:"Lavado a presión de la superficie, sellado de fisuras menores y dos manos de pintura caucho acrílica exterior",supuestos:"Arriendo de hidrolavadora incluido en gastos generales; andamios o silla para altura sobre segundo piso se cotizan aparte",editable:true},
+       materiales:[{materialId:6,cantidad:0.12},{materialId:5,cantidad:0.04}]},
+      {id:40519, tipo:"Mantención", estructura:"General",
+       nombre:"Limpieza fina post obra o entrega", categoria:"Servicios Generales",
+       unidad:"m²", catalogId:362, esSubcontrato:false, precioSubcontrato:0, pctMO:60, pctGG:15, pctUtilidad:15,
+       rendimiento:90, dotacion:2,
+       baseTecnica:{metodo:"Limpieza fina de pisos, vidrios interiores, sanitarios y retiro de polvo de obra para entrega",supuestos:"No incluye retiro de escombros ni limpieza de vidrios en altura con andamio",editable:true},
+       materiales:[{materialId:480,cantidad:0.015}]},
+      {id:40520, tipo:"Mantención", estructura:"General",
+       nombre:"Traslado y acarreo de mobiliario (mudanza interna)", categoria:"Servicios Generales",
+       unidad:"gl", catalogId:363, esSubcontrato:false, precioSubcontrato:0, pctMO:70, pctGG:15, pctUtilidad:15,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Traslado y reubicación de mobiliario y enseres dentro de la misma propiedad",supuestos:"Precio referencial para un ambiente estándar; volumen mayor o traslado entre direcciones distintas se cotiza aparte",editable:true},
+       materiales:[]},
+      {id:40521, tipo:"Mantención", estructura:"General",
+       nombre:"Jornada adicional de especialista a trato", categoria:"Servicios Generales",
+       unidad:"jornada", catalogId:364, esSubcontrato:false, precioSubcontrato:0, pctMO:75, pctGG:12, pctUtilidad:12,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Jornada de un especialista (electricista, gásfiter u oficio afín) para tareas no cubiertas por otra partida",supuestos:"No incluye materiales; se cotizan según la tarea específica",editable:true},
+       materiales:[]},
+      {id:40522, tipo:"Remodelación", estructura:"General",
+       nombre:"Letrero acrílico luminoso con letras corpóreas", categoria:"Equipamiento Comercial",
+       unidad:"m²", catalogId:365, esSubcontrato:true, precioSubcontrato:185000, pctMO:0, pctGG:12, pctUtilidad:0,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Fabricación e instalación de letrero acrílico con letras corpóreas iluminadas LED, por subcontrato especializado",supuestos:"Precio referencial por m²; diseño, complejidad de iluminación y estructura de soporte se confirman con el proveedor",editable:true},
+       materiales:[]},
+      {id:40523, tipo:"Remodelación", estructura:"General",
+       nombre:"Vitrina exhibidora de melamina con vidrio", categoria:"Equipamiento Comercial",
+       unidad:"ml", catalogId:366, esSubcontrato:false, precioSubcontrato:0, pctMO:42, pctGG:12, pctUtilidad:15,
+       rendimiento:1.8, dotacion:2,
+       baseTecnica:{metodo:"Fabricación e instalación de mueble base de melamina con frente y tapa de vidrio templado",supuestos:"Considera vidrio templado 6mm; iluminación interior y cerraduras se cotizan aparte",editable:true},
+       materiales:[{materialId:459,cantidad:1.1},{materialId:481,cantidad:0.6}]},
+      {id:40524, tipo:"Remodelación", estructura:"General",
+       nombre:"Mueble para punto de venta o caja registradora", categoria:"Equipamiento Comercial",
+       unidad:"unidad", catalogId:367, esSubcontrato:false, precioSubcontrato:0, pctMO:40, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Fabricación e instalación de mueble de melamina para punto de venta con espacio para caja registradora y cajonera",supuestos:"No incluye equipo de punto de venta ni conexiones eléctricas",editable:true},
+       materiales:[{materialId:459,cantidad:1.3},{materialId:460,cantidad:1.3}]},
+      /* ═══ AMPLIACIÓN 2026-07-25 (2) — SANITARIO Y GAS RESIDENCIAL ═══ */
+      {id:40525, tipo:"Remodelación", estructura:"General",
+       nombre:"Instalación de WC estándar con cisterna", categoria:"Instalaciones Sanitarias",
+       unidad:"unidad", catalogId:368, esSubcontrato:false, precioSubcontrato:0, precioMO:45000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Retiro de WC existente (si aplica), instalación de WC nuevo, conexión a desagüe y sellado de base",supuestos:"Considera desagüe y llave de paso existentes en buen estado; adaptaciones de cañería se cotizan aparte",editable:true},
+       materiales:[{materialId:207,cantidad:1},{materialId:213,cantidad:0.05},{materialId:424,cantidad:0.1}]},
+      {id:40526, tipo:"Remodelación", estructura:"General",
+       nombre:"Instalación de ducha con mezcladora simple", categoria:"Instalaciones Sanitarias",
+       unidad:"unidad", catalogId:369, esSubcontrato:false, precioSubcontrato:0, precioMO:35000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Instalación de grifería y ducha sobre punto de agua fría/caliente existente, con sellado perimetral",supuestos:"No incluye habilitación de puntos de agua nuevos ni impermeabilización del recinto",editable:true},
+       materiales:[{materialId:209,cantidad:1},{materialId:424,cantidad:0.05}]},
+      {id:40527, tipo:"Remodelación", estructura:"General",
+       nombre:"Instalación de tina o bañera", categoria:"Instalaciones Sanitarias",
+       unidad:"unidad", catalogId:370, esSubcontrato:false, precioSubcontrato:0, precioMO:70000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Posicionamiento y nivelación de tina, conexión a desagüe con sifón y sellado perimetral",supuestos:"Considera base y desagüe existentes; refuerzo estructural de piso se cotiza aparte",editable:true},
+       materiales:[{materialId:210,cantidad:1},{materialId:211,cantidad:1},{materialId:424,cantidad:0.1}]},
+      {id:40528, tipo:"Remodelación", estructura:"General",
+       nombre:"Ampliación de red de desagüe PVC interior", categoria:"Instalaciones Sanitarias",
+       unidad:"ml", catalogId:371, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:12, pctUtilidad:15,
+       rendimiento:12, dotacion:1,
+       baseTecnica:{metodo:"Trazado, corte, pegado e instalación de tramo de tubería PVC de desagüe de 2\" con sus uniones",supuestos:"Considera trazado a la vista o en tabique liviano; picado de losa u obra gruesa se cotiza aparte",editable:true},
+       materiales:[{materialId:201,cantidad:1.05},{materialId:202,cantidad:0.15},{materialId:203,cantidad:0.1},{materialId:213,cantidad:0.02}]},
+      {id:40529, tipo:"Remodelación", estructura:"General",
+       nombre:"Instalación de calefont a gas 10L", categoria:"Gas",
+       unidad:"unidad", catalogId:372, esSubcontrato:false, precioSubcontrato:0, precioMO:90000, pctMO:0, pctGG:15, pctUtilidad:15,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Fijación de calefont, conexión a red de gas y agua existentes, prueba de hermeticidad y encendido",supuestos:"Requiere gasfíter certificado; ducto de evacuación de gases y ampliación de red de gas se cotizan aparte",editable:true},
+       materiales:[{materialId:215,cantidad:1},{materialId:220,cantidad:1.5},{materialId:222,cantidad:1},{materialId:224,cantidad:0.1}]},
+      {id:40530, tipo:"Remodelación", estructura:"General",
+       nombre:"Ampliación de red de gas residencial en cobre", categoria:"Gas",
+       unidad:"ml", catalogId:373, esSubcontrato:false, precioSubcontrato:0, pctMO:60, pctGG:15, pctUtilidad:15,
+       rendimiento:10, dotacion:1,
+       baseTecnica:{metodo:"Trazado, corte y soldadura de cañería de cobre para gas con sus fijaciones, incluye prueba de hermeticidad",supuestos:"Requiere gasfíter certificado; certificación SEC y sello verde se cotizan por separado",editable:true},
+       materiales:[{materialId:220,cantidad:1.05},{materialId:222,cantidad:0.2},{materialId:223,cantidad:0.1},{materialId:224,cantidad:0.08}]},
+      {id:40531, tipo:"Remodelación", estructura:"General",
+       nombre:"Instalación de regulador y manguera de gas licuado", categoria:"Gas",
+       unidad:"unidad", catalogId:374, esSubcontrato:false, precioSubcontrato:0, precioMO:15000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:2, dotacion:1,
+       baseTecnica:{metodo:"Instalación de válvula, regulador de presión y manguera flexible certificada entre cilindro y artefacto",supuestos:"No incluye el cilindro de gas; se asume artefacto ya instalado",editable:true},
+       materiales:[{materialId:226,cantidad:1},{materialId:227,cantidad:1},{materialId:225,cantidad:1}]},
+      {id:40532, tipo:"Remodelación", estructura:"General",
+       nombre:"Instalación de detector de gas GLP", categoria:"Gas",
+       unidad:"unidad", catalogId:375, esSubcontrato:false, precioSubcontrato:0, precioMO:15000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:3, dotacion:1,
+       baseTecnica:{metodo:"Fijación en muro a la altura normada, conexión eléctrica y prueba de funcionamiento",supuestos:"Requiere punto eléctrico cercano disponible; cableado nuevo se cotiza aparte",editable:true},
+       materiales:[{materialId:228,cantidad:1}]},
+      /* ═══ AMPLIACIÓN 2026-07-25 (3) — ELÉCTRICA ═══ */
+      {id:40533, tipo:"Remodelación", estructura:"General",
+       nombre:"Tablero de distribución 4 circuitos", categoria:"Instalaciones Eléctricas",
+       unidad:"unidad", catalogId:376, esSubcontrato:false, precioSubcontrato:0, precioMO:20000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Instalación de tablero, conexión de circuitos existentes y rotulado",supuestos:"Considera alimentación principal existente; certificación SEC se cotiza aparte",editable:true},
+       materiales:[{materialId:195,cantidad:1}]},
+      {id:40534, tipo:"Remodelación", estructura:"General",
+       nombre:"Tablero de distribución 12 circuitos", categoria:"Instalaciones Eléctricas",
+       unidad:"unidad", catalogId:377, esSubcontrato:false, precioSubcontrato:0, precioMO:35000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Instalación de tablero, conexión de circuitos existentes y rotulado",supuestos:"Considera alimentación principal existente; certificación SEC se cotiza aparte",editable:true},
+       materiales:[{materialId:197,cantidad:1}]},
+      {id:40535, tipo:"Remodelación", estructura:"General",
+       nombre:"Cableado de circuito reforzado 6mm² (calefont/A.A.)", categoria:"Instalaciones Eléctricas",
+       unidad:"ml", catalogId:378, esSubcontrato:false, precioSubcontrato:0, pctMO:60, pctGG:12, pctUtilidad:15,
+       rendimiento:25, dotacion:1,
+       baseTecnica:{metodo:"Tendido y conexión de cable THHN 6mm² para circuito dedicado de alto consumo",supuestos:"No incluye canalización empotrada en obra gruesa; se asume ducto o bandeja disponible",editable:true},
+       materiales:[{materialId:182,cantidad:1.08}]},
+      {id:40536, tipo:"Remodelación", estructura:"General",
+       nombre:"Cableado de circuito industrial/hornillas 10mm²", categoria:"Instalaciones Eléctricas",
+       unidad:"ml", catalogId:379, esSubcontrato:false, precioSubcontrato:0, pctMO:58, pctGG:12, pctUtilidad:15,
+       rendimiento:22, dotacion:1,
+       baseTecnica:{metodo:"Tendido y conexión de cable THHN 10mm² para circuito dedicado de hornillas o carga industrial",supuestos:"No incluye canalización empotrada en obra gruesa; se asume ducto o bandeja disponible",editable:true},
+       materiales:[{materialId:183,cantidad:1.08}]},
+      {id:40537, tipo:"Remodelación", estructura:"General",
+       nombre:"Instalación de luminaria LED panel embutido 24W", categoria:"Instalaciones Eléctricas",
+       unidad:"unidad", catalogId:380, esSubcontrato:false, precioSubcontrato:0, precioMO:12000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:2, dotacion:1,
+       baseTecnica:{metodo:"Corte de cielo, fijación de panel LED y conexión al punto de luz existente",supuestos:"Considera punto de luz y cableado existentes",editable:true},
+       materiales:[{materialId:188,cantidad:1}]},
+      {id:40538, tipo:"Remodelación", estructura:"General",
+       nombre:"Instalación de barra LED bajo mueble", categoria:"Instalaciones Eléctricas",
+       unidad:"unidad", catalogId:381, esSubcontrato:false, precioSubcontrato:0, precioMO:6000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:3, dotacion:1,
+       baseTecnica:{metodo:"Fijación de barra LED bajo mueble alto y conexión a transformador/punto existente",supuestos:"No incluye transformador ni cableado nuevo hasta el punto de conexión",editable:true},
+       materiales:[{materialId:189,cantidad:1}]},
+      /* ═══ AMPLIACIÓN 2026-07-26 — METALCON ESTRUCTURAL ═══ */
+      {id:40539, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Correa Metalcon omega 100x30mm e=0.85mm instalada", categoria:"Metalcon Estructural",
+       unidad:"ml", catalogId:382, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:12, pctUtilidad:15,
+       rendimiento:40, dotacion:2,
+       baseTecnica:{metodo:"Trazado, corte y fijación de correas omega livianas sobre estructura de techo",supuestos:"Considera separación estándar; cálculo de luces y sobrecarga se valida en terreno",editable:true},
+       materiales:[{materialId:59,cantidad:1.05},{materialId:70,cantidad:0.02}]},
+      {id:40540, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Correa Metalcon omega 100x30mm e=1.5mm reforzada instalada", categoria:"Metalcon Estructural",
+       unidad:"ml", catalogId:383, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:12, pctUtilidad:15,
+       rendimiento:35, dotacion:2,
+       baseTecnica:{metodo:"Trazado, corte y fijación de correas omega reforzadas para mayor sobrecarga o luz",supuestos:"Considera separación estándar; cálculo estructural se valida en terreno",editable:true},
+       materiales:[{materialId:60,cantidad:1.05},{materialId:70,cantidad:0.02}]},
+      {id:40541, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Correa Metalcon C200x50mm e=2.0mm (techo de mayor luz) instalada", categoria:"Metalcon Estructural",
+       unidad:"ml", catalogId:384, esSubcontrato:false, precioSubcontrato:0, pctMO:42, pctGG:12, pctUtilidad:15,
+       rendimiento:25, dotacion:2,
+       baseTecnica:{metodo:"Trazado, corte y fijación de correas C200 para cubiertas de mayor luz o sobrecarga",supuestos:"Cálculo estructural de luces y anclajes se valida en terreno",editable:true},
+       materiales:[{materialId:62,cantidad:1.05},{materialId:70,cantidad:0.02}]},
+      {id:40542, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Viga cajón Metalcon 2xC 150mm soldada (dintel/viga)", categoria:"Metalcon Estructural",
+       unidad:"ml", catalogId:385, esSubcontrato:false, precioSubcontrato:0, pctMO:48, pctGG:12, pctUtilidad:15,
+       rendimiento:12, dotacion:2,
+       baseTecnica:{metodo:"Armado y soldadura de dos perfiles C150 para formar viga cajón, para dinteles o vigas de luz media",supuestos:"Requiere soldador certificado; cálculo estructural de luces se valida en terreno",editable:true},
+       materiales:[{materialId:63,cantidad:1.05},{materialId:71,cantidad:0.05}]},
+      {id:40543, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Viga cajón Metalcon 2xC 200mm soldada (luces mayores)", categoria:"Metalcon Estructural",
+       unidad:"ml", catalogId:386, esSubcontrato:false, precioSubcontrato:0, pctMO:48, pctGG:12, pctUtilidad:15,
+       rendimiento:10, dotacion:2,
+       baseTecnica:{metodo:"Armado y soldadura de dos perfiles C200 para formar viga cajón, para dinteles o vigas de luz mayor",supuestos:"Requiere soldador certificado; cálculo estructural de luces se valida en terreno",editable:true},
+       materiales:[{materialId:64,cantidad:1.05},{materialId:71,cantidad:0.05}]},
+      {id:40544, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Perfil Z 150mm e=2.0mm instalado (correa o refuerzo)", categoria:"Metalcon Estructural",
+       unidad:"ml", catalogId:387, esSubcontrato:false, precioSubcontrato:0, pctMO:44, pctGG:12, pctUtilidad:15,
+       rendimiento:30, dotacion:2,
+       baseTecnica:{metodo:"Trazado, corte y fijación de perfil Z como correa de techo o refuerzo estructural",supuestos:"Cálculo de luces y sobrecarga se valida en terreno",editable:true},
+       materiales:[{materialId:65,cantidad:1.05},{materialId:70,cantidad:0.03}]},
+      {id:40545, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Perfil angular acero 50x50x3mm instalado (arriostramiento)", categoria:"Metalcon Estructural",
+       unidad:"ml", catalogId:388, esSubcontrato:false, precioSubcontrato:0, pctMO:44, pctGG:12, pctUtilidad:15,
+       rendimiento:32, dotacion:2,
+       baseTecnica:{metodo:"Corte y fijación de perfil angular como arriostramiento diagonal de estructura Metalcon",supuestos:"No incluye soldadura estructural; fijación mecánica",editable:true},
+       materiales:[{materialId:66,cantidad:1.05},{materialId:70,cantidad:0.03}]},
+      {id:40546, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Base de poste o columna metálica con placa y pernos de anclaje", categoria:"Metalcon Estructural",
+       unidad:"unidad", catalogId:389, esSubcontrato:false, precioSubcontrato:0, pctMO:40, pctGG:12, pctUtilidad:15,
+       rendimiento:6, dotacion:2,
+       baseTecnica:{metodo:"Fabricación e instalación de placa base soldada al poste y anclaje químico o pernos de expansión a la fundación",supuestos:"Considera fundación existente en buen estado; hormigonado de dado se cotiza aparte",editable:true},
+       materiales:[{materialId:67,cantidad:1},{materialId:68,cantidad:4},{materialId:72,cantidad:0.04}]},
+      {id:40547, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Tabique Metalcon estructural reforzado 90x38mm (muro de carga liviano)", categoria:"Metalcon Estructural",
+       unidad:"m²", catalogId:390, esSubcontrato:false, precioSubcontrato:0, pctMO:48, pctGG:12, pctUtilidad:15,
+       rendimiento:8, dotacion:2,
+       baseTecnica:{metodo:"Estructura Metalcon 90x38mm e=0.85mm con OSB estructural en una cara, lana mineral y placa yeso en la otra",supuestos:"Considera muro de carga liviano; validar con cálculo estructural la solicitación real",editable:true,alturaM:2.4,separacionM:0.4,mermaPct:10},
+       materiales:[{materialId:429,cantidad:2.7},{materialId:430,cantidad:0.3},{materialId:129,cantidad:0.45},{materialId:80,cantidad:1.05},{materialId:96,cantidad:1},{materialId:87,cantidad:0.15},{materialId:70,cantidad:0.04}]},
+      {id:40548, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Tabique Metalcon estructural liviano 60x38mm", categoria:"Metalcon Estructural",
+       unidad:"m²", catalogId:391, esSubcontrato:false, precioSubcontrato:0, pctMO:46, pctGG:12, pctUtilidad:15,
+       rendimiento:10, dotacion:2,
+       baseTecnica:{metodo:"Estructura Metalcon 60x38mm e=0.85mm con placa yeso ambas caras y lana mineral",supuestos:"No estructural; uso en tabiques reforzados o furring de baja altura",editable:true,alturaM:2.4,separacionM:0.4,mermaPct:10},
+       materiales:[{materialId:431,cantidad:2.7},{materialId:432,cantidad:0.3},{materialId:80,cantidad:2.1},{materialId:96,cantidad:1},{materialId:87,cantidad:0.2}]},
+      {id:40549, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Muro Metalcon perimetral económico 100x50mm e=0.85mm", categoria:"Metalcon Estructural",
+       unidad:"m²", catalogId:392, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:12, pctUtilidad:15,
+       rendimiento:5, dotacion:3,
+       baseTecnica:{metodo:"Muro perimetral Metalcon 100x50mm e=0.85mm con OSB estructural, barrera de vapor y estuco exterior",supuestos:"Alternativa económica al muro C150; validar con cálculo estructural",editable:true,alturaM:2.4,separacionM:0.4,mermaPct:10},
+       materiales:[{materialId:50,cantidad:2.75},{materialId:54,cantidad:0.92},{materialId:129,cantidad:0.45},{materialId:33,cantidad:0.28},{materialId:20,cantidad:0.04},{materialId:100,cantidad:1.1},{materialId:70,cantidad:0.06},{materialId:71,cantidad:0.04}]},
+      {id:40550, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Muro Metalcon perimetral reforzado 150x50mm e=1.0mm", categoria:"Metalcon Estructural",
+       unidad:"m²", catalogId:393, esSubcontrato:false, precioSubcontrato:0, pctMO:52, pctGG:12, pctUtilidad:15,
+       rendimiento:5, dotacion:3,
+       baseTecnica:{metodo:"Muro perimetral Metalcon 150x50mm e=1.0mm con OSB estructural, barrera de vapor y estuco exterior",supuestos:"Alternativa intermedia entre el muro económico y el C150 e=1.5mm; validar con cálculo estructural",editable:true,alturaM:2.4,separacionM:0.4,mermaPct:10},
+       materiales:[{materialId:51,cantidad:2.75},{materialId:55,cantidad:0.92},{materialId:129,cantidad:0.45},{materialId:33,cantidad:0.28},{materialId:20,cantidad:0.04},{materialId:100,cantidad:1.1},{materialId:70,cantidad:0.06},{materialId:71,cantidad:0.04}]},
+      /* ═══ AMPLIACIÓN 2026-07-26 (2) — HORMIGÓN Y ALBAÑILERÍA ═══ */
+      {id:40551, tipo:"Nueva Construcción", estructura:"Hormigón",
+       nombre:"Muro albañilería bloques 14cm (sin refuerzo)", categoria:"Hormigón y Albañilería",
+       unidad:"m²", catalogId:394, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:12, pctUtilidad:15,
+       rendimiento:10, dotacion:2,
+       baseTecnica:{metodo:"Levante de muro con bloque de hormigón 14cm y mortero de pega, sin enfierradura estructural",supuestos:"Uso en muros divisorios o cierres no estructurales; refuerzo se cotiza aparte",editable:true},
+       materiales:[{materialId:28,cantidad:12.5},{materialId:20,cantidad:0.13},{materialId:21,cantidad:0.025},{materialId:31,cantidad:0.35}]},
+      {id:40552, tipo:"Nueva Construcción", estructura:"Hormigón",
+       nombre:"Hormigón elaborado en obra (dosificación artesanal)", categoria:"Hormigón y Albañilería",
+       unidad:"m³", catalogId:395, esSubcontrato:false, precioSubcontrato:0, pctMO:35, pctGG:12, pctUtilidad:15,
+       rendimiento:2, dotacion:3,
+       baseTecnica:{metodo:"Dosificación y mezclado en obra de cemento, arena, gravilla y aditivos con betonera",supuestos:"Alternativa al hormigón premezclado para volúmenes pequeños sin acceso de camión mixer",editable:true},
+       materiales:[{materialId:20,cantidad:7},{materialId:22,cantidad:0.55},{materialId:24,cantidad:0.55},{materialId:41,cantidad:0.3},{materialId:42,cantidad:0.2}]},
+      {id:40553, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Base granular compactada para radier o pavimento", categoria:"Hormigón y Albañilería",
+       unidad:"m²", catalogId:396, esSubcontrato:false, precioSubcontrato:0, pctMO:30, pctGG:12, pctUtilidad:15,
+       rendimiento:60, dotacion:2,
+       baseTecnica:{metodo:"Extendido y compactación de capa granular como base previa a radier o pavimento",supuestos:"Considera espesor aproximado de 15cm; espesores mayores se cotizan proporcionalmente",editable:true},
+       materiales:[{materialId:23,cantidad:0.15}]},
+      {id:40554, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Relleno o enrocado con piedra bolón", categoria:"Hormigón y Albañilería",
+       unidad:"m³", catalogId:397, esSubcontrato:false, precioSubcontrato:0, pctMO:35, pctGG:12, pctUtilidad:12,
+       rendimiento:15, dotacion:2,
+       baseTecnica:{metodo:"Suministro y colocación de piedra bolón para relleno, drenaje o base de fundaciones",supuestos:"No incluye excavación; se asume acceso directo para descarga",editable:true},
+       materiales:[{materialId:25,cantidad:1.05}]},
+      {id:40555, tipo:"Mantención", estructura:"General",
+       nombre:"Enlucido o relleno con yeso en muros interiores", categoria:"Hormigón y Albañilería",
+       unidad:"m²", catalogId:398, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:12, pctUtilidad:15,
+       rendimiento:15, dotacion:1,
+       baseTecnica:{metodo:"Preparación de mezcla de yeso y aplicación a mano para nivelar o rellenar imperfecciones del muro",supuestos:"No incluye pintura de terminación",editable:true},
+       materiales:[{materialId:32,cantidad:0.8}]},
+      /* ═══ AMPLIACIÓN 2026-07-26 (3) — MADERA ESTRUCTURAL ═══ */
+      {id:40556, tipo:"Nueva Construcción", estructura:"Madera",
+       nombre:"Instalación de cercha prefabricada pino 8m de luz", categoria:"Madera Estructural",
+       unidad:"par", catalogId:399, esSubcontrato:false, precioSubcontrato:0, pctMO:30, pctGG:12, pctUtilidad:15,
+       rendimiento:2, dotacion:3,
+       baseTecnica:{metodo:"Izaje e instalación de cercha prefabricada de 8m de luz con anclaje tipo T sobre cadena o solera",supuestos:"No incluye correas ni cubierta; considera cercha ya fabricada",editable:true},
+       materiales:[{materialId:127,cantidad:1},{materialId:132,cantidad:2}]},
+      {id:40557, tipo:"Nueva Construcción", estructura:"Madera",
+       nombre:"Entramado o refuerzo con polín pino 2x2\"", categoria:"Madera Estructural",
+       unidad:"ml", catalogId:400, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:12, pctUtilidad:15,
+       rendimiento:35, dotacion:2,
+       baseTecnica:{metodo:"Corte y fijación de polín de pino 2x2\" como refuerzo o entramado secundario",supuestos:"No incluye impregnación adicional ni fijaciones especiales",editable:true},
+       materiales:[{materialId:120,cantidad:1.05}]},
+      {id:40558, tipo:"Nueva Construcción", estructura:"Madera",
+       nombre:"Viga o dintel de madera pino 2x8\"", categoria:"Madera Estructural",
+       unidad:"ml", catalogId:401, esSubcontrato:false, precioSubcontrato:0, pctMO:40, pctGG:12, pctUtilidad:15,
+       rendimiento:20, dotacion:2,
+       baseTecnica:{metodo:"Corte, nivelación e instalación de viga o dintel de pino 2x8\" sobre apoyos existentes",supuestos:"Cálculo de luces y cargas se valida con especialista estructural",editable:true},
+       materiales:[{materialId:125,cantidad:1.05}]},
+      {id:40559, tipo:"Nueva Construcción", estructura:"Madera",
+       nombre:"Cielo o entrepiso con terciado estructural 12mm", categoria:"Madera Estructural",
+       unidad:"m²", catalogId:402, esSubcontrato:false, precioSubcontrato:0, pctMO:40, pctGG:12, pctUtilidad:15,
+       rendimiento:25, dotacion:2,
+       baseTecnica:{metodo:"Corte e instalación de terciado estructural de 12mm sobre entramado de piso o cielo",supuestos:"No incluye la estructura de soporte ni terminación de piso",editable:true},
+       materiales:[{materialId:130,cantidad:0.34}]},
+      /* ═══ AMPLIACIÓN 2026-07-26 (4) — TECHUMBRES ═══ */
+      {id:40560, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Cubierta zinc teja española instalada", categoria:"Techumbres",
+       unidad:"m²", catalogId:403, esSubcontrato:false, precioSubcontrato:0, pctMO:40, pctGG:12, pctUtilidad:15,
+       rendimiento:35, dotacion:2,
+       baseTecnica:{metodo:"Instalación de plancha de zinc perfil teja española sobre estructura de techo existente",supuestos:"Considera estructura y correas ya instaladas; incluye traslapos y fijaciones",editable:true},
+       materiales:[{materialId:107,cantidad:1.1}]},
+      {id:40561, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Cubierta policarbonato alveolar 8mm instalada", categoria:"Techumbres",
+       unidad:"m²", catalogId:404, esSubcontrato:false, precioSubcontrato:0, pctMO:35, pctGG:12, pctUtilidad:15,
+       rendimiento:20, dotacion:2,
+       baseTecnica:{metodo:"Instalación de plancha de policarbonato alveolar 8mm con perfiles de fijación sobre estructura existente",supuestos:"Uso típico en pérgolas, quinchos o cierres translúcidos",editable:true},
+       materiales:[{materialId:109,cantidad:1.05}]},
+      {id:40562, tipo:"Mantención", estructura:"General",
+       nombre:"Limatesa de zinc instalada", categoria:"Techumbres",
+       unidad:"unidad", catalogId:405, esSubcontrato:false, precioSubcontrato:0, pctMO:35, pctGG:12, pctUtilidad:15,
+       rendimiento:15, dotacion:2,
+       baseTecnica:{metodo:"Instalación de limatesa de zinc en encuentro de faldones de techumbre",supuestos:"Pieza de 2,4m; tramos mayores se cotizan proporcionalmente",editable:true},
+       materiales:[{materialId:111,cantidad:1.05}]},
+      {id:40563, tipo:"Mantención", estructura:"General",
+       nombre:"Impermeabilización acrílica de techumbre", categoria:"Techumbres",
+       unidad:"m²", catalogId:406, esSubcontrato:false, precioSubcontrato:0, pctMO:35, pctGG:12, pctUtilidad:15,
+       rendimiento:60, dotacion:1,
+       baseTecnica:{metodo:"Limpieza de superficie y aplicación de dos manos de impermeabilizante acrílico sobre techumbre",supuestos:"No incluye reparación de perforaciones o filtraciones activas",editable:true},
+       materiales:[{materialId:119,cantidad:0.25}]},
+      /* ═══ AMPLIACIÓN 2026-07-26 (5) — PISOS Y REVESTIMIENTOS ═══ */
+      {id:40564, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Piso flotante laminado AC5 (uso comercial)", categoria:"Pisos y Revestimientos",
+       unidad:"m²", catalogId:407, esSubcontrato:false, precioSubcontrato:0, pctMO:35, pctGG:10, pctUtilidad:15,
+       rendimiento:15, dotacion:1,
+       baseTecnica:{metodo:"Instalación de piso flotante laminado grado AC5 sobre base nivelada con espuma niveladora",supuestos:"Grado de mayor resistencia al desgaste, recomendado para uso comercial",editable:true},
+       materiales:[{materialId:141,cantidad:1.05}]},
+      {id:40565, tipo:"Mantención", estructura:"General",
+       nombre:"Renovación de fragua en juntas de piso o revestimiento", categoria:"Pisos y Revestimientos",
+       unidad:"m²", catalogId:408, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:12, pctUtilidad:15,
+       rendimiento:20, dotacion:1,
+       baseTecnica:{metodo:"Limpieza de juntas existentes y aplicación de fragua nueva",supuestos:"No incluye retiro ni reposición de piezas de cerámico o porcelanato",editable:true},
+       materiales:[{materialId:147,cantidad:0.4}]},
+      {id:40566, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Fijación de piso de parquet con adhesivo (madera de cargo del cliente)", categoria:"Pisos y Revestimientos",
+       unidad:"m²", catalogId:409, esSubcontrato:false, precioSubcontrato:0, pctMO:55, pctGG:12, pctUtilidad:15,
+       rendimiento:8, dotacion:2,
+       baseTecnica:{metodo:"Preparación de base, aplicación de adhesivo y colocación de piso de parquet",supuestos:"El suministro de la madera de parquet se cotiza por separado; este ítem cubre adhesivo y mano de obra",editable:true},
+       materiales:[{materialId:151,cantidad:0.15}]},
+      {id:40567, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Piso vinílico adherido con adhesivo acrílico (instalación pegada)", categoria:"Pisos y Revestimientos",
+       unidad:"m²", catalogId:410, esSubcontrato:false, precioSubcontrato:0, pctMO:38, pctGG:10, pctUtilidad:15,
+       rendimiento:18, dotacion:1,
+       baseTecnica:{metodo:"Preparación de base, aplicación de adhesivo acrílico y colocación de piso vinílico en formato pegado",supuestos:"Alternativa al sistema click para tránsito comercial o áreas húmedas",editable:true},
+       materiales:[{materialId:301,cantidad:1.05},{materialId:302,cantidad:0.2}]},
+      /* ═══ AMPLIACIÓN 2026-07-26 (6) — CLIMATIZACIÓN ═══ */
+      {id:40568, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Suministro de equipo split 9.000 BTU (sin instalación)", categoria:"Climatización",
+       unidad:"unidad", catalogId:411, esSubcontrato:false, precioSubcontrato:0, pctMO:5, pctGG:10, pctUtilidad:12,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Suministro del equipo split 9.000 BTU frío/calor, sin instalación",supuestos:"La instalación se cotiza por separado; considera equipo de marca estándar",editable:true},
+       materiales:[{materialId:257,cantidad:1}]},
+      {id:40569, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Suministro de equipo split 12.000 BTU (sin instalación)", categoria:"Climatización",
+       unidad:"unidad", catalogId:412, esSubcontrato:false, precioSubcontrato:0, pctMO:5, pctGG:10, pctUtilidad:12,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Suministro del equipo split 12.000 BTU frío/calor, sin instalación",supuestos:"La instalación se cotiza por separado; considera equipo de marca estándar",editable:true},
+       materiales:[{materialId:258,cantidad:1}]},
+      {id:40570, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Suministro de equipo split 18.000 BTU (sin instalación)", categoria:"Climatización",
+       unidad:"unidad", catalogId:413, esSubcontrato:false, precioSubcontrato:0, pctMO:5, pctGG:10, pctUtilidad:12,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Suministro del equipo split 18.000 BTU frío/calor, sin instalación",supuestos:"La instalación se cotiza por separado; considera equipo de marca estándar",editable:true},
+       materiales:[{materialId:259,cantidad:1}]},
+      {id:40571, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Instalación de split (mano de obra, equipo de cliente o comprado aparte)", categoria:"Climatización",
+       unidad:"unidad", catalogId:414, esSubcontrato:false, precioSubcontrato:0, pctMO:70, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Fijación de unidades interior/exterior, tendido de tubería de cobre, vacío y carga de gas, prueba de funcionamiento",supuestos:"No incluye el equipo; se asume suministrado por el cliente o cotizado por separado",editable:true},
+       materiales:[{materialId:261,cantidad:3}]},
+      /* ═══ AMPLIACIÓN 2026-07-26 (7) — AISLACIÓN E IMPERMEABILIZACIÓN ═══ */
+      {id:40572, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Aislación térmica de muro con poliestireno EPS 50mm", categoria:"Aislación",
+       unidad:"m²", catalogId:415, esSubcontrato:false, precioSubcontrato:0, pctMO:35, pctGG:12, pctUtilidad:15,
+       rendimiento:30, dotacion:1,
+       baseTecnica:{metodo:"Fijación de planchas de poliestireno expandido de 50mm sobre muro con adhesivo o fijaciones mecánicas",supuestos:"No incluye terminación de revestimiento exterior",editable:true},
+       materiales:[{materialId:98,cantidad:1.05}]},
+      {id:40573, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Aislación térmica de muro o techo con poliestireno EPS 100mm", categoria:"Aislación",
+       unidad:"m²", catalogId:416, esSubcontrato:false, precioSubcontrato:0, pctMO:32, pctGG:12, pctUtilidad:15,
+       rendimiento:25, dotacion:1,
+       baseTecnica:{metodo:"Fijación de planchas de poliestireno expandido de 100mm sobre muro o techo con adhesivo o fijaciones mecánicas",supuestos:"No incluye terminación de revestimiento",editable:true},
+       materiales:[{materialId:99,cantidad:1.05}]},
+      {id:40574, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Impermeabilización de muro bajo nivel con membrana deltaforce", categoria:"Impermeabilización",
+       unidad:"m²", catalogId:417, esSubcontrato:false, precioSubcontrato:0, pctMO:35, pctGG:12, pctUtilidad:15,
+       rendimiento:35, dotacion:2,
+       baseTecnica:{metodo:"Instalación de membrana drenante deltaforce sobre muro bajo nivel, con traslapos y fijaciones",supuestos:"No incluye excavación ni relleno de la zanja perimetral",editable:true},
+       materiales:[{materialId:101,cantidad:1.05}]},
+      /* ═══ AMPLIACIÓN 2026-07-26 (8) — CARPINTERÍA ═══ */
+      {id:40575, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Ventana proyectante PVC 60x60cm instalada", categoria:"Carpintería",
+       unidad:"unidad", catalogId:418, esSubcontrato:false, precioSubcontrato:0, pctMO:20, pctGG:12, pctUtilidad:15,
+       rendimiento:4, dotacion:2,
+       baseTecnica:{metodo:"Instalación de ventana proyectante PVC en vano existente, con sellado perimetral",supuestos:"Considera vano ya preparado; ampliación o regularización del vano se cotiza aparte",editable:true},
+       materiales:[{materialId:161,cantidad:1}]},
+      {id:40576, tipo:"Remodelación", estructura:"General",
+       nombre:"Perfil de terminación de aluminio instalado", categoria:"Carpintería",
+       unidad:"ml", catalogId:419, esSubcontrato:false, precioSubcontrato:0, pctMO:40, pctGG:12, pctUtilidad:15,
+       rendimiento:30, dotacion:1,
+       baseTecnica:{metodo:"Corte e instalación de perfil de terminación de aluminio en encuentros de revestimiento o carpintería",supuestos:"No incluye sellado con silicona estructural",editable:true},
+       materiales:[{materialId:163,cantidad:1.05}]},
+      /* ═══ AMPLIACIÓN 2026-07-26 (9) — CIERRE DE BIBLIOTECA (categorías con 1 material) ═══ */
+      {id:40577, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Tabique cortafuego con placa yeso RF 15mm", categoria:"Tabiquería",
+       unidad:"m²", catalogId:420, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:12, pctUtilidad:15,
+       rendimiento:9, dotacion:2,
+       baseTecnica:{metodo:"Estructura liviana con placa de yeso resistente al fuego (RF) 15mm en ambas caras",supuestos:"Verificar exigencia de resistencia al fuego (EI) requerida por normativa según uso",editable:true},
+       materiales:[{materialId:83,cantidad:2.1}]},
+      {id:40578, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Impermeabilización de muro con manta drenante geodren", categoria:"Impermeabilización",
+       unidad:"m²", catalogId:421, esSubcontrato:false, precioSubcontrato:0, pctMO:32, pctGG:12, pctUtilidad:15,
+       rendimiento:40, dotacion:2,
+       baseTecnica:{metodo:"Instalación de manta drenante geodren sobre muro bajo nivel, con traslapos y fijaciones",supuestos:"No incluye excavación ni relleno de la zanja perimetral",editable:true},
+       materiales:[{materialId:176,cantidad:1.05}]},
+      {id:40579, tipo:"Mantención", estructura:"General",
+       nombre:"Cambio de ampolleta o foco LED", categoria:"Mantención Eléctrica",
+       unidad:"unidad", catalogId:422, esSubcontrato:false, precioSubcontrato:0, precioMO:3500, pctMO:0, pctGG:10, pctUtilidad:12,
+       rendimiento:15, dotacion:1,
+       baseTecnica:{metodo:"Retiro de ampolleta o foco en mal estado e instalación de reemplazo LED",supuestos:"Considera punto accesible sin necesidad de andamios",editable:true},
+       materiales:[{materialId:186,cantidad:1}]},
+      {id:40580, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Red de desagüe PVC 4\" (colector principal)", categoria:"Instalaciones Sanitarias",
+       unidad:"ml", catalogId:423, esSubcontrato:false, precioSubcontrato:0, pctMO:50, pctGG:12, pctUtilidad:15,
+       rendimiento:10, dotacion:1,
+       baseTecnica:{metodo:"Trazado, corte, pegado e instalación de colector principal de PVC de 4\" con sus uniones",supuestos:"Considera pendiente y excavación menor ya resuelta; obra gruesa mayor se cotiza aparte",editable:true},
+       materiales:[{materialId:200,cantidad:1.05},{materialId:202,cantidad:0.1},{materialId:203,cantidad:0.08}]},
+      {id:40581, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Red de gas en cobre 3/4\" (matriz o alimentación principal)", categoria:"Gas",
+       unidad:"ml", catalogId:424, esSubcontrato:false, precioSubcontrato:0, pctMO:60, pctGG:15, pctUtilidad:15,
+       rendimiento:8, dotacion:1,
+       baseTecnica:{metodo:"Trazado, corte y soldadura de cañería matriz de cobre 3/4\" para gas con fijaciones y prueba de hermeticidad",supuestos:"Requiere gasfíter certificado; certificación SEC se cotiza por separado",editable:true},
+       materiales:[{materialId:221,cantidad:1.05},{materialId:224,cantidad:0.1}]},
+      {id:40582, tipo:"Nueva Construcción", estructura:"Metalcon",
+       nombre:"Fijación con tornillo autorroscante en perfil metálico (por caja)", categoria:"Estructuras Metálicas",
+       unidad:"caja", catalogId:425, esSubcontrato:false, precioSubcontrato:0, pctMO:10, pctGG:10, pctUtilidad:10,
+       rendimiento:50, dotacion:1,
+       baseTecnica:{metodo:"Suministro de caja de tornillos autorroscantes para fijación de estructuras metálicas livianas",supuestos:"Ítem de insumo; no incluye mano de obra de montaje asociada",editable:true},
+       materiales:[{materialId:245,cantidad:1}]},
+      {id:40583, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Entibación de excavación con plancha metálica", categoria:"Mov. de Tierras",
+       unidad:"unidad", catalogId:426, esSubcontrato:false, precioSubcontrato:0, pctMO:35, pctGG:12, pctUtilidad:15,
+       rendimiento:3, dotacion:2,
+       baseTecnica:{metodo:"Instalación de plancha metálica de entibación para contención temporal de taludes en excavación",supuestos:"Cálculo de estabilidad de talud se valida en terreno según profundidad y tipo de suelo",editable:true},
+       materiales:[{materialId:248,cantidad:1}]},
+      {id:40584, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Poste HEB de acero para cierre o estructura exterior", categoria:"Obras Exteriores",
+       unidad:"unidad", catalogId:427, esSubcontrato:false, precioSubcontrato:0, pctMO:30, pctGG:12, pctUtilidad:15,
+       rendimiento:6, dotacion:2,
+       baseTecnica:{metodo:"Fundación e instalación de poste de perfil HEB de acero para cierre perimetral o estructura exterior",supuestos:"Incluye dado de fundación básico; anclajes especiales se cotizan aparte",editable:true},
+       materiales:[{materialId:256,cantidad:1}]},
+      {id:40585, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Instalación de alarma domiciliaria básica", categoria:"Seguridad",
+       unidad:"unidad", catalogId:428, esSubcontrato:false, precioSubcontrato:0, precioMO:20000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Instalación de kit de alarma domiciliaria básica, configuración y prueba de sensores",supuestos:"Requiere punto eléctrico cercano; monitoreo contratado se cotiza por separado",editable:true},
+       materiales:[{materialId:267,cantidad:1}]},
+      {id:40586, tipo:"Nueva Construcción", estructura:"Hormigón",
+       nombre:"Refuerzo puntual con fierro corrugado 8mm", categoria:"Hormigón Armado",
+       unidad:"ml", catalogId:429, esSubcontrato:false, precioSubcontrato:0, pctMO:45, pctGG:12, pctUtilidad:15,
+       rendimiento:60, dotacion:1,
+       baseTecnica:{metodo:"Corte, doblado e instalación de fierro corrugado de 8mm para refuerzos puntuales",supuestos:"Uso en reparaciones o refuerzos menores; cálculo estructural mayor se cotiza aparte",editable:true},
+       materiales:[{materialId:271,cantidad:1.05}]},
+      {id:40587, tipo:"Remodelación", estructura:"General",
+       nombre:"Instalación de estanque elevado 500L (base existente)", categoria:"Sanitario",
+       unidad:"unidad", catalogId:430, esSubcontrato:false, precioSubcontrato:0, precioMO:35000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:2,
+       baseTecnica:{metodo:"Posicionamiento e instalación de estanque elevado sobre base o torre ya existente, con conexión a la red",supuestos:"No incluye fabricación de torre o estructura de soporte",editable:true},
+       materiales:[{materialId:285,cantidad:1}]},
+      {id:40588, tipo:"Mantención", estructura:"General",
+       nombre:"Arriendo de baño químico (mensual)", categoria:"Obras Provisorias",
+       unidad:"mes", catalogId:431, esSubcontrato:false, precioSubcontrato:0, pctMO:5, pctGG:10, pctUtilidad:10,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Arriendo mensual de baño químico portátil con servicio de limpieza periódico",supuestos:"Servicio de limpieza según condiciones del proveedor; traslado inicial incluido",editable:true},
+       materiales:[{materialId:291,cantidad:1}]},
+      {id:40589, tipo:"Mantención", estructura:"General",
+       nombre:"Transporte en camión tolva 8 m³ (flete general)", categoria:"Servicios",
+       unidad:"viaje", catalogId:432, esSubcontrato:false, precioSubcontrato:0, pctMO:8, pctGG:10, pctUtilidad:10,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Flete de materiales o escombros en camión tolva de 8 m³ con carguío y botadero autorizado",supuestos:"No incluye carguío manual adicional fuera del alcance del camión",editable:true},
+       materiales:[{materialId:473,cantidad:1}]},
+      {id:40590, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Kit de insumos para pintura (brochas, bandejas, lijas, masilla)", categoria:"Pintura",
+       unidad:"gl", catalogId:433, esSubcontrato:false, precioSubcontrato:0, pctMO:5, pctGG:10, pctUtilidad:10,
+       rendimiento:20, dotacion:1,
+       baseTecnica:{metodo:"Suministro de insumos y herramientas menores de aplicación para un proyecto de pintura",supuestos:"Cantidad referencial para un proyecto estándar; ajustar según superficie",editable:true},
+       materiales:[{materialId:10,cantidad:2},{materialId:11,cantidad:1},{materialId:13,cantidad:3},{materialId:17,cantidad:1}]}
     ].map((t) => d({ rendimiento: 30, dotacion: 1 }, t)),
     Kl = (t) => {
       window.__isElectron &&
@@ -16873,7 +17684,7 @@ Error generating stack: ` +
         return r.simbolo + Math.round(t).toLocaleString("es-CL");
       }
     },
-    Ee = (t, i, r, n) => {
+    Ee = (t, i, r, n, isSinIva) => {
       t = Array.isArray(t) ? t : [];
       var l0 = 0,
         matS = 0,
@@ -16895,7 +17706,7 @@ Error generating stack: ` +
         ((matS += mat), (noMatS += noMat), (l0 += tot));
       });
       var l = n === "mo" ? Math.round(noMatS) : Math.round(l0),
-        o = i && i.moneda ? i.moneda.impuesto / 100 : (i && i.iva) || 0.19,
+        o = isSinIva ? 0 : (i && i.moneda ? i.moneda.impuesto / 100 : (i && i.iva) || 0.19),
         s = l * o,
         m = l + s,
         p = r ? m * ((i && i.descuento) || 0) : 0,
@@ -16911,7 +17722,7 @@ Error generating stack: ` +
         matSub: Math.round(matS),
         noMatSub: Math.round(noMatS),
       };
-    },
+    }, __Ee_export = (window.__Ee = Ee),
     calculaMO = (t, i) => {
       var r = parseFloat(t.rendimiento) || 0,
         n = Math.max(0, parseInt(t.dotacion) || 0),
@@ -17588,7 +18399,7 @@ Error generating stack: ` +
       desc: C,
       total: b,
       anticipo: h,
-    } = Ee(t.items, r, t.descuento, t.modoCosteo);
+    } = Ee(t.items, r, t.descuento, t.modoCosteo, t.sinIva);
     var j = r.accentColor || "#f5a020",
       F = j.match(/\w\w/g).map((M) => parseInt(M, 16)),
       g = (M) =>
@@ -17684,7 +18495,7 @@ Error generating stack: ` +
                   o.setFont("helvetica", "bold"),
                   o.setTextColor(...F),
                   o.text(s(Sr), 194, G + 5.3, { align: "right" }));
-              } else
+              } else {
                 (ie === "separado"
                   ? (o.text(s(Sr), 160, G + 5.3, { align: "right" }),
                     o.text(s(Ar), 178, G + 5.3, { align: "right" }),
@@ -17694,9 +18505,10 @@ Error generating stack: ` +
                   : (o.text(s(jr), 170, G + 5.3, { align: "right" }),
                     o.setFont("helvetica", "bold"),
                     o.setTextColor(...F),
-                    o.text(s(Pr), 194, G + 5.3, { align: "right" })),
-                  (G += Fr),
-                  G > 262 && (o.addPage(), (G = 18)));
+                    o.text(s(Pr), 194, G + 5.3, { align: "right" })));
+              }
+              (G += Fr),
+              G > 262 && (o.addPage(), (G = 18));
             }),
           G
         );
@@ -17750,7 +18562,7 @@ Error generating stack: ` +
           o.setTextColor(...F),
           o.text(s(b), 193, M + 7.5, { align: "right" }),
           (M += 14),
-          o.setFillColor(240, 248, 241),
+(typeof window.renderHitosPdf === 'function' ? window.renderHitosPdf(o, J, M, s, h, r, t) : (          o.setFillColor(240, 248, 241),
           o.setDrawColor(180, 220, 185),
           o.setLineWidth(0.3),
           o.roundedRect(J - 2, M, 196 - J + 2, 10, 2, 2, "FD"),
@@ -17764,7 +18576,7 @@ Error generating stack: ` +
           ),
           o.setFont("helvetica", "bold"),
           o.text(s(h), 193, M + 6.5, { align: "right" }),
-          M + 14
+          M + 14))
         );
       },
       v = (M, q = 20) => (M + q > 274 ? (o.addPage(), 16) : M),
@@ -18299,7 +19111,7 @@ Error generating stack: ` +
     return escapeProfile(profile).replace(/\r?\n/g, "<br/>");
   }
   function Ef(t, i, r) {
-    const { total: n, anticipo: l } = Ee(t.items, r, t.descuento, t.modoCosteo);
+    const { total: n, anticipo: l } = Ee(t.items, r, t.descuento, t.modoCosteo, t.sinIva);
     var o = (r && r.accentColor) || "#f5a020",
       s = (r && r.empresa) || "Empresa",
       m = (r && r.logoCliente) || "",
@@ -18383,7 +19195,7 @@ Error generating stack: ` +
     (B.document.write(z), B.document.close());
   }
   function Af(t, i, r) {
-    const { total: n, anticipo: l } = Ee(t.items, r, t.descuento, t.modoCosteo);
+    const { total: n, anticipo: l } = Ee(t.items, r, t.descuento, t.modoCosteo, t.sinIva);
     var o = (r && r.accentColor) || "#f5a020",
       s = (r && r.empresa) || "Empresa",
       m = (r && r.logoCliente) || "",
@@ -18549,7 +19361,7 @@ Error generating stack: ` +
             "</td></tr>",
         ));
     });
-    var v = Ee(h, r, t.descuento, m) || {},
+    var v = Ee(h, r, t.descuento, m, t.sinIva) || {},
       x0 = Number(v.sub) || 0,
       f0 = Number(v.iva) || 0,
       I0 = Number(v.total) || 0,
@@ -18671,7 +19483,7 @@ Error generating stack: ` +
       b[w.rol] = 0;
     });
     var modo = t.modoCosteo || "completo",
-      tot = Ee(p, r, t.descuento, modo) || {},
+      tot = Ee(p, r, t.descuento, modo, t.sinIva) || {},
       moTotal =
         modo === "mo"
           ? Number(tot.sub) || 0
@@ -18845,7 +19657,7 @@ Error generating stack: ` +
       sub: l0,
       iva: o0,
       anticipo: s,
-    } = Ee(t.items, r, t.descuento, t.modoCosteo);
+    } = Ee(t.items, r, t.descuento, t.modoCosteo, t.sinIva);
     var n = Math.round(Number(n0) || 0),
       l = Math.round(Number(l0) || 0),
       o = Math.round(Number(o0) || 0),
@@ -18974,7 +19786,7 @@ Error generating stack: ` +
   }
   function Df(t, i, r, u) {
     if (!t) return;
-    const { total: n } = Ee(t.items || [], r, t.descuento, t.modoCosteo);
+    const { total: n } = Ee(t.items || [], r, t.descuento, t.modoCosteo, t.sinIva);
     var l = (r && r.accentColor) || "#f5a020",
       o = (r && r.empresa) || "Empresa",
       s = (r && r.logoCliente) || "",
@@ -19104,7 +19916,7 @@ Error generating stack: ` +
     i = i || {};
     t = t || {};
     var modo = t.modoCosteo || "completo";
-    var T = Ee(t.items || [], r, t.descuento, modo) || {};
+    var T = Ee(t.items || [], r, t.descuento, modo, t.sinIva) || {};
     var total = Number(T.total) || 0,
       sub = Number(T.sub) || 0,
       iva = Number(T.iva) || 0,
@@ -19350,7 +20162,7 @@ Error generating stack: ` +
       iva: o,
       total: s,
       anticipo: m,
-    } = Ee(t.items, r, t.descuento, t.modoCosteo);
+    } = Ee(t.items, r, t.descuento, t.modoCosteo, t.sinIva);
     var p = i && i.telefono ? i.telefono.replace(/\D/g, "") : "";
     const [C, b] = V(!0),
       [h, j] = V(!0),
@@ -19746,7 +20558,7 @@ ${D}
     });
   }
   async function Mp(t, i, r) {
-    const { total: n, anticipo: l } = Ee(t.items, r, t.descuento, t.modoCosteo);
+    const { total: n, anticipo: l } = Ee(t.items, r, t.descuento, t.modoCosteo, t.sinIva);
     var o = i && i.telefono ? i.telefono.replace(/\D/g, "") : "";
     await zr(t, i, r, pt("pdfTplPref", "simple"));
     var s = t.items
@@ -19777,7 +20589,7 @@ ${D}
     setTimeout(() => window.open(p, "_blank"), 300);
   }
   function Nf({ budget: t, client: i, cfg: r, onClose: n }) {
-    (Ee(t.items, r, t.descuento, t.modoCosteo),
+    (Ee(t.items, r, t.descuento, t.modoCosteo, t.sinIva),
       (t.items || []).map(
         (p) =>
           `  ${p.desc}: ${p.cant} ${p.unidad} × ${ne(p.precio)} = ${ne(p.cant * p.precio)}`,
@@ -20530,7 +21342,7 @@ ${r.empresa}`;
       desc: b,
       total: h,
       anticipo: j,
-    } = Ee(s.items, n, s.descuento, s.modoCosteo);
+    } = Ee(s.items, n, s.descuento, s.modoCosteo, s.sinIva);
     var F = (n && n.version) || "starter",
       g = F === "starter";
     const [z, B] = V(g ? "simple" : pt("pdfTplPref", "simple")),
@@ -20898,7 +21710,7 @@ ${r.empresa}`;
                               desc: y,
                               total: P,
                               anticipo: A,
-                            } = Ee(s.items, n, s.descuento, s.modoCosteo),
+                            } = Ee(s.items, n, s.descuento, s.modoCosteo, s.sinIva),
                             S = {
                               simple: "1A3A5C",
                               azul: "1E40AF",
@@ -21560,7 +22372,7 @@ ${r.empresa}`;
                             }),
                           ],
                         }),
-                        e.jsxs("div", {
+                        (typeof window.renderHitosModal === 'function' ? window.renderHitosModal(e, s, n, ne, j) : e.jsxs("div", {
                           style: {
                             display: "flex",
                             justifyContent: "space-between",
@@ -21588,7 +22400,7 @@ ${r.empresa}`;
                               children: ne(j),
                             }),
                           ],
-                        }),
+                        })),
                       ],
                     }),
                   }),
@@ -22533,7 +23345,7 @@ ${r.empresa}`;
             return I.getFullYear() === x.year && I.getMonth() === x.month;
           })
           .reduce(
-            (f, I) => f + Ee(I.items, i, I.descuento, I.modoCosteo).total,
+            (f, I) => f + Ee(I.items, i, I.descuento, I.modoCosteo, I.sinIva).total,
             0,
           ),
       ),
@@ -22705,7 +23517,7 @@ ${r.empresa}`;
         const s = t
           .filter((m) => m.clienteId === o.id)
           .reduce(
-            (m, p) => m + Ee(p.items, r, p.descuento, p.modoCosteo).total,
+            (m, p) => m + Ee(p.items, r, p.descuento, p.modoCosteo, p.sinIva).total,
             0,
           );
         return { name: o.nombre.split(" ").slice(0, 2).join(" "), tot: s };
@@ -27569,7 +28381,7 @@ ${r.empresa}`;
       },
       R = Gt(n.licenciaCodigo, n.rut),
       K = R.valid && !R.expired && R.dias <= 30,
-      y = t.map((L) => Ee(L.items, n, L.descuento, L.modoCosteo).total),
+      y = t.map((L) => Ee(L.items, n, L.descuento, L.modoCosteo, L.sinIva).total),
       P = y.reduce((L, E) => L + E, 0),
       A = {
         Completado: 0,
@@ -27638,7 +28450,7 @@ ${r.empresa}`;
       ee = i.map((L) => {
         const E = t.filter((J) => J.clienteId === L.id),
           M = E.reduce(
-            (J, re) => J + Ee(re.items, n, re.descuento, re.modoCosteo).total,
+            (J, re) => J + Ee(re.items, n, re.descuento, re.modoCosteo, re.sinIva).total,
             0,
           ),
           q = [...E].sort((J, re) => re.id - J.id)[0];
@@ -27664,7 +28476,7 @@ ${r.empresa}`;
               style: { display: "flex", flexDirection: "column", gap: 8 },
               children: M.map((q) => {
                 var J = i.find((Q) => Q.id === q.clienteId),
-                  re = Ee(q.items, n, q.descuento, q.modoCosteo).total;
+                  re = Ee(q.items, n, q.descuento, q.modoCosteo, q.sinIva).total;
                 return e.jsxs(
                   "div",
                   {
@@ -28440,9 +29252,13 @@ ${r.empresa}`;
                             " ",
                             L === "Pendiente"
                               ? "Pendientes"
-                              : L === "En progreso"
-                                ? "Progreso"
-                                : "Rechazados",
+                              : L === "Aprobado"
+                                ? "Aprobados"
+                                : L === "En progreso"
+                                  ? "Progreso"
+                                  : L === "Rechazado"
+                                    ? "Rechazados"
+                                    : "Vencidos",
                           ],
                         }),
                         e.jsx("div", {
@@ -28846,12 +29662,7 @@ ${r.empresa}`;
                             .slice(0, 6)
                             .map((L) => {
                               const E = i.find((q) => q.id === L.clienteId),
-                                M = Ee(
-                                  L.items,
-                                  n,
-                                  L.descuento,
-                                  L.modoCosteo,
-                                ).total;
+                                M = Ee(L.items, n, L.descuento, L.modoCosteo, L.sinIva).total;
                               return e.jsxs(
                                 "tr",
                                 {
@@ -29347,7 +30158,9 @@ ${r.empresa}`;
       [manualName, setManualName] = V(""),
       [manualUnit, setManualUnit] = V("und"),
       [manualPrice, setManualPrice] = V("0"),
-      [manualSave, setManualSave] = V(true);
+      [manualSave, setManualSave] = V(true),
+      [materialSearch, setMaterialSearch] = V(""),
+      [materialPickerOpen, setMaterialPickerOpen] = V(false);
     var materialesActivos = s.filter((y) => y._activo && y._mat).map((y) => ({ materialId: y.materialId, cantidad: y.cantidad })),
       calculoModal = li(u(d({}, i), { materiales: materialesActivos, pctMO: p, pctGG: b, pctUtilidad: j, rendimiento: g, dotacion: B }), r, cfgModal),
       v = calculoModal.matTotal,
@@ -29362,6 +30175,31 @@ ${r.empresa}`;
         ),
       K = (y, P) =>
         m((A) => A.map((S, O) => (O === y ? u(d({}, S), { cantidad: P }) : S)));
+    var normalizeMaterialSearch = (value) =>
+        String(value || "")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, " ")
+          .trim(),
+      materialSearchTerms = normalizeMaterialSearch(materialSearch).split(/\s+/).filter(Boolean),
+      filteredMaterials = materialSearchTerms.length
+        ? r.filter((mat) => {
+            var searchable = normalizeMaterialSearch([mat.nombre, mat.cat, mat.unidad].join(" "));
+            return materialSearchTerms.every((term) => searchable.includes(term));
+          })
+        : r;
+    var selectExtraMaterial = (newId) => {
+      if (!newId) return;
+      if (s.some((line) => line.materialId === newId)) {
+        m(s.map((line) => line.materialId === newId ? u(d({}, line), { _activo: true }) : line));
+      } else {
+        var newMat = r.find((line) => line.id === newId);
+        if (newMat) m([...s, { materialId: newId, cantidad: 1, _activo: true, _mat: newMat }]);
+      }
+      setMaterialSearch("");
+      setMaterialPickerOpen(false);
+    };
     return e.jsx("div", {
       style: {
         position: "fixed",
@@ -29638,38 +30476,134 @@ ${r.empresa}`;
                         style: { fontSize: 13, fontWeight: 600, color: a.text, whiteSpace: "nowrap" },
                         children: "➕ Agregar extra:"
                       }),
-                      e.jsxs("select", {
-                        style: u(d({}, c.inp), { flex: 1, fontSize: 13, padding: "6px" }),
-                        value: "",
-                        onChange: (O) => {
-                          var newId = parseInt(O.target.value);
-                          if (!newId) return;
-                          if (s.some((x) => x.materialId === newId)) {
-                            m(s.map((x) => x.materialId === newId ? u(d({}, x), { _activo: true }) : x));
-                            return;
-                          }
-                          var newMat = r.find((x) => x.id === newId);
-                          if (newMat) {
-                            m([...s, { materialId: newId, cantidad: 1, _activo: true, _mat: newMat }]);
-                          }
-                        },
+                      e.jsxs("div", {
+                        style: { position: "relative", flex: 1, minWidth: 0 },
                         children: [
-                          e.jsx("option", { value: "", children: "-- Selecciona un insumo del catálogo --" }),
-                          ...Object.entries(
-                            r.reduce((acc, mat) => {
-                              const cat = mat.cat || "Sin Categoría";
-                              if (!acc[cat]) acc[cat] = [];
-                              acc[cat].push(mat);
-                              return acc;
-                            }, {})
-                          ).sort((a, b) => a[0].localeCompare(b[0])).map(([cat, mats]) =>
-                            e.jsx("optgroup", {
-                              label: cat,
-                              children: mats.sort((A, B) => A.nombre.localeCompare(B.nombre)).map((mat) =>
-                                e.jsxs("option", { value: mat.id, children: [mat.nombre, " (", mat.unidad, ") - $", mat.precio.toLocaleString("es-CL")] }, mat.id)
-                              )
-                            }, cat)
-                          )
+                          e.jsx("input", {
+                            type: "search",
+                            role: "combobox",
+                            value: materialSearch,
+                            placeholder: "-- Selecciona un insumo del catálogo --",
+                            "aria-label": "Seleccionar o buscar insumo del catálogo",
+                            "aria-expanded": materialPickerOpen,
+                            "aria-controls": "material-picker-results",
+                            autoComplete: "off",
+                            onFocus: () => setMaterialPickerOpen(true),
+                            onClick: () => setMaterialPickerOpen(true),
+                            onChange: (O) => {
+                              setMaterialSearch(O.target.value);
+                              setMaterialPickerOpen(true);
+                            },
+                            onKeyDown: (O) => {
+                              if (O.key === "Escape") setMaterialPickerOpen(false);
+                              if (O.key === "Enter" && filteredMaterials.length) {
+                                O.preventDefault();
+                                selectExtraMaterial(filteredMaterials[0].id);
+                              }
+                            },
+                            onBlur: () => setTimeout(() => setMaterialPickerOpen(false), 120),
+                            style: u(d({}, c.inp), {
+                              width: "100%",
+                              fontSize: 13,
+                              padding: "6px 32px 6px 10px"
+                            }),
+                          }),
+                          e.jsx("span", {
+                            style: {
+                              position: "absolute",
+                              right: 10,
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              color: a.muted,
+                              pointerEvents: "none",
+                              fontSize: 12
+                            },
+                            children: "⌄"
+                          }),
+                          materialPickerOpen && e.jsx("div", {
+                            id: "material-picker-results",
+                            role: "listbox",
+                            style: {
+                              position: "absolute",
+                              left: 0,
+                              right: 0,
+                              top: "calc(100% + 3px)",
+                              zIndex: 80,
+                              maxHeight: 340,
+                              overflowY: "auto",
+                              background: a.card,
+                              border: "1px solid " + a.border,
+                              boxShadow: "0 12px 28px rgba(0,0,0,.45)",
+                              color: a.text
+                            },
+                            children: filteredMaterials.length
+                              ? Object.entries(
+                                  filteredMaterials.reduce((acc, mat) => {
+                                    const cat = mat.cat || "Sin Categoría";
+                                    if (!acc[cat]) acc[cat] = [];
+                                    acc[cat].push(mat);
+                                    return acc;
+                                  }, {})
+                                ).sort((A, B) => A[0].localeCompare(B[0])).map(([cat, mats]) =>
+                                  e.jsxs("div", {
+                                    children: [
+                                      e.jsx("div", {
+                                        style: {
+                                          padding: "5px 10px",
+                                          background: a.sb,
+                                          color: a.text,
+                                          fontSize: 12,
+                                          fontWeight: 700,
+                                          position: "sticky",
+                                          top: 0,
+                                          zIndex: 1
+                                        },
+                                        children: cat
+                                      }),
+                                      ...mats.sort((A, B) => A.nombre.localeCompare(B.nombre)).map((mat) => {
+                                        var isActive = s.some((line) => line.materialId === mat.id && line._activo);
+                                        return e.jsxs("button", {
+                                          type: "button",
+                                          role: "option",
+                                          "aria-selected": isActive,
+                                          onMouseDown: (O) => O.preventDefault(),
+                                          onClick: () => selectExtraMaterial(mat.id),
+                                          onMouseEnter: (O) => O.currentTarget.style.background = a.sb,
+                                          onMouseLeave: (O) => O.currentTarget.style.background = "transparent",
+                                          style: {
+                                            display: "flex",
+                                            width: "100%",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            gap: 12,
+                                            padding: "6px 12px 6px 18px",
+                                            border: 0,
+                                            background: "transparent",
+                                            color: isActive ? a.muted : a.text,
+                                            cursor: "pointer",
+                                            fontSize: 12,
+                                            textAlign: "left"
+                                          },
+                                          children: [
+                                            e.jsxs("span", {
+                                              style: { minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
+                                              children: [mat.nombre, " (", mat.unidad, ")"]
+                                            }),
+                                            e.jsxs("span", {
+                                              style: { color: "#60a5fa", fontWeight: 600, whiteSpace: "nowrap" },
+                                              children: ["- $", mat.precio.toLocaleString("es-CL")]
+                                            })
+                                          ]
+                                        }, mat.id);
+                                      })
+                                    ]
+                                  }, cat)
+                                )
+                              : e.jsx("div", {
+                                  style: { padding: "12px", color: "#f87171", fontSize: 12, textAlign: "center" },
+                                  children: "No se encontraron materiales"
+                                })
+                          })
                         ]
                       }),
                       e.jsx("button", {
@@ -30486,9 +31420,9 @@ ${r.empresa}`;
     var m = i.find((v) => v.id === parseInt(o)),
       p = r.find((v) => v.id === t.clienteId) || {},
       C = m ? r.find((v) => v.id === m.clienteId) || {} : null;
-    const { total: b } = Ee(t.items, n, t.descuento, t.modoCosteo),
+    const { total: b } = Ee(t.items, n, t.descuento, t.modoCosteo, t.sinIva),
       { total: h } = m
-        ? Ee(m.items, n, m.descuento, m.modoCosteo)
+        ? Ee(m.items, n, m.descuento, m.modoCosteo, m.sinIva)
         : { total: 0 };
     var j = h - b,
       F = [
@@ -36741,6 +37675,8 @@ MATERIALES:
               licitacionOrganismo: m.licitacionOrganismo || "",
               _pendingClientName: m._pendingClientName || "",
               _isTenderDraft: !!m._isTenderDraft,
+              sinIva: !!m.sinIva,
+              hitosPago: m.hitosPago || null,
             }
           : {
               clienteId: (t[0] && t[0].id) || "",
@@ -36760,6 +37696,8 @@ MATERIALES:
               licitacionOrganismo: "",
               _pendingClientName: "",
               _isTenderDraft: false,
+              sinIva: false,
+              hitosPago: null,
             },
       ),
       [k, R] = V(null),
@@ -36772,7 +37710,7 @@ MATERIALES:
         return Math.floor((new Date() - W) / (1e3 * 60 * 60 * 24)) > 90;
       })(),
       $ = t.find((W) => W.id === parseInt(I.clienteId));
-    Ee(I.items, r, I.descuento, I.modoCosteo);
+    Ee(I.items, r, I.descuento, I.modoCosteo, I.sinIva);
     var ee = (W, T, L) => {
         var E = [...I.items];
         if (((E[W] = u(d({}, E[W]), { [T]: L })), T === "_cid" && L)) {
@@ -37968,7 +38906,7 @@ MATERIALES:
                           }),
                         ],
                       }),
-                      e.jsxs("div", {
+                      (typeof window.renderHitosSidebar === 'function' ? window.renderHitosSidebar(e, I, D, r, ne, J, a, c, ze, Pe, u, d, typeof Re !== "undefined" ? Re : null) :                       e.jsxs("div", {
                         style: {
                           display: "flex",
                           justifyContent: "space-between",
@@ -37995,7 +38933,7 @@ MATERIALES:
                             children: ne(J),
                           }),
                         ],
-                      }),
+                      })),
                       e.jsx(ze, {
                         label: "Estado",
                         children: e.jsx(Mi, {
@@ -38053,7 +38991,7 @@ MATERIALES:
           w.descripcion && w.descripcion.toLowerCase().includes("anticipo"),
       ),
       j = h.reduce((w, v) => w + (parseFloat(v.monto) || 0), 0);
-    const { total: F } = Ee(t.items, r || {}, t.descuento, t.modoCosteo);
+    const { total: F } = Ee(t.items, r || {}, t.descuento, t.modoCosteo, t.sinIva);
     var g = F - j,
       z =
         "<!DOCTYPE html><html><head><meta charset='utf-8'><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;padding:40px;font-size:13px;max-width:820px;margin:0 auto}@media print{.np{display:none}}</style></head><body>";
@@ -38172,7 +39110,7 @@ MATERIALES:
           "' style='height:100px;object-fit:contain;display:block;margin:0 auto 6px'/>"
         : "",
       h = i.reduce((x, f) => x + (parseFloat(f.monto) || 0), 0);
-    const { total: j } = Ee(t.items, r || {}, t.descuento, t.modoCosteo);
+    const { total: j } = Ee(t.items, r || {}, t.descuento, t.modoCosteo, t.sinIva);
     var F = j - h,
       g = j > 0 ? Math.min(100, Math.round((h / j) * 100)) : 0,
       z = 0,
@@ -38306,7 +39244,7 @@ MATERIALES:
           "' style='height:100px;object-fit:contain;display:block;margin:0 auto 6px'/>"
         : "",
       h = i.reduce((z, B) => z + (parseFloat(B.monto) || 0), 0);
-    const { total: j } = Ee(t.items, r || {}, t.descuento, t.modoCosteo);
+    const { total: j } = Ee(t.items, r || {}, t.descuento, t.modoCosteo, t.sinIva);
     var F =
       "<!DOCTYPE html><html><head><meta charset='utf-8'><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;padding:40px;font-size:13px;max-width:820px;margin:0 auto}@media print{.np{display:none}}</style></head><body>";
     ((F +=
@@ -38541,7 +39479,7 @@ MATERIALES:
     (z.document.write(g), z.document.close());
   }
   function ug({ budget: t, cfg: i, onClose: r, onSave: n }) {
-    const { total: l } = Ee(t.items, i || {}, t.descuento, t.modoCosteo);
+    const { total: l } = Ee(t.items, i || {}, t.descuento, t.modoCosteo, t.sinIva);
     var o = Math.round(l * ((i && i.anticipo) || 0.6));
     const [s, m] = V(t.pagos || []),
       [p, C] = V((t.pagos || []).length + 1),
@@ -39538,7 +40476,7 @@ MATERIALES:
         "Al cobrar",
         "Uso interno",
       ];
-    const { total: h } = Ee(t.items || [], r, t.descuento, t.modoCosteo);
+    const { total: h } = Ee(t.items || [], r, t.descuento, t.modoCosteo, t.sinIva);
     var j = async (F) => {
       if (C(F))
         if (F === "carta") Ef(t, i, r);
@@ -39555,7 +40493,7 @@ MATERIALES:
             iva: y,
             total: P,
             anticipo: A,
-          } = Ee(t.items || [], r, t.descuento, t.modoCosteo);
+          } = Ee(t.items || [], r, t.descuento, t.modoCosteo, t.sinIva);
           var w = "1A3A5C",
             v = "F5A020",
             x = "F5F7FA",
@@ -40016,7 +40954,7 @@ MATERIALES:
       [b, h] = V(30),
       j = t.items.filter((x) => x.desc),
       F = j.filter((x, f) => l.has(f)),
-      tt = Ee(F, r, t.descuento, t.modoCosteo || "completo") || {},
+      tt = Ee(F, r, t.descuento, t.modoCosteo || "completo", t.sinIva) || {},
       g = Number(tt.sub) || 0,
       z = Number(tt.iva) || 0,
       B = Number(tt.total) || 0,
@@ -40721,12 +41659,14 @@ MATERIALES:
       E = T && L >= T,
       M = W.limite && W.limite.historialDias,
       q = M ? new Date(Date.now() - M * 24 * 60 * 60 * 1e3) : null,
-      J = q
+      J = (q
         ? t.filter((Q) => {
             var G = new Date(Q.fecha || Q.id);
             return isNaN(G.getTime()) || G >= q;
           })
-        : t,
+        : t
+      ).filter((Q) => !Q._deleted),
+      H = Math.max(0, L - J.length),
       re = [...(B === "Todos" ? J : J.filter((Q) => Q.estado === B))]
         .sort((Q, G) => G.id - Q.id)
         .filter((Q) => {
@@ -40905,7 +41845,9 @@ MATERIALES:
                 children: [
                   e.jsxs("div", {
                     style: c.ct,
-                    children: ["Mis Presupuestos (", re.length, ")"],
+                    children: M
+                      ? ["Mis Presupuestos \u2014 \u00faltimos ", M, " d\u00edas (", re.length, " de ", L, ")"]
+                      : ["Mis Presupuestos (", re.length, ")"],
                   }),
                   e.jsxs("div", {
                     style: { display: "flex", gap: 8, alignItems: "center" },
@@ -40943,6 +41885,28 @@ MATERIALES:
                   }),
                 ],
               }),
+              H > 0 &&
+                e.jsxs("div", {
+                  style: {
+                    margin: "-4px 0 14px",
+                    padding: "10px 12px",
+                    borderRadius: 8,
+                    background: "rgba(245,160,32,.10)",
+                    border: "1px solid rgba(245,160,32,.35)",
+                    color: a.muted,
+                    fontSize: 12,
+                    lineHeight: 1.45,
+                  },
+                  children: [
+                    "Tu plan muestra el historial de los \u00faltimos ",
+                    M,
+                    " d\u00edas. Hay ",
+                    H,
+                    H === 1
+                      ? " presupuesto anterior conservado y disponible en los m\u00f3dulos relacionados."
+                      : " presupuestos anteriores conservados y disponibles en los m\u00f3dulos relacionados.",
+                  ],
+                }),
               e.jsx("div", {
                 style: { overflowX: "auto" },
                 children: e.jsxs("table", {
@@ -40976,7 +41940,7 @@ MATERIALES:
                           sub: ie,
                           iva: oe,
                           total: ce,
-                        } = Ee(Q.items, n, Q.descuento, Q.modoCosteo);
+                        } = Ee(Q.items, n, Q.descuento, Q.modoCosteo, Q.sinIva);
                         var te = kp(Q.fecha, n.validez),
                           fe =
                             (Q.estado === "Pendiente" ||
@@ -41724,7 +42688,7 @@ MATERIALES:
             P = 0,
             A = 0;
           D.forEach((O) => {
-            const { total: U } = Ee(O.items, n || {}, O.descuento);
+            const { total: U } = Ee(O.items, n || {}, O.descuento, O.modoCosteo, O.sinIva);
             var $ = (O.pagos || []).reduce(
               (ee, Y) => ee + (parseFloat(Y.monto) || 0),
               0,
@@ -42040,7 +43004,7 @@ MATERIALES:
                   k = [],
                   R = f || [];
                 R.forEach((K) => {
-                  const { total: y } = Ee(K.items, n || {}, K.descuento);
+                  const { total: y } = Ee(K.items, n || {}, K.descuento, K.modoCosteo, K.sinIva);
                   var P = (K.pagos || []).reduce(
                       (A, S) => A + (parseFloat(S.monto) || 0),
                       0,
@@ -42197,7 +43161,7 @@ MATERIALES:
                   children: "Presupuestos",
                 }),
                 f.map((I) => {
-                  const { total: D } = Ee(I.items, n || {}, I.descuento);
+                  const { total: D } = Ee(I.items, n || {}, I.descuento, I.modoCosteo, I.sinIva);
                   return e.jsxs(
                     "div",
                     {
@@ -55194,11 +56158,11 @@ MATERIALES:
       ),
       n = t.filter((b) => b.estado === "Pendiente"),
       l = r.reduce(
-        (b, h) => b + Ee(h.items, i, h.descuento, h.modoCosteo).total,
+        (b, h) => b + Ee(h.items, i, h.descuento, h.modoCosteo, h.sinIva).total,
         0,
       ),
       o = n.reduce(
-        (b, h) => b + Ee(h.items, i, h.descuento, h.modoCosteo).total,
+        (b, h) => b + Ee(h.items, i, h.descuento, h.modoCosteo, h.sinIva).total,
         0,
       ),
       s = {};
@@ -55206,7 +56170,7 @@ MATERIALES:
       var h = b.fecha ? b.fecha.slice(0, 7) : "";
       if (h) {
         s[h] || (s[h] = { mes: h, adj: 0, pend: 0, n: 0 });
-        var j = Ee(b.items, i, b.descuento, b.modoCosteo).total;
+        var j = Ee(b.items, i, b.descuento, b.modoCosteo, b.sinIva).total;
         (b.estado === "Adjudicado" || b.estado === "En progreso"
           ? (s[h].adj += j)
           : b.estado === "Pendiente" && (s[h].pend += j),
@@ -58759,6 +59723,8 @@ MATERIALES:
     apus: s,
     setApus: m,
     onClearAll: p,
+    onImportUpdatePack: Zu,
+    updateHistory: Xu,
   }) {
     var [C, b] = V(Hp),
       [h, j] = V(null),
@@ -58837,6 +59803,25 @@ MATERIALES:
                 return;
               }
               (r(O), n("✅ Datos importados desde archivo"));
+            } catch (U) {
+              n("⚠️ Error al leer el archivo");
+            }
+          }),
+            A.readAsText(P));
+        }
+      },
+      Yu = (y) => {
+        var P = y.target.files[0];
+        if (P) {
+          var A = new FileReader();
+          ((A.onload = (S) => {
+            try {
+              var O = JSON.parse(S.target.result);
+              if (O.tipo !== "ecp_update_pack") {
+                n("⚠️ Ese archivo no es un paquete de actualización de catálogo");
+                return;
+              }
+              Zu(O);
             } catch (U) {
               n("⚠️ Error al leer el archivo");
             }
@@ -59161,6 +60146,17 @@ MATERIALES:
               }),
           ],
         }),
+        e.jsx("div", {
+          style: {
+            fontSize: 12,
+            fontWeight: 700,
+            color: a.muted,
+            textTransform: "uppercase",
+            letterSpacing: ".05em",
+            marginBottom: 8,
+          },
+          children: "💾 Respaldo completo (clientes, presupuestos, catálogo)",
+        }),
         e.jsxs("div", {
           style: { display: "flex", gap: 10, marginBottom: 20 },
           children: [
@@ -59189,7 +60185,7 @@ MATERIALES:
           ],
         }),
         e.jsxs("div", {
-          style: c.card,
+          style: u(d({}, c.card), { marginBottom: 24 }),
           children: [
             e.jsxs("div", {
               style: {
@@ -59211,122 +60207,203 @@ MATERIALES:
                   children:
                     'Aún no hay respaldos. Haz click en "Respaldar ahora".',
                 })
-              : C.map((y, P) =>
-                  e.jsxs(
-                    "div",
-                    {
-                      style: {
-                        display: "grid",
-                        gridTemplateColumns: "1fr auto",
-                        gap: 12,
-                        alignItems: "center",
-                        padding: "12px 0",
-                        borderBottom:
-                          P < C.length - 1 ? `1px solid ${a.border}` : "none",
-                      },
-                      children: [
-                        e.jsxs("div", {
-                          children: [
-                            e.jsxs("div", {
-                              style: {
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 8,
-                                marginBottom: 3,
-                              },
-                              children: [
-                                e.jsx("span", {
+              : e.jsxs("table", {
+                  style: { width: "100%", borderCollapse: "collapse", fontSize: 12.5 },
+                  children: [
+                    e.jsx("thead", {
+                      children: e.jsxs("tr", {
+                        children: [
+                          e.jsx("th", { style: c.th, children: "Fecha" }),
+                          e.jsx("th", { style: c.th, children: "Tipo" }),
+                          e.jsx("th", { style: c.th, children: "Contenido" }),
+                          e.jsx("th", { style: u(d({}, c.th), { textAlign: "right" }), children: "Acciones" }),
+                        ],
+                      }),
+                    }),
+                    e.jsx("tbody", {
+                      children: C.map((y, P) =>
+                        e.jsxs(
+                          "tr",
+                          {
+                            style: { borderBottom: `1px solid ${a.border}` },
+                            children: [
+                              e.jsx("td", {
+                                style: { padding: "10px 6px" },
+                                children: e.jsxs("div", {
+                                  children: [
+                                    e.jsx("div", { style: { fontWeight: 600, color: a.text }, children: R(y.fecha) }),
+                                    P === 0 &&
+                                      e.jsx("div", {
+                                        style: { fontSize: 10, color: "#4ade80", fontWeight: 600, marginTop: 2 },
+                                        children: "● Más reciente",
+                                      }),
+                                  ],
+                                }),
+                              }),
+                              e.jsx("td", {
+                                style: { padding: "10px 6px" },
+                                children: e.jsx("span", {
                                   style: {
                                     fontSize: 11,
                                     fontWeight: 700,
                                     padding: "2px 8px",
                                     borderRadius: 10,
-                                    background:
-                                      y.etiqueta === "Automático"
-                                        ? "var(--bdg-prog-bg)"
-                                        : "var(--bdg-comp-bg)",
-                                    color:
-                                      y.etiqueta === "Automático"
-                                        ? "var(--bdg-prog-fg)"
-                                        : "var(--bdg-comp-fg)",
+                                    background: y.etiqueta === "Automático" ? "var(--bdg-prog-bg)" : "var(--bdg-comp-bg)",
+                                    color: y.etiqueta === "Automático" ? "var(--bdg-prog-fg)" : "var(--bdg-comp-fg)",
                                   },
                                   children: y.etiqueta,
                                 }),
-                                P === 0 &&
-                                  e.jsx("span", {
-                                    style: {
-                                      fontSize: 10,
-                                      color: "#4ade80",
-                                      fontWeight: 600,
-                                    },
-                                    children: "● Más reciente",
-                                  }),
-                              ],
-                            }),
-                            e.jsx("div", {
-                              style: {
-                                fontSize: 13,
-                                fontWeight: 600,
-                                color: a.text,
-                              },
-                              children: R(y.fecha),
-                            }),
-                            e.jsxs("div", {
-                              style: {
-                                fontSize: 11,
-                                color: a.muted,
-                                marginTop: 2,
-                              },
-                              children: [
-                                y.stats.presupuestos,
-                                " presupuestos · ",
-                                y.stats.clientes,
-                                " clientes · ",
-                                y.stats.materiales,
-                                " materiales · ",
-                                y.stats.apus,
-                                " APUs",
-                              ],
-                            }),
-                          ],
-                        }),
-                        e.jsxs("div", {
-                          style: { display: "flex", gap: 6 },
-                          children: [
-                            e.jsx("button", {
-                              style: u(d({}, c.btn("s")), {
-                                fontSize: 11,
-                                padding: "5px 10px",
                               }),
-                              onClick: () => f(y),
-                              title: "Descargar como archivo",
-                              children: "⬇",
-                            }),
-                            e.jsx("button", {
-                              style: u(d({}, c.btn("s")), {
-                                fontSize: 11,
-                                padding: "5px 10px",
+                              e.jsx("td", {
+                                style: { padding: "10px 6px", color: a.muted, fontSize: 11.5 },
+                                children: [
+                                  y.stats.presupuestos, " presupuestos · ",
+                                  y.stats.clientes, " clientes · ",
+                                  y.stats.materiales, " materiales · ",
+                                  y.stats.apus, " APUs",
+                                ].join(""),
                               }),
-                              onClick: () => j(y),
-                              title: "Restaurar estos datos",
-                              children: "↩",
-                            }),
-                            e.jsx("button", {
-                              style: u(d({}, c.btn("d")), {
-                                fontSize: 11,
-                                padding: "5px 10px",
+                              e.jsx("td", {
+                                style: { padding: "10px 6px", textAlign: "right" },
+                                children: e.jsxs("div", {
+                                  style: { display: "flex", gap: 6, justifyContent: "flex-end" },
+                                  children: [
+                                    e.jsx("button", {
+                                      style: u(d({}, c.btn("s")), { fontSize: 11, padding: "5px 10px" }),
+                                      onClick: () => f(y),
+                                      title: "Descargar como archivo",
+                                      children: "⬇",
+                                    }),
+                                    e.jsx("button", {
+                                      style: u(d({}, c.btn("s")), { fontSize: 11, padding: "5px 10px" }),
+                                      onClick: () => j(y),
+                                      title: "Restaurar estos datos",
+                                      children: "↩",
+                                    }),
+                                    e.jsx("button", {
+                                      style: u(d({}, c.btn("d")), { fontSize: 11, padding: "5px 10px" }),
+                                      onClick: () => D(y.id),
+                                      title: "Eliminar respaldo",
+                                      children: "✕",
+                                    }),
+                                  ],
+                                }),
                               }),
-                              onClick: () => D(y.id),
-                              title: "Eliminar respaldo",
-                              children: "✕",
-                            }),
-                          ],
-                        }),
-                      ],
-                    },
-                    y.id,
-                  ),
-                ),
+                            ],
+                          },
+                          y.id,
+                        ),
+                      ),
+                    }),
+                  ],
+                }),
+          ],
+        }),
+        e.jsx("div", {
+          style: {
+            fontSize: 12,
+            fontWeight: 700,
+            color: a.muted,
+            textTransform: "uppercase",
+            letterSpacing: ".05em",
+            marginBottom: 8,
+          },
+          children: "📦 Actualización de catálogo (partidas, materiales y APU)",
+        }),
+        e.jsxs("label", {
+          style: u(d({}, c.btn("s")), {
+            display: "flex",
+            justifyContent: "center",
+            padding: "10px",
+            textAlign: "center",
+            cursor: "pointer",
+            marginBottom: 20,
+          }),
+          children: [
+            "📦 Importar actualización de catálogo",
+            e.jsx("input", {
+              type: "file",
+              accept: ".json",
+              style: { display: "none" },
+              onChange: Yu,
+            }),
+          ],
+        }),
+        e.jsxs("div", {
+          style: c.card,
+          children: [
+            e.jsxs("div", {
+              style: {
+                fontSize: 14,
+                fontWeight: 700,
+                color: a.text,
+                marginBottom: 14,
+              },
+              children: ["Historial de actualizaciones de catálogo (", (Xu || []).length, ")"],
+            }),
+            !Xu || Xu.length === 0
+              ? e.jsx("div", {
+                  style: {
+                    textAlign: "center",
+                    padding: "30px",
+                    color: a.muted,
+                    fontSize: 13,
+                  },
+                  children:
+                    'Aún no has importado una actualización de catálogo.',
+                })
+              : e.jsxs("table", {
+                  style: { width: "100%", borderCollapse: "collapse", fontSize: 12.5 },
+                  children: [
+                    e.jsx("thead", {
+                      children: e.jsxs("tr", {
+                        children: [
+                          e.jsx("th", { style: c.th, children: "Fecha recibida" }),
+                          e.jsx("th", { style: c.th, children: "Generada el" }),
+                          e.jsx("th", { style: c.th, children: "Nuevos" }),
+                          e.jsx("th", { style: c.th, children: "Actualizados" }),
+                          e.jsx("th", { style: c.th, children: "Protegidos" }),
+                          e.jsx("th", { style: c.th, children: "Sin cambios" }),
+                        ],
+                      }),
+                    }),
+                    e.jsx("tbody", {
+                      children: Xu.map((y, P) => {
+                        var nuevos = y.diff.catalogo.nuevos + y.diff.materiales.nuevos + y.diff.apus.nuevos,
+                          actualizados = y.diff.catalogo.actualizados + y.diff.materiales.actualizados + y.diff.apus.actualizados,
+                          protegidos = y.diff.materiales.protegidos || 0,
+                          sinCambios = y.diff.catalogo.sinCambios + y.diff.materiales.sinCambios + y.diff.apus.sinCambios;
+                        return e.jsxs(
+                          "tr",
+                          {
+                            style: { borderBottom: P < Xu.length - 1 ? `1px solid ${a.border}` : "none" },
+                            children: [
+                              e.jsx("td", {
+                                style: { padding: "10px 6px" },
+                                children: e.jsxs("div", {
+                                  children: [
+                                    e.jsx("div", { style: { fontWeight: 600, color: a.text }, children: R(y.fecha) }),
+                                    P === 0 &&
+                                      e.jsx("div", {
+                                        style: { fontSize: 10, color: "#4ade80", fontWeight: 600, marginTop: 2 },
+                                        children: "● Más reciente",
+                                      }),
+                                  ],
+                                }),
+                              }),
+                              e.jsx("td", { style: { padding: "10px 6px", color: a.muted }, children: y.generado }),
+                              e.jsx("td", { style: { padding: "10px 6px", color: "#34d399", fontWeight: 700 }, children: nuevos }),
+                              e.jsx("td", { style: { padding: "10px 6px", color: a.accent, fontWeight: 700 }, children: actualizados }),
+                              e.jsx("td", { style: { padding: "10px 6px", color: a.blue, fontWeight: 700 }, children: protegidos }),
+                              e.jsx("td", { style: { padding: "10px 6px", color: a.muted }, children: sinCambios }),
+                            ],
+                          },
+                          P,
+                        );
+                      }),
+                    }),
+                  ],
+                }),
           ],
         }),
         e.jsx("div", {
@@ -61452,7 +62529,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               j &&
                 e.jsx("span", {
                   style: { fontSize: 13, color: a.accent, fontWeight: 700 },
-                  children: `$${Ee(j.items, r, j.descuento, j.modoCosteo).total.toLocaleString("es-CL")}`,
+                  children: `$${Ee(j.items, r, j.descuento, j.modoCosteo, j.sinIva).total.toLocaleString("es-CL")}`,
                 }),
             ],
           }),
@@ -61750,1550 +62827,6 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                 }),
             ],
           }),
-      ],
-    });
-  }
-  function qg({ clients: t, cfg: i }) {
-    var X, W;
-    const [r, n] = V("cierre"),
-      [l, o] = V("ml");
-    var s = (i && i.moItems) || [],
-      m =
-        ((X = s.find(
-          (T) => T.rol && T.rol.toLowerCase().includes("maestro"),
-        )) == null
-          ? void 0
-          : X.jornal) || 3e4,
-      p =
-        ((W = s.find(
-          (T) => T.rol && T.rol.toLowerCase().includes("ayudante"),
-        )) == null
-          ? void 0
-          : W.jornal) || 22e3;
-    const [C, b] = V({
-        jornalMaestro: m,
-        jornalAyudante: p,
-        leyesSociales: 33,
-        herramientas: 5,
-        gastosGenerales: 10,
-        utilidad: 15,
-      }),
-      [h, j] = V(0),
-      [F, g] = V(!1),
-      [z, B] = V(!1),
-      [w, v] = V({
-        clienteId: "",
-        descripcion: "",
-        fecha: new Date().toISOString().split("T")[0],
-      }),
-      [x, f] = V({
-        longitud: 100,
-        altura: 2.4,
-        distPostes: 3,
-        doblePosteEach: 8,
-      });
-    var I = [
-      {
-        id: "trazado",
-        label: "Trazado y replanteo",
-        rend: 50,
-        unidadRend: "ml",
-        cuadrilla: "maestro",
-        activa: !0,
-      },
-      {
-        id: "excSimple",
-        label: "Excavación hoyo simple (50cm)",
-        rend: 6,
-        unidadRend: "hoyos",
-        cuadrilla: "maestro+ayudante",
-        activa: !0,
-      },
-      {
-        id: "excDoble",
-        label: "Excavación hoyo doble (50cm)",
-        rend: 4,
-        unidadRend: "hoyos",
-        cuadrilla: "maestro+ayudante",
-        activa: !0,
-      },
-      {
-        id: "hincado",
-        label: "Hincado y afianzamiento poste",
-        rend: 8,
-        unidadRend: "postes",
-        cuadrilla: "maestro",
-        activa: !0,
-      },
-      {
-        id: "horizontales",
-        label: "Colocación horizontales (3 palos)",
-        rend: 12,
-        unidadRend: "vanos",
-        cuadrilla: "ayudante",
-        activa: !0,
-      },
-      {
-        id: "osb",
-        label: "Instalación placas OSB",
-        rend: 10,
-        unidadRend: "placas",
-        cuadrilla: "maestro+ayudante",
-        activa: !0,
-      },
-    ];
-    const [D, k] = V(I),
-      [R, K] = V({ cantidad: 200 });
-    var y = [
-      {
-        id: "mezcla",
-        label: "Preparar mezcla y cargar manga",
-        rend: 40,
-        unidadRend: "perf.",
-        cuadrilla: "ayudante",
-        activa: !0,
-      },
-      {
-        id: "relleno",
-        label: "Rellenar y emparejar perforación",
-        rend: 25,
-        unidadRend: "perf.",
-        cuadrilla: "maestro",
-        activa: !0,
-      },
-    ];
-    const [P, A] = V(y);
-    var S = () => {
-        const { longitud: T, altura: L, distPostes: E, doblePosteEach: M } = x;
-        var q = Math.ceil(T / E) + 1,
-          J = Math.floor(q / M),
-          re = q - J,
-          Q = Math.ceil(T / E),
-          G = Math.ceil((T * L) / 2.88),
-          ie = C.jornalMaestro / 8,
-          oe = C.jornalAyudante / 8,
-          ce = D.filter((N) => N.activa).map((N) => {
-            var de = 0;
-            (N.id === "trazado" && (de = T),
-              N.id === "excSimple" && (de = re),
-              N.id === "excDoble" && (de = J),
-              N.id === "hincado" && (de = q),
-              N.id === "horizontales" && (de = Q),
-              N.id === "osb" && (de = G));
-            var me = de / N.rend,
-              pe =
-                N.cuadrilla === "maestro"
-                  ? ie
-                  : N.cuadrilla === "ayudante"
-                    ? oe
-                    : ie + oe,
-              he = me * pe * 8;
-            return u(d({}, N), {
-              qty: Math.round(de * 100) / 100,
-              hh: Math.round(me * 100) / 100,
-              costoDirecto: Math.round(he),
-            });
-          }),
-          te = ce.reduce((N, de) => N + de.costoDirecto, 0),
-          fe = te * (C.leyesSociales / 100),
-          ve = te * (C.herramientas / 100),
-          be = (te + fe + ve) * (C.gastosGenerales / 100),
-          Ce = te + fe + ve + be,
-          Ie = Ce * (C.utilidad / 100),
-          we = Math.round(Ce + Ie),
-          ye = Math.round(we * (h / 100)),
-          _ = we - ye,
-          ue = l === "ml" ? T : T * L,
-          xe = Math.round(_ / ue),
-          se = z ? Math.round(_ * 0.19) : 0,
-          H = _ + se,
-          ae = Math.round(H / ue);
-        return {
-          filas: ce,
-          totalDirecto: te,
-          leyes: fe,
-          herr: ve,
-          gg: be,
-          utilidad: Ie,
-          subtotal: we,
-          descMonto: ye,
-          total: _,
-          iva: se,
-          totalConIVA: H,
-          medida: ue,
-          precioUnitario: z ? ae : xe,
-          nPostes: q,
-          nDobles: J,
-          nSimples: re,
-          nVanos: Q,
-          nPlacas: G,
-        };
-      },
-      O = () => {
-        const { cantidad: T } = R;
-        var L = C.jornalMaestro / 8,
-          E = C.jornalAyudante / 8,
-          M = P.filter((Ie) => Ie.activa).map((Ie) => {
-            var we = T / Ie.rend,
-              ye = Ie.cuadrilla === "maestro" ? L : E,
-              _ = Math.round(we * ye * 8);
-            return u(d({}, Ie), {
-              qty: T,
-              hh: Math.round(we * 100) / 100,
-              costoDirecto: _,
-            });
-          }),
-          q = M.reduce((Ie, we) => Ie + we.costoDirecto, 0),
-          J = q * (C.leyesSociales / 100),
-          re = q * (C.herramientas / 100),
-          Q = (q + J + re) * (C.gastosGenerales / 100),
-          G = q + J + re + Q,
-          ie = G * (C.utilidad / 100),
-          oe = Math.round(G + ie),
-          ce = Math.round(oe * (h / 100)),
-          te = oe - ce,
-          fe = Math.round(te / T),
-          ve = z ? Math.round(te * 0.19) : 0,
-          be = te + ve,
-          Ce = Math.round(be / T);
-        return {
-          filas: M,
-          totalDirecto: q,
-          leyes: J,
-          herr: re,
-          gg: Q,
-          utilidad: ie,
-          subtotal: oe,
-          descMonto: ce,
-          total: te,
-          iva: ve,
-          totalConIVA: be,
-          precioUnitario: z ? Ce : fe,
-          cantidad: T,
-        };
-      },
-      U = Re.useMemo(
-        () => (r === "cierre" ? S() : O()),
-        [r, x, R, C, h, z, l, D, P],
-      ),
-      $ = () => {
-        var T = {
-          id: "custom_" + Date.now(),
-          label: "Nueva partida",
-          rend: 10,
-          unidadRend: "unid.",
-          cuadrilla: "maestro",
-          activa: !0,
-        };
-        r === "cierre" ? k((L) => [...L, T]) : A((L) => [...L, T]);
-      },
-      ee = () => {
-        var T = (i && i.accentColor) || "#f5a020",
-          L = (i && i.empresa) || "Empresa",
-          E = (i && i.logoCliente) || "",
-          M = (i && i.firmaImg) || "",
-          q = (i && i.firmaNombre) || L,
-          J = (i && i.firmaCargo) || "Representante Legal",
-          re = E
-            ? '<img src="' +
-              E +
-              '" style="height:70px;object-fit:contain;margin-bottom:8px;display:block"/>'
-            : "",
-          Q = M
-            ? '<img src="' +
-              M +
-              '" style="height:78px;object-fit:contain;display:block;margin-bottom:6px"/>'
-            : "",
-          G =
-            t.find(function (ve) {
-              return ve.id === w.clienteId;
-            }) || {},
-          ie =
-            r === "cierre"
-              ? "PRESUPUESTO MANO DE OBRA — CIERRE PERIMETRAL"
-              : "PRESUPUESTO MANO DE OBRA — TAPADO PERFORACIONES",
-          oe = r === "cierre" ? (l === "ml" ? "ml" : "m²") : "perforación",
-          ce = U.filas
-            .map(function (ve) {
-              return (
-                '<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0">' +
-                ve.label +
-                '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center">' +
-                ve.qty +
-                " " +
-                ve.unidadRend +
-                '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center">' +
-                ve.hh +
-                ' HH</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center">' +
-                ve.cuadrilla +
-                '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:600">$' +
-                ve.costoDirecto.toLocaleString("es-CL") +
-                "</td></tr>"
-              );
-            })
-            .join(""),
-          te =
-            '<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;padding:30px 40px;font-size:13px;max-width:820px;margin:0 auto}table{width:100%;border-collapse:collapse;page-break-inside:auto}tr{page-break-inside:avoid;page-break-after:auto}th{background:#1a3060;color:#fff;padding:8px 10px;font-size:11px;text-align:left}.totales{page-break-inside:avoid}.nota{page-break-inside:avoid;margin-bottom:20px}.firmas{page-break-inside:avoid;page-break-before:avoid}.header-block{page-break-inside:avoid}.params-block{page-break-inside:avoid}@media print{.np{display:none}body{padding:15px 20px}}</style></head><body>';
-        ((te +=
-          '<button class="np" onclick="window.print()" style="margin-bottom:20px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px">🖨 Imprimir / PDF</button>'),
-          (te +=
-            '<div class="header-block" style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;border-bottom:3px solid ' +
-            T +
-            '">'),
-          (te +=
-            "<div>" +
-            re +
-            '<div style="font-size:20px;font-weight:bold;color:#1a3060">' +
-            L +
-            "</div>"),
-          (te +=
-            '<div style="font-size:12px;color:#666">' +
-            (i && i.rut ? "RUT: " + i.rut + " | " : "") +
-            (i && i.ciudad ? i.ciudad : "") +
-            "</div></div>"),
-          (te +=
-            '<div style="text-align:right"><div style="font-size:12px;font-weight:bold;color:' +
-            T +
-            ';text-transform:uppercase">' +
-            ie +
-            "</div>"),
-          (te +=
-            '<div style="font-size:12px;color:#666;margin-top:4px">Fecha: ' +
-            w.fecha +
-            "</div>"),
-          (te +=
-            '<div style="font-size:11px;color:#888;margin-top:2px">Solo mano de obra — materiales provistos por mandante</div></div></div>'),
-          (te +=
-            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">'),
-          (te +=
-            '<div style="background:#f0f4f8;padding:12px;border-radius:8px"><div style="font-size:10px;color:#999;text-transform:uppercase;margin-bottom:6px">Cliente / Mandante</div>'),
-          (te +=
-            '<strong style="color:#1a3060">' +
-            (G.nombre || w.clienteId || "—") +
-            '</strong><br/><span style="font-size:12px;color:#666">' +
-            (w.descripcion || "") +
-            "</span></div>"),
-          r === "cierre"
-            ? ((te +=
-                '<div style="background:#f0f4f8;padding:12px;border-radius:8px"><div style="font-size:10px;color:#999;text-transform:uppercase;margin-bottom:6px">Parámetros</div>'),
-              (te +=
-                '<div style="font-size:12px;color:#333;line-height:1.8">Longitud: <strong>' +
-                x.longitud +
-                " ml</strong><br/>"),
-              (te += "Altura: <strong>" + x.altura + " m</strong><br/>"),
-              (te +=
-                "Postes cada: <strong>" +
-                x.distPostes +
-                " m</strong> (" +
-                U.nPostes +
-                " postes, " +
-                U.nDobles +
-                " dobles)</div></div>"))
-            : ((te +=
-                '<div style="background:#f0f4f8;padding:12px;border-radius:8px"><div style="font-size:10px;color:#999;text-transform:uppercase;margin-bottom:6px">Parámetros</div>'),
-              (te +=
-                '<div style="font-size:12px;color:#333">Perforaciones: <strong>' +
-                R.cantidad +
-                " unidades</strong></div></div>")),
-          (te += "</div>"),
-          (te +=
-            '<table style="margin-bottom:16px"><thead><tr><th>Partida</th><th style="text-align:center">Cantidad</th><th style="text-align:center">HH</th><th style="text-align:center">Cuadrilla</th><th style="text-align:right">Costo MO</th></tr></thead><tbody>' +
-            ce +
-            "</tbody></table>"),
-          (te +=
-            '<div class="totales" style="display:flex;justify-content:flex-end;margin-bottom:24px"><div style="min-width:300px">'),
-          h > 0 &&
-            (te +=
-              '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;color:#2e7d32"><span>Descuento (' +
-              h +
-              "%)</span><span>-$" +
-              U.descMonto.toLocaleString("es-CL") +
-              "</span></div>"),
-          z
-            ? ((te +=
-                '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee"><span>Subtotal neto</span><span>$' +
-                U.total.toLocaleString("es-CL") +
-                "</span></div>"),
-              (te +=
-                '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee"><span>IVA (19%)</span><span>$' +
-                U.iva.toLocaleString("es-CL") +
-                "</span></div>"),
-              (te +=
-                '<div style="display:flex;justify-content:space-between;padding:12px 16px;background:#1a3060;color:#fff;border-radius:6px;margin-top:8px"><strong style="font-size:15px">TOTAL CON IVA</strong><strong style="color:' +
-                T +
-                ';font-size:20px">$' +
-                U.totalConIVA.toLocaleString("es-CL") +
-                "</strong></div>"),
-              (te +=
-                '<div style="display:flex;justify-content:space-between;padding:8px 14px;background:#f0f4f8;border-radius:6px;margin-top:6px"><span>Precio por ' +
-                oe +
-                " (c/IVA)</span><strong>$" +
-                U.precioUnitario.toLocaleString("es-CL") +
-                "/" +
-                oe +
-                "</strong></div>"))
-            : ((te +=
-                '<div style="display:flex;justify-content:space-between;padding:12px 16px;background:#1a3060;color:#fff;border-radius:6px;margin-top:8px"><strong style="font-size:15px">TOTAL MO</strong><strong style="color:' +
-                T +
-                ';font-size:20px">$' +
-                U.total.toLocaleString("es-CL") +
-                "</strong></div>"),
-              (te +=
-                '<div style="display:flex;justify-content:space-between;padding:8px 14px;background:#f0f4f8;border-radius:6px;margin-top:6px"><span>Precio por ' +
-                oe +
-                "</span><strong>$" +
-                U.precioUnitario.toLocaleString("es-CL") +
-                "/" +
-                oe +
-                "</strong></div>")),
-          (te += "</div></div>"),
-          (te +=
-            '<div class="nota" style="background:#fff8f0;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;font-size:12px;color:#555">'),
-          (te +=
-            "<strong>Nota:</strong> Este presupuesto contempla exclusivamente mano de obra. Los materiales son provistos por el mandante.</div>"),
-          (te +=
-            '<div class="firmas" style="display:grid;grid-template-columns:1fr 1fr;gap:60px">'),
-          (te += Q
-            ? "<div>" +
-              Q +
-              '<div style="border-top:1.5px solid #333;padding-top:8px"><strong style="font-size:14px;color:#1a3060">' +
-              q +
-              '</strong><br/><span style="font-size:12px;color:#666">' +
-              J +
-              " — " +
-              L +
-              "</span></div></div>"
-            : '<div><div style="border-top:1.5px solid #333;padding-top:8px;margin-top:60px"><strong style="font-size:14px;color:#1a3060">' +
-              q +
-              '</strong><br/><span style="font-size:12px;color:#666">' +
-              J +
-              "</span></div></div>"),
-          (te +=
-            '<div><div style="border-top:1.5px solid #333;padding-top:8px;margin-top:60px"><strong style="font-size:14px;color:#1a3060">' +
-            (G.nombre || "Cliente / Mandante") +
-            '</strong><br/><span style="font-size:12px;color:#666">RUT: ___________________</span></div></div></div>'),
-          (te +=
-            '<div style="margin-top:24px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center">Enlace Constructor Pro — ' +
-            L +
-            " · " +
-            new Date().toLocaleDateString("es-CL") +
-            "</div></body></html>"));
-        var fe = window.open("", "_blank");
-        (fe.document.write(te), fe.document.close());
-      },
-      Y = () => {
-        var T = (i && i.accentColor) || "#f5a020",
-          L = (i && i.empresa) || "Empresa",
-          E = (i && i.logoCliente) || "",
-          M = (i && i.firmaImg) || "",
-          q = (i && i.firmaNombre) || L,
-          J = (i && i.firmaCargo) || "Representante Legal",
-          re =
-            t.find(function (ve) {
-              return ve.id === w.clienteId;
-            }) || {},
-          Q = new Date().toLocaleDateString("es-CL", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          }),
-          G = z ? U.totalConIVA : U.total,
-          ie =
-            r === "cierre"
-              ? "instalación de cierre perimetral provisorio"
-              : "tapado de perforaciones de moldaje",
-          oe = E
-            ? '<img src="' +
-              E +
-              '" style="height:70px;object-fit:contain;margin-bottom:8px;display:block"/>'
-            : "",
-          ce = M
-            ? '<img src="' +
-              M +
-              '" style="height:78px;object-fit:contain;display:block;margin-bottom:6px"/>'
-            : "",
-          te =
-            '<!DOCTYPE html><html><head><meta charset="utf-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Georgia,serif;color:#111;padding:30px 45px;font-size:13px;line-height:1.6;max-width:760px;margin:0 auto}@media print{.np{display:none}body{padding:20px 35px}}</style></head><body>';
-        ((te +=
-          '<button class="np" onclick="window.print()" style="margin-bottom:24px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px;font-family:Arial,sans-serif">🖨 Imprimir / PDF</button>'),
-          (te +=
-            '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid ' +
-            T +
-            '">'),
-          (te +=
-            "<div>" +
-            oe +
-            '<div style="font-size:22px;font-weight:bold;color:#1a3060;font-family:Arial,sans-serif">' +
-            L +
-            "</div>"),
-          (te +=
-            '<div style="font-size:12px;color:#666;font-family:Arial,sans-serif">' +
-            (i && i.rut ? "RUT: " + i.rut + " | " : "") +
-            (i && i.ciudad ? i.ciudad : "") +
-            "<br/>" +
-            (i && i.telefono ? i.telefono + " | " : "") +
-            (i && i.email ? i.email : "") +
-            "</div></div>"),
-          (te +=
-            '<div style="text-align:right;font-family:Arial,sans-serif"><div style="font-size:12px;color:#666">' +
-            Q +
-            '</div><div style="font-size:12px;color:#666;margin-top:2px">Ref. Presupuesto MO — ' +
-            ie +
-            "</div></div></div>"),
-          (te +=
-            '<p style="margin-bottom:12px">Estimado/a <strong style="color:#1a3060">' +
-            (re.contacto || re.nombre || "Mandante") +
-            "</strong>,</p>"),
-          (te +=
-            '<p style="margin-bottom:10px"><strong style="color:#1a3060">' +
-            L +
-            '</strong> tiene el agrado de presentar su propuesta de <strong style="color:#1a3060">mano de obra especializada</strong> para la ' +
-            ie +
-            ".</p>"),
-          (te +=
-            '<p style="margin-bottom:10px">Nuestra empresa cuenta con experiencia comprobada en faenas de construcción en la Región de Coquimbo, con cuadrillas propias, herramientas adecuadas y cumplimiento estricto de los plazos acordados.</p>'),
-          (te +=
-            '<p style="margin-bottom:10px"><strong>Alcance de la propuesta:</strong> Este presupuesto contempla exclusivamente la mano de obra calificada para la ejecución de los trabajos. Los materiales serán provistos por el mandante conforme a lo acordado.</p>'),
-          (te +=
-            '<div style="background:#f0f4f8;border-left:4px solid ' +
-            T +
-            ';padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-family:Arial,sans-serif">'),
-          (te +=
-            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'),
-          (te +=
-            '<div><span style="font-size:11px;color:#888">Tipo de trabajo</span><br/><strong>' +
-            ie.charAt(0).toUpperCase() +
-            ie.slice(1) +
-            "</strong></div>"),
-          r === "cierre"
-            ? (te +=
-                '<div><span style="font-size:11px;color:#888">Longitud / Superficie</span><br/><strong>' +
-                x.longitud +
-                " ml (" +
-                (x.longitud * x.altura).toFixed(1) +
-                " m²)</strong></div>")
-            : (te +=
-                '<div><span style="font-size:11px;color:#888">Cantidad</span><br/><strong>' +
-                R.cantidad +
-                " perforaciones</strong></div>"),
-          (te +=
-            '<div><span style="font-size:11px;color:#888">Valor total MO</span><br/><strong style="font-size:20px;color:' +
-            T +
-            '">$' +
-            G.toLocaleString("es-CL") +
-            (z ? " (IVA inc.)" : "") +
-            "</strong></div>"),
-          (te +=
-            '<div><span style="font-size:11px;color:#888">Precio unitario</span><br/><strong>$' +
-            U.precioUnitario.toLocaleString("es-CL") +
-            "/" +
-            (r === "cierre" ? (z ? "m² c/IVA" : "ml") : "perf.") +
-            "</strong></div>"),
-          (te += "</div></div>"),
-          (te +=
-            '<p style="margin-bottom:10px">Nuestra propuesta contempla mano de obra calificada, cuadrilla con experiencia en faenas similares, herramientas propias y cumplimiento de todas las normas de seguridad vigentes (EPP completo, DS N°132).</p>'),
-          (te +=
-            '<p style="margin-bottom:16px">Quedamos a su disposición para coordinar el inicio de los trabajos en el momento que sea requerido.</p>'),
-          (te += '<p style="margin-bottom:20px">Atentamente,</p>'),
-          (te += ce
-            ? ce + '<div style="margin-top:4px">'
-            : '<div style="margin-top:30px">'),
-          (te +=
-            '<div style="border-top:1.5px solid #333;padding-top:8px;display:inline-block;min-width:220px;font-family:Arial,sans-serif"><strong style="color:#1a3060;font-size:14px">' +
-            q +
-            '</strong><br/><span style="font-size:12px;color:#666">' +
-            J +
-            " — " +
-            L +
-            "</span></div></div>"),
-          (te +=
-            '<div style="margin-top:36px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;font-family:Arial,sans-serif;text-align:center">Enlace Constructor Pro — ' +
-            L +
-            " · " +
-            new Date().toLocaleDateString("es-CL") +
-            "</div>"),
-          (te += "</body></html>"));
-        try {
-          var fe = window.open("", "_blank");
-          fe && (fe.document.write(te), fe.document.close());
-        } catch (ve) {
-          console.error(ve);
-        }
-      },
-      le = r === "cierre" ? D : P,
-      Z = r === "cierre" ? k : A;
-    return e.jsxs("div", {
-      children: [
-        e.jsx("div", {
-          style: {
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 10,
-            marginBottom: 14,
-          },
-          children: [
-            [
-              "cierre",
-              "🔩",
-              "Cierre Perimetral MO",
-              "Mano de obra para cierre con postes y OSB",
-            ],
-            [
-              "perforaciones",
-              "🕳️",
-              "Tapado Perforaciones",
-              "Relleno de perforaciones de moldaje con manga",
-            ],
-          ].map(([T, L, E, M]) =>
-            e.jsxs(
-              "div",
-              {
-                onClick: () => n(T),
-                style: u(d({}, c.card), {
-                  cursor: "pointer",
-                  textAlign: "center",
-                  padding: "16px",
-                  marginBottom: 0,
-                  background: r === T ? a.accent + "22" : a.card,
-                  border: "2px solid " + (r === T ? a.accent : a.border),
-                  transition: "all .15s",
-                }),
-                children: [
-                  e.jsx("div", {
-                    style: { fontSize: 28, marginBottom: 6 },
-                    children: L,
-                  }),
-                  e.jsx("div", {
-                    style: {
-                      fontSize: 14,
-                      fontWeight: 700,
-                      color: r === T ? a.accent : a.text,
-                      marginBottom: 4,
-                    },
-                    children: E,
-                  }),
-                  e.jsx("div", {
-                    style: { fontSize: 11, color: a.muted },
-                    children: M,
-                  }),
-                ],
-              },
-              T,
-            ),
-          ),
-        }),
-        e.jsxs("div", {
-          style: { display: "grid", gridTemplateColumns: "1fr 320px", gap: 14 },
-          children: [
-            e.jsxs("div", {
-              children: [
-                e.jsxs("div", {
-                  style: u(d({}, c.card), { marginBottom: 14 }),
-                  children: [
-                    e.jsx("div", {
-                      style: {
-                        fontSize: 13,
-                        fontWeight: 700,
-                        color: a.accent,
-                        marginBottom: 10,
-                        textTransform: "uppercase",
-                        letterSpacing: ".05em",
-                      },
-                      children: "Datos del proyecto",
-                    }),
-                    e.jsxs("div", {
-                      style: {
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        gap: 8,
-                        marginBottom: 8,
-                      },
-                      children: [
-                        e.jsxs("div", {
-                          children: [
-                            e.jsx("div", {
-                              style: {
-                                fontSize: 11,
-                                color: a.muted,
-                                marginBottom: 3,
-                              },
-                              children: "Cliente",
-                            }),
-                            e.jsxs("select", {
-                              value: w.clienteId,
-                              onChange: (T) =>
-                                v((L) =>
-                                  u(d({}, L), { clienteId: T.target.value }),
-                                ),
-                              style: u(d({}, c.inp), {
-                                fontSize: 12,
-                                padding: "5px 8px",
-                                width: "100%",
-                              }),
-                              children: [
-                                e.jsx("option", {
-                                  value: "",
-                                  children: "— Sin cliente —",
-                                }),
-                                t.map((T) =>
-                                  e.jsx(
-                                    "option",
-                                    { value: T.id, children: T.nombre },
-                                    T.id,
-                                  ),
-                                ),
-                              ],
-                            }),
-                          ],
-                        }),
-                        e.jsxs("div", {
-                          children: [
-                            e.jsx("div", {
-                              style: {
-                                fontSize: 11,
-                                color: a.muted,
-                                marginBottom: 3,
-                              },
-                              children: "Fecha",
-                            }),
-                            e.jsx("input", {
-                              type: "date",
-                              value: w.fecha,
-                              onChange: (T) =>
-                                v((L) =>
-                                  u(d({}, L), { fecha: T.target.value }),
-                                ),
-                              style: u(d({}, c.inp), {
-                                fontSize: 12,
-                                padding: "5px 8px",
-                                width: "100%",
-                              }),
-                            }),
-                          ],
-                        }),
-                      ],
-                    }),
-                    e.jsxs("div", {
-                      children: [
-                        e.jsx("div", {
-                          style: {
-                            fontSize: 11,
-                            color: a.muted,
-                            marginBottom: 3,
-                          },
-                          children: "Descripción de obra",
-                        }),
-                        e.jsx("input", {
-                          value: w.descripcion,
-                          onChange: (T) =>
-                            v((L) =>
-                              u(d({}, L), { descripcion: T.target.value }),
-                            ),
-                          placeholder:
-                            "Ej: Cierre perimetral provisorio faena...",
-                          style: u(d({}, c.inp), {
-                            fontSize: 12,
-                            padding: "5px 8px",
-                            width: "100%",
-                          }),
-                        }),
-                      ],
-                    }),
-                  ],
-                }),
-                r === "cierre" &&
-                  e.jsxs("div", {
-                    style: u(d({}, c.card), { marginBottom: 14 }),
-                    children: [
-                      e.jsx("div", {
-                        style: {
-                          fontSize: 13,
-                          fontWeight: 700,
-                          color: a.accent,
-                          marginBottom: 10,
-                          textTransform: "uppercase",
-                          letterSpacing: ".05em",
-                        },
-                        children: "Parámetros del cierre",
-                      }),
-                      e.jsx("div", {
-                        style: {
-                          display: "grid",
-                          gridTemplateColumns: "1fr 1fr",
-                          gap: 8,
-                          marginBottom: 8,
-                        },
-                        children: [
-                          ["Longitud total (ml)", "longitud", "number"],
-                          ["Altura (m)", "altura", "number"],
-                          [
-                            "Distancia entre postes (m)",
-                            "distPostes",
-                            "number",
-                          ],
-                          [
-                            "Doble poste cada N postes",
-                            "doblePosteEach",
-                            "number",
-                          ],
-                        ].map(([T, L, E]) =>
-                          e.jsxs(
-                            "div",
-                            {
-                              children: [
-                                e.jsx("div", {
-                                  style: {
-                                    fontSize: 11,
-                                    color: a.muted,
-                                    marginBottom: 3,
-                                  },
-                                  children: T,
-                                }),
-                                e.jsx("input", {
-                                  type: E,
-                                  value: x[L],
-                                  onChange: (M) =>
-                                    f((q) =>
-                                      u(d({}, q), {
-                                        [L]: parseFloat(M.target.value) || 0,
-                                      }),
-                                    ),
-                                  style: u(d({}, c.inp), {
-                                    fontSize: 13,
-                                    padding: "5px 8px",
-                                    width: "100%",
-                                  }),
-                                }),
-                              ],
-                            },
-                            L,
-                          ),
-                        ),
-                      }),
-                      e.jsxs("div", {
-                        style: {
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 8,
-                          marginTop: 8,
-                          padding: "8px 10px",
-                          background: a.sb,
-                          borderRadius: 8,
-                        },
-                        children: [
-                          e.jsx("span", {
-                            style: { fontSize: 12, color: a.muted },
-                            children: "Unidad de precio:",
-                          }),
-                          [
-                            ["ml", "por metro lineal"],
-                            ["m2", "por m²"],
-                          ].map(([T, L]) =>
-                            e.jsx(
-                              "button",
-                              {
-                                style: u(d({}, c.btn(l === T ? "p" : "s")), {
-                                  fontSize: 12,
-                                  padding: "4px 12px",
-                                }),
-                                onClick: () => o(T),
-                                children: L,
-                              },
-                              T,
-                            ),
-                          ),
-                          l === "m2" &&
-                            e.jsxs("span", {
-                              style: { fontSize: 11, color: a.muted },
-                              children: [
-                                "(",
-                                x.longitud,
-                                " ml × ",
-                                x.altura,
-                                " m = ",
-                                (x.longitud * x.altura).toFixed(1),
-                                " m²)",
-                              ],
-                            }),
-                        ],
-                      }),
-                    ],
-                  }),
-                r === "perforaciones" &&
-                  e.jsxs("div", {
-                    style: u(d({}, c.card), { marginBottom: 14 }),
-                    children: [
-                      e.jsx("div", {
-                        style: {
-                          fontSize: 13,
-                          fontWeight: 700,
-                          color: a.accent,
-                          marginBottom: 10,
-                          textTransform: "uppercase",
-                          letterSpacing: ".05em",
-                        },
-                        children: "Parámetros",
-                      }),
-                      e.jsxs("div", {
-                        children: [
-                          e.jsx("div", {
-                            style: {
-                              fontSize: 11,
-                              color: a.muted,
-                              marginBottom: 3,
-                            },
-                            children: "Cantidad de perforaciones",
-                          }),
-                          e.jsx("input", {
-                            type: "number",
-                            value: R.cantidad,
-                            onChange: (T) =>
-                              K((L) =>
-                                u(d({}, L), {
-                                  cantidad: parseInt(T.target.value) || 0,
-                                }),
-                              ),
-                            style: u(d({}, c.inp), {
-                              fontSize: 14,
-                              padding: "6px 10px",
-                              width: 180,
-                            }),
-                          }),
-                        ],
-                      }),
-                    ],
-                  }),
-                e.jsxs("div", {
-                  style: u(d({}, c.card), { marginBottom: 14 }),
-                  children: [
-                    e.jsxs("div", {
-                      style: {
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: 10,
-                      },
-                      children: [
-                        e.jsx("div", {
-                          style: {
-                            fontSize: 13,
-                            fontWeight: 700,
-                            color: a.accent,
-                            textTransform: "uppercase",
-                            letterSpacing: ".05em",
-                          },
-                          children: "Partidas de mano de obra",
-                        }),
-                        e.jsx("button", {
-                          style: u(d({}, c.btn("s")), {
-                            fontSize: 11,
-                            padding: "4px 10px",
-                          }),
-                          onClick: $,
-                          children: "➕ Agregar",
-                        }),
-                      ],
-                    }),
-                    le.map((T, L) =>
-                      e.jsxs(
-                        "div",
-                        {
-                          style: {
-                            display: "grid",
-                            gridTemplateColumns: "auto 1fr 80px 80px 80px auto",
-                            gap: 6,
-                            alignItems: "center",
-                            padding: "6px 0",
-                            borderBottom: "1px solid " + a.border,
-                          },
-                          children: [
-                            e.jsx("input", {
-                              type: "checkbox",
-                              checked: T.activa,
-                              onChange: (E) =>
-                                Z((M) =>
-                                  M.map((q, J) =>
-                                    J === L
-                                      ? u(d({}, q), {
-                                          activa: E.target.checked,
-                                        })
-                                      : q,
-                                  ),
-                                ),
-                            }),
-                            e.jsx("input", {
-                              value: T.label,
-                              onChange: (E) =>
-                                Z((M) =>
-                                  M.map((q, J) =>
-                                    J === L
-                                      ? u(d({}, q), { label: E.target.value })
-                                      : q,
-                                  ),
-                                ),
-                              style: u(d({}, c.inp), {
-                                fontSize: 12,
-                                padding: "3px 6px",
-                              }),
-                            }),
-                            e.jsxs("div", {
-                              children: [
-                                e.jsx("div", {
-                                  style: {
-                                    fontSize: 9,
-                                    color: a.muted,
-                                    marginBottom: 1,
-                                  },
-                                  children: "Rend.",
-                                }),
-                                e.jsx("input", {
-                                  type: "number",
-                                  value: T.rend,
-                                  onChange: (E) =>
-                                    Z((M) =>
-                                      M.map((q, J) =>
-                                        J === L
-                                          ? u(d({}, q), {
-                                              rend:
-                                                parseFloat(E.target.value) || 1,
-                                            })
-                                          : q,
-                                      ),
-                                    ),
-                                  style: u(d({}, c.inp), {
-                                    fontSize: 12,
-                                    padding: "3px 6px",
-                                    width: "100%",
-                                  }),
-                                }),
-                              ],
-                            }),
-                            e.jsxs("div", {
-                              children: [
-                                e.jsx("div", {
-                                  style: {
-                                    fontSize: 9,
-                                    color: a.muted,
-                                    marginBottom: 1,
-                                  },
-                                  children: "Unidad",
-                                }),
-                                e.jsx("input", {
-                                  value: T.unidadRend,
-                                  onChange: (E) =>
-                                    Z((M) =>
-                                      M.map((q, J) =>
-                                        J === L
-                                          ? u(d({}, q), {
-                                              unidadRend: E.target.value,
-                                            })
-                                          : q,
-                                      ),
-                                    ),
-                                  style: u(d({}, c.inp), {
-                                    fontSize: 11,
-                                    padding: "3px 5px",
-                                    width: "100%",
-                                  }),
-                                }),
-                              ],
-                            }),
-                            e.jsxs("div", {
-                              children: [
-                                e.jsx("div", {
-                                  style: {
-                                    fontSize: 9,
-                                    color: a.muted,
-                                    marginBottom: 1,
-                                  },
-                                  children: "Cuadrilla",
-                                }),
-                                e.jsxs("select", {
-                                  value: T.cuadrilla,
-                                  onChange: (E) =>
-                                    Z((M) =>
-                                      M.map((q, J) =>
-                                        J === L
-                                          ? u(d({}, q), {
-                                              cuadrilla: E.target.value,
-                                            })
-                                          : q,
-                                      ),
-                                    ),
-                                  style: u(d({}, c.inp), {
-                                    fontSize: 11,
-                                    padding: "3px 5px",
-                                    width: "100%",
-                                  }),
-                                  children: [
-                                    e.jsx("option", {
-                                      value: "maestro",
-                                      children: "Maestro",
-                                    }),
-                                    e.jsx("option", {
-                                      value: "ayudante",
-                                      children: "Ayudante",
-                                    }),
-                                    e.jsx("option", {
-                                      value: "maestro+ayudante",
-                                      children: "M+A",
-                                    }),
-                                  ],
-                                }),
-                              ],
-                            }),
-                            e.jsx("button", {
-                              style: u(d({}, c.btn("d")), {
-                                padding: "3px 7px",
-                                fontSize: 12,
-                              }),
-                              onClick: () =>
-                                Z((E) => E.filter((M, q) => q !== L)),
-                              children: "✕",
-                            }),
-                          ],
-                        },
-                        T.id,
-                      ),
-                    ),
-                  ],
-                }),
-              ],
-            }),
-            e.jsxs("div", {
-              children: [
-                e.jsxs("div", {
-                  style: u(d({}, c.card), { marginBottom: 14 }),
-                  children: [
-                    e.jsx("div", {
-                      style: {
-                        fontSize: 13,
-                        fontWeight: 700,
-                        color: a.accent,
-                        marginBottom: 10,
-                        textTransform: "uppercase",
-                        letterSpacing: ".05em",
-                      },
-                      children: "Factores de costo",
-                    }),
-                    [
-                      ["jornalMaestro", "Jornal maestro ($)", "number"],
-                      ["jornalAyudante", "Jornal ayudante ($)", "number"],
-                      ["leyesSociales", "Leyes sociales (%)", "number"],
-                      ["herramientas", "Herramientas/desgaste (%)", "number"],
-                      ["gastosGenerales", "Gastos generales (%)", "number"],
-                      ["utilidad", "Utilidad (%)", "number"],
-                    ].map(([T, L]) =>
-                      e.jsxs(
-                        "div",
-                        {
-                          style: { marginBottom: 8 },
-                          children: [
-                            e.jsx("div", {
-                              style: {
-                                fontSize: 11,
-                                color: a.muted,
-                                marginBottom: 3,
-                              },
-                              children: L,
-                            }),
-                            e.jsx("input", {
-                              type: "number",
-                              value: C[T],
-                              onChange: (E) =>
-                                b((M) =>
-                                  u(d({}, M), {
-                                    [T]: parseFloat(E.target.value) || 0,
-                                  }),
-                                ),
-                              style: u(d({}, c.inp), {
-                                fontSize: 13,
-                                padding: "5px 8px",
-                                width: "100%",
-                              }),
-                            }),
-                          ],
-                        },
-                        T,
-                      ),
-                    ),
-                  ],
-                }),
-                e.jsxs("div", {
-                  style: u(d({}, c.card), { marginBottom: 14 }),
-                  children: [
-                    e.jsx("div", {
-                      style: {
-                        fontSize: 13,
-                        fontWeight: 700,
-                        color: a.accent,
-                        marginBottom: 10,
-                        textTransform: "uppercase",
-                        letterSpacing: ".05em",
-                      },
-                      children: "Resumen",
-                    }),
-                    r === "cierre" &&
-                      e.jsxs("div", {
-                        style: {
-                          background: a.sb,
-                          borderRadius: 6,
-                          padding: "8px 10px",
-                          marginBottom: 10,
-                          fontSize: 11,
-                          color: a.muted,
-                          lineHeight: 1.8,
-                        },
-                        children: [
-                          U.nPostes,
-                          " postes · ",
-                          U.nDobles,
-                          " dobles · ",
-                          U.nVanos,
-                          " vanos · ",
-                          U.nPlacas,
-                          " placas OSB",
-                        ],
-                      }),
-                    U.filas.map((T) =>
-                      e.jsxs(
-                        "div",
-                        {
-                          style: {
-                            display: "flex",
-                            justifyContent: "space-between",
-                            padding: "5px 0",
-                            borderBottom: "1px solid " + a.border,
-                            fontSize: 12,
-                          },
-                          children: [
-                            e.jsx("span", {
-                              style: { color: a.muted, flex: 1 },
-                              children: T.label,
-                            }),
-                            e.jsx("span", {
-                              style: { fontWeight: 600, color: a.text },
-                              children:
-                                "$" + T.costoDirecto.toLocaleString("es-CL"),
-                            }),
-                          ],
-                        },
-                        T.id,
-                      ),
-                    ),
-                    e.jsx("div", {
-                      style: {
-                        marginTop: 10,
-                        padding: "8px 0",
-                        borderTop: "1px solid " + a.border,
-                      },
-                      children: [
-                        ["Costo MO directo", U.totalDirecto, a.text],
-                        [
-                          "Leyes sociales (" + C.leyesSociales + "%)",
-                          Math.round(U.leyes),
-                          "#94a3b8",
-                        ],
-                        [
-                          "Herramientas (" + C.herramientas + "%)",
-                          Math.round(U.herr),
-                          "#94a3b8",
-                        ],
-                        [
-                          "Gastos generales (" + C.gastosGenerales + "%)",
-                          Math.round(U.gg),
-                          "#94a3b8",
-                        ],
-                        [
-                          "Utilidad (" + C.utilidad + "%)",
-                          Math.round(U.utilidad),
-                          "#94a3b8",
-                        ],
-                        ...(h > 0
-                          ? [
-                              [
-                                "Descuento (" + h + "%)",
-                                -U.descMonto,
-                                "#34d399",
-                              ],
-                            ]
-                          : []),
-                      ].map(([T, L, E]) =>
-                        e.jsxs(
-                          "div",
-                          {
-                            style: {
-                              display: "flex",
-                              justifyContent: "space-between",
-                              padding: "3px 0",
-                              fontSize: 12,
-                            },
-                            children: [
-                              e.jsx("span", {
-                                style: { color: a.muted },
-                                children: T,
-                              }),
-                              e.jsx("span", {
-                                style: { color: E },
-                                children:
-                                  L < 0
-                                    ? "-$" + Math.abs(L).toLocaleString("es-CL")
-                                    : "$" + L.toLocaleString("es-CL"),
-                              }),
-                            ],
-                          },
-                          T,
-                        ),
-                      ),
-                    }),
-                    e.jsxs("div", {
-                      style: {
-                        background: a.sb,
-                        borderRadius: 8,
-                        padding: "12px 14px",
-                        marginTop: 10,
-                      },
-                      children: [
-                        e.jsxs("div", {
-                          style: {
-                            display: "flex",
-                            justifyContent: "space-between",
-                            marginBottom: 6,
-                          },
-                          children: [
-                            e.jsx("span", {
-                              style: { color: a.text, fontWeight: 700 },
-                              children: "TOTAL MO",
-                            }),
-                            e.jsx("span", {
-                              style: {
-                                color: a.accent,
-                                fontWeight: 700,
-                                fontSize: 18,
-                              },
-                              children: "$" + U.total.toLocaleString("es-CL"),
-                            }),
-                          ],
-                        }),
-                        e.jsxs("div", {
-                          style: {
-                            display: "flex",
-                            justifyContent: "space-between",
-                            fontSize: 12,
-                          },
-                          children: [
-                            e.jsx("span", {
-                              style: { color: "#aaa" },
-                              children:
-                                "Precio por " +
-                                (r === "cierre"
-                                  ? l === "ml"
-                                    ? "ml"
-                                    : "m²"
-                                  : "perforación"),
-                            }),
-                            e.jsx("span", {
-                              style: { color: a.accent, fontWeight: 600 },
-                              children:
-                                "$" + U.precioUnitario.toLocaleString("es-CL"),
-                            }),
-                          ],
-                        }),
-                      ],
-                    }),
-                    e.jsxs("div", {
-                      style: {
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 8,
-                        marginTop: 10,
-                        padding: "8px 10px",
-                        background: a.sb,
-                        borderRadius: 8,
-                      },
-                      children: [
-                        e.jsx("span", {
-                          style: { fontSize: 12, color: a.muted, flex: 1 },
-                          children: "Incluir IVA 19%",
-                        }),
-                        e.jsx("button", {
-                          style: u(d({}, c.btn(z ? "p" : "s")), {
-                            fontSize: 11,
-                            padding: "4px 12px",
-                          }),
-                          onClick: () => B((T) => !T),
-                          children: z ? "✓ Con IVA" : "Sin IVA",
-                        }),
-                      ],
-                    }),
-                    z &&
-                      e.jsxs("div", {
-                        style: {
-                          background: a.sb,
-                          borderRadius: 6,
-                          padding: "6px 10px",
-                          marginTop: 6,
-                          fontSize: 12,
-                        },
-                        children: [
-                          e.jsxs("div", {
-                            style: {
-                              display: "flex",
-                              justifyContent: "space-between",
-                              color: a.muted,
-                              marginBottom: 3,
-                            },
-                            children: [
-                              e.jsx("span", { children: "Neto" }),
-                              e.jsx("span", {
-                                children: "$" + U.total.toLocaleString("es-CL"),
-                              }),
-                            ],
-                          }),
-                          e.jsxs("div", {
-                            style: {
-                              display: "flex",
-                              justifyContent: "space-between",
-                              color: a.muted,
-                              marginBottom: 3,
-                            },
-                            children: [
-                              e.jsx("span", { children: "IVA (19%)" }),
-                              e.jsx("span", {
-                                children: "$" + U.iva.toLocaleString("es-CL"),
-                              }),
-                            ],
-                          }),
-                          e.jsxs("div", {
-                            style: {
-                              display: "flex",
-                              justifyContent: "space-between",
-                              color: a.accent,
-                              fontWeight: 700,
-                            },
-                            children: [
-                              e.jsx("span", { children: "Total con IVA" }),
-                              e.jsx("span", {
-                                children:
-                                  "$" + U.totalConIVA.toLocaleString("es-CL"),
-                              }),
-                            ],
-                          }),
-                        ],
-                      }),
-                    e.jsxs("div", {
-                      style: { marginTop: 10 },
-                      children: [
-                        e.jsx("button", {
-                          style: u(d({}, c.btn("s")), {
-                            fontSize: 11,
-                            padding: "4px 10px",
-                            width: "100%",
-                          }),
-                          onClick: () => {
-                            (g((T) => !T), F && j(0));
-                          },
-                          children: F
-                            ? "✕ Quitar descuento"
-                            : "🏷️ Aplicar descuento",
-                        }),
-                        F &&
-                          e.jsxs("div", {
-                            style: {
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 8,
-                              marginTop: 8,
-                              background: a.sb,
-                              padding: "8px 10px",
-                              borderRadius: 8,
-                            },
-                            children: [
-                              e.jsx("span", {
-                                style: {
-                                  fontSize: 12,
-                                  color: a.muted,
-                                  whiteSpace: "nowrap",
-                                },
-                                children: "Descuento",
-                              }),
-                              e.jsx("input", {
-                                type: "number",
-                                min: "0",
-                                max: "50",
-                                value: h,
-                                onChange: (T) =>
-                                  j(
-                                    Math.min(
-                                      50,
-                                      Math.max(
-                                        0,
-                                        parseFloat(T.target.value) || 0,
-                                      ),
-                                    ),
-                                  ),
-                                style: u(d({}, c.inp), {
-                                  width: 60,
-                                  fontSize: 13,
-                                  padding: "4px 6px",
-                                  textAlign: "center",
-                                }),
-                              }),
-                              e.jsx("span", {
-                                style: { fontSize: 12, color: a.muted },
-                                children: "%",
-                              }),
-                              h > 0 &&
-                                e.jsxs("span", {
-                                  style: {
-                                    fontSize: 12,
-                                    color: "#34d399",
-                                    fontWeight: 600,
-                                  },
-                                  children: [
-                                    "-$",
-                                    U.descMonto.toLocaleString("es-CL"),
-                                  ],
-                                }),
-                            ],
-                          }),
-                      ],
-                    }),
-                    e.jsxs("div", {
-                      style: {
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 6,
-                        marginTop: 12,
-                      },
-                      children: [
-                        e.jsx("button", {
-                          style: u(d({}, c.btn("p")), {
-                            width: "100%",
-                            padding: "10px",
-                            fontWeight: 700,
-                            fontSize: 13,
-                          }),
-                          onClick: ee,
-                          children: "🖨️ Generar PDF Presupuesto MO",
-                        }),
-                        e.jsx("button", {
-                          style: u(d({}, c.btn("s")), {
-                            width: "100%",
-                            padding: "9px",
-                            fontSize: 12,
-                          }),
-                          onClick: Y,
-                          children: "✉️ Carta de Presentación",
-                        }),
-                      ],
-                    }),
-                  ],
-                }),
-              ],
-            }),
-          ],
-        }),
       ],
     });
   }
@@ -66580,6 +66113,34 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       localStorage.setItem(Bn + "_" + t, JSON.stringify(i));
     } catch (r) {}
   }
+  function firmaActualizacion(t, i) {
+    var r = "ECP-UPD-2026#kL9$qW3nX",
+      n = t + "|" + JSON.stringify(i) + "|" + r,
+      l = 5381;
+    for (var o = 0; o < n.length; o++)
+      l = ((l << 5) + l + n.charCodeAt(o)) & 4294967295;
+    return Math.abs(l).toString(36);
+  }
+  function normalizaRut(t) {
+    return t
+      ? String(t).replace(/[^0-9]/g, "").slice(0, -1).toUpperCase().slice(-8)
+      : "";
+  }
+  function mergeUpdatePack(t, i) {
+    var r = new Set((i || []).map((o) => o.id)),
+      n = (t || []).filter((o) => !r.has(o.id));
+    return [...(i || []), ...n];
+  }
+  function mergeMaterialesUpdatePack(t, i) {
+    var r = new Map((t || []).map((o) => [o.id, o])),
+      n = new Set((i || []).map((o) => o.id)),
+      l = (i || []).map((o) => {
+        var s = r.get(o.id);
+        return s && s._precioUsuario ? s : o;
+      }),
+      f = (t || []).filter((o) => !n.has(o.id));
+    return [...l, ...f];
+  }
   function as() {
     try {
       [
@@ -68128,7 +67689,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       props.onOpenBudget(enrichedBudget);
     };
     var linkedBudget = (props.budgets || []).find(function (budget) { return String(budget.id) === String(form.PresupuestoVinculado || ""); });
-    var linkedBudgetTotals = linkedBudget ? Ee(linkedBudget.items || [], props.cfg || {}, linkedBudget.descuento, linkedBudget.modoCosteo) : { sub: 0, iva: 0, total: 0 };
+    var linkedBudgetTotals = linkedBudget ? Ee(linkedBudget.items || [], props.cfg || {}, linkedBudget.descuento, linkedBudget.modoCosteo, linkedBudget.sinIva) : { sub: 0, iva: 0, total: 0 };
 
     var steps = [
       "Ficha oficial",
@@ -73282,7 +72843,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
     var linkedBudget = (budgets || []).find(function (budget) {
       return String(budget.id) === String(form.PresupuestoVinculado || "");
     });
-    var linkedTotals = linkedBudget ? Ee(linkedBudget.items || [], cfg || {}, linkedBudget.descuento, linkedBudget.modoCosteo) : { sub: 0 };
+    var linkedTotals = linkedBudget ? Ee(linkedBudget.items || [], cfg || {}, linkedBudget.descuento, linkedBudget.modoCosteo, linkedBudget.sinIva) : { sub: 0 };
     var lines = linkedBudget
       ? (linkedBudget.items || []).filter(function (item) { return !!String(item.desc || "").trim(); }).map(function (item) {
           return { NombreProducto: item.desc || "", Cantidad: item.cant == null ? 1 : item.cant, UnidadMedida: item.unidad || "unidad", PrecioUnitarioNeto: parseFloat(item.precio) || 0, EspecificacionTecnica: item.especTecnica || "" };
@@ -75020,10 +74581,30 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       return () => clearInterval(interval);
     }, []);
     const [t, i] = V(() => pt("theme", "dark")),
-      [r, n] = V(!1);
+      [r, n] = V(!1),
+      [sbHidden, setSbHidden] = V(() => pt("sbHidden", !1)),
+      [winW, setWinW] = V(() => window.innerWidth);
     ct(() => {
       ((document.body.dataset.theme = t), _t("theme", t));
     }, [t]);
+    ct(() => {
+      _t("sbHidden", sbHidden);
+    }, [sbHidden]);
+    ct(() => {
+      var H = () => setWinW(window.innerWidth);
+      return (
+        window.addEventListener("resize", H),
+        () => window.removeEventListener("resize", H)
+      );
+    }, []);
+    const hdrNarrow = winW - (sbHidden ? 0 : 230) < 900;
+    const [adminGate, setAdminGate] = V(!1),
+      [adminPanel, setAdminPanel] = V(!1),
+      [adminPin, setAdminPin] = V(""),
+      [adminRut, setAdminRut] = V(""),
+      [importAnalysis, setImportAnalysis] = V(null),
+      [genResult, setGenResult] = V(null),
+      [updateHistory, setUpdateHistory] = V(() => pt("updateHistory", []));
     const [l, o] = V(() => {
         var H = pt("cfg", Ct),
           ae = d(d({}, Ct), H);
@@ -75116,6 +74697,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               reparado.historialPrecios = guardado.historialPrecios;
             if (guardado.fechaActualizacion)
               reparado.fechaActualizacion = guardado.fechaActualizacion;
+            if (guardado._precioUsuario) reparado._precioUsuario = !0;
             if (
               !precioConfiable &&
               Number.isFinite(precioGuardado) &&
@@ -75428,8 +75010,8 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         var ae = B.find((Me) => parseInt(Me.id) === parseInt(k && k.id));
         if (ae) {
           var N = [];
-          var de = Ee(ae.items, l, ae.descuento, ae.modoCosteo).total,
-            me = Ee(H.items, l, H.descuento, H.modoCosteo).total;
+          var de = Ee(ae.items, l, ae.descuento, ae.modoCosteo, ae.sinIva).total,
+            me = Ee(H.items, l, H.descuento, H.modoCosteo, H.sinIva).total;
           de !== me &&
             N.push({
               fecha: Wt(),
@@ -75682,20 +75264,147 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       Ce =
         (l.licenciaCodigo && ve.valid && !ve.expired && l.version) || "starter",
       Ie = l.licenciaCodigo && ve.reason === "rut_mismatch";
+    const tryAdminUnlock = () => {
+      if (adminPin === "171912")
+        (setAdminGate(!1), setAdminPin(""), setGenResult(null), setAdminPanel(!0));
+      else (setAdminPin(""), Q("Clave incorrecta"));
+    };
+    const generarActualizacion = () => {
+      var rutNorm = normalizaRut(adminRut);
+      if (!rutNorm) {
+        Q("Ingresa un RUT válido");
+        return;
+      }
+      var payload = { catalogo: b, materiales: j, apus: g },
+        pack = {
+          tipo: "ecp_update_pack",
+          version: 1,
+          generado: new Date().toISOString().slice(0, 10),
+          rutCliente: rutNorm,
+          firma: firmaActualizacion(rutNorm, payload),
+          catalogo: b,
+          materiales: j,
+          apus: g,
+        },
+        blob = new Blob([JSON.stringify(pack)], { type: "application/json" }),
+        urlObj = URL.createObjectURL(blob),
+        aTag = document.createElement("a");
+      ((aTag.href = urlObj),
+        (aTag.download =
+          "ECP_actualizacion_" + rutNorm + "_" + pack.generado + ".json"),
+        aTag.click(),
+        setTimeout(() => URL.revokeObjectURL(urlObj), 1000));
+      (Q("📦 Paquete generado para RUT " + rutNorm),
+        setGenResult({ rutNorm: rutNorm, generado: pack.generado }));
+    };
+    const diffUpdatePack = (t, i) => {
+      var r = new Map((t || []).map((s) => [s.id, s])),
+        n = 0,
+        l = 0,
+        o = 0;
+      return (
+        (i || []).forEach((s) => {
+          var m = r.get(s.id);
+          !m
+            ? n++
+            : JSON.stringify(m.precio) !== JSON.stringify(s.precio)
+              ? l++
+              : o++;
+        }),
+        { nuevos: n, actualizados: l, sinCambios: o, total: (i || []).length }
+      );
+    };
+    const diffMaterialesPack = (t, i) => {
+      var r = new Map((t || []).map((s) => [s.id, s])),
+        n = 0,
+        l = 0,
+        o = 0,
+        p = 0;
+      return (
+        (i || []).forEach((s) => {
+          var m = r.get(s.id);
+          !m
+            ? n++
+            : m._precioUsuario
+              ? p++
+              : Number(m.precio) !== Number(s.precio)
+                ? l++
+                : o++;
+        }),
+        {
+          nuevos: n,
+          actualizados: l,
+          sinCambios: o,
+          protegidos: p,
+          total: (i || []).length,
+        }
+      );
+    };
+    const analizarPaqueteImportado = (pack) => {
+      if (!pack || pack.tipo !== "ecp_update_pack") {
+        Q("⚠️ Archivo no válido");
+        return;
+      }
+      if (!ve.valid || ve.expired) {
+        Q("⚠️ Necesitas una licencia activa para aplicar actualizaciones");
+        return;
+      }
+      var payload = {
+          catalogo: pack.catalogo,
+          materiales: pack.materiales,
+          apus: pack.apus,
+        },
+        firmaEsperada = firmaActualizacion(pack.rutCliente, payload);
+      if (firmaEsperada !== pack.firma) {
+        Q("⚠️ El archivo de actualización no es válido o fue alterado");
+        return;
+      }
+      var rutLicencia = normalizaRut(l.rut);
+      if (!rutLicencia || rutLicencia !== pack.rutCliente) {
+        Q("⚠️ Esta actualización fue generada para otro RUT");
+        return;
+      }
+      var diff = {
+          catalogo: diffUpdatePack(b, pack.catalogo || []),
+          materiales: diffMaterialesPack(j, pack.materiales || []),
+          apus: diffUpdatePack(g, pack.apus || []),
+        },
+        previousEntry = updateHistory[0] || null,
+        histEntry = {
+          fecha: new Date().toISOString().slice(0, 10),
+          generado: pack.generado,
+          diff: diff,
+        },
+        newHistory = [histEntry, ...updateHistory].slice(0, 12);
+      (setUpdateHistory(newHistory),
+        _t("updateHistory", newHistory),
+        setImportAnalysis({ pack: pack, diff: diff, previousEntry: previousEntry }));
+    };
+    const confirmarImportPack = () => {
+      if (!importAnalysis) return;
+      var pack = importAnalysis.pack,
+        nuevoCatalogo = mergeUpdatePack(b, pack.catalogo || []),
+        nuevosMateriales = mergeMaterialesUpdatePack(j, pack.materiales || []),
+        nuevasApus = mergeUpdatePack(g, pack.apus || []);
+      (h(nuevoCatalogo),
+        F(nuevosMateriales),
+        z(nuevasApus),
+        setImportAnalysis(null),
+        Q("✅ Catálogo, materiales y APU actualizados correctamente"));
+    };
     (ct(() => {
       var H = (ae) => {
         ((ae.ctrlKey || ae.metaKey) &&
           ae.key === "k" &&
           (ae.preventDefault(), J((N) => !N)),
+          (ae.ctrlKey || ae.metaKey) &&
+            ae.key === "b" &&
+            (ae.preventDefault(), setSbHidden((N) => !N)),
           (window.__TAURI_IPC__ || window.__TAURI__) &&
             (ae.key === "F5" ||
               ((ae.ctrlKey || ae.metaKey) && ae.key === "r") ||
               ((ae.ctrlKey || ae.metaKey) && ae.shiftKey && ae.key === "R")) &&
-            (ae.preventDefault(), window.location.reload()),
-          (ae.ctrlKey || ae.metaKey) &&
-            ae.shiftKey &&
-            ae.key === "M" &&
-            (ae.preventDefault(), f("mano_obra")));
+            (ae.preventDefault(), window.location.reload()));
       };
       return (
         document.addEventListener("keydown", H),
@@ -75750,7 +75459,6 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               l: "Calendario",
               locked: !ye("calendario"),
             },
-            { k: "mano_obra", ic: "👷", l: "Presupuesto MO", locked: !0 },
           ],
         },
         {
@@ -75800,7 +75508,6 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         gantt: "Carta Gantt",
         informe: "Informe de Entrega de Obra",
         documentos: "Documentos de Obra",
-        mano_obra: "Presupuesto de Mano de Obra",
       },
       xe = () => {
         if (x === "new" || (x === "edit" && k))
@@ -75994,6 +75701,8 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
             setMateriales: F,
             apus: g,
             setApus: z,
+            onImportUpdatePack: analizarPaqueteImportado,
+            updateHistory: updateHistory,
             onClearAll: () => {
               confirm(`¿Borrar TODOS los datos?
 
@@ -76175,7 +75884,6 @@ Esta acción no se puede deshacer.`) &&
             initBudgetId: X,
             initDocId: X ? "informe" : null,
           });
-        if (x === "mano_obra") return e.jsx(qg, { clients: p, cfg: l });
       },
       se =
         x === "edit" && k
@@ -76183,6 +75891,36 @@ Esta acción no se puede deshacer.`) &&
             ? `Duplicando N° ${k._srcId} → N° ${k._newId}`
             : `Editando N° ${k.id}`
           : ue[x];
+    const catCounts = {};
+    b.forEach((it) => {
+      catCounts[it.cat] = (catCounts[it.cat] || 0) + 1;
+    });
+    const topCats = Object.entries(catCounts)
+        .sort((x1, y1) => y1[1] - x1[1])
+        .slice(0, 6),
+      maxCatCount = topCats.length ? topCats[0][1] : 1,
+      usedMatIds = new Set();
+    g.forEach((apu) => (apu.materiales || []).forEach((mm) => usedMatIds.add(mm.materialId)));
+    const usedMatCount = j.filter((mm) => usedMatIds.has(mm.id)).length,
+      pctMatUsados = j.length ? Math.round((usedMatCount / j.length) * 100) : 0;
+    const diffTotals = importAnalysis
+      ? {
+          nuevos:
+            importAnalysis.diff.catalogo.nuevos +
+            importAnalysis.diff.materiales.nuevos +
+            importAnalysis.diff.apus.nuevos,
+          actualizados:
+            importAnalysis.diff.catalogo.actualizados +
+            importAnalysis.diff.materiales.actualizados +
+            importAnalysis.diff.apus.actualizados,
+          protegidos: importAnalysis.diff.materiales.protegidos || 0,
+          sinCambios:
+            importAnalysis.diff.catalogo.sinCambios +
+            importAnalysis.diff.materiales.sinCambios +
+            importAnalysis.diff.apus.sinCambios,
+        }
+      : null;
+    const hayNovedades = diffTotals && diffTotals.nuevos + diffTotals.actualizados > 0;
     return e.jsxs("div", {
       style: u(d({}, c.app), {
         display: "flex",
@@ -76200,8 +75938,648 @@ Esta acción no se puede deshacer.`) &&
         !I && !l.onboardingDone && e.jsx(wg, { onFinish: te, cfg: l }),
         E &&
           e.jsx(zg, { page: x === "edit" ? "new" : x, onClose: () => M(!1) }),
+        adminGate &&
+          e.jsx("div", {
+            style: {
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.6)",
+              zIndex: 10000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            },
+            onClick: () => (setAdminGate(!1), setAdminPin("")),
+            children: e.jsxs("div", {
+              style: {
+                background: a.card,
+                border: `1px solid ${a.border}`,
+                borderRadius: 12,
+                padding: 24,
+                width: 280,
+              },
+              onClick: (ev) => ev.stopPropagation(),
+              children: [
+                e.jsx("div", {
+                  style: {
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: a.text,
+                    marginBottom: 12,
+                  },
+                  children: "Acceso restringido",
+                }),
+                e.jsx("input", {
+                  type: "password",
+                  autoFocus: !0,
+                  value: adminPin,
+                  onChange: (ev) => setAdminPin(ev.target.value),
+                  onKeyDown: (ev) => {
+                    ev.key === "Enter" && tryAdminUnlock();
+                  },
+                  placeholder: "Clave",
+                  style: {
+                    width: "100%",
+                    padding: "8px 10px",
+                    borderRadius: 8,
+                    border: `1px solid ${a.border}`,
+                    background: a.surface,
+                    color: a.text,
+                    marginBottom: 12,
+                    boxSizing: "border-box",
+                  },
+                }),
+                e.jsxs("div", {
+                  style: { display: "flex", gap: 8 },
+                  children: [
+                    e.jsx("button", {
+                      onClick: tryAdminUnlock,
+                      style: u(d({}, c.btn("p")), { flex: 1 }),
+                      children: "Entrar",
+                    }),
+                    e.jsx("button", {
+                      onClick: () => (setAdminGate(!1), setAdminPin("")),
+                      style: {
+                        flex: 1,
+                        background: "transparent",
+                        border: `1px solid ${a.border}`,
+                        borderRadius: 8,
+                        color: a.muted,
+                        cursor: "pointer",
+                      },
+                      children: "Cancelar",
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          }),
+        adminPanel &&
+          e.jsx("div", {
+            style: {
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.7)",
+              zIndex: 10000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 20,
+              overflowY: "auto",
+            },
+            onClick: () => setAdminPanel(!1),
+            children: e.jsxs("div", {
+              style: {
+                background: `linear-gradient(160deg, ${a.card} 0%, ${a.surface} 100%)`,
+                border: `1px solid ${a.border}`,
+                borderRadius: 16,
+                padding: 28,
+                width: 560,
+                maxWidth: "100%",
+                maxHeight: "90vh",
+                overflowY: "auto",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+              },
+              onClick: (ev) => ev.stopPropagation(),
+              children: [
+                e.jsxs("div", {
+                  style: { marginBottom: 20 },
+                  children: [
+                    e.jsx("div", {
+                      style: {
+                        fontSize: 18,
+                        fontWeight: 800,
+                        color: a.text,
+                      },
+                      children: "🛠️ Generar actualización de catálogo",
+                    }),
+                    e.jsx("div", {
+                      style: { fontSize: 12, color: a.muted, marginTop: 2 },
+                      children:
+                        "Snapshot en vivo de tu base técnica de partidas, materiales y APU",
+                    }),
+                  ],
+                }),
+                e.jsx("div", {
+                  style: {
+                    display: "grid",
+                    gridTemplateColumns: "repeat(4,1fr)",
+                    gap: 10,
+                    marginBottom: 18,
+                  },
+                  children: [
+                    ["📋", b.length, "Partidas"],
+                    ["🧱", j.length, "Materiales"],
+                    ["🔧", g.length, "APU"],
+                    ["🗂️", topCats.length > 0 ? Object.keys(catCounts).length : 0, "Categorías"],
+                  ].map(([ic, val, lab], idx) =>
+                    e.jsxs(
+                      "div",
+                      {
+                        style: {
+                          background: a.card,
+                          border: `1px solid ${a.border}`,
+                          borderRadius: 10,
+                          padding: "12px 10px",
+                          textAlign: "center",
+                        },
+                        children: [
+                          e.jsx("div", { style: { fontSize: 18 }, children: ic }),
+                          e.jsx("div", {
+                            style: {
+                              fontSize: 20,
+                              fontWeight: 800,
+                              color: a.accent,
+                              lineHeight: 1.3,
+                            },
+                            children: val,
+                          }),
+                          e.jsx("div", {
+                            style: {
+                              fontSize: 10,
+                              color: a.muted,
+                              textTransform: "uppercase",
+                              letterSpacing: ".05em",
+                            },
+                            children: lab,
+                          }),
+                        ],
+                      },
+                      idx,
+                    ),
+                  ),
+                }),
+                e.jsxs("div", {
+                  style: {
+                    background: a.card,
+                    border: `1px solid ${a.border}`,
+                    borderRadius: 10,
+                    padding: "14px 16px",
+                    marginBottom: 12,
+                  },
+                  children: [
+                    e.jsx("div", {
+                      style: {
+                        fontSize: 11,
+                        fontWeight: 700,
+                        color: a.muted,
+                        textTransform: "uppercase",
+                        letterSpacing: ".06em",
+                        marginBottom: 10,
+                      },
+                      children: "Top categorías por cobertura",
+                    }),
+                    topCats.map(([catName, cnt]) =>
+                      e.jsxs(
+                        "div",
+                        {
+                          style: { marginBottom: 7 },
+                          children: [
+                            e.jsxs("div", {
+                              style: {
+                                display: "flex",
+                                justifyContent: "space-between",
+                                fontSize: 11,
+                                color: a.muted,
+                                marginBottom: 2,
+                              },
+                              children: [catName, cnt],
+                            }),
+                            e.jsx("div", {
+                              style: {
+                                height: 6,
+                                borderRadius: 3,
+                                background: a.border,
+                                overflow: "hidden",
+                              },
+                              children: e.jsx("div", {
+                                style: {
+                                  height: "100%",
+                                  width: (cnt / maxCatCount) * 100 + "%",
+                                  background: a.blue,
+                                  borderRadius: 3,
+                                },
+                              }),
+                            }),
+                          ],
+                        },
+                        catName,
+                      ),
+                    ),
+                  ],
+                }),
+                e.jsxs("div", {
+                  style: {
+                    background: a.card,
+                    border: `1px solid ${a.border}`,
+                    borderRadius: 10,
+                    padding: "14px 16px",
+                    marginBottom: 18,
+                  },
+                  children: [
+                    e.jsxs("div", {
+                      style: {
+                        display: "flex",
+                        justifyContent: "space-between",
+                        fontSize: 11,
+                        fontWeight: 700,
+                        color: a.muted,
+                        textTransform: "uppercase",
+                        letterSpacing: ".06em",
+                        marginBottom: 8,
+                      },
+                      children: [
+                        "Cobertura de materiales en APU",
+                        pctMatUsados + "%",
+                      ],
+                    }),
+                    e.jsx("div", {
+                      style: {
+                        height: 10,
+                        borderRadius: 5,
+                        background: a.border,
+                        overflow: "hidden",
+                      },
+                      children: e.jsx("div", {
+                        style: {
+                          height: "100%",
+                          width: pctMatUsados + "%",
+                          background:
+                            pctMatUsados >= 70
+                              ? "#34d399"
+                              : pctMatUsados >= 40
+                                ? a.accent
+                                : "#ef4444",
+                          borderRadius: 5,
+                        },
+                      }),
+                    }),
+                    e.jsxs("div", {
+                      style: { fontSize: 10, color: a.muted, marginTop: 5 },
+                      children: [
+                        usedMatCount,
+                        " en uso · ",
+                        j.length - usedMatCount,
+                        " en reserva",
+                      ],
+                    }),
+                  ],
+                }),
+                !genResult && e.jsx("input", {
+                  value: adminRut,
+                  onChange: (ev) => setAdminRut(ev.target.value),
+                  placeholder: "RUT del cliente (ej: 12.345.678-9)",
+                  style: {
+                    width: "100%",
+                    padding: "10px 12px",
+                    borderRadius: 8,
+                    border: `1px solid ${a.border}`,
+                    background: a.surface,
+                    color: a.text,
+                    marginBottom: 12,
+                    boxSizing: "border-box",
+                    fontSize: 14,
+                  },
+                }),
+                genResult && e.jsxs("div", {
+                  style: {
+                    background: a.card,
+                    border: `1px solid ${a.border}`,
+                    borderRadius: 10,
+                    padding: "14px 16px",
+                    marginBottom: 12,
+                  },
+                  children: [
+                    e.jsxs("div", {
+                      style: { fontSize: 13, color: "#34d399", fontWeight: 700, marginBottom: 10 },
+                      children: ["✅ Archivo generado para RUT ", genResult.rutNorm],
+                    }),
+                    e.jsx("div", {
+                      style: {
+                        fontSize: 11,
+                        fontWeight: 700,
+                        color: a.muted,
+                        textTransform: "uppercase",
+                        letterSpacing: ".05em",
+                        marginBottom: 6,
+                      },
+                      children: "Mensaje sugerido para enviar por WhatsApp o correo",
+                    }),
+                    [
+                      {
+                        label: "🤝 Formal",
+                        texto: `Estimado/a,\n\nAdjunto la actualización mensual de precios, materiales y partidas para su programa Enlace Constructor Pro, generada el ${genResult.generado}.\n\nPara aplicarla, ingrese a Respaldos → "Importar actualización de catálogo" y seleccione este archivo.\n\nQuedamos atentos a cualquier consulta.\n\nSaludos cordiales.`,
+                      },
+                      {
+                        label: "😊 Amigable",
+                        texto: `¡Hola! 👋 Te dejo la actualización de precios y partidas de este mes (${genResult.generado}) para tu Enlace Constructor.\n\nSolo entra a Respaldos → "Importar actualización de catálogo" y sube este archivo. En un par de minutos quedas al día 🙌\n\nCualquier duda me avisas.`,
+                      },
+                    ].map((tpl) =>
+                      e.jsxs(
+                        "div",
+                        {
+                          style: { marginBottom: 10 },
+                          children: [
+                            e.jsxs("div", {
+                              style: {
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                marginBottom: 4,
+                              },
+                              children: [
+                                e.jsx("span", { style: { fontSize: 12, fontWeight: 700, color: a.text }, children: tpl.label }),
+                                e.jsx("button", {
+                                  onClick: () => {
+                                    navigator.clipboard && navigator.clipboard.writeText(tpl.texto);
+                                    Q("📋 Mensaje copiado");
+                                  },
+                                  style: {
+                                    background: a.hover,
+                                    border: `1px solid ${a.border}`,
+                                    borderRadius: 6,
+                                    padding: "3px 9px",
+                                    color: a.muted,
+                                    fontSize: 11,
+                                    cursor: "pointer",
+                                  },
+                                  children: "Copiar",
+                                }),
+                              ],
+                            }),
+                            e.jsx("div", {
+                              style: {
+                                fontSize: 11.5,
+                                color: a.muted,
+                                background: a.surface,
+                                border: `1px solid ${a.border}`,
+                                borderRadius: 8,
+                                padding: "8px 10px",
+                                whiteSpace: "pre-wrap",
+                                lineHeight: 1.4,
+                              },
+                              children: tpl.texto,
+                            }),
+                          ],
+                        },
+                        tpl.label,
+                      ),
+                    ),
+                  ],
+                }),
+                e.jsxs("div", {
+                  style: { display: "flex", gap: 8 },
+                  children: [
+                    !genResult && e.jsx("button", {
+                      onClick: generarActualizacion,
+                      style: u(d({}, c.btn("p")), {
+                        flex: 1,
+                        padding: "11px",
+                        fontSize: 14,
+                        fontWeight: 700,
+                      }),
+                      children: "⬇ Generar y descargar",
+                    }),
+                    e.jsx("button", {
+                      onClick: () => (setAdminPanel(!1), setGenResult(null), setAdminRut("")),
+                      style: {
+                        flex: 1,
+                        background: "transparent",
+                        border: `1px solid ${a.border}`,
+                        borderRadius: 8,
+                        color: a.muted,
+                        cursor: "pointer",
+                      },
+                      children: "Cerrar",
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          }),
+        importAnalysis &&
+          diffTotals &&
+          e.jsx("div", {
+            style: {
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.7)",
+              zIndex: 10000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 20,
+              overflowY: "auto",
+            },
+            children: e.jsxs("div", {
+              style: {
+                background: `linear-gradient(160deg, ${a.card} 0%, ${a.surface} 100%)`,
+                border: `1px solid ${a.border}`,
+                borderRadius: 16,
+                padding: 28,
+                width: 560,
+                maxWidth: "100%",
+                maxHeight: "90vh",
+                overflowY: "auto",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+              },
+              children: [
+                e.jsxs("div", {
+                  style: { marginBottom: 14 },
+                  children: [
+                    e.jsx("div", {
+                      style: { fontSize: 18, fontWeight: 800, color: a.text },
+                      children: hayNovedades
+                        ? "🎉 ¡Felicidades! Recibiste tu actualización del mes"
+                        : "✅ Tu catálogo ya está al día",
+                    }),
+                    e.jsxs("div", {
+                      style: { fontSize: 12, color: a.muted, marginTop: 2 },
+                      children: [
+                        "Generada el ",
+                        importAnalysis.pack.generado,
+                        " · ",
+                        diffTotals.nuevos +
+                          diffTotals.actualizados +
+                          diffTotals.protegidos +
+                          diffTotals.sinCambios,
+                        " ítems revisados",
+                      ],
+                    }),
+                  ],
+                }),
+                e.jsx("div", {
+                  style: {
+                    background: a.hover,
+                    border: `1px solid ${a.border}`,
+                    borderRadius: 10,
+                    padding: "10px 14px",
+                    marginBottom: 18,
+                    fontSize: 11.5,
+                    color: a.muted,
+                  },
+                  children: importAnalysis.previousEntry
+                    ? `📅 Tu actualización anterior fue el ${importAnalysis.previousEntry.fecha}` +
+                      (updateHistory.length > 1
+                        ? " · Historial: " +
+                          updateHistory
+                            .slice(1, 4)
+                            .map((hh) => hh.fecha)
+                            .join(", ")
+                        : "")
+                    : "🆕 Esta es tu primera actualización de catálogo registrada",
+                }),
+                e.jsx("div", {
+                  style: {
+                    display: "grid",
+                    gridTemplateColumns: "repeat(4,1fr)",
+                    gap: 10,
+                    marginBottom: 18,
+                  },
+                  children: [
+                    ["🆕", diffTotals.nuevos, "Nuevos", "#34d399"],
+                    ["💲", diffTotals.actualizados, "Precios a actualizar", a.accent],
+                    ["🔒", diffTotals.protegidos, "Protegidos (tus precios)", a.blue],
+                    ["✅", diffTotals.sinCambios, "Sin cambios", a.muted],
+                  ].map(([ic, val, lab, color], idx) =>
+                    e.jsxs(
+                      "div",
+                      {
+                        style: {
+                          background: a.card,
+                          border: `1px solid ${a.border}`,
+                          borderRadius: 10,
+                          padding: "12px 8px",
+                          textAlign: "center",
+                        },
+                        children: [
+                          e.jsx("div", { style: { fontSize: 18 }, children: ic }),
+                          e.jsx("div", {
+                            style: {
+                              fontSize: 20,
+                              fontWeight: 800,
+                              color: color,
+                              lineHeight: 1.3,
+                            },
+                            children: val,
+                          }),
+                          e.jsx("div", {
+                            style: {
+                              fontSize: 9.5,
+                              color: a.muted,
+                              textTransform: "uppercase",
+                              letterSpacing: ".04em",
+                            },
+                            children: lab,
+                          }),
+                        ],
+                      },
+                      idx,
+                    ),
+                  ),
+                }),
+                e.jsx("div", {
+                  style: {
+                    background: a.card,
+                    border: `1px solid ${a.border}`,
+                    borderRadius: 10,
+                    padding: "14px 16px",
+                    marginBottom: 20,
+                  },
+                  children: [
+                    ["Partidas", importAnalysis.diff.catalogo],
+                    ["Materiales", importAnalysis.diff.materiales],
+                    ["APU", importAnalysis.diff.apus],
+                  ].map(([lab, dd]) => {
+                    var tot = dd.total || 1,
+                      pNuevos = (dd.nuevos / tot) * 100,
+                      pAct = (dd.actualizados / tot) * 100,
+                      pProt = ((dd.protegidos || 0) / tot) * 100;
+                    return e.jsxs(
+                      "div",
+                      {
+                        style: { marginBottom: 10 },
+                        children: [
+                          e.jsxs("div", {
+                            style: {
+                              display: "flex",
+                              justifyContent: "space-between",
+                              fontSize: 11,
+                              color: a.muted,
+                              marginBottom: 3,
+                            },
+                            children: [
+                              lab,
+                              dd.nuevos +
+                                " nuevas · " +
+                                dd.actualizados +
+                                " actualizadas",
+                            ],
+                          }),
+                          e.jsxs("div", {
+                            style: {
+                              height: 8,
+                              borderRadius: 4,
+                              background: a.border,
+                              overflow: "hidden",
+                              display: "flex",
+                            },
+                            children: [
+                              e.jsx("div", {
+                                style: { height: "100%", width: pNuevos + "%", background: "#34d399" },
+                              }),
+                              e.jsx("div", {
+                                style: { height: "100%", width: pAct + "%", background: a.accent },
+                              }),
+                              e.jsx("div", {
+                                style: { height: "100%", width: pProt + "%", background: a.blue },
+                              }),
+                            ],
+                          }),
+                        ],
+                      },
+                      lab,
+                    );
+                  }),
+                }),
+                e.jsxs("div", {
+                  style: { display: "flex", gap: 8 },
+                  children: [
+                    hayNovedades && e.jsx("button", {
+                      onClick: confirmarImportPack,
+                      style: u(d({}, c.btn("p")), {
+                        flex: 1,
+                        padding: "11px",
+                        fontSize: 14,
+                        fontWeight: 700,
+                      }),
+                      children: "✅ Aplicar actualización",
+                    }),
+                    e.jsx("button", {
+                      onClick: () => setImportAnalysis(null),
+                      style: {
+                        flex: 1,
+                        background: hayNovedades ? "transparent" : a.accent,
+                        border: `1px solid ${a.border}`,
+                        borderRadius: 8,
+                        color: hayNovedades ? a.muted : "#050a10",
+                        fontWeight: hayNovedades ? 400 : 700,
+                        cursor: "pointer",
+                      },
+                      children: hayNovedades ? "Cancelar" : "Cerrar",
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          }),
         e.jsxs("div", {
-          style: c.sb,
+          style: u(
+            d({}, c.sb),
+            sbHidden
+              ? { width: 0, minWidth: 0, padding: 0, overflow: "hidden", borderRight: "none" }
+              : {},
+          ),
           children: [
             e.jsxs("div", {
               style: {
@@ -76213,7 +76591,7 @@ Esta acción no se puede deshacer.`) &&
                 gap: 8,
                 cursor: "default",
               },
-              onDoubleClick: () => f("mano_obra"),
+              onDoubleClick: () => setAdminGate(!0),
               children: [
                 e.jsx("img", {
                   src: l.logoCliente || l.logo,
@@ -76222,7 +76600,7 @@ Esta acción no se puede deshacer.`) &&
                 }),
                 e.jsxs("div", {
                   style: { textAlign: "center" },
-                  onDoubleClick: () => f("mano_obra"),
+                  onDoubleClick: () => setAdminGate(!0),
                   children: [
                     e.jsx("div", {
                       style: {
@@ -76634,90 +77012,6 @@ Esta acción no se puede deshacer.`) &&
                   },
                   children: se,
                 }),
-                x !== "licitaciones" && e.jsxs("div", {
-                  style: {
-                    position: "absolute",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 9,
-                  },
-                  children: [
-                    l.logo
-                      ? e.jsx("img", {
-                          src: l.logo,
-                          alt: "Enlace",
-                          style: {
-                            height: 34,
-                            objectFit: "contain",
-                            filter: "drop-shadow(0 0 6px #2563eb99)",
-                          },
-                        })
-                      : e.jsxs("svg", {
-                          width: "30",
-                          height: "30",
-                          viewBox: "0 0 100 100",
-                          children: [
-                            e.jsx("defs", {
-                              children: e.jsxs("linearGradient", {
-                                id: "lg2",
-                                x1: "0%",
-                                y1: "0%",
-                                x2: "100%",
-                                y2: "100%",
-                                children: [
-                                  e.jsx("stop", {
-                                    offset: "0%",
-                                    stopColor: "#60a5fa",
-                                  }),
-                                  e.jsx("stop", {
-                                    offset: "100%",
-                                    stopColor: "#2563eb",
-                                  }),
-                                ],
-                              }),
-                            }),
-                            e.jsx("path", {
-                              d: "M50 8 C28 8 10 26 10 48 C10 62 17 74 28 82 L50 95 L72 82 C83 74 90 62 90 48 C90 26 72 8 50 8Z",
-                              fill: "url(#lg2)",
-                            }),
-                            e.jsx("path", {
-                              d: "M35 35 Q50 25 65 35 Q72 42 65 52 Q55 58 50 52 Q44 46 50 40 Q58 36 62 42",
-                              fill: "none",
-                              stroke: fe,
-                              strokeWidth: "5",
-                              strokeLinecap: "round",
-                            }),
-                          ],
-                        }),
-                    e.jsxs("div", {
-                      style: { lineHeight: 1.2 },
-                      children: [
-                        e.jsx("div", {
-                          style: {
-                            fontSize: 14,
-                            fontWeight: 800,
-                            color: "#ffffff",
-                            letterSpacing: ".08em",
-                            textTransform: "uppercase",
-                          },
-                          children: "ENLACE",
-                        }),
-                        e.jsx("div", {
-                          style: {
-                            fontSize: 8.5,
-                            fontWeight: 700,
-                            color: fe,
-                            letterSpacing: ".12em",
-                            textTransform: "uppercase",
-                          },
-                          children: "CONSTRUCTOR",
-                        }),
-                      ],
-                    }),
-                  ],
-                }),
                 e.jsxs("div", {
                   style: {
                     flex: 1,
@@ -76727,6 +77021,21 @@ Esta acción no se puede deshacer.`) &&
                     justifyContent: "flex-end",
                   },
                   children: [
+                    e.jsx("button", {
+                      title: sbHidden ? "Mostrar menú lateral" : "Ocultar menú lateral",
+                      style: {
+                        background: "rgba(255,255,255,0.1)",
+                        border: "1px solid rgba(255,255,255,0.2)",
+                        borderRadius: 8,
+                        padding: "7px 10px",
+                        cursor: "pointer",
+                        color: "rgba(255,255,255,0.85)",
+                        fontSize: 16,
+                        fontWeight: 700,
+                      },
+                      onClick: () => setSbHidden((H) => !H),
+                      children: sbHidden ? "▶" : "◀",
+                    }),
                     e.jsx("button", {
                       title: "Consejos de este módulo",
                       style: {
@@ -76841,6 +77150,98 @@ Esta acción no se puede deshacer.`) &&
                       }),
                   ],
                 }),
+                x !== "licitaciones" && e.jsxs("div", {
+                  style: hdrNarrow
+                    ? {
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 9,
+                        flexShrink: 0,
+                        marginLeft: 10,
+                      }
+                    : {
+                        position: "absolute",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 9,
+                      },
+                  children: [
+                    l.logo
+                      ? e.jsx("img", {
+                          src: l.logo,
+                          alt: "Enlace",
+                          style: {
+                            height: 34,
+                            objectFit: "contain",
+                            filter: "drop-shadow(0 0 6px #2563eb99)",
+                          },
+                        })
+                      : e.jsxs("svg", {
+                          width: "30",
+                          height: "30",
+                          viewBox: "0 0 100 100",
+                          children: [
+                            e.jsx("defs", {
+                              children: e.jsxs("linearGradient", {
+                                id: "lg2",
+                                x1: "0%",
+                                y1: "0%",
+                                x2: "100%",
+                                y2: "100%",
+                                children: [
+                                  e.jsx("stop", {
+                                    offset: "0%",
+                                    stopColor: "#60a5fa",
+                                  }),
+                                  e.jsx("stop", {
+                                    offset: "100%",
+                                    stopColor: "#2563eb",
+                                  }),
+                                ],
+                              }),
+                            }),
+                            e.jsx("path", {
+                              d: "M50 8 C28 8 10 26 10 48 C10 62 17 74 28 82 L50 95 L72 82 C83 74 90 62 90 48 C90 26 72 8 50 8Z",
+                              fill: "url(#lg2)",
+                            }),
+                            e.jsx("path", {
+                              d: "M35 35 Q50 25 65 35 Q72 42 65 52 Q55 58 50 52 Q44 46 50 40 Q58 36 62 42",
+                              fill: "none",
+                              stroke: fe,
+                              strokeWidth: "5",
+                              strokeLinecap: "round",
+                            }),
+                          ],
+                        }),
+                    e.jsxs("div", {
+                      style: { lineHeight: 1.2 },
+                      children: [
+                        e.jsx("div", {
+                          style: {
+                            fontSize: 14,
+                            fontWeight: 800,
+                            color: "#ffffff",
+                            letterSpacing: ".08em",
+                            textTransform: "uppercase",
+                          },
+                          children: "ENLACE",
+                        }),
+                        e.jsx("div", {
+                          style: {
+                            fontSize: 8.5,
+                            fontWeight: 700,
+                            color: fe,
+                            letterSpacing: ".12em",
+                            textTransform: "uppercase",
+                          },
+                          children: "CONSTRUCTOR",
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
               ],
             }),
             e.jsxs("div", {
@@ -76922,7 +77323,7 @@ Esta acción no se puede deshacer.`) &&
         U != null &&
           e.jsx(Uf, {
             budgetId: U,
-            budgets: B,
+            budgets: v,
             clients: p,
             cfg: l,
             onClose: () => $(null),
@@ -82546,5 +82947,60 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
     });
   }
 
+  (function patchUserApu() {
+    try {
+      var rawApus = localStorage.getItem("enlace_constructor_pro_v1_apus") || localStorage.getItem("apus") || "[]";
+      var rawMats = localStorage.getItem("enlace_constructor_pro_v1_materiales") || "[]";
+      var apus = JSON.parse(rawApus);
+      var mats = JSON.parse(rawMats);
+      var m = function(id, cat, nombre, unidad, precio) {
+        if (!mats.find(function(x) { return x.id === id; })) {
+          mats.push({ id: id, cat: cat, nombre: nombre, unidad: unidad, precio: precio });
+        }
+      };
+      m(475, "Estructuras Metálicas", "Imprimante anticorrosivo rico en zinc", "litro", 13500);
+      m(12847, "Estructuras Metálicas", "Pintura esmalte sintético 1L", "litro", 8500);
+      m(11496, "Estructuras Metálicas", "Aguarrás litro", "litro", 3500);
+      m(11461, "Herramientas", "Brocha 4\"", "unidad", 2500);
+      m(12781, "Estructuras Metálicas", "Electrodo 6011 1/8\" 1kg", "kg", 4500);
+      m(12788, "Herramientas", "Disco corte metal 4.5\"", "unidad", 1500);
+      m(234, "Estructuras Metálicas", "Ángulo acero laminado 25x25x3 mm (tira 6m)", "tira", 9500);
+      var targetApu = apus.find(function(a) { return a && a.nombre && a.nombre.toLowerCase().includes("cierre acmafor 3d 2.5m"); });
+      var newMats = [
+        { materialId: 475, cantidad: 0.1 },
+        { materialId: 12847, cantidad: 0.15 },
+        { materialId: 11496, cantidad: 0.05 },
+        { materialId: 11461, cantidad: 0.05 },
+        { materialId: 12781, cantidad: 0.25 },
+        { materialId: 12788, cantidad: 0.3 },
+        { materialId: 234, cantidad: 0.35 }
+      ];
+      if (targetApu) {
+        targetApu.materiales = newMats;
+        localStorage.setItem("enlace_constructor_pro_v1_apus", JSON.stringify(apus));
+      }
+      localStorage.setItem("enlace_constructor_pro_v1_materiales", JSON.stringify(mats));
+      
+      var rawBudgets = localStorage.getItem("enlace_constructor_pro_v1_budgets");
+      if (rawBudgets) {
+        var budgets = JSON.parse(rawBudgets);
+        var changed = false;
+        budgets.forEach(function(b) {
+          if (b && b.items) {
+            b.items.forEach(function(item) {
+              var n = (item.nombre || item.desc || item.descripcion || "").toLowerCase();
+              if (n.includes("acmafor")) {
+                item.materiales = newMats;
+                changed = true;
+              }
+            });
+          }
+        });
+        if (changed) {
+          localStorage.setItem("enlace_constructor_pro_v1_budgets", JSON.stringify(budgets));
+        }
+      }
+    } catch(e) {}
+  })();
   _n.createRoot(document.getElementById("root")).render(e.jsx(Jg, {}));
 })();

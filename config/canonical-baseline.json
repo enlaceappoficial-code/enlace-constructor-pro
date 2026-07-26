@@ -1,0 +1,24 @@
+{
+  "name": "ECP canonical production baseline",
+  "acceptedAt": "2026-07-26T16:55:12.843Z",
+  "entrypoint": "src/index.html",
+  "bundle": "src/assets/index.js",
+  "sha256": {
+    "entrypoint": "97F8B5CFF8D7DFC9A1AE66B93C9C50AB7D5C02EF06F0D867F6918A39394CA6A0",
+    "bundle": "47430068A7FF138D7EFF310BC78EB15B90B4E5E38450788C540BCA4651BD35B7"
+  },
+  "minimumCounts": {
+    "catalog": 311,
+    "materials": 327,
+    "apus": 311
+  },
+  "requiredFeatures": [
+    "Proveedores",
+    "APU & Actualización",
+    "Pide tu Módulo",
+    "Tu Plan — Licencia y Datos",
+    "Centro de Postulaciones",
+    "Documentos de Obra",
+    "Partidas de Obra"
+  ]
+}

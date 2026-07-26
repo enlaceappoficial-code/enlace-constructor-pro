@@ -1,6 +1,4 @@
-const fs = require('fs');
 
-const content = `
 function WhatsAppProviderModal({ doc, budget, docType, cfg, onClose, setToast }) {
     const isSC = docType === "sc";
     const [includeIntro, setIncludeIntro] = Re.useState(false);
@@ -12,49 +10,51 @@ function WhatsAppProviderModal({ doc, budget, docType, cfg, onClose, setToast })
 
     const formatMessage = () => {
         const provName = doc.prov.vendedor || doc.prov.nombre.split(' ')[0] || "Proveedor";
-        let msg = \`Hola \${provName} 👋\\n\\n\`;
+        let msg = `Hola ${provName} 👋\n\n`;
         
         if (includeIntro) {
-            msg += \`Junto con saludar, somos la empresa *\${cfg?.empresa || "Constructora"}*\. Nos estamos contactando porque nos gustaría considerarlos como proveedores para nuestros proyectos actuales y futuros.\\n\\n\`;
+            msg += `Junto con saludar, somos la empresa *${cfg?.empresa || "Constructora"}*. Nos estamos contactando porque nos gustaría considerarlos como proveedores para nuestros proyectos actuales y futuros.\n\n`;
         }
         
         if (isSC) {
-            msg += \`Te comparto nuestra Solicitud de Cotización para la obra:\\n📄 *\${budget.descripcion}*\\n\\n\`;
+            msg += `Te comparto nuestra Solicitud de Cotización para la obra:\n📄 *${budget.descripcion}*\n\n`;
         } else {
-            msg += \`Te comparto la Orden de Compra para la obra:\\n🛒 *\${budget.descripcion}*\\n\\n\`;
+            msg += `Te comparto la Orden de Compra para la obra:\n🛒 *${budget.descripcion}*\n\n`;
         }
 
         if (includeItems) {
-            msg += \`DETALLE DE REQUERIMIENTOS:\\n\`;
+            msg += `DETALLE DE REQUERIMIENTOS:\n`;
             doc.items.forEach(it => {
-                msg += \`▪ \${it.nombre} — \${it.cantidadTotal.toFixed(2)} \${it.unidad}\\n\`;
+                msg += `▪ ${it.nombre} — ${it.cantidadTotal.toFixed(2)} ${it.unidad}\n`;
             });
-            msg += \`\\n\`;
+            msg += `\n`;
         }
 
         if (includeTotals && !isSC && doc.subtotal) {
             const iva = doc.subtotal * 0.19;
             const total = doc.subtotal + iva;
-            msg += \`💰 Subtotal neto: $\${Math.round(doc.subtotal).toLocaleString("es-CL")}\\n\`;
-            msg += \`📄 IVA (19%): $\${Math.round(iva).toLocaleString("es-CL")}\\n\`;
-            msg += \`✅ TOTAL O.C.: $\${Math.round(total).toLocaleString("es-CL")}\\n\\n\`;
+            msg += `💰 Subtotal neto: $${Math.round(doc.subtotal).toLocaleString("es-CL")}\n`;
+            msg += `📄 IVA (19%): $${Math.round(iva).toLocaleString("es-CL")}\n`;
+            msg += `✅ TOTAL O.C.: $${Math.round(total).toLocaleString("es-CL")}\n\n`;
         }
 
         if (includeCond) {
             if (isSC) {
-                msg += \`💳 *Condiciones:*\nAgradecería su pronta respuesta con los valores comerciales, indicando forma de pago y plazos de entrega.\\n\\n\`;
+                msg += `💳 *Condiciones:*
+Agradecería su pronta respuesta con los valores comerciales, indicando forma de pago y plazos de entrega.\n\n`;
             } else {
-                msg += \`💳 *Condiciones:*\nFavor confirmar recepción y plazos de entrega oportunos.\\n\\n\`;
+                msg += `💳 *Condiciones:*
+Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
             }
         }
         
         if (customNote.trim()) {
-            msg += \`*Nota:* \${customNote.trim()}\\n\\n\`;
+            msg += `*Nota:* ${customNote.trim()}\n\n`;
         }
 
-        msg += \`Quedo atento a cualquier consulta 🤝\\n\`;
-        msg += \`*\${cfg?.empresa || "Constructora"}*\\n\`;
-        if (cfg?.telefono) msg += \`📞 \${cfg.telefono}\`;
+        msg += `Quedo atento a cualquier consulta 🤝\n`;
+        msg += `*${cfg?.empresa || "Constructora"}*\n`;
+        if (cfg?.telefono) msg += `📞 ${cfg.telefono}`;
         
         return msg.trim();
     };
@@ -71,7 +71,7 @@ function WhatsAppProviderModal({ doc, budget, docType, cfg, onClose, setToast })
         if (!phone) return setToast("⚠️ Este proveedor no tiene número de teléfono registrado.");
         
         // Implicit PDF download if needed, or simply WhatsApp link
-        window.open(\`https://wa.me/\${phone}?text=\${encodeURIComponent(finalMsg)}\`, "_blank");
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(finalMsg)}`, "_blank");
     };
 
     return e.jsxs("div", {
@@ -314,7 +314,7 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
             
             const { jsPDF } = window.jspdf;
             const accentColor = cfg?.accentColor || "#f5a020";
-            const accentRGB = accentColor.match(/\\w\\w/g).map(c => parseInt(c, 16));
+            const accentRGB = accentColor.match(/\w\w/g).map(c => parseInt(c, 16));
             
             const getImageSize = (src) => new Promise(resolve => {
                 const img = new window.Image();
@@ -349,7 +349,7 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                     y += 30;
                     doc.setFontSize(10);
                     doc.setTextColor(50);
-                    doc.text(\`Fecha: \${new Date().toLocaleDateString("es-CL")}\`, 14, y);
+                    doc.text(`Fecha: ${new Date().toLocaleDateString("es-CL")}`, 14, y);
                     y += 10;
                     doc.setFontSize(12);
                     doc.setFont("helvetica", "bold");
@@ -357,9 +357,9 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                     y += 10;
                     doc.setFont("helvetica", "normal");
                     doc.setFontSize(11);
-                    doc.text(\`Señores \${prov.nombre},\`, 14, y);
+                    doc.text(`Señores ${prov.nombre},`, 14, y);
                     y += 10;
-                    const letterText = \`Por medio de la presente, nos dirigimos a ustedes para solicitar una cotización formal de los materiales y/o servicios detallados en la página adjunta, requeridos para nuestro proyecto "\${budget.descripcion}".\\n\\nAgradeceremos que su cotización incluya:\\n- Precios unitarios netos y totales.\\n- Disponibilidad y tiempos de entrega.\\n- Condiciones de pago.\\n- Vigencia de la oferta.\\n\\nQuedamos a la espera de su pronta respuesta para proceder con el análisis comercial y eventual emisión de la orden de compra.\\n\\nSin otro particular, saluda atentamente a usted,\`;
+                    const letterText = `Por medio de la presente, nos dirigimos a ustedes para solicitar una cotización formal de los materiales y/o servicios detallados en la página adjunta, requeridos para nuestro proyecto "${budget.descripcion}".\n\nAgradeceremos que su cotización incluya:\n- Precios unitarios netos y totales.\n- Disponibilidad y tiempos de entrega.\n- Condiciones de pago.\n- Vigencia de la oferta.\n\nQuedamos a la espera de su pronta respuesta para proceder con el análisis comercial y eventual emisión de la orden de compra.\n\nSin otro particular, saluda atentamente a usted,`;
                     
                     const splitText = doc.splitTextToSize(letterText, 180);
                     doc.text(splitText, 14, y);
@@ -411,8 +411,8 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                 
                 doc.setFontSize(10);
                 doc.setTextColor(100);
-                doc.text(\`N° Presupuesto Ref: \${budget.id}\`, 14, y + 15);
-                doc.text(\`Fecha: \${new Date().toLocaleDateString("es-CL")}\`, 14, y + 20);
+                doc.text(`N° Presupuesto Ref: ${budget.id}`, 14, y + 15);
+                doc.text(`Fecha: ${new Date().toLocaleDateString("es-CL")}`, 14, y + 20);
                 
                 y += 35;
                 
@@ -424,19 +424,19 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                 y += 6;
                 doc.setFontSize(9);
                 doc.setTextColor(70, 80, 95);
-                doc.text(\`Empresa: \${cfg?.empresa || "Constructora"}\`, 14, y);
-                doc.text(\`Empresa: \${prov.nombre}\`, 105, y);
+                doc.text(`Empresa: ${cfg?.empresa || "Constructora"}`, 14, y);
+                doc.text(`Empresa: ${prov.nombre}`, 105, y);
                 
                 y += 5;
-                doc.text(\`RUT: \${cfg?.rut || "Sin RUT"}\`, 14, y);
-                doc.text(\`Vendedor: \${prov.vendedor || "No especificado"}\`, 105, y);
+                doc.text(`RUT: ${cfg?.rut || "Sin RUT"}`, 14, y);
+                doc.text(`Vendedor: ${prov.vendedor || "No especificado"}`, 105, y);
                 
                 y += 5;
-                if (cfg?.telefono) doc.text(\`Fono: \${cfg?.telefono}\`, 14, y);
-                doc.text(\`Email: \${prov.email || "No especificado"}\`, 105, y);
+                if (cfg?.telefono) doc.text(`Fono: ${cfg?.telefono}`, 14, y);
+                doc.text(`Email: ${prov.email || "No especificado"}`, 105, y);
                 
                 y += 5;
-                doc.text(\`Fono: \${prov.telefono || "No especificado"}\`, 105, y);
+                doc.text(`Fono: ${prov.telefono || "No especificado"}`, 105, y);
                 
                 y += 12;
                 
@@ -483,7 +483,7 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                     doc.text("Subtotal Neto", 130, finalY);
                     doc.setFont("helvetica", "bold");
                     doc.setTextColor(30, 40, 55);
-                    doc.text(\`$\${Math.round(subtotal).toLocaleString("es-CL")}\`, 194, finalY, { align: "right" });
+                    doc.text(`$${Math.round(subtotal).toLocaleString("es-CL")}`, 194, finalY, { align: "right" });
                     
                     finalY += 6;
                     doc.setFont("helvetica", "normal");
@@ -491,7 +491,7 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                     doc.text("IVA (19%)", 130, finalY);
                     doc.setFont("helvetica", "bold");
                     doc.setTextColor(30, 40, 55);
-                    doc.text(\`$\${Math.round(iva).toLocaleString("es-CL")}\`, 194, finalY, { align: "right" });
+                    doc.text(`$${Math.round(iva).toLocaleString("es-CL")}`, 194, finalY, { align: "right" });
                     
                     finalY += 2;
                     doc.setDrawColor(180, 185, 200);
@@ -504,7 +504,7 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                     doc.setFontSize(10);
                     doc.setTextColor(255, 255, 255);
                     doc.text("TOTAL O.C.", 130, finalY + 7.5);
-                    doc.text(\`$\${Math.round(total).toLocaleString("es-CL")}\`, 193, finalY + 7.5, { align: "right" });
+                    doc.text(`$${Math.round(total).toLocaleString("es-CL")}`, 193, finalY + 7.5, { align: "right" });
                     
                     finalY += 30;
                 } else {
@@ -566,7 +566,7 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                 doc.setTextColor(100, 115, 130);
                 doc.text(cfg?.empresa || "Firma Autorizada", 14, finalY);
                 
-                const pdfName = \`\${isSC ? "Cotizacion" : "Orden_Compra"}_\${prov.nombre.replace(/\\s+/g, '_')}_P\${budget.id}.pdf\`;
+                const pdfName = `${isSC ? "Cotizacion" : "Orden_Compra"}_${prov.nombre.replace(/\s+/g, '_')}_P${budget.id}.pdf`;
                 const pdfBlob = doc.output("blob");
                 const pdfDataUri = URL.createObjectURL(pdfBlob);
                 
@@ -651,7 +651,7 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                                                     children: "⬇ Descargar PDF"
                                                 }),
                                                 e.jsx("a", {
-                                                    href: \`mailto:\${activeDoc.prov.email||""}?subject=\${encodeURIComponent("Solicitud de " + (docType==="sc"?"Cotización":"Compra") + " - " + budget.descripcion)}&body=\${encodeURIComponent("Adjunto encontrará el documento del requerimiento.\\n\\nQuedamos atentos.\\nSaludos.")}\`,
+                                                    href: `mailto:${activeDoc.prov.email||""}?subject=${encodeURIComponent("Solicitud de " + (docType==="sc"?"Cotización":"Compra") + " - " + budget.descripcion)}&body=${encodeURIComponent("Adjunto encontrará el documento del requerimiento.\n\nQuedamos atentos.\nSaludos.")}`,
                                                     style: { padding: "10px 20px", background: "var(--sb)", border: "1px solid var(--accent)", color: "var(--accent)", textDecoration: "none", borderRadius: 8, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 8 },
                                                     children: "✉️ Email"
                                                 }),
@@ -882,8 +882,3 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
         ]
     });
 }
-`;
-
-fs.writeFileSync('update_oc_gen.js', content);
-fs.writeFileSync('src/assets/generador_oc_modulo.js', content);
-console.log('Update script prepared for Preview UI.');

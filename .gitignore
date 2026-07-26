@@ -3,6 +3,7 @@ dist/
 build/
 target/
 src-tauri/target/
+src-tauri/target_build/
 .env
 .wrangler/
 cdn_tmp/
@@ -10,3 +11,5 @@ backup_localstorage/
 release_installers/
 _backups/
 *.log
+ECP_AUDITORIA_COMPLETA.zip
+ECP_AUDITORIA_COMPLETA/

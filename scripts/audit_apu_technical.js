@@ -5,18 +5,44 @@ const path = require("path");
 const vm = require("vm");
 
 const root = path.resolve(__dirname, "..");
-const sourcePath = path.join(root, "src", "app.html");
+const sourcePath = path.join(root, "src", "assets", "index.js");
 const outputPath = process.argv[2]
   ? path.resolve(process.argv[2])
   : path.join(root, "target", "auditoria_apu_tecnica.json");
 
 const source = fs.readFileSync(sourcePath, "utf8");
 
+// La auditoría usa la cuadrilla canónica de una instalación nueva. En la app,
+// estos valores se reemplazan por los jornales configurados por cada usuario.
+const DEFAULT_LABOR = {
+  master: 47000,
+  helper: 25000,
+};
+
+function calculateLabor(apu, materialsCost) {
+  const explicit = Number(apu.precioMO || 0);
+  if (explicit > 0) return { cost: explicit, source: "explicit" };
+
+  const productivity = Number(apu.rendimiento || 0);
+  const crew = Math.max(0, Math.trunc(Number(apu.dotacion || 0)));
+  if (productivity > 0 && crew > 0) {
+    const dailyCrewCost = DEFAULT_LABOR.master + Math.max(0, crew - 1) * DEFAULT_LABOR.helper;
+    return { cost: dailyCrewCost / productivity, source: "journals" };
+  }
+
+  return {
+    cost: materialsCost * Number(apu.pctMO || 0) / 100,
+    source: "percentage_fallback",
+  };
+}
+
 function extractArray(constName) {
-  const marker = `const ${constName}=`;
+  const compiledNames = { DCAT: "qi", DMAT: "Qi", DAPU: "Ai" };
+  const variableName = compiledNames[constName] || constName;
+  const marker = `${variableName} = [`;
   const markerAt = source.indexOf(marker);
   if (markerAt < 0) throw new Error(`No se encontro ${marker}`);
-  const start = source.indexOf("[", markerAt + marker.length);
+  const start = source.indexOf("[", markerAt);
   if (start < 0) throw new Error(`No se encontro el array ${constName}`);
 
   let quote = "";
@@ -166,8 +192,9 @@ for (const apu of apus) {
     );
   }
 
-  if (!apu.esSubcontrato && lines.length === 0 && !(Number(apu.precioMO) > 0)) {
-    issues.push(issue("critical", "NO_COST_COMPONENT", apu, "Sin materiales, subcontrato ni precio base de mano de obra"));
+  const hasJournalLabor = Number(apu.rendimiento) > 0 && Number(apu.dotacion) > 0;
+  if (!apu.esSubcontrato && lines.length === 0 && !(Number(apu.precioMO) > 0) && !hasJournalLabor) {
+    issues.push(issue("critical", "NO_COST_COMPONENT", apu, "Sin materiales, subcontrato, precio base ni cálculo de mano de obra por jornales"));
   }
   if (apu.esSubcontrato && !(Number(apu.precioSubcontrato) > 0)) {
     issues.push(issue("critical", "INVALID_SUBCONTRACT_PRICE", apu, "Subcontrato sin precio positivo"));
@@ -316,7 +343,11 @@ for (const apu of apus) {
     );
   }
 
-  if (/hormigon h 20 premezclado/.test(selectedText) && /arena lavada|piedra chancada/.test(selectedText)) {
+  if (
+    /hormigon h 20 premezclado/.test(selectedText)
+    && /arena lavada|piedra chancada/.test(selectedText)
+    && apu.capaBaseIndependiente !== true
+  ) {
     issues.push(
       issue(
         "medium",
@@ -374,9 +405,8 @@ for (const apu of apus) {
     }
   }
 
-  const laborCost = Number(apu.precioMO) > 0
-    ? Number(apu.precioMO)
-    : materialsCost * Number(apu.pctMO || 0) / 100;
+  const labor = calculateLabor(apu, materialsCost);
+  const laborCost = labor.cost;
   const base = apu.esSubcontrato ? Number(apu.precioSubcontrato || 0) : materialsCost + laborCost;
   const gg = base * Number(apu.pctGG || 0) / 100;
   const profit = (base + gg) * Number(apu.pctUtilidad || 0) / 100;
@@ -393,6 +423,7 @@ for (const apu of apus) {
     crew: Number(apu.dotacion || 0),
     materialsCost: Math.round(materialsCost),
     laborCost: Math.round(laborCost),
+    laborSource: labor.source,
     computedPrice: Math.round(computed),
     referencePrice: Number(catalogItem && catalogItem.precio || 0),
     materials: lines.map((line) => {

@@ -69,6 +69,8 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
 
     const handleSend = () => {
         if (!phone) return setToast("⚠️ Este proveedor no tiene número de teléfono registrado.");
+        
+        // Implicit PDF download if needed, or simply WhatsApp link
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(finalMsg)}`, "_blank");
     };
 
@@ -107,7 +109,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                     }),
 
                                     e.jsxs("label", {
-                                        style: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "var(--bg)", borderRadius: 8, cursor: "pointer" },
+                                        style: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "var(--sb)", borderRadius: 8, cursor: "pointer" },
                                         children: [
                                             e.jsx("span", { style: { fontSize: 14, fontWeight: 500 }, children: "📋 Incluir detalle de materiales" }),
                                             e.jsx("input", { type: "checkbox", checked: includeItems, onChange: (ev) => setIncludeItems(ev.target.checked), style: { width: 40, height: 20, accentColor: "#25D366", cursor: "pointer" } })
@@ -115,7 +117,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                     }),
                                     
                                     !isSC && e.jsxs("label", {
-                                        style: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "var(--bg)", borderRadius: 8, cursor: "pointer" },
+                                        style: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "var(--sb)", borderRadius: 8, cursor: "pointer" },
                                         children: [
                                             e.jsx("span", { style: { fontSize: 14, fontWeight: 500 }, children: "💰 Incluir totales (neto + IVA)" }),
                                             e.jsx("input", { type: "checkbox", checked: includeTotals, onChange: (ev) => setIncludeTotals(ev.target.checked), style: { width: 40, height: 20, accentColor: "#25D366", cursor: "pointer" } })
@@ -123,7 +125,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                     }),
                                     
                                     e.jsxs("label", {
-                                        style: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "var(--bg)", borderRadius: 8, cursor: "pointer" },
+                                        style: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "var(--sb)", borderRadius: 8, cursor: "pointer" },
                                         children: [
                                             e.jsx("span", { style: { fontSize: 14, fontWeight: 500 }, children: "💳 Incluir condiciones de cierre" }),
                                             e.jsx("input", { type: "checkbox", checked: includeCond, onChange: (ev) => setIncludeCond(ev.target.checked), style: { width: 40, height: 20, accentColor: "#25D366", cursor: "pointer" } })
@@ -173,7 +175,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                         children: [
                             e.jsx("button", {
                                 onClick: handleCopy,
-                                style: { flex: 1, padding: "12px", background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, cursor: "pointer", fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 },
+                                style: { flex: 1, padding: "12px", background: "var(--sb)", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, cursor: "pointer", fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 },
                                 children: "📋 Copiar mensaje"
                             }),
                             e.jsx("button", {
@@ -344,97 +346,24 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                         } catch (e) {}
                     }
                     
+                    y += 30;
                     doc.setFontSize(10);
-                    doc.setTextColor(100);
-                    doc.text(`${new Date().toLocaleDateString("es-CL", {day: 'numeric', month: 'long', year: 'numeric'})}`, 196, y + 5, { align: "right" });
-                    doc.text(`Ref. Presupuesto N° ${budget.id}`, 196, y + 10, { align: "right" });
-                    
-                    y += 25;
-                    
-                    doc.setFontSize(16);
-                    doc.setFont("helvetica", "bold");
-                    doc.setTextColor(30, 50, 120);
-                    const companyName = cfg?.empresa || "Constructora";
-                    doc.text(companyName, 14, y);
-                    
-                    y += 6;
-                    doc.setFontSize(9);
-                    doc.setFont("helvetica", "normal");
-                    doc.setTextColor(100);
-                    const city = "Tu Ciudad, Chile";
-                    doc.text(`RUT: ${cfg?.rut || "Sin RUT"} | ${city}`, 14, y);
-                    y += 5;
-                    doc.text(`${cfg?.telefono || "Sin Fono"} | ${cfg?.email || "Sin Email"}`, 14, y);
-                    
+                    doc.setTextColor(50);
+                    doc.text(`Fecha: ${new Date().toLocaleDateString("es-CL")}`, 14, y);
                     y += 10;
-                    
-                    doc.setDrawColor(...accentRGB);
-                    doc.setLineWidth(0.6);
-                    doc.line(14, y, 196, y);
-                    
-                    y += 15;
-                    
-                    doc.setFontSize(11);
-                    doc.setTextColor(40);
-                    doc.text("Estimado/a ", 14, y);
+                    doc.setFontSize(12);
                     doc.setFont("helvetica", "bold");
-                    const provName = prov.nombre || "Proveedor";
-                    doc.text(provName + ",", 14 + doc.getTextWidth("Estimado/a "), y);
-                    
-                    y += 12;
-                    doc.setFont("helvetica", "normal");
-                    
-                    const p1 = `Por medio de la presente, ${companyName} se dirige a ustedes para solicitar su mejor propuesta técnica y económica para la provisión de materiales correspondientes a ${budget.descripcion}.`;
-                    const p2 = `Contamos con amplia experiencia en proyectos de construcción, y buscamos establecer alianzas con proveedores comprometidos con la calidad, los plazos y el buen servicio.`;
-                    const p3 = `Nuestra solicitud ha sido elaborada considerando un listado de materiales clave para la ejecución, detallado en la página siguiente.`;
-                    
-                    doc.text(doc.splitTextToSize(p1, 180), 14, y);
-                    y += 14;
-                    doc.text(doc.splitTextToSize(p2, 180), 14, y);
-                    y += 14;
-                    doc.text(doc.splitTextToSize(p3, 180), 14, y);
-                    
-                    y += 15;
-                    
-                    doc.setDrawColor(...accentRGB);
-                    doc.setLineWidth(1.5);
-                    doc.line(14, y, 14, y + 25);
-                    
-                    doc.setFontSize(9);
-                    doc.setFont("helvetica", "bold");
-                    doc.setTextColor(120);
-                    doc.text("RESUMEN DE LA SOLICITUD", 18, y + 4);
-                    
-                    doc.setFontSize(9);
-                    doc.setFont("helvetica", "normal");
-                    doc.setTextColor(100);
-                    doc.text("Proyecto:", 18, y + 12);
-                    doc.text("Materiales solicitados:", 105, y + 12);
-                    
-                    doc.setFontSize(11);
-                    doc.setFont("helvetica", "bold");
-                    doc.setTextColor(30, 50, 120);
-                    doc.text(budget.descripcion.substring(0, 45) + (budget.descripcion.length > 45 ? '...' : ''), 18, y + 18);
-                    doc.setTextColor(...accentRGB);
-                    doc.text(`${items.length} ítems`, 105, y + 18);
-                    
-                    y += 35;
-                    
-                    doc.setFontSize(11);
-                    doc.setFont("helvetica", "normal");
-                    doc.setTextColor(40);
-                    
-                    const p4 = `Quedamos a su entera disposición para resolver cualquier consulta o aclarar los alcances de los materiales requeridos.`;
-                    doc.text(doc.splitTextToSize(p4, 180), 14, y);
+                    doc.text("CARTA DE INVITACIÓN A COTIZAR", 14, y);
                     y += 10;
-                    
-                    const p5 = `Agradecemos de antemano su pronta respuesta.`;
-                    doc.text(doc.splitTextToSize(p5, 180), 14, y);
-                    
-                    y += 15;
-                    doc.text("Atentamente,", 14, y);
-                    
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(11);
+                    doc.text(`Señores ${prov.nombre},`, 14, y);
                     y += 10;
+                    const letterText = `Por medio de la presente, nos dirigimos a ustedes para solicitar una cotización formal de los materiales y/o servicios detallados en la página adjunta, requeridos para nuestro proyecto "${budget.descripcion}".\n\nAgradeceremos que su cotización incluya:\n- Precios unitarios netos y totales.\n- Disponibilidad y tiempos de entrega.\n- Condiciones de pago.\n- Vigencia de la oferta.\n\nQuedamos a la espera de su pronta respuesta para proceder con el análisis comercial y eventual emisión de la orden de compra.\n\nSin otro particular, saluda atentamente a usted,`;
+                    
+                    const splitText = doc.splitTextToSize(letterText, 180);
+                    doc.text(splitText, 14, y);
+                    y += 80;
                     
                     if (cfg?.firmaImg) {
                         try {
@@ -444,34 +373,22 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                                 doc.addImage(cfg.firmaImg, cfg.firmaImg.includes('png') ? 'PNG' : 'JPEG', 14, y, w*ratio, h*ratio);
                                 y += (h*ratio) + 2;
                             }
-                        } catch (e) { y += 20; }
-                    } else {
-                        y += 20;
+                        } catch (e) { y += 4; }
                     }
                     
-                    y += 10;
-                    doc.setDrawColor(200);
-                    doc.setLineWidth(0.5);
-                    doc.line(14, y, 100, y);
-                    doc.line(110, y, 196, y);
-                    
-                    y += 6;
-                    
-                    doc.setFontSize(10);
-                    doc.setFont("helvetica", "bold");
-                    doc.setTextColor(30, 50, 120);
-                    doc.text(companyName, 57, y, { align: "center" });
-                    doc.text(provName, 153, y, { align: "center" });
-                    
+                    doc.setDrawColor(160, 170, 185);
+                    doc.setLineWidth(0.4);
+                    doc.line(14, y, 70, y);
                     y += 5;
-                    doc.setFontSize(9);
+                    if (cfg?.firmaNombre) {
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(9);
+                        doc.text(cfg.firmaNombre, 14, y);
+                        y += 5;
+                    }
                     doc.setFont("helvetica", "normal");
-                    doc.setTextColor(100);
-                    doc.text("Representante Legal — " + companyName, 57, y, { align: "center" });
-                    doc.text("RUT: ____________________", 153, y, { align: "center" });
-                    
                     doc.setFontSize(8);
-                    doc.text(`Enlace Constructor — ${companyName} · ${new Date().toLocaleDateString("es-CL")}`, 105, 285, { align: "center" });
+                    doc.text(cfg?.empresa || "Constructora", 14, y);
                     
                     doc.addPage();
                     y = 14;
@@ -644,48 +561,26 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                     finalY += 5;
                 }
                 
-                    doc.text(cfg?.empresa || "Firma Autorizada", 14, finalY);
-                    
-                    const pdfName = `${isSC ? "Cotizacion" : "Orden_Compra"}_${prov.nombre.replace(/\s+/g, '_')}_P${budget.id}.pdf`;
-                    const pdfBlob = doc.output("blob");
-                    const pdfDataUri = URL.createObjectURL(pdfBlob);
-                    
-                    docsGenerated.push({ prov, items, subtotal, pdfName, pdfDataUri, pdfBlob });
-                }
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(8);
+                doc.setTextColor(100, 115, 130);
+                doc.text(cfg?.empresa || "Firma Autorizada", 14, finalY);
                 
-                const saveHistory = (docs) => {
-                    try {
-                        const history = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_adquisiciones") || "[]");
-                        const newEntries = docs.map(d => ({
-                            id: `REQ-${new Date().getTime().toString(36)}-${Math.random().toString(36).substr(2, 5)}`.toUpperCase(),
-                            presupuestoId: budget.id,
-                            fecha: new Date().toLocaleDateString("es-CL"),
-                            proveedorId: d.prov.id,
-                            proveedorNombre: d.prov.nombre,
-                            tipo: docType, // 'sc' or 'oc'
-                            estado: docType === "sc" ? "Esperando Cotización" : "Orden Emitida",
-                            materiales: d.items.map(i => ({
-                                desc: i.nombre,
-                                cant: i.cantidadTotal,
-                                unidad: i.unidad,
-                                precioRef: i.precioReferencia
-                            }))
-                        }));
-                        localStorage.setItem("enlace_constructor_pro_v1_adquisiciones", JSON.stringify([...newEntries, ...history]));
-                    } catch (e) {
-                        console.error("Error saving history", e);
-                    }
-                };
-                saveHistory(docsGenerated);
+                const pdfName = `${isSC ? "Cotizacion" : "Orden_Compra"}_${prov.nombre.replace(/\s+/g, '_')}_P${budget.id}.pdf`;
+                const pdfBlob = doc.output("blob");
+                const pdfDataUri = URL.createObjectURL(pdfBlob);
                 
-                setGeneratedDocs(docsGenerated);
-                setActiveDocIndex(0);
-            } catch (error) {
-                console.error("Error generating preview:", error);
-                setToast("❌ Hubo un error al generar los documentos.");
-            } finally {
-                setIsGenerating(false);
+                docsGenerated.push({ prov, items, subtotal, pdfName, pdfDataUri });
             }
+            
+            setGeneratedDocs(docsGenerated);
+            setActiveDocIndex(0);
+        } catch (error) {
+            console.error("Error generating preview:", error);
+            setToast("❌ Hubo un error al generar los documentos.");
+        } finally {
+            setIsGenerating(false);
+        }
     };
 
     if (activeWhatsAppDoc) {
@@ -752,12 +647,12 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                                                 e.jsx("a", {
                                                     href: activeDoc.pdfDataUri,
                                                     download: activeDoc.pdfName,
-                                                    style: { padding: "10px 20px", background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)", textDecoration: "none", borderRadius: 8, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 8 },
+                                                    style: { padding: "10px 20px", background: "var(--sb)", border: "1px solid var(--border)", color: "var(--text)", textDecoration: "none", borderRadius: 8, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 8 },
                                                     children: "⬇ Descargar PDF"
                                                 }),
                                                 e.jsx("a", {
                                                     href: `mailto:${activeDoc.prov.email||""}?subject=${encodeURIComponent("Solicitud de " + (docType==="sc"?"Cotización":"Compra") + " - " + budget.descripcion)}&body=${encodeURIComponent("Adjunto encontrará el documento del requerimiento.\n\nQuedamos atentos.\nSaludos.")}`,
-                                                    style: { padding: "10px 20px", background: "var(--bg)", border: "1px solid var(--accent)", color: "var(--accent)", textDecoration: "none", borderRadius: 8, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 8 },
+                                                    style: { padding: "10px 20px", background: "var(--sb)", border: "1px solid var(--accent)", color: "var(--accent)", textDecoration: "none", borderRadius: 8, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 8 },
                                                     children: "✉️ Email"
                                                 }),
                                                 e.jsx("button", {
@@ -817,12 +712,12 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                                                     style: { display: "flex", gap: 12 },
                                                     children: [
                                                         e.jsx("button", {
-                                                            style: { flex: 1, padding: "12px", borderRadius: 8, border: docType === "sc" ? "none" : "1px solid var(--border)", background: docType === "sc" ? "#f5a020" : "var(--bg)", color: docType === "sc" ? "#ffffff" : "var(--text)", fontWeight: docType === "sc" ? 700 : 500, cursor: "pointer", boxShadow: docType === "sc" ? "0 4px 10px rgba(245, 160, 32, 0.3)" : "none", transition: "all 0.2s" },
+                                                            style: { flex: 1, padding: "10px", borderRadius: 6, border: docType === "sc" ? "2px solid var(--accent)" : "1px solid var(--border)", background: docType === "sc" ? "rgba(var(--accent-rgb), 0.1)" : "var(--bg)", color: "var(--text)", fontWeight: docType === "sc" ? 700 : 400, cursor: "pointer" },
                                                             onClick: () => setDocType("sc"),
                                                             children: "📝 Solicitud de Cotización"
                                                         }),
                                                         e.jsx("button", {
-                                                            style: { flex: 1, padding: "12px", borderRadius: 8, border: docType === "oc" ? "none" : "1px solid var(--border)", background: docType === "oc" ? "#f5a020" : "var(--bg)", color: docType === "oc" ? "#ffffff" : "var(--text)", fontWeight: docType === "oc" ? 700 : 500, cursor: "pointer", boxShadow: docType === "oc" ? "0 4px 10px rgba(245, 160, 32, 0.3)" : "none", transition: "all 0.2s" },
+                                                            style: { flex: 1, padding: "10px", borderRadius: 6, border: docType === "oc" ? "2px solid var(--accent)" : "1px solid var(--border)", background: docType === "oc" ? "rgba(var(--accent-rgb), 0.1)" : "var(--bg)", color: "var(--text)", fontWeight: docType === "oc" ? 700 : 400, cursor: "pointer" },
                                                             onClick: () => setDocType("oc"),
                                                             children: "🛒 Orden de Compra"
                                                         })
@@ -890,7 +785,7 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                                                                 e.jsxs("td", { style: { padding: "10px", display: "flex", alignItems: "center", gap: 6 }, children: [
                                                                     e.jsx("input", {
                                                                         type: "number",
-                                                                        style: { width: 70, background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)", padding: "4px 8px", borderRadius: 4, textAlign: "right" },
+                                                                        style: { width: 70, background: "var(--sb)", border: "1px solid var(--border)", color: "var(--text)", padding: "4px 8px", borderRadius: 4, textAlign: "right" },
                                                                         value: item.cantidadTotal,
                                                                         onChange: (ev) => handleUpdateQuantity(item.id, ev.target.value)
                                                                     }),
@@ -898,7 +793,7 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                                                                 ]}),
                                                                 e.jsxs("td", { style: { padding: "10px", color: "var(--muted)" }, children: ["$", Math.round(item.precioReferencia).toLocaleString("es-CL")] }),
                                                                 e.jsx("td", { style: { padding: "10px" }, children: e.jsxs("select", {
-                                                                    style: { background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)", padding: "6px", borderRadius: 4, width: "100%", fontSize: 13 },
+                                                                    style: { background: "var(--sb)", border: "1px solid var(--border)", color: "var(--text)", padding: "6px", borderRadius: 4, width: "100%", fontSize: 13 },
                                                                     value: item.proveedorId,
                                                                     onChange: (ev) => handleAssignProvider(item.id, ev.target.value),
                                                                     children: [
@@ -960,7 +855,7 @@ function GeneradorOCModulo({budget, onClose, cfg, setToast}) {
                         style: { padding: "16px 24px", borderTop: "1px solid var(--border)", background: "rgba(0,0,0,0.15)", display: "flex", justifyContent: "flex-end", gap: 12 },
                         children: [
                             e.jsx("button", {
-                                style: { padding: "10px 24px", fontSize: 14, background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, cursor: "pointer" },
+                                style: { padding: "10px 24px", fontSize: 14, background: "var(--sb)", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, cursor: "pointer" },
                                 onClick: onClose,
                                 children: "Cancelar"
                             }),

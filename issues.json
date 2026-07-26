@@ -1,0 +1,9 @@
+[
+  {
+    "level": "medium",
+    "code": "REFERENCE_PRICE_OUTLIER",
+    "apuId": 40515,
+    "apu": "Cierre Acmafor 3D 2.5m verde c/postes",
+    "detail": "Calculado $76816 vs referencia $29500 (2.60x)"
+  }
+]

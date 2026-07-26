@@ -42,6 +42,8 @@ const server = http.createServer((req, res) => {
     }
 
     if (urlPath === "/" || urlPath === "/index.html") {
+      // La aplicación de producción usa index.html + assets/index.js.
+      // app.html se conserva solamente como fuente auxiliar histórica.
       filePath = path.join(root, "index.html");
     }
 
@@ -81,4 +83,3 @@ server.listen(port, "127.0.0.1", () => {
   console.log(`Servidor local activo: http://localhost:${port}/`);
   console.log(`Sirviendo carpeta: ${root}`);
 });
-
