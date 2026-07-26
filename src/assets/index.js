@@ -19186,7 +19186,7 @@ Error generating stack: ` +
         s +
         '</span></div></div><div style="text-align:center"><div style="height:100px"></div><div style="border-top:1.5px solid #333;padding-top:8px"><strong style="font-size:14px;color:#1a3060;font-family:Arial,sans-serif">' +
         (i.nombre || "Cliente") +
-        '</strong><br/><span style="font-size:12px;color:#666;font-family:Arial,sans-serif">RUT: ___________________</span></div></div></div><div class="footer" style="margin-top:16px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;font-family:Arial,sans-serif;text-align:center">Enlace Constructor — ' +
+        '</strong><br/><span style="font-size:12px;color:#666;font-family:Arial,sans-serif">RUT: ___________________</span></div></div></div><div class="footer" style="margin-top:16px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;font-family:Arial,sans-serif;text-align:center">Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — ' +
         s +
         " · " +
         new Date().toLocaleDateString("es-CL") +
@@ -19270,7 +19270,7 @@ Error generating stack: ` +
         s +
         '</span></div></div><div style="text-align:center"><div style="height:100px"></div><div style="border-top:1.5px solid #333;padding-top:8px"><strong style="font-size:14px;color:#1a3060;font-family:Arial,sans-serif">' +
         (i.nombre || "Cliente") +
-        '</strong><br/><span style="font-size:12px;color:#666;font-family:Arial,sans-serif">RUT: ___________________</span></div></div></div><div class="footer" style="margin-top:16px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;font-family:Arial,sans-serif;text-align:center">Enlace Constructor — ' +
+        '</strong><br/><span style="font-size:12px;color:#666;font-family:Arial,sans-serif">RUT: ___________________</span></div></div></div><div class="footer" style="margin-top:16px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;font-family:Arial,sans-serif;text-align:center">Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — ' +
         s +
         " · " +
         new Date().toLocaleDateString("es-CL") +
@@ -19773,7 +19773,7 @@ Error generating stack: ` +
             return "<li>" + B + "</li>";
           })
           .join("") +
-        '</ul></div></div><div style="margin-top:18px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;font-family:Arial,sans-serif;text-align:center">Enlace Constructor Pro — ' +
+        '</ul></div></div><div style="margin-top:18px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;font-family:Arial,sans-serif;text-align:center">Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — ' +
         p +
         " · " +
         new Date().toLocaleDateString("es-CL") +
@@ -20144,7 +20144,7 @@ Error generating stack: ` +
         empresa +
         '</div></div></div><div style="text-align:center"><div style="height:100px"></div><div style="border-top:1.5px solid #333;padding-top:8px"><div style="font-size:13px;font-weight:700;color:#1a3060">' +
         cliente +
-        '</div><div style="font-size:11px;color:#666;margin-top:2px">RUT: ___________________</div></div></div></div><div style="margin-top:32px;padding-top:10px;border-top:1px solid #eee;font-size:10px;color:#aaa;text-align:center">Generado por Enlace Constructor Pro — ' +
+        '</div><div style="font-size:11px;color:#666;margin-top:2px">RUT: ___________________</div></div></div></div><div style="margin-top:32px;padding-top:10px;border-top:1px solid #eee;font-size:10px;color:#aaa;text-align:center">Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — ' +
         empresa +
         " · " +
         new Date().toLocaleDateString("es-CL") +
@@ -22459,7 +22459,7 @@ ${r.empresa}`;
                         borderRadius: 4,
                       },
                       children:
-                        "Generado con Enlace Constructor Pro — Plan Starter",
+                        "Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo.",
                     }),
                   e.jsx("div", {
                     style: {
@@ -33061,7 +33061,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
       <th style="min-width:220px;padding:4px 8px;background:#1a3060;color:#fff;border:1px solid #ccc;text-align:left">Tarea</th>
       ${q}
     </tr></thead><tbody>${J}</tbody></table></div>
-    <p style="font-size:10px;color:#888;margin-top:20px">Generado por Enlace Constructor Pro</p>
+    <p style="font-size:10px;color:#888;margin-top:20px">Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo.</p>
     </body></html>`),
           re.document.close());
       },
@@ -34100,7 +34100,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
     <table><thead><tr><th>Material</th><th>Cantidad</th><th>Unidad</th><th>Partidas</th></tr></thead>
     <tbody>${S.map(($) => `<tr><td>${$.nombre}</td><td>${+$.cantidad.toFixed(3)}</td><td>${$.unidad}</td><td style="font-size:11px;color:#666">${($.partidas || []).join(", ")}</td></tr>`).join("")}</tbody>
     </table>
-    <p style="font-size:11px;color:#888;margin-top:20px">Enlace Constructor Pro</p>
+    <p style="font-size:11px;color:#888;margin-top:20px">Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo.</p>
     </body></html>`),
           U.document.close());
       };
@@ -35194,7 +35194,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
               )
               .join(
                 "",
-              )}</tbody></table><div class="res">Planchas: <strong>${k.planchas.length}</strong> · Piezas: <strong>${k.totalPiezas}</strong> · Aprovechamiento: <strong>${k.aprovechamiento}%</strong> · Costo: <strong>$${k.costTotal.toLocaleString("es-CL")}</strong></div>${G ? `<div class="ret"><h3 style="margin:0 0 10px;color:#ea580c">↩ Retazos aprovechables</h3><table><thead><tr><th style="background:#ea580c">Plancha</th><th style="background:#ea580c">Dimensiones</th><th style="background:#ea580c">Área</th></tr></thead><tbody>${G}</tbody></table></div>` : ""}<p style="font-size:11px;color:#888;margin-top:20px">Enlace Constructor Pro</p></body></html>`,
+              )}</tbody></table><div class="res">Planchas: <strong>${k.planchas.length}</strong> · Piezas: <strong>${k.totalPiezas}</strong> · Aprovechamiento: <strong>${k.aprovechamiento}%</strong> · Costo: <strong>$${k.costTotal.toLocaleString("es-CL")}</strong></div>${G ? `<div class="ret"><h3 style="margin:0 0 10px;color:#ea580c">↩ Retazos aprovechables</h3><table><thead><tr><th style="background:#ea580c">Plancha</th><th style="background:#ea580c">Dimensiones</th><th style="background:#ea580c">Área</th></tr></thead><tbody>${G}</tbody></table></div>` : ""}<p style="font-size:11px;color:#888;margin-top:20px">Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo.</p></body></html>`,
             oe = new Blob([ie], { type: "text/html;charset=utf-8" }),
             ce = URL.createObjectURL(oe),
             te = document.createElement("a");
@@ -39084,7 +39084,7 @@ MATERIALES:
       (z +=
         "<div style='border-top:1.5px solid #333;padding-top:8px'><strong style='color:#1a3060;font-size:14px'>Cliente / Mandante</strong><br/><span style='font-size:12px;color:#666'>RUT: ___________________</span></div></div></div>"),
       (z +=
-        "<div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>Enlace Constructor — " +
+        "<div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — " +
         l +
         " · " +
         new Date().toLocaleDateString("es-CL") +
@@ -39218,7 +39218,7 @@ MATERIALES:
       (w +=
         "<div style='border-top:1.5px solid #333;padding-top:8px'><strong style='color:#1a3060;font-size:14px'>Cliente / Mandante</strong><br/><span style='font-size:12px;color:#666'>RUT: ___________________</span></div></div></div>"),
       (w +=
-        "<div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>Enlace Constructor — " +
+        "<div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — " +
         l +
         " · " +
         new Date().toLocaleDateString("es-CL") +
@@ -39317,7 +39317,7 @@ MATERIALES:
       (F +=
         "<div style='border-top:1.5px solid #333;padding-top:8px'><strong style='color:#1a3060;font-size:14px'>Cliente / Mandante</strong><br/><span style='font-size:12px;color:#666'>RUT: ___________________</span></div></div></div>"),
       (F +=
-        "<div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>Enlace Constructor — " +
+        "<div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — " +
         l +
         " · " +
         new Date().toLocaleDateString("es-CL") +
@@ -39470,7 +39470,7 @@ MATERIALES:
       (g +=
         "<div style='text-align:center'><div style='height:100px'></div><div style='border-top:1.5px solid #333;padding-top:8px'><strong style='color:#1a3060;font-size:14px'>Cliente / Mandante</strong><br/><span style='font-size:12px;color:#666'>RUT: ___________________</span></div></div></div>"),
       (g +=
-        "<div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>Enlace Constructor Pro — " +
+        "<div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — " +
         o +
         " · " +
         new Date().toLocaleDateString("es-CL") +
@@ -40706,7 +40706,7 @@ MATERIALES:
               Math.round((r.anticipo || 0.6) * 100) +
               "% = $" +
               A.toLocaleString("es-CL") +
-              ") · Generado por Enlace Constructor Pro",
+              ") · Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo.",
             "s",
             I(
               "EEF4FF",
@@ -42752,7 +42752,7 @@ MATERIALES:
             "",
             (n && n.empresa) || "",
             "",
-            "Enlace Constructor Pro — " +
+            "Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — " +
               new Date().toLocaleDateString("es-CL"),
           ].forEach((U, $) =>
             P(
@@ -49661,7 +49661,7 @@ MATERIALES:
         M(
           oe,
           0,
-          "Generado por Enlace Constructor Pro — " +
+          "Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — " +
             new Date().toLocaleDateString("es-CL"),
           "s",
           E(O, { sz: 8, color: { rgb: "7090B0" } }, {}, {}),
@@ -51776,7 +51776,7 @@ MATERIALES:
     h(
       v,
       0,
-      "★ Valores en CLP netos sin IVA — Ley de Compras Públicas N° 19.886 · Generado por Enlace Constructor Pro",
+      "★ Valores en CLP netos sin IVA — Ley de Compras Públicas N° 19.886 · Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo.",
       "s",
       j("EEF4FF", { italic: !0, sz: 9, color: { rgb: "3B5F86" } }, {}),
     );
@@ -58182,6 +58182,7 @@ MATERIALES:
                 { id: "presupuesto", label: "💰 Presupuesto" },
                 { id: "costos", label: "📊 Costos" },
                 { id: "integraciones", label: "🔌 Integraciones" },
+                { id: "sobre", label: "ℹ️ Sobre la aplicación" },
               ].map((x) =>
                 e.jsx(
                   "button",
@@ -59674,6 +59675,45 @@ MATERIALES:
                   ],
                 }),
             ],
+          }),
+        F === "sobre" &&
+          e.jsxs("div", {
+            style: c.card,
+            children: [
+              e.jsx("div", { style: c.ct, children: "ℹ️ Sobre la aplicación" }),
+              e.jsxs("div", {
+                style: { fontSize: 13, lineHeight: 1.6, color: a.text, whiteSpace: "pre-wrap" },
+                children: [
+                  e.jsx("strong", { children: "📜 Términos y Condiciones de Licencia y Uso — Enlace Constructor Pro (ECP)" }),
+                  "\n\n",
+                  e.jsx("strong", { children: "Versión del software:" }), " Enlace Constructor Pro v1.2\n",
+                  e.jsx("strong", { children: "Titular de los derechos:" }), " ENLACE\n\n",
+                  e.jsx("strong", { children: "1. Concesión de Licencia y Adquisición (Compra)" }), "\n",
+                  "Licencia de uso: Al adquirir o descargar el software, ENLACE otorga al usuario una licencia de uso limitada, no exclusiva, intransferible y revocable para utilizar Enlace Constructor Pro únicamente con fines internos o comerciales en su propia actividad profesional o empresarial.\n",
+                  "Reventa prohibida: Queda estrictamente prohibida la reventa, sublicenciamiento, alquiler, distribución comercial o comercialización de Enlace Constructor Pro, ya sea de forma parcial o total, sin el consentimiento expreso y por escrito de ENLACE.\n\n",
+                  e.jsx("strong", { children: "2. Propiedad Intelectual" }), "\n",
+                  "Titularidad: Todos los derechos de propiedad intelectual, industrial, marcas, interfaces gráficas, algoritmos y bases de datos integradas en Enlace Constructor Pro son propiedad exclusiva de ENLACE y están protegidos por las leyes y tratados internacionales de derechos de autor.\n",
+                  "Prohibición de modificación: El usuario no podrá aplicar ingeniería inversa, descompilar, desensamblar, modificar, alterar, traducir ni crear obras derivadas basadas en el software o en su código fuente.\n\n",
+                  e.jsx("strong", { children: "3. Difusión y Copias no Autorizadas" }), "\n",
+                  "Uso personal/empresarial: La licencia adquirida autoriza la instalación y uso del software en los dispositivos propiedad del usuario o de la empresa adquiriente.\n",
+                  "Restricción de difusión masiva: Se prohíbe terminantemente la distribución masiva, publicación de enlaces de descarga en foros, redes sociales, sitios de piratería, o el alojamiento de Enlace Constructor Pro en servidores públicos o nubes de acceso público.\n\n",
+                  e.jsx("strong", { children: "4. Exclusión de Garantías" }), "\n",
+                  "El software se proporciona «tal cual» (as is). ENLACE no garantiza que el funcionamiento de Enlace Constructor Pro sea ininterrumpido o esté completamente libre de errores.\n",
+                  "ENLACE no garantiza la adjudicación de licitaciones, rentabilidad de proyectos o la exactitud absoluta de los rendimientos constructivos sugeridos, los cuales son valores referenciales sujetos a revisión del profesional a cargo.\n\n",
+                  e.jsx("strong", { children: "5. Limitación de Responsabilidad (Importante para Licitaciones)" }), "\n",
+                  "Responsabilidad de presupuestos: La verificación técnica, matemática y económica de las cantidades de obra (cubicaciones), precios unitarios, rendimientos, leyes sociales e impuestos generados mediante el software es de exclusiva responsabilidad del usuario.\n",
+                  "Desvinculación legal: ENLACE no asumirá ninguna responsabilidad por lucro cesante, daños indirectos, pérdida de contratos, errores en licitaciones (públicas o privadas), multas, o cualquier otra pérdida económica derivada del uso o incapacidad de uso del software o de los resultados obtenidos por éste.\n\n",
+                  e.jsx("strong", { children: "6. Privacidad y Confidencialidad" }), "\n",
+                  "Datos del cliente: Toda la información, bases de datos de clientes, presupuestos y proyectos creados por el usuario dentro de Enlace Constructor Pro son de su exclusiva propiedad y confidencialidad. ENLACE no accede, comparte ni comercializa la información confidencial de las obras o proyectos gestionados localmente por el usuario en el software.\n\n",
+                  e.jsx("strong", { children: "7. Actualizaciones y Soporte" }), "\n",
+                  "El soporte técnico y las actualizaciones (mejoras de rendimiento, actualización de catálogo de materiales, corrección de bugs) estarán sujetos a los términos específicos del plan de mantenimiento, versión o suscripción que el usuario haya adquirido. ENLACE no tiene obligación de entregar actualizaciones gratuitas a versiones perpetuas a menos que se indique lo contrario en el momento de la compra.\n\n",
+                  e.jsx("strong", { children: "8. Rescisión y Suspensión de la Licencia" }), "\n",
+                  "ENLACE se reserva el derecho de rescindir o suspender de forma inmediata, y sin derecho a reembolso, la licencia de cualquier usuario o entidad que incumpla los presentes términos (por ejemplo, ante la detección de piratería, alteración de claves o difusión no autorizada). En caso de rescisión, el usuario deberá cesar todo uso del software y eliminar todas las copias instaladas en sus equipos.\n\n",
+                  e.jsx("strong", { children: "9. Jurisdicción y Ley Aplicable" }), "\n",
+                  "Cualquier controversia, disputa o reclamación legal derivada de la interpretación, adquisición o uso de Enlace Constructor Pro se regirá por las leyes vigentes del país/región de domicilio fiscal de ENLACE, sometiéndose las partes a los tribunales competentes de dicha jurisdicción."
+                ]
+              })
+            ]
           }),
               ]
             })
@@ -63080,7 +63120,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         <span style='font-size:11px;color:#666'>Recepción conforme</span></div></div>
     </div>
     <div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>
-      Enlace Constructor Pro — ${K} · ${k.fecha}
+      Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — ${K} · ${k.fecha}
     </div></body></html>`;
         var ve = document.getElementById("ecp_preview_overlay");
         ve && ve.remove();
@@ -78740,7 +78780,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
 
             doc.setFontSize(8);
             doc.text(
-              `Enlace Constructor — ${companyName} · ${new Date().toLocaleDateString("es-CL")}`,
+              `Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — ${companyName} · ${new Date().toLocaleDateString("es-CL")}`,
               105,
               285,
               { align: "center" },
