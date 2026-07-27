@@ -1,0 +1,535 @@
+{
+  "version": "1.0.0-fase1a",
+  "fase": "Fase 1A — propuesta de taxonomía (sin implementar)",
+  "generadoEl": "2026-07-27T15:54:17.828Z",
+  "fuente": {
+    "archivo": "src/assets/index.js",
+    "rama": "feature/taxonomia-ecp",
+    "nota": "Fuente canónica leída pero no modificada por esta fase."
+  },
+  "totales": {
+    "partidas": 311,
+    "materialesEnFuente": 327,
+    "apusEnFuente": 311
+  },
+  "vocabularioControlado": {
+    "rubros": [
+      "Obras preliminares",
+      "Demoliciones y desmontajes",
+      "Movimiento de tierras",
+      "Hormigón y fundaciones",
+      "Albañilería",
+      "Estructuras metálicas",
+      "Construcción liviana",
+      "Techumbres y aguas lluvias",
+      "Impermeabilización",
+      "Aislación y eficiencia energética",
+      "Fachadas y cerramientos",
+      "Puertas, ventanas y carpinterías",
+      "Pisos y revestimientos",
+      "Cielos y terminaciones",
+      "Pinturas y recubrimientos",
+      "Instalaciones sanitarias",
+      "Alcantarillado y drenaje",
+      "Instalaciones de gas",
+      "Instalaciones eléctricas",
+      "Corrientes débiles y seguridad electrónica",
+      "Climatización y ventilación",
+      "Protección contra incendios",
+      "Accesibilidad universal",
+      "Equipamiento y mobiliario",
+      "Obras exteriores y urbanización",
+      "Paisajismo y riego",
+      "Piscinas",
+      "Servicios profesionales",
+      "Mantención general",
+      "Limpieza, pruebas y entrega"
+    ],
+    "tiposIntervencion": [
+      "Obra nueva",
+      "Ampliación",
+      "Remodelación",
+      "Reposición",
+      "Reparación",
+      "Mantención preventiva",
+      "Mantención correctiva",
+      "Demolición",
+      "Desmontaje",
+      "Regularización",
+      "Servicio profesional"
+    ],
+    "alcances": [
+      "Solo suministro",
+      "Solo instalación",
+      "Solo mano de obra",
+      "Suministro e instalación",
+      "Fabricación e instalación",
+      "Desmontaje y retiro",
+      "Reparación parcial",
+      "Servicio completo",
+      "Subcontrato"
+    ]
+  },
+  "categoriasActualesARubroPropuesto": {
+    "Pintura": [
+      {
+        "rubro": "Pinturas y recubrimientos",
+        "partidas": 7
+      }
+    ],
+    "Albañilería": [
+      {
+        "rubro": "Albañilería",
+        "partidas": 15
+      }
+    ],
+    "Metalcon NC": [
+      {
+        "rubro": "Construcción liviana",
+        "partidas": 9
+      },
+      {
+        "rubro": "Cielos y terminaciones",
+        "partidas": 3
+      }
+    ],
+    "Metalcon Rem.": [
+      {
+        "rubro": "Construcción liviana",
+        "partidas": 2
+      }
+    ],
+    "Metalcon Mant.": [
+      {
+        "rubro": "Techumbres y aguas lluvias",
+        "partidas": 1
+      }
+    ],
+    "Madera NC": [
+      {
+        "rubro": "Construcción liviana",
+        "partidas": 8
+      },
+      {
+        "rubro": "Cielos y terminaciones",
+        "partidas": 3
+      }
+    ],
+    "Madera Mant.": [
+      {
+        "rubro": "Techumbres y aguas lluvias",
+        "partidas": 2
+      }
+    ],
+    "Impermeable": [
+      {
+        "rubro": "Impermeabilización",
+        "partidas": 4
+      }
+    ],
+    "Pisos": [
+      {
+        "rubro": "Pisos y revestimientos",
+        "partidas": 14
+      }
+    ],
+    "Carpintería": [
+      {
+        "rubro": "Puertas, ventanas y carpinterías",
+        "partidas": 10
+      }
+    ],
+    "Eléctrica": [
+      {
+        "rubro": "Instalaciones eléctricas",
+        "partidas": 7
+      }
+    ],
+    "Sanitario": [
+      {
+        "rubro": "Instalaciones sanitarias",
+        "partidas": 9
+      },
+      {
+        "rubro": "Alcantarillado y drenaje",
+        "partidas": 5
+      }
+    ],
+    "Gas": [
+      {
+        "rubro": "Instalaciones de gas",
+        "partidas": 8
+      },
+      {
+        "rubro": "Servicios profesionales",
+        "partidas": 1
+      }
+    ],
+    "Demolición": [
+      {
+        "rubro": "Demoliciones y desmontajes",
+        "partidas": 8
+      }
+    ],
+    "Ojalaería": [
+      {
+        "rubro": "Techumbres y aguas lluvias",
+        "partidas": 3
+      }
+    ],
+    "Regularización": [
+      {
+        "rubro": "Servicios profesionales",
+        "partidas": 2
+      }
+    ],
+    "Varios": [
+      {
+        "rubro": "Corrientes débiles y seguridad electrónica",
+        "partidas": 1
+      },
+      {
+        "rubro": "Puertas, ventanas y carpinterías",
+        "partidas": 1
+      }
+    ],
+    "Estructuras Metálicas": [
+      {
+        "rubro": "Estructuras metálicas",
+        "partidas": 18
+      }
+    ],
+    "Mov. de Tierras": [
+      {
+        "rubro": "Movimiento de tierras",
+        "partidas": 9
+      }
+    ],
+    "Obras Exteriores": [
+      {
+        "rubro": "Obras exteriores y urbanización",
+        "partidas": 8
+      }
+    ],
+    "Climatización": [
+      {
+        "rubro": "Climatización y ventilación",
+        "partidas": 8
+      }
+    ],
+    "Seguridad": [
+      {
+        "rubro": "Corrientes débiles y seguridad electrónica",
+        "partidas": 5
+      }
+    ],
+    "Hormigón Armado": [
+      {
+        "rubro": "Hormigón y fundaciones",
+        "partidas": 16
+      }
+    ],
+    "Obras Provisorias": [
+      {
+        "rubro": "Obras preliminares",
+        "partidas": 8
+      }
+    ],
+    "Pavimentos": [
+      {
+        "rubro": "Obras exteriores y urbanización",
+        "partidas": 7
+      }
+    ],
+    "Piscinas": [
+      {
+        "rubro": "Piscinas",
+        "partidas": 9
+      }
+    ],
+    "Áreas Exteriores": [
+      {
+        "rubro": "Obras exteriores y urbanización",
+        "partidas": 12
+      },
+      {
+        "rubro": "Paisajismo y riego",
+        "partidas": 2
+      }
+    ],
+    "Hormigón y Albañilería": [
+      {
+        "rubro": "Hormigón y fundaciones",
+        "partidas": 5
+      }
+    ],
+    "Impermeabilización": [
+      {
+        "rubro": "Impermeabilización",
+        "partidas": 4
+      }
+    ],
+    "Instalaciones Sanitarias": [
+      {
+        "rubro": "Instalaciones sanitarias",
+        "partidas": 6
+      },
+      {
+        "rubro": "Alcantarillado y drenaje",
+        "partidas": 2
+      }
+    ],
+    "Instalaciones Eléctricas": [
+      {
+        "rubro": "Instalaciones eléctricas",
+        "partidas": 7
+      }
+    ],
+    "Techumbres": [
+      {
+        "rubro": "Techumbres y aguas lluvias",
+        "partidas": 5
+      }
+    ],
+    "Servicios Generales": [
+      {
+        "rubro": "Servicios profesionales",
+        "partidas": 2
+      },
+      {
+        "rubro": "Limpieza, pruebas y entrega",
+        "partidas": 1
+      },
+      {
+        "rubro": "Obras preliminares",
+        "partidas": 1
+      }
+    ],
+    "Mantención Techumbres": [
+      {
+        "rubro": "Techumbres y aguas lluvias",
+        "partidas": 2
+      }
+    ],
+    "Mantención Pintura": [
+      {
+        "rubro": "Pinturas y recubrimientos",
+        "partidas": 4
+      }
+    ],
+    "Mantención Sanitaria": [
+      {
+        "rubro": "Instalaciones sanitarias",
+        "partidas": 2
+      },
+      {
+        "rubro": "Alcantarillado y drenaje",
+        "partidas": 1
+      }
+    ],
+    "Mantención Eléctrica": [
+      {
+        "rubro": "Instalaciones eléctricas",
+        "partidas": 3
+      }
+    ],
+    "Reparaciones Generales": [
+      {
+        "rubro": "Puertas, ventanas y carpinterías",
+        "partidas": 1
+      },
+      {
+        "rubro": "Cielos y terminaciones",
+        "partidas": 1
+      }
+    ],
+    "Fachadas y Vidrios": [
+      {
+        "rubro": "Fachadas y cerramientos",
+        "partidas": 1
+      },
+      {
+        "rubro": "Puertas, ventanas y carpinterías",
+        "partidas": 1
+      }
+    ],
+    "Accesibilidad": [
+      {
+        "rubro": "Accesibilidad universal",
+        "partidas": 2
+      }
+    ],
+    "Protección Incendio": [
+      {
+        "rubro": "Protección contra incendios",
+        "partidas": 3
+      }
+    ],
+    "Corrientes Débiles": [
+      {
+        "rubro": "Corrientes débiles y seguridad electrónica",
+        "partidas": 3
+      }
+    ],
+    "Equipamiento": [
+      {
+        "rubro": "Equipamiento y mobiliario",
+        "partidas": 2
+      }
+    ],
+    "Equipamiento Comercial": [
+      {
+        "rubro": "Equipamiento y mobiliario",
+        "partidas": 4
+      }
+    ],
+    "Eficiencia Energética": [
+      {
+        "rubro": "Aislación y eficiencia energética",
+        "partidas": 2
+      }
+    ],
+    "Mantención Preventiva": [
+      {
+        "rubro": "Mantención general",
+        "partidas": 3
+      }
+    ],
+    "Retiro de Escombros": [
+      {
+        "rubro": "Demoliciones y desmontajes",
+        "partidas": 2
+      }
+    ],
+    "Metalcon Estructural": [
+      {
+        "rubro": "Estructuras metálicas",
+        "partidas": 12
+      }
+    ],
+    "Aislación": [
+      {
+        "rubro": "Aislación y eficiencia energética",
+        "partidas": 2
+      }
+    ],
+    "Tabiquería": [
+      {
+        "rubro": "Construcción liviana",
+        "partidas": 1
+      }
+    ],
+    "Servicios": [
+      {
+        "rubro": "Demoliciones y desmontajes",
+        "partidas": 1
+      }
+    ]
+  },
+  "especialidadPropuestaPorRubro": {
+    "Pinturas y recubrimientos": "Pintura",
+    "Albañilería": "Construcción general",
+    "Construcción liviana": "Construcción en seco (steel framing / madera)",
+    "Techumbres y aguas lluvias": "Techumbres",
+    "Cielos y terminaciones": "Terminaciones",
+    "Impermeabilización": "Impermeabilización",
+    "Pisos y revestimientos": "Terminaciones",
+    "Puertas, ventanas y carpinterías": "Carpintería / cerrajería",
+    "Instalaciones eléctricas": "Ingeniería eléctrica",
+    "Instalaciones sanitarias": "Ingeniería sanitaria",
+    "Instalaciones de gas": "Gasfitería certificada",
+    "Servicios profesionales": "Servicios profesionales",
+    "Demoliciones y desmontajes": "Construcción general",
+    "Corrientes débiles y seguridad electrónica": "Electrónica / seguridad",
+    "Estructuras metálicas": "Ingeniería estructural / metalmecánica",
+    "Movimiento de tierras": "Ingeniería civil — movimiento de tierras",
+    "Obras exteriores y urbanización": "Urbanización",
+    "Climatización y ventilación": "Climatización (HVAC)",
+    "Hormigón y fundaciones": "Ingeniería estructural",
+    "Alcantarillado y drenaje": "Ingeniería sanitaria",
+    "Obras preliminares": "Administración de obra",
+    "Piscinas": "Piscinas",
+    "Paisajismo y riego": "Paisajismo",
+    "Fachadas y cerramientos": "Fachadas",
+    "Accesibilidad universal": "Arquitectura / accesibilidad",
+    "Protección contra incendios": "Protección contra incendios",
+    "Equipamiento y mobiliario": "Carpintería / mobiliario",
+    "Aislación y eficiencia energética": "Eficiencia energética",
+    "Mantención general": "Mantención",
+    "Limpieza, pruebas y entrega": "Servicios generales de obra"
+  },
+  "categoriasTransitoriasIdentificadas": [
+    "Varios",
+    "Reparaciones Generales",
+    "Servicios Generales",
+    "Servicios",
+    "Fachadas y Vidrios"
+  ],
+  "categoriasDuplicadasOEquivalentes": [
+    {
+      "categorias": [
+        "Impermeable",
+        "Impermeabilización"
+      ],
+      "rubroUnificado": "Impermeabilización"
+    },
+    {
+      "categorias": [
+        "Servicios",
+        "Servicios Generales"
+      ],
+      "rubroUnificado": "Servicios profesionales (parcial; ver overrides por ítem)"
+    },
+    {
+      "categorias": [
+        "Equipamiento",
+        "Equipamiento Comercial"
+      ],
+      "rubroUnificado": "Equipamiento y mobiliario"
+    },
+    {
+      "categorias": [
+        "Seguridad",
+        "Corrientes Débiles"
+      ],
+      "rubroUnificado": "Corrientes débiles y seguridad electrónica"
+    }
+  ],
+  "categoriasQueMezclanRubroEIntervencion": [
+    "Metalcon NC",
+    "Metalcon Rem.",
+    "Metalcon Mant.",
+    "Metalcon Estructural",
+    "Madera NC",
+    "Madera Mant.",
+    "Mantención Pintura",
+    "Mantención Sanitaria",
+    "Mantención Eléctrica",
+    "Mantención Techumbres",
+    "Mantención Preventiva",
+    "Demolición",
+    "Regularización"
+  ],
+  "categoriasQueMezclanMaterialOSistemaConstructivo": [
+    "Metalcon NC",
+    "Metalcon Rem.",
+    "Metalcon Mant.",
+    "Metalcon Estructural",
+    "Madera NC",
+    "Madera Mant.",
+    "Hormigón Armado",
+    "Hormigón y Albañilería"
+  ],
+  "erroresOrtograficosDetectados": [
+    {
+      "categoria": "Ojalaería",
+      "problema": "Grafía incorrecta; el término correcto es \"Hojalatería\" (oficio de trabajar chapa/lámina metálica: canales, bajantes, cubiertas).",
+      "sugerencia": "Hojalatería"
+    },
+    {
+      "categoria": "Mov. de Tierras",
+      "problema": "Abreviatura inconsistente con el resto de las categorías (todas las demás usan el nombre completo).",
+      "sugerencia": "Movimiento de Tierras"
+    }
+  ]
+}
