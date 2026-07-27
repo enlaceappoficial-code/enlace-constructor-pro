@@ -76792,7 +76792,7 @@ Esta acción no se puede deshacer.`) &&
               style: {
                 marginTop: "auto",
                 borderTop: "1px solid rgba(255,255,255,0.2)",
-                padding: "10px 14px",
+                padding: "6px 14px",
               },
               children: [
                 window.__isElectron &&
@@ -76823,8 +76823,8 @@ Esta acción no se puede deshacer.`) &&
                     style: {
                       width: "100%",
                       textAlign: "left",
-                      marginBottom: 10,
-                      padding: "10px 10px",
+                      marginBottom: 6,
+                      padding: "6px 10px",
                       borderRadius: 7,
                       cursor: "pointer",
                       background: "rgba(52,211,153,.12)",
@@ -76839,7 +76839,7 @@ Esta acción no se puede deshacer.`) &&
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "space-between",
-                          marginBottom: 6,
+                          marginBottom: 2,
                         },
                         children: [
                           e.jsxs("div", {
@@ -77020,8 +77020,8 @@ Esta acción no se puede deshacer.`) &&
                     alignItems: "center",
                     gap: 7,
                     width: "100%",
-                    marginTop: 10,
-                    padding: "8px 10px",
+                    marginTop: 6,
+                    padding: "6px 10px",
                     borderRadius: 7,
                     cursor: "pointer",
                     background: "rgba(245,160,32,.12)",
