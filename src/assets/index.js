@@ -17790,26 +17790,27 @@ Error generating stack: ` +
       var p = o.reduce((b, h) => b + h.jornal * h.cantidad, 0);
       return p > 0 ? { total: p / r, costoCuadrillaDia: p, cuadrilla: o, label: o.map((b) => `${b.cantidad} ${b.rol}`).join(" + ") } : null;
     },
-    li = (t, i, r) => {
+    li = (t, i, r, opts) => {
       if (t.esSubcontrato) {
         var costoBase = parseFloat(t.precioSubcontrato) || 0,
           n = (costoBase * (parseFloat(t.pctGG) || 0)) / 100,
           utilidad = ((costoBase + n) * (parseFloat(t.pctUtilidad) || 0)) / 100;
         return { matTotal: 0, moTotal: 0, ggTotal: n, utilTotal: utilidad, precioFinal: Math.round(costoBase + n + utilidad), base: costoBase, moSource: "subcontrato", moLabel: "Subcontrato" };
       }
+      var forceMOFromPct = !!(opts && opts.forceMOFromPct);
       var l = (t.materiales || []).reduce((h, j) => {
           var F = i.find((g) => g.id === j.materialId);
           return h + (F ? F.precio : 0) * (parseFloat(j.cantidad) || 0);
         }, 0),
-        o = parseFloat(t.precioMO) || 0,
-        manoObra = o > 0 ? null : calculaMO(t, r),
-        s = o > 0 ? o : manoObra ? manoObra.total : (l * (parseFloat(t.pctMO) || 0)) / 100,
+        o = forceMOFromPct ? 0 : parseFloat(t.precioMO) || 0,
+        manoObra = forceMOFromPct ? null : (o > 0 ? null : calculaMO(t, r)),
+        s = forceMOFromPct ? (l * (parseFloat(t.pctMO) || 0)) / 100 : (o > 0 ? o : manoObra ? manoObra.total : (l * (parseFloat(t.pctMO) || 0)) / 100),
         m = ((l + s) * (parseFloat(t.pctGG) || 0)) / 100,
         p = l + s + m,
         C = (p * (parseFloat(t.pctUtilidad) || 0)) / 100,
         b = Math.round(p + C),
-        fuenteMO = o > 0 ? "manual" : manoObra ? "jornales" : "porcentaje",
-        etiquetaMO = o > 0 ? "Precio manual" : manoObra ? "Jornales / rendimiento" : `Porcentaje ${parseFloat(t.pctMO) || 0}%`;
+        fuenteMO = forceMOFromPct ? "override_manual" : (o > 0 ? "manual" : manoObra ? "jornales" : "porcentaje"),
+        etiquetaMO = forceMOFromPct ? `Override manual ${parseFloat(t.pctMO) || 0}%` : (o > 0 ? "Precio manual" : manoObra ? "Jornales / rendimiento" : `Porcentaje ${parseFloat(t.pctMO) || 0}%`);
       return { matTotal: l, moTotal: s, ggTotal: m, utilTotal: C, precioFinal: b, base: l, moSource: fuenteMO, moLabel: etiquetaMO, costoCuadrillaDia: manoObra && manoObra.costoCuadrillaDia, cuadrillaCalculada: manoObra && manoObra.cuadrilla, cuadrillaLabel: manoObra && manoObra.label };
     },
     Zl = (t) => {
@@ -30249,6 +30250,7 @@ ${r.empresa}`;
       [j, F] = V(cd && cd._customUtil !== undefined ? cd._customUtil : i.pctUtilidad),
       [g, z] = V(cd && cd._rendimiento !== undefined ? cd._rendimiento : i.rendimiento || 0),
       [B, w] = V(cd && cd._dotacion !== undefined ? cd._dotacion : i.dotacion || 1),
+      [moOverrideActivo, setMoOverrideActivo] = V(!!(cd && cd._moOverrideActivo)),
       [showManualMat, setShowManualMat] = V(false),
       [manualName, setManualName] = V(""),
       [manualUnit, setManualUnit] = V("und"),
@@ -30257,7 +30259,7 @@ ${r.empresa}`;
       [materialSearch, setMaterialSearch] = V(""),
       [materialPickerOpen, setMaterialPickerOpen] = V(false);
     var materialesActivos = s.filter((y) => y._activo && y._mat).map((y) => ({ materialId: y.materialId, cantidad: y.cantidad })),
-      calculoModal = li(u(d({}, i), { materiales: materialesActivos, pctMO: p, pctGG: b, pctUtilidad: j, rendimiento: g, dotacion: B }), r, cfgModal),
+      calculoModal = li(u(d({}, i), { materiales: materialesActivos, pctMO: p, pctGG: b, pctUtilidad: j, rendimiento: g, dotacion: B }), r, cfgModal, { forceMOFromPct: moOverrideActivo }),
       v = calculoModal.matTotal,
       x = calculoModal.moTotal,
       f = calculoModal.ggTotal,
@@ -30379,7 +30381,7 @@ ${r.empresa}`;
                   marginBottom: 16,
                 },
                 children: [
-                  ["MO (%)", p, C, "#34d399"],
+                  ["MO (%)", p, (val) => { setMoOverrideActivo(true); C(val); }, "#34d399"],
                   ["GG (%)", b, h, "#c084fc"],
                   ["Utilidad (%)", j, F, a.accent],
                 ].map(([y, P, A, S]) =>
@@ -30796,6 +30798,21 @@ ${r.empresa}`;
                     },
                     children: ["Composición del precio (por ", i.unidad, ")"],
                   }),
+                  moOverrideActivo &&
+                    e.jsx("div", {
+                      style: {
+                        fontSize: 11,
+                        fontWeight: 700,
+                        color: "#34d399",
+                        background: "#34d39922",
+                        border: "1px solid #34d39955",
+                        borderRadius: 6,
+                        padding: "4px 8px",
+                        marginBottom: 10,
+                        display: "inline-block",
+                      },
+                      children: "⚙️ Precio personalizado para este presupuesto",
+                    }),
                   [
                     ["Materiales", v, "#60a5fa"],
                     [`MO - ${calculoModal.moLabel}`, x, "#34d399"],
@@ -31062,7 +31079,7 @@ ${r.empresa}`;
                   padding: "11px",
                   fontSize: 16,
                 }),
-                onClick: () => l(k, g, B, v, s, p, b, j),
+                onClick: () => l(k, g, B, v, s, p, b, j, moOverrideActivo),
                 children: ["✓ Usar este precio (", ne(k), "/", i.unidad, ")"],
               }),
               e.jsxs("button", {
@@ -31070,7 +31087,10 @@ ${r.empresa}`;
                   padding: "11px 16px",
                   fontSize: 14,
                 }),
-                onClick: () => l(t ? t.precio : (i.precio || k), g, B, v, s, p, b, j),
+                onClick: () => {
+                  (C(i.pctMO), h(i.pctGG), F(i.pctUtilidad), setMoOverrideActivo(false));
+                  l(t ? t.precio : (i.precio || k), g, B, v, s, undefined, undefined, undefined, false);
+                },
                 children: ["Precio estándar (", ne(t ? t.precio : (i.precio || k)), ")"],
               }),
               e.jsx("button", {
@@ -37922,7 +37942,7 @@ MATERIALES:
         }
         D((J) => u(d({}, J), { items: E }));
       },
-      Y = (W, T, L, E, M_val, customMats, pMO, pGG, pUtil) => {
+      Y = (W, T, L, E, M_val, customMats, pMO, pGG, pUtil, moOverride) => {
         D((J) => {
           var re = [...J.items];
           return (
@@ -37935,6 +37955,7 @@ MATERIALES:
               _customMO: pMO,
               _customGG: pGG,
               _customUtil: pUtil,
+              _moOverrideActivo: !!moOverride,
               _apuId: k && k.apu ? k.apu.id : re[W]._apuId,
               _apuNombre: k && k.apu ? k.apu.nombre : re[W]._apuNombre,
               _tipoCosto: "auto",
@@ -38062,7 +38083,7 @@ MATERIALES:
             setMateriales: setMateriales,
             cfg: r,
             cantItem: parseFloat(I.items[k.idx] && I.items[k.idx].cant) || 1,
-            onConfirm: (W, T, L, E, customMats, pMO, pGG, pUtil) => Y(k.idx, W, T, L, E, customMats, pMO, pGG, pUtil),
+            onConfirm: (W, T, L, E, customMats, pMO, pGG, pUtil, moOverride) => Y(k.idx, W, T, L, E, customMats, pMO, pGG, pUtil, moOverride),
             onSkip: () => R(null),
             customData: I.items[k.idx],
           }),
