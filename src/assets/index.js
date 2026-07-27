@@ -11309,6 +11309,7 @@ Error generating stack: ` +
         unidad: "gl",
         precio: 82000,
         requiereMovilizacion: true,
+        satisfaceCargoComercial: ["visita_tecnica"],
       },
       {
         id: 311,
@@ -17713,9 +17714,9 @@ Error generating stack: ` +
         unidad = h.unidad || "",
         reglaAplicada = aplicaMinPrecio ? "precioMinimoPartida" : aplicaMinCantidad ? "cantidadMinimaFacturable" : "",
         motivo = aplicaMinPrecio
-          ? "Valor calculado: " + ne(totalCalculado) + " · Precio mínimo aplicado: " + ne(precioMinimoPartida)
+          ? "Valor calculado: " + ne(totalCalculado) + " · Precio mínimo del servicio aplicado: " + ne(precioMinimoPartida) + "."
           : aplicaMinCantidad
-            ? "Cantidad ingresada: " + cantidadIngresada + " " + unidad + " · Mínimo facturable: " + cantidadMinima + " " + unidad
+            ? "Cantidad solicitada: " + cantidadIngresada + " " + unidad + " · Mínimo comercial facturable: " + cantidadMinima + " " + unidad + "."
             : "";
       return {
         cantidadIngresada,
@@ -18508,7 +18509,14 @@ Error generating stack: ` +
           t.items
             .filter((ve) => ve.desc)
             .forEach((ve, xr) => {
-              var Fr = 8,
+              var Lve = calcularLineaPresupuesto(ve),
+                hrShow = Lve.cantidadIngresada,
+                hr = Lve.cantidadFacturable,
+                jr = Lve.precioUnitario,
+                Pr = Lve.totalLinea,
+                tieneNota = !!Lve.reglaAplicada,
+                Fr = tieneNota ? 12 : 8,
+                yTxt = tieneNota ? G + 4.3 : G + 5.3,
                 gr = xr % 2 === 0 ? re : Q;
               (o.setFillColor(...gr),
                 o.rect(14, G, 182, Fr, "F"),
@@ -18518,21 +18526,22 @@ Error generating stack: ` +
                 o.setFont("helvetica", "normal"),
                 o.setFontSize(8.5),
                 o.setTextColor(50, 60, 75),
-                o.text("" + (xr + 1), 16, G + 5.3),
-                o.text(
-                  (ve.desc || "").slice(0, fe) + (ve._cantidadMinimaFacturable || ve._precioMinimoPartida ? " *" : ""),
-                  25,
-                  G + 5.3,
-                ));
-              var Lve = calcularLineaPresupuesto(ve),
-                hr = Lve.cantidadFacturable,
-                jr = Lve.precioUnitario,
-                Pr = Lve.totalLinea,
-                Or = ve._tipoCosto || (ve._cid ? "auto" : "mo"),
+                o.text("" + (xr + 1), 16, yTxt),
+                o.text((ve.desc || "").slice(0, fe), 25, yTxt));
+              if (tieneNota) {
+                (o.setFont("helvetica", "italic"),
+                  o.setFontSize(6.5),
+                  o.setTextColor(180, 83, 9),
+                  o.text(Lve.motivo.slice(0, 95), 25, G + 9.3),
+                  o.setFont("helvetica", "normal"),
+                  o.setFontSize(8.5),
+                  o.setTextColor(50, 60, 75));
+              }
+              var Or = ve._tipoCosto || (ve._cid ? "auto" : "mo"),
                 Ar = 0,
                 Sr = 0;
-              (o.text("" + hr, ce, G + 5.3, { align: "right" }),
-                o.text(ve.unidad || "", te, G + 5.3, { align: "right" }));
+              (o.text("" + hrShow, ce, yTxt, { align: "right" }),
+                o.text(ve.unidad || "", te, yTxt, { align: "right" }));
               if (Or === "mat") Ar = Pr;
               else if (Or === "mo") Sr = Pr;
               else {
@@ -18542,21 +18551,21 @@ Error generating stack: ` +
               }
               if (ie === "mo") {
                 var Br = hr ? Sr / hr : 0;
-                (o.text(s(Br), 170, G + 5.3, { align: "right" }),
+                (o.text(s(Br), 170, yTxt, { align: "right" }),
                   o.setFont("helvetica", "bold"),
                   o.setTextColor(...F),
-                  o.text(s(Sr), 194, G + 5.3, { align: "right" }));
+                  o.text(s(Sr), 194, yTxt, { align: "right" }));
               } else {
                 (ie === "separado"
-                  ? (o.text(s(Sr), 160, G + 5.3, { align: "right" }),
-                    o.text(s(Ar), 178, G + 5.3, { align: "right" }),
+                  ? (o.text(s(Sr), 160, yTxt, { align: "right" }),
+                    o.text(s(Ar), 178, yTxt, { align: "right" }),
                     o.setFont("helvetica", "bold"),
                     o.setTextColor(...F),
-                    o.text(s(Pr), 194, G + 5.3, { align: "right" }))
-                  : (o.text(s(jr), 170, G + 5.3, { align: "right" }),
+                    o.text(s(Pr), 194, yTxt, { align: "right" }))
+                  : (o.text(s(jr), 170, yTxt, { align: "right" }),
                     o.setFont("helvetica", "bold"),
                     o.setTextColor(...F),
-                    o.text(s(Pr), 194, G + 5.3, { align: "right" })));
+                    o.text(s(Pr), 194, yTxt, { align: "right" })));
               }
               (G += Fr),
               G > 262 && (o.addPage(), (G = 18));
@@ -19362,7 +19371,7 @@ Error generating stack: ` +
           var k = parseFloat(e._apuMatUnit) || 0;
           ((I = Math.max(0, Math.min(x, k * u))), (D = Math.max(0, x - I)));
         }
-        return { cant: u, precio: d, tot: x, mat: I, noMat: D, nota: Lpp.motivo };
+        return { cant: Lpp.cantidadIngresada, precio: d, tot: x, mat: I, noMat: D, nota: Lpp.motivo };
       },
       B = [],
       w = 0;
@@ -19878,7 +19887,7 @@ Error generating stack: ` +
               v.includes("agua");
           return {
             desc: z.desc,
-            cant: LdfZ.cantidadFacturable,
+            cant: LdfZ.cantidadIngresada,
             unidad: z.unidad,
             subtotal: B,
             pct: w,
@@ -20024,6 +20033,7 @@ Error generating stack: ` +
         return (t.items || []).reduce(function (acc, I) {
           var Lts = calcularLineaPresupuesto(I),
             cant = Lts.cantidadFacturable,
+            cantShow = Lts.cantidadIngresada,
             precio = Lts.precioUnitario,
             tot = Lts.totalLinea,
             tipo = I._tipoCosto || (I._cid ? "auto" : "mo"),
@@ -20038,14 +20048,19 @@ Error generating stack: ` +
           }
           if (modo === "mo" && noMat <= 0) return acc;
           idx++;
-          var qty = cant + " " + (I.unidad || "");
+          var qty = cantShow + " " + (I.unidad || "");
+          var descHtml =
+            (I.desc || "") +
+            (Lts.reglaAplicada
+              ? '<div style="font-size:10px;color:#b45309;margin-top:2px">' + Lts.motivo + "</div>"
+              : "");
           if (modo === "separado")
             return (
               acc +
               '<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;color:#999;font-size:12px">' +
               idx +
               '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:12px">' +
-              (I.desc || "") +
+              descHtml +
               '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:12px">' +
               qty +
               '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
@@ -20063,7 +20078,7 @@ Error generating stack: ` +
               '<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;color:#999;font-size:12px">' +
               idx +
               '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:12px">' +
-              (I.desc || "") +
+              descHtml +
               '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:12px">' +
               qty +
               '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
@@ -20078,7 +20093,7 @@ Error generating stack: ` +
             '<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;color:#999;font-size:12px">' +
             idx +
             '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:12px">' +
-            (I.desc || "") +
+            descHtml +
             '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:12px">' +
             qty +
             '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
@@ -21877,7 +21892,7 @@ ${r.empresa}`;
                             ($.push([
                               ie + 1,
                               G.desc || "",
-                              Lg.cantidadFacturable,
+                              Lg.cantidadIngresada,
                               G.unidad || "",
                               Lg.precioUnitario,
                               Lg.totalLinea,
@@ -22305,7 +22320,7 @@ ${r.empresa}`;
                       e.jsx("tbody", {
                         children: (s.items || []).map((D, k) => {
                           var Luf = calcularLineaPresupuesto(D),
-                            cantRow = Luf.cantidadFacturable,
+                            cantRow = Luf.cantidadIngresada,
                             precioRow = Luf.precioUnitario,
                             totRow = Luf.totalLinea;
                           return e.jsxs(
@@ -37785,11 +37800,31 @@ MATERIALES:
       [P, A] = V(null),
       [S, O] = V(!0),
       [cargosSugeridos, setCargosSugeridos] = V(null);
+    const catalogItemSatisface = (cid, key) => {
+      var ci = i.find((W) => String(W.id) === String(cid));
+      return !!(
+        ci &&
+        Array.isArray(ci.satisfaceCargoComercial) &&
+        ci.satisfaceCargoComercial.includes(key)
+      );
+    };
+    const LEGACY_CARGO_KEY = {
+      movilizacion: "movilizacion",
+      visita_tecnica: "visitaTecnica",
+      trabajo_altura: "trabajoAltura",
+      retiro_residuos: "retiroResiduos",
+    };
+    const cargoYaCubierto = (key, currentItems) =>
+      (currentItems || []).some(
+        (it) =>
+          it._tipoCargoComercial === key ||
+          it._cargoComplementario === LEGACY_CARGO_KEY[key] ||
+          (it._cid && catalogItemSatisface(it._cid, key)),
+      );
     const generarCargosSugeridos = (catItem, currentItems) => {
       var mc = (r && r.minimosComerciales) || {};
       if (!mc.activo) return [];
-      var yaPresente = (key) =>
-        (currentItems || []).some((it) => it._cargoComplementario === key);
+      var yaPresente = (key) => cargoYaCubierto(key, currentItems);
       var out = [];
       if (catItem.requiereMovilizacion && !yaPresente("movilizacion"))
         out.push({
@@ -37798,29 +37833,56 @@ MATERIALES:
           motivo: "Esta partida requiere traslado de personal y equipos a la obra",
           valor: parseFloat(mc.movilizacionBase) || 0,
         });
-      if (catItem.requiereVisitaTecnica && !yaPresente("visitaTecnica"))
+      if (catItem.requiereVisitaTecnica && !yaPresente("visita_tecnica"))
         out.push({
-          key: "visitaTecnica",
+          key: "visita_tecnica",
           concepto: "Visita técnica",
           motivo: "Esta partida requiere una visita técnica previa de diagnóstico",
           valor: parseFloat(mc.visitaTecnicaBase) || 0,
         });
-      if (catItem.requiereTrabajoAltura && !yaPresente("trabajoAltura"))
+      if (catItem.requiereTrabajoAltura && !yaPresente("trabajo_altura"))
         out.push({
-          key: "trabajoAltura",
+          key: "trabajo_altura",
           concepto: "Trabajo en altura",
           motivo: `Esta partida supera la altura base incluida (${parseFloat(mc.alturaBaseIncluida) || 2.4} m)`,
           valor: parseFloat(mc.jornadaMinima) || 0,
         });
-      if (catItem.requiereRetiroResiduos && !yaPresente("retiroResiduos"))
+      if (catItem.requiereRetiroResiduos && !yaPresente("retiro_residuos"))
         out.push({
-          key: "retiroResiduos",
+          key: "retiro_residuos",
           concepto: "Retiro de residuos",
           motivo: "Esta partida genera residuos que requieren retiro",
           valor: parseFloat(mc.jornadaMinima) || 0,
         });
       return out;
     };
+    ct(() => {
+      if (!m) return;
+      var CARGO_LABEL = {
+        movilizacion: "Movilización",
+        visita_tecnica: "Visita técnica",
+        trabajo_altura: "Trabajo en altura",
+        retiro_residuos: "Retiro de residuos",
+      };
+      var items = m.items || [];
+      var duplicados = Object.keys(CARGO_LABEL).filter((key) => {
+        var tieneCargo = items.some(
+          (it) =>
+            it._tipoCargoComercial === key ||
+            it._cargoComplementario === LEGACY_CARGO_KEY[key],
+        );
+        var tienePartidaEquivalente = items.some(
+          (it) => it._cid && catalogItemSatisface(it._cid, key),
+        );
+        return tieneCargo && tienePartidaEquivalente;
+      });
+      if (duplicados.length > 0 && b)
+        b(
+          "⚠️ Este presupuesto tiene cargos complementarios duplicados con partidas equivalentes: " +
+            duplicados.map((k) => CARGO_LABEL[k]).join(", ") +
+            ". Revísalos antes de enviarlo (no se eliminaron automáticamente).",
+        );
+    }, []);
     var U = (() => {
         if (!r || !r.ultimaActualizacionCatalogo) return !0;
         var W = new Date(r.ultimaActualizacionCatalogo);
@@ -38088,7 +38150,7 @@ MATERIALES:
                                   precio: cs.valor,
                                   _cid: "",
                                   _tipoCosto: "mo",
-                                  _cargoComplementario: cs.key,
+                                  _tipoCargoComercial: cs.key,
                                 };
                                 (D((q) =>
                                   u(d({}, q), { items: [...q.items, nuevoItem] }),
@@ -41436,6 +41498,7 @@ MATERIALES:
               f.line(A, S + W, A + P, S + W));
             var Lfg = calcularLineaPresupuesto(Z),
               L = Lfg.cantidadFacturable,
+              Lshow = Lfg.cantidadIngresada,
               E = Lfg.precioUnitario,
               totBase = Lfg.totalCalculado,
               tot = Lfg.totalLinea,
@@ -41455,7 +41518,7 @@ MATERIALES:
               f.setTextColor(50, 60, 75),
               f.text("" + (X + 1), A + 2, S + 5.3),
               f.text((Z.desc || "").slice(0, 55), A + 12, S + 5.3),
-              f.text("" + L, ie === "separado" ? A + 110 : A + 120, S + 5.3, {
+              f.text("" + Lshow, ie === "separado" ? A + 110 : A + 120, S + 5.3, {
                 align: "right",
               }),
               f.text(

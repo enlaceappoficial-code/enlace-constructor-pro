@@ -23,9 +23,9 @@ La configuración global usada por estas reglas vive en `cfg.minimosComerciales`
 
 ### 2. Catálogo id `310` — "Visita Técnica / Diagnóstico"
 - **Categoría:** Servicios Generales · **Unidad:** gl · **Precio:** $82.000
-- **Regla agregada:** `requiereMovilizacion: true`
-- **Valor:** Dispara sugerencia de "Movilización" por `$15.000`.
-- **Justificación:** Caso de prueba adicional para confirmar que **dos partidas distintas** que requieren el mismo tipo de cargo ("movilización") no lo duplican en el mismo presupuesto (la clave de deduplicación es `_cargoComplementario === "movilizacion"`, no el texto ni la partida de origen).
+- **Reglas agregadas:** `requiereMovilizacion: true`, `satisfaceCargoComercial: ["visita_tecnica"]`
+- **Valor:** Dispara sugerencia de "Movilización" por `$15.000`. El campo `satisfaceCargoComercial` es nuevo (fase de corrección de duplicados): declara que esta partida **ya cubre** el cargo comercial "visita_tecnica", de modo que si más adelante se agrega otra partida que internamente requiere una visita técnica (p. ej. id 311), el sistema no vuelve a sugerir el cargo complementario "Visita técnica" — antes de esta corrección aparecían simultáneamente "Visita Técnica / Diagnóstico $82.000" y "Visita técnica $25.000" como líneas duplicadas.
+- **Justificación:** Caso de prueba adicional para confirmar que **dos partidas distintas** que requieren el mismo tipo de cargo ("movilización") no lo duplican en el mismo presupuesto (la clave de deduplicación es `_tipoCargoComercial === "movilizacion"`, no el texto ni la partida de origen), y que una partida normal del catálogo puede "satisfacer" un cargo comercial sin necesidad de agregarlo como línea aparte.
 - **¿Mantener o retirar antes de producción?** **MANTENER — es de negocio real.** Una visita técnica de diagnóstico normalmente sí implica traslado de personal; tiene sentido dejar esta regla en producción. Se recomienda solo validar que `movilizacionBase` refleje el costo real de traslado del contratista antes de activar `cfg.minimosComerciales.activo`.
 
 ### 3. Catálogo id `311` — "Reparación filtración techumbre (parche/tapagoteras)"
