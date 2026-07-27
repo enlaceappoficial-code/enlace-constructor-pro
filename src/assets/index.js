@@ -17699,19 +17699,45 @@ Error generating stack: ` +
         return r.simbolo + Math.round(t).toLocaleString("es-CL");
       }
     },
+    calcularLineaPresupuesto = (h) => {
+      h = h || {};
+      var cantidadIngresada = parseFloat(h.cant) || 0,
+        cantidadMinima = parseFloat(h._cantidadMinimaFacturable) || 0,
+        cantidadFacturable = cantidadMinima > 0 ? Math.max(cantidadIngresada, cantidadMinima) : cantidadIngresada,
+        precioUnitario = parseFloat(h.precio) || 0,
+        totalCalculado = cantidadFacturable * precioUnitario,
+        precioMinimoPartida = parseFloat(h._precioMinimoPartida) || 0,
+        aplicaMinPrecio = precioMinimoPartida > 0 && totalCalculado < precioMinimoPartida,
+        totalLinea = aplicaMinPrecio ? precioMinimoPartida : totalCalculado,
+        aplicaMinCantidad = cantidadMinima > 0 && cantidadIngresada < cantidadMinima,
+        unidad = h.unidad || "",
+        reglaAplicada = aplicaMinPrecio ? "precioMinimoPartida" : aplicaMinCantidad ? "cantidadMinimaFacturable" : "",
+        motivo = aplicaMinPrecio
+          ? "Valor calculado: " + ne(totalCalculado) + " · Precio mínimo aplicado: " + ne(precioMinimoPartida)
+          : aplicaMinCantidad
+            ? "Cantidad ingresada: " + cantidadIngresada + " " + unidad + " · Mínimo facturable: " + cantidadMinima + " " + unidad
+            : "";
+      return {
+        cantidadIngresada,
+        cantidadFacturable,
+        precioUnitario,
+        totalCalculado,
+        precioMinimoAplicado: aplicaMinPrecio ? precioMinimoPartida : 0,
+        totalLinea,
+        reglaAplicada,
+        motivo,
+      };
+    }, __calcularLineaPresupuesto_export = (window.__calcularLineaPresupuesto = calcularLineaPresupuesto),
     Ee = (t, i, r, n, isSinIva) => {
       t = Array.isArray(t) ? t : [];
       var l0 = 0,
         matS = 0,
         noMatS = 0;
       t.forEach((h) => {
-        var cantRaw = parseFloat(h.cant) || 0,
-          cantMin = parseFloat(h._cantidadMinimaFacturable) || 0,
-          cant = cantMin > 0 ? Math.max(cantRaw, cantMin) : cantRaw,
-          precio = parseFloat(h.precio) || 0,
-          totBase = cant * precio,
-          precioMin = parseFloat(h._precioMinimoPartida) || 0,
-          tot = precioMin > 0 && totBase < precioMin ? precioMin : totBase,
+        var L = calcularLineaPresupuesto(h),
+          cant = L.cantidadFacturable,
+          totBase = L.totalCalculado,
+          tot = L.totalLinea,
           ajusteMin = tot - totBase,
           tipo = h._tipoCosto || (h._cid ? "auto" : "mo"),
           mat = 0,
@@ -18493,15 +18519,20 @@ Error generating stack: ` +
                 o.setFontSize(8.5),
                 o.setTextColor(50, 60, 75),
                 o.text("" + (xr + 1), 16, G + 5.3),
-                o.text((ve.desc || "").slice(0, fe), 25, G + 5.3),
-                o.text("" + ve.cant, ce, G + 5.3, { align: "right" }),
-                o.text(ve.unidad || "", te, G + 5.3, { align: "right" }));
-              var hr = parseFloat(ve.cant) || 0,
-                jr = parseFloat(ve.precio) || 0,
-                Pr = hr * jr,
+                o.text(
+                  (ve.desc || "").slice(0, fe) + (ve._cantidadMinimaFacturable || ve._precioMinimoPartida ? " *" : ""),
+                  25,
+                  G + 5.3,
+                ));
+              var Lve = calcularLineaPresupuesto(ve),
+                hr = Lve.cantidadFacturable,
+                jr = Lve.precioUnitario,
+                Pr = Lve.totalLinea,
                 Or = ve._tipoCosto || (ve._cid ? "auto" : "mo"),
                 Ar = 0,
                 Sr = 0;
+              (o.text("" + hr, ce, G + 5.3, { align: "right" }),
+                o.text(ve.unidad || "", te, G + 5.3, { align: "right" }));
               if (Or === "mat") Ar = Pr;
               else if (Or === "mo") Sr = Pr;
               else {
@@ -19318,9 +19349,10 @@ Error generating stack: ` +
       F = () => new Date(t.fecha || Date.now()).toLocaleDateString("es-CL"),
       g = { mat: 0, mo: 0, gg: 0, util: 0, total: 0 },
       z = (e) => {
-        var u = parseFloat(e.cant) || 0,
-          d = parseFloat(e.precio) || 0,
-          x = u * d,
+        var Lpp = calcularLineaPresupuesto(e),
+          u = Lpp.cantidadFacturable,
+          d = Lpp.precioUnitario,
+          x = Lpp.totalLinea,
           f = e._tipoCosto || (e._cid ? "auto" : "mo"),
           I = 0,
           D = 0;
@@ -19330,7 +19362,7 @@ Error generating stack: ` +
           var k = parseFloat(e._apuMatUnit) || 0;
           ((I = Math.max(0, Math.min(x, k * u))), (D = Math.max(0, x - I)));
         }
-        return { cant: u, precio: d, tot: x, mat: I, noMat: D };
+        return { cant: u, precio: d, tot: x, mat: I, noMat: D, nota: Lpp.motivo };
       },
       B = [],
       w = 0;
@@ -19696,9 +19728,10 @@ Error generating stack: ` +
       if (!B || !B.desc) return;
       var w = B.cat || "General";
       j[w] || (j[w] = { items: [], subtotal: 0 });
-      var cant = parseFloat(B.cant) || 0,
-        precio = parseFloat(B.precio) || 0,
-        tot = cant * precio,
+      var LrfB = calcularLineaPresupuesto(B),
+        cant = LrfB.cantidadFacturable,
+        precio = LrfB.precioUnitario,
+        tot = LrfB.totalLinea,
         tipo = B._tipoCosto || (B._cid ? "auto" : "mo"),
         mat = 0,
         noMat = 0;
@@ -19817,7 +19850,8 @@ Error generating stack: ` +
         : "",
       p = (t.items || [])
         .map(function (z) {
-          var B = (parseFloat(z.cant) || 0) * (parseFloat(z.precio) || 0),
+          var LdfZ = calcularLineaPresupuesto(z),
+            B = LdfZ.totalLinea,
             w = n > 0 ? Math.round((B / n) * 100) : 0,
             v = (z.desc || "").toLowerCase(),
             x =
@@ -19844,7 +19878,7 @@ Error generating stack: ` +
               v.includes("agua");
           return {
             desc: z.desc,
-            cant: z.cant,
+            cant: LdfZ.cantidadFacturable,
             unidad: z.unidad,
             subtotal: B,
             pct: w,
@@ -19988,9 +20022,10 @@ Error generating stack: ` +
     var x = (() => {
         var idx = 0;
         return (t.items || []).reduce(function (acc, I) {
-          var cant = parseFloat(I.cant) || 0,
-            precio = parseFloat(I.precio) || 0,
-            tot = cant * precio,
+          var Lts = calcularLineaPresupuesto(I),
+            cant = Lts.cantidadFacturable,
+            precio = Lts.precioUnitario,
+            tot = Lts.totalLinea,
             tipo = I._tipoCosto || (I._cid ? "auto" : "mo"),
             mat = 0,
             noMat = 0;
@@ -20003,7 +20038,7 @@ Error generating stack: ` +
           }
           if (modo === "mo" && noMat <= 0) return acc;
           idx++;
-          var qty = (I.cant || 0) + " " + (I.unidad || "");
+          var qty = cant + " " + (I.unidad || "");
           if (modo === "separado")
             return (
               acc +
@@ -20054,6 +20089,16 @@ Error generating stack: ` +
           );
         }, "");
       })(),
+      notaMinTs = (t.items || [])
+        .map((I) => calcularLineaPresupuesto(I))
+        .filter((L) => L.reglaAplicada)
+        .map((L) => "<li>" + L.motivo + "</li>")
+        .join(""),
+      notaMinHtmlTs = notaMinTs
+        ? '<div style="background:#fffbeb;border:1px solid #fde68a;padding:10px 14px;border-radius:6px;margin-bottom:16px;font-size:11px;color:#78350f"><strong>Nota:</strong> Se aplicaron mínimos comerciales en las siguientes partidas:<ul style="margin:4px 0 0 18px">' +
+          notaMinTs +
+          "</ul></div>"
+        : "",
       f =
         '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Contrato de Obra N° ' +
         t.id +
@@ -20110,7 +20155,9 @@ Error generating stack: ` +
         cols +
         "</tr></thead><tbody>" +
         x +
-        '</tbody></table><div style="display:flex;justify-content:flex-end;margin-bottom:22px"><div style="min-width:280px">' +
+        "</tbody></table>" +
+        notaMinHtmlTs +
+        '<div style="display:flex;justify-content:flex-end;margin-bottom:22px"><div style="min-width:280px">' +
         extraTot +
         '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:12px"><span>' +
         subLabel +
@@ -20194,8 +20241,10 @@ Error generating stack: ` +
       D = t.items
         .filter((S) => S.desc)
         .map((S) => {
-          var O = (parseFloat(S.cant) || 0) * (parseFloat(S.precio) || 0);
-          return `▫️ ${S.desc} — ${ne(O)}`;
+          var Lap = calcularLineaPresupuesto(S);
+          return Lap.reglaAplicada
+            ? `▫️ ${S.desc} — ${ne(Lap.totalLinea)} _(${Lap.motivo})_`
+            : `▫️ ${S.desc} — ${ne(Lap.totalLinea)}`;
         }).join(`
 `),
       k = [
@@ -21824,17 +21873,17 @@ ${r.empresa}`;
                           var ee = $.length,
                             tt = Array.isArray(s.items) ? s.items : [];
                           (tt.forEach((G, ie) => {
-                            var oe =
-                              (parseFloat(G.cant) || 0) *
-                              (parseFloat(G.precio) || 0);
-                            $.push([
+                            var Lg = calcularLineaPresupuesto(G);
+                            ($.push([
                               ie + 1,
                               G.desc || "",
-                              G.cant,
+                              Lg.cantidadFacturable,
                               G.unidad || "",
-                              parseFloat(G.precio) || 0,
-                              oe,
-                            ]);
+                              Lg.precioUnitario,
+                              Lg.totalLinea,
+                            ]),
+                              Lg.reglaAplicada &&
+                                $.push(["", "  » " + Lg.motivo, "", "", "", ""]));
                           }),
                             $.push([""]),
                             $.push(["", "", "", "", "Subtotal Neto:", R]),
@@ -22255,17 +22304,10 @@ ${r.empresa}`;
                       }),
                       e.jsx("tbody", {
                         children: (s.items || []).map((D, k) => {
-                          var cantMinRow = parseFloat(D._cantidadMinimaFacturable) || 0,
-                            cantRow0 = parseFloat(D.cant) || 0,
-                            cantRow =
-                              cantMinRow > 0 ? Math.max(cantRow0, cantMinRow) : cantRow0,
-                            precioRow = parseFloat(D.precio) || 0,
-                            totBaseRow = cantRow * precioRow,
-                            precioMinRow = parseFloat(D._precioMinimoPartida) || 0,
-                            totRow =
-                              precioMinRow > 0 && totBaseRow < precioMinRow
-                                ? precioMinRow
-                                : totBaseRow;
+                          var Luf = calcularLineaPresupuesto(D),
+                            cantRow = Luf.cantidadFacturable,
+                            precioRow = Luf.precioUnitario,
+                            totRow = Luf.totalLinea;
                           return e.jsxs(
                             "tr",
                             {
@@ -22283,13 +22325,20 @@ ${r.empresa}`;
                                   },
                                   children: k + 1,
                                 }),
-                                e.jsx("td", {
+                                e.jsxs("td", {
                                   style: {
                                     padding: "8px 10px",
                                     fontSize: 14,
                                     borderBottom: "1px solid #f0f0f0",
                                   },
-                                  children: D.desc,
+                                  children: [
+                                    D.desc,
+                                    Luf.reglaAplicada &&
+                                      e.jsx("div", {
+                                        style: { fontSize: 11, color: "#b45309", marginTop: 2 },
+                                        children: Luf.motivo,
+                                      }),
+                                  ],
                                 }),
                                 e.jsx("td", {
                                   style: {
@@ -38624,14 +38673,9 @@ MATERIALES:
                                             color: a.accent,
                                           },
                                           children: (() => {
-                                            var Graw = parseFloat(W.cant) || 0,
-                                              GcantMinRow =
-                                                parseFloat(W._cantidadMinimaFacturable) || 0,
-                                              G =
-                                                GcantMinRow > 0
-                                                  ? Math.max(Graw, GcantMinRow)
-                                                  : Graw,
-                                              ie = parseFloat(W.precio) || 0,
+                                            var Lrow = calcularLineaPresupuesto(W),
+                                              G = Lrow.cantidadFacturable,
+                                              ie = Lrow.precioUnitario,
                                               oe = I.modoCosteo || "completo";
                                             var ce =
                                                 W._tipoCosto ||
@@ -38913,10 +38957,9 @@ MATERIALES:
                     fe = 0,
                     ve = 0;
                   (I.items || []).forEach((Q) => {
-                    var Graw = parseFloat(Q.cant) || 0,
-                      GcantMin = parseFloat(Q._cantidadMinimaFacturable) || 0,
-                      G = GcantMin > 0 ? Math.max(Graw, GcantMin) : Graw,
-                      ie = parseFloat(Q.precio) || 0,
+                    var LresQ = calcularLineaPresupuesto(Q),
+                      G = LresQ.cantidadFacturable,
+                      ie = LresQ.precioUnitario,
                       oe = Q._tipoCosto || (Q._cid ? "auto" : "mo"),
                       ce = 0,
                       de = 0,
@@ -38994,6 +39037,31 @@ MATERIALES:
                           })
                         ]
                       }),
+                      (() => {
+                        var notasMin = (I.items || [])
+                          .map((Q) => calcularLineaPresupuesto(Q))
+                          .filter((L) => L.reglaAplicada);
+                        return notasMin.length > 0
+                          ? e.jsx("div", {
+                              style: {
+                                background: "#fffbeb",
+                                border: "1px solid #fde68a",
+                                borderRadius: 7,
+                                padding: "8px 10px",
+                                marginBottom: 8,
+                                fontSize: 12,
+                                color: "#78350f",
+                              },
+                              children: notasMin.map((L, idx) =>
+                                e.jsx(
+                                  "div",
+                                  { style: { marginBottom: idx < notasMin.length - 1 ? 4 : 0 }, children: "⚠ " + L.motivo },
+                                  idx,
+                                ),
+                              ),
+                            })
+                          : null;
+                      })(),
                       ((I.modoCosteo || "completo") === "separado"
                         ? [
                             ["Materiales", ne(Math.round(te))],
@@ -41303,13 +41371,10 @@ MATERIALES:
           G =
             ie === "mo"
               ? F.filter((Z) => {
-                  var Lraw = parseFloat(Z.cant) || 0,
-                    Lmin = parseFloat(Z._cantidadMinimaFacturable) || 0,
-                    L = Lmin > 0 ? Math.max(Lraw, Lmin) : Lraw,
-                    E = parseFloat(Z.precio) || 0,
-                    totBase = L * E,
-                    Pmin = parseFloat(Z._precioMinimoPartida) || 0,
-                    tot = Pmin > 0 && totBase < Pmin ? Pmin : totBase,
+                  var Lfg = calcularLineaPresupuesto(Z),
+                    L = Lfg.cantidadFacturable,
+                    totBase = Lfg.totalCalculado,
+                    tot = Lfg.totalLinea,
                     tipo = Z._tipoCosto || (Z._cid ? "auto" : "mo"),
                     mat = 0,
                     noMat = 0;
@@ -41369,13 +41434,11 @@ MATERIALES:
               f.setDrawColor(226, 232, 240),
               f.setLineWidth(0.1),
               f.line(A, S + W, A + P, S + W));
-            var Lraw = parseFloat(Z.cant) || 0,
-              Lmin = parseFloat(Z._cantidadMinimaFacturable) || 0,
-              L = Lmin > 0 ? Math.max(Lraw, Lmin) : Lraw,
-              E = parseFloat(Z.precio) || 0,
-              totBase = L * E,
-              Pmin = parseFloat(Z._precioMinimoPartida) || 0,
-              tot = Pmin > 0 && totBase < Pmin ? Pmin : totBase,
+            var Lfg = calcularLineaPresupuesto(Z),
+              L = Lfg.cantidadFacturable,
+              E = Lfg.precioUnitario,
+              totBase = Lfg.totalCalculado,
+              tot = Lfg.totalLinea,
               tipo = Z._tipoCosto || (Z._cid ? "auto" : "mo"),
               mat = 0,
               noMat = 0;
