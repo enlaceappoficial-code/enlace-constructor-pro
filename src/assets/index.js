@@ -59687,7 +59687,8 @@ MATERIALES:
                   e.jsx("strong", { children: "📜 Términos y Condiciones de Licencia y Uso — Enlace Constructor Pro (ECP)" }),
                   "\n\n",
                   e.jsx("strong", { children: "Versión del software:" }), " Enlace Constructor Pro v1.2\n",
-                  e.jsx("strong", { children: "Titular de los derechos:" }), " ENLACE\n\n",
+                  e.jsx("strong", { children: "Titular de los derechos:" }), " ENLACE\n",
+                  e.jsx("strong", { children: "Sitio web oficial:" }), " ", e.jsx("a", { href: "#", onClick: (t) => { t.preventDefault(); window.__TAURI__ ? window.__TAURI__.shell.open("https://redenlace.cl/constructor-pro") : window.open("https://redenlace.cl/constructor-pro") }, style: { color: a.accent || "#3b82f6", textDecoration: "underline", cursor: "pointer" }, children: "https://redenlace.cl/constructor-pro" }), "\n\n",
                   e.jsx("strong", { children: "1. Concesión de Licencia y Adquisición (Compra)" }), "\n",
                   "Licencia de uso: Al adquirir o descargar el software, ENLACE otorga al usuario una licencia de uso limitada, no exclusiva, intransferible y revocable para utilizar Enlace Constructor Pro únicamente con fines internos o comerciales en su propia actividad profesional o empresarial.\n",
                   "Reventa prohibida: Queda estrictamente prohibida la reventa, sublicenciamiento, alquiler, distribución comercial o comercialización de Enlace Constructor Pro, ya sea de forma parcial o total, sin el consentimiento expreso y por escrito de ENLACE.\n\n",
@@ -77049,14 +77050,17 @@ Esta acción no se puede deshacer.`) &&
               ],
             }),
             e.jsx("div", {
+              onClick: () => { window.__TAURI__ ? window.__TAURI__.shell.open("https://redenlace.cl/constructor-pro") : window.open("https://redenlace.cl/constructor-pro") },
               style: {
                 marginTop: "15px",
                 padding: "15px 0 5px",
                 textAlign: "center",
-                fontSize: 10,
-                color: "rgba(255, 255, 255, 0.3)",
+                fontSize: 11,
+                color: "rgba(255, 255, 255, 0.45)",
                 fontFamily: "'DM Sans', sans-serif",
-                letterSpacing: "0.02em"
+                letterSpacing: "0.02em",
+                textDecoration: "underline",
+                cursor: "pointer"
               },
               children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.2")
             }),
