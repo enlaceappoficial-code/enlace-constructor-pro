@@ -77048,6 +77048,18 @@ Esta acción no se puede deshacer.`) &&
                 }),
               ],
             }),
+            e.jsx("div", {
+              style: {
+                marginTop: "15px",
+                padding: "15px 0 5px",
+                textAlign: "center",
+                fontSize: 10,
+                color: "rgba(255, 255, 255, 0.3)",
+                fontFamily: "'DM Sans', sans-serif",
+                letterSpacing: "0.02em"
+              },
+              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.2")
+            }),
           ],
         }),
         e.jsxs("div", {
