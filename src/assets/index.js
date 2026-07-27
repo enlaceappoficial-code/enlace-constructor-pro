@@ -9855,6 +9855,13 @@ Error generating stack: ` +
       iva: 0.19,
       paisRegion: "Chile",
       impuestoNombre: "IVA",
+      minimosComerciales: {
+        activo: false,
+        movilizacionBase: 15000,
+        visitaTecnicaBase: 25000,
+        jornadaMinima: 45000,
+        alturaBaseIncluida: 2.4,
+      },
       moneda: {
         pais: "Chile",
         codigo: "CL",
@@ -9991,6 +9998,7 @@ Error generating stack: ` +
         desc: "Pintura muros interiores (2 manos)",
         unidad: "m²",
         precio: 5500,
+        requiereMovilizacion: true,
       },
       {
         id: 2,
@@ -11300,6 +11308,7 @@ Error generating stack: ` +
         desc: "Visita Técnica / Diagnóstico",
         unidad: "gl",
         precio: 82000,
+        requiereMovilizacion: true,
       },
       {
         id: 311,
@@ -11307,6 +11316,10 @@ Error generating stack: ` +
         desc: "Reparación filtración techumbre (parche/tapagoteras)",
         unidad: "gl",
         precio: 45000,
+        precioMinimoPartida: 60000,
+        requiereVisitaTecnica: true,
+        requiereTrabajoAltura: true,
+        requiereRetiroResiduos: true,
       },
       {
         id: 312,
@@ -11314,6 +11327,8 @@ Error generating stack: ` +
         desc: "Limpieza y destape de canaletas y bajantes",
         unidad: "ml",
         precio: 2500,
+        cantidadMinimaFacturable: 10,
+        requiereTrabajoAltura: true,
       },
       {
         id: 313,
@@ -17690,20 +17705,25 @@ Error generating stack: ` +
         matS = 0,
         noMatS = 0;
       t.forEach((h) => {
-        var cant = parseFloat(h.cant) || 0,
+        var cantRaw = parseFloat(h.cant) || 0,
+          cantMin = parseFloat(h._cantidadMinimaFacturable) || 0,
+          cant = cantMin > 0 ? Math.max(cantRaw, cantMin) : cantRaw,
           precio = parseFloat(h.precio) || 0,
-          tot = cant * precio,
+          totBase = cant * precio,
+          precioMin = parseFloat(h._precioMinimoPartida) || 0,
+          tot = precioMin > 0 && totBase < precioMin ? precioMin : totBase,
+          ajusteMin = tot - totBase,
           tipo = h._tipoCosto || (h._cid ? "auto" : "mo"),
           mat = 0,
           noMat = 0;
-        if (tipo === "mat") mat = tot;
-        else if (tipo === "mo") noMat = tot;
+        if (tipo === "mat") mat = totBase;
+        else if (tipo === "mo") noMat = totBase;
         else {
           var mu = parseFloat(h._apuMatUnit) || 0;
-          ((mat = Math.max(0, Math.min(tot, mu * cant))),
-            (noMat = Math.max(0, tot - mat)));
+          ((mat = Math.max(0, Math.min(totBase, mu * cant))),
+            (noMat = Math.max(0, totBase - mat)));
         }
-        ((matS += mat), (noMatS += noMat), (l0 += tot));
+        ((matS += mat), (noMatS += noMat + ajusteMin), (l0 += tot));
       });
       var l = n === "mo" ? Math.round(noMatS) : Math.round(l0),
         o = isSinIva ? 0 : (i && i.moneda ? i.moneda.impuesto / 100 : (i && i.iva) || 0.19),
@@ -22234,8 +22254,19 @@ ${r.empresa}`;
                         }),
                       }),
                       e.jsx("tbody", {
-                        children: (s.items || []).map((D, k) =>
-                          e.jsxs(
+                        children: (s.items || []).map((D, k) => {
+                          var cantMinRow = parseFloat(D._cantidadMinimaFacturable) || 0,
+                            cantRow0 = parseFloat(D.cant) || 0,
+                            cantRow =
+                              cantMinRow > 0 ? Math.max(cantRow0, cantMinRow) : cantRow0,
+                            precioRow = parseFloat(D.precio) || 0,
+                            totBaseRow = cantRow * precioRow,
+                            precioMinRow = parseFloat(D._precioMinimoPartida) || 0,
+                            totRow =
+                              precioMinRow > 0 && totBaseRow < precioMinRow
+                                ? precioMinRow
+                                : totBaseRow;
+                          return e.jsxs(
                             "tr",
                             {
                               style: {
@@ -22267,7 +22298,7 @@ ${r.empresa}`;
                                     fontSize: 14,
                                     borderBottom: "1px solid #f0f0f0",
                                   },
-                                  children: D.cant,
+                                  children: cantRow,
                                 }),
                                 e.jsx("td", {
                                   style: {
@@ -22286,7 +22317,7 @@ ${r.empresa}`;
                                     fontSize: 14,
                                     borderBottom: "1px solid #f0f0f0",
                                   },
-                                  children: ne(D.precio),
+                                  children: ne(precioRow),
                                 }),
                                 e.jsx("td", {
                                   style: {
@@ -22297,13 +22328,13 @@ ${r.empresa}`;
                                     color: I.header,
                                     borderBottom: "1px solid #f0f0f0",
                                   },
-                                  children: ne(D.cant * D.precio),
+                                  children: ne(totRow),
                                 }),
                               ],
                             },
                             k,
-                          ),
-                        ),
+                          );
+                        }),
                       }),
                     ],
                   }),
@@ -37703,7 +37734,44 @@ MATERIALES:
       [k, R] = V(null),
       [K, y] = V(!1),
       [P, A] = V(null),
-      [S, O] = V(!0);
+      [S, O] = V(!0),
+      [cargosSugeridos, setCargosSugeridos] = V(null);
+    const generarCargosSugeridos = (catItem, currentItems) => {
+      var mc = (r && r.minimosComerciales) || {};
+      if (!mc.activo) return [];
+      var yaPresente = (key) =>
+        (currentItems || []).some((it) => it._cargoComplementario === key);
+      var out = [];
+      if (catItem.requiereMovilizacion && !yaPresente("movilizacion"))
+        out.push({
+          key: "movilizacion",
+          concepto: "Movilización",
+          motivo: "Esta partida requiere traslado de personal y equipos a la obra",
+          valor: parseFloat(mc.movilizacionBase) || 0,
+        });
+      if (catItem.requiereVisitaTecnica && !yaPresente("visitaTecnica"))
+        out.push({
+          key: "visitaTecnica",
+          concepto: "Visita técnica",
+          motivo: "Esta partida requiere una visita técnica previa de diagnóstico",
+          valor: parseFloat(mc.visitaTecnicaBase) || 0,
+        });
+      if (catItem.requiereTrabajoAltura && !yaPresente("trabajoAltura"))
+        out.push({
+          key: "trabajoAltura",
+          concepto: "Trabajo en altura",
+          motivo: `Esta partida supera la altura base incluida (${parseFloat(mc.alturaBaseIncluida) || 2.4} m)`,
+          valor: parseFloat(mc.jornadaMinima) || 0,
+        });
+      if (catItem.requiereRetiroResiduos && !yaPresente("retiroResiduos"))
+        out.push({
+          key: "retiroResiduos",
+          concepto: "Retiro de residuos",
+          motivo: "Esta partida genera residuos que requieren retiro",
+          valor: parseFloat(mc.jornadaMinima) || 0,
+        });
+      return out;
+    };
     var U = (() => {
         if (!r || !r.ultimaActualizacionCatalogo) return !0;
         var W = new Date(r.ultimaActualizacionCatalogo);
@@ -37788,19 +37856,25 @@ MATERIALES:
             _tipoCosto: "auto",
           });
         T && (L._apuMatUnit = parseFloat(li(T, l || [], r).matTotal) || 0);
+        (parseFloat(W.cantidadMinimaFacturable) > 0) &&
+          (L._cantidadMinimaFacturable = parseFloat(W.cantidadMinimaFacturable));
+        (parseFloat(W.precioMinimoPartida) > 0) &&
+          (L._precioMinimoPartida = parseFloat(W.precioMinimoPartida));
         var E = [...I.items, L],
           M = E.length - 1;
-        (D((q) => u(d({}, q), { items: E })),
-          T && ["m²", "m³", "ml"].includes(W.unidad)
-            ? A({
-                idx: M,
-                unidad: W.unidad,
-                _apuPendiente: { idx: M, catItem: W, apu: T },
-              })
-            : T
-              ? R({ idx: M, catItem: W, apu: T, _fromCatalog: !0 })
-              : ["m²", "m³", "ml", "m2", "m3"].includes(W.unidad) &&
-                A({ idx: M, unidad: W.unidad }));
+        D((q) => u(d({}, q), { items: E }));
+        var sugerencias = generarCargosSugeridos(W, E);
+        sugerencias.length > 0 && setCargosSugeridos(sugerencias);
+        (T && ["m²", "m³", "ml"].includes(W.unidad)
+          ? A({
+              idx: M,
+              unidad: W.unidad,
+              _apuPendiente: { idx: M, catItem: W, apu: T },
+            })
+          : T
+            ? R({ idx: M, catItem: W, apu: T, _fromCatalog: !0 })
+            : ["m²", "m³", "ml", "m2", "m3"].includes(W.unidad) &&
+              A({ idx: M, unidad: W.unidad }));
       },
       Z = () => {
         if (!I.clienteId || !I.descripcion) {
@@ -37880,6 +37954,145 @@ MATERIALES:
             onConfirm: (W, T, L, E, customMats, pMO, pGG, pUtil) => Y(k.idx, W, T, L, E, customMats, pMO, pGG, pUtil),
             onSkip: () => R(null),
             customData: I.items[k.idx],
+          }),
+        cargosSugeridos &&
+          cargosSugeridos.length > 0 &&
+          e.jsx("div", {
+            style: {
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.6)",
+              zIndex: 10000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 20,
+            },
+            children: e.jsxs("div", {
+              style: {
+                background: a.card,
+                border: `1px solid ${a.border}`,
+                borderRadius: 12,
+                padding: 24,
+                width: 480,
+                maxWidth: "100%",
+                maxHeight: "85vh",
+                overflowY: "auto",
+              },
+              children: [
+                e.jsx("div", {
+                  style: { fontSize: 16, fontWeight: 800, color: a.text, marginBottom: 4 },
+                  children: "💡 Costos complementarios sugeridos",
+                }),
+                e.jsx("div", {
+                  style: { fontSize: 12, color: a.muted, marginBottom: 16 },
+                  children: "Revisa, edita o descarta cada sugerencia antes de agregarla al presupuesto.",
+                }),
+                cargosSugeridos.map((cs, idx) =>
+                  e.jsxs(
+                    "div",
+                    {
+                      style: {
+                        border: `1px solid ${a.border}`,
+                        borderRadius: 8,
+                        padding: "10px 12px",
+                        marginBottom: 10,
+                      },
+                      children: [
+                        e.jsx("div", {
+                          style: { fontSize: 13, fontWeight: 700, color: a.text },
+                          children: cs.concepto,
+                        }),
+                        e.jsx("div", {
+                          style: { fontSize: 11, color: a.muted, marginBottom: 8 },
+                          children: cs.motivo,
+                        }),
+                        e.jsxs("div", {
+                          style: { display: "flex", gap: 8, alignItems: "center" },
+                          children: [
+                            e.jsx("input", {
+                              type: "number",
+                              value: cs.valor,
+                              onChange: (ev) => {
+                                var val = parseFloat(ev.target.value) || 0;
+                                setCargosSugeridos((prev) =>
+                                  prev.map((x, ix) =>
+                                    ix === idx ? u(d({}, x), { valor: val }) : x,
+                                  ),
+                                );
+                              },
+                              style: {
+                                flex: 1,
+                                padding: "6px 8px",
+                                borderRadius: 6,
+                                border: `1px solid ${a.border}`,
+                                background: a.surface,
+                                color: a.text,
+                              },
+                            }),
+                            e.jsx("button", {
+                              onClick: () => {
+                                var nuevoItem = {
+                                  desc: cs.concepto,
+                                  cant: 1,
+                                  unidad: "gl",
+                                  precio: cs.valor,
+                                  _cid: "",
+                                  _tipoCosto: "mo",
+                                  _cargoComplementario: cs.key,
+                                };
+                                (D((q) =>
+                                  u(d({}, q), { items: [...q.items, nuevoItem] }),
+                                ),
+                                  setCargosSugeridos((prev) =>
+                                    prev.filter((x, ix) => ix !== idx),
+                                  ));
+                              },
+                              style: u(d({}, c.btn("p")), {
+                                padding: "6px 12px",
+                                fontSize: 12,
+                              }),
+                              children: "Aceptar",
+                            }),
+                            e.jsx("button", {
+                              onClick: () =>
+                                setCargosSugeridos((prev) =>
+                                  prev.filter((x, ix) => ix !== idx),
+                                ),
+                              style: {
+                                padding: "6px 12px",
+                                fontSize: 12,
+                                background: "transparent",
+                                border: `1px solid ${a.border}`,
+                                borderRadius: 6,
+                                color: a.muted,
+                                cursor: "pointer",
+                              },
+                              children: "Omitir",
+                            }),
+                          ],
+                        }),
+                      ],
+                    },
+                    cs.key,
+                  ),
+                ),
+                e.jsx("button", {
+                  onClick: () => setCargosSugeridos(null),
+                  style: {
+                    width: "100%",
+                    marginTop: 8,
+                    padding: "8px",
+                    background: "transparent",
+                    border: `1px solid ${a.border}`,
+                    borderRadius: 8,
+                    color: a.muted,
+                    cursor: "pointer",
+                  },
+                  children: "Cerrar",
+                }),
+              ],
+            }),
           }),
         e.jsxs("div", {
           style: {
@@ -38411,7 +38624,13 @@ MATERIALES:
                                             color: a.accent,
                                           },
                                           children: (() => {
-                                            var G = parseFloat(W.cant) || 0,
+                                            var Graw = parseFloat(W.cant) || 0,
+                                              GcantMinRow =
+                                                parseFloat(W._cantidadMinimaFacturable) || 0,
+                                              G =
+                                                GcantMinRow > 0
+                                                  ? Math.max(Graw, GcantMinRow)
+                                                  : Graw,
                                               ie = parseFloat(W.precio) || 0,
                                               oe = I.modoCosteo || "completo";
                                             var ce =
@@ -38469,8 +38688,14 @@ MATERIALES:
                                               me = 0;
                                             }
                                             var mt = Math.round(G * me),
-                                              nm = Math.round(G * de),
-                                              tt = Math.round(G * (me + de));
+                                              ttBase = G * (me + de),
+                                              precioMinRow = parseFloat(W._precioMinimoPartida) || 0,
+                                              tt = Math.round(
+                                                precioMinRow > 0 && ttBase < precioMinRow
+                                                  ? precioMinRow
+                                                  : ttBase,
+                                              ),
+                                              nm = tt - mt;
                                             if (ce === "mat") return ne(mt);
                                             if (ce === "mo") return ne(nm);
                                             return e.jsxs("div", {
@@ -38688,7 +38913,9 @@ MATERIALES:
                     fe = 0,
                     ve = 0;
                   (I.items || []).forEach((Q) => {
-                    var G = parseFloat(Q.cant) || 0,
+                    var Graw = parseFloat(Q.cant) || 0,
+                      GcantMin = parseFloat(Q._cantidadMinimaFacturable) || 0,
+                      G = GcantMin > 0 ? Math.max(Graw, GcantMin) : Graw,
                       ie = parseFloat(Q.precio) || 0,
                       oe = Q._tipoCosto || (Q._cid ? "auto" : "mo"),
                       ce = 0,
@@ -38734,7 +38961,14 @@ MATERIALES:
                     } else if (oe === "mo") {
                       ce = 0;
                     }
-                    ((te += ce * G), (fe += de * G), (ve += (ce + de) * G));
+                    var totBaseQ = (ce + de) * G,
+                      precioMinQ = parseFloat(Q._precioMinimoPartida) || 0,
+                      totQ =
+                        precioMinQ > 0 && totBaseQ < precioMinQ
+                          ? precioMinQ
+                          : totBaseQ,
+                      ajusteQ = totQ - totBaseQ;
+                    ((te += ce * G), (fe += de * G + ajusteQ), (ve += totQ));
                   });
                   var W =
                       (I.modoCosteo || "completo") === "mo"
@@ -41069,17 +41303,21 @@ MATERIALES:
           G =
             ie === "mo"
               ? F.filter((Z) => {
-                  var L = parseFloat(Z.cant) || 0,
+                  var Lraw = parseFloat(Z.cant) || 0,
+                    Lmin = parseFloat(Z._cantidadMinimaFacturable) || 0,
+                    L = Lmin > 0 ? Math.max(Lraw, Lmin) : Lraw,
                     E = parseFloat(Z.precio) || 0,
-                    tot = L * E,
+                    totBase = L * E,
+                    Pmin = parseFloat(Z._precioMinimoPartida) || 0,
+                    tot = Pmin > 0 && totBase < Pmin ? Pmin : totBase,
                     tipo = Z._tipoCosto || (Z._cid ? "auto" : "mo"),
                     mat = 0,
                     noMat = 0;
-                  if (tipo === "mat") mat = tot;
-                  else if (tipo === "mo") noMat = tot;
+                  if (tipo === "mat") mat = totBase;
+                  else if (tipo === "mo") noMat = totBase;
                   else {
                     var mu = parseFloat(Z._apuMatUnit) || 0;
-                    mat = Math.max(0, Math.min(tot, mu * L));
+                    mat = Math.max(0, Math.min(totBase, mu * L));
                     noMat = Math.max(0, tot - mat);
                   }
                   return noMat > 0;
@@ -41131,17 +41369,21 @@ MATERIALES:
               f.setDrawColor(226, 232, 240),
               f.setLineWidth(0.1),
               f.line(A, S + W, A + P, S + W));
-            var L = parseFloat(Z.cant) || 0,
+            var Lraw = parseFloat(Z.cant) || 0,
+              Lmin = parseFloat(Z._cantidadMinimaFacturable) || 0,
+              L = Lmin > 0 ? Math.max(Lraw, Lmin) : Lraw,
               E = parseFloat(Z.precio) || 0,
-              tot = L * E,
+              totBase = L * E,
+              Pmin = parseFloat(Z._precioMinimoPartida) || 0,
+              tot = Pmin > 0 && totBase < Pmin ? Pmin : totBase,
               tipo = Z._tipoCosto || (Z._cid ? "auto" : "mo"),
               mat = 0,
               noMat = 0;
-            if (tipo === "mat") mat = tot;
-            else if (tipo === "mo") noMat = tot;
+            if (tipo === "mat") mat = totBase;
+            else if (tipo === "mo") noMat = totBase;
             else {
               var mu = parseFloat(Z._apuMatUnit) || 0;
-              mat = Math.max(0, Math.min(tot, mu * L));
+              mat = Math.max(0, Math.min(totBase, mu * L));
               noMat = Math.max(0, tot - mat);
             }
             var M = Math.round(tot);
@@ -44124,10 +44366,11 @@ MATERIALES:
       [s, m] = V(!1),
       [p, C] = V(""),
       [b, h] = V("Pintura"),
-      [j, F] = V({ desc: "", unidad: "unidad", precio: "" }),
+      [j, F] = V({ desc: "", unidad: "unidad", precio: "", cantidadMinimaFacturable: "", precioMinimoPartida: "", requiereMovilizacion: false, requiereVisitaTecnica: false, requiereTrabajoAltura: false, requiereRetiroResiduos: false }),
       [g, z] = V(null),
       [B, w] = V(""),
-      [v, x] = V(null);
+      [v, x] = V(null),
+      [reglasAbiertas, setReglasAbiertas] = V(!1);
     var f = (() => {
         var y = l === "Todos" ? t : t.filter((P) => P.cat === l);
         var A = (Q) => {
@@ -44349,26 +44592,44 @@ MATERIALES:
           return;
         }
         var R = isNaN(S) ? 0 : S;
+        var reglasComerciales = {};
+        var cmfVal = parseFloat(j.cantidadMinimaFacturable);
+        cmfVal > 0 && (reglasComerciales.cantidadMinimaFacturable = cmfVal);
+        var pmpVal = parseFloat(j.precioMinimoPartida);
+        pmpVal > 0 && (reglasComerciales.precioMinimoPartida = pmpVal);
+        j.requiereMovilizacion && (reglasComerciales.requiereMovilizacion = true);
+        j.requiereVisitaTecnica && (reglasComerciales.requiereVisitaTecnica = true);
+        j.requiereTrabajoAltura && (reglasComerciales.requiereTrabajoAltura = true);
+        j.requiereRetiroResiduos && (reglasComerciales.requiereRetiroResiduos = true);
         (g !== null
           ? (i(
               t.map((Q) =>
                 Q.id === g
-                  ? { id: g, cat: y, desc: P, unidad: O, precio: R }
+                  ? u(
+                      d({}, { id: g, cat: y, desc: P, unidad: O, precio: R }),
+                      reglasComerciales,
+                    )
                   : Q,
               ),
             ),
             z(null))
           : i([
               ...t,
-              {
-                id: Math.max(0, ...t.map((Q) => Q.id)) + 1,
-                cat: y,
-                desc: P,
-                unidad: O,
-                precio: R,
-              },
+              u(
+                d(
+                  {},
+                  {
+                    id: Math.max(0, ...t.map((Q) => Q.id)) + 1,
+                    cat: y,
+                    desc: P,
+                    unidad: O,
+                    precio: R,
+                  },
+                ),
+                reglasComerciales,
+              ),
             ]),
-          F({ desc: "", unidad: "unidad", precio: "" }),
+          F({ desc: "", unidad: "unidad", precio: "", cantidadMinimaFacturable: "", precioMinimoPartida: "", requiereMovilizacion: false, requiereVisitaTecnica: false, requiereTrabajoAltura: false, requiereRetiroResiduos: false }),
           m(!1),
           C(""));
       },
@@ -44987,6 +45248,12 @@ MATERIALES:
                                       desc: y.desc,
                                       unidad: y.unidad,
                                       precio: y.precio,
+                                      cantidadMinimaFacturable: y.cantidadMinimaFacturable || "",
+                                      precioMinimoPartida: y.precioMinimoPartida || "",
+                                      requiereMovilizacion: !!y.requiereMovilizacion,
+                                      requiereVisitaTecnica: !!y.requiereVisitaTecnica,
+                                      requiereTrabajoAltura: !!y.requiereTrabajoAltura,
+                                      requiereRetiroResiduos: !!y.requiereRetiroResiduos,
                                     }));
                                 },
                                 style: { cursor: "pointer" },
@@ -45114,6 +45381,12 @@ MATERIALES:
                                                 desc: y.desc,
                                                 unidad: y.unidad,
                                                 precio: y.precio,
+                                                cantidadMinimaFacturable: y.cantidadMinimaFacturable || "",
+                                                precioMinimoPartida: y.precioMinimoPartida || "",
+                                                requiereMovilizacion: !!y.requiereMovilizacion,
+                                                requiereVisitaTecnica: !!y.requiereVisitaTecnica,
+                                                requiereTrabajoAltura: !!y.requiereTrabajoAltura,
+                                                requiereRetiroResiduos: !!y.requiereRetiroResiduos,
                                               }));
                                           },
                                           children: "✏",
@@ -45408,6 +45681,101 @@ MATERIALES:
                     ],
                   }),
                 e.jsxs("div", {
+                  style: {
+                    marginBottom: 14,
+                    border: `1px solid ${a.border}`,
+                    borderRadius: 8,
+                    overflow: "hidden",
+                  },
+                  children: [
+                    e.jsxs("button", {
+                      type: "button",
+                      onClick: () => setReglasAbiertas((v2) => !v2),
+                      style: {
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "8px 12px",
+                        background: a.surface,
+                        border: "none",
+                        color: a.text,
+                        cursor: "pointer",
+                        fontSize: 13,
+                        fontWeight: 700,
+                      },
+                      children: [
+                        "📋 Reglas comerciales (opcional)",
+                        reglasAbiertas ? "▲" : "▼",
+                      ],
+                    }),
+                    reglasAbiertas &&
+                      e.jsxs("div", {
+                        style: {
+                          padding: 12,
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 4,
+                        },
+                        children: [
+                          e.jsx(ze, {
+                            label: "Cantidad mínima facturable",
+                            children: e.jsx(Pe, {
+                              type: "number",
+                              value: j.cantidadMinimaFacturable,
+                              onChange: (y) =>
+                                F((P) => u(d({}, P), { cantidadMinimaFacturable: y })),
+                              placeholder: "Ej: 10",
+                            }),
+                          }),
+                          e.jsx(ze, {
+                            label: "Precio mínimo de la partida ($)",
+                            children: e.jsx(Pe, {
+                              type: "number",
+                              value: j.precioMinimoPartida,
+                              onChange: (y) =>
+                                F((P) => u(d({}, P), { precioMinimoPartida: y })),
+                              placeholder: "Ej: 45000",
+                            }),
+                          }),
+                          ...[
+                            ["requiereMovilizacion", "Requiere movilización"],
+                            ["requiereVisitaTecnica", "Requiere visita técnica"],
+                            ["requiereTrabajoAltura", "Requiere trabajo en altura"],
+                            ["requiereRetiroResiduos", "Requiere retiro de residuos"],
+                          ].map(([key, label]) =>
+                            e.jsxs(
+                              "label",
+                              {
+                                style: {
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 8,
+                                  fontSize: 12,
+                                  color: a.text,
+                                  cursor: "pointer",
+                                  marginBottom: 6,
+                                },
+                                children: [
+                                  e.jsx("input", {
+                                    type: "checkbox",
+                                    checked: !!j[key],
+                                    onChange: (ev) =>
+                                      F((P) =>
+                                        u(d({}, P), { [key]: ev.target.checked }),
+                                      ),
+                                  }),
+                                  label,
+                                ],
+                              },
+                              key,
+                            ),
+                          ),
+                        ],
+                      }),
+                  ],
+                }),
+                e.jsxs("div", {
                   style: { display: "flex", gap: 8 },
                   children: [
                     e.jsx("button", {
@@ -45422,7 +45790,7 @@ MATERIALES:
                           (z(null),
                             m(!1),
                             h("Pintura"),
-                            F({ desc: "", unidad: "unidad", precio: "" }));
+                            F({ desc: "", unidad: "unidad", precio: "", cantidadMinimaFacturable: "", precioMinimoPartida: "", requiereMovilizacion: false, requiereVisitaTecnica: false, requiereTrabajoAltura: false, requiereRetiroResiduos: false }));
                         },
                         children: "Cancelar",
                       }),
@@ -59431,6 +59799,93 @@ MATERIALES:
               e.jsx(Wg, { cfg: h, setCfg: z, setConfigDirty: s }),
               e.jsx(Ng, { cfg: h, setCfg: z, setConfigDirty: s }),
               e.jsx(Og, { cfg: h, setCfg: z, setConfigDirty: s }),
+              e.jsxs("div", {
+                style: u(d({}, c.card), { marginTop: 16 }),
+                children: [
+                  e.jsxs("div", {
+                    style: {
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: 12,
+                    },
+                    children: [
+                      e.jsx("div", {
+                        style: c.ct,
+                        children: "🧮 Mínimos comerciales y costos complementarios",
+                      }),
+                      e.jsx("button", {
+                        onClick: () =>
+                          z((cur) =>
+                            u(d({}, cur), {
+                              minimosComerciales: u(
+                                d({}, cur.minimosComerciales || {}),
+                                {
+                                  activo: !(
+                                    cur.minimosComerciales &&
+                                    cur.minimosComerciales.activo
+                                  ),
+                                },
+                              ),
+                            }),
+                          ),
+                        style: {
+                          padding: "4px 10px",
+                          fontSize: 11,
+                          borderRadius: 6,
+                          cursor: "pointer",
+                          background:
+                            h.minimosComerciales && h.minimosComerciales.activo
+                              ? a.accent
+                              : "transparent",
+                          color:
+                            h.minimosComerciales && h.minimosComerciales.activo
+                              ? "#050a10"
+                              : a.muted,
+                          border: `1px solid ${a.border}`,
+                        },
+                        children:
+                          h.minimosComerciales && h.minimosComerciales.activo
+                            ? "✅ Activado"
+                            : "Desactivado",
+                      }),
+                    ],
+                  }),
+                  e.jsx("div", {
+                    style: { fontSize: 12, color: a.muted, marginBottom: 14, lineHeight: 1.5 },
+                    children:
+                      "Define montos base para movilización, visita técnica y jornada mínima. Se usan como sugerencia editable al agregar partidas que los requieran.",
+                  }),
+                  [
+                    ["movilizacionBase", "Movilización base ($)"],
+                    ["visitaTecnicaBase", "Visita técnica base ($)"],
+                    ["jornadaMinima", "Jornada mínima ($)"],
+                    ["alturaBaseIncluida", "Altura base incluida (m)"],
+                  ].map(([key, label]) =>
+                    e.jsx(
+                      ze,
+                      {
+                        label: label,
+                        children: e.jsx(Pe, {
+                          type: "number",
+                          value:
+                            (h.minimosComerciales && h.minimosComerciales[key]) ?? "",
+                          onChange: (y) =>
+                            z((cur) =>
+                              u(d({}, cur), {
+                                minimosComerciales: u(
+                                  d({}, cur.minimosComerciales || {}),
+                                  { [key]: parseFloat(y) || 0 },
+                                ),
+                              }),
+                            ),
+                        }),
+                      },
+                      key,
+                    ),
+                  ),
+                ],
+              }),
             ],
           }),
         F === "integraciones" &&
