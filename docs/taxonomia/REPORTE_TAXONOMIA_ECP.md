@@ -2,15 +2,28 @@
 
 Generado automáticamente a partir de la biblioteca canónica actual (`src/assets/index.js`, rama `feature/taxonomia-ecp`). **La fuente canónica no fue modificada**: este reporte y los archivos que lo acompañan (`PARTIDAS_TAXONOMIA_PROPUESTA.csv`, `CATEGORIAS_ACTUALES_ECP.csv`, `DICCIONARIO_TAXONOMICO_ECP.json`) son una **propuesta** para revisión humana antes de cualquier implementación.
 
+## 0. Correcciones aplicadas en esta revisión
+
+Esta es la segunda versión de la propuesta. La primera contenía errores sistemáticos entre partidas de confianza alta (el rubro se determinaba a veces por el material/sistema constructivo en vez de por la función de la partida). Se corrigió:
+
+1. **Rubro por función, no por material**: radier, losas, pilares, vigas y fundaciones de hormigón dejaron de heredar el rubro Albañilería de su categoría original y pasaron a *Hormigón y fundaciones*; las techumbres de Metalcon o madera pasaron de *Construcción liviana* a *Techumbres y aguas lluvias*, independientemente de su sistema constructivo.
+2. **Subrubro nunca igual a una categoría antigua**: el subrubro ya no hereda nombres como `Metalcon Mant.`, `Madera Mant.`, `Metalcon NC`, `Impermeable` o `Varios`; cuando no hay una palabra clave más específica, se usa el propio rubro propuesto.
+3. **Prioridad semántica del tipo de intervención**: se reordenó para que "mantención"/"repaso" → Mantención; "reparación"/"parche"/"sellado de fisura" → Reparación; "cambio"/"reemplazo" → Reposición — en ese orden, antes que cualquier valor por defecto. Ninguna partida con esas palabras puede quedar como Obra nueva (ver `VALIDACION_SEMANTICA_TAXONOMIA.md`, reglas R2 y R3).
+4. **Subcontrato solo con evidencia explícita**: el alcance "Subcontrato" exige que la descripción, el APU vinculado o su base técnica lo indiquen; sin esa evidencia se usa "Servicio completo" u otro alcance (ver `VALIDACION_SEMANTICA_TAXONOMIA.md`, regla R5).
+5. **`sistemaConstructivoPropuesto`** separa ahora "No aplica" (sin sistema constructivo aplicable) de "Mixto" (partida que combina varios sistemas); se eliminó el valor combinado "No aplica / mixto".
+6. **20 decisiones humanas explícitas** se aplicaron como corrección final sobre las partidas que en la revisión anterior quedaron con confianza baja o media (ver columna `observacion` de cada una); solo 2 partidas (id 363 y 432) permanecen deliberadamente marcadas para revisión humana, por instrucción explícita de no asignarlas automáticamente a un rubro.
+
+El detalle regla por regla, con las excepciones encontradas (si las hay), está en **`docs/taxonomia/VALIDACION_SEMANTICA_TAXONOMIA.md`**.
+
 ## 1. Resumen cuantitativo
 
 - **Categorías actuales (`cat`) distintas en el catálogo:** 51
-- **Rubros propuestos utilizados:** 30 de 30 posibles (el vocabulario controlado completo se usó en su totalidad)
+- **Rubros propuestos utilizados:** 30 de 30 posibles (los 30 rubros del vocabulario controlado permanecen definidos aunque alguno tenga cero partidas asignadas; no es obligatorio usarlos todos)
 - **Partidas clasificadas:** 311 de 311
-- **Partidas que requieren revisión humana:** 20 (6.4%)
-  - Confianza **baja**: 4
-  - Confianza **media**: 16
-  - Confianza **alta** (no requiere revisión): 291
+- **Partidas que requieren revisión humana:** 2 (0.6%)
+  - Confianza **baja**: 2
+  - Confianza **media**: 0
+  - Confianza **alta** (no requiere revisión): 309
 
 ## 2. Categorías duplicadas o equivalentes
 
@@ -53,30 +66,14 @@ Estas categorías no representan un rubro técnico coherente; agrupan partidas h
 - `Servicios` (1 partida)
 - `Fachadas y Vidrios` (2 partidas — una es fachada real, la otra es una ventana que corresponde a carpintería)
 
+**Partidas heredadas de categorías mixtas (`partidaHeredadaMixta`):** id 116 — su rubro final se fijó por decisión humana explícita (ver `observacion` y `DICCIONARIO_TAXONOMICO_ECP.json > partidasHeredadasMixtas`), no por una regla automática.
+
 ## 7. Partidas ambiguas (requieren revisión humana)
 
 | id | categoriaActual | descripcion | rubroPropuesto | confianza | motivo |
 |---|---|---|---|---|---|
-| 97 | Gas | Sello verde y prueba hermeticidad | Instalaciones de gas | baja | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 98 | Gas | Gestión convenio Gasco | Servicios profesionales | baja | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 115 | Varios | Reinstalación citófono | Corrientes débiles y seguridad electrónica | media | Categoría actual "Varios" es transitoria/catch-all; reclasificado a nivel de partida. Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 116 | Varios | Celosías y cambio de ventanas | Puertas, ventanas y carpinterías | baja | Categoría actual "Varios" es transitoria/catch-all; reclasificado a nivel de partida. Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 160 | Sanitario | Cámara de inspección hormigón ø60cm | Alcantarillado y drenaje | media | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 161 | Sanitario | Colector PVC ø110mm instalado | Alcantarillado y drenaje | media | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 162 | Sanitario | Colector PVC ø160mm instalado | Alcantarillado y drenaje | media | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 163 | Sanitario | Red alcantarillado vivienda completa | Alcantarillado y drenaje | media | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 164 | Sanitario | Trampa de grasa 30L (inst.) | Alcantarillado y drenaje | media | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 315 | Mantención Sanitaria | Destape de WC o cámara de inspección domiciliaria | Alcantarillado y drenaje | media | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 319 | Reparaciones Generales | Cambio de chapa/cerradura puerta | Puertas, ventanas y carpinterías | media | Categoría actual "Reparaciones Generales" es transitoria/catch-all; reclasificado a nivel de partida. Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 320 | Reparaciones Generales | Reparación parche yeso/empaste muro dañado | Cielos y terminaciones | media | Categoría actual "Reparaciones Generales" es transitoria/catch-all; reclasificado a nivel de partida. Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 328 | Fachadas y Vidrios | Ventana PVC termopanel instalada | Puertas, ventanas y carpinterías | media | Categoría actual "Fachadas y Vidrios" es transitoria/catch-all; reclasificado a nivel de partida. Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 363 | Servicios Generales | Traslado y acarreo de mobiliario (mudanza interna) | Obras preliminares | media | Categoría actual "Servicios Generales" es transitoria/catch-all; reclasificado a nivel de partida. Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 364 | Servicios Generales | Jornada adicional de especialista a trato | Servicios profesionales | media | Categoría actual "Servicios Generales" es transitoria/catch-all; reclasificado a nivel de partida. Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 371 | Instalaciones Sanitarias | Ampliación de red de desagüe PVC interior | Alcantarillado y drenaje | media | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 406 | Techumbres | Impermeabilización acrílica de techumbre | Techumbres y aguas lluvias | media | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 420 | Tabiquería | Tabique cortafuego con placa yeso RF 15mm | Construcción liviana | baja | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 423 | Instalaciones Sanitarias | Red de desagüe PVC 4" (colector principal) | Alcantarillado y drenaje | media | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 432 | Servicios | Transporte en camión tolva 8 m³ (flete general) | Demoliciones y desmontajes | media | Categoría actual "Servicios" es transitoria/catch-all; reclasificado a nivel de partida. Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
+| 363 | Servicios Generales | Traslado y acarreo de mobiliario (mudanza interna) | Servicios profesionales | baja | Marcado explícitamente para revisión humana; por instrucción no se asigna automáticamente a "Obras preliminares". Rubro de resguardo hasta decisión final. |
+| 432 | Servicios | Transporte en camión tolva 8 m³ (flete general) | Servicios profesionales | baja | Marcado explícitamente para revisión humana como transporte y logística; por instrucción no se clasifica automáticamente en "Demoliciones y desmontajes". Rubro de resguardo hasta decisión final. |
 
 
 ## 8. Distribución de partidas por rubro propuesto
@@ -84,30 +81,30 @@ Estas categorías no representan un rubro técnico coherente; agrupan partidas h
 | rubroPropuesto | cantidadPartidas | porcentaje |
 |---|---|---|
 | Estructuras metálicas | 30 | 9.6% |
+| Hormigón y fundaciones | 28 | 9.0% |
 | Obras exteriores y urbanización | 27 | 8.7% |
-| Hormigón y fundaciones | 21 | 6.8% |
-| Construcción liviana | 20 | 6.4% |
+| Techumbres y aguas lluvias | 18 | 5.8% |
 | Instalaciones eléctricas | 17 | 5.5% |
 | Instalaciones sanitarias | 17 | 5.5% |
-| Albañilería | 15 | 4.8% |
 | Pisos y revestimientos | 14 | 4.5% |
-| Techumbres y aguas lluvias | 13 | 4.2% |
+| Construcción liviana | 13 | 4.2% |
 | Puertas, ventanas y carpinterías | 13 | 4.2% |
 | Pinturas y recubrimientos | 11 | 3.5% |
-| Demoliciones y desmontajes | 11 | 3.5% |
+| Demoliciones y desmontajes | 10 | 3.2% |
+| Impermeabilización | 9 | 2.9% |
 | Corrientes débiles y seguridad electrónica | 9 | 2.9% |
 | Movimiento de tierras | 9 | 2.9% |
-| Obras preliminares | 9 | 2.9% |
 | Piscinas | 9 | 2.9% |
-| Impermeabilización | 8 | 2.6% |
+| Albañilería | 8 | 2.6% |
 | Instalaciones de gas | 8 | 2.6% |
 | Climatización y ventilación | 8 | 2.6% |
 | Alcantarillado y drenaje | 8 | 2.6% |
+| Obras preliminares | 8 | 2.6% |
 | Cielos y terminaciones | 7 | 2.3% |
+| Servicios profesionales | 7 | 2.3% |
 | Equipamiento y mobiliario | 6 | 1.9% |
-| Servicios profesionales | 5 | 1.6% |
+| Protección contra incendios | 4 | 1.3% |
 | Aislación y eficiencia energética | 4 | 1.3% |
-| Protección contra incendios | 3 | 1.0% |
 | Mantención general | 3 | 1.0% |
 | Paisajismo y riego | 2 | 0.6% |
 | Accesibilidad universal | 2 | 0.6% |
@@ -115,14 +112,14 @@ Estas categorías no representan un rubro técnico coherente; agrupan partidas h
 | Limpieza, pruebas y entrega | 1 | 0.3% |
 
 
+**Rubros del vocabulario controlado sin partidas asignadas actualmente (0):** ninguno — los 30 rubros tienen al menos una partida. Permanecen definidos en el vocabulario controlado (regla 6): no es obligatorio que todo rubro tenga partidas para seguir existiendo como categoría válida.
+
 ## 9. Partidas con confianza baja (prioridad de revisión)
 
 | id | categoriaActual | descripcion | rubroPropuesto | observacion |
 |---|---|---|---|---|
-| 97 | Gas | Sello verde y prueba hermeticidad | Instalaciones de gas | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 98 | Gas | Gestión convenio Gasco | Servicios profesionales | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 116 | Varios | Celosías y cambio de ventanas | Puertas, ventanas y carpinterías | Categoría actual "Varios" es transitoria/catch-all; reclasificado a nivel de partida. Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
-| 420 | Tabiquería | Tabique cortafuego con placa yeso RF 15mm | Construcción liviana | Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados). |
+| 363 | Servicios Generales | Traslado y acarreo de mobiliario (mudanza interna) | Servicios profesionales | Marcado explícitamente para revisión humana; por instrucción no se asigna automáticamente a "Obras preliminares". Rubro de resguardo hasta decisión final. |
+| 432 | Servicios | Transporte en camión tolva 8 m³ (flete general) | Servicios profesionales | Marcado explícitamente para revisión humana como transporte y logística; por instrucción no se clasifica automáticamente en "Demoliciones y desmontajes". Rubro de resguardo hasta decisión final. |
 
 
 ## 10. Metodología
@@ -137,9 +134,9 @@ La clasificación se generó con un script determinístico (`scripts/classify_ta
 
 ## 11. Recomendaciones antes de implementar
 
-1. **Revisar primero las 4 partidas de confianza baja** (sección 9) — son los casos donde el propio criterio de clasificación reconoce ambigüedad real (p. ej. "Sello verde y prueba hermeticidad" podría vivir en *Instalaciones de gas* o en *Limpieza, pruebas y entrega*; "Tabique cortafuego" podría vivir en *Construcción liviana* o en *Protección contra incendios*).
-2. **Resolver las categorías catch-all antes de cualquier migración de datos** (`Varios`, `Servicios`, `Servicios Generales`, `Reparaciones Generales`, `Fachadas y Vidrios`) — son pocas partidas pero cada una necesita una decisión explícita, no una regla automática.
-3. **Decidir si `subrubroPropuesto` se deja como campo libre o se convierte en un segundo vocabulario controlado** antes de implementar: hoy es una etiqueta descriptiva de apoyo (no validada contra una lista cerrada) y en 86 partidas (28%) no se encontró un subrubro más específico y se heredó el nombre de la categoría actual.
+1. **Decidir el rubro final de las 2 partidas aún marcadas de confianza baja** (sección 9: id 363 "Traslado y acarreo de mobiliario" e id 432 "Transporte en camión tolva") — quedaron deliberadamente sin asignación automática a "Obras preliminares" ni "Demoliciones y desmontajes" por instrucción explícita; hoy están en un rubro de resguardo ("Servicios profesionales") y requieren una decisión humana puntual.
+2. **Resolver las categorías catch-all antes de cualquier migración de datos** (`Varios`, `Servicios`, `Servicios Generales`, `Reparaciones Generales`, `Fachadas y Vidrios`) — la mayoría de sus partidas ya recibieron una decisión humana explícita en esta fase (ver `observacion`), pero la fusión real de categorías en la fuente canónica sigue pendiente.
+3. **Decidir si `subrubroPropuesto` se deja como campo libre o se convierte en un segundo vocabulario controlado** antes de implementar: hoy es una etiqueta descriptiva de apoyo (no validada contra una lista cerrada, aunque sí validada para que nunca repita el nombre de una categoría actual) y en 74 partidas (24%) no se encontró un subrubro más específico que el propio rubro propuesto.
 4. **No fusionar categorías automáticamente**: aunque `Impermeable`/`Impermeabilización` y `Seguridad`/`Corrientes Débiles` apuntan al mismo rubro propuesto, la fusión de categorías en la fuente canónica es una operación separada que debe hacerse partida por partida, con el mismo cuidado que cualquier cambio a `src/assets/index.js` (ver `docs/FUENTE_CANONICA_ECP.md`).
 5. **Tratar `especialidadPropuesta` como una primera aproximación**, no como un campo validado: se derivó 1:1 desde el rubro propuesto y no distingue casos donde una misma partida podría requerir dos especialidades (ej. un muro cortina es a la vez fachada y carpintería de aluminio/vidrio).
 6. **Esta propuesta no incluyó los 327 materiales ni los 311 APU** más allá de usarlos como señal de clasificación (campo `estructura`, `esSubcontrato`); una Fase 1B debería evaluar si materiales y APU necesitan su propia taxonomía o heredan la de su partida vinculada.

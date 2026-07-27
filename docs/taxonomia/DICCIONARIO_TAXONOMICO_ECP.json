@@ -1,7 +1,7 @@
 {
   "version": "1.0.0-fase1a",
   "fase": "Fase 1A — propuesta de taxonomía (sin implementar)",
-  "generadoEl": "2026-07-27T15:54:17.828Z",
+  "generadoEl": "2026-07-27T18:35:59.346Z",
   "fuente": {
     "archivo": "src/assets/index.js",
     "rama": "feature/taxonomia-ecp",
@@ -80,13 +80,21 @@
     "Albañilería": [
       {
         "rubro": "Albañilería",
-        "partidas": 15
+        "partidas": 8
+      },
+      {
+        "rubro": "Hormigón y fundaciones",
+        "partidas": 7
       }
     ],
     "Metalcon NC": [
       {
         "rubro": "Construcción liviana",
-        "partidas": 9
+        "partidas": 6
+      },
+      {
+        "rubro": "Techumbres y aguas lluvias",
+        "partidas": 3
       },
       {
         "rubro": "Cielos y terminaciones",
@@ -108,7 +116,11 @@
     "Madera NC": [
       {
         "rubro": "Construcción liviana",
-        "partidas": 8
+        "partidas": 5
+      },
+      {
+        "rubro": "Techumbres y aguas lluvias",
+        "partidas": 3
       },
       {
         "rubro": "Cielos y terminaciones",
@@ -288,20 +300,20 @@
     "Techumbres": [
       {
         "rubro": "Techumbres y aguas lluvias",
-        "partidas": 5
+        "partidas": 4
+      },
+      {
+        "rubro": "Impermeabilización",
+        "partidas": 1
       }
     ],
     "Servicios Generales": [
       {
         "rubro": "Servicios profesionales",
-        "partidas": 2
+        "partidas": 3
       },
       {
         "rubro": "Limpieza, pruebas y entrega",
-        "partidas": 1
-      },
-      {
-        "rubro": "Obras preliminares",
         "partidas": 1
       }
     ],
@@ -415,49 +427,58 @@
     ],
     "Tabiquería": [
       {
-        "rubro": "Construcción liviana",
+        "rubro": "Protección contra incendios",
         "partidas": 1
       }
     ],
     "Servicios": [
       {
-        "rubro": "Demoliciones y desmontajes",
+        "rubro": "Servicios profesionales",
         "partidas": 1
       }
     ]
   },
   "especialidadPropuestaPorRubro": {
-    "Pinturas y recubrimientos": "Pintura",
+    "Obras preliminares": "Administración de obra",
+    "Demoliciones y desmontajes": "Construcción general",
+    "Movimiento de tierras": "Ingeniería civil — movimiento de tierras",
+    "Hormigón y fundaciones": "Ingeniería estructural",
     "Albañilería": "Construcción general",
+    "Estructuras metálicas": "Ingeniería estructural / metalmecánica",
     "Construcción liviana": "Construcción en seco (steel framing / madera)",
     "Techumbres y aguas lluvias": "Techumbres",
-    "Cielos y terminaciones": "Terminaciones",
     "Impermeabilización": "Impermeabilización",
-    "Pisos y revestimientos": "Terminaciones",
-    "Puertas, ventanas y carpinterías": "Carpintería / cerrajería",
-    "Instalaciones eléctricas": "Ingeniería eléctrica",
-    "Instalaciones sanitarias": "Ingeniería sanitaria",
-    "Instalaciones de gas": "Gasfitería certificada",
-    "Servicios profesionales": "Servicios profesionales",
-    "Demoliciones y desmontajes": "Construcción general",
-    "Corrientes débiles y seguridad electrónica": "Electrónica / seguridad",
-    "Estructuras metálicas": "Ingeniería estructural / metalmecánica",
-    "Movimiento de tierras": "Ingeniería civil — movimiento de tierras",
-    "Obras exteriores y urbanización": "Urbanización",
-    "Climatización y ventilación": "Climatización (HVAC)",
-    "Hormigón y fundaciones": "Ingeniería estructural",
-    "Alcantarillado y drenaje": "Ingeniería sanitaria",
-    "Obras preliminares": "Administración de obra",
-    "Piscinas": "Piscinas",
-    "Paisajismo y riego": "Paisajismo",
-    "Fachadas y cerramientos": "Fachadas",
-    "Accesibilidad universal": "Arquitectura / accesibilidad",
-    "Protección contra incendios": "Protección contra incendios",
-    "Equipamiento y mobiliario": "Carpintería / mobiliario",
     "Aislación y eficiencia energética": "Eficiencia energética",
+    "Fachadas y cerramientos": "Fachadas",
+    "Puertas, ventanas y carpinterías": "Carpintería / cerrajería",
+    "Pisos y revestimientos": "Terminaciones",
+    "Cielos y terminaciones": "Terminaciones",
+    "Pinturas y recubrimientos": "Pintura",
+    "Instalaciones sanitarias": "Ingeniería sanitaria",
+    "Alcantarillado y drenaje": "Ingeniería sanitaria",
+    "Instalaciones de gas": "Gasfitería certificada",
+    "Instalaciones eléctricas": "Ingeniería eléctrica",
+    "Corrientes débiles y seguridad electrónica": "Electrónica / seguridad",
+    "Climatización y ventilación": "Climatización (HVAC)",
+    "Protección contra incendios": "Protección contra incendios",
+    "Accesibilidad universal": "Arquitectura / accesibilidad",
+    "Equipamiento y mobiliario": "Carpintería / mobiliario",
+    "Obras exteriores y urbanización": "Urbanización",
+    "Paisajismo y riego": "Paisajismo",
+    "Piscinas": "Piscinas",
+    "Servicios profesionales": "Servicios profesionales",
     "Mantención general": "Mantención",
     "Limpieza, pruebas y entrega": "Servicios generales de obra"
   },
+  "rubrosSinPartidasAsignadas": [],
+  "partidasHeredadasMixtas": [
+    {
+      "id": 116,
+      "descripcion": "Celosías y cambio de ventanas",
+      "rubroPropuesto": "Puertas, ventanas y carpinterías",
+      "nota": "Partida proveniente de una categoría transitoria (\"Varios\") cuyo rubro final se fijó por decisión humana, agrupando conceptos que en la categoría original no tenían relación funcional directa."
+    }
+  ],
   "categoriasTransitoriasIdentificadas": [
     "Varios",
     "Reparaciones Generales",

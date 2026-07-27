@@ -1,7 +1,7 @@
 categoriaActual,cantidadPartidas,rubroPropuestoPrincipal,rubrosDistintosAsociados,otrosRubrosAsociados,partidasConfianzaBaja,partidasConfianzaMedia,esCategoriaMixtaOTransitoria
 Accesibilidad,2,Accesibilidad universal,1,,0,0,false
 Aislación,2,Aislación y eficiencia energética,1,,0,0,false
-Albañilería,15,Albañilería,1,,0,0,false
+Albañilería,15,Albañilería,2,Hormigón y fundaciones,0,0,true
 Áreas Exteriores,14,Obras exteriores y urbanización,2,Paisajismo y riego,0,0,true
 Carpintería,10,"Puertas, ventanas y carpinterías",1,,0,0,false
 Climatización,8,Climatización y ventilación,1,,0,0,false
@@ -12,24 +12,24 @@ Eléctrica,7,Instalaciones eléctricas,1,,0,0,false
 Equipamiento,2,Equipamiento y mobiliario,1,,0,0,false
 Equipamiento Comercial,4,Equipamiento y mobiliario,1,,0,0,false
 Estructuras Metálicas,18,Estructuras metálicas,1,,0,0,false
-Fachadas y Vidrios,2,Fachadas y cerramientos,2,"Puertas, ventanas y carpinterías",0,1,true
-Gas,9,Instalaciones de gas,2,Servicios profesionales,2,0,true
+Fachadas y Vidrios,2,Fachadas y cerramientos,2,"Puertas, ventanas y carpinterías",0,0,true
+Gas,9,Instalaciones de gas,2,Servicios profesionales,0,0,true
 Hormigón Armado,16,Hormigón y fundaciones,1,,0,0,false
 Hormigón y Albañilería,5,Hormigón y fundaciones,1,,0,0,false
 Impermeabilización,4,Impermeabilización,1,,0,0,false
 Impermeable,4,Impermeabilización,1,,0,0,false
 Instalaciones Eléctricas,7,Instalaciones eléctricas,1,,0,0,false
-Instalaciones Sanitarias,8,Instalaciones sanitarias,2,Alcantarillado y drenaje,0,2,true
+Instalaciones Sanitarias,8,Instalaciones sanitarias,2,Alcantarillado y drenaje,0,0,true
 Madera Mant.,2,Techumbres y aguas lluvias,1,,0,0,false
-Madera NC,11,Construcción liviana,2,Cielos y terminaciones,0,0,true
+Madera NC,11,Construcción liviana,3,Techumbres y aguas lluvias | Cielos y terminaciones,0,0,true
 Mantención Eléctrica,3,Instalaciones eléctricas,1,,0,0,false
 Mantención Pintura,4,Pinturas y recubrimientos,1,,0,0,false
 Mantención Preventiva,3,Mantención general,1,,0,0,false
-Mantención Sanitaria,3,Instalaciones sanitarias,2,Alcantarillado y drenaje,0,1,true
+Mantención Sanitaria,3,Instalaciones sanitarias,2,Alcantarillado y drenaje,0,0,true
 Mantención Techumbres,2,Techumbres y aguas lluvias,1,,0,0,false
 Metalcon Estructural,12,Estructuras metálicas,1,,0,0,false
 Metalcon Mant.,1,Techumbres y aguas lluvias,1,,0,0,false
-Metalcon NC,12,Construcción liviana,2,Cielos y terminaciones,0,0,true
+Metalcon NC,12,Construcción liviana,3,Techumbres y aguas lluvias | Cielos y terminaciones,0,0,true
 Metalcon Rem.,2,Construcción liviana,1,,0,0,false
 Mov. de Tierras,9,Movimiento de tierras,1,,0,0,false
 Obras Exteriores,8,Obras exteriores y urbanización,1,,0,0,false
@@ -41,12 +41,12 @@ Piscinas,9,Piscinas,1,,0,0,false
 Pisos,14,Pisos y revestimientos,1,,0,0,false
 Protección Incendio,3,Protección contra incendios,1,,0,0,false
 Regularización,2,Servicios profesionales,1,,0,0,false
-Reparaciones Generales,2,"Puertas, ventanas y carpinterías",2,Cielos y terminaciones,0,2,true
+Reparaciones Generales,2,"Puertas, ventanas y carpinterías",2,Cielos y terminaciones,0,0,true
 Retiro de Escombros,2,Demoliciones y desmontajes,1,,0,0,false
-Sanitario,14,Instalaciones sanitarias,2,Alcantarillado y drenaje,0,5,true
+Sanitario,14,Instalaciones sanitarias,2,Alcantarillado y drenaje,0,0,true
 Seguridad,5,Corrientes débiles y seguridad electrónica,1,,0,0,false
-Servicios,1,Demoliciones y desmontajes,1,,0,1,true
-Servicios Generales,4,Servicios profesionales,3,"Limpieza, pruebas y entrega | Obras preliminares",0,2,true
-Tabiquería,1,Construcción liviana,1,,1,0,true
-Techumbres,5,Techumbres y aguas lluvias,1,,0,1,true
-Varios,2,Corrientes débiles y seguridad electrónica,2,"Puertas, ventanas y carpinterías",1,1,true
+Servicios,1,Servicios profesionales,1,,1,0,true
+Servicios Generales,4,Servicios profesionales,2,"Limpieza, pruebas y entrega",1,0,true
+Tabiquería,1,Protección contra incendios,1,,0,0,false
+Techumbres,5,Techumbres y aguas lluvias,2,Impermeabilización,0,0,true
+Varios,2,Corrientes débiles y seguridad electrónica,2,"Puertas, ventanas y carpinterías",0,0,true

@@ -12,6 +12,8 @@ const outDir = path.join(root, "docs", "taxonomia");
 fs.mkdirSync(outDir, { recursive: true });
 
 const rows = JSON.parse(fs.readFileSync(path.join(targetDir, "taxonomy_classified.json"), "utf8"));
+const vocabularios = JSON.parse(fs.readFileSync(path.join(targetDir, "taxonomy_vocabularios.json"), "utf8"));
+const partidasHeredadasMixtas = JSON.parse(fs.readFileSync(path.join(targetDir, "taxonomy_partidas_heredadas_mixtas.json"), "utf8"));
 
 // ---------------------------------------------------------------------------
 // CSV helpers
@@ -111,31 +113,9 @@ fs.writeFileSync(
 // 3) DICCIONARIO_TAXONOMICO_ECP.json
 // ---------------------------------------------------------------------------
 
-const RUBROS = [
-  "Obras preliminares", "Demoliciones y desmontajes", "Movimiento de tierras",
-  "Hormigón y fundaciones", "Albañilería", "Estructuras metálicas",
-  "Construcción liviana", "Techumbres y aguas lluvias", "Impermeabilización",
-  "Aislación y eficiencia energética", "Fachadas y cerramientos",
-  "Puertas, ventanas y carpinterías", "Pisos y revestimientos",
-  "Cielos y terminaciones", "Pinturas y recubrimientos",
-  "Instalaciones sanitarias", "Alcantarillado y drenaje",
-  "Instalaciones de gas", "Instalaciones eléctricas",
-  "Corrientes débiles y seguridad electrónica", "Climatización y ventilación",
-  "Protección contra incendios", "Accesibilidad universal",
-  "Equipamiento y mobiliario", "Obras exteriores y urbanización",
-  "Paisajismo y riego", "Piscinas", "Servicios profesionales",
-  "Mantención general", "Limpieza, pruebas y entrega",
-];
-const TIPOS_INTERVENCION = [
-  "Obra nueva", "Ampliación", "Remodelación", "Reposición", "Reparación",
-  "Mantención preventiva", "Mantención correctiva", "Demolición",
-  "Desmontaje", "Regularización", "Servicio profesional",
-];
-const ALCANCES = [
-  "Solo suministro", "Solo instalación", "Solo mano de obra",
-  "Suministro e instalación", "Fabricación e instalación",
-  "Desmontaje y retiro", "Reparación parcial", "Servicio completo", "Subcontrato",
-];
+const RUBROS = vocabularios.rubros;
+const TIPOS_INTERVENCION = vocabularios.tiposIntervencion;
+const ALCANCES = vocabularios.alcances;
 
 const rubroPorCategoriaActual = {};
 for (const [cat, items] of byCat.entries()) {
@@ -144,8 +124,11 @@ for (const [cat, items] of byCat.entries()) {
   rubroPorCategoriaActual[cat] = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([r, n]) => ({ rubro: r, partidas: n }));
 }
 
-const especialidadPorRubro = {};
-for (const r of rows) especialidadPorRubro[r.rubroPropuesto] = r.especialidadPropuesta;
+// Especialidad por rubro para los 30 rubros del vocabulario controlado,
+// tengan o no partidas asignadas actualmente (regla 6).
+const especialidadPorRubro = vocabularios.especialidadPorRubro;
+
+const rubrosSinPartidas = RUBROS.filter((r) => !rows.some((row) => row.rubroPropuesto === r));
 
 const diccionario = {
   version: "1.0.0-fase1a",
@@ -168,6 +151,11 @@ const diccionario = {
   },
   categoriasActualesARubroPropuesto: rubroPorCategoriaActual,
   especialidadPropuestaPorRubro: especialidadPorRubro,
+  rubrosSinPartidasAsignadas: rubrosSinPartidas,
+  partidasHeredadasMixtas: partidasHeredadasMixtas.map((id) => {
+    const r = rows.find((row) => row.id === id);
+    return { id, descripcion: r && r.descripcion, rubroPropuesto: r && r.rubroPropuesto, nota: "Partida proveniente de una categoría transitoria (\"Varios\") cuyo rubro final se fijó por decisión humana, agrupando conceptos que en la categoría original no tenían relación funcional directa." };
+  }),
   categoriasTransitoriasIdentificadas: [
     "Varios",
     "Reparaciones Generales",
@@ -224,10 +212,23 @@ const reporte = `# Reporte de taxonomía propuesta — ECP (Fase 1A)
 
 Generado automáticamente a partir de la biblioteca canónica actual (\`src/assets/index.js\`, rama \`feature/taxonomia-ecp\`). **La fuente canónica no fue modificada**: este reporte y los archivos que lo acompañan (\`PARTIDAS_TAXONOMIA_PROPUESTA.csv\`, \`CATEGORIAS_ACTUALES_ECP.csv\`, \`DICCIONARIO_TAXONOMICO_ECP.json\`) son una **propuesta** para revisión humana antes de cualquier implementación.
 
+## 0. Correcciones aplicadas en esta revisión
+
+Esta es la segunda versión de la propuesta. La primera contenía errores sistemáticos entre partidas de confianza alta (el rubro se determinaba a veces por el material/sistema constructivo en vez de por la función de la partida). Se corrigió:
+
+1. **Rubro por función, no por material**: radier, losas, pilares, vigas y fundaciones de hormigón dejaron de heredar el rubro Albañilería de su categoría original y pasaron a *Hormigón y fundaciones*; las techumbres de Metalcon o madera pasaron de *Construcción liviana* a *Techumbres y aguas lluvias*, independientemente de su sistema constructivo.
+2. **Subrubro nunca igual a una categoría antigua**: el subrubro ya no hereda nombres como \`Metalcon Mant.\`, \`Madera Mant.\`, \`Metalcon NC\`, \`Impermeable\` o \`Varios\`; cuando no hay una palabra clave más específica, se usa el propio rubro propuesto.
+3. **Prioridad semántica del tipo de intervención**: se reordenó para que "mantención"/"repaso" → Mantención; "reparación"/"parche"/"sellado de fisura" → Reparación; "cambio"/"reemplazo" → Reposición — en ese orden, antes que cualquier valor por defecto. Ninguna partida con esas palabras puede quedar como Obra nueva (ver \`VALIDACION_SEMANTICA_TAXONOMIA.md\`, reglas R2 y R3).
+4. **Subcontrato solo con evidencia explícita**: el alcance "Subcontrato" exige que la descripción, el APU vinculado o su base técnica lo indiquen; sin esa evidencia se usa "Servicio completo" u otro alcance (ver \`VALIDACION_SEMANTICA_TAXONOMIA.md\`, regla R5).
+5. **\`sistemaConstructivoPropuesto\`** separa ahora "No aplica" (sin sistema constructivo aplicable) de "Mixto" (partida que combina varios sistemas); se eliminó el valor combinado "No aplica / mixto".
+6. **20 decisiones humanas explícitas** se aplicaron como corrección final sobre las partidas que en la revisión anterior quedaron con confianza baja o media (ver columna \`observacion\` de cada una); solo 2 partidas (id 363 y 432) permanecen deliberadamente marcadas para revisión humana, por instrucción explícita de no asignarlas automáticamente a un rubro.
+
+El detalle regla por regla, con las excepciones encontradas (si las hay), está en **\`docs/taxonomia/VALIDACION_SEMANTICA_TAXONOMIA.md\`**.
+
 ## 1. Resumen cuantitativo
 
 - **Categorías actuales (\`cat\`) distintas en el catálogo:** ${totalCategorias}
-- **Rubros propuestos utilizados:** ${totalRubrosUsados} de 30 posibles (el vocabulario controlado completo se usó en su totalidad)
+- **Rubros propuestos utilizados:** ${totalRubrosUsados} de 30 posibles (los 30 rubros del vocabulario controlado permanecen definidos aunque alguno tenga cero partidas asignadas; no es obligatorio usarlos todos)
 - **Partidas clasificadas:** ${rows.length} de 311
 - **Partidas que requieren revisión humana:** ${revisionItems.length} (${((revisionItems.length / rows.length) * 100).toFixed(1)}%)
   - Confianza **baja**: ${bajaItems.length}
@@ -275,6 +276,8 @@ Estas categorías no representan un rubro técnico coherente; agrupan partidas h
 - \`Servicios\` (1 partida)
 - \`Fachadas y Vidrios\` (2 partidas — una es fachada real, la otra es una ventana que corresponde a carpintería)
 
+**Partidas heredadas de categorías mixtas (\`partidaHeredadaMixta\`):** ${partidasHeredadasMixtas.length > 0 ? partidasHeredadasMixtas.map((id) => "id " + id).join(", ") + " — su rubro final se fijó por decisión humana explícita (ver \`observacion\` y \`DICCIONARIO_TAXONOMICO_ECP.json > partidasHeredadasMixtas\`), no por una regla automática." : "ninguna."}
+
 ## 7. Partidas ambiguas (requieren revisión humana)
 
 ${mdTable(
@@ -296,6 +299,8 @@ ${mdTable(
   rubroDist.map(([rubro, n]) => ({ rubroPropuesto: rubro, cantidadPartidas: n, porcentaje: ((n / rows.length) * 100).toFixed(1) + "%" })),
 )}
 
+**Rubros del vocabulario controlado sin partidas asignadas actualmente (${rubrosSinPartidas.length}):** ${rubrosSinPartidas.length > 0 ? rubrosSinPartidas.map((r) => "\`" + r + "\`").join(", ") : "ninguno — los 30 rubros tienen al menos una partida."} Permanecen definidos en el vocabulario controlado (regla 6): no es obligatorio que todo rubro tenga partidas para seguir existiendo como categoría válida.
+
 ## 9. Partidas con confianza baja (prioridad de revisión)
 
 ${mdTable(
@@ -315,9 +320,9 @@ La clasificación se generó con un script determinístico (\`scripts/classify_t
 
 ## 11. Recomendaciones antes de implementar
 
-1. **Revisar primero las ${bajaItems.length} partidas de confianza baja** (sección 9) — son los casos donde el propio criterio de clasificación reconoce ambigüedad real (p. ej. "Sello verde y prueba hermeticidad" podría vivir en *Instalaciones de gas* o en *Limpieza, pruebas y entrega*; "Tabique cortafuego" podría vivir en *Construcción liviana* o en *Protección contra incendios*).
-2. **Resolver las categorías catch-all antes de cualquier migración de datos** (\`Varios\`, \`Servicios\`, \`Servicios Generales\`, \`Reparaciones Generales\`, \`Fachadas y Vidrios\`) — son pocas partidas pero cada una necesita una decisión explícita, no una regla automática.
-3. **Decidir si \`subrubroPropuesto\` se deja como campo libre o se convierte en un segundo vocabulario controlado** antes de implementar: hoy es una etiqueta descriptiva de apoyo (no validada contra una lista cerrada) y en ${rows.filter((r) => r.subrubroPropuesto === r.categoriaActual).length} partidas (${((rows.filter((r) => r.subrubroPropuesto === r.categoriaActual).length / rows.length) * 100).toFixed(0)}%) no se encontró un subrubro más específico y se heredó el nombre de la categoría actual.
+1. **Decidir el rubro final de las ${bajaItems.length} partidas aún marcadas de confianza baja** (sección 9: id 363 "Traslado y acarreo de mobiliario" e id 432 "Transporte en camión tolva") — quedaron deliberadamente sin asignación automática a "Obras preliminares" ni "Demoliciones y desmontajes" por instrucción explícita; hoy están en un rubro de resguardo ("Servicios profesionales") y requieren una decisión humana puntual.
+2. **Resolver las categorías catch-all antes de cualquier migración de datos** (\`Varios\`, \`Servicios\`, \`Servicios Generales\`, \`Reparaciones Generales\`, \`Fachadas y Vidrios\`) — la mayoría de sus partidas ya recibieron una decisión humana explícita en esta fase (ver \`observacion\`), pero la fusión real de categorías en la fuente canónica sigue pendiente.
+3. **Decidir si \`subrubroPropuesto\` se deja como campo libre o se convierte en un segundo vocabulario controlado** antes de implementar: hoy es una etiqueta descriptiva de apoyo (no validada contra una lista cerrada, aunque sí validada para que nunca repita el nombre de una categoría actual) y en ${rows.filter((r) => r.subrubroPropuesto === r.rubroPropuesto).length} partidas (${((rows.filter((r) => r.subrubroPropuesto === r.rubroPropuesto).length / rows.length) * 100).toFixed(0)}%) no se encontró un subrubro más específico que el propio rubro propuesto.
 4. **No fusionar categorías automáticamente**: aunque \`Impermeable\`/\`Impermeabilización\` y \`Seguridad\`/\`Corrientes Débiles\` apuntan al mismo rubro propuesto, la fusión de categorías en la fuente canónica es una operación separada que debe hacerse partida por partida, con el mismo cuidado que cualquier cambio a \`src/assets/index.js\` (ver \`docs/FUENTE_CANONICA_ECP.md\`).
 5. **Tratar \`especialidadPropuesta\` como una primera aproximación**, no como un campo validado: se derivó 1:1 desde el rubro propuesto y no distingue casos donde una misma partida podría requerir dos especialidades (ej. un muro cortina es a la vez fachada y carpintería de aluminio/vidrio).
 6. **Esta propuesta no incluyó los 327 materiales ni los 311 APU** más allá de usarlos como señal de clasificación (campo \`estructura\`, \`esSubcontrato\`); una Fase 1B debería evaluar si materiales y APU necesitan su propia taxonomía o heredan la de su partida vinculada.

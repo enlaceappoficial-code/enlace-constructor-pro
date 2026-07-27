@@ -276,19 +276,46 @@ const SUBRUBRO_RULES = [
 //    con apoyo del campo apu.tipo como señal secundaria.
 // ---------------------------------------------------------------------------
 
+// Prioridad semantica exacta pedida (regla 3 del encargo), en este orden:
+// 1) mantencion / repaso / limpieza preventiva -> Mantencion preventiva o correctiva
+// 2) reparacion / parche / sellado de fisura   -> Reparación
+// 3) cambio / reemplazo / reposicion            -> Reposición
+// 4) ampliacion                                 -> Ampliación
+// 5) demolicion                                 -> Demolición
+// 6) desmontaje / retiro                        -> Desmontaje
+// Ninguna partida con mantencion/reparacion/parche/cambio/sellado correctivo
+// puede caer en "Obra nueva" (validado luego en la fase de validacion
+// semantica automatica).
 function classifyTipoIntervencion(descN, cat, apuTipo) {
+  const catN = norm(cat);
+
+  // 1) Mantencion (preventiva primero, luego correctiva)
   if (/preventiv/.test(descN) || cat === "Mantención Preventiva") return "Mantención preventiva";
-  if (/demolicion/.test(descN)) return "Demolición";
-  if (/retiro y transporte|traslado interno de escombros|retiro escombros|retiro poste/.test(descN)) return "Desmontaje";
-  if (/reinstalacion/.test(descN)) return "Reposición";
-  if (/cambio |reposicion|reemplaz/.test(descN)) return "Reposición";
+  if (/\bmantencion\b|\brepaso\b/.test(descN) || /^mantencion/.test(catN)) return "Mantención correctiva";
+
+  // 2) Reparación
+  if (/\breparacion\b|\bparche\b|sellado.*fisura|\bgotera\b|\bdestape\b/.test(descN)) return "Reparación";
+
+  // 3) Reposición (cambio/reemplazo/reposicion/reinstalacion)
+  if (/reinstalacion|cambio |reposicion|reemplaz/.test(descN)) return "Reposición";
+
+  // 4) Ampliación
   if (/ampliacion/.test(descN)) return "Ampliación";
+
+  // 5) Remodelación (mencion explicita en la descripcion, no solo el tipo del APU)
   if (/remodelacion/.test(descN)) return "Remodelación";
-  if (/^mantencion|^mantención/.test(norm(cat))) return "Mantención correctiva";
-  if (/\breparacion\b|parche|repaso 1 mano|gotera|\bdestape\b/.test(descN)) return "Reparación";
+
+  // 6) Demolición
+  if (/demolicion/.test(descN)) return "Demolición";
+
+  // 7) Desmontaje (retiro sin instalacion asociada)
+  if (/retiro y transporte|traslado interno de escombros|retiro escombros|retiro poste/.test(descN)) return "Desmontaje";
+
+  // Fuera de la lista explicita de la regla 3, pero necesarios para no forzar
+  // "Obra nueva" en tramites y servicios profesionales:
   if (cat === "Regularización" || /regulariz|carpeta seremi|carpeta registro/.test(descN)) return "Regularización";
   if (/visita tecnica|diagnostico|informe|proyecto|diseno|calculo|asesoria|gestion convenio|jornada adicional de especialista/.test(descN)) return "Servicio profesional";
-  if (apuTipo === "Remodelación" && /instalacion|inst\./.test(descN)) return "Obra nueva";
+
   return "Obra nueva";
 }
 
@@ -336,7 +363,11 @@ function classifySistemaConstructivo(descN, apu) {
   if (estructura === "Madera") return "Madera";
   if (estructura === "Estructuras Metálicas") return "Acero estructural";
   if (estructura === "Hormigón" || /hormigon/.test(descN)) return /armad/.test(descN) ? "Hormigón armado" : "Hormigón";
-  return "No aplica / mixto";
+  // Sin un material/sistema dominante identificable: se distingue una
+  // partida genuinamente multi-material/sistema ("Mixto") de una partida sin
+  // sistema constructivo aplicable (mano de obra o servicio puro, "No aplica").
+  if (/complet[oa]|sistema .*complet|red .*complet/.test(descN)) return "Mixto";
+  return "No aplica";
 }
 
 // ---------------------------------------------------------------------------
@@ -388,10 +419,28 @@ const rows = catalog.map((item) => {
   let subrubro = null;
   let overrideConfianza = null;
   let overrideApplied = false;
+  let functionalFixApplied = false;
 
   if (!rubro) {
     rubro = "Servicios profesionales"; // fallback defensivo; no deberia ocurrir
     overrideConfianza = "baja";
+  }
+
+  // Regla 1 (funcion, no material/sistema constructivo): elementos
+  // estructurales de hormigon no son "Albañilería" aunque la categoria
+  // original los agrupe ahi; techumbres de Metalcon/madera no son
+  // "Construcción liviana" aunque compartan sistema constructivo con los
+  // tabiques. Ambas correcciones son deliberadamente estrechas (solo actuan
+  // sobre el rubro base especifico que las originaba) para no alterar otras
+  // partidas que mencionan las mismas palabras en un contexto distinto
+  // (p. ej. "Impermeabilización bajo radier" sigue siendo Impermeabilización).
+  if (rubro === "Albañilería" && /\bradier\b|\blosa\b|\bfundacion\b|pilar de hormigon|viga de hormigon|hormigon elaborado en obra/.test(descN)) {
+    rubro = "Hormigón y fundaciones";
+    functionalFixApplied = true;
+  }
+  if (rubro === "Construcción liviana" && /^techumbre /.test(descN)) {
+    rubro = "Techumbres y aguas lluvias";
+    functionalFixApplied = true;
   }
 
   for (const rule of RUBRO_OVERRIDES) {
@@ -410,7 +459,11 @@ const rows = catalog.map((item) => {
 
   if (!subrubro) {
     const hit = SUBRUBRO_RULES.find((r) => r.test.test(descN));
-    subrubro = hit ? hit.subrubro : item.cat;
+    // El subrubro nunca hereda el nombre crudo de la categoria actual (regla
+    // 2 del encargo): si no hay una palabra clave mas especifica, se usa el
+    // propio rubro propuesto como subrubro (siempre viene del vocabulario
+    // controlado, nunca es una categoria antigua como "Metalcon Mant.").
+    subrubro = hit ? hit.subrubro : rubro;
   }
 
   const tipoIntervencion = classifyTipoIntervencion(descN, item.cat, apu && apu.tipo);
@@ -441,9 +494,10 @@ const rows = catalog.map((item) => {
 
   const observaciones = [];
   if (isTransitionalCat) observaciones.push(`Categoría actual "${item.cat}" es transitoria/catch-all; reclasificado a nivel de partida.`);
+  if (functionalFixApplied) observaciones.push("Rubro asignado por función de la partida, no por el material o sistema constructivo de la categoría original.");
   if (overrideApplied) observaciones.push("Rubro corregido respecto de la categoría actual original (ver DICCIONARIO_TAXONOMICO_ECP.json > overridesAplicados).");
   if (!apu) observaciones.push("Partida sin APU vinculado directamente por catalogId; clasificación basada solo en descripción y categoría.");
-  if (subrubro === item.cat && !overrideApplied) observaciones.push("Subrubro heredado de la categoría actual (sin coincidencia de palabra clave más específica).");
+  if (subrubro === rubro) observaciones.push("Subrubro sin coincidencia de palabra clave más específica; se usó el rubro propuesto como subrubro provisional.");
 
   return {
     id: item.id,
@@ -462,7 +516,68 @@ const rows = catalog.map((item) => {
   };
 });
 
+// ---------------------------------------------------------------------------
+// 8) Decisiones humanas explicitas (regla 8 del encargo de correccion). Se
+//    aplican como una pasada final que reemplaza el resultado del
+//    clasificador automatico para estos IDs puntuales. Los IDs 363 y 432
+//    quedan deliberadamente con confianza baja / revision humana, tal como
+//    fue instruido ("no asignar automaticamente"): se les da un rubro de
+//    resguardo (Servicios profesionales) mientras se toma la decision final.
+// ---------------------------------------------------------------------------
+
+const PARTIDAS_HEREDADAS_MIXTAS = new Set([116]);
+
+const HUMAN_DECISIONS = {
+  97: { rubro: "Instalaciones de gas", subrubro: "Pruebas, inspección y certificación", tipoIntervencion: "Servicio profesional", nota: "Decisión humana explícita." },
+  98: { rubro: "Servicios profesionales", subrubro: "Tramitación y coordinación", tipoIntervencion: "Servicio profesional", nota: "Decisión humana explícita." },
+  115: { rubro: "Corrientes débiles y seguridad electrónica", subrubro: "Citofonía y videoportero", nota: "Decisión humana explícita." },
+  116: { rubro: "Puertas, ventanas y carpinterías", subrubro: "Ventanas", nota: "Decisión humana explícita. Partida heredada de la categoría transitoria \"Varios\"; agrupa celosías y cambio de ventanas bajo un mismo rubro por decisión humana, no por regla automática (partidaHeredadaMixta=true)." },
+  160: { rubro: "Alcantarillado y drenaje", subrubro: "Cámaras de inspección", nota: "Decisión humana explícita." },
+  161: { rubro: "Alcantarillado y drenaje", subrubro: "Redes de alcantarillado", nota: "Decisión humana explícita." },
+  162: { rubro: "Alcantarillado y drenaje", subrubro: "Redes de alcantarillado", nota: "Decisión humana explícita." },
+  163: { rubro: "Alcantarillado y drenaje", subrubro: "Redes de alcantarillado", nota: "Decisión humana explícita." },
+  164: { rubro: "Alcantarillado y drenaje", subrubro: "Trampas de grasa", nota: "Decisión humana explícita." },
+  315: { rubro: "Alcantarillado y drenaje", subrubro: "Destapes y mantención correctiva", tipoIntervencion: "Mantención correctiva", nota: "Decisión humana explícita." },
+  319: { rubro: "Puertas, ventanas y carpinterías", subrubro: "Quincallería y cerraduras", nota: "Decisión humana explícita." },
+  320: { rubro: "Cielos y terminaciones", subrubro: "Reparación de superficies interiores", tipoIntervencion: "Reparación", nota: "Decisión humana explícita." },
+  328: { rubro: "Puertas, ventanas y carpinterías", subrubro: "Ventanas", nota: "Decisión humana explícita." },
+  363: { rubro: "Servicios profesionales", subrubro: "Logística y traslados (pendiente de decisión)", confianza: "baja", requiereRevisionHumana: true, nota: "Marcado explícitamente para revisión humana; por instrucción no se asigna automáticamente a \"Obras preliminares\". Rubro de resguardo hasta decisión final." },
+  364: { rubro: "Servicios profesionales", subrubro: "Mano de obra especializada", tipoIntervencion: "Servicio profesional", nota: "Decisión humana explícita." },
+  371: { rubro: "Alcantarillado y drenaje", subrubro: "Redes de alcantarillado", nota: "Decisión humana explícita." },
+  406: { rubro: "Impermeabilización", subrubro: "Impermeabilización de cubiertas", nota: "Decisión humana explícita." },
+  420: { rubro: "Protección contra incendios", subrubro: "Compartimentación resistente al fuego", sistemaConstructivo: "Metalcon (acero galvanizado liviano)", nota: "Decisión humana explícita. Sistema constructivo: tabique Metalcon con placa de yeso-cartón RF." },
+  423: { rubro: "Alcantarillado y drenaje", subrubro: "Redes de alcantarillado", nota: "Decisión humana explícita." },
+  432: { rubro: "Servicios profesionales", subrubro: "Transporte y logística (pendiente de decisión)", confianza: "baja", requiereRevisionHumana: true, nota: "Marcado explícitamente para revisión humana como transporte y logística; por instrucción no se clasifica automáticamente en \"Demoliciones y desmontajes\". Rubro de resguardo hasta decisión final." },
+};
+
+for (const row of rows) {
+  const decision = HUMAN_DECISIONS[row.id];
+  if (!decision) continue;
+  row.rubroPropuesto = decision.rubro;
+  row.subrubroPropuesto = decision.subrubro;
+  if (decision.tipoIntervencion) row.tipoIntervencionPropuesto = decision.tipoIntervencion;
+  if (decision.sistemaConstructivo) row.sistemaConstructivoPropuesto = decision.sistemaConstructivo;
+  row.especialidadPropuesta = RUBRO_TO_ESPECIALIDAD[decision.rubro] || row.especialidadPropuesta;
+  row.confianza = decision.confianza || "alta";
+  row.requiereRevisionHumana = decision.requiereRevisionHumana != null ? decision.requiereRevisionHumana : false;
+  row.observacion = decision.nota;
+  if (!RUBRO_SET.has(row.rubroPropuesto)) {
+    throw new Error(`Decisión humana usa un rubro fuera de vocabulario controlado: "${row.rubroPropuesto}" (item ${row.id})`);
+  }
+  if (decision.tipoIntervencion && !TIPO_SET.has(decision.tipoIntervencion)) {
+    throw new Error(`Decisión humana usa un tipo de intervención fuera de vocabulario controlado: "${decision.tipoIntervencion}" (item ${row.id})`);
+  }
+}
+
 fs.writeFileSync(path.join(targetDir, "taxonomy_classified.json"), JSON.stringify(rows, null, 2));
+fs.writeFileSync(path.join(targetDir, "taxonomy_partidas_heredadas_mixtas.json"), JSON.stringify([...PARTIDAS_HEREDADAS_MIXTAS], null, 2));
+// Vocabularios completos (todos los rubros, tengan o no partidas asignadas)
+// para que el generador de artefactos no dependa de lo que aparezca en
+// `rows` — regla 6: un rubro puede permanecer definido con cero partidas.
+fs.writeFileSync(
+  path.join(targetDir, "taxonomy_vocabularios.json"),
+  JSON.stringify({ rubros: RUBROS, tiposIntervencion: TIPOS_INTERVENCION, alcances: ALCANCES, especialidadPorRubro: RUBRO_TO_ESPECIALIDAD }, null, 2),
+);
 
 console.log(JSON.stringify({
   total: rows.length,
