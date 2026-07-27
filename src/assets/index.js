@@ -76790,6 +76790,7 @@ Esta acción no se puede deshacer.`) &&
             }),
             e.jsxs("div", {
               style: {
+                marginTop: "auto",
                 borderTop: "1px solid rgba(255,255,255,0.2)",
                 padding: "10px 14px",
               },
@@ -77052,8 +77053,8 @@ Esta acción no se puede deshacer.`) &&
             e.jsx("div", {
               onClick: () => { window.__TAURI__ ? window.__TAURI__.shell.open("https://redenlace.cl/constructor-pro") : window.open("https://redenlace.cl/constructor-pro") },
               style: {
-                marginTop: "15px",
-                padding: "15px 0 5px",
+                marginTop: "5px",
+                padding: "0 0 15px",
                 textAlign: "center",
                 fontSize: 11,
                 color: "rgba(255, 255, 255, 0.45)",
