@@ -14,7 +14,16 @@ fs.mkdirSync(outDir, { recursive: true });
 
 const catalog = JSON.parse(fs.readFileSync(path.join(targetDir, "taxonomy_raw_catalog.json"), "utf8"));
 const apus = JSON.parse(fs.readFileSync(path.join(targetDir, "taxonomy_raw_apus.json"), "utf8"));
+const materials = JSON.parse(fs.readFileSync(path.join(targetDir, "taxonomy_raw_materials.json"), "utf8"));
 const apuByCatalogId = new Map(apus.map((a) => [a.catalogId, a]));
+const materialById = new Map(materials.map((m) => [m.id, m]));
+
+function materialNamesText(apu) {
+  if (!apu || !Array.isArray(apu.materiales)) return "";
+  return apu.materiales
+    .map((m) => (materialById.get(m.materialId) || {}).nombre || "")
+    .join(" ");
+}
 
 // ---------------------------------------------------------------------------
 // Vocabularios controlados (dados por el usuario, no editar sin instruccion)
@@ -187,7 +196,7 @@ const RUBRO_OVERRIDES = [
   { test: /muro cortina/, rubro: "Fachadas y cerramientos", subrubro: "Muro cortina", confianza: "alta" },
 
   // Ojalaeria / canaletas -> aguas lluvias (subrubro especifico)
-  { test: /canal pvc|ojalaeria|canal y bajante|destape de canaletas|limpieza y destape de canaletas/, rubro: "Techumbres y aguas lluvias", subrubro: "Canales y bajantes (aguas lluvias)", confianza: "alta" },
+  { test: /canal pvc|ojalaeria|canal y bajante|destape de canaletas|limpieza y destape de canaletas/, rubro: "Techumbres y aguas lluvias", subrubro: "Canaletas y bajantes", especialidad: "Hojalatería", confianza: "alta" },
 
   // Servicios Generales / Servicios / Varios / Reparaciones Generales: catch-all,
   // reclasificar item a item.
@@ -340,29 +349,45 @@ function classifyAlcance(descN, unidad, apu) {
 // 6) Sistema constructivo (a partir de apu.estructura + palabras clave)
 // ---------------------------------------------------------------------------
 
+function materialKeywordMatch(text) {
+  if (/albañileria|ladrillo|bloques/.test(text)) return "Albañilería";
+  if (/pvc/.test(text)) return "PVC";
+  if (/ppr/.test(text)) return "PPR";
+  if (/cobre/.test(text)) return "Cobre";
+  if (/acma|malla electrosoldada/.test(text)) return "Acero (malla/ACMA)";
+  if (/aluminio/.test(text)) return "Aluminio";
+  if (/vidrio|termopanel/.test(text)) return "Vidrio";
+  if (/ceramico|porcelanato/.test(text)) return "Cerámico";
+  if (/vinilico/.test(text)) return "Vinílico";
+  if (/melamina/.test(text)) return "Melamina";
+  if (/zinc/.test(text)) return "Zinc";
+  if (/policarbonato/.test(text)) return "Policarbonato";
+  if (/poliestireno eps/.test(text)) return "Poliestireno expandido (EPS)";
+  return null;
+}
+
 function classifySistemaConstructivo(descN, apu) {
   const estructura = apu && apu.estructura;
-  // Palabras clave de material/sistema en la descripcion tienen prioridad
-  // sobre el campo generico apu.estructura (que en esta fuente usa
-  // "Hormigón" como categoria estructural amplia incluso para muros de
-  // albañilería reforzada con pilares/cadenas de hormigón).
-  if (/albañileria|ladrillo|bloques/.test(descN)) return "Albañilería";
-  if (/pvc/.test(descN)) return "PVC";
-  if (/ppr/.test(descN)) return "PPR";
-  if (/cobre/.test(descN)) return "Cobre";
-  if (/acma|malla electrosoldada/.test(descN)) return "Acero (malla/ACMA)";
-  if (/aluminio/.test(descN)) return "Aluminio";
-  if (/vidrio|termopanel/.test(descN)) return "Vidrio";
-  if (/ceramico|porcelanato/.test(descN)) return "Cerámico";
-  if (/vinilico/.test(descN)) return "Vinílico";
-  if (/melamina/.test(descN)) return "Melamina";
-  if (/zinc/.test(descN)) return "Zinc";
-  if (/policarbonato/.test(descN)) return "Policarbonato";
-  if (/poliestireno eps/.test(descN)) return "Poliestireno expandido (EPS)";
+  // 1) Palabras clave de material/sistema en la propia descripcion de la
+  //    partida (señal mas confiable, es lo que el usuario ve y busca).
+  const porDescripcion = materialKeywordMatch(descN);
+  if (porDescripcion) return porDescripcion;
+  // 2) Campo estructura del APU (Metalcon/Madera/Estructuras Metalicas son
+  //    señales limpias; "Hormigón" es ambiguo -- ver mas abajo).
   if (estructura === "Metalcon") return "Metalcon (acero galvanizado liviano)";
   if (estructura === "Madera") return "Madera";
   if (estructura === "Estructuras Metálicas") return "Acero estructural";
   if (estructura === "Hormigón" || /hormigon/.test(descN)) return /armad/.test(descN) ? "Hormigón armado" : "Hormigón";
+  // 3) Solo si la descripcion no dio ninguna señal, se recurre a los
+  //    nombres de materiales del APU vinculado como respaldo (p. ej.
+  //    "Cambio canal y bajante existente" no menciona PVC, pero sus
+  //    materiales son "Canal PVC.../Bajante PVC..."). Se excluye "vidrio"
+  //    de este respaldo porque "Malla fibra vidrio" (cinta de refuerzo para
+  //    estucos/empastes) aparece como material incidental en casi cualquier
+  //    partida de reparación de muros y no indica un sistema de vidrio.
+  const materialesTexto = norm(materialNamesText(apu)).replace(/malla fibra vidrio/g, "");
+  const porMaterial = materialKeywordMatch(materialesTexto);
+  if (porMaterial) return porMaterial;
   // Sin un material/sistema dominante identificable: se distingue una
   // partida genuinamente multi-material/sistema ("Mixto") de una partida sin
   // sistema constructivo aplicable (mano de obra o servicio puro, "No aplica").
@@ -443,11 +468,13 @@ const rows = catalog.map((item) => {
     functionalFixApplied = true;
   }
 
+  let overrideEspecialidad = null;
   for (const rule of RUBRO_OVERRIDES) {
     if (rule.test.test(descN)) {
       rubro = rule.rubro;
       subrubro = rule.subrubro;
       overrideConfianza = rule.confianza;
+      overrideEspecialidad = rule.especialidad || null;
       overrideApplied = true;
       break;
     }
@@ -477,7 +504,7 @@ const rows = catalog.map((item) => {
   }
 
   const sistemaConstructivo = classifySistemaConstructivo(descN, apu);
-  const especialidad = RUBRO_TO_ESPECIALIDAD[rubro] || "Construcción general";
+  const especialidad = overrideEspecialidad || RUBRO_TO_ESPECIALIDAD[rubro] || "Construcción general";
 
   // Confianza global del registro: una regla por-item explicita fija su
   // propia confianza (ya evaluada al redactar la regla); si no hubo regla,
@@ -541,13 +568,13 @@ const HUMAN_DECISIONS = {
   319: { rubro: "Puertas, ventanas y carpinterías", subrubro: "Quincallería y cerraduras", nota: "Decisión humana explícita." },
   320: { rubro: "Cielos y terminaciones", subrubro: "Reparación de superficies interiores", tipoIntervencion: "Reparación", nota: "Decisión humana explícita." },
   328: { rubro: "Puertas, ventanas y carpinterías", subrubro: "Ventanas", nota: "Decisión humana explícita." },
-  363: { rubro: "Servicios profesionales", subrubro: "Logística y traslados (pendiente de decisión)", confianza: "baja", requiereRevisionHumana: true, nota: "Marcado explícitamente para revisión humana; por instrucción no se asigna automáticamente a \"Obras preliminares\". Rubro de resguardo hasta decisión final." },
+  363: { rubro: "Servicios profesionales", subrubro: "Logística y apoyo de obra", tipoIntervencion: "Servicio profesional", sistemaConstructivo: "No aplica", alcance: "Servicio completo", especialidad: "Logística de obra", nota: "Decisión humana explícita (segunda ronda). No se asigna a \"Obras preliminares\" por instrucción explícita." },
   364: { rubro: "Servicios profesionales", subrubro: "Mano de obra especializada", tipoIntervencion: "Servicio profesional", nota: "Decisión humana explícita." },
   371: { rubro: "Alcantarillado y drenaje", subrubro: "Redes de alcantarillado", nota: "Decisión humana explícita." },
   406: { rubro: "Impermeabilización", subrubro: "Impermeabilización de cubiertas", nota: "Decisión humana explícita." },
   420: { rubro: "Protección contra incendios", subrubro: "Compartimentación resistente al fuego", sistemaConstructivo: "Metalcon (acero galvanizado liviano)", nota: "Decisión humana explícita. Sistema constructivo: tabique Metalcon con placa de yeso-cartón RF." },
   423: { rubro: "Alcantarillado y drenaje", subrubro: "Redes de alcantarillado", nota: "Decisión humana explícita." },
-  432: { rubro: "Servicios profesionales", subrubro: "Transporte y logística (pendiente de decisión)", confianza: "baja", requiereRevisionHumana: true, nota: "Marcado explícitamente para revisión humana como transporte y logística; por instrucción no se clasifica automáticamente en \"Demoliciones y desmontajes\". Rubro de resguardo hasta decisión final." },
+  432: { rubro: "Servicios profesionales", subrubro: "Transporte y logística de obra", tipoIntervencion: "Servicio profesional", sistemaConstructivo: "No aplica", alcance: "Subcontrato", especialidad: "Transporte", nota: "Decisión humana explícita (segunda ronda). No se clasifica en \"Demoliciones y desmontajes\" por instrucción explícita." },
 };
 
 for (const row of rows) {
@@ -557,7 +584,8 @@ for (const row of rows) {
   row.subrubroPropuesto = decision.subrubro;
   if (decision.tipoIntervencion) row.tipoIntervencionPropuesto = decision.tipoIntervencion;
   if (decision.sistemaConstructivo) row.sistemaConstructivoPropuesto = decision.sistemaConstructivo;
-  row.especialidadPropuesta = RUBRO_TO_ESPECIALIDAD[decision.rubro] || row.especialidadPropuesta;
+  if (decision.alcance) row.alcancePropuesto = decision.alcance;
+  row.especialidadPropuesta = decision.especialidad || RUBRO_TO_ESPECIALIDAD[decision.rubro] || row.especialidadPropuesta;
   row.confianza = decision.confianza || "alta";
   row.requiereRevisionHumana = decision.requiereRevisionHumana != null ? decision.requiereRevisionHumana : false;
   row.observacion = decision.nota;
@@ -566,6 +594,9 @@ for (const row of rows) {
   }
   if (decision.tipoIntervencion && !TIPO_SET.has(decision.tipoIntervencion)) {
     throw new Error(`Decisión humana usa un tipo de intervención fuera de vocabulario controlado: "${decision.tipoIntervencion}" (item ${row.id})`);
+  }
+  if (decision.alcance && !ALCANCE_SET.has(decision.alcance)) {
+    throw new Error(`Decisión humana usa un alcance fuera de vocabulario controlado: "${decision.alcance}" (item ${row.id})`);
   }
 }
 

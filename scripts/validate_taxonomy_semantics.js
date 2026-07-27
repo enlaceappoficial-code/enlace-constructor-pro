@@ -129,12 +129,16 @@ function addRule(id, descripcion, exceptions) {
       const evidenciaDescripcion = /subcontr/.test(d);
       const evidenciaApu = !!(apu && apu.esSubcontrato);
       const evidenciaBaseTecnica = !!(apu && apu.baseTecnica && /subcontr/.test(norm(apu.baseTecnica.metodo || "")));
-      return !(evidenciaDescripcion || evidenciaApu || evidenciaBaseTecnica);
+      // Una decision humana explicita (regla 8) es en si misma evidencia
+      // valida: la regla 4 prohibe que el clasificador automatico INFIERA
+      // Subcontrato sin evidencia, no que una persona lo decida a proposito.
+      const evidenciaDecisionHumana = /decisi[oó]n humana expl[ií]cita/i.test(r.observacion || "");
+      return !(evidenciaDescripcion || evidenciaApu || evidenciaBaseTecnica || evidenciaDecisionHumana);
     })
     .map((r) => ({ id: r.id, descripcion: r.descripcion }));
   addRule(
     "R5",
-    'Ninguna partida puede quedar clasificada con alcance "Subcontrato" sin evidencia explícita en la descripción, en el campo esSubcontrato del APU vinculado, o en su base técnica.',
+    'Ninguna partida puede quedar clasificada con alcance "Subcontrato" sin evidencia explícita en la descripción, en el campo esSubcontrato del APU vinculado, en su base técnica, o en una decisión humana explícita (regla 8).',
     exceptions,
   );
 }

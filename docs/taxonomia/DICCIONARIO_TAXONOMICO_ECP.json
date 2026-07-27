@@ -1,7 +1,7 @@
 {
   "version": "1.0.0-fase1a",
   "fase": "Fase 1A — propuesta de taxonomía (sin implementar)",
-  "generadoEl": "2026-07-27T18:35:59.346Z",
+  "generadoEl": "2026-07-27T20:55:47.091Z",
   "fuente": {
     "archivo": "src/assets/index.js",
     "rama": "feature/taxonomia-ecp",

@@ -20,10 +20,10 @@ El detalle regla por regla, con las excepciones encontradas (si las hay), está 
 - **Categorías actuales (`cat`) distintas en el catálogo:** 51
 - **Rubros propuestos utilizados:** 30 de 30 posibles (los 30 rubros del vocabulario controlado permanecen definidos aunque alguno tenga cero partidas asignadas; no es obligatorio usarlos todos)
 - **Partidas clasificadas:** 311 de 311
-- **Partidas que requieren revisión humana:** 2 (0.6%)
-  - Confianza **baja**: 2
+- **Partidas que requieren revisión humana:** 0 (0.0%)
+  - Confianza **baja**: 0
   - Confianza **media**: 0
-  - Confianza **alta** (no requiere revisión): 309
+  - Confianza **alta** (no requiere revisión): 311
 
 ## 2. Categorías duplicadas o equivalentes
 
@@ -72,8 +72,6 @@ Estas categorías no representan un rubro técnico coherente; agrupan partidas h
 
 | id | categoriaActual | descripcion | rubroPropuesto | confianza | motivo |
 |---|---|---|---|---|---|
-| 363 | Servicios Generales | Traslado y acarreo de mobiliario (mudanza interna) | Servicios profesionales | baja | Marcado explícitamente para revisión humana; por instrucción no se asigna automáticamente a "Obras preliminares". Rubro de resguardo hasta decisión final. |
-| 432 | Servicios | Transporte en camión tolva 8 m³ (flete general) | Servicios profesionales | baja | Marcado explícitamente para revisión humana como transporte y logística; por instrucción no se clasifica automáticamente en "Demoliciones y desmontajes". Rubro de resguardo hasta decisión final. |
 
 
 ## 8. Distribución de partidas por rubro propuesto
@@ -118,8 +116,6 @@ Estas categorías no representan un rubro técnico coherente; agrupan partidas h
 
 | id | categoriaActual | descripcion | rubroPropuesto | observacion |
 |---|---|---|---|---|
-| 363 | Servicios Generales | Traslado y acarreo de mobiliario (mudanza interna) | Servicios profesionales | Marcado explícitamente para revisión humana; por instrucción no se asigna automáticamente a "Obras preliminares". Rubro de resguardo hasta decisión final. |
-| 432 | Servicios | Transporte en camión tolva 8 m³ (flete general) | Servicios profesionales | Marcado explícitamente para revisión humana como transporte y logística; por instrucción no se clasifica automáticamente en "Demoliciones y desmontajes". Rubro de resguardo hasta decisión final. |
 
 
 ## 10. Metodología
@@ -134,7 +130,7 @@ La clasificación se generó con un script determinístico (`scripts/classify_ta
 
 ## 11. Recomendaciones antes de implementar
 
-1. **Decidir el rubro final de las 2 partidas aún marcadas de confianza baja** (sección 9: id 363 "Traslado y acarreo de mobiliario" e id 432 "Transporte en camión tolva") — quedaron deliberadamente sin asignación automática a "Obras preliminares" ni "Demoliciones y desmontajes" por instrucción explícita; hoy están en un rubro de resguardo ("Servicios profesionales") y requieren una decisión humana puntual.
+1. **Decidir el rubro final de las 0 partidas aún marcadas de confianza baja** (sección 9: id 363 "Traslado y acarreo de mobiliario" e id 432 "Transporte en camión tolva") — quedaron deliberadamente sin asignación automática a "Obras preliminares" ni "Demoliciones y desmontajes" por instrucción explícita; hoy están en un rubro de resguardo ("Servicios profesionales") y requieren una decisión humana puntual.
 2. **Resolver las categorías catch-all antes de cualquier migración de datos** (`Varios`, `Servicios`, `Servicios Generales`, `Reparaciones Generales`, `Fachadas y Vidrios`) — la mayoría de sus partidas ya recibieron una decisión humana explícita en esta fase (ver `observacion`), pero la fusión real de categorías en la fuente canónica sigue pendiente.
 3. **Decidir si `subrubroPropuesto` se deja como campo libre o se convierte en un segundo vocabulario controlado** antes de implementar: hoy es una etiqueta descriptiva de apoyo (no validada contra una lista cerrada, aunque sí validada para que nunca repita el nombre de una categoría actual) y en 74 partidas (24%) no se encontró un subrubro más específico que el propio rubro propuesto.
 4. **No fusionar categorías automáticamente**: aunque `Impermeable`/`Impermeabilización` y `Seguridad`/`Corrientes Débiles` apuntan al mismo rubro propuesto, la fusión de categorías en la fuente canónica es una operación separada que debe hacerse partida por partida, con el mismo cuidado que cualquier cambio a `src/assets/index.js` (ver `docs/FUENTE_CANONICA_ECP.md`).

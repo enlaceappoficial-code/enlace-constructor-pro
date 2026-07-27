@@ -30,7 +30,7 @@ Sin excepciones.
 
 ## R5 — PASA
 
-Ninguna partida puede quedar clasificada con alcance "Subcontrato" sin evidencia explícita en la descripción, en el campo esSubcontrato del APU vinculado, o en su base técnica.
+Ninguna partida puede quedar clasificada con alcance "Subcontrato" sin evidencia explícita en la descripción, en el campo esSubcontrato del APU vinculado, en su base técnica, o en una decisión humana explícita (regla 8).
 
 Sin excepciones.
 

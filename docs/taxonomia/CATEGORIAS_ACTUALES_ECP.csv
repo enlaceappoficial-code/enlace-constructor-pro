@@ -45,8 +45,8 @@ Reparaciones Generales,2,"Puertas, ventanas y carpinterías",2,Cielos y terminac
 Retiro de Escombros,2,Demoliciones y desmontajes,1,,0,0,false
 Sanitario,14,Instalaciones sanitarias,2,Alcantarillado y drenaje,0,0,true
 Seguridad,5,Corrientes débiles y seguridad electrónica,1,,0,0,false
-Servicios,1,Servicios profesionales,1,,1,0,true
-Servicios Generales,4,Servicios profesionales,2,"Limpieza, pruebas y entrega",1,0,true
+Servicios,1,Servicios profesionales,1,,0,0,false
+Servicios Generales,4,Servicios profesionales,2,"Limpieza, pruebas y entrega",0,0,true
 Tabiquería,1,Protección contra incendios,1,,0,0,false
 Techumbres,5,Techumbres y aguas lluvias,2,Impermeabilización,0,0,true
 Varios,2,Corrientes débiles y seguridad electrónica,2,"Puertas, ventanas y carpinterías",0,0,true

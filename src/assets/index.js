@@ -9999,6 +9999,12 @@ Error generating stack: ` +
         unidad: "m²",
         precio: 5500,
         requiereMovilizacion: true,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Pinturas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Pintura"
       },
       {
         id: 2,
@@ -10006,6 +10012,12 @@ Error generating stack: ` +
         desc: "Pintura muros exteriores (2 manos)",
         unidad: "m²",
         precio: 7500,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Pinturas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Pintura"
       },
       {
         id: 3,
@@ -10013,6 +10025,12 @@ Error generating stack: ` +
         desc: "Pintura cielos",
         unidad: "m²",
         precio: 6500,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Cielos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Pintura"
       },
       {
         id: 4,
@@ -10020,6 +10038,12 @@ Error generating stack: ` +
         desc: "Pintura puertas y ventanas (2 manos)",
         unidad: "m²",
         precio: 8500,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Ventanas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Pintura"
       },
       {
         id: 5,
@@ -10027,6 +10051,12 @@ Error generating stack: ` +
         desc: "Pintura anticorrosiva estructura met.",
         unidad: "m²",
         precio: 9500,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Pinturas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Pintura"
       },
       {
         id: 6,
@@ -10034,6 +10064,12 @@ Error generating stack: ` +
         desc: "Pintura repaso 1 mano (mantención)",
         unidad: "m²",
         precio: 7500,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Pinturas",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Reparación parcial",
+        especialidad: "Pintura"
       },
       {
         id: 10,
@@ -10041,6 +10077,12 @@ Error generating stack: ` +
         desc: "Radier hormigón H-20",
         unidad: "m³",
         precio: 185e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 11,
@@ -10048,6 +10090,12 @@ Error generating stack: ` +
         desc: "Radier hormigón H-25",
         unidad: "m³",
         precio: 195e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 12,
@@ -10055,6 +10103,12 @@ Error generating stack: ` +
         desc: "Muro albañilería reforzada c/bloques",
         unidad: "m²",
         precio: 48e3,
+        rubro: "Albañilería",
+        subrubro: "Albañilería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Albañilería",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción general"
       },
       {
         id: 13,
@@ -10062,6 +10116,12 @@ Error generating stack: ` +
         desc: "Muro albañilería ladrillo fiscal",
         unidad: "m²",
         precio: 52e3,
+        rubro: "Albañilería",
+        subrubro: "Albañilería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Albañilería",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción general"
       },
       {
         id: 14,
@@ -10069,6 +10129,12 @@ Error generating stack: ` +
         desc: "Fundación corrida H-20",
         unidad: "m³",
         precio: 195e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 15,
@@ -10076,6 +10142,12 @@ Error generating stack: ` +
         desc: "Losa hormigón H-20",
         unidad: "m³",
         precio: 21e4,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 16,
@@ -10083,6 +10155,12 @@ Error generating stack: ` +
         desc: "Losa hormigón H-25",
         unidad: "m³",
         precio: 225e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 17,
@@ -10090,6 +10168,12 @@ Error generating stack: ` +
         desc: "Estuco exterior",
         unidad: "m²",
         precio: 18500,
+        rubro: "Albañilería",
+        subrubro: "Albañilería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción general"
       },
       {
         id: 18,
@@ -10097,6 +10181,12 @@ Error generating stack: ` +
         desc: "Estuco interior",
         unidad: "m²",
         precio: 16500,
+        rubro: "Albañilería",
+        subrubro: "Albañilería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción general"
       },
       {
         id: 19,
@@ -10104,6 +10194,12 @@ Error generating stack: ` +
         desc: "Reparación estuco exterior parcial",
         unidad: "m²",
         precio: 22e3,
+        rubro: "Albañilería",
+        subrubro: "Albañilería",
+        tipoIntervencion: "Reparación",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción general"
       },
       {
         id: 20,
@@ -10111,6 +10207,12 @@ Error generating stack: ` +
         desc: "Muro perimetral Metalcon C150 + OSB + estuco",
         unidad: "m²",
         precio: 85e3,
+        rubro: "Construcción liviana",
+        subrubro: "Cierres y muros perimetrales",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
       },
       {
         id: 21,
@@ -10118,6 +10220,12 @@ Error generating stack: ` +
         desc: "Muro perimetral Metalcon C200 + OSB + estuco",
         unidad: "m²",
         precio: 95e3,
+        rubro: "Construcción liviana",
+        subrubro: "Cierres y muros perimetrales",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
       },
       {
         id: 22,
@@ -10125,6 +10233,12 @@ Error generating stack: ` +
         desc: "Tabique Metalcon 89mm + lana + 1 placa yeso",
         unidad: "m²",
         precio: 58e3,
+        rubro: "Construcción liviana",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
       },
       {
         id: 23,
@@ -10132,6 +10246,12 @@ Error generating stack: ` +
         desc: "Tabique Metalcon 65mm doble placa yeso",
         unidad: "m²",
         precio: 55e3,
+        rubro: "Construcción liviana",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
       },
       {
         id: 24,
@@ -10139,6 +10259,12 @@ Error generating stack: ` +
         desc: "Tabique Metalcon 65mm 1 placa yeso simple",
         unidad: "m²",
         precio: 42e3,
+        rubro: "Construcción liviana",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
       },
       {
         id: 25,
@@ -10146,6 +10272,12 @@ Error generating stack: ` +
         desc: "Tabique Metalcon 89mm + placa RH baño/cocina",
         unidad: "m²",
         precio: 62e3,
+        rubro: "Construcción liviana",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
       },
       {
         id: 26,
@@ -10153,6 +10285,12 @@ Error generating stack: ` +
         desc: "Tabique Metalcon 65mm en remodelación",
         unidad: "m²",
         precio: 48e3,
+        rubro: "Construcción liviana",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Remodelación",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
       },
       {
         id: 30,
@@ -10160,6 +10298,12 @@ Error generating stack: ` +
         desc: "Techumbre Metalcon correas + omegas + zinc 0.35",
         unidad: "m²",
         precio: 62e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
       },
       {
         id: 31,
@@ -10167,6 +10311,12 @@ Error generating stack: ` +
         desc: "Techumbre Metalcon correas + omegas + zinc 0.5",
         unidad: "m²",
         precio: 72e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
       },
       {
         id: 32,
@@ -10174,6 +10324,12 @@ Error generating stack: ` +
         desc: "Techumbre Metalcon C150 + policarbonato",
         unidad: "m²",
         precio: 68e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Policarbonato",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
       },
       {
         id: 33,
@@ -10181,6 +10337,12 @@ Error generating stack: ` +
         desc: "Cambio zinc ondulado estructura Metalcon",
         unidad: "m²",
         precio: 28e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Techumbres y aguas lluvias",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
       },
       {
         id: 35,
@@ -10188,6 +10350,12 @@ Error generating stack: ` +
         desc: "Cielo yeso cartón 1 placa Metalcon",
         unidad: "m²",
         precio: 32e3,
+        rubro: "Cielos y terminaciones",
+        subrubro: "Cielos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 36,
@@ -10195,6 +10363,12 @@ Error generating stack: ` +
         desc: "Cielo yeso cartón doble placa Metalcon",
         unidad: "m²",
         precio: 42e3,
+        rubro: "Cielos y terminaciones",
+        subrubro: "Cielos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 37,
@@ -10202,6 +10376,12 @@ Error generating stack: ` +
         desc: "Cielo yeso RH (humedad) baño/cocina",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Cielos y terminaciones",
+        subrubro: "Cielos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 38,
@@ -10209,6 +10389,12 @@ Error generating stack: ` +
         desc: "Ampliación cielo yeso en remodelación",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Construcción liviana",
+        subrubro: "Cielos",
+        tipoIntervencion: "Ampliación",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
       },
       {
         id: 40,
@@ -10216,6 +10402,12 @@ Error generating stack: ` +
         desc: "Techumbre cerchas pino 1x4 + correas + zinc 0.35",
         unidad: "m²",
         precio: 55e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
       },
       {
         id: 41,
@@ -10223,6 +10415,12 @@ Error generating stack: ` +
         desc: "Techumbre cerchas pino 1x4 + correas + zinc 0.5",
         unidad: "m²",
         precio: 65e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
       },
       {
         id: 42,
@@ -10230,6 +10428,12 @@ Error generating stack: ` +
         desc: "Techumbre correas pino 2x3 + zinc 0.35 (simple)",
         unidad: "m²",
         precio: 42e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
       },
       {
         id: 43,
@@ -10237,6 +10441,12 @@ Error generating stack: ` +
         desc: "Cambio zinc ondulado estructura madera",
         unidad: "m²",
         precio: 25e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Techumbres y aguas lluvias",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
       },
       {
         id: 44,
@@ -10244,6 +10454,12 @@ Error generating stack: ` +
         desc: "Reparación cercha pino (parcial)",
         unidad: "unidad",
         precio: 85e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Techumbres y aguas lluvias",
+        tipoIntervencion: "Reparación",
+        sistemaConstructivo: "Madera",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
       },
       {
         id: 45,
@@ -10251,6 +10467,12 @@ Error generating stack: ` +
         desc: "Tabique madera pino 2x4 + OSB + lana",
         unidad: "m²",
         precio: 65e3,
+        rubro: "Construcción liviana",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
       },
       {
         id: 46,
@@ -10258,6 +10480,12 @@ Error generating stack: ` +
         desc: "Tabique madera pino 2x3 + volcanita",
         unidad: "m²",
         precio: 48e3,
+        rubro: "Construcción liviana",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
       },
       {
         id: 47,
@@ -10265,6 +10493,12 @@ Error generating stack: ` +
         desc: "Cielo madera terciado 9mm",
         unidad: "m²",
         precio: 28e3,
+        rubro: "Cielos y terminaciones",
+        subrubro: "Cielos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 48,
@@ -10272,6 +10506,12 @@ Error generating stack: ` +
         desc: "Cielo madera volcanita sobre correas pino",
         unidad: "m²",
         precio: 25e3,
+        rubro: "Cielos y terminaciones",
+        subrubro: "Cielos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 50,
@@ -10279,6 +10519,12 @@ Error generating stack: ` +
         desc: "Cubierta membrana asfáltica 4mm (terraza plana)",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Impermeabilización",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Impermeabilización"
       },
       {
         id: 51,
@@ -10286,6 +10532,12 @@ Error generating stack: ` +
         desc: "Repaso impermeabilizante cubierta plana",
         unidad: "m²",
         precio: 18e3,
+        rubro: "Impermeabilización",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Impermeabilización"
       },
       {
         id: 52,
@@ -10293,6 +10545,12 @@ Error generating stack: ` +
         desc: "Sellado fisuras muro exterior",
         unidad: "ml",
         precio: 8500,
+        rubro: "Impermeabilización",
+        subrubro: "Impermeabilización",
+        tipoIntervencion: "Reparación",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Impermeabilización"
       },
       {
         id: 53,
@@ -10300,6 +10558,12 @@ Error generating stack: ` +
         desc: "Impermeabilización fundación cristalizante",
         unidad: "m²",
         precio: 32e3,
+        rubro: "Impermeabilización",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Impermeabilización"
       },
       {
         id: 60,
@@ -10307,6 +10571,12 @@ Error generating stack: ` +
         desc: "Cerámico piso 45x45cm",
         unidad: "m²",
         precio: 28e3,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Cerámico",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 61,
@@ -10314,6 +10584,12 @@ Error generating stack: ` +
         desc: "Porcelanato 60x60cm",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Cerámico",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 62,
@@ -10321,6 +10597,12 @@ Error generating stack: ` +
         desc: "Piso flotante laminado AC4",
         unidad: "m²",
         precio: 22e3,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 63,
@@ -10328,6 +10610,12 @@ Error generating stack: ` +
         desc: "Cerámico muro ducha 30x60cm",
         unidad: "m²",
         precio: 32e3,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Cerámico",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 64,
@@ -10335,6 +10623,12 @@ Error generating stack: ` +
         desc: "Cambio cerámico piso (inc. retiro)",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "Cerámico",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 65,
@@ -10342,6 +10636,12 @@ Error generating stack: ` +
         desc: "Cambio piso flotante (inc. retiro)",
         unidad: "m²",
         precio: 28e3,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 66,
@@ -10349,6 +10649,12 @@ Error generating stack: ` +
         desc: "Reparación cerámico pisos/sócalos",
         unidad: "gl",
         precio: 95e3,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Reparación",
+        sistemaConstructivo: "Cerámico",
+        alcance: "Subcontrato",
+        especialidad: "Terminaciones"
       },
       {
         id: 67,
@@ -10356,6 +10662,12 @@ Error generating stack: ` +
         desc: "Reparación cerámico muros",
         unidad: "gl",
         precio: 95e3,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Reparación",
+        sistemaConstructivo: "Cerámico",
+        alcance: "Subcontrato",
+        especialidad: "Terminaciones"
       },
       {
         id: 70,
@@ -10363,6 +10675,12 @@ Error generating stack: ` +
         desc: "Puerta interior HDF 80x200cm + marcos",
         unidad: "unidad",
         precio: 185e3,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Puertas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
       },
       {
         id: 71,
@@ -10370,6 +10688,12 @@ Error generating stack: ` +
         desc: "Puerta exterior madera sólida 90x200cm",
         unidad: "unidad",
         precio: 285e3,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Puertas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
       },
       {
         id: 72,
@@ -10377,6 +10701,12 @@ Error generating stack: ` +
         desc: "Ventana PVC corredera 100x100cm",
         unidad: "unidad",
         precio: 195e3,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Ventanas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
       },
       {
         id: 73,
@@ -10384,6 +10714,12 @@ Error generating stack: ` +
         desc: "Ventana PVC termopanel 100x100cm",
         unidad: "unidad",
         precio: 285e3,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Ventanas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
       },
       {
         id: 74,
@@ -10391,6 +10727,12 @@ Error generating stack: ` +
         desc: "Cambio ventana PVC (inc. retiro old)",
         unidad: "unidad",
         precio: 245e3,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Ventanas",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
       },
       {
         id: 75,
@@ -10398,6 +10740,12 @@ Error generating stack: ` +
         desc: "Reparación muebles cocina",
         unidad: "gl",
         precio: 15e4,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Mobiliario y equipamiento",
+        tipoIntervencion: "Reparación",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Carpintería / cerrajería"
       },
       {
         id: 76,
@@ -10405,6 +10753,12 @@ Error generating stack: ` +
         desc: "Cornisas perfil MDF",
         unidad: "ml",
         precio: 8500,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Puertas, ventanas y carpinterías",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
       },
       {
         id: 77,
@@ -10412,6 +10766,12 @@ Error generating stack: ` +
         desc: "Guardapolvos MDF",
         unidad: "ml",
         precio: 6500,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Puertas, ventanas y carpinterías",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
       },
       {
         id: 80,
@@ -10419,6 +10779,12 @@ Error generating stack: ` +
         desc: "Punto de luz (foco LED empotrado)",
         unidad: "unidad",
         precio: 45e3,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Iluminación",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
       },
       {
         id: 81,
@@ -10426,6 +10792,12 @@ Error generating stack: ` +
         desc: "Punto toma corriente triple 16A",
         unidad: "unidad",
         precio: 55e3,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Tomas e interruptores",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
       },
       {
         id: 82,
@@ -10433,6 +10805,12 @@ Error generating stack: ` +
         desc: "Punto eléctrico completo (luz + toma)",
         unidad: "unidad",
         precio: 85e3,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Instalaciones eléctricas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Mixto",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
       },
       {
         id: 83,
@@ -10440,6 +10818,12 @@ Error generating stack: ` +
         desc: "Tablero distribución 8 circuitos",
         unidad: "unidad",
         precio: 28e4,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Tableros y protecciones eléctricas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
       },
       {
         id: 84,
@@ -10447,6 +10831,12 @@ Error generating stack: ` +
         desc: "Instalación eléctrica completa vivienda 60m²",
         unidad: "gl",
         precio: 85e4,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Instalaciones eléctricas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Mixto",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería eléctrica"
       },
       {
         id: 85,
@@ -10454,6 +10844,12 @@ Error generating stack: ` +
         desc: "Cambio foco LED (mantención)",
         unidad: "unidad",
         precio: 18e3,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Instalaciones eléctricas",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
       },
       {
         id: 86,
@@ -10461,6 +10857,12 @@ Error generating stack: ` +
         desc: "Reparación toma corriente (mantención)",
         unidad: "unidad",
         precio: 22e3,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Tomas e interruptores",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
       },
       {
         id: 90,
@@ -10468,6 +10870,12 @@ Error generating stack: ` +
         desc: "Punto agua fría PPR 20mm",
         unidad: "unidad",
         precio: 65e3,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Agua potable",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PPR",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 91,
@@ -10475,6 +10883,12 @@ Error generating stack: ` +
         desc: "Punto agua caliente PPR 20mm",
         unidad: "unidad",
         precio: 75e3,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Agua potable",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PPR",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 92,
@@ -10482,6 +10896,12 @@ Error generating stack: ` +
         desc: "Instalación sanitaria completa baño",
         unidad: "gl",
         precio: 45e4,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Instalaciones sanitarias",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Mixto",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 93,
@@ -10489,6 +10909,12 @@ Error generating stack: ` +
         desc: "Artefactos sanitarios c/cubículos",
         unidad: "unidad",
         precio: 285e3,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Instalaciones sanitarias",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 94,
@@ -10496,6 +10922,12 @@ Error generating stack: ` +
         desc: "Cambio llave de paso (mantención)",
         unidad: "unidad",
         precio: 35e3,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Instalaciones sanitarias",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 95,
@@ -10503,6 +10935,12 @@ Error generating stack: ` +
         desc: "Instalación gas 45KL (duchas y baño)",
         unidad: "unidad",
         precio: 112e4,
+        rubro: "Instalaciones de gas",
+        subrubro: "Artefactos y grifería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Gasfitería certificada"
       },
       {
         id: 96,
@@ -10510,6 +10948,12 @@ Error generating stack: ` +
         desc: "Instalación cilindros 45KL casino",
         unidad: "unidad",
         precio: 355e4,
+        rubro: "Instalaciones de gas",
+        subrubro: "Instalaciones de gas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Gasfitería certificada"
       },
       {
         id: 97,
@@ -10517,6 +10961,12 @@ Error generating stack: ` +
         desc: "Sello verde y prueba hermeticidad",
         unidad: "unidad",
         precio: 345e3,
+        rubro: "Instalaciones de gas",
+        subrubro: "Pruebas, inspección y certificación",
+        tipoIntervencion: "Servicio profesional",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Gasfitería certificada"
       },
       {
         id: 98,
@@ -10524,6 +10974,12 @@ Error generating stack: ` +
         desc: "Gestión convenio Gasco",
         unidad: "unidad",
         precio: 3e5,
+        rubro: "Servicios profesionales",
+        subrubro: "Tramitación y coordinación",
+        tipoIntervencion: "Servicio profesional",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Servicios profesionales"
       },
       {
         id: 100,
@@ -10531,6 +10987,12 @@ Error generating stack: ` +
         desc: "Demolición tabique (retiro escombros inc.)",
         unidad: "m²",
         precio: 18500,
+        rubro: "Demoliciones y desmontajes",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Demolición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Desmontaje y retiro",
+        especialidad: "Construcción general"
       },
       {
         id: 101,
@@ -10538,6 +11000,12 @@ Error generating stack: ` +
         desc: "Demolición cielo existente",
         unidad: "m²",
         precio: 12e3,
+        rubro: "Demoliciones y desmontajes",
+        subrubro: "Cielos",
+        tipoIntervencion: "Demolición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Desmontaje y retiro",
+        especialidad: "Construcción general"
       },
       {
         id: 102,
@@ -10545,6 +11013,12 @@ Error generating stack: ` +
         desc: "Demolición muro albañilería",
         unidad: "m²",
         precio: 32e3,
+        rubro: "Demoliciones y desmontajes",
+        subrubro: "Demoliciones",
+        tipoIntervencion: "Demolición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Desmontaje y retiro",
+        especialidad: "Construcción general"
       },
       {
         id: 103,
@@ -10552,6 +11026,12 @@ Error generating stack: ` +
         desc: "Demolición radier / solera",
         unidad: "m²",
         precio: 22e3,
+        rubro: "Demoliciones y desmontajes",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Demolición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Desmontaje y retiro",
+        especialidad: "Construcción general"
       },
       {
         id: 105,
@@ -10559,6 +11039,12 @@ Error generating stack: ` +
         desc: "Canal PVC 3m + bajante (ml ojalaería)",
         unidad: "ml",
         precio: 18500,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Canaletas y bajantes",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Hojalatería"
       },
       {
         id: 106,
@@ -10566,6 +11052,12 @@ Error generating stack: ` +
         desc: "Ojalaería completa (canal + bajante + tapasol)",
         unidad: "ml",
         precio: 28e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Canaletas y bajantes",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Hojalatería"
       },
       {
         id: 107,
@@ -10573,6 +11065,12 @@ Error generating stack: ` +
         desc: "Cambio canal y bajante existente",
         unidad: "ml",
         precio: 22e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Canaletas y bajantes",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Hojalatería"
       },
       {
         id: 110,
@@ -10580,6 +11078,12 @@ Error generating stack: ` +
         desc: "Carpeta Seremi Salud",
         unidad: "unidad",
         precio: 15e4,
+        rubro: "Servicios profesionales",
+        subrubro: "Regularización y trámites",
+        tipoIntervencion: "Regularización",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Servicios profesionales"
       },
       {
         id: 111,
@@ -10587,6 +11091,12 @@ Error generating stack: ` +
         desc: "Carpeta Registro Patentes",
         unidad: "unidad",
         precio: 15e4,
+        rubro: "Servicios profesionales",
+        subrubro: "Regularización y trámites",
+        tipoIntervencion: "Regularización",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Servicios profesionales"
       },
       {
         id: 115,
@@ -10594,6 +11104,12 @@ Error generating stack: ` +
         desc: "Reinstalación citófono",
         unidad: "unidad",
         precio: 28990,
+        rubro: "Corrientes débiles y seguridad electrónica",
+        subrubro: "Citofonía y videoportero",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Electrónica / seguridad"
       },
       {
         id: 116,
@@ -10601,6 +11117,12 @@ Error generating stack: ` +
         desc: "Celosías y cambio de ventanas",
         unidad: "unidad",
         precio: 64e4,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Ventanas",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Carpintería / cerrajería"
       },
       {
         id: 120,
@@ -10608,6 +11130,12 @@ Error generating stack: ` +
         desc: "Reja tubular (fabricación + instalación)",
         unidad: "m²",
         precio: 85e3,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cerrajería metálica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Fabricación e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
       },
       {
         id: 121,
@@ -10615,6 +11143,12 @@ Error generating stack: ` +
         desc: "Protección ventana (fabricación + instalación)",
         unidad: "m²",
         precio: 53491,
+        rubro: "Estructuras metálicas",
+        subrubro: "Ventanas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Fabricación e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
       },
       {
         id: 122,
@@ -10622,6 +11156,12 @@ Error generating stack: ` +
         desc: "Portón corredera (fabricación + instalación)",
         unidad: "m²",
         precio: 95e3,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Fabricación e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
       },
       {
         id: 123,
@@ -10629,6 +11169,12 @@ Error generating stack: ` +
         desc: "Pilar tubular 100x100x3mm (fabricación + inst.)",
         unidad: "unidad",
         precio: 185e3,
+        rubro: "Estructuras metálicas",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
       },
       {
         id: 124,
@@ -10636,6 +11182,12 @@ Error generating stack: ` +
         desc: "Cierre perimetral tubular c/malla (fab. + inst.)",
         unidad: "m²",
         precio: 72e3,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cierres y muros perimetrales",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Fabricación e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
       },
       {
         id: 125,
@@ -10643,6 +11195,12 @@ Error generating stack: ` +
         desc: "Escalera metálica recta (fabricación + inst.)",
         unidad: "ml",
         precio: 185e3,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cerrajería metálica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
       },
       {
         id: 126,
@@ -10650,6 +11208,12 @@ Error generating stack: ` +
         desc: "Baranda / pasamanos metálico (fab. + inst.)",
         unidad: "ml",
         precio: 85e3,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cerrajería metálica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Fabricación e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
       },
       {
         id: 127,
@@ -10657,6 +11221,12 @@ Error generating stack: ` +
         desc: "Portón abatible 2 hojas (fabricación + inst.)",
         unidad: "m²",
         precio: 88e3,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
       },
       {
         id: 128,
@@ -10664,6 +11234,12 @@ Error generating stack: ` +
         desc: "Cobertizo / pérgola metálica (fab. + inst.)",
         unidad: "m²",
         precio: 95e3,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Fabricación e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
       },
       {
         id: 129,
@@ -10671,6 +11247,12 @@ Error generating stack: ` +
         desc: "Marco metálico puerta / ventana (fab. + inst.)",
         unidad: "unidad",
         precio: 125e3,
+        rubro: "Estructuras metálicas",
+        subrubro: "Ventanas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Fabricación e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
       },
       {
         id: 130,
@@ -10678,6 +11260,12 @@ Error generating stack: ` +
         desc: "Excavación manual fundaciones",
         unidad: "m³",
         precio: 45e3,
+        rubro: "Movimiento de tierras",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería civil — movimiento de tierras"
       },
       {
         id: 131,
@@ -10685,6 +11273,12 @@ Error generating stack: ` +
         desc: "Excavación mecánica (retroexcavadora)",
         unidad: "m³",
         precio: 22e3,
+        rubro: "Movimiento de tierras",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería civil — movimiento de tierras"
       },
       {
         id: 132,
@@ -10692,6 +11286,12 @@ Error generating stack: ` +
         desc: "Relleno compactado material selecto",
         unidad: "m³",
         precio: 38e3,
+        rubro: "Movimiento de tierras",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería civil — movimiento de tierras"
       },
       {
         id: 133,
@@ -10699,6 +11299,12 @@ Error generating stack: ` +
         desc: "Nivelación y compactación terreno",
         unidad: "m²",
         precio: 8500,
+        rubro: "Movimiento de tierras",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería civil — movimiento de tierras"
       },
       {
         id: 134,
@@ -10706,6 +11312,12 @@ Error generating stack: ` +
         desc: "Retiro y transporte de escombros",
         unidad: "m³",
         precio: 32e3,
+        rubro: "Movimiento de tierras",
+        subrubro: "Retiro y transporte de escombros",
+        tipoIntervencion: "Desmontaje",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería civil — movimiento de tierras"
       },
       {
         id: 135,
@@ -10713,6 +11325,12 @@ Error generating stack: ` +
         desc: "Vereda hormigón H-20 7cm",
         unidad: "m²",
         precio: 28e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 136,
@@ -10720,6 +11338,12 @@ Error generating stack: ` +
         desc: "Adoquín peatonal 6cm c/base granular",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 137,
@@ -10727,6 +11351,12 @@ Error generating stack: ` +
         desc: "Solera prefabricada 15x30cm (inst.)",
         unidad: "ml",
         precio: 18500,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 138,
@@ -10734,6 +11364,12 @@ Error generating stack: ` +
         desc: "Estacionamiento hormigón H-20 10cm",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 139,
@@ -10741,6 +11377,12 @@ Error generating stack: ` +
         desc: "Muro contención hormigón armado H-25",
         unidad: "m²",
         precio: 165e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 140,
@@ -10748,6 +11390,12 @@ Error generating stack: ` +
         desc: "Cerco perimetral poste HEB c/cadena",
         unidad: "ml",
         precio: 42e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 141,
@@ -10755,6 +11403,12 @@ Error generating stack: ` +
         desc: "Inst. split 9.000 BTU frío/calor (subcontr.)",
         unidad: "unidad",
         precio: 285e3,
+        rubro: "Climatización y ventilación",
+        subrubro: "Climatización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Climatización (HVAC)"
       },
       {
         id: 142,
@@ -10762,6 +11416,12 @@ Error generating stack: ` +
         desc: "Inst. split 12.000 BTU frío/calor (subcontr.)",
         unidad: "unidad",
         precio: 35e4,
+        rubro: "Climatización y ventilación",
+        subrubro: "Climatización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Climatización (HVAC)"
       },
       {
         id: 143,
@@ -10769,6 +11429,12 @@ Error generating stack: ` +
         desc: "Inst. split 18.000 BTU frío/calor (subcontr.)",
         unidad: "unidad",
         precio: 45e4,
+        rubro: "Climatización y ventilación",
+        subrubro: "Climatización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Climatización (HVAC)"
       },
       {
         id: 144,
@@ -10776,6 +11442,12 @@ Error generating stack: ` +
         desc: "Extractor / ventilador baño c/ducto (inst.)",
         unidad: "unidad",
         precio: 85e3,
+        rubro: "Climatización y ventilación",
+        subrubro: "Climatización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Climatización (HVAC)"
       },
       {
         id: 145,
@@ -10783,6 +11455,12 @@ Error generating stack: ` +
         desc: "Cámara CCTV IP 2MP exterior (instalación)",
         unidad: "punto",
         precio: 125e3,
+        rubro: "Corrientes débiles y seguridad electrónica",
+        subrubro: "Seguridad electrónica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Electrónica / seguridad"
       },
       {
         id: 146,
@@ -10790,6 +11468,12 @@ Error generating stack: ` +
         desc: "DVR 4 canales 1080p + disco 1TB (inst.)",
         unidad: "unidad",
         precio: 285e3,
+        rubro: "Corrientes débiles y seguridad electrónica",
+        subrubro: "Seguridad electrónica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Electrónica / seguridad"
       },
       {
         id: 147,
@@ -10797,6 +11481,12 @@ Error generating stack: ` +
         desc: "Alarma domiciliaria básica (inst.)",
         unidad: "unidad",
         precio: 185e3,
+        rubro: "Corrientes débiles y seguridad electrónica",
+        subrubro: "Seguridad electrónica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Electrónica / seguridad"
       },
       {
         id: 148,
@@ -10804,6 +11494,12 @@ Error generating stack: ` +
         desc: "Control acceso magnético puerta (inst.)",
         unidad: "unidad",
         precio: 225e3,
+        rubro: "Corrientes débiles y seguridad electrónica",
+        subrubro: "Puertas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Electrónica / seguridad"
       },
       {
         id: 150,
@@ -10811,6 +11507,12 @@ Error generating stack: ` +
         desc: "Pilar H-25 armado (cualquier sección)",
         unidad: "m³",
         precio: 285e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 151,
@@ -10818,6 +11520,12 @@ Error generating stack: ` +
         desc: "Pilar H-30 armado (cualquier sección)",
         unidad: "m³",
         precio: 31e4,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 152,
@@ -10825,6 +11533,12 @@ Error generating stack: ` +
         desc: "Viga H-25 armada (cualquier sección)",
         unidad: "m³",
         precio: 275e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 153,
@@ -10832,6 +11546,12 @@ Error generating stack: ` +
         desc: "Viga H-30 armada (cualquier sección)",
         unidad: "m³",
         precio: 295e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 154,
@@ -10839,6 +11559,12 @@ Error generating stack: ` +
         desc: "Losa H-25 armada",
         unidad: "m³",
         precio: 265e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 155,
@@ -10846,6 +11572,12 @@ Error generating stack: ` +
         desc: "Losa H-30 armada",
         unidad: "m³",
         precio: 285e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 156,
@@ -10853,6 +11585,12 @@ Error generating stack: ` +
         desc: "Fundación corrida H-25 armada",
         unidad: "m³",
         precio: 255e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 157,
@@ -10860,6 +11598,12 @@ Error generating stack: ` +
         desc: "Zapata aislada H-25 armada",
         unidad: "m³",
         precio: 265e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 158,
@@ -10867,6 +11611,12 @@ Error generating stack: ` +
         desc: "Moldaje metálico pilar (arriendo+inst.)",
         unidad: "m²",
         precio: 28e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 159,
@@ -10874,6 +11624,12 @@ Error generating stack: ` +
         desc: "Enfierradura habilitada y colocada",
         unidad: "kg",
         precio: 1850,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 160,
@@ -10881,6 +11637,12 @@ Error generating stack: ` +
         desc: "Cámara de inspección hormigón ø60cm",
         unidad: "unidad",
         precio: 285e3,
+        rubro: "Alcantarillado y drenaje",
+        subrubro: "Cámaras de inspección",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 161,
@@ -10888,6 +11650,12 @@ Error generating stack: ` +
         desc: "Colector PVC ø110mm instalado",
         unidad: "ml",
         precio: 28e3,
+        rubro: "Alcantarillado y drenaje",
+        subrubro: "Redes de alcantarillado",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 162,
@@ -10895,6 +11663,12 @@ Error generating stack: ` +
         desc: "Colector PVC ø160mm instalado",
         unidad: "ml",
         precio: 38e3,
+        rubro: "Alcantarillado y drenaje",
+        subrubro: "Redes de alcantarillado",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 163,
@@ -10902,6 +11676,12 @@ Error generating stack: ` +
         desc: "Red alcantarillado vivienda completa",
         unidad: "gl",
         precio: 85e4,
+        rubro: "Alcantarillado y drenaje",
+        subrubro: "Redes de alcantarillado",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Mixto",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 164,
@@ -10909,6 +11689,12 @@ Error generating stack: ` +
         desc: "Trampa de grasa 30L (inst.)",
         unidad: "unidad",
         precio: 185e3,
+        rubro: "Alcantarillado y drenaje",
+        subrubro: "Trampas de grasa",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 165,
@@ -10916,6 +11702,12 @@ Error generating stack: ` +
         desc: 'Llave de paso esfera 3/4" (reemplazo)',
         unidad: "unidad",
         precio: 28e3,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Instalaciones sanitarias",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 166,
@@ -10923,6 +11715,12 @@ Error generating stack: ` +
         desc: 'Medidor agua fría 1/2" + conexión',
         unidad: "unidad",
         precio: 95e3,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Agua potable",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 167,
@@ -10930,6 +11728,12 @@ Error generating stack: ` +
         desc: "Estanque elevado 500L + estructura",
         unidad: "unidad",
         precio: 385e3,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Instalaciones sanitarias",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 170,
@@ -10937,6 +11741,12 @@ Error generating stack: ` +
         desc: "Bodega de faena 3x3m (arm.+desarm.)",
         unidad: "unidad",
         precio: 285e3,
+        rubro: "Obras preliminares",
+        subrubro: "Instalaciones de faena",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Administración de obra"
       },
       {
         id: 171,
@@ -10944,6 +11754,12 @@ Error generating stack: ` +
         desc: "Cerco perimetral obras (inst.+retiro)",
         unidad: "ml",
         precio: 12e3,
+        rubro: "Obras preliminares",
+        subrubro: "Instalaciones de faena",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Administración de obra"
       },
       {
         id: 172,
@@ -10951,6 +11767,12 @@ Error generating stack: ` +
         desc: "Letrero de obra 1.2x2.4m",
         unidad: "unidad",
         precio: 95e3,
+        rubro: "Obras preliminares",
+        subrubro: "Instalaciones de faena",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Administración de obra"
       },
       {
         id: 173,
@@ -10958,6 +11780,12 @@ Error generating stack: ` +
         desc: "Baño químico arrendado (mes)",
         unidad: "mes",
         precio: 95e3,
+        rubro: "Obras preliminares",
+        subrubro: "Instalaciones de faena",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Administración de obra"
       },
       {
         id: 174,
@@ -10965,6 +11793,12 @@ Error generating stack: ` +
         desc: "Instalación eléctrica provisoria faena",
         unidad: "gl",
         precio: 185e3,
+        rubro: "Obras preliminares",
+        subrubro: "Instalaciones de faena",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Administración de obra"
       },
       {
         id: 175,
@@ -10972,6 +11806,12 @@ Error generating stack: ` +
         desc: "Agua provisoria faena (conexión+punto)",
         unidad: "gl",
         precio: 125e3,
+        rubro: "Obras preliminares",
+        subrubro: "Instalaciones de faena",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Administración de obra"
       },
       {
         id: 180,
@@ -10979,6 +11819,12 @@ Error generating stack: ` +
         desc: "Asfalto frío reparación bacheo",
         unidad: "m²",
         precio: 28e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Reparación",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 181,
@@ -10986,6 +11832,12 @@ Error generating stack: ` +
         desc: "Sello bituminoso doble tratamiento",
         unidad: "m²",
         precio: 18500,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 182,
@@ -10993,6 +11845,12 @@ Error generating stack: ` +
         desc: "Carpeta asfáltica caliente 5cm (subcontr.)",
         unidad: "m²",
         precio: 22e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 183,
@@ -11000,6 +11858,12 @@ Error generating stack: ` +
         desc: "Base estabilizada granular 15cm",
         unidad: "m²",
         precio: 12e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 184,
@@ -11007,6 +11871,12 @@ Error generating stack: ` +
         desc: "Señalética horizontal pintura vial",
         unidad: "ml",
         precio: 8500,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Pinturas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 185,
@@ -11014,6 +11884,12 @@ Error generating stack: ` +
         desc: "Tachón reflectante (inst.)",
         unidad: "unidad",
         precio: 6500,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 186,
@@ -11021,6 +11897,12 @@ Error generating stack: ` +
         desc: "Berma HEB/piedra bolón",
         unidad: "ml",
         precio: 22e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 187,
@@ -11028,6 +11910,12 @@ Error generating stack: ` +
         desc: "Excavación piscina (maquinaria)",
         unidad: "m³",
         precio: 22e3,
+        rubro: "Piscinas",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Piscinas"
       },
       {
         id: 188,
@@ -11035,6 +11923,12 @@ Error generating stack: ` +
         desc: "Estructura hormigón armado piscina H-25",
         unidad: "m³",
         precio: 285e3,
+        rubro: "Piscinas",
+        subrubro: "Piscinas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Subcontrato",
+        especialidad: "Piscinas"
       },
       {
         id: 189,
@@ -11042,6 +11936,12 @@ Error generating stack: ` +
         desc: "Impermeabilización piscina (membrana)",
         unidad: "m²",
         precio: 55e3,
+        rubro: "Piscinas",
+        subrubro: "Piscinas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Piscinas"
       },
       {
         id: 190,
@@ -11049,6 +11949,12 @@ Error generating stack: ` +
         desc: "Revestimiento gresite/cerámico piscina",
         unidad: "m²",
         precio: 65e3,
+        rubro: "Piscinas",
+        subrubro: "Pisos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Cerámico",
+        alcance: "Subcontrato",
+        especialidad: "Piscinas"
       },
       {
         id: 191,
@@ -11056,6 +11962,12 @@ Error generating stack: ` +
         desc: "Sistema filtración + bomba (inst.)",
         unidad: "unidad",
         precio: 85e4,
+        rubro: "Piscinas",
+        subrubro: "Piscinas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Piscinas"
       },
       {
         id: 192,
@@ -11063,6 +11975,12 @@ Error generating stack: ` +
         desc: "Iluminación subacuática LED (por punto)",
         unidad: "unidad",
         precio: 185e3,
+        rubro: "Piscinas",
+        subrubro: "Iluminación",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Piscinas"
       },
       {
         id: 193,
@@ -11070,6 +11988,12 @@ Error generating stack: ` +
         desc: "Escalera acero inoxidable piscina",
         unidad: "unidad",
         precio: 385e3,
+        rubro: "Piscinas",
+        subrubro: "Piscinas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Piscinas"
       },
       {
         id: 194,
@@ -11077,6 +12001,12 @@ Error generating stack: ` +
         desc: "Vereda perimetral piscina hormigón",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Piscinas",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Piscinas"
       },
       {
         id: 195,
@@ -11084,6 +12014,12 @@ Error generating stack: ` +
         desc: "Canaleta perimetral piscina (drenaje)",
         unidad: "ml",
         precio: 28e3,
+        rubro: "Piscinas",
+        subrubro: "Piscinas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Piscinas"
       },
       {
         id: 196,
@@ -11091,6 +12027,12 @@ Error generating stack: ` +
         desc: "Quincho estructura madera (fabricación+inst.)",
         unidad: "m²",
         precio: 185e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 197,
@@ -11098,6 +12040,12 @@ Error generating stack: ` +
         desc: "Quincho estructura metálica (fabricación+inst.)",
         unidad: "m²",
         precio: 225e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 198,
@@ -11105,6 +12053,12 @@ Error generating stack: ` +
         desc: "Cubierta zinc quincho/pérgola",
         unidad: "m²",
         precio: 42e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 199,
@@ -11112,6 +12066,12 @@ Error generating stack: ` +
         desc: "Pérgola madera tratada (fabricación+inst.)",
         unidad: "m²",
         precio: 125e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 200,
@@ -11119,6 +12079,12 @@ Error generating stack: ` +
         desc: "Deck madera tratada exterior",
         unidad: "m²",
         precio: 68e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 201,
@@ -11126,6 +12092,12 @@ Error generating stack: ` +
         desc: "Deck composite (WPC) exterior",
         unidad: "m²",
         precio: 95e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 202,
@@ -11133,6 +12105,12 @@ Error generating stack: ` +
         desc: "Terraza hormigón pulido exterior",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 203,
@@ -11140,6 +12118,12 @@ Error generating stack: ` +
         desc: "Pavimento adoquín jardín c/base",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
       },
       {
         id: 204,
@@ -11147,6 +12131,12 @@ Error generating stack: ` +
         desc: "Hormigón estampado/decorativo",
         unidad: "m²",
         precio: 48e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 205,
@@ -11154,6 +12144,12 @@ Error generating stack: ` +
         desc: "Gravilla volcánica decorativa e=5cm",
         unidad: "m²",
         precio: 8500,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 206,
@@ -11161,6 +12157,12 @@ Error generating stack: ` +
         desc: "Jardín (preparación terreno + pasto)",
         unidad: "m²",
         precio: 18500,
+        rubro: "Paisajismo y riego",
+        subrubro: "Áreas verdes y riego",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Paisajismo"
       },
       {
         id: 207,
@@ -11168,6 +12170,12 @@ Error generating stack: ` +
         desc: "Sistema riego automático (por zona)",
         unidad: "unidad",
         precio: 185e3,
+        rubro: "Paisajismo y riego",
+        subrubro: "Áreas verdes y riego",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Paisajismo"
       },
       {
         id: 208,
@@ -11175,6 +12183,12 @@ Error generating stack: ` +
         desc: "Muro jardín albañilería decorativa",
         unidad: "m²",
         precio: 58e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Áreas verdes y riego",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 209,
@@ -11182,6 +12196,12 @@ Error generating stack: ` +
         desc: "Iluminación exterior (por punto)",
         unidad: "unidad",
         precio: 65e3,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Iluminación",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Urbanización"
       },
       {
         id: 210,
@@ -11189,6 +12209,12 @@ Error generating stack: ` +
         desc: "Revalses (moldaje contorno radier)",
         unidad: "ml",
         precio: 7700,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 211,
@@ -11196,6 +12222,12 @@ Error generating stack: ` +
         desc: "Enfierradura malla electrosoldada colocada",
         unidad: "m²",
         precio: 8800,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero (malla/ACMA)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 212,
@@ -11203,6 +12235,12 @@ Error generating stack: ` +
         desc: "Impermeabilización bajo radier (polietileno)",
         unidad: "m²",
         precio: 3850,
+        rubro: "Impermeabilización",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Impermeabilización"
       },
       {
         id: 213,
@@ -11210,6 +12248,12 @@ Error generating stack: ` +
         desc: "Nivelación y compactación terreno (máquina)",
         unidad: "m²",
         precio: 3500,
+        rubro: "Movimiento de tierras",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería civil — movimiento de tierras"
       },
       {
         id: 214,
@@ -11217,6 +12261,12 @@ Error generating stack: ` +
         desc: "Revalses - solo mano de obra",
         unidad: "ml",
         precio: 3500,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón y fundaciones",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Solo mano de obra",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 215,
@@ -11224,6 +12274,12 @@ Error generating stack: ` +
         desc: "Enfierradura malla electrosoldada - solo MO",
         unidad: "m²",
         precio: 3200,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero (malla/ACMA)",
+        alcance: "Solo mano de obra",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 216,
@@ -11231,6 +12287,12 @@ Error generating stack: ` +
         desc: "Impermeabilización bajo radier - solo MO",
         unidad: "m²",
         precio: 1500,
+        rubro: "Impermeabilización",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Solo mano de obra",
+        especialidad: "Impermeabilización"
       },
       {
         id: 217,
@@ -11238,6 +12300,12 @@ Error generating stack: ` +
         desc: "Nivelación y compactación terreno - solo MO",
         unidad: "m²",
         precio: 1800,
+        rubro: "Movimiento de tierras",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Solo mano de obra",
+        especialidad: "Ingeniería civil — movimiento de tierras"
       },
       {
         id: 218,
@@ -11245,6 +12313,12 @@ Error generating stack: ` +
         desc: "Radier H-20 e=8cm completo (exc+relleno+revalse+radier)",
         unidad: "m²",
         precio: 38e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Mixto",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 219,
@@ -11252,6 +12326,12 @@ Error generating stack: ` +
         desc: "Radier H-25 e=10cm armado completo",
         unidad: "m²",
         precio: 52e3,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería estructural"
       },
       {
         id: 220,
@@ -11259,6 +12339,12 @@ Error generating stack: ` +
         desc: "Ducha + grifería termostática (inst.)",
         unidad: "unidad",
         precio: 185e3,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Artefactos y grifería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 221,
@@ -11266,6 +12352,12 @@ Error generating stack: ` +
         desc: "Lavamanos + grifería (inst.)",
         unidad: "unidad",
         precio: 95e3,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Artefactos y grifería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 222,
@@ -11273,6 +12365,12 @@ Error generating stack: ` +
         desc: "WC con bidet incluido (inst.)",
         unidad: "unidad",
         precio: 145e3,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Artefactos y grifería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 223,
@@ -11280,6 +12378,12 @@ Error generating stack: ` +
         desc: "Cableado principal 4mm² (ml)",
         unidad: "ml",
         precio: 4500,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Cableado",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
       },
       {
         id: 224,
@@ -11287,6 +12391,12 @@ Error generating stack: ` +
         desc: "Reparación gotera techumbre zinc (parche)",
         unidad: "m²",
         precio: 19e3,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Reparación",
+        sistemaConstructivo: "Zinc",
+        alcance: "Reparación parcial",
+        especialidad: "Techumbres"
       },
       {
         id: 226,
@@ -11294,6 +12404,12 @@ Error generating stack: ` +
         desc: "Cambio piso Vinílico (instalación)",
         unidad: "m²",
         precio: 40500,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "Vinílico",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 227,
@@ -11301,6 +12417,12 @@ Error generating stack: ` +
         desc: "Cambio piso Vinílico (inc. retiro piso existente)",
         unidad: "m²",
         precio: 46e3,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "Vinílico",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
       },
       {
         id: 310,
@@ -11310,6 +12432,12 @@ Error generating stack: ` +
         precio: 82000,
         requiereMovilizacion: true,
         satisfaceCargoComercial: ["visita_tecnica"],
+        rubro: "Servicios profesionales",
+        subrubro: "Visita técnica y diagnóstico",
+        tipoIntervencion: "Servicio profesional",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Servicios profesionales"
       },
       {
         id: 311,
@@ -11321,6 +12449,12 @@ Error generating stack: ` +
         requiereVisitaTecnica: true,
         requiereTrabajoAltura: true,
         requiereRetiroResiduos: true,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Reparación parcial",
+        especialidad: "Techumbres"
       },
       {
         id: 312,
@@ -11330,6 +12464,12 @@ Error generating stack: ` +
         precio: 2500,
         cantidadMinimaFacturable: 10,
         requiereTrabajoAltura: true,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Canaletas y bajantes",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Hojalatería"
       },
       {
         id: 313,
@@ -11337,6 +12477,12 @@ Error generating stack: ` +
         desc: "Lijado y pintura esmalte/anticorrosivo reja o portón",
         unidad: "m²",
         precio: 12500,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Pinturas",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Pintura"
       },
       {
         id: 314,
@@ -11344,6 +12490,12 @@ Error generating stack: ` +
         desc: "Cambio herrajes / flotador estanque WC",
         unidad: "unidad",
         precio: 25000,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Artefactos y grifería",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 315,
@@ -11351,6 +12503,12 @@ Error generating stack: ` +
         desc: "Destape de WC o cámara de inspección domiciliaria",
         unidad: "gl",
         precio: 45000,
+        rubro: "Alcantarillado y drenaje",
+        subrubro: "Destapes y mantención correctiva",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 316,
@@ -11358,6 +12516,12 @@ Error generating stack: ` +
         desc: "Cambio de sifón lavamanos / lavaplatos",
         unidad: "unidad",
         precio: 18500,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Artefactos y grifería",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
       },
       {
         id: 317,
@@ -11365,6 +12529,12 @@ Error generating stack: ` +
         desc: "Detección cortocircuito y revisión tablero",
         unidad: "gl",
         precio: 35000,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Tableros y protecciones eléctricas",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
       },
       {
         id: 318,
@@ -11372,6 +12542,12 @@ Error generating stack: ` +
         desc: "Cambio de enchufe/interruptor en mal estado",
         unidad: "unidad",
         precio: 25500,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Tomas e interruptores",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
       },
       {
         id: 319,
@@ -11379,6 +12555,12 @@ Error generating stack: ` +
         desc: "Cambio de chapa/cerradura puerta",
         unidad: "unidad",
         precio: 58000,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Quincallería y cerraduras",
+        tipoIntervencion: "Reposición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
       },
       {
         id: 320,
@@ -11386,134 +12568,931 @@ Error generating stack: ` +
         desc: "Reparación parche yeso/empaste muro dañado",
         unidad: "m²",
         precio: 15000,
+        rubro: "Cielos y terminaciones",
+        subrubro: "Reparación de superficies interiores",
+        tipoIntervencion: "Reparación",
+        sistemaConstructivo: "No aplica",
+        alcance: "Reparación parcial",
+        especialidad: "Terminaciones"
       },
       /* ═══ AMPLIACIÓN PROFESIONAL 1 — VIVIENDA, EDIFICIO Y LOCAL ═══ */
-      {id:321,cat:"Obras Provisorias",desc:"Cierre provisorio de obra en placa OSB",unidad:"ml",precio:28500},
-      {id:322,cat:"Demolición",desc:"Demolición tabique liviano con retiro a botadero",unidad:"m²",precio:14500},
-      {id:323,cat:"Mov. de Tierras",desc:"Excavación manual de fundación hasta 0,80 m",unidad:"m³",precio:29500},
-      {id:324,cat:"Hormigón Armado",desc:"Fundación aislada de hormigón armado",unidad:"m³",precio:385000},
-      {id:325,cat:"Hormigón Armado",desc:"Pilar de hormigón armado",unidad:"m³",precio:565000},
-      {id:326,cat:"Hormigón Armado",desc:"Viga de hormigón armado",unidad:"m³",precio:595000},
-      {id:327,cat:"Fachadas y Vidrios",desc:"Muro cortina aluminio y vidrio termopanel",unidad:"m²",precio:285000},
-      {id:328,cat:"Fachadas y Vidrios",desc:"Ventana PVC termopanel instalada",unidad:"m²",precio:165000},
-      {id:329,cat:"Accesibilidad",desc:"Rampa accesible de hormigón con pasamanos",unidad:"m²",precio:145000},
-      {id:330,cat:"Accesibilidad",desc:"Pavimento podotáctil de alerta o avance",unidad:"m²",precio:68000},
-      {id:331,cat:"Protección Incendio",desc:"Red húmeda interior completa por gabinete",unidad:"unidad",precio:890000},
-      {id:332,cat:"Protección Incendio",desc:"Extintor PQS 6 kg instalado y señalizado",unidad:"unidad",precio:78000},
-      {id:333,cat:"Protección Incendio",desc:"Puerta cortafuego F-60 instalada",unidad:"unidad",precio:485000},
-      {id:334,cat:"Corrientes Débiles",desc:"Punto de red Cat 6 certificado",unidad:"punto",precio:72000},
-      {id:335,cat:"Corrientes Débiles",desc:"Punto cámara CCTV IP canalizado",unidad:"punto",precio:115000},
-      {id:336,cat:"Corrientes Débiles",desc:"Sistema citofonía o videoportero básico",unidad:"unidad",precio:325000},
-      {id:337,cat:"Equipamiento",desc:"Mueble base de cocina melamina con cubierta",unidad:"ml",precio:245000},
-      {id:338,cat:"Equipamiento",desc:"Mueble aéreo de cocina melamina",unidad:"ml",precio:155000},
-      {id:339,cat:"Equipamiento Comercial",desc:"Mesón de atención comercial laminado",unidad:"ml",precio:295000},
-      {id:340,cat:"Eficiencia Energética",desc:"Sistema solar fotovoltaico on-grid 1 kWp",unidad:"kWp",precio:1350000},
-      {id:341,cat:"Eficiencia Energética",desc:"Termo solar domiciliario 200 L instalado",unidad:"unidad",precio:1250000},
-      {id:342,cat:"Mantención Preventiva",desc:"Mantención preventiva tablero eléctrico",unidad:"unidad",precio:85000},
-      {id:343,cat:"Mantención Preventiva",desc:"Limpieza y mantención equipo split mural",unidad:"unidad",precio:65000},
-      {id:344,cat:"Mantención Preventiva",desc:"Sellado preventivo de juntas y fisuras exteriores",unidad:"ml",precio:6500},
+      {id:321,cat:"Obras Provisorias",desc:"Cierre provisorio de obra en placa OSB",unidad:"ml",precio:28500,
+        rubro: "Obras preliminares",
+        subrubro: "Instalaciones de faena",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Administración de obra"
+      },
+      {id:322,cat:"Demolición",desc:"Demolición tabique liviano con retiro a botadero",unidad:"m²",precio:14500,
+        rubro: "Demoliciones y desmontajes",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Demolición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Desmontaje y retiro",
+        especialidad: "Construcción general"
+      },
+      {id:323,cat:"Mov. de Tierras",desc:"Excavación manual de fundación hasta 0,80 m",unidad:"m³",precio:29500,
+        rubro: "Movimiento de tierras",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería civil — movimiento de tierras"
+      },
+      {id:324,cat:"Hormigón Armado",desc:"Fundación aislada de hormigón armado",unidad:"m³",precio:385000,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
+      },
+      {id:325,cat:"Hormigón Armado",desc:"Pilar de hormigón armado",unidad:"m³",precio:565000,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
+      },
+      {id:326,cat:"Hormigón Armado",desc:"Viga de hormigón armado",unidad:"m³",precio:595000,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón armado",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
+      },
+      {id:327,cat:"Fachadas y Vidrios",desc:"Muro cortina aluminio y vidrio termopanel",unidad:"m²",precio:285000,
+        rubro: "Fachadas y cerramientos",
+        subrubro: "Muro cortina",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Aluminio",
+        alcance: "Suministro e instalación",
+        especialidad: "Fachadas"
+      },
+      {id:328,cat:"Fachadas y Vidrios",desc:"Ventana PVC termopanel instalada",unidad:"m²",precio:165000,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Ventanas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
+      },
+      {id:329,cat:"Accesibilidad",desc:"Rampa accesible de hormigón con pasamanos",unidad:"m²",precio:145000,
+        rubro: "Accesibilidad universal",
+        subrubro: "Accesibilidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Arquitectura / accesibilidad"
+      },
+      {id:330,cat:"Accesibilidad",desc:"Pavimento podotáctil de alerta o avance",unidad:"m²",precio:68000,
+        rubro: "Accesibilidad universal",
+        subrubro: "Accesibilidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Arquitectura / accesibilidad"
+      },
+      {id:331,cat:"Protección Incendio",desc:"Red húmeda interior completa por gabinete",unidad:"unidad",precio:890000,
+        rubro: "Protección contra incendios",
+        subrubro: "Protección contra incendios",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Mixto",
+        alcance: "Suministro e instalación",
+        especialidad: "Protección contra incendios"
+      },
+      {id:332,cat:"Protección Incendio",desc:"Extintor PQS 6 kg instalado y señalizado",unidad:"unidad",precio:78000,
+        rubro: "Protección contra incendios",
+        subrubro: "Protección contra incendios",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Protección contra incendios"
+      },
+      {id:333,cat:"Protección Incendio",desc:"Puerta cortafuego F-60 instalada",unidad:"unidad",precio:485000,
+        rubro: "Protección contra incendios",
+        subrubro: "Puertas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Protección contra incendios"
+      },
+      {id:334,cat:"Corrientes Débiles",desc:"Punto de red Cat 6 certificado",unidad:"punto",precio:72000,
+        rubro: "Corrientes débiles y seguridad electrónica",
+        subrubro: "Seguridad electrónica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Electrónica / seguridad"
+      },
+      {id:335,cat:"Corrientes Débiles",desc:"Punto cámara CCTV IP canalizado",unidad:"punto",precio:115000,
+        rubro: "Corrientes débiles y seguridad electrónica",
+        subrubro: "Seguridad electrónica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Electrónica / seguridad"
+      },
+      {id:336,cat:"Corrientes Débiles",desc:"Sistema citofonía o videoportero básico",unidad:"unidad",precio:325000,
+        rubro: "Corrientes débiles y seguridad electrónica",
+        subrubro: "Seguridad electrónica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Electrónica / seguridad"
+      },
+      {id:337,cat:"Equipamiento",desc:"Mueble base de cocina melamina con cubierta",unidad:"ml",precio:245000,
+        rubro: "Equipamiento y mobiliario",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Melamina",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / mobiliario"
+      },
+      {id:338,cat:"Equipamiento",desc:"Mueble aéreo de cocina melamina",unidad:"ml",precio:155000,
+        rubro: "Equipamiento y mobiliario",
+        subrubro: "Mobiliario y equipamiento",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Melamina",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / mobiliario"
+      },
+      {id:339,cat:"Equipamiento Comercial",desc:"Mesón de atención comercial laminado",unidad:"ml",precio:295000,
+        rubro: "Equipamiento y mobiliario",
+        subrubro: "Equipamiento y mobiliario",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Melamina",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / mobiliario"
+      },
+      {id:340,cat:"Eficiencia Energética",desc:"Sistema solar fotovoltaico on-grid 1 kWp",unidad:"kWp",precio:1350000,
+        rubro: "Aislación y eficiencia energética",
+        subrubro: "Energía solar",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Eficiencia energética"
+      },
+      {id:341,cat:"Eficiencia Energética",desc:"Termo solar domiciliario 200 L instalado",unidad:"unidad",precio:1250000,
+        rubro: "Aislación y eficiencia energética",
+        subrubro: "Energía solar",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Eficiencia energética"
+      },
+      {id:342,cat:"Mantención Preventiva",desc:"Mantención preventiva tablero eléctrico",unidad:"unidad",precio:85000,
+        rubro: "Mantención general",
+        subrubro: "Tableros y protecciones eléctricas",
+        tipoIntervencion: "Mantención preventiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Mantención"
+      },
+      {id:343,cat:"Mantención Preventiva",desc:"Limpieza y mantención equipo split mural",unidad:"unidad",precio:65000,
+        rubro: "Mantención general",
+        subrubro: "Climatización",
+        tipoIntervencion: "Mantención preventiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Mantención"
+      },
+      {id:344,cat:"Mantención Preventiva",desc:"Sellado preventivo de juntas y fisuras exteriores",unidad:"ml",precio:6500,
+        rubro: "Mantención general",
+        subrubro: "Mantención general",
+        tipoIntervencion: "Mantención preventiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Mantención"
+      },
       /* ═══ CIERRE PERIMETRAL ACMA — DEMOLICIÓN, RETIRO Y REPOSICIÓN ═══ */
-      {id:345,cat:"Demolición",desc:"Demolición controlada cierre pandereta H=2,0 m",unidad:"m²",precio:29500},
-      {id:346,cat:"Demolición",desc:"Retiro poste hormigón prefabricado de cierre",unidad:"unidad",precio:42000},
-      {id:347,cat:"Demolición",desc:"Demolición selectiva dado de fundación existente",unidad:"unidad",precio:85000},
-      {id:348,cat:"Retiro de Escombros",desc:"Traslado interno de escombros en pendiente hasta 25 m",unidad:"m³",precio:44000},
-      {id:349,cat:"Retiro de Escombros",desc:"Retiro escombros camión tolva con carguío y botadero",unidad:"viaje",precio:320000},
-      {id:350,cat:"Estructuras Metálicas",desc:"Reutilización dado existente con platina y anclaje químico",unidad:"unidad",precio:72000},
-      {id:351,cat:"Hormigón y Albañilería",desc:"Fundación nueva para poste metálico de cierre",unidad:"unidad",precio:70000},
-      {id:352,cat:"Estructuras Metálicas",desc:"Poste perfil acero 40x40x4 mm fabricado e instalado",unidad:"unidad",precio:52000},
-      {id:353,cat:"Estructuras Metálicas",desc:"Paño malla ACMA 1G 3,00x1,85 m marco ángulo 25x25x3 mm",unidad:"unidad",precio:105000},
-      {id:354,cat:"Estructuras Metálicas",desc:"Paño malla ACMA 1G 3,00x1,85 m marco ángulo 25x25x4 mm",unidad:"unidad",precio:115000},
-      {id:355,cat:"Estructuras Metálicas",desc:"Paño corto escalonado malla ACMA 1G 1,50x1,85 m marco 3 mm",unidad:"unidad",precio:68000},
-      {id:356,cat:"Estructuras Metálicas",desc:"Paño corto escalonado malla ACMA 1G 1,50x1,85 m marco 4 mm",unidad:"unidad",precio:74000},
-      {id:357,cat:"Obras Exteriores",desc:"Limpieza y perfilado final de franja de cierre",unidad:"ml",precio:3200},
-      {id:358,cat:"Estructuras Metálicas",desc:"Cierre Acmafor 3D 2.5m verde c/postes",unidad:"ml",precio:75000},
+      {id:345,cat:"Demolición",desc:"Demolición controlada cierre pandereta H=2,0 m",unidad:"m²",precio:29500,
+        rubro: "Demoliciones y desmontajes",
+        subrubro: "Demoliciones",
+        tipoIntervencion: "Demolición",
+        sistemaConstructivo: "No aplica",
+        alcance: "Desmontaje y retiro",
+        especialidad: "Construcción general"
+      },
+      {id:346,cat:"Demolición",desc:"Retiro poste hormigón prefabricado de cierre",unidad:"unidad",precio:42000,
+        rubro: "Demoliciones y desmontajes",
+        subrubro: "Retiro y transporte de escombros",
+        tipoIntervencion: "Desmontaje",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Desmontaje y retiro",
+        especialidad: "Construcción general"
+      },
+      {id:347,cat:"Demolición",desc:"Demolición selectiva dado de fundación existente",unidad:"unidad",precio:85000,
+        rubro: "Demoliciones y desmontajes",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Demolición",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Desmontaje y retiro",
+        especialidad: "Construcción general"
+      },
+      {id:348,cat:"Retiro de Escombros",desc:"Traslado interno de escombros en pendiente hasta 25 m",unidad:"m³",precio:44000,
+        rubro: "Demoliciones y desmontajes",
+        subrubro: "Retiro y transporte de escombros",
+        tipoIntervencion: "Desmontaje",
+        sistemaConstructivo: "No aplica",
+        alcance: "Desmontaje y retiro",
+        especialidad: "Construcción general"
+      },
+      {id:349,cat:"Retiro de Escombros",desc:"Retiro escombros camión tolva con carguío y botadero",unidad:"viaje",precio:320000,
+        rubro: "Demoliciones y desmontajes",
+        subrubro: "Retiro y transporte de escombros",
+        tipoIntervencion: "Desmontaje",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Construcción general"
+      },
+      {id:350,cat:"Estructuras Metálicas",desc:"Reutilización dado existente con platina y anclaje químico",unidad:"unidad",precio:72000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Artefactos y grifería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:351,cat:"Hormigón y Albañilería",desc:"Fundación nueva para poste metálico de cierre",unidad:"unidad",precio:70000,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
+      },
+      {id:352,cat:"Estructuras Metálicas",desc:"Poste perfil acero 40x40x4 mm fabricado e instalado",unidad:"unidad",precio:52000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero estructural",
+        alcance: "Fabricación e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:353,cat:"Estructuras Metálicas",desc:"Paño malla ACMA 1G 3,00x1,85 m marco ángulo 25x25x3 mm",unidad:"unidad",precio:105000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cierres y muros perimetrales",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero (malla/ACMA)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:354,cat:"Estructuras Metálicas",desc:"Paño malla ACMA 1G 3,00x1,85 m marco ángulo 25x25x4 mm",unidad:"unidad",precio:115000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cierres y muros perimetrales",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero (malla/ACMA)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:355,cat:"Estructuras Metálicas",desc:"Paño corto escalonado malla ACMA 1G 1,50x1,85 m marco 3 mm",unidad:"unidad",precio:68000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cierres y muros perimetrales",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero (malla/ACMA)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:356,cat:"Estructuras Metálicas",desc:"Paño corto escalonado malla ACMA 1G 1,50x1,85 m marco 4 mm",unidad:"unidad",precio:74000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cierres y muros perimetrales",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero (malla/ACMA)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:357,cat:"Obras Exteriores",desc:"Limpieza y perfilado final de franja de cierre",unidad:"ml",precio:3200,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
+      },
+      {id:358,cat:"Estructuras Metálicas",desc:"Cierre Acmafor 3D 2.5m verde c/postes",unidad:"ml",precio:75000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cierres y muros perimetrales",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Acero (malla/ACMA)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
       /* ═══ AMPLIACIÓN 2026-07-25 — MANTENCIÓN PINTURA, SERVICIOS GENERALES, EQUIPAMIENTO COMERCIAL ═══ */
-      {id:359,cat:"Mantención Pintura",desc:"Repintado interior con tratamiento de humedad/hongos",unidad:"m²",precio:9200},
-      {id:360,cat:"Mantención Pintura",desc:"Pintura de cielo americano o placa yeso-cartón",unidad:"m²",precio:6500},
-      {id:361,cat:"Mantención Pintura",desc:"Lavado a presión y pintura de fachada exterior",unidad:"m²",precio:9800},
-      {id:362,cat:"Servicios Generales",desc:"Limpieza fina post obra o entrega",unidad:"m²",precio:2200},
-      {id:363,cat:"Servicios Generales",desc:"Traslado y acarreo de mobiliario (mudanza interna)",unidad:"gl",precio:85000},
-      {id:364,cat:"Servicios Generales",desc:"Jornada adicional de especialista a trato",unidad:"jornada",precio:45000},
-      {id:365,cat:"Equipamiento Comercial",desc:"Letrero acrílico luminoso con letras corpóreas",unidad:"m²",precio:185000},
-      {id:366,cat:"Equipamiento Comercial",desc:"Vitrina exhibidora de melamina con vidrio",unidad:"ml",precio:210000},
-      {id:367,cat:"Equipamiento Comercial",desc:"Mueble para punto de venta o caja registradora",unidad:"unidad",precio:280000},
+      {id:359,cat:"Mantención Pintura",desc:"Repintado interior con tratamiento de humedad/hongos",unidad:"m²",precio:9200,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Pinturas",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Pintura"
+      },
+      {id:360,cat:"Mantención Pintura",desc:"Pintura de cielo americano o placa yeso-cartón",unidad:"m²",precio:6500,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Cielos",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Pintura"
+      },
+      {id:361,cat:"Mantención Pintura",desc:"Lavado a presión y pintura de fachada exterior",unidad:"m²",precio:9800,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Pinturas",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Pintura"
+      },
+      {id:362,cat:"Servicios Generales",desc:"Limpieza fina post obra o entrega",unidad:"m²",precio:2200,
+        rubro: "Limpieza, pruebas y entrega",
+        subrubro: "Limpieza final de obra",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Servicios generales de obra"
+      },
+      {id:363,cat:"Servicios Generales",desc:"Traslado y acarreo de mobiliario (mudanza interna)",unidad:"gl",precio:85000,
+        rubro: "Servicios profesionales",
+        subrubro: "Logística y apoyo de obra",
+        tipoIntervencion: "Servicio profesional",
+        sistemaConstructivo: "No aplica",
+        alcance: "Servicio completo",
+        especialidad: "Logística de obra"
+      },
+      {id:364,cat:"Servicios Generales",desc:"Jornada adicional de especialista a trato",unidad:"jornada",precio:45000,
+        rubro: "Servicios profesionales",
+        subrubro: "Mano de obra especializada",
+        tipoIntervencion: "Servicio profesional",
+        sistemaConstructivo: "No aplica",
+        alcance: "Solo mano de obra",
+        especialidad: "Servicios profesionales"
+      },
+      {id:365,cat:"Equipamiento Comercial",desc:"Letrero acrílico luminoso con letras corpóreas",unidad:"m²",precio:185000,
+        rubro: "Equipamiento y mobiliario",
+        subrubro: "Mobiliario y equipamiento",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Carpintería / mobiliario"
+      },
+      {id:366,cat:"Equipamiento Comercial",desc:"Vitrina exhibidora de melamina con vidrio",unidad:"ml",precio:210000,
+        rubro: "Equipamiento y mobiliario",
+        subrubro: "Mobiliario y equipamiento",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Vidrio",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / mobiliario"
+      },
+      {id:367,cat:"Equipamiento Comercial",desc:"Mueble para punto de venta o caja registradora",unidad:"unidad",precio:280000,
+        rubro: "Equipamiento y mobiliario",
+        subrubro: "Mobiliario y equipamiento",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Melamina",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / mobiliario"
+      },
       /* ═══ AMPLIACIÓN 2026-07-25 (2) — SANITARIO Y GAS RESIDENCIAL ═══ */
-      {id:368,cat:"Instalaciones Sanitarias",desc:"Instalación de WC estándar con cisterna",unidad:"unidad",precio:165000},
-      {id:369,cat:"Instalaciones Sanitarias",desc:"Instalación de ducha con mezcladora simple",unidad:"unidad",precio:130000},
-      {id:370,cat:"Instalaciones Sanitarias",desc:"Instalación de tina o bañera",unidad:"unidad",precio:320000},
-      {id:371,cat:"Instalaciones Sanitarias",desc:"Ampliación de red de desagüe PVC interior",unidad:"ml",precio:8500},
-      {id:372,cat:"Gas",desc:"Instalación de calefont a gas 10L",unidad:"unidad",precio:320000},
-      {id:373,cat:"Gas",desc:"Ampliación de red de gas residencial en cobre",unidad:"ml",precio:9500},
-      {id:374,cat:"Gas",desc:"Instalación de regulador y manguera de gas licuado",unidad:"unidad",precio:58000},
-      {id:375,cat:"Gas",desc:"Instalación de detector de gas GLP",unidad:"unidad",precio:55000},
+      {id:368,cat:"Instalaciones Sanitarias",desc:"Instalación de WC estándar con cisterna",unidad:"unidad",precio:165000,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Artefactos y grifería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
+      },
+      {id:369,cat:"Instalaciones Sanitarias",desc:"Instalación de ducha con mezcladora simple",unidad:"unidad",precio:130000,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Artefactos y grifería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
+      },
+      {id:370,cat:"Instalaciones Sanitarias",desc:"Instalación de tina o bañera",unidad:"unidad",precio:320000,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Artefactos y grifería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
+      },
+      {id:371,cat:"Instalaciones Sanitarias",desc:"Ampliación de red de desagüe PVC interior",unidad:"ml",precio:8500,
+        rubro: "Alcantarillado y drenaje",
+        subrubro: "Redes de alcantarillado",
+        tipoIntervencion: "Ampliación",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
+      },
+      {id:372,cat:"Gas",desc:"Instalación de calefont a gas 10L",unidad:"unidad",precio:320000,
+        rubro: "Instalaciones de gas",
+        subrubro: "Redes de gas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Cobre",
+        alcance: "Suministro e instalación",
+        especialidad: "Gasfitería certificada"
+      },
+      {id:373,cat:"Gas",desc:"Ampliación de red de gas residencial en cobre",unidad:"ml",precio:9500,
+        rubro: "Instalaciones de gas",
+        subrubro: "Redes de gas",
+        tipoIntervencion: "Ampliación",
+        sistemaConstructivo: "Cobre",
+        alcance: "Suministro e instalación",
+        especialidad: "Gasfitería certificada"
+      },
+      {id:374,cat:"Gas",desc:"Instalación de regulador y manguera de gas licuado",unidad:"unidad",precio:58000,
+        rubro: "Instalaciones de gas",
+        subrubro: "Redes de gas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Gasfitería certificada"
+      },
+      {id:375,cat:"Gas",desc:"Instalación de detector de gas GLP",unidad:"unidad",precio:55000,
+        rubro: "Instalaciones de gas",
+        subrubro: "Redes de gas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Gasfitería certificada"
+      },
       /* ═══ AMPLIACIÓN 2026-07-26 — METALCON ESTRUCTURAL ═══ */
-      {id:382,cat:"Metalcon Estructural",desc:"Correa Metalcon omega 100x30mm e=0.85mm instalada",unidad:"ml",precio:4200},
-      {id:383,cat:"Metalcon Estructural",desc:"Correa Metalcon omega 100x30mm e=1.5mm reforzada instalada",unidad:"ml",precio:5900},
-      {id:384,cat:"Metalcon Estructural",desc:"Correa Metalcon C200x50mm e=2.0mm (techo de mayor luz) instalada",unidad:"ml",precio:12800},
-      {id:385,cat:"Metalcon Estructural",desc:"Viga cajón Metalcon 2xC 150mm soldada (dintel/viga)",unidad:"ml",precio:19500},
-      {id:386,cat:"Metalcon Estructural",desc:"Viga cajón Metalcon 2xC 200mm soldada (luces mayores)",unidad:"ml",precio:27500},
-      {id:387,cat:"Metalcon Estructural",desc:"Perfil Z 150mm e=2.0mm instalado (correa o refuerzo)",unidad:"ml",precio:10800},
-      {id:388,cat:"Metalcon Estructural",desc:"Perfil angular acero 50x50x3mm instalado (arriostramiento)",unidad:"ml",precio:6900},
-      {id:389,cat:"Metalcon Estructural",desc:"Base de poste o columna metálica con placa y pernos de anclaje",unidad:"unidad",precio:19800},
-      {id:390,cat:"Metalcon Estructural",desc:"Tabique Metalcon estructural reforzado 90x38mm (muro de carga liviano)",unidad:"m²",precio:75000},
-      {id:391,cat:"Metalcon Estructural",desc:"Tabique Metalcon estructural liviano 60x38mm",unidad:"m²",precio:48000},
-      {id:392,cat:"Metalcon Estructural",desc:"Muro Metalcon perimetral económico 100x50mm e=0.85mm",unidad:"m²",precio:72000},
-      {id:393,cat:"Metalcon Estructural",desc:"Muro Metalcon perimetral reforzado 150x50mm e=1.0mm",unidad:"m²",precio:80000},
+      {id:382,cat:"Metalcon Estructural",desc:"Correa Metalcon omega 100x30mm e=0.85mm instalada",unidad:"ml",precio:4200,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:383,cat:"Metalcon Estructural",desc:"Correa Metalcon omega 100x30mm e=1.5mm reforzada instalada",unidad:"ml",precio:5900,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:384,cat:"Metalcon Estructural",desc:"Correa Metalcon C200x50mm e=2.0mm (techo de mayor luz) instalada",unidad:"ml",precio:12800,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:385,cat:"Metalcon Estructural",desc:"Viga cajón Metalcon 2xC 150mm soldada (dintel/viga)",unidad:"ml",precio:19500,
+        rubro: "Estructuras metálicas",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:386,cat:"Metalcon Estructural",desc:"Viga cajón Metalcon 2xC 200mm soldada (luces mayores)",unidad:"ml",precio:27500,
+        rubro: "Estructuras metálicas",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:387,cat:"Metalcon Estructural",desc:"Perfil Z 150mm e=2.0mm instalado (correa o refuerzo)",unidad:"ml",precio:10800,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:388,cat:"Metalcon Estructural",desc:"Perfil angular acero 50x50x3mm instalado (arriostramiento)",unidad:"ml",precio:6900,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:389,cat:"Metalcon Estructural",desc:"Base de poste o columna metálica con placa y pernos de anclaje",unidad:"unidad",precio:19800,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:390,cat:"Metalcon Estructural",desc:"Tabique Metalcon estructural reforzado 90x38mm (muro de carga liviano)",unidad:"m²",precio:75000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:391,cat:"Metalcon Estructural",desc:"Tabique Metalcon estructural liviano 60x38mm",unidad:"m²",precio:48000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Tabiquería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:392,cat:"Metalcon Estructural",desc:"Muro Metalcon perimetral económico 100x50mm e=0.85mm",unidad:"m²",precio:72000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cierres y muros perimetrales",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:393,cat:"Metalcon Estructural",desc:"Muro Metalcon perimetral reforzado 150x50mm e=1.0mm",unidad:"m²",precio:80000,
+        rubro: "Estructuras metálicas",
+        subrubro: "Cierres y muros perimetrales",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
       /* ═══ AMPLIACIÓN 2026-07-26 (2) — HORMIGÓN Y ALBAÑILERÍA ═══ */
-      {id:394,cat:"Albañilería",desc:"Muro albañilería bloques 14cm (sin refuerzo)",unidad:"m²",precio:32000},
-      {id:395,cat:"Albañilería",desc:"Hormigón elaborado en obra (dosificación artesanal)",unidad:"m³",precio:165000},
-      {id:396,cat:"Albañilería",desc:"Base granular compactada para radier o pavimento",unidad:"m²",precio:8500},
-      {id:397,cat:"Albañilería",desc:"Relleno o enrocado con piedra bolón",unidad:"m³",precio:68000},
-      {id:398,cat:"Albañilería",desc:"Enlucido o relleno con yeso en muros interiores",unidad:"m²",precio:6500},
+      {id:394,cat:"Albañilería",desc:"Muro albañilería bloques 14cm (sin refuerzo)",unidad:"m²",precio:32000,
+        rubro: "Albañilería",
+        subrubro: "Albañilería",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Albañilería",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción general"
+      },
+      {id:395,cat:"Albañilería",desc:"Hormigón elaborado en obra (dosificación artesanal)",unidad:"m³",precio:165000,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón y fundaciones",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
+      },
+      {id:396,cat:"Albañilería",desc:"Base granular compactada para radier o pavimento",unidad:"m²",precio:8500,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Pavimentos y vialidad",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
+      },
+      {id:397,cat:"Albañilería",desc:"Relleno o enrocado con piedra bolón",unidad:"m³",precio:68000,
+        rubro: "Albañilería",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción general"
+      },
+      {id:398,cat:"Albañilería",desc:"Enlucido o relleno con yeso en muros interiores",unidad:"m²",precio:6500,
+        rubro: "Albañilería",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción general"
+      },
       /* ═══ AMPLIACIÓN 2026-07-26 (3) — MADERA ESTRUCTURAL ═══ */
-      {id:399,cat:"Madera NC",desc:"Instalación de cercha prefabricada pino 8m de luz",unidad:"par",precio:95000},
-      {id:400,cat:"Madera NC",desc:"Entramado o refuerzo con polín pino 2x2\"",unidad:"ml",precio:3500},
-      {id:401,cat:"Madera NC",desc:"Viga o dintel de madera pino 2x8\"",unidad:"ml",precio:9500},
-      {id:402,cat:"Madera NC",desc:"Cielo o entrepiso con terciado estructural 12mm",unidad:"m²",precio:12500},
+      {id:399,cat:"Madera NC",desc:"Instalación de cercha prefabricada pino 8m de luz",unidad:"par",precio:95000,
+        rubro: "Construcción liviana",
+        subrubro: "Construcción liviana",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
+      },
+      {id:400,cat:"Madera NC",desc:"Entramado o refuerzo con polín pino 2x2\"",unidad:"ml",precio:3500,
+        rubro: "Construcción liviana",
+        subrubro: "Construcción liviana",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
+      },
+      {id:401,cat:"Madera NC",desc:"Viga o dintel de madera pino 2x8\"",unidad:"ml",precio:9500,
+        rubro: "Construcción liviana",
+        subrubro: "Hormigón estructural",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Suministro e instalación",
+        especialidad: "Construcción en seco (steel framing / madera)"
+      },
+      {id:402,cat:"Madera NC",desc:"Cielo o entrepiso con terciado estructural 12mm",unidad:"m²",precio:12500,
+        rubro: "Cielos y terminaciones",
+        subrubro: "Cielos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
+      },
       /* ═══ AMPLIACIÓN 2026-07-26 (4) — TECHUMBRES ═══ */
-      {id:403,cat:"Techumbres",desc:"Cubierta zinc teja española instalada",unidad:"m²",precio:16500},
-      {id:404,cat:"Techumbres",desc:"Cubierta policarbonato alveolar 8mm instalada",unidad:"m²",precio:26000},
-      {id:405,cat:"Techumbres",desc:"Limatesa de zinc instalada",unidad:"unidad",precio:9800},
-      {id:406,cat:"Techumbres",desc:"Impermeabilización acrílica de techumbre",unidad:"m²",precio:3800},
+      {id:403,cat:"Techumbres",desc:"Cubierta zinc teja española instalada",unidad:"m²",precio:16500,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
+      },
+      {id:404,cat:"Techumbres",desc:"Cubierta policarbonato alveolar 8mm instalada",unidad:"m²",precio:26000,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Policarbonato",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
+      },
+      {id:405,cat:"Techumbres",desc:"Limatesa de zinc instalada",unidad:"unidad",precio:9800,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres"
+      },
+      {id:406,cat:"Techumbres",desc:"Impermeabilización acrílica de techumbre",unidad:"m²",precio:3800,
+        rubro: "Impermeabilización",
+        subrubro: "Impermeabilización de cubiertas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Impermeabilización"
+      },
       /* ═══ AMPLIACIÓN 2026-07-26 (5) — PISOS Y REVESTIMIENTOS ═══ */
-      {id:407,cat:"Pisos",desc:"Piso flotante laminado AC5 (uso comercial)",unidad:"m²",precio:27000},
-      {id:408,cat:"Pisos",desc:"Renovación de fragua en juntas de piso o revestimiento",unidad:"m²",precio:3800},
-      {id:409,cat:"Pisos",desc:"Fijación de piso de parquet con adhesivo (madera de cargo del cliente)",unidad:"m²",precio:14500},
-      {id:410,cat:"Pisos",desc:"Piso vinílico adherido con adhesivo acrílico (instalación pegada)",unidad:"m²",precio:24000},
+      {id:407,cat:"Pisos",desc:"Piso flotante laminado AC5 (uso comercial)",unidad:"m²",precio:27000,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
+      },
+      {id:408,cat:"Pisos",desc:"Renovación de fragua en juntas de piso o revestimiento",unidad:"m²",precio:3800,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos y revestimientos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
+      },
+      {id:409,cat:"Pisos",desc:"Fijación de piso de parquet con adhesivo (madera de cargo del cliente)",unidad:"m²",precio:14500,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
+      },
+      {id:410,cat:"Pisos",desc:"Piso vinílico adherido con adhesivo acrílico (instalación pegada)",unidad:"m²",precio:24000,
+        rubro: "Pisos y revestimientos",
+        subrubro: "Pisos",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Vinílico",
+        alcance: "Suministro e instalación",
+        especialidad: "Terminaciones"
+      },
       /* ═══ AMPLIACIÓN 2026-07-26 (6) — CLIMATIZACIÓN ═══ */
-      {id:411,cat:"Climatización",desc:"Suministro de equipo split 9.000 BTU (sin instalación)",unidad:"unidad",precio:310000},
-      {id:412,cat:"Climatización",desc:"Suministro de equipo split 12.000 BTU (sin instalación)",unidad:"unidad",precio:420000},
-      {id:413,cat:"Climatización",desc:"Suministro de equipo split 18.000 BTU (sin instalación)",unidad:"unidad",precio:570000},
-      {id:414,cat:"Climatización",desc:"Instalación de split (mano de obra, equipo de cliente o comprado aparte)",unidad:"unidad",precio:95000},
+      {id:411,cat:"Climatización",desc:"Suministro de equipo split 9.000 BTU (sin instalación)",unidad:"unidad",precio:310000,
+        rubro: "Climatización y ventilación",
+        subrubro: "Climatización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Solo suministro",
+        especialidad: "Climatización (HVAC)"
+      },
+      {id:412,cat:"Climatización",desc:"Suministro de equipo split 12.000 BTU (sin instalación)",unidad:"unidad",precio:420000,
+        rubro: "Climatización y ventilación",
+        subrubro: "Climatización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Solo suministro",
+        especialidad: "Climatización (HVAC)"
+      },
+      {id:413,cat:"Climatización",desc:"Suministro de equipo split 18.000 BTU (sin instalación)",unidad:"unidad",precio:570000,
+        rubro: "Climatización y ventilación",
+        subrubro: "Climatización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Solo suministro",
+        especialidad: "Climatización (HVAC)"
+      },
+      {id:414,cat:"Climatización",desc:"Instalación de split (mano de obra, equipo de cliente o comprado aparte)",unidad:"unidad",precio:95000,
+        rubro: "Climatización y ventilación",
+        subrubro: "Climatización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Cobre",
+        alcance: "Solo instalación",
+        especialidad: "Climatización (HVAC)"
+      },
       /* ═══ AMPLIACIÓN 2026-07-26 (7) — AISLACIÓN E IMPERMEABILIZACIÓN ═══ */
-      {id:415,cat:"Aislación",desc:"Aislación térmica de muro con poliestireno EPS 50mm",unidad:"m²",precio:6800},
-      {id:416,cat:"Aislación",desc:"Aislación térmica de muro o techo con poliestireno EPS 100mm",unidad:"m²",precio:11500},
-      {id:417,cat:"Impermeabilización",desc:"Impermeabilización de muro bajo nivel con membrana deltaforce",unidad:"m²",precio:9200},
+      {id:415,cat:"Aislación",desc:"Aislación térmica de muro con poliestireno EPS 50mm",unidad:"m²",precio:6800,
+        rubro: "Aislación y eficiencia energética",
+        subrubro: "Aislación térmica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Poliestireno expandido (EPS)",
+        alcance: "Suministro e instalación",
+        especialidad: "Eficiencia energética"
+      },
+      {id:416,cat:"Aislación",desc:"Aislación térmica de muro o techo con poliestireno EPS 100mm",unidad:"m²",precio:11500,
+        rubro: "Aislación y eficiencia energética",
+        subrubro: "Aislación térmica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Poliestireno expandido (EPS)",
+        alcance: "Suministro e instalación",
+        especialidad: "Eficiencia energética"
+      },
+      {id:417,cat:"Impermeabilización",desc:"Impermeabilización de muro bajo nivel con membrana deltaforce",unidad:"m²",precio:9200,
+        rubro: "Impermeabilización",
+        subrubro: "Impermeabilización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Impermeabilización"
+      },
       /* ═══ AMPLIACIÓN 2026-07-26 (8) — CARPINTERÍA ═══ */
-      {id:418,cat:"Carpintería",desc:"Ventana proyectante PVC 60x60cm instalada",unidad:"unidad",precio:88000},
-      {id:419,cat:"Carpintería",desc:"Perfil de terminación de aluminio instalado",unidad:"ml",precio:5200},
+      {id:418,cat:"Carpintería",desc:"Ventana proyectante PVC 60x60cm instalada",unidad:"unidad",precio:88000,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Ventanas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
+      },
+      {id:419,cat:"Carpintería",desc:"Perfil de terminación de aluminio instalado",unidad:"ml",precio:5200,
+        rubro: "Puertas, ventanas y carpinterías",
+        subrubro: "Puertas, ventanas y carpinterías",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Aluminio",
+        alcance: "Suministro e instalación",
+        especialidad: "Carpintería / cerrajería"
+      },
       /* ═══ AMPLIACIÓN 2026-07-26 (9) — CIERRE DE BIBLIOTECA (categorías con 1 material) ═══ */
-      {id:420,cat:"Tabiquería",desc:"Tabique cortafuego con placa yeso RF 15mm",unidad:"m²",precio:32000},
-      {id:421,cat:"Impermeabilización",desc:"Impermeabilización de muro con manta drenante geodren",unidad:"m²",precio:11500},
-      {id:422,cat:"Mantención Eléctrica",desc:"Cambio de ampolleta o foco LED",unidad:"unidad",precio:6500},
-      {id:423,cat:"Instalaciones Sanitarias",desc:"Red de desagüe PVC 4\" (colector principal)",unidad:"ml",precio:9500},
-      {id:424,cat:"Gas",desc:"Red de gas en cobre 3/4\" (matriz o alimentación principal)",unidad:"ml",precio:13500},
-      {id:425,cat:"Estructuras Metálicas",desc:"Fijación con tornillo autorroscante en perfil metálico (por caja)",unidad:"caja",precio:4200},
-      {id:426,cat:"Mov. de Tierras",desc:"Entibación de excavación con plancha metálica",unidad:"unidad",precio:52000},
-      {id:427,cat:"Obras Exteriores",desc:"Poste HEB de acero para cierre o estructura exterior",unidad:"unidad",precio:32000},
-      {id:428,cat:"Seguridad",desc:"Instalación de alarma domiciliaria básica",unidad:"unidad",precio:118000},
-      {id:429,cat:"Hormigón Armado",desc:"Refuerzo puntual con fierro corrugado 8mm",unidad:"ml",precio:1200},
-      {id:430,cat:"Sanitario",desc:"Instalación de estanque elevado 500L (base existente)",unidad:"unidad",precio:105000},
-      {id:431,cat:"Obras Provisorias",desc:"Arriendo de baño químico (mensual)",unidad:"mes",precio:110000},
-      {id:432,cat:"Servicios",desc:"Transporte en camión tolva 8 m³ (flete general)",unidad:"viaje",precio:320000},
-      {id:433,cat:"Pintura",desc:"Kit de insumos para pintura (brochas, bandejas, lijas, masilla)",unidad:"gl",precio:15000},
+      {id:420,cat:"Tabiquería",desc:"Tabique cortafuego con placa yeso RF 15mm",unidad:"m²",precio:32000,
+        rubro: "Protección contra incendios",
+        subrubro: "Compartimentación resistente al fuego",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Protección contra incendios"
+      },
+      {id:421,cat:"Impermeabilización",desc:"Impermeabilización de muro con manta drenante geodren",unidad:"m²",precio:11500,
+        rubro: "Impermeabilización",
+        subrubro: "Impermeabilización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Impermeabilización"
+      },
+      {id:422,cat:"Mantención Eléctrica",desc:"Cambio de ampolleta o foco LED",unidad:"unidad",precio:6500,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Instalaciones eléctricas",
+        tipoIntervencion: "Mantención correctiva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
+      },
+      {id:423,cat:"Instalaciones Sanitarias",desc:"Red de desagüe PVC 4\" (colector principal)",unidad:"ml",precio:9500,
+        rubro: "Alcantarillado y drenaje",
+        subrubro: "Redes de alcantarillado",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "PVC",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
+      },
+      {id:424,cat:"Gas",desc:"Red de gas en cobre 3/4\" (matriz o alimentación principal)",unidad:"ml",precio:13500,
+        rubro: "Instalaciones de gas",
+        subrubro: "Redes de gas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Cobre",
+        alcance: "Suministro e instalación",
+        especialidad: "Gasfitería certificada"
+      },
+      {id:425,cat:"Estructuras Metálicas",desc:"Fijación con tornillo autorroscante en perfil metálico (por caja)",unidad:"caja",precio:4200,
+        rubro: "Estructuras metálicas",
+        subrubro: "Estructuras metálicas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Metalcon (acero galvanizado liviano)",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural / metalmecánica"
+      },
+      {id:426,cat:"Mov. de Tierras",desc:"Entibación de excavación con plancha metálica",unidad:"unidad",precio:52000,
+        rubro: "Movimiento de tierras",
+        subrubro: "Movimiento de tierras",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería civil — movimiento de tierras"
+      },
+      {id:427,cat:"Obras Exteriores",desc:"Poste HEB de acero para cierre o estructura exterior",unidad:"unidad",precio:32000,
+        rubro: "Obras exteriores y urbanización",
+        subrubro: "Obras exteriores y urbanización",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Urbanización"
+      },
+      {id:428,cat:"Seguridad",desc:"Instalación de alarma domiciliaria básica",unidad:"unidad",precio:118000,
+        rubro: "Corrientes débiles y seguridad electrónica",
+        subrubro: "Seguridad electrónica",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Electrónica / seguridad"
+      },
+      {id:429,cat:"Hormigón Armado",desc:"Refuerzo puntual con fierro corrugado 8mm",unidad:"ml",precio:1200,
+        rubro: "Hormigón y fundaciones",
+        subrubro: "Hormigón y fundaciones",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Hormigón",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería estructural"
+      },
+      {id:430,cat:"Sanitario",desc:"Instalación de estanque elevado 500L (base existente)",unidad:"unidad",precio:105000,
+        rubro: "Instalaciones sanitarias",
+        subrubro: "Instalaciones sanitarias",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería sanitaria"
+      },
+      {id:431,cat:"Obras Provisorias",desc:"Arriendo de baño químico (mensual)",unidad:"mes",precio:110000,
+        rubro: "Obras preliminares",
+        subrubro: "Instalaciones de faena",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Administración de obra"
+      },
+      {id:432,cat:"Servicios",desc:"Transporte en camión tolva 8 m³ (flete general)",unidad:"viaje",precio:320000,
+        rubro: "Servicios profesionales",
+        subrubro: "Transporte y logística de obra",
+        tipoIntervencion: "Servicio profesional",
+        sistemaConstructivo: "No aplica",
+        alcance: "Subcontrato",
+        especialidad: "Transporte"
+      },
+      {id:433,cat:"Pintura",desc:"Kit de insumos para pintura (brochas, bandejas, lijas, masilla)",unidad:"gl",precio:15000,
+        rubro: "Pinturas y recubrimientos",
+        subrubro: "Pinturas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Pintura"
+      },
       /* ═══ AMPLIACIÓN 2026-07-25 (3) — ELÉCTRICA ═══ */
-      {id:376,cat:"Instalaciones Eléctricas",desc:"Tablero de distribución 4 circuitos",unidad:"unidad",precio:65000},
-      {id:377,cat:"Instalaciones Eléctricas",desc:"Tablero de distribución 12 circuitos",unidad:"unidad",precio:140000},
-      {id:378,cat:"Instalaciones Eléctricas",desc:"Cableado de circuito reforzado 6mm² (calefont/A.A.)",unidad:"ml",precio:4200},
-      {id:379,cat:"Instalaciones Eléctricas",desc:"Cableado de circuito industrial/hornillas 10mm²",unidad:"ml",precio:6000},
-      {id:380,cat:"Instalaciones Eléctricas",desc:"Instalación de luminaria LED panel embutido 24W",unidad:"unidad",precio:32000},
-      {id:381,cat:"Instalaciones Eléctricas",desc:"Instalación de barra LED bajo mueble",unidad:"unidad",precio:16000},
+      {id:376,cat:"Instalaciones Eléctricas",desc:"Tablero de distribución 4 circuitos",unidad:"unidad",precio:65000,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Tableros y protecciones eléctricas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
+      },
+      {id:377,cat:"Instalaciones Eléctricas",desc:"Tablero de distribución 12 circuitos",unidad:"unidad",precio:140000,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Tableros y protecciones eléctricas",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
+      },
+      {id:378,cat:"Instalaciones Eléctricas",desc:"Cableado de circuito reforzado 6mm² (calefont/A.A.)",unidad:"ml",precio:4200,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Cableado",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
+      },
+      {id:379,cat:"Instalaciones Eléctricas",desc:"Cableado de circuito industrial/hornillas 10mm²",unidad:"ml",precio:6000,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Cableado",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
+      },
+      {id:380,cat:"Instalaciones Eléctricas",desc:"Instalación de luminaria LED panel embutido 24W",unidad:"unidad",precio:32000,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Iluminación",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
+      },
+      {id:381,cat:"Instalaciones Eléctricas",desc:"Instalación de barra LED bajo mueble",unidad:"unidad",precio:16000,
+        rubro: "Instalaciones eléctricas",
+        subrubro: "Mobiliario y equipamiento",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Ingeniería eléctrica"
+      },
     ],
     Rn = [
       {
@@ -32486,15 +34465,24 @@ ${r.empresa}`;
   }) {
     const [C, b] = V(""),
       [h, j] = V("Todas"),
-      [apuChoice, setApuChoice] = V({});
+      [apuChoice, setApuChoice] = V({}),
+      [rubroFiltro, setRubroFiltro] = V("Todos"),
+      [subrubroFiltro, setSubrubroFiltro] = V("Todos"),
+      [tipoFiltro, setTipoFiltro] = V("Todos");
     var F = ["Todas", ...new Set(i.map((v) => v.cat))],
+      rubrosPresentes = [...new Set(i.map((v) => v.rubro || v.cat))].sort((a2, b2) => a2.localeCompare(b2, "es")),
+      subrubrosPresentes = [...new Set(i.filter((v) => rubroFiltro === "Todos" || (v.rubro || v.cat) === rubroFiltro).map((v) => v.subrubro).filter(Boolean))].sort((a2, b2) => a2.localeCompare(b2, "es")),
+      tiposPresentes = [...new Set(i.map((v) => v.tipoIntervencion).filter(Boolean))].sort((a2, b2) => a2.localeCompare(b2, "es")),
       g = i.filter((v) => {
         var x = h === "Todas" || v.cat === h,
           f =
             !C ||
             (v.nombre && v.nombre.toLowerCase().includes(C.toLowerCase())) ||
-            (v.desc && v.desc.toLowerCase().includes(C.toLowerCase()));
-        return x && f;
+            (v.desc && v.desc.toLowerCase().includes(C.toLowerCase())),
+          rOk = rubroFiltro === "Todos" || (v.rubro || v.cat) === rubroFiltro,
+          sOk = subrubroFiltro === "Todos" || v.subrubro === subrubroFiltro,
+          tOk = tipoFiltro === "Todos" || v.tipoIntervencion === tipoFiltro;
+        return x && f && rOk && sOk && tOk;
       }),
       z = new Set(
         (n.items || [])
@@ -32580,6 +34568,41 @@ ${r.empresa}`;
               children: F.map((v) =>
                 e.jsx("option", { value: v, children: v }, v)
               )
+            }),
+            e.jsxs("div", {
+              style: { display: "flex", gap: 5, marginTop: 6 },
+              children: [
+                e.jsxs("select", {
+                  value: rubroFiltro,
+                  onChange: (v) => {
+                    setRubroFiltro(v.target.value);
+                    setSubrubroFiltro("Todos");
+                  },
+                  style: u(d({}, s.inp), { flex: 1, minWidth: 0, fontSize: 10, cursor: "pointer", padding: "4px 6px" }),
+                  children: [
+                    e.jsx("option", { value: "Todos", children: "Rubro" }),
+                    rubrosPresentes.map((v) => e.jsx("option", { value: v, children: v }, v)),
+                  ],
+                }),
+                e.jsxs("select", {
+                  value: subrubroFiltro,
+                  onChange: (v) => setSubrubroFiltro(v.target.value),
+                  style: u(d({}, s.inp), { flex: 1, minWidth: 0, fontSize: 10, cursor: "pointer", padding: "4px 6px" }),
+                  children: [
+                    e.jsx("option", { value: "Todos", children: "Subrubro" }),
+                    subrubrosPresentes.map((v) => e.jsx("option", { value: v, children: v }, v)),
+                  ],
+                }),
+                e.jsxs("select", {
+                  value: tipoFiltro,
+                  onChange: (v) => setTipoFiltro(v.target.value),
+                  style: u(d({}, s.inp), { flex: 1, minWidth: 0, fontSize: 10, cursor: "pointer", padding: "4px 6px" }),
+                  children: [
+                    e.jsx("option", { value: "Todos", children: "Tipo" }),
+                    tiposPresentes.map((v) => e.jsx("option", { value: v, children: v }, v)),
+                  ],
+                }),
+              ],
             }),
           ],
         }),
@@ -32685,6 +34708,15 @@ ${r.empresa}`;
                                   style: { fontSize: 10, color: o.muted },
                                   children: [v.unidad, " · ", v.cat],
                                 }),
+                                (v.rubro || v.tipoIntervencion) &&
+                                  e.jsxs("div", {
+                                    style: { fontSize: 9, color: o.accent, marginTop: 1, display: "flex", flexWrap: "wrap", gap: 4 },
+                                    children: [
+                                      e.jsx("span", { style: { fontWeight: 700 }, children: v.rubro || v.cat }),
+                                      v.subrubro && e.jsxs("span", { style: { color: o.muted }, children: ["· ", v.subrubro] }),
+                                      v.tipoIntervencion && e.jsxs("span", { style: { color: o.muted }, children: ["· ", v.tipoIntervencion] }),
+                                    ],
+                                  }),
                               ],
                             }),
                             e.jsxs("div", {
@@ -37971,6 +40003,15 @@ MATERIALES:
           (L._cantidadMinimaFacturable = parseFloat(W.cantidadMinimaFacturable));
         (parseFloat(W.precioMinimoPartida) > 0) &&
           (L._precioMinimoPartida = parseFloat(W.precioMinimoPartida));
+        // Metadatos opcionales de clasificacion tecnica: solo informativos,
+        // no participan del calculo de precios ni de ningun export (PDF,
+        // Excel, WhatsApp, contrato).
+        W.rubro && (L._rubro = W.rubro);
+        W.subrubro && (L._subrubro = W.subrubro);
+        W.tipoIntervencion && (L._tipoIntervencion = W.tipoIntervencion);
+        W.sistemaConstructivo && (L._sistemaConstructivo = W.sistemaConstructivo);
+        W.alcance && (L._alcance = W.alcance);
+        W.especialidad && (L._especialidad = W.especialidad);
         var E = [...I.items, L],
           M = E.length - 1;
         D((q) => u(d({}, q), { items: E }));
@@ -44488,17 +46529,38 @@ MATERIALES:
   }
   function vg({ catalog: t, setCatalog: i, setToast: r }) {
     var n = [...new Set(t.map((y) => y.cat))];
+    var rubrosPresentes = [...new Set(t.map((y) => y.rubro || y.cat))].sort((a, b) => a.localeCompare(b, "es"));
+    var tiposPresentes = [...new Set(t.map((y) => y.tipoIntervencion).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
+    const TAXO_RUBROS = ["Obras preliminares", "Demoliciones y desmontajes", "Movimiento de tierras", "Hormigón y fundaciones", "Albañilería", "Estructuras metálicas", "Construcción liviana", "Techumbres y aguas lluvias", "Impermeabilización", "Aislación y eficiencia energética", "Fachadas y cerramientos", "Puertas, ventanas y carpinterías", "Pisos y revestimientos", "Cielos y terminaciones", "Pinturas y recubrimientos", "Instalaciones sanitarias", "Alcantarillado y drenaje", "Instalaciones de gas", "Instalaciones eléctricas", "Corrientes débiles y seguridad electrónica", "Climatización y ventilación", "Protección contra incendios", "Accesibilidad universal", "Equipamiento y mobiliario", "Obras exteriores y urbanización", "Paisajismo y riego", "Piscinas", "Servicios profesionales", "Mantención general", "Limpieza, pruebas y entrega"],
+      TAXO_TIPOS = ["Obra nueva", "Ampliación", "Remodelación", "Reposición", "Reparación", "Mantención preventiva", "Mantención correctiva", "Demolición", "Desmontaje", "Regularización", "Servicio profesional"],
+      TAXO_ALCANCES = ["Solo suministro", "Solo instalación", "Solo mano de obra", "Suministro e instalación", "Fabricación e instalación", "Desmontaje y retiro", "Reparación parcial", "Servicio completo", "Subcontrato"];
     const [l, o] = V("Todos"),
       [s, m] = V(!1),
       [p, C] = V(""),
       [b, h] = V("Pintura"),
-      [j, F] = V({ desc: "", unidad: "unidad", precio: "", cantidadMinimaFacturable: "", precioMinimoPartida: "", requiereMovilizacion: false, requiereVisitaTecnica: false, requiereTrabajoAltura: false, requiereRetiroResiduos: false }),
+      [j, F] = V({ desc: "", unidad: "unidad", precio: "", cantidadMinimaFacturable: "", precioMinimoPartida: "", requiereMovilizacion: false, requiereVisitaTecnica: false, requiereTrabajoAltura: false, requiereRetiroResiduos: false, rubro: "", subrubro: "", tipoIntervencion: "", sistemaConstructivo: "", alcance: "", especialidad: "" }),
       [g, z] = V(null),
       [B, w] = V(""),
       [v, x] = V(null),
-      [reglasAbiertas, setReglasAbiertas] = V(!1);
+      [reglasAbiertas, setReglasAbiertas] = V(!1),
+      [clasifAbierta, setClasifAbierta] = V(!1),
+      [categoriaHeredada, setCategoriaHeredada] = V(""),
+      [rubroFiltro, setRubroFiltro] = V("Todos"),
+      [subrubroFiltro, setSubrubroFiltro] = V("Todos"),
+      [tipoFiltro, setTipoFiltro] = V("Todos");
+    var subrubrosPresentes = [
+      ...new Set(
+        t
+          .filter((y) => rubroFiltro === "Todos" || (y.rubro || y.cat) === rubroFiltro)
+          .map((y) => y.subrubro)
+          .filter(Boolean),
+      ),
+    ].sort((a, b) => a.localeCompare(b, "es"));
     var f = (() => {
         var y = l === "Todos" ? t : t.filter((P) => P.cat === l);
+        rubroFiltro !== "Todos" && (y = y.filter((P) => (P.rubro || P.cat) === rubroFiltro));
+        subrubroFiltro !== "Todos" && (y = y.filter((P) => P.subrubro === subrubroFiltro));
+        tipoFiltro !== "Todos" && (y = y.filter((P) => P.tipoIntervencion === tipoFiltro));
         var A = (Q) => {
             var Z = String(Q || "");
             try {
@@ -44727,16 +46789,35 @@ MATERIALES:
         j.requiereVisitaTecnica && (reglasComerciales.requiereVisitaTecnica = true);
         j.requiereTrabajoAltura && (reglasComerciales.requiereTrabajoAltura = true);
         j.requiereRetiroResiduos && (reglasComerciales.requiereRetiroResiduos = true);
+        var clasificacionTecnica = {};
+        j.rubro && (clasificacionTecnica.rubro = j.rubro);
+        j.subrubro && (clasificacionTecnica.subrubro = j.subrubro);
+        j.tipoIntervencion && (clasificacionTecnica.tipoIntervencion = j.tipoIntervencion);
+        j.sistemaConstructivo && (clasificacionTecnica.sistemaConstructivo = j.sistemaConstructivo);
+        j.alcance && (clasificacionTecnica.alcance = j.alcance);
+        j.especialidad && (clasificacionTecnica.especialidad = j.especialidad);
+        var OPCIONALES = [
+          "cantidadMinimaFacturable", "precioMinimoPartida", "requiereMovilizacion",
+          "requiereVisitaTecnica", "requiereTrabajoAltura", "requiereRetiroResiduos",
+          "rubro", "subrubro", "tipoIntervencion", "sistemaConstructivo", "alcance", "especialidad",
+        ];
         (g !== null
           ? (i(
-              t.map((Q) =>
-                Q.id === g
-                  ? u(
-                      d({}, { id: g, cat: y, desc: P, unidad: O, precio: R }),
-                      reglasComerciales,
-                    )
-                  : Q,
-              ),
+              t.map((Q) => {
+                if (Q.id !== g) return Q;
+                // Se preserva todo lo que ya tenia la partida (incluye
+                // satisfaceCargoComercial u otros campos que este
+                // formulario no edita) y solo se actualizan los campos
+                // base + reglas comerciales + clasificacion tecnica, con
+                // soporte para "borrar" un campo opcional dejandolo vacio.
+                var actualizada = u(d({}, Q), { cat: y, desc: P, unidad: O, precio: R });
+                OPCIONALES.forEach((campo) => {
+                  if (Object.prototype.hasOwnProperty.call(reglasComerciales, campo)) actualizada[campo] = reglasComerciales[campo];
+                  else if (Object.prototype.hasOwnProperty.call(clasificacionTecnica, campo)) actualizada[campo] = clasificacionTecnica[campo];
+                  else delete actualizada[campo];
+                });
+                return actualizada;
+              }),
             ),
             z(null))
           : i([
@@ -44744,18 +46825,25 @@ MATERIALES:
               u(
                 d(
                   {},
-                  {
-                    id: Math.max(0, ...t.map((Q) => Q.id)) + 1,
-                    cat: y,
-                    desc: P,
-                    unidad: O,
-                    precio: R,
-                  },
+                  u(
+                    d(
+                      {},
+                      {
+                        id: Math.max(0, ...t.map((Q) => Q.id)) + 1,
+                        cat: y,
+                        desc: P,
+                        unidad: O,
+                        precio: R,
+                      },
+                    ),
+                    reglasComerciales,
+                  ),
                 ),
-                reglasComerciales,
+                clasificacionTecnica,
               ),
             ]),
-          F({ desc: "", unidad: "unidad", precio: "", cantidadMinimaFacturable: "", precioMinimoPartida: "", requiereMovilizacion: false, requiereVisitaTecnica: false, requiereTrabajoAltura: false, requiereRetiroResiduos: false }),
+          F({ desc: "", unidad: "unidad", precio: "", cantidadMinimaFacturable: "", precioMinimoPartida: "", requiereMovilizacion: false, requiereVisitaTecnica: false, requiereTrabajoAltura: false, requiereRetiroResiduos: false, rubro: "", subrubro: "", tipoIntervencion: "", sistemaConstructivo: "", alcance: "", especialidad: "" }),
+          setCategoriaHeredada(""),
           m(!1),
           C(""));
       },
@@ -45339,6 +47427,61 @@ MATERIALES:
                         }),
                       ],
                     }),
+                    e.jsxs("div", {
+                      style: {
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 8,
+                        marginBottom: 14,
+                        alignItems: "center",
+                      },
+                      children: [
+                        e.jsx("span", {
+                          style: { fontSize: 11, color: a.muted, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em" },
+                          children: "Taxonomía:",
+                        }),
+                        e.jsxs("select", {
+                          style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", width: "auto" }),
+                          value: rubroFiltro,
+                          onChange: (y) => {
+                            setRubroFiltro(y.target.value);
+                            setSubrubroFiltro("Todos");
+                          },
+                          children: [
+                            e.jsx("option", { value: "Todos", children: "Rubro: todos" }),
+                            rubrosPresentes.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                          ],
+                        }),
+                        e.jsxs("select", {
+                          style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", width: "auto" }),
+                          value: subrubroFiltro,
+                          onChange: (y) => setSubrubroFiltro(y.target.value),
+                          children: [
+                            e.jsx("option", { value: "Todos", children: "Subrubro: todos" }),
+                            subrubrosPresentes.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                          ],
+                        }),
+                        e.jsxs("select", {
+                          style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", width: "auto" }),
+                          value: tipoFiltro,
+                          onChange: (y) => setTipoFiltro(y.target.value),
+                          children: [
+                            e.jsx("option", { value: "Todos", children: "Tipo de intervención: todos" }),
+                            tiposPresentes.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                          ],
+                        }),
+                        (rubroFiltro !== "Todos" || subrubroFiltro !== "Todos" || tipoFiltro !== "Todos") &&
+                          e.jsx("button", {
+                            onClick: () => {
+                              setRubroFiltro("Todos");
+                              setSubrubroFiltro("Todos");
+                              setTipoFiltro("Todos");
+                            },
+                            style: { fontSize: 11, padding: "4px 8px", borderRadius: 6, border: "1px solid " + a.border, background: "var(--surface)", color: a.muted, cursor: "pointer" },
+                            children: "✕ Limpiar taxonomía",
+                          }),
+                      ],
+                    }),
                     e.jsxs("table", {
                       style: { width: "100%", borderCollapse: "collapse" },
                       children: [
@@ -45370,6 +47513,7 @@ MATERIALES:
                                   (z(y.id),
                                     h(y.cat),
                                     m(!1),
+                                    setCategoriaHeredada(y.cat),
                                     F({
                                       desc: y.desc,
                                       unidad: y.unidad,
@@ -45380,6 +47524,12 @@ MATERIALES:
                                       requiereVisitaTecnica: !!y.requiereVisitaTecnica,
                                       requiereTrabajoAltura: !!y.requiereTrabajoAltura,
                                       requiereRetiroResiduos: !!y.requiereRetiroResiduos,
+                                      rubro: y.rubro || "",
+                                      subrubro: y.subrubro || "",
+                                      tipoIntervencion: y.tipoIntervencion || "",
+                                      sistemaConstructivo: y.sistemaConstructivo || "",
+                                      alcance: y.alcance || "",
+                                      especialidad: y.especialidad || "",
                                     }));
                                 },
                                 style: { cursor: "pointer" },
@@ -45459,6 +47609,13 @@ MATERIALES:
                                           },
                                           children: "Sin APU",
                                         }),
+                                      e.jsxs("div", {
+                                        style: { marginTop: 3, fontSize: 11, color: a.muted },
+                                        children: [
+                                          e.jsx("span", { style: { fontWeight: 700 }, children: y.rubro || y.cat }),
+                                          y.subrubro && [" · ", y.subrubro],
+                                        ],
+                                      }),
                                     ],
                                   }),
                                   e.jsx("td", {
@@ -45503,6 +47660,7 @@ MATERIALES:
                                             (z(y.id),
                                               h(y.cat),
                                               m(!1),
+                                              setCategoriaHeredada(y.cat),
                                               F({
                                                 desc: y.desc,
                                                 unidad: y.unidad,
@@ -45513,6 +47671,12 @@ MATERIALES:
                                                 requiereVisitaTecnica: !!y.requiereVisitaTecnica,
                                                 requiereTrabajoAltura: !!y.requiereTrabajoAltura,
                                                 requiereRetiroResiduos: !!y.requiereRetiroResiduos,
+                                                rubro: y.rubro || "",
+                                                subrubro: y.subrubro || "",
+                                                tipoIntervencion: y.tipoIntervencion || "",
+                                                sistemaConstructivo: y.sistemaConstructivo || "",
+                                                alcance: y.alcance || "",
+                                                especialidad: y.especialidad || "",
                                               }));
                                           },
                                           children: "✏",
@@ -45771,6 +47935,12 @@ MATERIALES:
                         placeholder: "Nombre nueva categoría",
                         autoFocus: !0,
                       }),
+                    g !== null &&
+                      categoriaHeredada &&
+                      e.jsxs("div", {
+                        style: { marginTop: 6, fontSize: 11, color: a.muted },
+                        children: ["Categoría heredada: ", e.jsx("strong", { children: categoriaHeredada })],
+                      }),
                   ],
                 }),
                 e.jsx(ze, {
@@ -45902,6 +48072,108 @@ MATERIALES:
                   ],
                 }),
                 e.jsxs("div", {
+                  style: {
+                    marginBottom: 14,
+                    border: `1px solid ${a.border}`,
+                    borderRadius: 8,
+                    overflow: "hidden",
+                  },
+                  children: [
+                    e.jsxs("button", {
+                      type: "button",
+                      onClick: () => setClasifAbierta((v2) => !v2),
+                      style: {
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "8px 12px",
+                        background: a.surface,
+                        border: "none",
+                        color: a.text,
+                        cursor: "pointer",
+                        fontSize: 13,
+                        fontWeight: 700,
+                      },
+                      children: [
+                        "🏷️ Clasificación técnica",
+                        clasifAbierta ? "▲" : "▼",
+                      ],
+                    }),
+                    clasifAbierta &&
+                      e.jsxs("div", {
+                        style: {
+                          padding: 12,
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 4,
+                        },
+                        children: [
+                          e.jsx(ze, {
+                            label: "Rubro",
+                            children: e.jsxs("select", {
+                              style: c.sel,
+                              value: j.rubro,
+                              onChange: (y) => F((P) => u(d({}, P), { rubro: y.target.value })),
+                              children: [
+                                e.jsx("option", { value: "", children: "— Sin definir —" }),
+                                TAXO_RUBROS.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                              ],
+                            }),
+                          }),
+                          e.jsx(ze, {
+                            label: "Subrubro",
+                            children: e.jsx(Pe, {
+                              value: j.subrubro,
+                              onChange: (y) => F((P) => u(d({}, P), { subrubro: y })),
+                              placeholder: "Ej: Canaletas y bajantes",
+                            }),
+                          }),
+                          e.jsx(ze, {
+                            label: "Tipo de intervención",
+                            children: e.jsxs("select", {
+                              style: c.sel,
+                              value: j.tipoIntervencion,
+                              onChange: (y) => F((P) => u(d({}, P), { tipoIntervencion: y.target.value })),
+                              children: [
+                                e.jsx("option", { value: "", children: "— Sin definir —" }),
+                                TAXO_TIPOS.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                              ],
+                            }),
+                          }),
+                          e.jsx(ze, {
+                            label: "Sistema constructivo",
+                            children: e.jsx(Pe, {
+                              value: j.sistemaConstructivo,
+                              onChange: (y) => F((P) => u(d({}, P), { sistemaConstructivo: y })),
+                              placeholder: "Ej: PVC, Metalcon, Hormigón…",
+                            }),
+                          }),
+                          e.jsx(ze, {
+                            label: "Alcance",
+                            children: e.jsxs("select", {
+                              style: c.sel,
+                              value: j.alcance,
+                              onChange: (y) => F((P) => u(d({}, P), { alcance: y.target.value })),
+                              children: [
+                                e.jsx("option", { value: "", children: "— Sin definir —" }),
+                                TAXO_ALCANCES.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                              ],
+                            }),
+                          }),
+                          e.jsx(ze, {
+                            label: "Especialidad",
+                            children: e.jsx(Pe, {
+                              value: j.especialidad,
+                              onChange: (y) => F((P) => u(d({}, P), { especialidad: y })),
+                              placeholder: "Ej: Hojalatería, Gasfitería…",
+                            }),
+                          }),
+                        ],
+                      }),
+                  ],
+                }),
+                e.jsxs("div", {
                   style: { display: "flex", gap: 8 },
                   children: [
                     e.jsx("button", {
@@ -45916,7 +48188,8 @@ MATERIALES:
                           (z(null),
                             m(!1),
                             h("Pintura"),
-                            F({ desc: "", unidad: "unidad", precio: "", cantidadMinimaFacturable: "", precioMinimoPartida: "", requiereMovilizacion: false, requiereVisitaTecnica: false, requiereTrabajoAltura: false, requiereRetiroResiduos: false }));
+                            setCategoriaHeredada(""),
+                            F({ desc: "", unidad: "unidad", precio: "", cantidadMinimaFacturable: "", precioMinimoPartida: "", requiereMovilizacion: false, requiereVisitaTecnica: false, requiereTrabajoAltura: false, requiereRetiroResiduos: false, rubro: "", subrubro: "", tipoIntervencion: "", sistemaConstructivo: "", alcance: "", especialidad: "" }));
                         },
                         children: "Cancelar",
                       }),
