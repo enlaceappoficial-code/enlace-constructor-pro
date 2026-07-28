@@ -19749,6 +19749,9 @@ Error generating stack: ` +
         noMatSub: Math.round(noMatS),
       };
     }, __Ee_export = (window.__Ee = Ee),
+    obtenerItemsPresupuestoExportables = (items) =>
+      (items || []).filter((it) => String((it && it.desc) || "").trim().length > 0),
+    __obtenerItemsPresupuestoExportables_export = (window.__obtenerItemsPresupuestoExportables = obtenerItemsPresupuestoExportables),
     calculaMO = (t, i) => {
       var r = parseFloat(t.rendimiento) || 0,
         n = Math.max(0, parseInt(t.dotacion) || 0),
@@ -20486,9 +20489,45 @@ Error generating stack: ` +
               o.text(ve.l, ve.x, G + 5.3, { align: ve.r ? "right" : "left" }));
           }),
           (G += 8),
-          t.items
-            .filter((ve) => ve.desc)
-            .forEach((ve, xr) => {
+          (() => {
+            var itemsFiltradosZr = obtenerItemsPresupuestoExportables(t.items);
+            var capsOrdZr = Array.isArray(t.capitulos)
+              ? [...t.capitulos].sort((a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0))
+              : [];
+            var gruposZr;
+            if (capsOrdZr.length === 0) {
+              gruposZr = [{ cap: null, items: itemsFiltradosZr }];
+            } else {
+              gruposZr = capsOrdZr.map((cap) => ({
+                cap,
+                items: itemsFiltradosZr.filter((it) => it.capituloId === cap.id),
+              }));
+              var sinCapZr = itemsFiltradosZr.filter((it) => !capsOrdZr.some((c) => c.id === it.capituloId));
+              if (sinCapZr.length > 0) gruposZr.push({ cap: null, items: sinCapZr });
+              gruposZr = gruposZr.filter((grp) => grp.items.length > 0);
+            }
+            var usaCapsZr = capsOrdZr.length > 0;
+            var numZr = 0;
+            gruposZr.forEach((grp) => {
+              if (usaCapsZr) {
+                if (G > 255) {
+                  o.addPage();
+                  G = 18;
+                }
+                o.setFillColor(...q);
+                o.rect(14, G, 182, 7, "F");
+                o.setFont("helvetica", "bold");
+                o.setFontSize(8);
+                o.setTextColor(...J);
+                o.text(
+                  grp.cap ? (grp.cap.codigo ? grp.cap.codigo + " — " : "") + (grp.cap.nombre || "Capítulo") : "Sin capítulo",
+                  16,
+                  G + 5,
+                );
+                G += 9;
+              }
+              grp.items.forEach((ve) => {
+              var xr = numZr++;
               var Lve = calcularLineaPresupuesto(ve),
                 hrShow = Lve.cantidadIngresada,
                 hr = Lve.cantidadFacturable,
@@ -20548,8 +20587,10 @@ Error generating stack: ` +
                     o.text(s(Pr), 194, yTxt, { align: "right" })));
               }
               (G += Fr),
-              G > 262 && (o.addPage(), (G = 18));
-            }),
+                G > 262 && (o.addPage(), (G = 18));
+              });
+            });
+          })(),
           G
         );
       },
@@ -22010,7 +22051,7 @@ Error generating stack: ` +
           : '<th style="width:36px">#</th><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:110px;text-align:right">P. Unit.</th><th style="width:110px;text-align:right">Total</th>';
     var x = (() => {
         var idx = 0;
-        return (t.items || []).reduce(function (acc, I) {
+        return obtenerItemsPresupuestoExportables(t.items || []).reduce(function (acc, I) {
           var Lts = calcularLineaPresupuesto(I),
             cant = Lts.cantidadFacturable,
             cantShow = Lts.cantidadIngresada,
@@ -22084,7 +22125,7 @@ Error generating stack: ` +
           );
         }, "");
       })(),
-      notaMinTs = (t.items || [])
+      notaMinTs = obtenerItemsPresupuestoExportables(t.items || [])
         .map((I) => calcularLineaPresupuesto(I))
         .filter((L) => L.reglaAplicada)
         .map((L) => "<li>" + L.motivo + "</li>")
@@ -22233,8 +22274,7 @@ Error generating stack: ` +
       [w, v] = V(""),
       [x, f] = V(!1);
     var I = `Hola ${i && i.nombre ? i.nombre.split(" ")[0] : "cliente"} 👋`,
-      D = t.items
-        .filter((S) => S.desc)
+      D = obtenerItemsPresupuestoExportables(t.items)
         .map((S) => {
           var Lap = calcularLineaPresupuesto(S);
           return Lap.reglaAplicada
@@ -22260,7 +22300,7 @@ Error generating stack: ` +
         `Te comparto el *Presupuesto N° ${t.id}* para:`,
         `📋 _${t.descripcion || "la obra"}_`,
         "",
-        C && t.items.length > 0
+        C && D
           ? `*DETALLE DE OBRA:*
 ${D}
 `
@@ -23866,11 +23906,50 @@ ${r.empresa}`;
                               "TOTAL",
                             ]));
                           var ee = $.length,
-                            tt = Array.isArray(s.items) ? s.items : [];
+                            capsOrdExcel = Array.isArray(s.capitulos)
+                              ? [...s.capitulos].sort((a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0))
+                              : [],
+                            tt = (() => {
+                              var itemsOriginal = obtenerItemsPresupuestoExportables(s.items);
+                              if (capsOrdExcel.length === 0) return itemsOriginal;
+                              var porCapExcel = (capId) =>
+                                itemsOriginal
+                                  .filter((it) =>
+                                    capId === null
+                                      ? !capsOrdExcel.some((c) => c.id === it.capituloId)
+                                      : it.capituloId === capId,
+                                  )
+                                  .sort(
+                                    (a, b) =>
+                                      (parseFloat(a.ordenDentroCapitulo) || 0) - (parseFloat(b.ordenDentroCapitulo) || 0),
+                                  );
+                              var salidaExcel = [];
+                              capsOrdExcel.forEach((cap) => {
+                                var itemsCap = porCapExcel(cap.id);
+                                if (!itemsCap.length) return;
+                                salidaExcel.push({
+                                  __esCapitulo: !0,
+                                  __nombre: (cap.codigo ? cap.codigo + " — " : "") + (cap.nombre || "Capítulo"),
+                                });
+                                salidaExcel.push(...itemsCap);
+                              });
+                              var sinCapExcel = porCapExcel(null);
+                              if (sinCapExcel.length) {
+                                salidaExcel.push({ __esCapitulo: !0, __nombre: "Sin capítulo" });
+                                salidaExcel.push(...sinCapExcel);
+                              }
+                              return salidaExcel;
+                            })();
+                          var numExportable = 0;
                           (tt.forEach((G, ie) => {
+                            if (G.__esCapitulo) {
+                              $.push(["", G.__nombre, "", "", "", ""]);
+                              return;
+                            }
+                            numExportable++;
                             var Lg = calcularLineaPresupuesto(G);
                             ($.push([
-                              ie + 1,
+                              numExportable,
                               G.desc || "",
                               Lg.cantidadIngresada,
                               G.unidad || "",
@@ -24012,8 +24091,19 @@ ${r.empresa}`;
                             oe && (oe.s = Z);
                           }),
                             tt.forEach((G, ie) => {
-                              var oe = E + ie + 1,
-                                ce = ie % 2 === 0 ? "FFFFFF" : "F8FAFC";
+                              var oe = E + ie + 1;
+                              if (G.__esCapitulo) {
+                                ["A", "B", "C", "D", "E", "F"].forEach((te) => {
+                                  var fe = Y[te + oe];
+                                  fe &&
+                                    (fe.s = {
+                                      font: { bold: !0, sz: 10, color: { rgb: "FFFFFF" } },
+                                      fill: { fgColor: { rgb: O } },
+                                    });
+                                });
+                                return;
+                              }
+                              var ce = ie % 2 === 0 ? "FFFFFF" : "F8FAFC";
                               (["A", "B", "C", "D"].forEach((te) => {
                                 var fe = Y[te + oe];
                                 fe &&
@@ -24041,7 +24131,7 @@ ${r.empresa}`;
                                     }));
                                 }));
                             }));
-                          var M = s.items.length,
+                          var M = tt.length,
                             q = E + M + 2;
                           [q, q + 1, q + 2].forEach((G) => {
                             var ie = Y["E" + G],
@@ -24298,7 +24388,50 @@ ${r.empresa}`;
                         }),
                       }),
                       e.jsx("tbody", {
-                        children: (s.items || []).map((D, k) => {
+                        children: ((renderFila) => {
+                          var capsOrd = Array.isArray(s.capitulos)
+                            ? [...s.capitulos].sort((a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0))
+                            : [];
+                          var itemsExportablesPreview = obtenerItemsPresupuestoExportables(s.items);
+                          if (capsOrd.length === 0) return itemsExportablesPreview.map((D, k) => renderFila(D, k));
+                          var conIdx = itemsExportablesPreview.map((D, k) => ({ D, k }));
+                          var deGrupo = (capId) =>
+                            conIdx
+                              .filter(({ D }) =>
+                                capId === null ? !capsOrd.some((c) => c.id === D.capituloId) : D.capituloId === capId,
+                              )
+                              .sort(
+                                (a, b) =>
+                                  (parseFloat(a.D.ordenDentroCapitulo) || 0) -
+                                  (parseFloat(b.D.ordenDentroCapitulo) || 0),
+                              );
+                          var renderHeader = (cap) =>
+                            e.jsx(
+                              "tr",
+                              {
+                                children: e.jsx("td", {
+                                  colSpan: 6,
+                                  style: { padding: "6px 10px", fontSize: 13, fontWeight: 700, color: "#fff", background: I.header },
+                                  children: cap ? (cap.codigo ? cap.codigo + " — " : "") + (cap.nombre || "Capítulo") : "Sin capítulo",
+                                }),
+                              },
+                              "cap_" + (cap ? cap.id : "sin"),
+                            );
+                          var salida = [];
+                          var filaNum = 0;
+                          capsOrd.forEach((cap) => {
+                            var items = deGrupo(cap.id);
+                            if (!items.length) return;
+                            salida.push(renderHeader(cap));
+                            items.forEach(({ D }) => salida.push(renderFila(D, filaNum++)));
+                          });
+                          var sinCap = deGrupo(null);
+                          if (sinCap.length) {
+                            salida.push(renderHeader(null));
+                            sinCap.forEach(({ D }) => salida.push(renderFila(D, filaNum++)));
+                          }
+                          return salida;
+                        })((D, k) => {
                           var Luf = calcularLineaPresupuesto(D),
                             cantRow = Luf.cantidadIngresada,
                             precioRow = Luf.precioUnitario,
@@ -39830,6 +39963,7 @@ MATERIALES:
               _isTenderDraft: !!m._isTenderDraft,
               sinIva: !!m.sinIva,
               hitosPago: m.hitosPago || null,
+              capitulos: m.capitulos || [],
             }
           : {
               clienteId: (t[0] && t[0].id) || "",
@@ -39851,6 +39985,7 @@ MATERIALES:
               _isTenderDraft: false,
               sinIva: false,
               hitosPago: null,
+              capitulos: [],
             },
       ),
       [k, R] = V(null),
@@ -40055,6 +40190,115 @@ MATERIALES:
             : ["m²", "m³", "ml", "m2", "m3"].includes(W.unidad) &&
               A({ idx: M, unidad: W.unidad }));
       },
+      subtotalCapitulo = (capId) =>
+        (I.items || [])
+          .filter((it) =>
+            capId === null
+              ? !(I.capitulos || []).some((c) => c.id === it.capituloId)
+              : it.capituloId === capId,
+          )
+          .reduce((sum, it) => sum + calcularLineaPresupuesto(it).totalLinea, 0),
+      agregarCapitulo = () =>
+        D((J) => {
+          var caps = J.capitulos || [];
+          var maxId = caps.reduce((mx, c) => Math.max(mx, parseInt(c.id) || 0), 0);
+          var maxOrden = caps.reduce((mx, c) => Math.max(mx, parseFloat(c.orden) || 0), 0);
+          var nuevo = {
+            id: maxId + 1,
+            codigo: "",
+            nombre: "Nuevo capítulo",
+            orden: maxOrden + 1,
+            descripcionOpcional: "",
+            subtotal: 0,
+          };
+          return u(d({}, J), { capitulos: [...caps, nuevo] });
+        }),
+      actualizarCapitulo = (capId, campo, valor) =>
+        D((J) =>
+          u(d({}, J), {
+            capitulos: (J.capitulos || []).map((c) =>
+              c.id === capId ? u(d({}, c), { [campo]: valor }) : c,
+            ),
+          }),
+        ),
+      moverCapitulo = (capId, direccion) =>
+        D((J) => {
+          var caps = [...(J.capitulos || [])].sort(
+            (a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0),
+          );
+          var idx = caps.findIndex((c) => c.id === capId);
+          var swapIdx = idx + direccion;
+          if (idx < 0 || swapIdx < 0 || swapIdx >= caps.length) return J;
+          var ordenA = parseFloat(caps[idx].orden) || 0,
+            ordenB = parseFloat(caps[swapIdx].orden) || 0;
+          if (ordenA === ordenB) {
+            ordenA = idx;
+            ordenB = swapIdx;
+          }
+          var idA = caps[idx].id,
+            idB = caps[swapIdx].id;
+          return u(d({}, J), {
+            capitulos: (J.capitulos || []).map((c) => {
+              if (c.id === idA) return u(d({}, c), { orden: ordenB });
+              if (c.id === idB) return u(d({}, c), { orden: ordenA });
+              return c;
+            }),
+          });
+        }),
+      eliminarCapitulo = (capId) => {
+        var tieneItems = (I.items || []).some((it) => it.capituloId === capId);
+        if (
+          tieneItems &&
+          !window.confirm(
+            "Esta sección tiene partidas asignadas. ¿Moverlas a \"Sin capítulo\" y eliminar la sección?",
+          )
+        )
+          return;
+        D((J) =>
+          u(d({}, J), {
+            capitulos: (J.capitulos || []).filter((c) => c.id !== capId),
+            items: (J.items || []).map((it) =>
+              it.capituloId === capId ? u(d({}, it), { capituloId: "" }) : it,
+            ),
+          }),
+        );
+      },
+      moverItemACapitulo = (T, capId) =>
+        D((J) => {
+          var items = [...J.items];
+          items[T] = u(d({}, items[T]), { capituloId: capId || "" });
+          return u(d({}, J), { items });
+        }),
+      reordenarItemEnGrupo = (T, direccion, capId) =>
+        D((J) => {
+          var items = [...(J.items || [])];
+          var grupo = items
+            .map((it, idx) => ({ it, idx }))
+            .filter(({ it }) =>
+              capId === null
+                ? !(J.capitulos || []).some((c) => c.id === it.capituloId)
+                : it.capituloId === capId,
+            )
+            .sort(
+              (a, b) =>
+                (parseFloat(a.it.ordenDentroCapitulo) || 0) -
+                (parseFloat(b.it.ordenDentroCapitulo) || 0),
+            );
+          var pos = grupo.findIndex(({ idx }) => idx === T);
+          var swapPos = pos + direccion;
+          if (pos < 0 || swapPos < 0 || swapPos >= grupo.length) return J;
+          var ordenA = parseFloat(grupo[pos].it.ordenDentroCapitulo) || 0,
+            ordenB = parseFloat(grupo[swapPos].it.ordenDentroCapitulo) || 0;
+          if (ordenA === ordenB) {
+            ordenA = pos;
+            ordenB = swapPos;
+          }
+          var idxA = grupo[pos].idx,
+            idxB = grupo[swapPos].idx;
+          items[idxA] = u(d({}, items[idxA]), { ordenDentroCapitulo: ordenB });
+          items[idxB] = u(d({}, items[idxB]), { ordenDentroCapitulo: ordenA });
+          return u(d({}, J), { items });
+        }),
       Z = () => {
         if (!I.clienteId || !I.descripcion) {
           b("⚠️ Completa cliente y descripción");
@@ -40064,9 +40308,12 @@ MATERIALES:
           b("⚠️ Agrega al menos un ítem");
           return;
         }
+        var capitulosConSubtotal = (I.capitulos || []).map((cap) =>
+          u(d({}, cap), { subtotal: Math.round(subtotalCapitulo(cap.id)) }),
+        );
         o(
           d(
-            u(d({}, I), { pctMO: g, pctGG: B, pctUtil: v }),
+            u(d({}, I), { pctMO: g, pctGG: B, pctUtil: v, capitulos: capitulosConSubtotal }),
             m && I.customId && parseInt(I.customId) !== parseInt(m.id)
               ? { _newId: parseInt(I.customId) }
               : {},
@@ -40571,6 +40818,14 @@ MATERIALES:
                               children: "📋 Plantilla",
                             }),
                             e.jsx("button", {
+                              style: u(d({}, c.btn("s")), {
+                                fontSize: 12,
+                                padding: "5px 10px",
+                              }),
+                              onClick: agregarCapitulo,
+                              children: "+ Agregar capítulo",
+                            }),
+                            e.jsx("button", {
                               style: c.btn("g"),
                               onClick: () =>
                                 D((W) =>
@@ -40618,7 +40873,102 @@ MATERIALES:
                         ),
                       ),
                     }),
-                    (I.items || []).map((W, T) => {
+                    ((renderFilaItem) => {
+                      var capsOrdenados = [...(I.capitulos || [])].sort(
+                        (a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0),
+                      );
+                      if (capsOrdenados.length === 0)
+                        return (I.items || []).map((W, T) => renderFilaItem(W, T, false, capsOrdenados));
+                      var itemsConIndice = (I.items || []).map((W, T) => ({ W, T }));
+                      var itemsDeGrupo = (capId) =>
+                        itemsConIndice
+                          .filter(({ W }) =>
+                            capId === null
+                              ? !capsOrdenados.some((c) => c.id === W.capituloId)
+                              : W.capituloId === capId,
+                          )
+                          .sort(
+                            (a, b) =>
+                              (parseFloat(a.W.ordenDentroCapitulo) || 0) -
+                              (parseFloat(b.W.ordenDentroCapitulo) || 0),
+                          );
+                      var renderEncabezado = (cap, capIdx) => {
+                        var esSinCapitulo = cap === null;
+                        var subtotal = subtotalCapitulo(esSinCapitulo ? null : cap.id);
+                        return e.jsxs(
+                          "div",
+                          {
+                            style: {
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                              background: a.sb,
+                              border: `1px solid ${a.border}`,
+                              borderRadius: 8,
+                              padding: "8px 10px",
+                              margin: "10px 0 6px",
+                            },
+                            children: [
+                              !esSinCapitulo &&
+                                e.jsxs("div", {
+                                  style: { display: "flex", flexDirection: "column", gap: 1 },
+                                  children: [
+                                    e.jsx("button", {
+                                      title: "Subir capítulo",
+                                      disabled: capIdx === 0,
+                                      onClick: () => moverCapitulo(cap.id, -1),
+                                      style: { background: "transparent", border: "none", color: a.muted, cursor: capIdx === 0 ? "default" : "pointer", fontSize: 10, lineHeight: 1, padding: 0, opacity: capIdx === 0 ? 0.35 : 1 },
+                                      children: "▲",
+                                    }),
+                                    e.jsx("button", {
+                                      title: "Bajar capítulo",
+                                      disabled: capIdx === capsOrdenados.length - 1,
+                                      onClick: () => moverCapitulo(cap.id, 1),
+                                      style: { background: "transparent", border: "none", color: a.muted, cursor: capIdx === capsOrdenados.length - 1 ? "default" : "pointer", fontSize: 10, lineHeight: 1, padding: 0, opacity: capIdx === capsOrdenados.length - 1 ? 0.35 : 1 },
+                                      children: "▼",
+                                    }),
+                                  ],
+                                }),
+                              !esSinCapitulo &&
+                                e.jsx("input", {
+                                  value: cap.codigo || "",
+                                  placeholder: "Código",
+                                  onChange: (ev) => actualizarCapitulo(cap.id, "codigo", ev.target.value),
+                                  style: u(d({}, c.inp), { width: 56, fontSize: 12, padding: "4px 6px" }),
+                                }),
+                              esSinCapitulo
+                                ? e.jsx("div", { style: { fontWeight: 700, fontSize: 13, color: a.muted, flex: 1 }, children: "Sin capítulo" })
+                                : e.jsx("input", {
+                                    value: cap.nombre || "",
+                                    placeholder: "Nombre del capítulo",
+                                    onChange: (ev) => actualizarCapitulo(cap.id, "nombre", ev.target.value),
+                                    style: u(d({}, c.inp), { flex: 1, fontWeight: 700, fontSize: 13, padding: "4px 6px" }),
+                                  }),
+                              e.jsxs("div", { style: { fontSize: 12, color: a.accent, fontWeight: 700, whiteSpace: "nowrap" }, children: ["Subtotal: ", ne(Math.round(subtotal))] }),
+                              !esSinCapitulo &&
+                                e.jsx("button", {
+                                  title: "Eliminar capítulo",
+                                  onClick: () => eliminarCapitulo(cap.id),
+                                  style: u(d({}, c.btn("d")), { padding: "4px 8px", fontSize: 13 }),
+                                  children: "✕",
+                                }),
+                            ],
+                          },
+                          "cap_" + (esSinCapitulo ? "sin" : cap.id),
+                        );
+                      };
+                      var salida = [];
+                      capsOrdenados.forEach((cap, capIdx) => {
+                        salida.push(renderEncabezado(cap, capIdx));
+                        itemsDeGrupo(cap.id).forEach(({ W, T }) => salida.push(renderFilaItem(W, T, true, capsOrdenados)));
+                      });
+                      var sinCap = itemsDeGrupo(null);
+                      if (sinCap.length > 0) {
+                        salida.push(renderEncabezado(null, -1));
+                        sinCap.forEach(({ W, T }) => salida.push(renderFilaItem(W, T, true, capsOrdenados)));
+                      }
+                      return salida;
+                    })((W, T, usaCapitulos, capsOrdenados) => {
                       var L = W._cid
                           ? i.find((M) => M.id === parseInt(W._cid))
                           : null,
@@ -40965,6 +41315,50 @@ MATERIALES:
                                     R({ idx: T, catItem: L, apu: E || { id: "manual_" + T, nombre: W.desc || "Ítem Manual", unidad: W.unidad || "unidad", materiales: [], pctMO: g, pctGG: B, pctUtilidad: v, rendimiento: 0, dotacion: 1 } }),
                                   children: E ? "🔧 Ver y ajustar materiales del APU" : "🔧 Definir materiales manualmente",
                                 }),
+                              }),
+                            usaCapitulos &&
+                              e.jsxs("div", {
+                                style: {
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 6,
+                                  marginBottom: 8,
+                                  marginTop: -2,
+                                },
+                                children: [
+                                  e.jsx("span", { style: { fontSize: 11, color: a.muted }, children: "Capítulo:" }),
+                                  e.jsxs("select", {
+                                    value: W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : "",
+                                    onChange: (ev) => moverItemACapitulo(T, ev.target.value ? parseInt(ev.target.value) : ""),
+                                    style: { fontSize: 11, padding: "3px 5px", background: a.sb, color: a.text, border: `1px solid ${a.border}`, borderRadius: 5 },
+                                    children: [
+                                      e.jsx("option", { value: "", children: "Sin capítulo" }, "sin"),
+                                      ...capsOrdenados.map((cap) => e.jsx("option", { value: cap.id, children: cap.nombre || "Capítulo " + cap.id }, cap.id)),
+                                    ],
+                                  }),
+                                  e.jsx("button", {
+                                    title: "Subir dentro del capítulo",
+                                    onClick: () =>
+                                      reordenarItemEnGrupo(
+                                        T,
+                                        -1,
+                                        W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : null,
+                                      ),
+                                    style: { background: "transparent", border: `1px solid ${a.border}`, borderRadius: 4, color: a.muted, cursor: "pointer", fontSize: 11, padding: "1px 5px" },
+                                    children: "▲",
+                                  }),
+                                  e.jsx("button", {
+                                    title: "Bajar dentro del capítulo",
+                                    onClick: () =>
+                                      reordenarItemEnGrupo(
+                                        T,
+                                        1,
+                                        W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : null,
+                                      ),
+                                    style: { background: "transparent", border: `1px solid ${a.border}`, borderRadius: 4, color: a.muted, cursor: "pointer", fontSize: 11, padding: "1px 5px" },
+                                    children: "▼",
+                                  }),
+                                ],
                               }),
                           ],
                         },
@@ -43379,12 +43773,12 @@ MATERIALES:
   }
   function fg({ budget: t, client: i, cfg: r, onClose: n }) {
     var [l, o] = V(
-        () => new Set(t.items.filter((x) => x.desc).map((x, f) => f)),
+        () => new Set(obtenerItemsPresupuestoExportables(t.items).map((x, f) => f)),
       ),
       [s, m] = V(!1),
       [p, C] = V("COT-" + (t.id || "001")),
       [b, h] = V(30),
-      j = t.items.filter((x) => x.desc),
+      j = obtenerItemsPresupuestoExportables(t.items),
       F = j.filter((x, f) => l.has(f)),
       tt = Ee(F, r, t.descuento, t.modoCosteo || "completo", t.sinIva) || {},
       g = Number(tt.sub) || 0,
@@ -43556,74 +43950,114 @@ MATERIALES:
               }));
           }),
           (S += 8),
-          G.forEach((Z, X) => {
-            var W = 8,
-              T = X % 2 === 0 ? [248, 250, 252] : [255, 255, 255];
-            (f.setFillColor(...T),
-              f.rect(A, S, P, W, "F"),
-              f.setDrawColor(226, 232, 240),
-              f.setLineWidth(0.1),
-              f.line(A, S + W, A + P, S + W));
-            var Lfg = calcularLineaPresupuesto(Z),
-              L = Lfg.cantidadFacturable,
-              Lshow = Lfg.cantidadIngresada,
-              E = Lfg.precioUnitario,
-              totBase = Lfg.totalCalculado,
-              tot = Lfg.totalLinea,
-              tipo = Z._tipoCosto || (Z._cid ? "auto" : "mo"),
-              mat = 0,
-              noMat = 0;
-            if (tipo === "mat") mat = totBase;
-            else if (tipo === "mo") noMat = totBase;
-            else {
-              var mu = parseFloat(Z._apuMatUnit) || 0;
-              mat = Math.max(0, Math.min(totBase, mu * L));
-              noMat = Math.max(0, tot - mat);
-            }
-            var M = Math.round(tot);
-            (f.setFont("helvetica", "normal"),
-              f.setFontSize(8.5),
-              f.setTextColor(50, 60, 75),
-              f.text("" + (X + 1), A + 2, S + 5.3),
-              f.text((Z.desc || "").slice(0, 55), A + 12, S + 5.3),
-              f.text("" + Lshow, ie === "separado" ? A + 110 : A + 120, S + 5.3, {
-                align: "right",
-              }),
-              f.text(
-                Z.unidad || "",
-                ie === "separado" ? A + 128 : A + 140,
-                S + 5.3,
-                { align: "right" },
-              ),
-              ie === "separado"
-                ? (f.text(I(Math.round(noMat)), A + 145, S + 5.3, {
+          (() => {
+            var usaCapitulosPdf = Array.isArray(t.capitulos) && t.capitulos.length > 0;
+            var gruposPdf = usaCapitulosPdf
+              ? (() => {
+                  var capsOrd = [...t.capitulos].sort(
+                    (a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0),
+                  );
+                  var out = capsOrd.map((cap) => ({
+                    cap,
+                    items: G.filter((it) => it.capituloId === cap.id),
+                  }));
+                  var sinCap = G.filter((it) => !capsOrd.some((c) => c.id === it.capituloId));
+                  if (sinCap.length > 0) out.push({ cap: null, items: sinCap });
+                  return out.filter((grp) => grp.items.length > 0);
+                })()
+              : [{ cap: null, items: G }];
+            var filaNum = 0;
+            gruposPdf.forEach((grp) => {
+              if (usaCapitulosPdf) {
+                if (S > 255) {
+                  f.addPage();
+                  S = 18;
+                }
+                f.setFillColor(...R);
+                f.roundedRect(A, S, P, 7, 1, 1, "F");
+                f.setFont("helvetica", "bold");
+                f.setFontSize(8.5);
+                f.setTextColor(255, 255, 255);
+                f.text(
+                  grp.cap
+                    ? (grp.cap.codigo ? grp.cap.codigo + " — " : "") + (grp.cap.nombre || "Capítulo")
+                    : "Sin capítulo",
+                  A + 3,
+                  S + 5,
+                );
+                S += 9;
+              }
+              grp.items.forEach((Z) => {
+                var W = 8,
+                  T = filaNum % 2 === 0 ? [248, 250, 252] : [255, 255, 255];
+                (f.setFillColor(...T),
+                  f.rect(A, S, P, W, "F"),
+                  f.setDrawColor(226, 232, 240),
+                  f.setLineWidth(0.1),
+                  f.line(A, S + W, A + P, S + W));
+                var Lfg = calcularLineaPresupuesto(Z),
+                  L = Lfg.cantidadFacturable,
+                  Lshow = Lfg.cantidadIngresada,
+                  E = Lfg.precioUnitario,
+                  totBase = Lfg.totalCalculado,
+                  tot = Lfg.totalLinea,
+                  tipo = Z._tipoCosto || (Z._cid ? "auto" : "mo"),
+                  mat = 0,
+                  noMat = 0;
+                if (tipo === "mat") mat = totBase;
+                else if (tipo === "mo") noMat = totBase;
+                else {
+                  var mu = parseFloat(Z._apuMatUnit) || 0;
+                  mat = Math.max(0, Math.min(totBase, mu * L));
+                  noMat = Math.max(0, tot - mat);
+                }
+                var M = Math.round(tot);
+                (f.setFont("helvetica", "normal"),
+                  f.setFontSize(8.5),
+                  f.setTextColor(50, 60, 75),
+                  f.text("" + (filaNum + 1), A + 2, S + 5.3),
+                  f.text((Z.desc || "").slice(0, 55), A + 12, S + 5.3),
+                  f.text("" + Lshow, ie === "separado" ? A + 110 : A + 120, S + 5.3, {
                     align: "right",
                   }),
-                  f.text(I(Math.round(mat)), A + 165, S + 5.3, {
-                    align: "right",
-                  }),
-                  f.setFont("helvetica", "bold"),
-                  f.setTextColor(...k),
-                  f.text(I(M), A + P - 1, S + 5.3, { align: "right" }))
-                : ie === "mo"
-                  ? (f.text(
-                      I(L ? Math.round(noMat / L) : 0),
-                      A + 160,
-                      S + 5.3,
-                      { align: "right" },
-                    ),
-                    f.setFont("helvetica", "bold"),
-                    f.setTextColor(...k),
-                    f.text(I(Math.round(noMat)), A + P - 1, S + 5.3, {
-                      align: "right",
-                    }))
-                  : (f.text(I(E), A + 154, S + 5.3, { align: "right" }),
-                    f.setFont("helvetica", "bold"),
-                    f.setTextColor(...k),
-                    f.text(I(M), A + P - 1, S + 5.3, { align: "right" })),
-              (S += W),
-              S > 262 && (f.addPage(), (S = 18)));
-          }),
+                  f.text(
+                    Z.unidad || "",
+                    ie === "separado" ? A + 128 : A + 140,
+                    S + 5.3,
+                    { align: "right" },
+                  ),
+                  ie === "separado"
+                    ? (f.text(I(Math.round(noMat)), A + 145, S + 5.3, {
+                        align: "right",
+                      }),
+                      f.text(I(Math.round(mat)), A + 165, S + 5.3, {
+                        align: "right",
+                      }),
+                      f.setFont("helvetica", "bold"),
+                      f.setTextColor(...k),
+                      f.text(I(M), A + P - 1, S + 5.3, { align: "right" }))
+                    : ie === "mo"
+                      ? (f.text(
+                          I(L ? Math.round(noMat / L) : 0),
+                          A + 160,
+                          S + 5.3,
+                          { align: "right" },
+                        ),
+                        f.setFont("helvetica", "bold"),
+                        f.setTextColor(...k),
+                        f.text(I(Math.round(noMat)), A + P - 1, S + 5.3, {
+                          align: "right",
+                        }))
+                      : (f.text(I(E), A + 154, S + 5.3, { align: "right" }),
+                        f.setFont("helvetica", "bold"),
+                        f.setTextColor(...k),
+                        f.text(I(M), A + P - 1, S + 5.3, { align: "right" })),
+                  (S += W),
+                  S > 262 && (f.addPage(), (S = 18)));
+                filaNum++;
+              });
+            });
+          })(),
           (S += 6));
         var ee = 120;
         ([
