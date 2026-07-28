@@ -30423,6 +30423,12 @@ ${r.empresa}`;
                   ),
                 ),
               }),
+              e.jsx("div", {
+                style: { fontSize: 11, color: a.muted, marginBottom: 12, marginTop: -6, padding: "0 4px" },
+                children: (parseFloat(g) > 0)
+                  ? "💡 Nota: Esta partida tiene cuadrilla técnica. Si modificas el porcentaje, anularás la dotación."
+                  : "💡 Nota: Sin cuadrilla técnica definida. Se usa cálculo por porcentaje (se recomienda asignar dotación abajo)."
+              }),
               e.jsxs("div", {
                 style: {
                   fontSize: 11,
