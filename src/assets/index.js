@@ -19749,6 +19749,9 @@ Error generating stack: ` +
         noMatSub: Math.round(noMatS),
       };
     }, __Ee_export = (window.__Ee = Ee),
+    obtenerItemsPresupuestoExportables = (items) =>
+      (items || []).filter((it) => String((it && it.desc) || "").trim().length > 0),
+    __obtenerItemsPresupuestoExportables_export = (window.__obtenerItemsPresupuestoExportables = obtenerItemsPresupuestoExportables),
     calculaMO = (t, i) => {
       var r = parseFloat(t.rendimiento) || 0,
         n = Math.max(0, parseInt(t.dotacion) || 0),
@@ -20486,9 +20489,45 @@ Error generating stack: ` +
               o.text(ve.l, ve.x, G + 5.3, { align: ve.r ? "right" : "left" }));
           }),
           (G += 8),
-          t.items
-            .filter((ve) => ve.desc)
-            .forEach((ve, xr) => {
+          (() => {
+            var itemsFiltradosZr = obtenerItemsPresupuestoExportables(t.items);
+            var capsOrdZr = Array.isArray(t.capitulos)
+              ? [...t.capitulos].sort((a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0))
+              : [];
+            var gruposZr;
+            if (capsOrdZr.length === 0) {
+              gruposZr = [{ cap: null, items: itemsFiltradosZr }];
+            } else {
+              gruposZr = capsOrdZr.map((cap) => ({
+                cap,
+                items: itemsFiltradosZr.filter((it) => it.capituloId === cap.id),
+              }));
+              var sinCapZr = itemsFiltradosZr.filter((it) => !capsOrdZr.some((c) => c.id === it.capituloId));
+              if (sinCapZr.length > 0) gruposZr.push({ cap: null, items: sinCapZr });
+              gruposZr = gruposZr.filter((grp) => grp.items.length > 0);
+            }
+            var usaCapsZr = capsOrdZr.length > 0;
+            var numZr = 0;
+            gruposZr.forEach((grp) => {
+              if (usaCapsZr) {
+                if (G > 255) {
+                  o.addPage();
+                  G = 18;
+                }
+                o.setFillColor(...q);
+                o.rect(14, G, 182, 7, "F");
+                o.setFont("helvetica", "bold");
+                o.setFontSize(8);
+                o.setTextColor(...J);
+                o.text(
+                  grp.cap ? (grp.cap.codigo ? grp.cap.codigo + " — " : "") + (grp.cap.nombre || "Capítulo") : "Sin capítulo",
+                  16,
+                  G + 5,
+                );
+                G += 9;
+              }
+              grp.items.forEach((ve) => {
+              var xr = numZr++;
               var Lve = calcularLineaPresupuesto(ve),
                 hrShow = Lve.cantidadIngresada,
                 hr = Lve.cantidadFacturable,
@@ -20548,8 +20587,10 @@ Error generating stack: ` +
                     o.text(s(Pr), 194, yTxt, { align: "right" })));
               }
               (G += Fr),
-              G > 262 && (o.addPage(), (G = 18));
-            }),
+                G > 262 && (o.addPage(), (G = 18));
+              });
+            });
+          })(),
           G
         );
       },
@@ -22010,7 +22051,7 @@ Error generating stack: ` +
           : '<th style="width:36px">#</th><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:110px;text-align:right">P. Unit.</th><th style="width:110px;text-align:right">Total</th>';
     var x = (() => {
         var idx = 0;
-        return (t.items || []).reduce(function (acc, I) {
+        return obtenerItemsPresupuestoExportables(t.items || []).reduce(function (acc, I) {
           var Lts = calcularLineaPresupuesto(I),
             cant = Lts.cantidadFacturable,
             cantShow = Lts.cantidadIngresada,
@@ -22084,7 +22125,7 @@ Error generating stack: ` +
           );
         }, "");
       })(),
-      notaMinTs = (t.items || [])
+      notaMinTs = obtenerItemsPresupuestoExportables(t.items || [])
         .map((I) => calcularLineaPresupuesto(I))
         .filter((L) => L.reglaAplicada)
         .map((L) => "<li>" + L.motivo + "</li>")
@@ -22233,8 +22274,7 @@ Error generating stack: ` +
       [w, v] = V(""),
       [x, f] = V(!1);
     var I = `Hola ${i && i.nombre ? i.nombre.split(" ")[0] : "cliente"} 👋`,
-      D = t.items
-        .filter((S) => S.desc)
+      D = obtenerItemsPresupuestoExportables(t.items)
         .map((S) => {
           var Lap = calcularLineaPresupuesto(S);
           return Lap.reglaAplicada
@@ -22260,7 +22300,7 @@ Error generating stack: ` +
         `Te comparto el *Presupuesto N° ${t.id}* para:`,
         `📋 _${t.descripcion || "la obra"}_`,
         "",
-        C && t.items.length > 0
+        C && D
           ? `*DETALLE DE OBRA:*
 ${D}
 `
@@ -23870,7 +23910,7 @@ ${r.empresa}`;
                               ? [...s.capitulos].sort((a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0))
                               : [],
                             tt = (() => {
-                              var itemsOriginal = Array.isArray(s.items) ? s.items : [];
+                              var itemsOriginal = obtenerItemsPresupuestoExportables(s.items);
                               if (capsOrdExcel.length === 0) return itemsOriginal;
                               var porCapExcel = (capId) =>
                                 itemsOriginal
@@ -23900,14 +23940,16 @@ ${r.empresa}`;
                               }
                               return salidaExcel;
                             })();
+                          var numExportable = 0;
                           (tt.forEach((G, ie) => {
                             if (G.__esCapitulo) {
                               $.push(["", G.__nombre, "", "", "", ""]);
                               return;
                             }
+                            numExportable++;
                             var Lg = calcularLineaPresupuesto(G);
                             ($.push([
-                              ie + 1,
+                              numExportable,
                               G.desc || "",
                               Lg.cantidadIngresada,
                               G.unidad || "",
@@ -24350,8 +24392,9 @@ ${r.empresa}`;
                           var capsOrd = Array.isArray(s.capitulos)
                             ? [...s.capitulos].sort((a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0))
                             : [];
-                          if (capsOrd.length === 0) return (s.items || []).map((D, k) => renderFila(D, k));
-                          var conIdx = (s.items || []).map((D, k) => ({ D, k }));
+                          var itemsExportablesPreview = obtenerItemsPresupuestoExportables(s.items);
+                          if (capsOrd.length === 0) return itemsExportablesPreview.map((D, k) => renderFila(D, k));
+                          var conIdx = itemsExportablesPreview.map((D, k) => ({ D, k }));
                           var deGrupo = (capId) =>
                             conIdx
                               .filter(({ D }) =>
@@ -43730,12 +43773,12 @@ MATERIALES:
   }
   function fg({ budget: t, client: i, cfg: r, onClose: n }) {
     var [l, o] = V(
-        () => new Set(t.items.filter((x) => x.desc).map((x, f) => f)),
+        () => new Set(obtenerItemsPresupuestoExportables(t.items).map((x, f) => f)),
       ),
       [s, m] = V(!1),
       [p, C] = V("COT-" + (t.id || "001")),
       [b, h] = V(30),
-      j = t.items.filter((x) => x.desc),
+      j = obtenerItemsPresupuestoExportables(t.items),
       F = j.filter((x, f) => l.has(f)),
       tt = Ee(F, r, t.descuento, t.modoCosteo || "completo", t.sinIva) || {},
       g = Number(tt.sub) || 0,
