@@ -1,7 +1,8 @@
 {
-  "version": "0.1.0-propuesta",
+  "version": "0.2.0-propuesta",
   "generadoDesde": "src/assets/index.js (catálogo qi, 311 partidas) — commit ea05f69 (v1.2.1-estabilidad)",
   "notaGeneral": "Todos los catalogId referenciados abajo existen en el catálogo real de la app. Los campos 'cantidadBase' son valores de partida sugeridos (punto de partida editable), no mediciones reales — el profesional siempre debe ajustarlos en terreno o según lo indicado por el cliente. Ningún precio fue inventado ni modificado: las soluciones solo referencian partidas ya existentes por su catalogId.",
+  "notaVersion0.2.0": "Se formalizaron las exclusiones mutuas entre partidas alternativas ('excluyeCatalogIds', 'grupoSeleccion', 'seleccionMinima', 'seleccionMaxima') y se agregó el estado de cada solución ('estado', 'requierePartidasNuevas'). Solo 'sol-005-reparacion-porton' queda en estado 'borrador' por depender de partidas de catálogo que no existen todavía; las otras 5 quedan 'activa' para una futura implementación.",
   "soluciones": [
     {
       "id": "sol-001-filtracion-techumbre",
@@ -48,7 +49,11 @@
           "formulaCantidad": "por m²: superficie de zinc a reemplazar si la estructura es Metalcon",
           "obligatoria": false,
           "editable": true,
-          "motivo": "Alternativa cuando la reparación puntual no basta y se requiere cambiar la plancha completa (estructura Metalcon). Excluyente con la partida 43."
+          "motivo": "Alternativa cuando la reparación puntual no basta y se requiere cambiar la plancha completa (estructura Metalcon). Excluyente con la partida 43.",
+          "excluyeCatalogIds": [43],
+          "grupoSeleccion": "grp-sistema-techumbre",
+          "seleccionMinima": 0,
+          "seleccionMaxima": 1
         },
         {
           "catalogId": 43,
@@ -56,7 +61,11 @@
           "formulaCantidad": "por m²: superficie de zinc a reemplazar si la estructura es de madera",
           "obligatoria": false,
           "editable": true,
-          "motivo": "Igual que la partida 33 pero para estructura de techumbre en madera. Excluyente con la partida 33 — nunca deben coexistir en la misma solución aplicada."
+          "motivo": "Igual que la partida 33 pero para estructura de techumbre en madera. Excluyente con la partida 33 — nunca deben coexistir en la misma solución aplicada.",
+          "excluyeCatalogIds": [33],
+          "grupoSeleccion": "grp-sistema-techumbre",
+          "seleccionMinima": 0,
+          "seleccionMaxima": 1
         }
       ],
       "preguntas": [
@@ -70,7 +79,9 @@
         "Las partidas 33 y 43 son excluyentes entre sí: incluir solo la que corresponde al sistema constructivo real de la techumbre.",
         "No sumar la partida 311 (gl) y la 224 (m²) si ambas describen el mismo parche puntual; usar solo una según el criterio del profesional en terreno."
       ],
-      "requiereVisita": true
+      "requiereVisita": true,
+      "estado": "activa",
+      "requierePartidasNuevas": false
     },
     {
       "id": "sol-002-cambio-canaleta-bajante",
@@ -85,7 +96,11 @@
           "formulaCantidad": "por ml: metros lineales de canal + bajante existente a reemplazar",
           "obligatoria": true,
           "editable": true,
-          "motivo": "Ítem principal: reemplazo de canaleta y bajante ya instalados que se encuentran dañados u obsoletos."
+          "motivo": "Ítem principal: reemplazo de canaleta y bajante ya instalados que se encuentran dañados u obsoletos.",
+          "excluyeCatalogIds": [106],
+          "grupoSeleccion": "grp-alcance-canaleta",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
         },
         {
           "catalogId": 106,
@@ -93,7 +108,11 @@
           "formulaCantidad": "por ml: metros lineales de ojalaería completa (canal + bajante + tapasol) si no existe ojalaería previa",
           "obligatoria": false,
           "editable": true,
-          "motivo": "Alternativa para instalación nueva (sin canaleta previa). Excluyente con la partida 107 — no debe coexistir con ella en la misma solución aplicada."
+          "motivo": "Alternativa para instalación nueva (sin canaleta previa). Excluyente con la partida 107 — no debe coexistir con ella en la misma solución aplicada.",
+          "excluyeCatalogIds": [107],
+          "grupoSeleccion": "grp-alcance-canaleta",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
         },
         {
           "catalogId": 312,
@@ -122,7 +141,9 @@
         "Las partidas 107 y 106 son excluyentes: 107 es para reemplazo de ojalaería existente, 106 es para instalación nueva completa sin canaleta previa.",
         "Verificar la pendiente real de la canaleta en terreno; una pendiente insuficiente puede requerir ajustar soportes, trabajo no incluido en estas partidas del catálogo."
       ],
-      "requiereVisita": true
+      "requiereVisita": true,
+      "estado": "activa",
+      "requierePartidasNuevas": false
     },
     {
       "id": "sol-003-pintura-interior-habitacion",
@@ -182,7 +203,9 @@
         "El ítem base (1) contempla 2 manos estándar; colores muy oscuros sobre muros claros (o viceversa) pueden requerir manos adicionales no incluidas en el precio — validar con el cliente.",
         "Si hay humedad activa (no solo mancha antigua), no proceder a pintar sin resolver antes la causa — derivar a la solución 'Reparación de filtración en techumbre' o a inspección de impermeabilización según corresponda."
       ],
-      "requiereVisita": false
+      "requiereVisita": false,
+      "estado": "activa",
+      "requierePartidasNuevas": false
     },
     {
       "id": "sol-004-cambio-piso-ceramico",
@@ -197,7 +220,11 @@
           "formulaCantidad": "por m²: superficie de piso a reemplazar (incluye retiro del cerámico existente)",
           "obligatoria": true,
           "editable": true,
-          "motivo": "Ítem principal: cambio de cerámico de piso con retiro incluido."
+          "motivo": "Ítem principal: cambio de cerámico de piso con retiro incluido.",
+          "excluyeCatalogIds": [66],
+          "grupoSeleccion": "grp-alcance-piso",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
         },
         {
           "catalogId": 408,
@@ -221,7 +248,11 @@
           "formulaCantidad": "fija: 1 gl por sector de parche puntual (usar solo si no se aplica la partida 64)",
           "obligatoria": false,
           "editable": true,
-          "motivo": "Alternativa de menor alcance para reparación puntual, cuando el cliente decide finalmente no cambiar todo el piso. Excluyente con la partida 64."
+          "motivo": "Alternativa de menor alcance para reparación puntual, cuando el cliente decide finalmente no cambiar todo el piso. Excluyente con la partida 64.",
+          "excluyeCatalogIds": [64],
+          "grupoSeleccion": "grp-alcance-piso",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
         }
       ],
       "preguntas": [
@@ -234,7 +265,9 @@
         "Las partidas 64 y 66 son excluyentes: 64 es reemplazo completo, 66 es reparación puntual. No deben coexistir en la misma solución aplicada.",
         "Si al retirar el piso existente se detecta daño en el radier o contrapiso, se requiere una partida adicional de reparación de radier no incluida en esta solución — derivar a evaluación técnica en terreno."
       ],
-      "requiereVisita": true
+      "requiereVisita": true,
+      "estado": "activa",
+      "requierePartidasNuevas": false
     },
     {
       "id": "sol-005-reparacion-porton",
@@ -269,7 +302,9 @@
         "GAP DE CATÁLOGO: no existe una partida genérica de mano de obra para reparación estructural de portón (soldadura, enderezado, cambio de bisagras o ruedas). Las únicas partidas relacionadas son la fabricación completa de un portón nuevo (catalogId 120, 122, 127 — no aplicables a una reparación) y la partida de pintura/mantención (313). Si la reparación requiere soldadura o enderezado, debe agregarse manualmente como partida 'Definir materiales manualmente' en el presupuesto — no se incluye automáticamente en esta solución.",
         "El catalogId 319 está descrito en el catálogo como 'Cambio de chapa/cerradura puerta'; su uso en portones es una extrapolación funcional razonable pero no una coincidencia textual exacta — confirmar con el profesional antes de aplicarlo."
       ],
-      "requiereVisita": true
+      "requiereVisita": true,
+      "estado": "borrador",
+      "requierePartidasNuevas": true
     },
     {
       "id": "sol-006-remodelacion-basica-bano",
@@ -308,7 +343,11 @@
           "formulaCantidad": "fija: 1 unidad por WC",
           "obligatoria": true,
           "editable": true,
-          "motivo": "Instalación de WC estándar, opción base acorde al alcance 'remodelación básica'. Excluyente con la partida 222."
+          "motivo": "Instalación de WC estándar, opción base acorde al alcance 'remodelación básica'. Excluyente con la partida 222.",
+          "excluyeCatalogIds": [222],
+          "grupoSeleccion": "grp-estandar-wc",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
         },
         {
           "catalogId": 369,
@@ -316,7 +355,11 @@
           "formulaCantidad": "fija: 1 unidad por ducha",
           "obligatoria": true,
           "editable": true,
-          "motivo": "Instalación de ducha con mezcladora simple, opción base acorde al alcance 'remodelación básica'. Excluyente con la partida 220."
+          "motivo": "Instalación de ducha con mezcladora simple, opción base acorde al alcance 'remodelación básica'. Excluyente con la partida 220.",
+          "excluyeCatalogIds": [220],
+          "grupoSeleccion": "grp-estandar-ducha",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
         },
         {
           "catalogId": 222,
@@ -324,7 +367,11 @@
           "formulaCantidad": "fija: 1 unidad por WC (alternativa de mayor estándar)",
           "obligatoria": false,
           "editable": true,
-          "motivo": "Upgrade opcional a WC con bidet incluido. Excluyente con la partida 368 — elegir solo una de las dos."
+          "motivo": "Upgrade opcional a WC con bidet incluido. Excluyente con la partida 368 — elegir solo una de las dos.",
+          "excluyeCatalogIds": [368],
+          "grupoSeleccion": "grp-estandar-wc",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
         },
         {
           "catalogId": 220,
@@ -332,7 +379,11 @@
           "formulaCantidad": "fija: 1 unidad por ducha (alternativa de mayor estándar)",
           "obligatoria": false,
           "editable": true,
-          "motivo": "Upgrade opcional a ducha con grifería termostática. Excluyente con la partida 369 — elegir solo una de las dos."
+          "motivo": "Upgrade opcional a ducha con grifería termostática. Excluyente con la partida 369 — elegir solo una de las dos.",
+          "excluyeCatalogIds": [369],
+          "grupoSeleccion": "grp-estandar-ducha",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
         },
         {
           "catalogId": 370,
@@ -387,7 +438,9 @@
         "Esta solución no incluye impermeabilización de piso/muro bajo cerámico; si la losa o el piso presentan filtraciones activas, debe evaluarse y cotizarse por separado.",
         "'Remodelación básica' asume que se mantiene la disposición actual de artefactos (mismos puntos de agua y desagüe); un cambio de layout implica trabajos de gasfitería adicionales no incluidos aquí."
       ],
-      "requiereVisita": true
+      "requiereVisita": true,
+      "estado": "activa",
+      "requierePartidasNuevas": false
     }
   ]
 }

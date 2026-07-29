@@ -103,7 +103,64 @@ Estos no son errores del diseño de las soluciones — son límites reales del c
 - **El `catalogId` 319 ("Cambio de chapa/cerradura puerta")** está descrito textualmente para puertas, no portones. Se usó como opcional razonable en la solución 5 por ser funcionalmente equivalente, pero se advierte explícitamente que requiere confirmación del profesional antes de aplicarlo — no se asumió como calce automático.
 - **No existe una partida específica de "instalación sanitaria parcial"** entre el extremo de "solo cambiar artefactos" y "instalación sanitaria completa baño" (id 92, gl). La solución 6 deja 92 como opcional binario (todo o nada) en vez de inventar un punto intermedio.
 
-## 7. Siguientes pasos (fuera del alcance de esta fase)
+## 7. Exclusiones, grupos de selección y estado de la solución
+
+Agregado en la versión `0.2.0-propuesta` de `SOLUCIONES_PROPUESTAS.json`, a partir de las exclusiones que ya estaban descritas como texto libre en `advertencias` desde la versión `0.1.0-propuesta`. Formalizarlas no cambia ninguna decisión de diseño anterior — solo las hace verificables por código en vez de depender de que el profesional lea el texto.
+
+### 7.1 Campos nuevos por partida
+
+```json
+{
+  "excluyeCatalogIds": [],
+  "grupoSeleccion": "",
+  "seleccionMinima": 0,
+  "seleccionMaxima": 1
+}
+```
+
+Estos cuatro campos son **opcionales** y solo aparecen en las partidas que participan de una exclusión o de un grupo de selección. Una partida sin alternativas (la mayoría) no los lleva.
+
+| Campo | Tipo | Descripción |
+|---|---|---|
+| `excluyeCatalogIds` | number[] | Lista de `catalogId`, dentro de la misma solución, que no deben coexistir seleccionados junto con esta partida. Siempre bidireccional: si A excluye a B, B también debe declarar que excluye a A. |
+| `grupoSeleccion` | string | Identificador del grupo de alternativas al que pertenece la partida (único dentro de la solución, no necesariamente entre soluciones distintas). Todas las partidas de un mismo grupo comparten el mismo `grupoSeleccion`, la misma `seleccionMinima` y la misma `seleccionMaxima`. |
+| `seleccionMinima` | number | Cantidad mínima de partidas del grupo que deben quedar seleccionadas al aplicar la solución. |
+| `seleccionMaxima` | number | Cantidad máxima de partidas del grupo que pueden quedar seleccionadas al aplicar la solución. |
+
+### 7.2 Exclusiones formalizadas en esta versión
+
+| Grupo | Partidas | `seleccionMinima` / `seleccionMaxima` | Motivo |
+|---|---|---|---|
+| `grp-sistema-techumbre` (sol-001) | 33 ↔ 43 | 0 / 1 | Cambio de plancha completa, según el sistema constructivo (Metalcon o madera). Ninguna es obligatoria por defecto: la reparación puntual (311) puede bastar sin cambiar plancha. |
+| `grp-alcance-canaleta` (sol-002) | 107 ↔ 106 | 1 / 1 | La solución siempre implica un tipo de trabajo de canaleta: reemplazo de una existente (107, obligatoria por defecto) o instalación nueva sin ojalaería previa (106). |
+| `grp-alcance-piso` (sol-004) | 64 ↔ 66 | 1 / 1 | La solución siempre implica trabajo en el piso: reemplazo completo (64, obligatoria por defecto) o parche puntual (66). |
+| `grp-estandar-wc` (sol-006) | 368 ↔ 222 | 1 / 1 | Siempre se instala un WC: estándar (368, obligatoria por defecto) o de mayor estándar con bidet (222). |
+| `grp-estandar-ducha` (sol-006) | 369 ↔ 220 | 1 / 1 | Siempre se instala una ducha: mezcladora simple (369, obligatoria por defecto) o grifería termostática (220). |
+
+Nota de coherencia: en los 4 grupos con `seleccionMinima: 1`, la partida marcada `obligatoria: true` es la que satisface ese mínimo por defecto; si el usuario cambia a la alternativa opcional del mismo grupo, esta debería reemplazar (no sumarse) a la obligatoria — eso es exactamente lo que codifica `excluyeCatalogIds`. En `grp-sistema-techumbre` ninguna partida es obligatoria, por lo que `seleccionMinima: 0` permite que el grupo completo quede sin seleccionar.
+
+El `catalogId` 64 aparece también en `sol-006-remodelacion-basica-bano`, pero ahí **no** lleva `excluyeCatalogIds` ni `grupoSeleccion`: esa solución no tiene una partida 66 con la que sea excluyente, así que la exclusión solo se declara donde realmente aplica (dentro de `sol-004-cambio-piso-ceramico`).
+
+### 7.3 Estado de la solución
+
+Campos nuevos a nivel de la solución completa (no de cada partida):
+
+```json
+{
+  "estado": "activa",
+  "requierePartidasNuevas": false
+}
+```
+
+`estado` es uno de tres valores:
+
+- **`"activa"`** — el catálogo actual cubre razonablemente el núcleo de la solución. Puede implementarse en la app sin agregar partidas nuevas al catálogo. Las 5 soluciones restantes de esta fase (`sol-001`, `sol-002`, `sol-003`, `sol-004`, `sol-006`) quedan en este estado.
+- **`"borrador"`** — la solución tiene al menos una partida obligatoria real y utilizable, pero su cobertura es incompleta: falta una partida de catálogo para cubrir un alcance central del caso de uso. Puede mostrarse en un futuro catálogo de soluciones marcada como "en desarrollo", pero no debería ofrecerse como una solución lista para aplicar sin que el profesional revise manualmente qué falta. `sol-005-reparacion-porton` es la única en este estado (ver §6: no existe partida de mano de obra para reparación estructural de portón).
+- **`"bloqueada"`** — estado reservado para una futura solución que no tenga *ninguna* partida real de catálogo que cubra su núcleo (a diferencia de "borrador", donde sí existe al menos una partida central utilizable). Ninguna de las 6 soluciones de esta fase cae en este estado; se documenta aquí porque el diseño del campo `estado` debe contemplarlo desde ahora para no tener que migrar datos más adelante. Una solución "bloqueada" no debería ofrecerse al usuario en absoluto hasta que se agreguen las partidas de catálogo que le faltan.
+
+`requierePartidasNuevas` es un booleano independiente de `estado` (aunque en la práctica hoy coincide con `estado === "borrador"` en las 6 soluciones): indica si, para que la solución llegue a estado `"activa"` con cobertura completa, hace falta agregar partidas nuevas al catálogo (`qi` en `index.js`) — una señal explícita para quien priorice el trabajo de catálogo, sin tener que releer las `advertencias` de cada solución.
+
+## 8. Siguientes pasos (fuera del alcance de esta fase)
 
 No implementados todavía, y deliberadamente no diseñados en detalle aquí porque exceden lo pedido:
 
