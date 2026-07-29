@@ -21273,6 +21273,7 @@ Error generating stack: ` +
         new Date().toLocaleDateString("es-CL") +
         "</div></body></html>",
       B = window.open("", "_blank");
+    if (!B) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (B.document.write(z), B.document.close());
   }
   function Af(t, i, r) {
@@ -21542,6 +21543,7 @@ Error generating stack: ` +
   }
   function Mf(t, i, r) {
     var n = window.open("", "_blank");
+    if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (n.document.write(Pp(t, i, r)), n.document.close());
   }
   function Tp(t, i, r) {
@@ -21731,6 +21733,7 @@ Error generating stack: ` +
   }
   function Ff(t, i, r) {
     var n = window.open("", "_blank");
+    if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (n.document.write(Tp(t, i, r)), n.document.close());
   }
   function Rf(t, i, r) {
@@ -21865,6 +21868,7 @@ Error generating stack: ` +
   }
   function Bf(t, i, r) {
     var n = window.open("", "_blank");
+    if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (n.document.write(Rf(t, i, r)), n.document.close());
   }
   function Df(t, i, r, u) {
@@ -21993,6 +21997,7 @@ Error generating stack: ` +
         "</div></body></html>";
     if (u === "return") return F;
     var g = window.open("", "_blank");
+    if (!g) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (g.document.write(F), g.document.close());
   }
   function ts(t, i, r) {
@@ -22257,6 +22262,7 @@ Error generating stack: ` +
   function Ep(t, i, r) {
     var n = ts(t, i, r),
       l = window.open("", "_blank");
+    if (!l) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (l.document.write(n), l.document.close());
   }
   function Ap({ budget: t, client: i, cfg: r, onClose: n }) {
@@ -35326,6 +35332,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
             })
             .join(""),
           re = window.open("", "_blank");
+        if (!re) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
         (re.document.write(`<html><head><title>${M}</title>
     <meta charset="utf-8"/>
     <style>
@@ -36376,6 +36383,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
       },
       A = (S, O) => {
         var U = window.open("", "_blank");
+        if (!U) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
         (U.document.write(`<html><head><title>${O}</title>
     <style>body{font-family:Arial,sans-serif;padding:30px}table{width:100%;border-collapse:collapse;margin-top:16px}
     th{background:#1a3060;color:#fff;padding:8px;text-align:left}td{padding:8px;border-bottom:1px solid #ddd}
@@ -41916,6 +41924,7 @@ MATERIALES:
         new Date().toLocaleDateString("es-CL") +
         "</div></body></html>"));
     var B = window.open("", "_blank");
+    if (!B) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (B.document.write(z), B.document.close());
   }
   function dg(t, i, r) {
@@ -42050,6 +42059,7 @@ MATERIALES:
         new Date().toLocaleDateString("es-CL") +
         "</div></body></html>"));
     var v = window.open("", "_blank");
+    if (!v) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (v.document.write(w), v.document.close());
   }
   function cg(t, i, r) {
@@ -42149,6 +42159,7 @@ MATERIALES:
         new Date().toLocaleDateString("es-CL") +
         "</div></body></html>"));
     var g = window.open("", "_blank");
+    if (!g) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (g.document.write(F), g.document.close());
   }
   function pg(t, i, r, n) {
@@ -42302,6 +42313,7 @@ MATERIALES:
         new Date().toLocaleDateString("es-CL") +
         "</div></body></html>"));
     var z = window.open("", "_blank");
+    if (!z) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (z.document.write(g), z.document.close());
   }
   function ug({ budget: t, cfg: i, onClose: r, onSave: n }) {
@@ -65826,6 +65838,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       v = () => {
         if (b && p !== "informe") {
           var f = window.open("", "_blank");
+          if (!f) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
           (f.document.write(b), f.document.close());
         }
       },
@@ -78475,7 +78488,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
               return;
             }
           }
-          var Qp = l.nextNum;
+          var Qp = Math.max(0, ...B.map((Me) => Number(Me.id) || 0)) + 1;
           var createdBudget = u(d({}, H), {
             id: Qp,
             _isDuplicate: void 0,
@@ -78493,7 +78506,8 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         (R(null), f("history"), Q("✅ Presupuesto guardado"));
       },
       ce = (H) => {
-        var ae = l.nextNum,
+        var ae =
+            (B.length ? Math.max(...B.map((m) => Number(m.id) || 0)) : 0) + 1,
           N = u(d({}, H), {
             id: ae,
             fecha: Xt(),
