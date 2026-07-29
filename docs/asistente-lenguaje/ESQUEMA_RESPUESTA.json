@@ -1,0 +1,12 @@
+{
+  "tipoTrabajo": "reparacion|mantencion|remodelacion|construccion|null",
+  "elemento": "techumbre|muros_interiores|pisos|canaletas_bajantes|bano|cocina|null",
+  "dimension": "number|null",
+  "unidad": "m2|ml|un|null",
+  "material": "zinc|teja|ceramica|flotante|alfombra|yeso|madera|pvc|null",
+  "condiciones": ["array de strings (ej: filtracion, canaletas_obstruidas, hongos, descascarado, levantado)"],
+  "urgencia": "boolean|null",
+  "requiereVisita": "boolean|null",
+  "flujoSugerido": "flujo-1-filtracion-techumbre|flujo-2-remodelacion-bano|flujo-3-pintura-interior|flujo-4-cambio-piso|flujo-5-mantencion-canaletas|null",
+  "datosFaltantes": ["array de strings con los campos obligatorios faltantes para ejecutar el flujo sugerido"]
+}
