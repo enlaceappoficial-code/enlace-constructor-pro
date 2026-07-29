@@ -1,0 +1,446 @@
+{
+  "version": "0.2.0-propuesta",
+  "generadoDesde": "src/assets/index.js (catálogo qi, 311 partidas) — commit ea05f69 (v1.2.1-estabilidad)",
+  "notaGeneral": "Todos los catalogId referenciados abajo existen en el catálogo real de la app. Los campos 'cantidadBase' son valores de partida sugeridos (punto de partida editable), no mediciones reales — el profesional siempre debe ajustarlos en terreno o según lo indicado por el cliente. Ningún precio fue inventado ni modificado: las soluciones solo referencian partidas ya existentes por su catalogId.",
+  "notaVersion0.2.0": "Se formalizaron las exclusiones mutuas entre partidas alternativas ('excluyeCatalogIds', 'grupoSeleccion', 'seleccionMinima', 'seleccionMaxima') y se agregó el estado de cada solución ('estado', 'requierePartidasNuevas'). Solo 'sol-005-reparacion-porton' queda en estado 'borrador' por depender de partidas de catálogo que no existen todavía; las otras 5 quedan 'activa' para una futura implementación.",
+  "soluciones": [
+    {
+      "id": "sol-001-filtracion-techumbre",
+      "nombre": "Reparación de filtración en techumbre",
+      "descripcion": "Diagnóstico y reparación puntual de una filtración de agua detectada en la techumbre, con opciones complementarias según la extensión del daño y el estado de las canaletas.",
+      "rubro": "Techumbres y aguas lluvias",
+      "tipoIntervencion": "Mantención correctiva",
+      "partidas": [
+        {
+          "catalogId": 311,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 gl (jornada de reparación puntual, no fraccionable por m²)",
+          "obligatoria": true,
+          "editable": true,
+          "motivo": "Ítem principal: reparación localizada de la filtración detectada (parche / tapagoteras)."
+        },
+        {
+          "catalogId": 312,
+          "cantidadBase": 6,
+          "formulaCantidad": "por ml: metros lineales de canaleta perimetral a limpiar en el sector afectado",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Las canaletas obstruidas son causa frecuente de filtraciones; se sugiere revisar y despejar antes de sellar."
+        },
+        {
+          "catalogId": 224,
+          "cantidadBase": 2,
+          "formulaCantidad": "por m²: superficie de zinc dañado a reparar puntualmente",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Alternativa cuando el daño es más extenso que el sellado puntual de la partida 311 (plancha deformada u oxidada en un área visible)."
+        },
+        {
+          "catalogId": 406,
+          "cantidadBase": 20,
+          "formulaCantidad": "por m²: superficie de techumbre a impermeabilizar preventivamente",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Tratamiento preventivo opcional para reducir el riesgo de nuevas filtraciones en el sector reparado."
+        },
+        {
+          "catalogId": 33,
+          "cantidadBase": 4,
+          "formulaCantidad": "por m²: superficie de zinc a reemplazar si la estructura es Metalcon",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Alternativa cuando la reparación puntual no basta y se requiere cambiar la plancha completa (estructura Metalcon). Excluyente con la partida 43.",
+          "excluyeCatalogIds": [43],
+          "grupoSeleccion": "grp-sistema-techumbre",
+          "seleccionMinima": 0,
+          "seleccionMaxima": 1
+        },
+        {
+          "catalogId": 43,
+          "cantidadBase": 4,
+          "formulaCantidad": "por m²: superficie de zinc a reemplazar si la estructura es de madera",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Igual que la partida 33 pero para estructura de techumbre en madera. Excluyente con la partida 33 — nunca deben coexistir en la misma solución aplicada.",
+          "excluyeCatalogIds": [33],
+          "grupoSeleccion": "grp-sistema-techumbre",
+          "seleccionMinima": 0,
+          "seleccionMaxima": 1
+        }
+      ],
+      "preguntas": [
+        "¿La estructura de la techumbre es Metalcon o de madera?",
+        "¿Las canaletas del sector están visiblemente obstruidas u oxidadas?",
+        "¿El daño es un punto localizado o afecta una superficie mayor a 1-2 m²?",
+        "¿Es la primera reparación en este sector o es un problema recurrente?"
+      ],
+      "advertencias": [
+        "Confirmar en terreno el origen real de la filtración antes de cotizar: una misma mancha de humedad interior puede originarse en la techumbre, la canaleta, un muro o la losa.",
+        "Las partidas 33 y 43 son excluyentes entre sí: incluir solo la que corresponde al sistema constructivo real de la techumbre.",
+        "No sumar la partida 311 (gl) y la 224 (m²) si ambas describen el mismo parche puntual; usar solo una según el criterio del profesional en terreno."
+      ],
+      "requiereVisita": true,
+      "estado": "activa",
+      "requierePartidasNuevas": false
+    },
+    {
+      "id": "sol-002-cambio-canaleta-bajante",
+      "nombre": "Cambio de canaleta y bajante",
+      "descripcion": "Reemplazo de un tramo de canaleta y bajante existente, con alternativa para instalación nueva cuando no existe ojalaería previa.",
+      "rubro": "Techumbres y aguas lluvias",
+      "tipoIntervencion": "Reposición",
+      "partidas": [
+        {
+          "catalogId": 107,
+          "cantidadBase": 8,
+          "formulaCantidad": "por ml: metros lineales de canal + bajante existente a reemplazar",
+          "obligatoria": true,
+          "editable": true,
+          "motivo": "Ítem principal: reemplazo de canaleta y bajante ya instalados que se encuentran dañados u obsoletos.",
+          "excluyeCatalogIds": [106],
+          "grupoSeleccion": "grp-alcance-canaleta",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
+        },
+        {
+          "catalogId": 106,
+          "cantidadBase": 8,
+          "formulaCantidad": "por ml: metros lineales de ojalaería completa (canal + bajante + tapasol) si no existe ojalaería previa",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Alternativa para instalación nueva (sin canaleta previa). Excluyente con la partida 107 — no debe coexistir con ella en la misma solución aplicada.",
+          "excluyeCatalogIds": [107],
+          "grupoSeleccion": "grp-alcance-canaleta",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
+        },
+        {
+          "catalogId": 312,
+          "cantidadBase": 8,
+          "formulaCantidad": "por ml: metros lineales de canaleta a limpiar antes de decidir el cambio",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Limpieza previa recomendada para evaluar el estado real del tramo antes de confirmar si se repara o se cambia completo."
+        },
+        {
+          "catalogId": 405,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 unidad por cada limatesa a reponer",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Complemento opcional cuando el tramo de canaleta colinda con una limatesa deteriorada."
+        }
+      ],
+      "preguntas": [
+        "¿Existe una canaleta/bajante previa que se está reemplazando, o es una instalación nueva sin ojalaería anterior?",
+        "¿Cuál es el largo total en metros lineales del tramo a intervenir?",
+        "¿El material actual es PVC, zinc u otro? ¿Se mantiene el mismo material en el reemplazo?",
+        "¿Hay riesgo de daño a fachada o revestimiento al retirar la canaleta existente?"
+      ],
+      "advertencias": [
+        "Las partidas 107 y 106 son excluyentes: 107 es para reemplazo de ojalaería existente, 106 es para instalación nueva completa sin canaleta previa.",
+        "Verificar la pendiente real de la canaleta en terreno; una pendiente insuficiente puede requerir ajustar soportes, trabajo no incluido en estas partidas del catálogo."
+      ],
+      "requiereVisita": true,
+      "estado": "activa",
+      "requierePartidasNuevas": false
+    },
+    {
+      "id": "sol-003-pintura-interior-habitacion",
+      "nombre": "Pintura interior de habitación",
+      "descripcion": "Pintura de muros interiores de una habitación, con opciones para cielo, marcos/puertas/ventanas y preparación de superficie dañada.",
+      "rubro": "Pinturas y recubrimientos",
+      "tipoIntervencion": "Obra nueva",
+      "partidas": [
+        {
+          "catalogId": 1,
+          "cantidadBase": 30,
+          "formulaCantidad": "por m²: superficie de muros interiores de la habitación (perímetro × altura, descontando vanos)",
+          "obligatoria": true,
+          "editable": true,
+          "motivo": "Ítem principal: pintura de muros interiores de la habitación, 2 manos."
+        },
+        {
+          "catalogId": 3,
+          "cantidadBase": 12,
+          "formulaCantidad": "por m²: superficie del cielo de la habitación",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Opcional si el cliente también desea pintar el cielo; no todo trabajo de 'pintura de habitación' lo incluye."
+        },
+        {
+          "catalogId": 4,
+          "cantidadBase": 4,
+          "formulaCantidad": "por m²: superficie de puertas y ventanas interiores de la habitación",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Opcional para dar terminación uniforme a marcos, puertas y ventanas de la habitación."
+        },
+        {
+          "catalogId": 320,
+          "cantidadBase": 2,
+          "formulaCantidad": "por m²: superficie de muro con daño visible (grietas, humedad, empaste) a reparar antes de pintar",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Preparación de superficie: incluir solo si hay daños puntuales detectados antes de pintar."
+        },
+        {
+          "catalogId": 433,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 gl (kit de insumos, no fraccionable)",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Cargo complementario sugerido: brochas, bandejas, lijas y masilla no siempre están incluidos en el precio unitario de pintura."
+        }
+      ],
+      "preguntas": [
+        "¿Se pinta también el cielo de la habitación, o solo los muros?",
+        "¿Se pintan puertas y ventanas interiores de la habitación?",
+        "¿Existen daños visibles en el muro (grietas, humedad, hongos) que requieran preparación antes de pintar?",
+        "¿El color nuevo contrasta fuertemente con el actual? (puede requerir manos adicionales no incluidas en el ítem base)"
+      ],
+      "advertencias": [
+        "El ítem base (1) contempla 2 manos estándar; colores muy oscuros sobre muros claros (o viceversa) pueden requerir manos adicionales no incluidas en el precio — validar con el cliente.",
+        "Si hay humedad activa (no solo mancha antigua), no proceder a pintar sin resolver antes la causa — derivar a la solución 'Reparación de filtración en techumbre' o a inspección de impermeabilización según corresponda."
+      ],
+      "requiereVisita": false,
+      "estado": "activa",
+      "requierePartidasNuevas": false
+    },
+    {
+      "id": "sol-004-cambio-piso-ceramico",
+      "nombre": "Cambio de piso cerámico",
+      "descripcion": "Reemplazo completo del piso cerámico de un recinto, incluyendo retiro del piso existente y terminación de juntas.",
+      "rubro": "Pisos y revestimientos",
+      "tipoIntervencion": "Reposición",
+      "partidas": [
+        {
+          "catalogId": 64,
+          "cantidadBase": 15,
+          "formulaCantidad": "por m²: superficie de piso a reemplazar (incluye retiro del cerámico existente)",
+          "obligatoria": true,
+          "editable": true,
+          "motivo": "Ítem principal: cambio de cerámico de piso con retiro incluido.",
+          "excluyeCatalogIds": [66],
+          "grupoSeleccion": "grp-alcance-piso",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
+        },
+        {
+          "catalogId": 408,
+          "cantidadBase": 15,
+          "formulaCantidad": "por m²: superficie de piso a renovar fragua en juntas",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Terminación opcional como remate fino tras la instalación del piso nuevo, o como servicio independiente si solo se refrescan las juntas."
+        },
+        {
+          "catalogId": 134,
+          "cantidadBase": 1,
+          "formulaCantidad": "por m³: volumen de escombro estimado según superficie y espesor del piso retirado",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Cargo complementario: el retiro de escombro a botadero no siempre está incluido en el precio unitario del cambio de piso."
+        },
+        {
+          "catalogId": 66,
+          "cantidadBase": 2,
+          "formulaCantidad": "fija: 1 gl por sector de parche puntual (usar solo si no se aplica la partida 64)",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Alternativa de menor alcance para reparación puntual, cuando el cliente decide finalmente no cambiar todo el piso. Excluyente con la partida 64.",
+          "excluyeCatalogIds": [64],
+          "grupoSeleccion": "grp-alcance-piso",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
+        }
+      ],
+      "preguntas": [
+        "¿Cuál es la superficie total en m² del piso a cambiar?",
+        "¿El cerámico actual se retira completo, o el cliente prefiere un parche puntual?",
+        "¿El retiro de escombros lo gestiona el contratista o el cliente?",
+        "¿Se requiere nivelar o reparar el radier/contrapiso antes de instalar el cerámico nuevo?"
+      ],
+      "advertencias": [
+        "Las partidas 64 y 66 son excluyentes: 64 es reemplazo completo, 66 es reparación puntual. No deben coexistir en la misma solución aplicada.",
+        "Si al retirar el piso existente se detecta daño en el radier o contrapiso, se requiere una partida adicional de reparación de radier no incluida en esta solución — derivar a evaluación técnica en terreno."
+      ],
+      "requiereVisita": true,
+      "estado": "activa",
+      "requierePartidasNuevas": false
+    },
+    {
+      "id": "sol-005-reparacion-porton",
+      "nombre": "Reparación de portón",
+      "descripcion": "Mantención y reparación de un portón existente (óxido, pintura, cerradura). No cubre fabricación de un portón nuevo ni trabajos estructurales de soldadura/enderezado, que no tienen partida propia en el catálogo actual.",
+      "rubro": "Estructuras metálicas",
+      "tipoIntervencion": "Reparación",
+      "partidas": [
+        {
+          "catalogId": 313,
+          "cantidadBase": 6,
+          "formulaCantidad": "por m²: superficie del portón a lijar y pintar (ambas caras si aplica)",
+          "obligatoria": true,
+          "editable": true,
+          "motivo": "Único ítem del catálogo que cubre mantención/terminación de un portón existente: lijado y pintura esmalte/anticorrosivo."
+        },
+        {
+          "catalogId": 319,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 unidad por cada chapa o cerradura a cambiar",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Opcional si el portón presenta falla en la cerradura o chapa. El ítem del catálogo está descrito para 'puerta'; es funcionalmente aplicable a portones pero requiere validación con el cliente antes de incluirlo."
+        }
+      ],
+      "preguntas": [
+        "¿Cuál es la falla principal del portón: óxido/pintura, cerradura/chapa, bisagras, ruedas/riel, o estructura deformada?",
+        "¿El portón es corredera o abatible, y de qué material (fierro, Metalcon, madera)?",
+        "¿La reparación requiere soldadura o enderezado estructural?"
+      ],
+      "advertencias": [
+        "GAP DE CATÁLOGO: no existe una partida genérica de mano de obra para reparación estructural de portón (soldadura, enderezado, cambio de bisagras o ruedas). Las únicas partidas relacionadas son la fabricación completa de un portón nuevo (catalogId 120, 122, 127 — no aplicables a una reparación) y la partida de pintura/mantención (313). Si la reparación requiere soldadura o enderezado, debe agregarse manualmente como partida 'Definir materiales manualmente' en el presupuesto — no se incluye automáticamente en esta solución.",
+        "El catalogId 319 está descrito en el catálogo como 'Cambio de chapa/cerradura puerta'; su uso en portones es una extrapolación funcional razonable pero no una coincidencia textual exacta — confirmar con el profesional antes de aplicarlo."
+      ],
+      "requiereVisita": true,
+      "estado": "borrador",
+      "requierePartidasNuevas": true
+    },
+    {
+      "id": "sol-006-remodelacion-basica-bano",
+      "nombre": "Remodelación básica de baño",
+      "descripcion": "Remodelación de un baño existente: cambio de piso y revestimiento de ducha, más artefactos sanitarios estándar (lavamanos, WC, ducha), con opciones de mayor estándar y trabajos complementarios de cielo e instalación sanitaria.",
+      "rubro": "Instalaciones sanitarias",
+      "tipoIntervencion": "Reposición",
+      "partidas": [
+        {
+          "catalogId": 64,
+          "cantidadBase": 5,
+          "formulaCantidad": "por m²: superficie de piso del baño a cambiar (incluye retiro)",
+          "obligatoria": true,
+          "editable": true,
+          "motivo": "Ítem principal de piso: cambio de cerámico de piso existente."
+        },
+        {
+          "catalogId": 63,
+          "cantidadBase": 6,
+          "formulaCantidad": "por m²: superficie de muro de la zona de ducha a revestir",
+          "obligatoria": true,
+          "editable": true,
+          "motivo": "Revestimiento cerámico de muro en zona húmeda (ducha), estándar en una remodelación básica de baño."
+        },
+        {
+          "catalogId": 221,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 unidad por lavamanos",
+          "obligatoria": true,
+          "editable": true,
+          "motivo": "Artefacto sanitario esencial en cualquier remodelación de baño."
+        },
+        {
+          "catalogId": 368,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 unidad por WC",
+          "obligatoria": true,
+          "editable": true,
+          "motivo": "Instalación de WC estándar, opción base acorde al alcance 'remodelación básica'. Excluyente con la partida 222.",
+          "excluyeCatalogIds": [222],
+          "grupoSeleccion": "grp-estandar-wc",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
+        },
+        {
+          "catalogId": 369,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 unidad por ducha",
+          "obligatoria": true,
+          "editable": true,
+          "motivo": "Instalación de ducha con mezcladora simple, opción base acorde al alcance 'remodelación básica'. Excluyente con la partida 220.",
+          "excluyeCatalogIds": [220],
+          "grupoSeleccion": "grp-estandar-ducha",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
+        },
+        {
+          "catalogId": 222,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 unidad por WC (alternativa de mayor estándar)",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Upgrade opcional a WC con bidet incluido. Excluyente con la partida 368 — elegir solo una de las dos.",
+          "excluyeCatalogIds": [368],
+          "grupoSeleccion": "grp-estandar-wc",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
+        },
+        {
+          "catalogId": 220,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 unidad por ducha (alternativa de mayor estándar)",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Upgrade opcional a ducha con grifería termostática. Excluyente con la partida 369 — elegir solo una de las dos.",
+          "excluyeCatalogIds": [369],
+          "grupoSeleccion": "grp-estandar-ducha",
+          "seleccionMinima": 1,
+          "seleccionMaxima": 1
+        },
+        {
+          "catalogId": 370,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 unidad por tina",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Opcional si el baño incluirá tina además de, o en vez de, la ducha; no todo baño básico la incluye."
+        },
+        {
+          "catalogId": 92,
+          "cantidadBase": 1,
+          "formulaCantidad": "fija: 1 gl (instalación sanitaria completa)",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Opcional cuando la remodelación requiere rehacer la red de agua y desagüe completa (baños antiguos), no solo cambiar artefactos sobre la instalación existente."
+        },
+        {
+          "catalogId": 37,
+          "cantidadBase": 5,
+          "formulaCantidad": "por m²: superficie de cielo del baño a reemplazar por placa RH (resistente a humedad)",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Opcional si el cielo actual está dañado por humedad y se decide reemplazarlo."
+        },
+        {
+          "catalogId": 101,
+          "cantidadBase": 5,
+          "formulaCantidad": "por m²: superficie de cielo existente a demoler antes de instalar el nuevo",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Complementario a la partida 37: incluir solo si se reemplaza el cielo y el actual debe retirarse primero."
+        },
+        {
+          "catalogId": 134,
+          "cantidadBase": 1,
+          "formulaCantidad": "por m³: volumen de escombro estimado de la remodelación completa",
+          "obligatoria": false,
+          "editable": true,
+          "motivo": "Cargo complementario: retiro de escombros de piso, revestimientos y artefactos antiguos retirados."
+        }
+      ],
+      "preguntas": [
+        "¿El baño incluirá tina, o solo ducha?",
+        "¿Se cambia también el cielo del baño, o se mantiene el actual?",
+        "¿Los artefactos serán estándar o de mayor estándar (bidet incluido, grifería termostática)?",
+        "¿La instalación de agua y desagüe existente está en buen estado, o requiere renovarse por completo?",
+        "¿Cuáles son las dimensiones reales del baño (m² de piso y m² de muro de ducha)?"
+      ],
+      "advertencias": [
+        "Los pares (368/222) y (369/220) son excluyentes entre sí respectivamente: elegir la opción estándar o la de mayor estándar, no ambas.",
+        "Esta solución no incluye impermeabilización de piso/muro bajo cerámico; si la losa o el piso presentan filtraciones activas, debe evaluarse y cotizarse por separado.",
+        "'Remodelación básica' asume que se mantiene la disposición actual de artefactos (mismos puntos de agua y desagüe); un cambio de layout implica trabajos de gasfitería adicionales no incluidos aquí."
+      ],
+      "requiereVisita": true,
+      "estado": "activa",
+      "requierePartidasNuevas": false
+    }
+  ]
+}

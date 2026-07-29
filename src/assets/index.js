@@ -39896,6 +39896,380 @@ MATERIALES:
     );
   }
   var Bn = "enlace_constructor_pro_v1";
+  // Fuente: docs/soluciones/SOLUCIONES_PROPUESTAS.json v0.2.0-propuesta.
+  // Solo se embeben las 5 soluciones en estado "activa" — "sol-005-reparacion-porton"
+  // queda en estado "borrador" y no se implementa en esta primera versión.
+  var SOLUCIONES_COMPUESTAS_ACTIVAS = [
+    {
+      id: "sol-001-filtracion-techumbre",
+      nombre: "Reparación de filtración en techumbre",
+      descripcion: "Diagnóstico y reparación puntual de una filtración de agua detectada en la techumbre, con opciones complementarias según la extensión del daño y el estado de las canaletas.",
+      rubro: "Techumbres y aguas lluvias",
+      tipoIntervencion: "Mantención correctiva",
+      partidas: [
+        { catalogId: 311, cantidadBase: 1, formulaCantidad: "fija: 1 gl (jornada de reparación puntual, no fraccionable por m²)", obligatoria: true, editable: true, motivo: "Ítem principal: reparación localizada de la filtración detectada (parche / tapagoteras)." },
+        { catalogId: 312, cantidadBase: 6, formulaCantidad: "por ml: metros lineales de canaleta perimetral a limpiar en el sector afectado", obligatoria: false, editable: true, motivo: "Las canaletas obstruidas son causa frecuente de filtraciones; se sugiere revisar y despejar antes de sellar." },
+        { catalogId: 224, cantidadBase: 2, formulaCantidad: "por m²: superficie de zinc dañado a reparar puntualmente", obligatoria: false, editable: true, motivo: "Alternativa cuando el daño es más extenso que el sellado puntual de la partida 311 (plancha deformada u oxidada en un área visible)." },
+        { catalogId: 406, cantidadBase: 20, formulaCantidad: "por m²: superficie de techumbre a impermeabilizar preventivamente", obligatoria: false, editable: true, motivo: "Tratamiento preventivo opcional para reducir el riesgo de nuevas filtraciones en el sector reparado." },
+        { catalogId: 33, cantidadBase: 4, formulaCantidad: "por m²: superficie de zinc a reemplazar si la estructura es Metalcon", obligatoria: false, editable: true, motivo: "Alternativa cuando la reparación puntual no basta y se requiere cambiar la plancha completa (estructura Metalcon). Excluyente con la partida 43.", excluyeCatalogIds: [43], grupoSeleccion: "grp-sistema-techumbre", seleccionMinima: 0, seleccionMaxima: 1 },
+        { catalogId: 43, cantidadBase: 4, formulaCantidad: "por m²: superficie de zinc a reemplazar si la estructura es de madera", obligatoria: false, editable: true, motivo: "Igual que la partida 33 pero para estructura de techumbre en madera. Excluyente con la partida 33 — nunca deben coexistir en la misma solución aplicada.", excluyeCatalogIds: [33], grupoSeleccion: "grp-sistema-techumbre", seleccionMinima: 0, seleccionMaxima: 1 },
+      ],
+      preguntas: ["¿La estructura de la techumbre es Metalcon o de madera?", "¿Las canaletas del sector están visiblemente obstruidas u oxidadas?", "¿El daño es un punto localizado o afecta una superficie mayor a 1-2 m²?", "¿Es la primera reparación en este sector o es un problema recurrente?"],
+      advertencias: ["Confirmar en terreno el origen real de la filtración antes de cotizar: una misma mancha de humedad interior puede originarse en la techumbre, la canaleta, un muro o la losa.", "Las partidas 33 y 43 son excluyentes entre sí: incluir solo la que corresponde al sistema constructivo real de la techumbre.", "No sumar la partida 311 (gl) y la 224 (m²) si ambas describen el mismo parche puntual; usar solo una según el criterio del profesional en terreno."],
+      requiereVisita: true,
+      estado: "activa",
+      requierePartidasNuevas: false,
+    },
+    {
+      id: "sol-002-cambio-canaleta-bajante",
+      nombre: "Cambio de canaleta y bajante",
+      descripcion: "Reemplazo de un tramo de canaleta y bajante existente, con alternativa para instalación nueva cuando no existe ojalaería previa.",
+      rubro: "Techumbres y aguas lluvias",
+      tipoIntervencion: "Reposición",
+      partidas: [
+        { catalogId: 107, cantidadBase: 8, formulaCantidad: "por ml: metros lineales de canal + bajante existente a reemplazar", obligatoria: true, editable: true, motivo: "Ítem principal: reemplazo de canaleta y bajante ya instalados que se encuentran dañados u obsoletos.", excluyeCatalogIds: [106], grupoSeleccion: "grp-alcance-canaleta", seleccionMinima: 1, seleccionMaxima: 1 },
+        { catalogId: 106, cantidadBase: 8, formulaCantidad: "por ml: metros lineales de ojalaería completa (canal + bajante + tapasol) si no existe ojalaería previa", obligatoria: false, editable: true, motivo: "Alternativa para instalación nueva (sin canaleta previa). Excluyente con la partida 107 — no debe coexistir con ella en la misma solución aplicada.", excluyeCatalogIds: [107], grupoSeleccion: "grp-alcance-canaleta", seleccionMinima: 1, seleccionMaxima: 1 },
+        { catalogId: 312, cantidadBase: 8, formulaCantidad: "por ml: metros lineales de canaleta a limpiar antes de decidir el cambio", obligatoria: false, editable: true, motivo: "Limpieza previa recomendada para evaluar el estado real del tramo antes de confirmar si se repara o se cambia completo." },
+        { catalogId: 405, cantidadBase: 1, formulaCantidad: "fija: 1 unidad por cada limatesa a reponer", obligatoria: false, editable: true, motivo: "Complemento opcional cuando el tramo de canaleta colinda con una limatesa deteriorada." },
+      ],
+      preguntas: ["¿Existe una canaleta/bajante previa que se está reemplazando, o es una instalación nueva sin ojalaería anterior?", "¿Cuál es el largo total en metros lineales del tramo a intervenir?", "¿El material actual es PVC, zinc u otro? ¿Se mantiene el mismo material en el reemplazo?", "¿Hay riesgo de daño a fachada o revestimiento al retirar la canaleta existente?"],
+      advertencias: ["Las partidas 107 y 106 son excluyentes: 107 es para reemplazo de ojalaería existente, 106 es para instalación nueva completa sin canaleta previa.", "Verificar la pendiente real de la canaleta en terreno; una pendiente insuficiente puede requerir ajustar soportes, trabajo no incluido en estas partidas del catálogo."],
+      requiereVisita: true,
+      estado: "activa",
+      requierePartidasNuevas: false,
+    },
+    {
+      id: "sol-003-pintura-interior-habitacion",
+      nombre: "Pintura interior de habitación",
+      descripcion: "Pintura de muros interiores de una habitación, con opciones para cielo, marcos/puertas/ventanas y preparación de superficie dañada.",
+      rubro: "Pinturas y recubrimientos",
+      tipoIntervencion: "Obra nueva",
+      partidas: [
+        { catalogId: 1, cantidadBase: 30, formulaCantidad: "por m²: superficie de muros interiores de la habitación (perímetro × altura, descontando vanos)", obligatoria: true, editable: true, motivo: "Ítem principal: pintura de muros interiores de la habitación, 2 manos." },
+        { catalogId: 3, cantidadBase: 12, formulaCantidad: "por m²: superficie del cielo de la habitación", obligatoria: false, editable: true, motivo: "Opcional si el cliente también desea pintar el cielo; no todo trabajo de 'pintura de habitación' lo incluye." },
+        { catalogId: 4, cantidadBase: 4, formulaCantidad: "por m²: superficie de puertas y ventanas interiores de la habitación", obligatoria: false, editable: true, motivo: "Opcional para dar terminación uniforme a marcos, puertas y ventanas de la habitación." },
+        { catalogId: 320, cantidadBase: 2, formulaCantidad: "por m²: superficie de muro con daño visible (grietas, humedad, empaste) a reparar antes de pintar", obligatoria: false, editable: true, motivo: "Preparación de superficie: incluir solo si hay daños puntuales detectados antes de pintar." },
+        { catalogId: 433, cantidadBase: 1, formulaCantidad: "fija: 1 gl (kit de insumos, no fraccionable)", obligatoria: false, editable: true, motivo: "Cargo complementario sugerido: brochas, bandejas, lijas y masilla no siempre están incluidos en el precio unitario de pintura." },
+      ],
+      preguntas: ["¿Se pinta también el cielo de la habitación, o solo los muros?", "¿Se pintan puertas y ventanas interiores de la habitación?", "¿Existen daños visibles en el muro (grietas, humedad, hongos) que requieran preparación antes de pintar?", "¿El color nuevo contrasta fuertemente con el actual? (puede requerir manos adicionales no incluidas en el ítem base)"],
+      advertencias: ["El ítem base (1) contempla 2 manos estándar; colores muy oscuros sobre muros claros (o viceversa) pueden requerir manos adicionales no incluidas en el precio — validar con el cliente.", "Si hay humedad activa (no solo mancha antigua), no proceder a pintar sin resolver antes la causa — derivar a la solución 'Reparación de filtración en techumbre' o a inspección de impermeabilización según corresponda."],
+      requiereVisita: false,
+      estado: "activa",
+      requierePartidasNuevas: false,
+    },
+    {
+      id: "sol-004-cambio-piso-ceramico",
+      nombre: "Cambio de piso cerámico",
+      descripcion: "Reemplazo completo del piso cerámico de un recinto, incluyendo retiro del piso existente y terminación de juntas.",
+      rubro: "Pisos y revestimientos",
+      tipoIntervencion: "Reposición",
+      partidas: [
+        { catalogId: 64, cantidadBase: 15, formulaCantidad: "por m²: superficie de piso a reemplazar (incluye retiro del cerámico existente)", obligatoria: true, editable: true, motivo: "Ítem principal: cambio de cerámico de piso con retiro incluido.", excluyeCatalogIds: [66], grupoSeleccion: "grp-alcance-piso", seleccionMinima: 1, seleccionMaxima: 1 },
+        { catalogId: 408, cantidadBase: 15, formulaCantidad: "por m²: superficie de piso a renovar fragua en juntas", obligatoria: false, editable: true, motivo: "Terminación opcional como remate fino tras la instalación del piso nuevo, o como servicio independiente si solo se refrescan las juntas." },
+        { catalogId: 134, cantidadBase: 1, formulaCantidad: "por m³: volumen de escombro estimado según superficie y espesor del piso retirado", obligatoria: false, editable: true, motivo: "Cargo complementario: el retiro de escombro a botadero no siempre está incluido en el precio unitario del cambio de piso." },
+        { catalogId: 66, cantidadBase: 2, formulaCantidad: "fija: 1 gl por sector de parche puntual (usar solo si no se aplica la partida 64)", obligatoria: false, editable: true, motivo: "Alternativa de menor alcance para reparación puntual, cuando el cliente decide finalmente no cambiar todo el piso. Excluyente con la partida 64.", excluyeCatalogIds: [64], grupoSeleccion: "grp-alcance-piso", seleccionMinima: 1, seleccionMaxima: 1 },
+      ],
+      preguntas: ["¿Cuál es la superficie total en m² del piso a cambiar?", "¿El cerámico actual se retira completo, o el cliente prefiere un parche puntual?", "¿El retiro de escombros lo gestiona el contratista o el cliente?", "¿Se requiere nivelar o reparar el radier/contrapiso antes de instalar el cerámico nuevo?"],
+      advertencias: ["Las partidas 64 y 66 son excluyentes: 64 es reemplazo completo, 66 es reparación puntual. No deben coexistir en la misma solución aplicada.", "Si al retirar el piso existente se detecta daño en el radier o contrapiso, se requiere una partida adicional de reparación de radier no incluida en esta solución — derivar a evaluación técnica en terreno."],
+      requiereVisita: true,
+      estado: "activa",
+      requierePartidasNuevas: false,
+    },
+    {
+      id: "sol-006-remodelacion-basica-bano",
+      nombre: "Remodelación básica de baño",
+      descripcion: "Remodelación de un baño existente: cambio de piso y revestimiento de ducha, más artefactos sanitarios estándar (lavamanos, WC, ducha), con opciones de mayor estándar y trabajos complementarios de cielo e instalación sanitaria.",
+      rubro: "Instalaciones sanitarias",
+      tipoIntervencion: "Reposición",
+      partidas: [
+        { catalogId: 64, cantidadBase: 5, formulaCantidad: "por m²: superficie de piso del baño a cambiar (incluye retiro)", obligatoria: true, editable: true, motivo: "Ítem principal de piso: cambio de cerámico de piso existente." },
+        { catalogId: 63, cantidadBase: 6, formulaCantidad: "por m²: superficie de muro de la zona de ducha a revestir", obligatoria: true, editable: true, motivo: "Revestimiento cerámico de muro en zona húmeda (ducha), estándar en una remodelación básica de baño." },
+        { catalogId: 221, cantidadBase: 1, formulaCantidad: "fija: 1 unidad por lavamanos", obligatoria: true, editable: true, motivo: "Artefacto sanitario esencial en cualquier remodelación de baño." },
+        { catalogId: 368, cantidadBase: 1, formulaCantidad: "fija: 1 unidad por WC", obligatoria: true, editable: true, motivo: "Instalación de WC estándar, opción base acorde al alcance 'remodelación básica'. Excluyente con la partida 222.", excluyeCatalogIds: [222], grupoSeleccion: "grp-estandar-wc", seleccionMinima: 1, seleccionMaxima: 1 },
+        { catalogId: 369, cantidadBase: 1, formulaCantidad: "fija: 1 unidad por ducha", obligatoria: true, editable: true, motivo: "Instalación de ducha con mezcladora simple, opción base acorde al alcance 'remodelación básica'. Excluyente con la partida 220.", excluyeCatalogIds: [220], grupoSeleccion: "grp-estandar-ducha", seleccionMinima: 1, seleccionMaxima: 1 },
+        { catalogId: 222, cantidadBase: 1, formulaCantidad: "fija: 1 unidad por WC (alternativa de mayor estándar)", obligatoria: false, editable: true, motivo: "Upgrade opcional a WC con bidet incluido. Excluyente con la partida 368 — elegir solo una de las dos.", excluyeCatalogIds: [368], grupoSeleccion: "grp-estandar-wc", seleccionMinima: 1, seleccionMaxima: 1 },
+        { catalogId: 220, cantidadBase: 1, formulaCantidad: "fija: 1 unidad por ducha (alternativa de mayor estándar)", obligatoria: false, editable: true, motivo: "Upgrade opcional a ducha con grifería termostática. Excluyente con la partida 369 — elegir solo una de las dos.", excluyeCatalogIds: [369], grupoSeleccion: "grp-estandar-ducha", seleccionMinima: 1, seleccionMaxima: 1 },
+        { catalogId: 370, cantidadBase: 1, formulaCantidad: "fija: 1 unidad por tina", obligatoria: false, editable: true, motivo: "Opcional si el baño incluirá tina además de, o en vez de, la ducha; no todo baño básico la incluye." },
+        { catalogId: 92, cantidadBase: 1, formulaCantidad: "fija: 1 gl (instalación sanitaria completa)", obligatoria: false, editable: true, motivo: "Opcional cuando la remodelación requiere rehacer la red de agua y desagüe completa (baños antiguos), no solo cambiar artefactos sobre la instalación existente." },
+        { catalogId: 37, cantidadBase: 5, formulaCantidad: "por m²: superficie de cielo del baño a reemplazar por placa RH (resistente a humedad)", obligatoria: false, editable: true, motivo: "Opcional si el cielo actual está dañado por humedad y se decide reemplazarlo." },
+        { catalogId: 101, cantidadBase: 5, formulaCantidad: "por m²: superficie de cielo existente a demoler antes de instalar el nuevo", obligatoria: false, editable: true, motivo: "Complementario a la partida 37: incluir solo si se reemplaza el cielo y el actual debe retirarse primero." },
+        { catalogId: 134, cantidadBase: 1, formulaCantidad: "por m³: volumen de escombro estimado de la remodelación completa", obligatoria: false, editable: true, motivo: "Cargo complementario: retiro de escombros de piso, revestimientos y artefactos antiguos retirados." },
+      ],
+      preguntas: ["¿El baño incluirá tina, o solo ducha?", "¿Se cambia también el cielo del baño, o se mantiene el actual?", "¿Los artefactos serán estándar o de mayor estándar (bidet incluido, grifería termostática)?", "¿La instalación de agua y desagüe existente está en buen estado, o requiere renovarse por completo?", "¿Cuáles son las dimensiones reales del baño (m² de piso y m² de muro de ducha)?"],
+      advertencias: ["Los pares (368/222) y (369/220) son excluyentes entre sí respectivamente: elegir la opción estándar o la de mayor estándar, no ambas.", "Esta solución no incluye impermeabilización de piso/muro bajo cerámico; si la losa o el piso presentan filtraciones activas, debe evaluarse y cotizarse por separado.", "'Remodelación básica' asume que se mantiene la disposición actual de artefactos (mismos puntos de agua y desagüe); un cambio de layout implica trabajos de gasfitería adicionales no incluidos aquí."],
+      requiereVisita: true,
+      estado: "activa",
+      requierePartidasNuevas: false,
+    },
+  ];
+
+  function EcpSelectorSoluciones({ catalog, apus, materiales, cfg, budgetItems, capitulos, onClose, onApply }) {
+    const [paso, setPaso] = V("lista"),
+      [solucionId, setSolucionId] = V(null),
+      [cantidades, setCantidades] = V({}),
+      [marcadas, setMarcadas] = V(() => new Set()),
+      [grupoElegido, setGrupoElegido] = V({}),
+      [capituloDestino, setCapituloDestino] = V("");
+
+    var solucion = SOLUCIONES_COMPUESTAS_ACTIVAS.find((sv) => sv.id === solucionId) || null;
+    var catalogPorId = new Map((catalog || []).map((cv) => [cv.id, cv]));
+    var capsOrdenadas = [...(capitulos || [])].sort((a1, b1) => (parseFloat(a1.orden) || 0) - (parseFloat(b1.orden) || 0));
+
+    function elegirSolucion(sol) {
+      var cantInit = {},
+        marcInit = new Set(),
+        grupoInit = {};
+      sol.partidas.forEach((p) => {
+        cantInit[p.catalogId] = p.cantidadBase;
+        if (p.grupoSeleccion) {
+          if (p.obligatoria) grupoInit[p.grupoSeleccion] = p.catalogId;
+          else if (!(p.grupoSeleccion in grupoInit)) grupoInit[p.grupoSeleccion] = null;
+        } else if (p.obligatoria) marcInit.add(p.catalogId);
+      });
+      (setSolucionId(sol.id), setCantidades(cantInit), setMarcadas(marcInit), setGrupoElegido(grupoInit), setCapituloDestino(""), setPaso("detalle"));
+    }
+
+    function estaSeleccionada(p) {
+      return p.grupoSeleccion ? grupoElegido[p.grupoSeleccion] === p.catalogId : marcadas.has(p.catalogId);
+    }
+
+    function partidasSeleccionadas() {
+      return solucion ? solucion.partidas.filter(estaSeleccionada) : [];
+    }
+
+    function previewLinea(p) {
+      var catItem = catalogPorId.get(p.catalogId);
+      if (!catItem) return null;
+      return calcularLineaPresupuesto({
+        cant: parseFloat(cantidades[p.catalogId]) || 0,
+        precio: catItem.precio,
+        unidad: catItem.unidad,
+        _cantidadMinimaFacturable: catItem.cantidadMinimaFacturable,
+        _precioMinimoPartida: catItem.precioMinimoPartida,
+      });
+    }
+
+    var totalEstimado = partidasSeleccionadas().reduce((sum, p) => {
+      var linea = previewLinea(p);
+      return sum + (linea ? linea.totalLinea : 0);
+    }, 0);
+
+    function construirItemDesdeCatalogo(catItem, cantidad, capId) {
+      var apuMatch = (apus || []).find(
+        (q) => q.catalogId === catItem.id && !q.esSubcontrato && ((q.materiales && q.materiales.length > 0) || parseFloat(q.precioMO) > 0),
+      );
+      var item = {
+        desc: catItem.desc,
+        cant: cantidad,
+        unidad: catItem.unidad,
+        precio: catItem.precio,
+        _cid: String(catItem.id),
+        _tipoCosto: "auto",
+        capituloId: capId || "",
+      };
+      if (apuMatch) item._apuMatUnit = parseFloat(li(apuMatch, materiales || [], cfg).matTotal) || 0;
+      (parseFloat(catItem.cantidadMinimaFacturable) > 0) && (item._cantidadMinimaFacturable = parseFloat(catItem.cantidadMinimaFacturable));
+      (parseFloat(catItem.precioMinimoPartida) > 0) && (item._precioMinimoPartida = parseFloat(catItem.precioMinimoPartida));
+      catItem.rubro && (item._rubro = catItem.rubro);
+      catItem.subrubro && (item._subrubro = catItem.subrubro);
+      catItem.tipoIntervencion && (item._tipoIntervencion = catItem.tipoIntervencion);
+      catItem.sistemaConstructivo && (item._sistemaConstructivo = catItem.sistemaConstructivo);
+      catItem.alcance && (item._alcance = catItem.alcance);
+      catItem.especialidad && (item._especialidad = catItem.especialidad);
+      item._solucionOrigenId = solucion.id;
+      item._solucionOrigenNombre = solucion.nombre;
+      return item;
+    }
+
+    function confirmarYAgregar() {
+      var seleccionadas = partidasSeleccionadas();
+      for (var p of seleccionadas) {
+        if (p.excluyeCatalogIds && p.excluyeCatalogIds.some((exId) => seleccionadas.some((o) => o.catalogId === exId))) {
+          alert("Hay una selección inconsistente: dos partidas excluyentes entre sí quedaron marcadas a la vez. Revisa la solución antes de continuar.");
+          return;
+        }
+      }
+      var itemsFinal = [...(budgetItems || [])];
+      var agregados = [];
+      seleccionadas.forEach((p) => {
+        var catItem = catalogPorId.get(p.catalogId);
+        if (!catItem) return;
+        var cantidad = parseFloat(cantidades[p.catalogId]) || 0;
+        if (cantidad <= 0) return;
+        var idxExistente = itemsFinal.findIndex((it) => it._cid === String(p.catalogId));
+        if (idxExistente >= 0) {
+          var acumular = window.confirm("Esta partida ya existe en el presupuesto. ¿Deseas acumular la cantidad o agregar otra línea?");
+          if (acumular) {
+            itemsFinal[idxExistente] = u(d({}, itemsFinal[idxExistente]), {
+              cant: (parseFloat(itemsFinal[idxExistente].cant) || 0) + cantidad,
+            });
+          } else {
+            itemsFinal.push(construirItemDesdeCatalogo(catItem, cantidad, capituloDestino));
+          }
+        } else {
+          itemsFinal.push(construirItemDesdeCatalogo(catItem, cantidad, capituloDestino));
+        }
+        agregados.push(catItem);
+      });
+      onApply({ items: itemsFinal, agregados });
+    }
+
+    var gruposUnicos = solucion ? [...new Set(solucion.partidas.filter((p) => p.grupoSeleccion).map((p) => p.grupoSeleccion))] : [];
+    var partidasSinGrupo = solucion ? solucion.partidas.filter((p) => !p.grupoSeleccion) : [];
+
+    function filaPartida(p) {
+      var catItem = catalogPorId.get(p.catalogId);
+      if (!catItem) return null;
+      var seleccionada = estaSeleccionada(p);
+      var linea = seleccionada ? previewLinea(p) : null;
+      var esRadio = !!p.grupoSeleccion;
+      return e.jsxs(
+        "div",
+        {
+          style: { display: "flex", alignItems: "flex-start", gap: 8, padding: "8px 0", borderBottom: `1px solid ${a.border}` },
+          children: [
+            e.jsx("input", {
+              type: esRadio ? "radio" : "checkbox",
+              name: esRadio ? p.grupoSeleccion : void 0,
+              checked: seleccionada,
+              style: { marginTop: 4 },
+              onChange: () => {
+                if (esRadio) setGrupoElegido((prev) => u(d({}, prev), { [p.grupoSeleccion]: p.catalogId }));
+                else
+                  setMarcadas((prev) => {
+                    var next = new Set(prev);
+                    next.has(p.catalogId) ? next.delete(p.catalogId) : next.add(p.catalogId);
+                    return next;
+                  });
+              },
+            }),
+            e.jsxs("div", { style: { flex: 1, minWidth: 0 }, children: [
+              e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }, children: [
+                e.jsx("span", { style: { fontSize: 13, fontWeight: 600, color: a.text }, children: catItem.desc }),
+                p.obligatoria && e.jsx("span", { style: { fontSize: 9, background: "var(--bdg-comp-bg)", color: "var(--bdg-comp-fg)", padding: "1px 5px", borderRadius: 4, fontWeight: 700 }, children: "Obligatoria" }),
+              ]}),
+              e.jsx("div", { style: { fontSize: 11, color: a.muted, marginTop: 2 }, children: p.formulaCantidad }),
+              e.jsx("div", { style: { fontSize: 11, color: a.muted, marginTop: 2, fontStyle: "italic" }, children: p.motivo }),
+            ]}),
+            e.jsxs("div", { style: { textAlign: "right", flexShrink: 0, width: 140 }, children: [
+              e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 4, justifyContent: "flex-end" }, children: [
+                e.jsx("input", {
+                  type: "number",
+                  value: cantidades[p.catalogId] != null ? cantidades[p.catalogId] : p.cantidadBase,
+                  disabled: !seleccionada,
+                  onChange: (ev) => setCantidades((prev) => u(d({}, prev), { [p.catalogId]: parseFloat(ev.target.value) || 0 })),
+                  style: { width: 60, fontSize: 12, padding: "3px 5px", background: a.sb, color: a.text, border: `1px solid ${a.border}`, borderRadius: 5 },
+                }),
+                e.jsx("span", { style: { fontSize: 11, color: a.muted }, children: catItem.unidad }),
+              ]}),
+              e.jsx("div", { style: { fontSize: 11, color: a.muted, marginTop: 3 }, children: "P.Unit: " + ne(catItem.precio, cfg) }),
+              linea && e.jsx("div", { style: { fontSize: 12, fontWeight: 700, color: a.accent, marginTop: 2 }, children: ne(linea.totalLinea, cfg) }),
+              linea && linea.reglaAplicada && e.jsx("div", { style: { fontSize: 9, color: "#fb923c", marginTop: 2 }, children: "⚠️ mínimo comercial aplicado" }),
+            ]}),
+          ],
+        },
+        p.catalogId,
+      );
+    }
+
+    var contenido;
+    if (paso === "lista") {
+      contenido = e.jsxs("div", { children: [
+        e.jsx("div", { style: { fontSize: 17, fontWeight: 700, marginBottom: 4 }, children: "🧩 Agregar solución" }),
+        e.jsx("div", { style: { fontSize: 13, color: a.muted, marginBottom: 14 }, children: "Elige un paquete de partidas frecuentes. Podrás revisar, marcar opcionales y ajustar cantidades antes de agregarlas." }),
+        e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: SOLUCIONES_COMPUESTAS_ACTIVAS.map((sol) =>
+          e.jsxs("button", {
+            onClick: () => elegirSolucion(sol),
+            style: { textAlign: "left", background: a.sb, border: `1px solid ${a.border}`, borderRadius: 10, padding: "12px 14px", cursor: "pointer", color: a.text },
+            children: [
+              e.jsx("div", { style: { fontSize: 14, fontWeight: 700 }, children: sol.nombre }),
+              e.jsx("div", { style: { fontSize: 12, color: a.muted, marginTop: 3 }, children: sol.descripcion }),
+            ],
+          }, sol.id),
+        )}),
+        e.jsx("div", { style: { display: "flex", justifyContent: "flex-end", marginTop: 16 }, children:
+          e.jsx("button", { style: c.btn("s"), onClick: onClose, children: "Cancelar" }),
+        }),
+      ]});
+    } else if (paso === "detalle" && solucion) {
+      contenido = e.jsxs("div", { children: [
+        e.jsx("div", { style: { fontSize: 17, fontWeight: 700, marginBottom: 4 }, children: solucion.nombre }),
+        e.jsx("div", { style: { fontSize: 13, color: a.muted, marginBottom: 10 }, children: solucion.descripcion }),
+        solucion.advertencias.length > 0 && e.jsxs("div", { style: { background: "var(--email-warn-bg)", border: "1px solid var(--email-warn-border)", borderRadius: 8, padding: "8px 10px", marginBottom: 10 }, children: [
+          e.jsx("div", { style: { fontSize: 11, fontWeight: 700, marginBottom: 4 }, children: "⚠️ Advertencias" }),
+          solucion.advertencias.map((av, ix) => e.jsxs("div", { style: { fontSize: 11, color: a.muted, marginBottom: 2 }, children: ["• ", av] }, ix)),
+        ]}),
+        solucion.preguntas.length > 0 && e.jsxs("div", { style: { marginBottom: 10 }, children: [
+          e.jsx("div", { style: { fontSize: 11, fontWeight: 700, marginBottom: 4, color: a.muted }, children: "Preguntas a confirmar con el cliente" }),
+          solucion.preguntas.map((pr, ix) => e.jsxs("div", { style: { fontSize: 11, color: a.muted, marginBottom: 2 }, children: ["• ", pr] }, ix)),
+        ]}),
+        e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }, children: [
+          e.jsx("span", { style: { fontSize: 12, color: a.muted }, children: "Capítulo destino:" }),
+          e.jsxs("select", {
+            value: capituloDestino,
+            onChange: (ev) => setCapituloDestino(ev.target.value ? parseInt(ev.target.value) : ""),
+            style: { fontSize: 12, padding: "4px 6px", background: a.sb, color: a.text, border: `1px solid ${a.border}`, borderRadius: 5 },
+            children: [
+              e.jsx("option", { value: "", children: "Sin capítulo" }, "sin"),
+              ...capsOrdenadas.map((cap) => e.jsx("option", { value: cap.id, children: cap.nombre || "Capítulo " + cap.id }, cap.id)),
+            ],
+          }),
+        ]}),
+        partidasSinGrupo.map(filaPartida),
+        gruposUnicos.map((g) => {
+          var miembros = solucion.partidas.filter((p) => p.grupoSeleccion === g);
+          var opcional = miembros[0] && miembros[0].seleccionMinima === 0;
+          return e.jsxs("div", { key: g, style: { marginTop: 6 }, children: [
+            e.jsx("div", { style: { fontSize: 11, fontWeight: 700, color: a.accent, marginTop: 8 }, children: "Elige una opción" + (opcional ? " (o ninguna)" : "") + ":" }),
+            opcional && e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 8, padding: "4px 0" }, children: [
+              e.jsx("input", { type: "radio", name: g, checked: grupoElegido[g] == null, onChange: () => setGrupoElegido((prev) => u(d({}, prev), { [g]: null })) }),
+              e.jsx("span", { style: { fontSize: 12, color: a.muted }, children: "Ninguna de estas opciones" }),
+            ]}),
+            miembros.map(filaPartida),
+          ]});
+        }),
+        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 14, paddingTop: 10, borderTop: `1px solid ${a.border}` }, children: [
+          e.jsxs("div", { style: { fontSize: 13, fontWeight: 700 }, children: ["Total estimado: ", ne(totalEstimado, cfg)] }),
+          e.jsxs("div", { style: { display: "flex", gap: 8 }, children: [
+            e.jsx("button", { style: c.btn("s"), onClick: () => setPaso("lista"), children: "← Volver" }),
+            e.jsx("button", { style: u(d({}, c.btn("p")), { opacity: partidasSeleccionadas().length === 0 ? 0.5 : 1 }), disabled: partidasSeleccionadas().length === 0, onClick: () => setPaso("resumen"), children: "Continuar" }),
+          ]}),
+        ]}),
+      ]});
+    } else if (paso === "resumen" && solucion) {
+      var seleccionadasResumen = partidasSeleccionadas();
+      contenido = e.jsxs("div", { children: [
+        e.jsx("div", { style: { fontSize: 17, fontWeight: 700, marginBottom: 4 }, children: "Resumen antes de agregar" }),
+        e.jsx("div", { style: { fontSize: 13, color: a.muted, marginBottom: 12 }, children: solucion.nombre + " — " + (capituloDestino ? (capsOrdenadas.find((c) => c.id === capituloDestino) || {}).nombre || "Capítulo" : "Sin capítulo") }),
+        seleccionadasResumen.map((p) => {
+          var catItem = catalogPorId.get(p.catalogId);
+          var linea = previewLinea(p);
+          if (!catItem || !linea) return null;
+          return e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 12, padding: "5px 0", borderBottom: `1px solid ${a.border}` }, children: [
+            e.jsxs("span", { children: [catItem.desc, " — ", cantidades[p.catalogId], " ", catItem.unidad] }),
+            e.jsx("span", { style: { fontWeight: 700 }, children: ne(linea.totalLinea, cfg) }),
+          ]}, p.catalogId);
+        }),
+        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 14, paddingTop: 10, borderTop: `1px solid ${a.border}` }, children: [
+          e.jsxs("div", { style: { fontSize: 14, fontWeight: 700 }, children: ["Total estimado: ", ne(totalEstimado, cfg)] }),
+          e.jsxs("div", { style: { display: "flex", gap: 8 }, children: [
+            e.jsx("button", { style: c.btn("s"), onClick: () => setPaso("detalle"), children: "← Volver" }),
+            e.jsx("button", { style: c.btn("p"), onClick: confirmarYAgregar, children: "✅ Confirmar y agregar" }),
+          ]}),
+        ]}),
+      ]});
+    }
+
+    return e.jsx("div", {
+      style: { position: "fixed", inset: 0, background: "rgba(0,0,0,.85)", zIndex: 6000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 },
+      onClick: onClose,
+      children: e.jsx("div", {
+        style: { background: a.card, border: `1px solid ${a.border}`, borderRadius: 14, padding: "22px 24px", maxWidth: 620, width: "100%", maxHeight: "88vh", overflowY: "auto" },
+        onClick: (ev) => ev.stopPropagation(),
+        children: contenido,
+      }),
+    });
+  }
   function lg({
     clients: t,
     catalog: i,
@@ -40000,7 +40374,8 @@ MATERIALES:
       [K, y] = V(!1),
       [P, A] = V(null),
       [S, O] = V(!0),
-      [cargosSugeridos, setCargosSugeridos] = V(null);
+      [cargosSugeridos, setCargosSugeridos] = V(null),
+      [mostrarSelectorSoluciones, setMostrarSelectorSoluciones] = V(!1);
     const catalogItemSatisface = (cid, key) => {
       var ci = i.find((W) => String(W.id) === String(cid));
       return !!(
@@ -40375,6 +40750,26 @@ MATERIALES:
                 }),
               ),
                 y(!1));
+            },
+          }),
+        mostrarSelectorSoluciones &&
+          e.jsx(EcpSelectorSoluciones, {
+            catalog: i,
+            apus: n,
+            materiales: l,
+            cfg: r,
+            budgetItems: I.items,
+            capitulos: I.capitulos,
+            onClose: () => setMostrarSelectorSoluciones(!1),
+            onApply: (resultado) => {
+              D((W) => u(d({}, W), { items: resultado.items }));
+              var todasSugerencias = [];
+              (resultado.agregados || []).forEach((catItem) => {
+                var s = generarCargosSugeridos(catItem, resultado.items);
+                s && s.length > 0 && (todasSugerencias = [...todasSugerencias, ...s]);
+              });
+              todasSugerencias.length > 0 && setCargosSugeridos(todasSugerencias);
+              setMostrarSelectorSoluciones(!1);
             },
           }),
         k &&
@@ -40832,6 +41227,14 @@ MATERIALES:
                               }),
                               onClick: agregarCapitulo,
                               children: "+ Agregar capítulo",
+                            }),
+                            e.jsx("button", {
+                              style: u(d({}, c.btn("s")), {
+                                fontSize: 12,
+                                padding: "5px 10px",
+                              }),
+                              onClick: () => setMostrarSelectorSoluciones(!0),
+                              children: "🧩 Agregar solución",
                             }),
                             e.jsx("button", {
                               style: c.btn("g"),
