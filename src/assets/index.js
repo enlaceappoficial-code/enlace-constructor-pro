@@ -33236,423 +33236,153 @@ ${r.empresa}`;
   var Xf = [
     {
       id: "bano",
+      esModerna: true,
       nombre: "🚿 Remodelación Baño",
-      desc: "Baño completo: demolición, revestimientos, artefactos, instalaciones",
-      items: [
+      desc: "Cambio de cerámicos y artefactos sanitarios estándar en baño existente.",
+      tipoProyecto: "Remodelación",
+      requiereVisita: true,
+      capitulos: [
         {
-          desc: "Demolición revestimientos baño",
-          cant: 12,
-          unidad: "m²",
-          _cid: "100",
-        },
-        { desc: "Estuco interior", cant: 12, unidad: "m²", _cid: "18" },
-        {
-          desc: "Cerámico muro ducha 30x60cm",
-          cant: 8,
-          unidad: "m²",
-          _cid: "63",
-        },
-        { desc: "Cerámico piso 45x45cm", cant: 4, unidad: "m²", _cid: "60" },
-        {
-          desc: "Punto agua PPR (por punto)",
-          cant: 4,
-          unidad: "unidad",
-          _cid: "90",
-        },
-        {
-          desc: "Punto desagüe PVC (por punto)",
-          cant: 6,
-          unidad: "ml",
-          _cid: "161",
-        },
-        {
-          desc: "WC con bidet incluido",
-          cant: 1,
-          unidad: "unidad",
-          _cid: "222",
-        },
-        {
-          desc: "Lavamanos + grifería",
-          cant: 1,
-          unidad: "unidad",
-          _cid: "221",
-        },
-        {
-          desc: "Ducha + grifería termostática",
-          cant: 1,
-          unidad: "unidad",
-          _cid: "220",
-        },
-        {
-          desc: "Punto de luz (foco LED empotrado)",
-          cant: 2,
-          unidad: "unidad",
-          _cid: "80",
-        },
-        {
-          desc: "Pintura cielo baño impermeabilizante",
-          cant: 4,
-          unidad: "m²",
-          _cid: "3",
-        },
+          codigo: "cap-01",
+          nombre: "Baño",
+          orden: 1,
+          soluciones: [{ solucionId: "sol-006-remodelacion-basica-bano", obligatoria: true }],
+          partidasDirectas: [
+            { catalogId: 40516, obligatoria: false, cantidadSugerida: 12 }
+          ]
+        }
       ],
+      preguntasIniciales: [
+        "¿El cielo o los muros sin cerámico requieren tratamiento antihongos previo a la pintura?"
+      ],
+      advertencias: [
+        "Incluir la partida de repintado antihongos si hay presencia visible de humedad."
+      ]
     },
     {
       id: "cocina",
+      esModerna: true,
       nombre: "🍳 Remodelación Cocina",
-      desc: "Cocina completa: revestimientos, instalaciones, muebles",
-      items: [
+      desc: "Renovación de pisos, muros y muebles de cocina.",
+      tipoProyecto: "Remodelación",
+      requiereVisita: true,
+      capitulos: [
         {
-          desc: "Demolición revestimientos cocina",
-          cant: 15,
-          unidad: "m²",
-          _cid: "100",
-        },
-        { desc: "Estuco interior", cant: 15, unidad: "m²", _cid: "18" },
-        { desc: "Cerámico muro cocina", cant: 8, unidad: "m²", _cid: "63" },
-        { desc: "Cerámico piso 45x45cm", cant: 12, unidad: "m²", _cid: "60" },
-        {
-          desc: "Punto agua PPR (por punto)",
-          cant: 3,
-          unidad: "unidad",
-          _cid: "90",
-        },
-        {
-          desc: "Punto desagüe PVC (por punto)",
-          cant: 4,
-          unidad: "ml",
-          _cid: "161",
-        },
-        {
-          desc: "Punto de luz (foco LED empotrado)",
-          cant: 4,
-          unidad: "unidad",
-          _cid: "80",
-        },
-        {
-          desc: "Punto eléctrico toma corriente triple",
-          cant: 4,
-          unidad: "unidad",
-          _cid: "81",
-        },
-        {
-          desc: "Pintura muros interiores (2 manos + sellador)",
-          cant: 15,
-          unidad: "m²",
-          _cid: "1",
-        },
+          codigo: "cap-01",
+          nombre: "Cocina",
+          orden: 1,
+          soluciones: [{ solucionId: "sol-004-cambio-piso-ceramico", obligatoria: true }],
+          partidasDirectas: [
+            { catalogId: 337, obligatoria: true, cantidadSugerida: 3 },
+            { catalogId: 40007, obligatoria: false, cantidadSugerida: 1 }
+          ]
+        }
       ],
+      preguntasIniciales: [
+        "¿Se repararán los muebles aéreos existentes o se instalarán muebles base nuevos?"
+      ],
+      advertencias: [
+        "Faltan partidas directas de muebles aéreos en esta configuración por límite de alcance."
+      ]
+    },
+    {
+      id: "techo",
+      esModerna: true,
+      nombre: "🛠️ Cambio Cubierta / Techo",
+      desc: "Mantención de techo, limpieza y cambio de canaletas y bajantes.",
+      tipoProyecto: "Mantención",
+      requiereVisita: true,
+      capitulos: [
+        {
+          codigo: "cap-01",
+          nombre: "Techumbre y Canaletas",
+          orden: 1,
+          soluciones: [
+            { solucionId: "sol-001-filtracion-techumbre", obligatoria: false },
+            { solucionId: "sol-002-cambio-canaleta-bajante", obligatoria: true }
+          ],
+          partidasDirectas: [
+            { catalogId: 79, obligatoria: false, cantidadSugerida: 20 }
+          ]
+        }
+      ],
+      preguntasIniciales: [
+        "¿Cuántos metros lineales de canaleta se van a cambiar?",
+        "¿Hay sectores de la fachada que requieran un repaso de pintura exterior por daños de humedad?"
+      ],
+      advertencias: [
+        "El repaso de pintura exterior es opcional y solo cubre 1 mano."
+      ]
+    },
+    {
+      id: "pintura",
+      esModerna: true,
+      nombre: "🎨 Pintura Completa Interior",
+      desc: "Renovación estética completa de pintura en muros, cielos, puertas y ventanas.",
+      tipoProyecto: "Remodelación",
+      requiereVisita: false,
+      capitulos: [
+        {
+          codigo: "cap-01",
+          nombre: "Pintura y Terminaciones",
+          orden: 1,
+          soluciones: [{ solucionId: "sol-003-pintura-interior-habitacion", obligatoria: true }],
+          partidasDirectas: [
+            { catalogId: 40, obligatoria: true, cantidadSugerida: 50 },
+            { catalogId: 41, obligatoria: false, cantidadSugerida: 5 }
+          ]
+        }
+      ],
+      preguntasIniciales: [
+        "¿Se pintarán también los cielos de la vivienda?",
+        "¿Las puertas y ventanas de madera requieren pintura de esmalte?"
+      ],
+      advertencias: [
+        "La solución sol-003 solo incluye muros, por lo que cielos y puertas se cargan como partidas directas adicionales."
+      ]
     },
     {
       id: "ampliacion",
       nombre: "🏠 Ampliación Habitación",
-      desc: "Ampliación con estructura, cubierta, terminaciones",
-      items: [
-        { desc: "Radier hormigón H-20", cant: 12, unidad: "m²", _cid: "10" },
-        {
-          desc: "Muro albañilería reforzada c/bloques",
-          cant: 24,
-          unidad: "m²",
-          _cid: "12",
-        },
-        {
-          desc: "Techumbre cerchas pino + zinc 0.35",
-          cant: 20,
-          unidad: "m²",
-          _cid: "40",
-        },
-        {
-          desc: "Cielo volcanita s/correas pino",
-          cant: 20,
-          unidad: "m²",
-          _cid: "48",
-        },
-        {
-          desc: "Tabique Metalcon 89mm + lana mineral + 1 placa yeso",
-          cant: 12,
-          unidad: "m²",
-          _cid: "22",
-        },
-        { desc: "Estuco exterior", cant: 24, unidad: "m²", _cid: "17" },
-        { desc: "Estuco interior", cant: 36, unidad: "m²", _cid: "18" },
-        {
-          desc: "Piso flotante laminado AC4",
-          cant: 20,
-          unidad: "m²",
-          _cid: "62",
-        },
-        {
-          desc: "Puerta interior 90x210cm machihembrada",
-          cant: 1,
-          unidad: "unidad",
-          _cid: "70",
-        },
-        {
-          desc: "Pintura muros interiores (2 manos + sellador)",
-          cant: 36,
-          unidad: "m²",
-          _cid: "1",
-        },
-        {
-          desc: "Punto de luz (foco LED empotrado)",
-          cant: 3,
-          unidad: "unidad",
-          _cid: "80",
-        },
-        {
-          desc: "Punto eléctrico toma corriente triple",
-          cant: 3,
-          unidad: "unidad",
-          _cid: "81",
-        },
-      ],
-    },
-    {
-      id: "techo",
-      nombre: "🏚️ Cambio Cubierta / Techo",
-      desc: "Retiro cubierta existente y nueva instalación zinc",
-      items: [
-        {
-          desc: "Demolición y retiro cubierta existente",
-          cant: 60,
-          unidad: "m²",
-          _cid: "101",
-        },
-        {
-          desc: "Techumbre cerchas pino + zinc 0.35",
-          cant: 60,
-          unidad: "m²",
-          _cid: "40",
-        },
-        {
-          desc: "Ojalaería y canaletas zinc",
-          cant: 24,
-          unidad: "ml",
-          _cid: "106",
-        },
-        { desc: "Bajante PVC 100mm", cant: 6, unidad: "ml", _cid: "105" },
-      ],
+      desc: "[Próximamente] Plantilla en actualización",
+      bloqueada: true,
+      items: []
     },
     {
       id: "radier",
-      nombre: "🧱 Radier + Pavimento",
-      desc: "Radier de hormigón con terminación cerámica o piso flotante",
-      items: [
-        {
-          desc: "Excavación manual fundaciones",
-          cant: 3,
-          unidad: "m³",
-          _cid: "130",
-        },
-        {
-          desc: "Nivelación y compactación terreno (máquina)",
-          cant: 20,
-          unidad: "m²",
-          _cid: "213",
-        },
-        {
-          desc: "Revalses (moldaje contorno radier)",
-          cant: 20,
-          unidad: "ml",
-          _cid: "210",
-        },
-        {
-          desc: "Impermeabilización bajo radier (polietileno)",
-          cant: 20,
-          unidad: "m²",
-          _cid: "212",
-        },
-        {
-          desc: "Enfierradura malla electrosoldada colocada",
-          cant: 20,
-          unidad: "m²",
-          _cid: "211",
-        },
-        { desc: "Radier hormigón H-20", cant: 20, unidad: "m²", _cid: "10" },
-        { desc: "Cerámico piso 45x45cm", cant: 20, unidad: "m²", _cid: "60" },
-      ],
-    },
-    {
-      id: "pintura",
-      nombre: "🎨 Pintura Completa Interior",
-      desc: "Pintura de muros y cielos interior completa",
-      items: [
-        {
-          desc: "Pintura muros interiores (2 manos + sellador)",
-          cant: 80,
-          unidad: "m²",
-          _cid: "1",
-        },
-        { desc: "Pintura cielos (2 manos)", cant: 40, unidad: "m²" },
-        {
-          desc: "Pintura puertas y ventanas (esmalte 2 manos)",
-          cant: 12,
-          unidad: "m²",
-          _cid: "4",
-        },
-      ],
+      nombre: "🏗️ Radier + Pavimento",
+      desc: "[Próximamente] Plantilla en actualización",
+      bloqueada: true,
+      items: []
     },
     {
       id: "electrico",
       nombre: "⚡ Instalación Eléctrica",
-      desc: "Instalación eléctrica básica domiciliaria",
-      items: [
-        {
-          desc: "Punto de luz (foco LED empotrado)",
-          cant: 10,
-          unidad: "unidad",
-          _cid: "80",
-        },
-        {
-          desc: "Punto eléctrico toma corriente triple",
-          cant: 8,
-          unidad: "unidad",
-          _cid: "81",
-        },
-        {
-          desc: "Punto eléctrico 220V (lavadora/horno)",
-          cant: 2,
-          unidad: "unidad",
-          _cid: "82",
-        },
-        {
-          desc: "Tablero eléctrico 12 circuitos (inst.)",
-          cant: 1,
-          unidad: "unidad",
-          _cid: "83",
-        },
-        {
-          desc: "Cableado principal 4mm² (ml)",
-          cant: 20,
-          unidad: "ml",
-          _cid: "223",
-        },
-      ],
+      desc: "[Próximamente] Plantilla en actualización",
+      bloqueada: true,
+      items: []
     },
     {
       id: "cierre",
-      nombre: "🔒 Cierre Perimetral",
-      desc: "Reja perimetral metálica con fundaciones",
-      items: [
-        {
-          desc: "Reja metálica tubo cuadrado 40x40mm",
-          cant: 20,
-          unidad: "m²",
-          _cid: "120",
-        },
-        { desc: "Fundación corrida H-20", cant: 0.8, unidad: "m³", _cid: "14" },
-        {
-          desc: "Pilares tubulares HEB 100 (inst.)",
-          cant: 6,
-          unidad: "unidad",
-          _cid: "123",
-        },
-        {
-          desc: "Puerta metálica 1 hoja 1x2m",
-          cant: 1,
-          unidad: "unidad",
-          _cid: "129",
-        },
-        {
-          desc: "Pintura anticorrosiva + esmalte reja",
-          cant: 20,
-          unidad: "m²",
-          _cid: "5",
-        },
-      ],
+      nombre: "🚧 Cierre Perimetral",
+      desc: "[Próximamente] Plantilla en actualización",
+      bloqueada: true,
+      items: []
     },
     {
       id: "quincho",
-      nombre: "🔥 Quincho / Área Exterior",
-      desc: "Quincho con terraza y pavimento exterior",
-      items: [
-        {
-          desc: "Quincho estructura madera (fabricación+inst.)",
-          cant: 16,
-          unidad: "m²",
-          _cid: "196",
-        },
-        {
-          desc: "Cubierta zinc quincho/pérgola",
-          cant: 18,
-          unidad: "m²",
-          _cid: "198",
-        },
-        {
-          desc: "Deck madera tratada exterior",
-          cant: 20,
-          unidad: "m²",
-          _cid: "200",
-        },
-        {
-          desc: "Pavimento adoquín jardín c/base",
-          cant: 30,
-          unidad: "m²",
-          _cid: "203",
-        },
-        {
-          desc: "Iluminación exterior (por punto)",
-          cant: 4,
-          unidad: "unidad",
-          _cid: "209",
-        },
-      ],
+      nombre: "🥩 Quincho / Área Exterior",
+      desc: "[Próximamente] Plantilla en actualización",
+      bloqueada: true,
+      items: []
     },
     {
       id: "piscina",
       nombre: "🏊 Piscina Básica",
-      desc: "Piscina rectangular con sistema de filtración",
-      items: [
-        {
-          desc: "Excavación piscina (maquinaria)",
-          cant: 40,
-          unidad: "m³",
-          _cid: "187",
-        },
-        {
-          desc: "Estructura hormigón armado piscina H-25",
-          cant: 8,
-          unidad: "m³",
-          _cid: "188",
-        },
-        {
-          desc: "Impermeabilización piscina (membrana)",
-          cant: 60,
-          unidad: "m²",
-          _cid: "189",
-        },
-        {
-          desc: "Revestimiento gresite/cerámico piscina",
-          cant: 50,
-          unidad: "m²",
-          _cid: "190",
-        },
-        {
-          desc: "Sistema filtración + bomba (inst.)",
-          cant: 1,
-          unidad: "unidad",
-          _cid: "191",
-        },
-        {
-          desc: "Escalera acero inoxidable piscina",
-          cant: 1,
-          unidad: "unidad",
-          _cid: "193",
-        },
-        {
-          desc: "Vereda perimetral piscina hormigón",
-          cant: 20,
-          unidad: "m²",
-          _cid: "194",
-        },
-        {
-          desc: "Iluminación subacuática LED (por punto)",
-          cant: 2,
-          unidad: "unidad",
-          _cid: "192",
-        },
-      ],
-    },
+      desc: "[Próximamente] Plantilla en actualización",
+      bloqueada: true,
+      items: []
+    }
   ];
   function Jf({ budget: t, budgets: i, clients: r, cfg: n, onClose: l }) {
     const [o, s] = V("");
@@ -34366,11 +34096,253 @@ ${r.empresa}`;
       }),
     });
   }
-  function Zf({ onSelect: t, onClose: i, plantillasUser: r, onDeleteUser: n }) {
+  function Zf({ onSelect: t, onClose: i, plantillasUser: r, onDeleteUser: n, catalog, apus, materiales, cfg }) {
     const [l, o] = V(null),
-      [s, m] = V(r && r.length > 0 ? "user" : "std");
+      [s, m] = V(r && r.length > 0 ? "user" : "std"),
+      [paso, setPaso] = V("lista"),
+      [marcadas, setMarcadas] = V(() => new Set());
+
     var p = Xf,
       C = s === "user" ? r : p;
+
+    var catalogPorId = new Map((catalog || []).map((cv) => [cv.id, cv]));
+
+    function handleOpcional(id, checked) {
+      const next = new Set(marcadas);
+      if (checked) next.add(id);
+      else next.delete(id);
+      setMarcadas(next);
+    }
+
+    function prepararPlantillaModerna(plantilla) {
+      var cantInit = {};
+      var marcInit = new Set();
+      (plantilla.capitulos || []).forEach(cap => {
+        (cap.partidasDirectas || []).forEach(pd => {
+          if (pd.obligatoria) marcInit.add(pd.catalogId);
+          cantInit[pd.catalogId] = pd.cantidadSugerida || 1;
+        });
+        (cap.soluciones || []).forEach(solRef => {
+          var sol = SOLUCIONES_COMPUESTAS_ACTIVAS.find(s => s.id === solRef.solucionId);
+          if (sol) {
+            sol.partidas.forEach(p => {
+              if (p.obligatoria) marcInit.add(p.catalogId);
+              cantInit[p.catalogId] = p.cantidadBase || 1;
+            });
+          }
+        });
+      });
+      setMarcadas(marcInit);
+      setPaso("revision");
+    }
+
+    function construirItemDesdeCatalogo(catItem, cantidad, capId) {
+      var apuMatch = (apus || []).find(
+        (q) => q.catalogId === catItem.id && !q.esSubcontrato && ((q.materiales && q.materiales.length > 0) || parseFloat(q.precioMO) > 0),
+      );
+      var item = {
+        desc: catItem.desc,
+        cant: cantidad,
+        unidad: catItem.unidad,
+        precio: catItem.precio,
+        _cid: String(catItem.id),
+        _tipoCosto: "auto",
+        capituloId: capId || "",
+      };
+      if (apuMatch) item._apuMatUnit = parseFloat(li(apuMatch, materiales || [], cfg).matTotal) || 0;
+      return item;
+    }
+
+    function getPrecioLinea(catId, cant) {
+      var c = catalogPorId.get(catId);
+      if (!c) return 0;
+      return c.precio * cant;
+    }
+
+    function calcularTotalModerna() {
+      var total = 0;
+      (l.capitulos || []).forEach(cap => {
+        (cap.partidasDirectas || []).forEach(pd => {
+          if (pd.obligatoria || marcadas.has(pd.catalogId)) {
+            total += getPrecioLinea(pd.catalogId, pd.cantidadSugerida || 1);
+          }
+        });
+        (cap.soluciones || []).forEach(solRef => {
+          var sol = SOLUCIONES_COMPUESTAS_ACTIVAS.find(s => s.id === solRef.solucionId);
+          if (sol) {
+            sol.partidas.forEach(p => {
+              if (p.obligatoria || marcadas.has(p.catalogId)) {
+                total += getPrecioLinea(p.catalogId, p.cantidadBase || 1);
+              }
+            });
+          }
+        });
+      });
+      return total;
+    }
+
+    function aplicarPlantillaModerna() {
+      var itemsResult = [];
+      var capitulosResult = [];
+      var capIdMap = {};
+
+      (l.capitulos || []).forEach((c) => {
+        var newCapId = Math.random().toString(36).substr(2, 9);
+        capIdMap[c.codigo] = newCapId;
+        capitulosResult.push({ id: newCapId, nombre: c.nombre, orden: c.orden });
+
+        (c.partidasDirectas || []).forEach(pd => {
+          if (pd.obligatoria || marcadas.has(pd.catalogId)) {
+            var catItem = catalogPorId.get(pd.catalogId);
+            if (catItem) {
+              itemsResult.push(construirItemDesdeCatalogo(catItem, pd.cantidadSugerida || 1, newCapId));
+            }
+          }
+        });
+
+        (c.soluciones || []).forEach(solRef => {
+          var sol = SOLUCIONES_COMPUESTAS_ACTIVAS.find(s => s.id === solRef.solucionId);
+          if (sol) {
+            sol.partidas.forEach(sp => {
+              if (sp.obligatoria || marcadas.has(sp.catalogId)) {
+                var catItem = catalogPorId.get(sp.catalogId);
+                if (catItem) {
+                  itemsResult.push(construirItemDesdeCatalogo(catItem, sp.cantidadBase || 1, newCapId));
+                }
+              }
+            });
+          }
+        });
+      });
+
+      t({ esModerna: true, capitulos: capitulosResult, items: itemsResult });
+    }
+
+    if (paso === "revision" && l && l.esModerna) {
+      return e.jsx("div", {
+        style: {
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0,0,0,.85)",
+          zIndex: 6e3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 20,
+        },
+        onClick: i,
+        children: e.jsxs("div", {
+          style: {
+            background: a.card,
+            border: `1px solid ${a.border}`,
+            borderRadius: 14,
+            padding: "22px 24px",
+            maxWidth: 700,
+            width: "100%",
+            maxHeight: "88vh",
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: 12
+          },
+          onClick: (b) => b.stopPropagation(),
+          children: [
+            e.jsx("div", { style: { fontSize: 18, fontWeight: 700 }, children: l.nombre }),
+            e.jsx("div", { style: { fontSize: 13, color: a.muted }, children: l.desc }),
+            
+            l.preguntasIniciales && l.preguntasIniciales.length > 0 && e.jsxs("div", {
+              style: { background: a.sb, padding: 12, borderRadius: 8, border: `1px solid ${a.border}` },
+              children: [
+                e.jsx("div", { style: { fontWeight: 700, marginBottom: 8, fontSize: 12, color: a.accent }, children: "Preguntas Frecuentes:" }),
+                ...l.preguntasIniciales.map((p, idx) => e.jsx("div", { style: { fontSize: 12, color: a.text, marginBottom: 4 }, children: `• ${p}` }, idx))
+              ]
+            }),
+
+            l.advertencias && l.advertencias.length > 0 && e.jsxs("div", {
+              style: { background: "rgba(251,146,60,0.1)", padding: 12, borderRadius: 8, border: "1px solid #fb923c" },
+              children: [
+                e.jsx("div", { style: { fontWeight: 700, marginBottom: 8, fontSize: 12, color: "#fb923c" }, children: "⚠️ Advertencias:" }),
+                ...l.advertencias.map((ad, idx) => e.jsx("div", { style: { fontSize: 12, color: a.text, marginBottom: 4 }, children: `• ${ad}` }, idx))
+              ]
+            }),
+
+            e.jsx("div", { style: { fontSize: 14, fontWeight: 700, marginTop: 10 }, children: "Partidas Incluidas:" }),
+            e.jsx("div", {
+              style: { maxHeight: 200, overflowY: "auto", border: `1px solid ${a.border}`, borderRadius: 8, padding: 10 },
+              children: (l.capitulos || []).map((cap, cIdx) => e.jsxs("div", {
+                style: { marginBottom: 12 },
+                children: [
+                  e.jsx("div", { style: { fontWeight: 700, fontSize: 13, marginBottom: 6, color: a.accent }, children: cap.nombre }),
+                  ...(cap.partidasDirectas || []).map((pd, pIdx) => {
+                    var catItem = catalogPorId.get(pd.catalogId);
+                    if(!catItem) return null;
+                    return e.jsxs("label", {
+                      style: { display: "flex", alignItems: "center", gap: 8, fontSize: 12, marginBottom: 4, cursor: "pointer" },
+                      children: [
+                        e.jsx("input", {
+                          type: "checkbox",
+                          disabled: pd.obligatoria,
+                          checked: pd.obligatoria || marcadas.has(pd.catalogId),
+                          onChange: (ev) => handleOpcional(pd.catalogId, ev.target.checked)
+                        }),
+                        e.jsx("span", { style: { color: pd.obligatoria ? a.text : a.muted }, children: catItem.desc }),
+                        e.jsx("span", { style: { marginLeft: "auto", fontWeight: 600 }, children: ne(getPrecioLinea(pd.catalogId, pd.cantidadSugerida || 1)) })
+                      ]
+                    }, `pd-${cIdx}-${pIdx}`);
+                  }),
+                  ...(cap.soluciones || []).map((solRef, sIdx) => {
+                    var sol = SOLUCIONES_COMPUESTAS_ACTIVAS.find(s => s.id === solRef.solucionId);
+                    if(!sol) return null;
+                    return sol.partidas.map((sp, spIdx) => {
+                      var catItem = catalogPorId.get(sp.catalogId);
+                      if(!catItem) return null;
+                      return e.jsxs("label", {
+                        style: { display: "flex", alignItems: "center", gap: 8, fontSize: 12, marginBottom: 4, cursor: "pointer", marginLeft: 10 },
+                        children: [
+                          e.jsx("input", {
+                            type: "checkbox",
+                            disabled: sp.obligatoria,
+                            checked: sp.obligatoria || marcadas.has(sp.catalogId),
+                            onChange: (ev) => handleOpcional(sp.catalogId, ev.target.checked)
+                          }),
+                          e.jsx("span", { style: { color: sp.obligatoria ? a.text : a.muted }, children: catItem.desc }),
+                          e.jsx("span", { style: { marginLeft: "auto", fontWeight: 600 }, children: ne(getPrecioLinea(sp.catalogId, sp.cantidadBase || 1)) })
+                        ]
+                      }, `sol-${cIdx}-${sIdx}-${spIdx}`);
+                    });
+                  })
+                ]
+              }, cIdx))
+            }),
+
+            e.jsxs("div", {
+              style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10, padding: 12, background: a.sb, borderRadius: 8 },
+              children: [
+                e.jsx("div", { style: { fontSize: 14, fontWeight: 700 }, children: "Total Estimado:" }),
+                e.jsx("div", { style: { fontSize: 18, fontWeight: 700, color: a.accent }, children: ne(calcularTotalModerna()) })
+              ]
+            }),
+
+            e.jsxs("div", {
+              style: { display: "flex", gap: 8, marginTop: 10 },
+              children: [
+                e.jsx("button", {
+                  style: u(d({}, c.btn("p")), { flex: 1, padding: "10px", fontWeight: 700 }),
+                  onClick: aplicarPlantillaModerna,
+                  children: "✅ Confirmar y Cargar"
+                }),
+                e.jsx("button", {
+                  style: u(d({}, c.btn("s")), { padding: "10px 16px" }),
+                  onClick: () => setPaso("lista"),
+                  children: "Atrás"
+                })
+              ]
+            })
+          ]
+        })
+      });
+    }
+
     return e.jsx("div", {
       style: {
         position: "fixed",
@@ -34481,15 +34453,18 @@ ${r.empresa}`;
                 e.jsxs(
                   "div",
                   {
-                    onClick: () => o(b),
+                    onClick: () => {
+                      if (!b.bloqueada) o(b);
+                    },
                     style: {
                       background: l && l.id === b.id ? a.accent + "22" : a.sb,
                       border: `1px solid ${l && l.id === b.id ? a.accent : a.border}`,
                       borderRadius: 10,
                       padding: "12px 14px",
-                      cursor: "pointer",
+                      cursor: b.bloqueada ? "not-allowed" : "pointer",
                       transition: "all .15s",
                       position: "relative",
+                      opacity: b.bloqueada ? 0.5 : 1
                     },
                     children: [
                       e.jsx("div", {
@@ -34509,7 +34484,7 @@ ${r.empresa}`;
                         },
                         children: b.desc,
                       }),
-                      e.jsxs("div", {
+                      !b.bloqueada && e.jsxs("div", {
                         style: {
                           display: "flex",
                           justifyContent: "space-between",
@@ -34519,7 +34494,7 @@ ${r.empresa}`;
                         children: [
                           e.jsxs("span", {
                             style: { fontSize: 11, color: a.accent },
-                            children: [b.items.length, " partidas"],
+                            children: [(b.items ? b.items.length : (b.capitulos ? "Varias" : 0)), " partidas"],
                           }),
                           b.esUsuario &&
                             b.fecha &&
@@ -34556,7 +34531,7 @@ ${r.empresa}`;
                 ),
               ),
           }),
-          l &&
+          l && !l.esModerna &&
             e.jsxs("div", {
               style: {
                 background: a.sb,
@@ -34604,8 +34579,11 @@ ${r.empresa}`;
                   fontWeight: 700,
                 }),
                 disabled: !l,
-                onClick: () => l && t(l),
-                children: "✅ Cargar plantilla",
+                onClick: () => {
+                  if(l && l.esModerna) prepararPlantillaModerna(l);
+                  else if(l) t(l);
+                },
+                children: l && l.esModerna ? "Siguiente: Revisar →" : "✅ Cargar plantilla",
               }),
               e.jsx("button", {
                 style: u(d({}, c.btn("s")), { padding: "10px 16px" }),
