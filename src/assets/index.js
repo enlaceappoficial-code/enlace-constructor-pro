@@ -34101,7 +34101,7 @@ const FLUJOS_ASISTENTE = [
   { "flujoId": "flujo-1-filtracion-techumbre", "nombre": "Filtración o problema de techumbre", "preguntas": { "tipoTrabajo": "Reparación", "recintoElemento": "Techo / Cubierta" }, "salidaPropuesta": { "plantillaBase": "techo", "soluciones": ["sol-001-filtracion-techumbre"], "partidasAdicionales": [ { "catalogId": 311, "obligatoria": true, "motivo": "Urgencia implica reparación provisoria o tarp." } ], "advertencias": ["Posible daño en estructura (cerchas/vigas) no visible hasta destapar."] } },
   { "flujoId": "flujo-2-remodelacion-bano", "nombre": "Remodelación de baño", "preguntas": { "tipoTrabajo": "Remodelación", "recintoElemento": "Baño" }, "salidaPropuesta": { "plantillaBase": "bano", "soluciones": ["sol-006-renovacion-bano"], "partidasAdicionales": [ { "catalogId": 40516, "obligatoria": true, "motivo": "Humedad visible exige tratamiento antihongos previo." } ], "advertencias": ["Si hay filtraciones internas en cañerías, el presupuesto de gasfitería aumentará."] } },
   { "flujoId": "flujo-3-pintura-interior", "nombre": "Pintura interior", "preguntas": { "tipoTrabajo": "Mantención", "recintoElemento": "Muros interiores" }, "salidaPropuesta": { "plantillaBase": "pintura", "soluciones": ["sol-003-pintura-muros"], "partidasAdicionales": [ { "catalogId": 320, "obligatoria": true, "motivo": "Pintura descascarada exige raspado y empaste completo." } ], "advertencias": ["El rendimiento de la pintura puede variar según la porosidad real del muro rasgado."] } },
-  { "flujoId": "flujo-4-cambio-piso", "nombre": "Cambio de piso", "preguntas": { "tipoTrabajo": "Remodelación", "recintoElemento": "Pisos" }, "salidaPropuesta": { "plantillaBase": "dinamica-piso", "soluciones": ["sol-005-piso-flotante"], "partidasAdicionales": [ { "catalogId": 305, "obligatoria": true, "motivo": "Retiro de alfombra y pegamento existente." } ], "advertencias": ["Si la losa bajo la alfombra está irregular, se requerirá partida de nivelación extra."] } },
+  { "flujoId": "flujo-4-cambio-piso", "nombre": "Cambio de piso", "preguntas": { "tipoTrabajo": "Remodelación", "recintoElemento": "Pisos" }, "salidaPropuesta": { "plantillaBase": "dinamica-piso", "soluciones": ["sol-005-piso-flotante"], "partidasAdicionales": [ { "catalogId": 305, "obligatoria": true, "motivo": "Retiro de alfombra y pegamento existente.", "formulaCantidad": "Math.ceil(superficie / 5)" } ], "advertencias": ["Si la losa bajo la alfombra está irregular, se requerirá partida de nivelación extra."] } },
   { "flujoId": "flujo-5-mantencion-canaletas", "nombre": "Mantención de canaletas", "preguntas": { "tipoTrabajo": "Mantención", "recintoElemento": "Canaletas y Bajantes" }, "salidaPropuesta": { "plantillaBase": "techo", "soluciones": ["sol-002-cambio-canaleta-bajante"], "partidasAdicionales": [ { "catalogId": 312, "obligatoria": true, "motivo": "Limpieza profunda de canaletas previo a reparación." } ], "advertencias": ["Los bajantes embutidos en muro no están considerados en esta limpieza superficial."] } }
 ];
 
@@ -34140,8 +34140,8 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
     const capitulos = [
       {
         nombre: "Propuesta: " + match.nombre,
-        soluciones: match.salidaPropuesta.soluciones.map(s => ({ solucionId: s, cantidadSugerida: dim })),
-        partidasDirectas: adicionales.map(a => Object.assign({}, a, { cantidadSugerida: dim }))
+        soluciones: match.salidaPropuesta.soluciones.map(s => ({ solucionId: s, cantidadSugerida: 1 })),
+        partidasDirectas: adicionales.map(a => Object.assign({}, a, { cantidadSugerida: 1 }))
       }
     ];
 
@@ -34154,7 +34154,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       _asistenteCantidadOrigen: dim,
       _asistenteUnidadPrincipal: respuestas.recintoElemento === "Pisos" || respuestas.recintoElemento === "Muros interiores" || respuestas.recintoElemento === "Techo / Cubierta" || respuestas.recintoElemento === "Baño" ? "m²" : respuestas.recintoElemento === "Canaletas y Bajantes" ? "ml" : "un",
       capitulos: capitulos,
-      preguntas: match.salidaPropuesta.advertencias.map((a, idx) => ({ id: "adv" + idx, label: "⚠️ " + a }))
+      preguntas: [...match.salidaPropuesta.advertencias, "Cantidades de partidas en gl o un (como bolsas o puntos) mantuvieron su base. Revisar manualmente según rendimiento."].map((a, idx) => ({ id: "adv" + idx, label: "⚠️ " + a }))
     };
     onGenerarPropuesta(propuesta);
   };
@@ -34220,10 +34220,19 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
         (cap.partidasDirectas || []).forEach(pd => {
           if (pd.obligatoria) marcInit.add(pd.catalogId);
           let itemCat = catalogPorId.get(pd.catalogId);
-          if (plantilla._asistenteCantidadOrigen && itemCat && itemCat.unidad === plantilla._asistenteUnidadPrincipal) {
-            cantInit[pd.catalogId] = plantilla._asistenteCantidadOrigen * (pd.cantidadBase || pd.cantidadSugerida || 1);
+          let cantidadMultiplicador = 1;
+          if (plantilla._asistenteCantidadOrigen) {
+              if (itemCat && itemCat.unidad === plantilla._asistenteUnidadPrincipal) {
+                  cantidadMultiplicador = plantilla._asistenteCantidadOrigen;
+              } else if (pd.formulaCantidad) {
+                  try {
+                      let form = pd.formulaCantidad.replace(/superficie|longitud|cantidad|dim/g, plantilla._asistenteCantidadOrigen);
+                      cantidadMultiplicador = eval(form) || 1;
+                  } catch(e) { cantidadMultiplicador = 1; }
+              }
+              cantInit[pd.catalogId] = cantidadMultiplicador * (pd.cantidadBase || pd.cantidadSugerida || 1);
           } else {
-            cantInit[pd.catalogId] = pd.cantidadSugerida || 1;
+              cantInit[pd.catalogId] = pd.cantidadSugerida || 1;
           }
         });
         (cap.soluciones || []).forEach(solRef => {
@@ -34232,10 +34241,19 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
             sol.partidas.forEach(p => {
               if (p.obligatoria) marcInit.add(p.catalogId);
               let itemCat = catalogPorId.get(p.catalogId);
-              if (plantilla._asistenteCantidadOrigen && itemCat && itemCat.unidad === plantilla._asistenteUnidadPrincipal) {
-                cantInit[p.catalogId] = plantilla._asistenteCantidadOrigen * (p.cantidadBase || 1);
+              let cantidadMultiplicador = 1;
+              if (plantilla._asistenteCantidadOrigen) {
+                  if (itemCat && itemCat.unidad === plantilla._asistenteUnidadPrincipal) {
+                      cantidadMultiplicador = plantilla._asistenteCantidadOrigen;
+                  } else if (p.formulaCantidad) {
+                      try {
+                          let form = p.formulaCantidad.replace(/superficie|longitud|cantidad|dim/g, plantilla._asistenteCantidadOrigen);
+                          cantidadMultiplicador = eval(form) || 1;
+                      } catch(e) { cantidadMultiplicador = 1; }
+                  }
+                  cantInit[p.catalogId] = cantidadMultiplicador * (p.cantidadBase || 1);
               } else {
-                cantInit[p.catalogId] = (solRef.cantidadSugerida || 1) * (p.cantidadBase || 1);
+                  cantInit[p.catalogId] = (solRef.cantidadSugerida || 1) * (p.cantidadBase || 1);
               }
             });
           }
