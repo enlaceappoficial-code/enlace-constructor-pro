@@ -34098,16 +34098,14 @@ ${r.empresa}`;
   }
   
 const FLUJOS_ASISTENTE = [
-  { "flujoId": "flujo-1-filtracion-techumbre", "nombre": "Filtración o problema de techumbre", "preguntas": { "tipoTrabajo": "Reparación", "recintoElemento": "Techo / Cubierta" }, "salidaPropuesta": { "plantillaBase": "techo", "soluciones": ["sol-001-filtracion-techumbre"], "partidasAdicionales": [ { "catalogId": 80, "obligatoria": true, "motivo": "Urgencia implica reparación provisoria o tarp." } ], "advertencias": ["Posible daño en estructura (cerchas/vigas) no visible hasta destapar."] } },
+  { "flujoId": "flujo-1-filtracion-techumbre", "nombre": "Filtración o problema de techumbre", "preguntas": { "tipoTrabajo": "Reparación", "recintoElemento": "Techo / Cubierta" }, "salidaPropuesta": { "plantillaBase": "techo", "soluciones": ["sol-001-filtracion-techumbre"], "partidasAdicionales": [ { "catalogId": 311, "obligatoria": true, "motivo": "Urgencia implica reparación provisoria o tarp." } ], "advertencias": ["Posible daño en estructura (cerchas/vigas) no visible hasta destapar."] } },
   { "flujoId": "flujo-2-remodelacion-bano", "nombre": "Remodelación de baño", "preguntas": { "tipoTrabajo": "Remodelación", "recintoElemento": "Baño" }, "salidaPropuesta": { "plantillaBase": "bano", "soluciones": ["sol-006-renovacion-bano"], "partidasAdicionales": [ { "catalogId": 40516, "obligatoria": true, "motivo": "Humedad visible exige tratamiento antihongos previo." } ], "advertencias": ["Si hay filtraciones internas en cañerías, el presupuesto de gasfitería aumentará."] } },
-  { "flujoId": "flujo-3-pintura-interior", "nombre": "Pintura interior", "preguntas": { "tipoTrabajo": "Mantención", "recintoElemento": "Muros interiores" }, "salidaPropuesta": { "plantillaBase": "pintura", "soluciones": ["sol-003-pintura-muros"], "partidasAdicionales": [ { "catalogId": 42, "obligatoria": true, "motivo": "Pintura descascarada exige raspado y empaste completo." } ], "advertencias": ["El rendimiento de la pintura puede variar según la porosidad real del muro rasgado."] } },
-  { "flujoId": "flujo-4-cambio-piso", "nombre": "Cambio de piso", "preguntas": { "tipoTrabajo": "Remodelación", "recintoElemento": "Pisos" }, "salidaPropuesta": { "plantillaBase": "dinamica-piso", "soluciones": ["sol-005-piso-flotante"], "partidasAdicionales": [ { "catalogId": 99, "obligatoria": true, "motivo": "Retiro de alfombra y pegamento existente." } ], "advertencias": ["Si la losa bajo la alfombra está irregular, se requerirá partida de nivelación extra."] } },
-  { "flujoId": "flujo-5-mantencion-canaletas", "nombre": "Mantención de canaletas", "preguntas": { "tipoTrabajo": "Mantención", "recintoElemento": "Canaletas y Bajantes" }, "salidaPropuesta": { "plantillaBase": "techo", "soluciones": ["sol-002-cambio-canaleta-bajante"], "partidasAdicionales": [ { "catalogId": 110, "obligatoria": true, "motivo": "Limpieza profunda de canaletas previo a reparación." } ], "advertencias": ["Los bajantes embutidos en muro no están considerados en esta limpieza superficial."] } }
+  { "flujoId": "flujo-3-pintura-interior", "nombre": "Pintura interior", "preguntas": { "tipoTrabajo": "Mantención", "recintoElemento": "Muros interiores" }, "salidaPropuesta": { "plantillaBase": "pintura", "soluciones": ["sol-003-pintura-muros"], "partidasAdicionales": [ { "catalogId": 320, "obligatoria": true, "motivo": "Pintura descascarada exige raspado y empaste completo." } ], "advertencias": ["El rendimiento de la pintura puede variar según la porosidad real del muro rasgado."] } },
+  { "flujoId": "flujo-4-cambio-piso", "nombre": "Cambio de piso", "preguntas": { "tipoTrabajo": "Remodelación", "recintoElemento": "Pisos" }, "salidaPropuesta": { "plantillaBase": "dinamica-piso", "soluciones": ["sol-005-piso-flotante"], "partidasAdicionales": [ { "catalogId": 305, "obligatoria": true, "motivo": "Retiro de alfombra y pegamento existente." } ], "advertencias": ["Si la losa bajo la alfombra está irregular, se requerirá partida de nivelación extra."] } },
+  { "flujoId": "flujo-5-mantencion-canaletas", "nombre": "Mantención de canaletas", "preguntas": { "tipoTrabajo": "Mantención", "recintoElemento": "Canaletas y Bajantes" }, "salidaPropuesta": { "plantillaBase": "techo", "soluciones": ["sol-002-cambio-canaleta-bajante"], "partidasAdicionales": [ { "catalogId": 312, "obligatoria": true, "motivo": "Limpieza profunda de canaletas previo a reparación." } ], "advertencias": ["Los bajantes embutidos en muro no están considerados en esta limpieza superficial."] } }
 ];
 
-function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta }) {
-  const [paso, setPaso] = V(0);
-  const [respuestas, setRespuestas] = V({ tipoTrabajo: "", recintoElemento: "", dimension: "", condicionExistente: "", materiales: "", urgencia: "", visitaTecnica: "" });
+function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso, setPaso, respuestas, setRespuestas }) {
 
   const pasosConfig = [
     { key: "tipoTrabajo", label: "Tipo de Trabajo", options: ["Reparación", "Mantención", "Remodelación", "Obra Nueva"] },
@@ -40416,6 +40414,8 @@ MATERIALES:
     });
     const [mostrarAsistente, setMostrarAsistente] = V(!1);
     const [plantillaDelAsistente, setPlantillaDelAsistente] = V(null);
+    const [asisPaso, setAsisPaso] = V(0);
+    const [asisRespuestas, setAsisRespuestas] = V({ tipoTrabajo: "", recintoElemento: "", dimension: "", condicionExistente: "", materiales: "", urgencia: "", visitaTecnica: "" });
     const [I, D] = V(() =>
         m
           ? {
@@ -40821,20 +40821,30 @@ MATERIALES:
             onClose: () => A(null),
           }),
         
-        mostrarAsistente && e.jsx(AsistenteInteligenteModal, {
+                mostrarAsistente && e.jsx(AsistenteInteligenteModal, {
           catalog: i,
+          paso: asisPaso,
+          setPaso: setAsisPaso,
+          respuestas: asisRespuestas,
+          setRespuestas: setAsisRespuestas,
           onClose: () => setMostrarAsistente(!1),
           onGenerarPropuesta: (propuesta) => {
             setMostrarAsistente(!1);
             setPlantillaDelAsistente(propuesta);
-            y(!0); // Open Zf
+            y(!0);
           }
         }),
 K &&
           e.jsx(Zf, { plantillaAsistente: plantillaDelAsistente,
             plantillasUser: p || [],
             onDeleteUser: C,
-            onClose: () => { setPlantillaDelAsistente(null); y(!1); },
+            onClose: () => { 
+            if (plantillaDelAsistente) {
+                setPlantillaDelAsistente(null);
+                setMostrarAsistente(!0);
+            }
+            y(!1); 
+          },
             onSelect: (W) => {
               var T = (W.items || []).map((L, E) => {
                 var M = L._cid
