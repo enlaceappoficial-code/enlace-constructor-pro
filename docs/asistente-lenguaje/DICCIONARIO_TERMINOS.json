@@ -10,7 +10,7 @@
     "bano": ["baño", "wc", "inodoro", "ducha", "tina", "bano"],
     "pisos": ["piso", "suelo", "alfombra", "flotante", "ceramica", "radier", "cerámica"],
     "muros_interiores": ["muro", "pared", "tabique", "pieza", "living", "comedor", "dormitorio", "paredes", "muros"],
-    "canaletas_bajantes": ["canaleta", "canaletas", "bajante", "bajadas", "tubo del agua", "desagüe techo"],
+    "canaletas_bajantes": ["canaleta", "canaletas", "bajante", "bajantes", "bajadas", "tubo del agua", "tubos del agua", "tubos de agua", "desagüe techo", "desagüe de techo", "desagües de techo"],
     "cocina": ["cocina", "lavaplatos", "mueble cocina"]
   },
   "material": {
