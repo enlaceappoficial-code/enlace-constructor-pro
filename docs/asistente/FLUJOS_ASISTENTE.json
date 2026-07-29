@@ -1,0 +1,102 @@
+[
+  {
+    "flujoId": "flujo-1-filtracion-techumbre",
+    "nombre": "Filtración o problema de techumbre",
+    "preguntas": {
+      "tipoTrabajo": "Reparación",
+      "recintoElemento": "Techo / Cubierta",
+      "condicionExistente": "Filtración activa",
+      "materiales": "Zinc / Teja",
+      "urgencia": "Inmediata",
+      "visitaTecnica": "Requerida"
+    },
+    "salidaPropuesta": {
+      "plantillaBase": "techo",
+      "soluciones": ["sol-001-filtracion-techumbre"],
+      "partidasAdicionales": [
+        { "catalogId": 80, "obligatoria": true, "motivo": "Urgencia implica reparación provisoria o tarp." }
+      ],
+      "advertencias": ["Posible daño en estructura (cerchas/vigas) no visible hasta destapar."]
+    }
+  },
+  {
+    "flujoId": "flujo-2-remodelacion-bano",
+    "nombre": "Remodelación de baño",
+    "preguntas": {
+      "tipoTrabajo": "Remodelación",
+      "recintoElemento": "Baño",
+      "condicionExistente": "Humedad visible en muros",
+      "materiales": "Cerámica",
+      "urgencia": "Estándar",
+      "visitaTecnica": "Opcional"
+    },
+    "salidaPropuesta": {
+      "plantillaBase": "bano",
+      "soluciones": ["sol-006-renovacion-bano"],
+      "partidasAdicionales": [
+        { "catalogId": 40516, "obligatoria": true, "motivo": "Humedad visible exige tratamiento antihongos previo." }
+      ],
+      "advertencias": ["Si hay filtraciones internas en cañerías, el presupuesto de gasfitería aumentará."]
+    }
+  },
+  {
+    "flujoId": "flujo-3-pintura-interior",
+    "nombre": "Pintura interior",
+    "preguntas": {
+      "tipoTrabajo": "Mantención",
+      "recintoElemento": "Muros interiores",
+      "condicionExistente": "Pintura descascarada",
+      "materiales": "Esmalte al agua",
+      "urgencia": "Estándar",
+      "visitaTecnica": "No requerida"
+    },
+    "salidaPropuesta": {
+      "plantillaBase": "pintura",
+      "soluciones": ["sol-003-pintura-muros"],
+      "partidasAdicionales": [
+        { "catalogId": 42, "obligatoria": true, "motivo": "Pintura descascarada exige raspado y empaste completo." }
+      ],
+      "advertencias": ["El rendimiento de la pintura puede variar según la porosidad real del muro rasgado."]
+    }
+  },
+  {
+    "flujoId": "flujo-4-cambio-piso",
+    "nombre": "Cambio de piso",
+    "preguntas": {
+      "tipoTrabajo": "Remodelación",
+      "recintoElemento": "Pisos",
+      "condicionExistente": "Piso actual es alfombra",
+      "materiales": "Piso Flotante",
+      "urgencia": "Estándar",
+      "visitaTecnica": "No requerida"
+    },
+    "salidaPropuesta": {
+      "plantillaBase": "dinamica-piso",
+      "soluciones": ["sol-005-piso-flotante"],
+      "partidasAdicionales": [
+        { "catalogId": 99, "obligatoria": true, "motivo": "Retiro de alfombra y pegamento existente." }
+      ],
+      "advertencias": ["Si la losa bajo la alfombra está irregular, se requerirá partida de nivelación extra."]
+    }
+  },
+  {
+    "flujoId": "flujo-5-mantencion-canaletas",
+    "nombre": "Mantención de canaletas",
+    "preguntas": {
+      "tipoTrabajo": "Mantención",
+      "recintoElemento": "Canaletas y Bajantes",
+      "condicionExistente": "Obstrucción por hojas",
+      "materiales": "PVC",
+      "urgencia": "Estándar",
+      "visitaTecnica": "No requerida"
+    },
+    "salidaPropuesta": {
+      "plantillaBase": "techo",
+      "soluciones": ["sol-002-cambio-canaleta-bajante"],
+      "partidasAdicionales": [
+        { "catalogId": 110, "obligatoria": true, "motivo": "Limpieza profunda de canaletas previo a reparación." }
+      ],
+      "advertencias": ["Los bajantes embutidos en muro no están considerados en esta limpieza superficial."]
+    }
+  }
+]
