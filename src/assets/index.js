@@ -33288,8 +33288,8 @@ ${r.empresa}`;
     {
       id: "techo",
       esModerna: true,
-      nombre: "🛠️ Cambio Cubierta / Techo",
-      desc: "Mantención de techo, limpieza y cambio de canaletas y bajantes.",
+      nombre: "🛠️ Mantención de techumbre y canaletas",
+      desc: "Mantención de techo, limpieza y canaletas. NOTA: No contempla el reemplazo estructural ni cambio completo de la cubierta.",
       tipoProyecto: "Mantención",
       requiereVisita: true,
       capitulos: [
@@ -34253,7 +34253,7 @@ ${r.empresa}`;
             l.preguntasIniciales && l.preguntasIniciales.length > 0 && e.jsxs("div", {
               style: { background: a.sb, padding: 12, borderRadius: 8, border: `1px solid ${a.border}` },
               children: [
-                e.jsx("div", { style: { fontWeight: 700, marginBottom: 8, fontSize: 12, color: a.accent }, children: "Preguntas Frecuentes:" }),
+                e.jsx("div", { style: { fontWeight: 700, marginBottom: 8, fontSize: 12, color: a.accent }, children: "Preguntas de Referencia (para ajustar opcionales):" }),
                 ...l.preguntasIniciales.map((p, idx) => e.jsx("div", { style: { fontSize: 12, color: a.text, marginBottom: 4 }, children: `• ${p}` }, idx))
               ]
             }),
