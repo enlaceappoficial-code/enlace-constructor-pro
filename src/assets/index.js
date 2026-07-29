@@ -34096,10 +34096,108 @@ ${r.empresa}`;
       }),
     });
   }
-  function Zf({ onSelect: t, onClose: i, plantillasUser: r, onDeleteUser: n, catalog, apus, materiales, cfg }) {
-    const [l, o] = V(null),
+  
+const FLUJOS_ASISTENTE = [
+  { "flujoId": "flujo-1-filtracion-techumbre", "nombre": "Filtración o problema de techumbre", "preguntas": { "tipoTrabajo": "Reparación", "recintoElemento": "Techo / Cubierta" }, "salidaPropuesta": { "plantillaBase": "techo", "soluciones": ["sol-001-filtracion-techumbre"], "partidasAdicionales": [ { "catalogId": 311, "obligatoria": true, "motivo": "Urgencia implica reparación provisoria o tarp." } ], "advertencias": ["Posible daño en estructura (cerchas/vigas) no visible hasta destapar."] } },
+  { "flujoId": "flujo-2-remodelacion-bano", "nombre": "Remodelación de baño", "preguntas": { "tipoTrabajo": "Remodelación", "recintoElemento": "Baño" }, "salidaPropuesta": { "plantillaBase": "bano", "soluciones": ["sol-006-renovacion-bano"], "partidasAdicionales": [ { "catalogId": 40516, "obligatoria": true, "motivo": "Humedad visible exige tratamiento antihongos previo." } ], "advertencias": ["Si hay filtraciones internas en cañerías, el presupuesto de gasfitería aumentará."] } },
+  { "flujoId": "flujo-3-pintura-interior", "nombre": "Pintura interior", "preguntas": { "tipoTrabajo": "Mantención", "recintoElemento": "Muros interiores" }, "salidaPropuesta": { "plantillaBase": "pintura", "soluciones": ["sol-003-pintura-muros"], "partidasAdicionales": [ { "catalogId": 320, "obligatoria": true, "motivo": "Pintura descascarada exige raspado y empaste completo." } ], "advertencias": ["El rendimiento de la pintura puede variar según la porosidad real del muro rasgado."] } },
+  { "flujoId": "flujo-4-cambio-piso", "nombre": "Cambio de piso", "preguntas": { "tipoTrabajo": "Remodelación", "recintoElemento": "Pisos" }, "salidaPropuesta": { "plantillaBase": "dinamica-piso", "soluciones": ["sol-005-piso-flotante"], "partidasAdicionales": [ { "catalogId": 305, "obligatoria": true, "motivo": "Retiro de alfombra y pegamento existente.", "formulaCantidad": "Math.ceil(superficie / 5)" } ], "advertencias": ["Si la losa bajo la alfombra está irregular, se requerirá partida de nivelación extra."] } },
+  { "flujoId": "flujo-5-mantencion-canaletas", "nombre": "Mantención de canaletas", "preguntas": { "tipoTrabajo": "Mantención", "recintoElemento": "Canaletas y Bajantes" }, "salidaPropuesta": { "plantillaBase": "techo", "soluciones": ["sol-002-cambio-canaleta-bajante"], "partidasAdicionales": [ { "catalogId": 312, "obligatoria": true, "motivo": "Limpieza profunda de canaletas previo a reparación." } ], "advertencias": ["Los bajantes embutidos en muro no están considerados en esta limpieza superficial."] } }
+];
+
+function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso, setPaso, respuestas, setRespuestas }) {
+
+  const pasosConfig = [
+    { key: "tipoTrabajo", label: "Tipo de Trabajo", options: ["Reparación", "Mantención", "Remodelación", "Obra Nueva"] },
+    { key: "recintoElemento", label: "Recinto / Elemento Afectado", options: ["Techo / Cubierta", "Baño", "Muros interiores", "Pisos", "Canaletas y Bajantes"] },
+    { key: "dimension", label: "Dimensión (ingresa un número)", type: "number" },
+    { key: "condicionExistente", label: "Condición Existente", options: ["Ninguna", "Filtración activa", "Humedad visible en muros", "Pintura descascarada", "Piso actual es alfombra", "Obstrucción por hojas", "Daño severo", "Red sanitaria existente en mal estado"] },
+    { key: "materiales", label: "Materiales / Sistema Constructivo", options: ["Zinc / Teja", "Cerámica", "Esmalte al agua", "Piso Flotante", "PVC", "Otro"] },
+    { key: "urgencia", label: "Urgencia", options: ["Inmediata", "Estándar"] },
+    { key: "visitaTecnica", label: "Visita Técnica", options: ["Requerida", "Opcional", "No requerida"] }
+  ];
+
+  const handleNext = () => { if (paso < pasosConfig.length - 1) setPaso(paso + 1); else generarPropuesta(); };
+
+  const generarPropuesta = () => {
+    let match = FLUJOS_ASISTENTE.find(f => f.preguntas.recintoElemento === respuestas.recintoElemento && f.preguntas.tipoTrabajo === respuestas.tipoTrabajo) 
+             || FLUJOS_ASISTENTE.find(f => f.preguntas.recintoElemento === respuestas.recintoElemento) 
+             || FLUJOS_ASISTENTE[0];
+    
+    let adicionales = [...match.salidaPropuesta.partidasAdicionales];
+    if (respuestas.condicionExistente === "Humedad visible en muros" && match.flujoId !== "flujo-2-remodelacion-bano") {
+      adicionales.push({ catalogId: 40516, obligatoria: true, motivo: "Tratamiento antihongos sugerido." });
+    }
+    if (respuestas.condicionExistente === "Obstrucción por hojas" && match.flujoId !== "flujo-5-mantencion-canaletas") {
+      adicionales.push({ catalogId: 110, obligatoria: true, motivo: "Incluir limpieza de canaletas." });
+    }
+    if (respuestas.condicionExistente === "Red sanitaria existente en mal estado") {
+      adicionales.push({ catalogId: 40228, obligatoria: true, motivo: "Instalación sanitaria completa sugerida." });
+    }
+
+    const dim = parseFloat(respuestas.dimension) || 1;
+    
+    const capitulos = [
+      {
+        nombre: "Propuesta: " + match.nombre,
+        soluciones: match.salidaPropuesta.soluciones.map(s => ({ solucionId: s, cantidadSugerida: 1 })),
+        partidasDirectas: adicionales.map(a => Object.assign({}, a, { cantidadSugerida: 1 }))
+      }
+    ];
+
+    let propuesta = {
+      esModerna: true,
+      id: "asistente-dinamico",
+      nombre: "Asistente: " + match.nombre,
+      descripcion: "Diagnóstico: " + respuestas.condicionExistente + ". Urgencia: " + respuestas.urgencia + ".",
+      _asistenteFlujoId: match.flujoId,
+      _asistenteCantidadOrigen: dim,
+      _asistenteUnidadPrincipal: respuestas.recintoElemento === "Pisos" || respuestas.recintoElemento === "Muros interiores" || respuestas.recintoElemento === "Techo / Cubierta" || respuestas.recintoElemento === "Baño" ? "m²" : respuestas.recintoElemento === "Canaletas y Bajantes" ? "ml" : "un",
+      capitulos: capitulos,
+      preguntas: [...match.salidaPropuesta.advertencias, "Cantidades de partidas en gl o un (como bolsas o puntos) mantuvieron su base. Revisar manualmente según rendimiento."].map((a, idx) => ({ id: "adv" + idx, label: "⚠️ " + a }))
+    };
+    onGenerarPropuesta(propuesta);
+  };
+
+  const currPaso = pasosConfig[paso];
+
+  return e.jsx("div", {
+    style: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.6)", zIndex: 99999, display: "flex", alignItems: "center", justifyContent: "center" },
+    children: e.jsxs("div", {
+      style: { background: "var(--bg)", width: 500, borderRadius: 12, padding: 24, display: "flex", flexDirection: "column", gap: 16 },
+      children: [
+        e.jsx("div", { style: { fontSize: 20, fontWeight: 700 }, children: "✨ Asistente Inteligente" }),
+        e.jsxs("div", { style: { display: "flex", gap: 4 }, children: pasosConfig.map((p, i) => e.jsx("div", { key: i, style: { flex: 1, height: 6, borderRadius: 3, background: i <= paso ? "var(--accent)" : "var(--border)" } })) }),
+        e.jsx("div", { style: { fontSize: 16, fontWeight: 600, marginTop: 10 }, children: currPaso.label }),
+        currPaso.type === "number" ? e.jsx("input", {
+          type: "number",
+          value: respuestas[currPaso.key],
+          onChange: ev => setRespuestas({ ...respuestas, [currPaso.key]: ev.target.value }),
+          style: { padding: 10, borderRadius: 6, border: "1px solid var(--border)", background: "var(--sb)", color: "var(--text)" }
+        }) : e.jsx("div", {
+          style: { display: "flex", flexDirection: "column", gap: 8 },
+          children: currPaso.options.map(opt => e.jsx("button", {
+            key: opt,
+            onClick: () => setRespuestas({ ...respuestas, [currPaso.key]: opt }),
+            style: { padding: 10, borderRadius: 6, border: respuestas[currPaso.key] === opt ? "2px solid var(--accent)" : "1px solid var(--border)", background: "var(--sb)", color: "var(--text)", textAlign: "left", cursor: "pointer" },
+            children: opt
+          }))
+        }),
+        e.jsxs("div", {
+          style: { display: "flex", justifyContent: "space-between", marginTop: 20 },
+          children: [
+            e.jsx("button", { onClick: paso === 0 ? onClose : () => setPaso(paso - 1), style: { padding: "8px 16px", borderRadius: 6, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer" }, children: paso === 0 ? "Cancelar" : "Atrás" }),
+            e.jsx("button", { onClick: handleNext, disabled: !respuestas[currPaso.key], style: { padding: "8px 16px", borderRadius: 6, border: "none", background: respuestas[currPaso.key] ? "var(--accent)" : "var(--border)", color: "#fff", cursor: "pointer" }, children: paso === pasosConfig.length - 1 ? "Revisar propuesta" : "Continuar" })
+          ]
+        })
+      ]
+    })
+  });
+}
+  function Zf({ onSelect: t, onClose: i, plantillasUser: r, onDeleteUser: n, catalog, apus, materiales, cfg, plantillaAsistente }) {
+    const [l, o] = V(plantillaAsistente || null),
       [s, m] = V(r && r.length > 0 ? "user" : "std"),
-      [paso, setPaso] = V("lista"),
+      [paso, setPaso] = V(plantillaAsistente ? "revision" : "lista"),
       [marcadas, setMarcadas] = V(() => new Set());
 
     var p = Xf,
@@ -34114,20 +34212,49 @@ ${r.empresa}`;
       setMarcadas(next);
     }
 
+    
     function prepararPlantillaModerna(plantilla) {
       var cantInit = {};
       var marcInit = new Set();
       (plantilla.capitulos || []).forEach(cap => {
         (cap.partidasDirectas || []).forEach(pd => {
           if (pd.obligatoria) marcInit.add(pd.catalogId);
-          cantInit[pd.catalogId] = pd.cantidadSugerida || 1;
+          let itemCat = catalogPorId.get(pd.catalogId);
+          let cantidadMultiplicador = 1;
+          if (plantilla._asistenteCantidadOrigen) {
+              if (itemCat && itemCat.unidad === plantilla._asistenteUnidadPrincipal) {
+                  cantidadMultiplicador = plantilla._asistenteCantidadOrigen;
+              } else if (pd.formulaCantidad) {
+                  try {
+                      let form = pd.formulaCantidad.replace(/superficie|longitud|cantidad|dim/g, plantilla._asistenteCantidadOrigen);
+                      cantidadMultiplicador = eval(form) || 1;
+                  } catch(e) { cantidadMultiplicador = 1; }
+              }
+              cantInit[pd.catalogId] = cantidadMultiplicador * (pd.cantidadBase || pd.cantidadSugerida || 1);
+          } else {
+              cantInit[pd.catalogId] = pd.cantidadSugerida || 1;
+          }
         });
         (cap.soluciones || []).forEach(solRef => {
           var sol = SOLUCIONES_COMPUESTAS_ACTIVAS.find(s => s.id === solRef.solucionId);
           if (sol) {
             sol.partidas.forEach(p => {
               if (p.obligatoria) marcInit.add(p.catalogId);
-              cantInit[p.catalogId] = p.cantidadBase || 1;
+              let itemCat = catalogPorId.get(p.catalogId);
+              let cantidadMultiplicador = 1;
+              if (plantilla._asistenteCantidadOrigen) {
+                  if (itemCat && itemCat.unidad === plantilla._asistenteUnidadPrincipal) {
+                      cantidadMultiplicador = plantilla._asistenteCantidadOrigen;
+                  } else if (p.formulaCantidad) {
+                      try {
+                          let form = p.formulaCantidad.replace(/superficie|longitud|cantidad|dim/g, plantilla._asistenteCantidadOrigen);
+                          cantidadMultiplicador = eval(form) || 1;
+                      } catch(e) { cantidadMultiplicador = 1; }
+                  }
+                  cantInit[p.catalogId] = cantidadMultiplicador * (p.cantidadBase || 1);
+              } else {
+                  cantInit[p.catalogId] = (solRef.cantidadSugerida || 1) * (p.cantidadBase || 1);
+              }
             });
           }
         });
@@ -34135,6 +34262,13 @@ ${r.empresa}`;
       setMarcadas(marcInit);
       setPaso("revision");
     }
+    
+    S(() => {
+      if (plantillaAsistente) {
+        prepararPlantillaModerna(plantillaAsistente);
+      }
+    }, [plantillaAsistente]);
+
 
     function construirItemDesdeCatalogo(catItem, cantidad, capId) {
       var apuMatch = (apus || []).find(
@@ -40296,6 +40430,10 @@ MATERIALES:
       _cid: "",
       _tipoCosto: "mo",
     });
+    const [mostrarAsistente, setMostrarAsistente] = V(!1);
+    const [plantillaDelAsistente, setPlantillaDelAsistente] = V(null);
+    const [asisPaso, setAsisPaso] = V(0);
+    const [asisRespuestas, setAsisRespuestas] = V({ tipoTrabajo: "", recintoElemento: "", dimension: "", condicionExistente: "", materiales: "", urgencia: "", visitaTecnica: "" });
     const [I, D] = V(() =>
         m
           ? {
@@ -40700,11 +40838,31 @@ MATERIALES:
             },
             onClose: () => A(null),
           }),
-        K &&
-          e.jsx(Zf, {
+        
+                mostrarAsistente && e.jsx(AsistenteInteligenteModal, {
+          catalog: i,
+          paso: asisPaso,
+          setPaso: setAsisPaso,
+          respuestas: asisRespuestas,
+          setRespuestas: setAsisRespuestas,
+          onClose: () => setMostrarAsistente(!1),
+          onGenerarPropuesta: (propuesta) => {
+            setMostrarAsistente(!1);
+            setPlantillaDelAsistente(propuesta);
+            y(!0);
+          }
+        }),
+K &&
+          e.jsx(Zf, { plantillaAsistente: plantillaDelAsistente,
             plantillasUser: p || [],
             onDeleteUser: C,
-            onClose: () => y(!1),
+            onClose: () => { 
+            if (plantillaDelAsistente) {
+                setPlantillaDelAsistente(null);
+                setMostrarAsistente(!0);
+            }
+            y(!1); 
+          },
             onSelect: (W) => {
               var T = (W.items || []).map((L, E) => {
                 var M = L._cid
@@ -41198,6 +41356,18 @@ MATERIALES:
                               onClick: () => y(!0),
                               children: "📋 Plantilla",
                             }),
+                            e.jsx("button", {
+                              style: u(d({}, c.btn("p")), {
+                                fontSize: 12,
+                                padding: "5px 10px",
+                                background: "var(--accent-gradient)",
+                                color: "#fff",
+                                border: "none"
+                              }),
+                              onClick: () => setMostrarAsistente(!0),
+                              children: "✨ Asistente Inteligente",
+                            }),
+
                             e.jsx("button", {
                               style: u(d({}, c.btn("s")), {
                                 fontSize: 12,
