@@ -1,0 +1,242 @@
+[
+  {
+    "id": "tpl-001-reparacion-menor",
+    "nombre": "Reparación menor de vivienda",
+    "descripcion": "Plantilla rápida para reparaciones puntuales de filtraciones y arreglos menores en puertas.",
+    "estado": "activa",
+    "tipoProyecto": "Mantención",
+    "capitulos": [
+      {
+        "codigo": "cap-01",
+        "nombre": "Techumbre",
+        "orden": 1,
+        "soluciones": [
+          {
+            "solucionId": "sol-001-filtracion-techumbre",
+            "obligatoria": true
+          }
+        ],
+        "partidasDirectas": []
+      },
+      {
+        "codigo": "cap-02",
+        "nombre": "Interiores",
+        "orden": 2,
+        "soluciones": [],
+        "partidasDirectas": [
+          {
+            "catalogId": 40003,
+            "obligatoria": false,
+            "cantidadSugerida": 1
+          }
+        ]
+      }
+    ],
+    "preguntasIniciales": [
+      "¿Hay filtraciones activas en la techumbre?",
+      "¿Se requiere cambiar puertas interiores dañadas?"
+    ],
+    "advertencias": [
+      "Si la filtración afectó el sistema eléctrico, debe agregarse revisión eléctrica manual."
+    ],
+    "requiereVisita": true
+  },
+  {
+    "id": "tpl-002-mantencion-techumbre",
+    "nombre": "Mantención preventiva de techumbre",
+    "descripcion": "Mantención de techo, limpieza y cambio de canaletas y bajantes.",
+    "estado": "activa",
+    "tipoProyecto": "Mantención",
+    "capitulos": [
+      {
+        "codigo": "cap-01",
+        "nombre": "Techumbre y Canaletas",
+        "orden": 1,
+        "soluciones": [
+          {
+            "solucionId": "sol-001-filtracion-techumbre",
+            "obligatoria": false
+          },
+          {
+            "solucionId": "sol-002-cambio-canaleta-bajante",
+            "obligatoria": true
+          }
+        ],
+        "partidasDirectas": [
+          {
+            "catalogId": 79,
+            "obligatoria": false,
+            "cantidadSugerida": 20
+          }
+        ]
+      }
+    ],
+    "preguntasIniciales": [
+      "¿Cuántos metros lineales de canaleta se van a cambiar?",
+      "¿Hay sectores de la fachada que requieran un repaso de pintura exterior por daños de humedad?"
+    ],
+    "advertencias": [
+      "El repaso de pintura exterior es opcional y solo cubre 1 mano."
+    ],
+    "requiereVisita": true
+  },
+  {
+    "id": "tpl-003-pintura-interior",
+    "nombre": "Pintura interior de vivienda",
+    "descripcion": "Renovación estética completa de pintura en muros, cielos, puertas y ventanas.",
+    "estado": "activa",
+    "tipoProyecto": "Remodelación",
+    "capitulos": [
+      {
+        "codigo": "cap-01",
+        "nombre": "Pintura y Terminaciones",
+        "orden": 1,
+        "soluciones": [
+          {
+            "solucionId": "sol-003-pintura-interior-habitacion",
+            "obligatoria": true
+          }
+        ],
+        "partidasDirectas": [
+          {
+            "catalogId": 40,
+            "obligatoria": true,
+            "cantidadSugerida": 50
+          },
+          {
+            "catalogId": 41,
+            "obligatoria": false,
+            "cantidadSugerida": 5
+          }
+        ]
+      }
+    ],
+    "preguntasIniciales": [
+      "¿Se pintarán también los cielos de la vivienda?",
+      "¿Las puertas y ventanas de madera requieren pintura de esmalte?"
+    ],
+    "advertencias": [
+      "La solución sol-003 solo incluye muros, por lo que cielos y puertas se cargan como partidas directas adicionales."
+    ],
+    "requiereVisita": false
+  },
+  {
+    "id": "tpl-004-remodelacion-bano",
+    "nombre": "Remodelación básica de baño",
+    "descripcion": "Cambio de cerámicos y artefactos sanitarios estándar en baño existente.",
+    "estado": "activa",
+    "tipoProyecto": "Remodelación",
+    "capitulos": [
+      {
+        "codigo": "cap-01",
+        "nombre": "Baño",
+        "orden": 1,
+        "soluciones": [
+          {
+            "solucionId": "sol-006-remodelacion-basica-bano",
+            "obligatoria": true
+          }
+        ],
+        "partidasDirectas": [
+          {
+            "catalogId": 40516,
+            "obligatoria": false,
+            "cantidadSugerida": 12
+          }
+        ]
+      }
+    ],
+    "preguntasIniciales": [
+      "¿El cielo o los muros sin cerámico requieren tratamiento antihongos previo a la pintura?"
+    ],
+    "advertencias": [
+      "Incluir la partida de repintado antihongos si hay presencia visible de humedad."
+    ],
+    "requiereVisita": true
+  },
+  {
+    "id": "tpl-005-remodelacion-cocina",
+    "nombre": "Remodelación básica de cocina",
+    "descripcion": "Renovación de pisos, muros y muebles de cocina.",
+    "estado": "activa",
+    "tipoProyecto": "Remodelación",
+    "capitulos": [
+      {
+        "codigo": "cap-01",
+        "nombre": "Cocina",
+        "orden": 1,
+        "soluciones": [
+          {
+            "solucionId": "sol-004-cambio-piso-ceramico",
+            "obligatoria": true
+          }
+        ],
+        "partidasDirectas": [
+          {
+            "catalogId": 337,
+            "obligatoria": true,
+            "cantidadSugerida": 3
+          },
+          {
+            "catalogId": 40007,
+            "obligatoria": false,
+            "cantidadSugerida": 1
+          }
+        ]
+      }
+    ],
+    "preguntasIniciales": [
+      "¿Se repararán los muebles aéreos existentes o se instalarán muebles base nuevos?"
+    ],
+    "advertencias": [
+      "Faltan partidas directas de muebles aéreos en esta configuración por límite de alcance."
+    ],
+    "requiereVisita": true
+  },
+  {
+    "id": "tpl-006-entrega-vivienda",
+    "nombre": "Terminaciones para entrega de vivienda",
+    "descripcion": "Última mano de terminaciones (pintura, pisos y cristales) para obra nueva o entrega.",
+    "estado": "activa",
+    "tipoProyecto": "Obra Nueva",
+    "capitulos": [
+      {
+        "codigo": "cap-01",
+        "nombre": "Pisos",
+        "orden": 1,
+        "soluciones": [
+          {
+            "solucionId": "sol-004-cambio-piso-ceramico",
+            "obligatoria": true
+          }
+        ],
+        "partidasDirectas": []
+      },
+      {
+        "codigo": "cap-02",
+        "nombre": "Pintura y Vidrios",
+        "orden": 2,
+        "soluciones": [
+          {
+            "solucionId": "sol-003-pintura-interior-habitacion",
+            "obligatoria": true
+          }
+        ],
+        "partidasDirectas": [
+          {
+            "catalogId": 40005,
+            "obligatoria": false,
+            "cantidadSugerida": 2
+          }
+        ]
+      }
+    ],
+    "preguntasIniciales": [
+      "¿Falta instalación de ventanas correderas?"
+    ],
+    "advertencias": [
+      "Esta plantilla asume que la tabiquería y cielos ya están listos y solo faltan terminaciones finas."
+    ],
+    "requiereVisita": false
+  }
+]
