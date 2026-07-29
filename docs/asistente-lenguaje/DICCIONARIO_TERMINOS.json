@@ -1,0 +1,43 @@
+{
+  "tipoTrabajo": {
+    "reparacion": ["reparar", "arreglar", "parche", "tapagoteras", "parchar", "filtracion", "llueve", "goteando", "reparación", "filtración"],
+    "mantencion": ["mantención", "limpiar", "destapar", "limpieza", "mantener", "pintar", "mantencion"],
+    "remodelacion": ["remodelar", "cambiar", "renovar", "sacar y poner", "enchular", "remodelación", "cambio"],
+    "construccion": ["construir", "hacer de cero", "levantar", "obra nueva"]
+  },
+  "elemento": {
+    "techumbre": ["techo", "techumbre", "cubierta", "lata", "zinc", "tejas", "teja"],
+    "bano": ["baño", "wc", "inodoro", "ducha", "tina", "bano"],
+    "pisos": ["piso", "suelo", "alfombra", "flotante", "ceramica", "radier", "cerámica"],
+    "muros_interiores": ["muro", "pared", "tabique", "pieza", "living", "comedor", "dormitorio", "paredes", "muros"],
+    "canaletas_bajantes": ["canaleta", "canaletas", "bajante", "bajadas", "tubo del agua", "desagüe techo"],
+    "cocina": ["cocina", "lavaplatos", "mueble cocina"]
+  },
+  "material": {
+    "zinc": ["zinc", "lata", "calamina"],
+    "teja": ["teja", "tejas", "colonial", "asfaltica"],
+    "ceramica": ["ceramica", "cerámica", "porcelanato", "azulejo"],
+    "flotante": ["flotante", "laminado", "piso de madera"],
+    "alfombra": ["alfombra", "cubre piso", "cubrepiso"],
+    "yeso": ["yeso", "volcanita", "placa"],
+    "madera": ["madera", "terciado", "osb"],
+    "pvc": ["pvc", "plastico", "cañeria pvc"]
+  },
+  "condiciones": {
+    "filtracion": ["filtracion", "filtración", "gotera", "se llueve", "pasando agua", "mojado", "humedad", "pierde agua"],
+    "canaletas_obstruidas": ["tapadas", "rebalsando", "llenas de hojas", "obstruidas", "sucias", "con tierra"],
+    "hongos": ["hongo", "hongos", "moho", "negro en la pared", "mancha de humedad", "hediondo"],
+    "descascarado": ["descascarado", "pintura saltada", "desprendido", "saliendo la pintura", "pelado"],
+    "levantado": ["levantado", "soplado", "englobado", "chueco", "guateado"],
+    "roto": ["roto", "quebrado", "agujero", "hoyo", "partido", "destrozado"]
+  },
+  "modificadores": {
+    "urgencia": ["urgente", "ahora", "rapido", "rápido", "se inunda", "emergencia", "lo antes posible", "ya"],
+    "visita": ["vengan a ver", "necesito cotizar", "evaluar", "revisar", "visita tecnica", "visita"]
+  },
+  "unidades": {
+    "m2": ["m2", "metros cuadrados", "mt2", "mts2", "metros", "metros 2"],
+    "ml": ["ml", "metros lineales", "metros de largo", "mt", "mts"],
+    "un": ["un", "unidad", "unidades", "piezas"]
+  }
+}
