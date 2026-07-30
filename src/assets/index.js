@@ -33341,8 +33341,10 @@ ${r.empresa}`;
         "La solución sol-003 solo incluye muros, por lo que cielos y puertas se cargan como partidas directas adicionales."
       ]
     },
+    // Plantillas suspendidas hasta completar partidas, materiales y APU validados.
     {
       id: "ampliacion",
+      oculta: true,
       nombre: "🏠 Ampliación Habitación",
       desc: "Ampliación con estructura, cubierta, terminaciones. [Plantilla rápida]",
       esModerna: true,
@@ -33372,6 +33374,7 @@ ${r.empresa}`;
     },
     {
       id: "radier",
+      oculta: true,
       nombre: "🏗️ Radier + Pavimento",
       desc: "Radier de hormigón con terminación cerámica o piso flotante. [Plantilla rápida]",
       esModerna: true,
@@ -33396,6 +33399,7 @@ ${r.empresa}`;
     },
     {
       id: "electrico",
+      oculta: true,
       nombre: "⚡ Instalación Eléctrica",
       desc: "Instalación eléctrica básica domiciliaria. [Plantilla rápida]",
       esModerna: true,
@@ -33418,6 +33422,7 @@ ${r.empresa}`;
     },
     {
       id: "cierre",
+      oculta: true,
       nombre: "🚧 Cierre Perimetral",
       desc: "Reja perimetral metálica con fundaciones. [Plantilla rápida]",
       esModerna: true,
@@ -33440,6 +33445,7 @@ ${r.empresa}`;
     },
     {
       id: "quincho",
+      oculta: true,
       nombre: "🥩 Quincho / Área Exterior",
       desc: "Quincho con terraza y pavimento exterior. [Plantilla rápida]",
       esModerna: true,
@@ -33462,6 +33468,7 @@ ${r.empresa}`;
     },
     {
       id: "piscina",
+      oculta: true,
       nombre: "🏊 Piscina Básica",
       desc: "Piscina rectangular con sistema de filtración. [Plantilla rápida]",
       esModerna: true,
@@ -34561,7 +34568,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       [paso, setPaso] = V(plantillaAsistente ? "revision" : "lista"),
       [marcadas, setMarcadas] = V(() => new Set());
 
-    var p = Xf,
+    var p = Xf.filter(pl => !pl.oculta),
       C = s === "user" ? r : p;
 
     var catalogPorId = new Map((catalog || []).map((cv) => [cv.id, cv]));
