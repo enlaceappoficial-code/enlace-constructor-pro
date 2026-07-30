@@ -23939,7 +23939,7 @@ ${r.empresa}`;
                                   __nombre: (cap.codigo ? cap.codigo + " — " : "") + (cap.nombre || "Capítulo"),
                                 });
                                 itemsCap.forEach((it, itIdx) => {
-                                  it.__numJerarquico = `${capIdx + 1}.${itIdx + 1}`;
+                                  it.__numJerarquico = `${cap.codigo || (capIdx + 1)}.${itIdx + 1}`;
                                   salidaExcel.push(it);
                                 });
                               });
@@ -40510,13 +40510,13 @@ MATERIALES:
     },
   ];
 
-  function EcpSelectorSoluciones({ catalog, apus, materiales, cfg, budgetItems, capitulos, onClose, onApply }) {
+  function EcpSelectorSoluciones({ catalog, apus, materiales, cfg, budgetItems, capitulos, onClose, onApply, capituloActivoId }) {
     const [paso, setPaso] = V("lista"),
       [solucionId, setSolucionId] = V(null),
       [cantidades, setCantidades] = V({}),
       [marcadas, setMarcadas] = V(() => new Set()),
       [grupoElegido, setGrupoElegido] = V({}),
-      [capituloDestino, setCapituloDestino] = V("");
+      [capituloDestino, setCapituloDestino] = V(capituloActivoId || "");
 
     var solucion = SOLUCIONES_COMPUESTAS_ACTIVAS.find((sv) => sv.id === solucionId) || null;
     var catalogPorId = new Map((catalog || []).map((cv) => [cv.id, cv]));
@@ -40533,7 +40533,7 @@ MATERIALES:
           else if (!(p.grupoSeleccion in grupoInit)) grupoInit[p.grupoSeleccion] = null;
         } else if (p.obligatoria) marcInit.add(p.catalogId);
       });
-      (setSolucionId(sol.id), setCantidades(cantInit), setMarcadas(marcInit), setGrupoElegido(grupoInit), setCapituloDestino(""), setPaso("detalle"));
+      (setSolucionId(sol.id), setCantidades(cantInit), setMarcadas(marcInit), setGrupoElegido(grupoInit), setCapituloDestino(capituloActivoId || ""), setPaso("detalle"));
     }
 
     function estaSeleccionada(p) {
@@ -40886,7 +40886,8 @@ MATERIALES:
       [P, A] = V(null),
       [S, O] = V(!0),
       [cargosSugeridos, setCargosSugeridos] = V(null),
-      [mostrarSelectorSoluciones, setMostrarSelectorSoluciones] = V(!1);
+      [mostrarSelectorSoluciones, setMostrarSelectorSoluciones] = V(!1),
+      [capituloActivoId, setCapituloActivoId] = V(null);
     const catalogItemSatisface = (cid, key) => {
       var ci = i.find((W) => String(W.id) === String(cid));
       return !!(
@@ -41101,7 +41102,7 @@ MATERIALES:
           nId = maxId + 1;
           var nuevo = {
             id: nId,
-            codigo: "",
+            codigo: nId.toString(),
             nombre: "Nuevo capítulo",
             orden: maxOrden + 1,
             descripcionOpcional: "",
@@ -41109,6 +41110,7 @@ MATERIALES:
           };
           return u(d({}, J), { capitulos: [...caps, nuevo] });
         });
+        setCapituloActivoId(nId);
         setTimeout(() => {
           var el = document.getElementById("cap_name_" + nId);
           if (el) {
@@ -41305,6 +41307,7 @@ K &&
             cfg: r,
             budgetItems: I.items,
             capitulos: I.capitulos,
+            capituloActivoId: capituloActivoId,
             onClose: () => setMostrarSelectorSoluciones(!1),
             onApply: (resultado) => {
               D((W) => u(d({}, W), { items: resultado.items }));
@@ -41796,9 +41799,13 @@ K &&
                             e.jsx("button", {
                               style: c.btn("g"),
                               onClick: () =>
-                                D((W) =>
-                                  u(d({}, W), { items: [...W.items, f()] }),
-                                ),
+                                D((W) => {
+                                  var newItem = f();
+                                  if (usaCapitulos && capituloActivoId) {
+                                    newItem.capituloId = capituloActivoId;
+                                  }
+                                  return u(d({}, W), { items: [...W.items, newItem] });
+                                }),
                               children: "+ Agregar ítem",
                             }),
                           ],
@@ -41866,15 +41873,17 @@ K &&
                         return e.jsxs(
                           "div",
                           {
+                            onClick: () => { if (!esSinCapitulo) setCapituloActivoId(cap.id); },
                             style: {
                               display: "flex",
                               alignItems: "center",
                               gap: 8,
-                              background: a.sb,
-                              border: `1px solid ${a.border}`,
+                              background: (!esSinCapitulo && cap.id === capituloActivoId) ? (a.accent + "11") : a.sb,
+                              border: `1px solid ${(!esSinCapitulo && cap.id === capituloActivoId) ? a.accent : a.border}`,
                               borderRadius: 8,
                               padding: "8px 10px",
                               margin: "10px 0 6px",
+                              cursor: "pointer",
                             },
                             children: [
                               !esSinCapitulo &&
@@ -41902,6 +41911,19 @@ K &&
                                   value: cap.codigo || "",
                                   placeholder: "Código",
                                   onChange: (ev) => actualizarCapitulo(cap.id, "codigo", ev.target.value),
+                                  onBlur: (ev) => {
+                                    const val = ev.target.value.trim();
+                                    if (!val) {
+                                      alert("El código del capítulo no puede estar vacío.");
+                                      actualizarCapitulo(cap.id, "codigo", cap.id.toString());
+                                      return;
+                                    }
+                                    const repetido = I.capitulos.some(c => c.id !== cap.id && c.codigo === val);
+                                    if (repetido) {
+                                      alert("Ya existe un capítulo con el código " + val);
+                                      actualizarCapitulo(cap.id, "codigo", cap.id.toString());
+                                    }
+                                  },
                                   style: u(d({}, c.inp), { width: 56, fontSize: 12, padding: "4px 6px" }),
                                   }),
                                 esSinCapitulo
@@ -41929,7 +41951,7 @@ K &&
                       var salida = [];
                       capsOrdenados.forEach((cap, capIdx) => {
                         salida.push(renderEncabezado(cap, capIdx));
-                        itemsDeGrupo(cap.id).forEach(({ W, T }, itemIdx) => salida.push(renderFilaItem(W, T, true, capsOrdenados, `${capIdx + 1}.${itemIdx + 1}`)));
+                        itemsDeGrupo(cap.id).forEach(({ W, T }, itemIdx) => salida.push(renderFilaItem(W, T, true, capsOrdenados, `${cap.codigo || (capIdx + 1)}.${itemIdx + 1}`)));
                       });
                       var sinCap = itemsDeGrupo(null);
                       if (sinCap.length > 0) {
@@ -41954,6 +41976,7 @@ K &&
                       return e.jsxs(
                         "div",
                         {
+                          onClick: () => { if (W.capituloId) setCapituloActivoId(W.capituloId); },
                           children: [
                             e.jsxs("div", {
                               style: {
@@ -42270,69 +42293,70 @@ K &&
                                 }),
                               ],
                             }),
-                            e.jsx("div", {
+                            e.jsxs("div", {
                                 style: {
-                                  gridColumn: "span 6",
-                                  marginBottom: 6,
-                                  marginTop: -2,
-                                },
-                                children: e.jsx("button", {
-                                  style: {
-                                    background: a.sb,
-                                    border: `1px solid ${a.border}`,
-                                    borderRadius: 6,
-                                    padding: "3px 10px",
-                                    fontSize: 12,
-                                    color: E ? "#34d399" : "#60a5fa",
-                                    cursor: "pointer",
-                                    fontWeight: 600,
-                                  },
-                                  onClick: () =>
-                                    R({ idx: T, catItem: L, apu: E || { id: "manual_" + T, nombre: W.desc || "Ítem Manual", unidad: W.unidad || "unidad", materiales: [], pctMO: g, pctGG: B, pctUtilidad: v, rendimiento: 0, dotacion: 1 } }),
-                                  children: E ? "🔧 Ver y ajustar materiales del APU" : "🔧 Definir materiales manualmente",
-                                }),
-                              }),
-                            usaCapitulos &&
-                              e.jsxs("div", {
-                                style: {
+                                  gridColumn: "span 10",
                                   display: "flex",
+                                  flexWrap: "wrap",
                                   alignItems: "center",
-                                  gap: 6,
+                                  gap: 8,
                                   marginBottom: 8,
                                   marginTop: -2,
                                 },
                                 children: [
-                                  e.jsx("span", { style: { fontSize: 11, color: a.muted }, children: "Capítulo:" }),
-                                  e.jsxs("select", {
-                                    value: W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : "",
-                                    onChange: (ev) => moverItemACapitulo(T, ev.target.value ? parseInt(ev.target.value) : ""),
-                                    style: { fontSize: 11, padding: "3px 5px", background: a.sb, color: a.text, border: `1px solid ${a.border}`, borderRadius: 5 },
-                                    children: [
-                                      e.jsx("option", { value: "", children: "Sin capítulo" }, "sin"),
-                                      ...capsOrdenados.map((cap) => e.jsx("option", { value: cap.id, children: cap.nombre || "Capítulo " + cap.id }, cap.id)),
-                                    ],
-                                  }),
+                                  usaCapitulos &&
+                                    e.jsxs("div", {
+                                      style: { display: "flex", alignItems: "center", gap: 6 },
+                                      children: [
+                                        e.jsx("span", { style: { fontSize: 11, color: a.muted }, children: "Capítulo:" }),
+                                        e.jsxs("select", {
+                                          value: W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : "",
+                                          onChange: (ev) => moverItemACapitulo(T, ev.target.value ? parseInt(ev.target.value) : ""),
+                                          style: { fontSize: 11, padding: "3px 5px", background: a.sb, color: a.text, border: `1px solid ${a.border}`, borderRadius: 5 },
+                                          children: [
+                                            e.jsx("option", { value: "", children: "Sin capítulo" }, "sin"),
+                                            ...capsOrdenados.map((cap) => e.jsx("option", { value: cap.id, children: cap.nombre || "Capítulo " + cap.id }, cap.id)),
+                                          ],
+                                        }),
+                                        e.jsx("button", {
+                                          title: "Subir dentro del capítulo",
+                                          onClick: () =>
+                                            reordenarItemEnGrupo(
+                                              T,
+                                              -1,
+                                              W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : null,
+                                            ),
+                                          style: { background: "transparent", border: `1px solid ${a.border}`, borderRadius: 4, color: a.muted, cursor: "pointer", fontSize: 11, padding: "1px 5px" },
+                                          children: "▲",
+                                        }),
+                                        e.jsx("button", {
+                                          title: "Bajar dentro del capítulo",
+                                          onClick: () =>
+                                            reordenarItemEnGrupo(
+                                              T,
+                                              1,
+                                              W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : null,
+                                            ),
+                                          style: { background: "transparent", border: `1px solid ${a.border}`, borderRadius: 4, color: a.muted, cursor: "pointer", fontSize: 11, padding: "1px 5px" },
+                                          children: "▼",
+                                        }),
+                                      ],
+                                    }),
                                   e.jsx("button", {
-                                    title: "Subir dentro del capítulo",
+                                    style: {
+                                      background: a.sb,
+                                      border: `1px solid ${a.border}`,
+                                      borderRadius: 6,
+                                      padding: "3px 10px",
+                                      fontSize: 12,
+                                      color: E ? "#34d399" : "#60a5fa",
+                                      cursor: "pointer",
+                                      fontWeight: 600,
+                                      flexShrink: 0,
+                                    },
                                     onClick: () =>
-                                      reordenarItemEnGrupo(
-                                        T,
-                                        -1,
-                                        W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : null,
-                                      ),
-                                    style: { background: "transparent", border: `1px solid ${a.border}`, borderRadius: 4, color: a.muted, cursor: "pointer", fontSize: 11, padding: "1px 5px" },
-                                    children: "▲",
-                                  }),
-                                  e.jsx("button", {
-                                    title: "Bajar dentro del capítulo",
-                                    onClick: () =>
-                                      reordenarItemEnGrupo(
-                                        T,
-                                        1,
-                                        W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : null,
-                                      ),
-                                    style: { background: "transparent", border: `1px solid ${a.border}`, borderRadius: 4, color: a.muted, cursor: "pointer", fontSize: 11, padding: "1px 5px" },
-                                    children: "▼",
+                                      R({ idx: T, catItem: L, apu: E || { id: "manual_" + T, nombre: W.desc || "Ítem Manual", unidad: W.unidad || "unidad", materiales: [], pctMO: g, pctGG: B, pctUtilidad: v, rendimiento: 0, dotacion: 1 } }),
+                                    children: E ? "🔧 Ver y ajustar materiales del APU" : "🔧 Definir materiales manualmente",
                                   }),
                                 ],
                               }),
@@ -44429,42 +44453,52 @@ K &&
               var U = 10 + O;
               const $ = O % 2 === 0 ? "FFFFFF" : x;
               var ee = (parseFloat(S.cant) || 0) * (parseFloat(S.precio) || 0);
-              (f(
-                U,
-                0,
-                O + 1,
-                "n",
-                I($, { sz: 10 }, { horizontal: "center" }, D),
-              ),
-                f(U, 1, S.desc || "", "s", I($, { sz: 10 }, {}, D)),
-                f(
+              if (S.__esCapitulo) {
+                f(U, 0, "", "s", I(v, {}, {}));
+                f(U, 1, S.__nombre || "", "s", I(v, { bold: !0, sz: 11, color: { rgb: "FFFFFF" } }, {}, D));
+                f(U, 2, "", "s", I(v, {}, {}));
+                f(U, 3, "", "s", I(v, {}, {}));
+                f(U, 4, "", "s", I(v, {}, {}));
+                f(U, 5, "", "s", I(v, {}, {}));
+                B["!merges"].push({ s: { r: U, c: 1 }, e: { r: U, c: 5 } });
+              } else {
+                (f(
                   U,
-                  2,
-                  parseFloat(S.cant) || 0,
-                  "n",
-                  I($, { sz: 10 }, { horizontal: "center" }, D),
-                ),
-                f(
-                  U,
-                  3,
-                  S.unidad || "",
+                  0,
+                  S.__numJerarquico || (O + 1),
                   "s",
                   I($, { sz: 10 }, { horizontal: "center" }, D),
                 ),
-                f(
-                  U,
-                  4,
-                  parseFloat(S.precio) || 0,
-                  "n",
-                  I($, { sz: 10 }, { horizontal: "right" }, D),
-                ),
-                f(
-                  U,
-                  5,
-                  ee,
-                  "n",
-                  I($, { bold: !0, sz: 10 }, { horizontal: "right" }, D),
-                ));
+                  f(U, 1, S.desc || "", "s", I($, { sz: 10 }, {}, D)),
+                  f(
+                    U,
+                    2,
+                    parseFloat(S.cant) || 0,
+                    "n",
+                    I($, { sz: 10 }, { horizontal: "center" }, D),
+                  ),
+                  f(
+                    U,
+                    3,
+                    S.unidad || "",
+                    "s",
+                    I($, { sz: 10 }, { horizontal: "center" }, D),
+                  ),
+                  f(
+                    U,
+                    4,
+                    parseFloat(S.precio) || 0,
+                    "n",
+                    I($, { sz: 10 }, { horizontal: "right" }, D),
+                  ),
+                  f(
+                    U,
+                    5,
+                    ee,
+                    "n",
+                    I($, { bold: !0, sz: 10 }, { horizontal: "right" }, D),
+                  ));
+              }
             }));
           var k = 10 + t.items.length;
           for (let S = 0; S < 6; S++) f(k, S, "", "s", I(v, {}, {}));
@@ -44995,7 +45029,7 @@ K &&
                 (f.setFont("helvetica", "normal"),
                   f.setFontSize(8.5),
                   f.setTextColor(50, 60, 75),
-                  f.text(usaCapitulosPdf ? (!grp.cap ? "" + (itemIdx + 1) : "" + (capIdx + 1) + "." + (itemIdx + 1)) : "" + (filaNum + 1), A + 2, S + 5.3),
+                  f.text(usaCapitulosPdf ? (!grp.cap ? "" + (itemIdx + 1) : "" + (grp.cap.codigo || (capIdx + 1)) + "." + (itemIdx + 1)) : "" + (filaNum + 1), A + 2, S + 5.3),
                   f.text((Z.desc || "").slice(0, 55), A + 12, S + 5.3),
                   f.text("" + Lshow, ie === "separado" ? A + 110 : A + 120, S + 5.3, {
                     align: "right",
