@@ -35144,7 +35144,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
     var F = ["Todas", ...new Set(i.map((v) => v.cat))],
       rubrosPresentes = [...new Set(i.map((v) => v.rubro || v.cat))].sort((a2, b2) => a2.localeCompare(b2, "es")),
       subrubrosPresentes = [...new Set(i.filter((v) => rubroFiltro === "Todos" || (v.rubro || v.cat) === rubroFiltro).map((v) => v.subrubro).filter(Boolean))].sort((a2, b2) => a2.localeCompare(b2, "es")),
-      tiposPresentes = [...new Set(i.map((v) => v.tipoIntervencion).filter(Boolean))].sort((a2, b2) => a2.localeCompare(b2, "es")),
+      tiposPresentes = [...new Set(i.filter((v) => (rubroFiltro === "Todos" || (v.rubro || v.cat) === rubroFiltro) && (subrubroFiltro === "Todos" || v.subrubro === subrubroFiltro)).map((v) => v.tipoIntervencion).filter(Boolean))].sort((a2, b2) => a2.localeCompare(b2, "es")),
       g = i.filter((v) => {
         var x = h === "Todas" || v.cat === h,
           f =
@@ -35242,37 +35242,57 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
               )
             }),
             e.jsxs("div", {
-              style: { display: "flex", gap: 5, marginTop: 6 },
+              style: { display: "flex", flexDirection: "column", gap: 6, marginTop: 8 },
               children: [
-                e.jsxs("select", {
-                  value: rubroFiltro,
-                  onChange: (v) => {
-                    setRubroFiltro(v.target.value);
-                    setSubrubroFiltro("Todos");
-                  },
-                  style: u(d({}, s.inp), { flex: 1, minWidth: 0, fontSize: 10, cursor: "pointer", padding: "4px 6px" }),
+                e.jsxs("div", {
                   children: [
-                    e.jsx("option", { value: "Todos", children: "Rubro" }),
-                    rubrosPresentes.map((v) => e.jsx("option", { value: v, children: v }, v)),
+                    e.jsx("div", { style: { fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: o.muted, marginBottom: 3 }, children: "Rubro" }),
+                    e.jsxs("select", {
+                      value: rubroFiltro,
+                      title: rubroFiltro !== "Todos" ? rubroFiltro : undefined,
+                      onChange: (v) => { setRubroFiltro(v.target.value); setSubrubroFiltro("Todos"); setTipoFiltro("Todos"); },
+                      style: u(d({}, s.inp), { width: "100%", boxSizing: "border-box", fontSize: 11, cursor: "pointer", padding: "4px 6px" }),
+                      children: [
+                        e.jsx("option", { value: "Todos", children: "Todos (" + i.length + ")" }),
+                        rubrosPresentes.map((v) => { var cnt = i.filter((x) => (x.rubro || x.cat) === v).length; return e.jsx("option", { value: v, title: v, children: v + " (" + cnt + ")" }, v); }),
+                      ],
+                    }),
                   ],
                 }),
-                e.jsxs("select", {
-                  value: subrubroFiltro,
-                  onChange: (v) => setSubrubroFiltro(v.target.value),
-                  style: u(d({}, s.inp), { flex: 1, minWidth: 0, fontSize: 10, cursor: "pointer", padding: "4px 6px" }),
+                e.jsxs("div", {
                   children: [
-                    e.jsx("option", { value: "Todos", children: "Subrubro" }),
-                    subrubrosPresentes.map((v) => e.jsx("option", { value: v, children: v }, v)),
+                    e.jsx("div", { style: { fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: o.muted, marginBottom: 3 }, children: "Subrubro" }),
+                    e.jsxs("select", {
+                      value: subrubroFiltro,
+                      title: subrubroFiltro !== "Todos" ? subrubroFiltro : undefined,
+                      onChange: (v) => { setSubrubroFiltro(v.target.value); setTipoFiltro("Todos"); },
+                      style: u(d({}, s.inp), { width: "100%", boxSizing: "border-box", fontSize: 11, cursor: "pointer", padding: "4px 6px" }),
+                      children: [
+                        e.jsx("option", { value: "Todos", children: "Todos (" + (rubroFiltro === "Todos" ? i : i.filter((x) => (x.rubro || x.cat) === rubroFiltro)).filter((x) => x.subrubro).length + ")" }),
+                        subrubrosPresentes.map((v) => { var base = rubroFiltro === "Todos" ? i : i.filter((x) => (x.rubro || x.cat) === rubroFiltro); var cnt = base.filter((x) => x.subrubro === v).length; return e.jsx("option", { value: v, title: v, children: v + " (" + cnt + ")" }, v); }),
+                      ],
+                    }),
                   ],
                 }),
-                e.jsxs("select", {
-                  value: tipoFiltro,
-                  onChange: (v) => setTipoFiltro(v.target.value),
-                  style: u(d({}, s.inp), { flex: 1, minWidth: 0, fontSize: 10, cursor: "pointer", padding: "4px 6px" }),
+                e.jsxs("div", {
                   children: [
-                    e.jsx("option", { value: "Todos", children: "Tipo" }),
-                    tiposPresentes.map((v) => e.jsx("option", { value: v, children: v }, v)),
+                    e.jsx("div", { style: { fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: o.muted, marginBottom: 3 }, children: "Tipo de intervención" }),
+                    e.jsxs("select", {
+                      value: tipoFiltro,
+                      title: tipoFiltro !== "Todos" ? tipoFiltro : undefined,
+                      onChange: (v) => setTipoFiltro(v.target.value),
+                      style: u(d({}, s.inp), { width: "100%", boxSizing: "border-box", fontSize: 11, cursor: "pointer", padding: "4px 6px" }),
+                      children: [
+                        e.jsx("option", { value: "Todos", children: "Todos (" + tiposPresentes.length + " tipos)" }),
+                        tiposPresentes.map((v) => { var base2 = i.filter((x) => (rubroFiltro === "Todos" || (x.rubro || x.cat) === rubroFiltro) && (subrubroFiltro === "Todos" || x.subrubro === subrubroFiltro)); var cnt = base2.filter((x) => x.tipoIntervencion === v).length; return e.jsx("option", { value: v, title: v, children: v + " (" + cnt + ")" }, v); }),
+                      ],
+                    }),
                   ],
+                }),
+                (rubroFiltro !== "Todos" || subrubroFiltro !== "Todos" || tipoFiltro !== "Todos") && e.jsx("button", {
+                  onClick: () => { setRubroFiltro("Todos"); setSubrubroFiltro("Todos"); setTipoFiltro("Todos"); },
+                  style: { fontSize: 10, padding: "3px 8px", borderRadius: 6, border: "1px solid " + o.accent, background: "transparent", color: o.accent, cursor: "pointer", fontWeight: 700, alignSelf: "flex-start" },
+                  children: "✕ Limpiar filtros",
                 }),
               ],
             }),
@@ -48006,7 +48026,6 @@ K &&
   function vg({ catalog: t, setCatalog: i, setToast: r }) {
     var n = [...new Set(t.map((y) => y.cat))];
     var rubrosPresentes = [...new Set(t.map((y) => y.rubro || y.cat))].sort((a, b) => a.localeCompare(b, "es"));
-    var tiposPresentes = [...new Set(t.map((y) => y.tipoIntervencion).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
     const TAXO_RUBROS = ["Obras preliminares", "Demoliciones y desmontajes", "Movimiento de tierras", "Hormigón y fundaciones", "Albañilería", "Estructuras metálicas", "Construcción liviana", "Techumbres y aguas lluvias", "Impermeabilización", "Aislación y eficiencia energética", "Fachadas y cerramientos", "Puertas, ventanas y carpinterías", "Pisos y revestimientos", "Cielos y terminaciones", "Pinturas y recubrimientos", "Instalaciones sanitarias", "Alcantarillado y drenaje", "Instalaciones de gas", "Instalaciones eléctricas", "Corrientes débiles y seguridad electrónica", "Climatización y ventilación", "Protección contra incendios", "Accesibilidad universal", "Equipamiento y mobiliario", "Obras exteriores y urbanización", "Paisajismo y riego", "Piscinas", "Servicios profesionales", "Mantención general", "Limpieza, pruebas y entrega"],
       TAXO_TIPOS = ["Obra nueva", "Ampliación", "Remodelación", "Reposición", "Reparación", "Mantención preventiva", "Mantención correctiva", "Demolición", "Desmontaje", "Regularización", "Servicio profesional"],
       TAXO_ALCANCES = ["Solo suministro", "Solo instalación", "Solo mano de obra", "Suministro e instalación", "Fabricación e instalación", "Desmontaje y retiro", "Reparación parcial", "Servicio completo", "Subcontrato"];
@@ -48024,14 +48043,8 @@ K &&
       [rubroFiltro, setRubroFiltro] = V("Todos"),
       [subrubroFiltro, setSubrubroFiltro] = V("Todos"),
       [tipoFiltro, setTipoFiltro] = V("Todos");
-    var subrubrosPresentes = [
-      ...new Set(
-        t
-          .filter((y) => rubroFiltro === "Todos" || (y.rubro || y.cat) === rubroFiltro)
-          .map((y) => y.subrubro)
-          .filter(Boolean),
-      ),
-    ].sort((a, b) => a.localeCompare(b, "es"));
+    var subrubrosPresentes = [...new Set(t.filter((y) => rubroFiltro === "Todos" || (y.rubro || y.cat) === rubroFiltro).map((y) => y.subrubro).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
+    var tiposPresentes = [...new Set(t.filter((y) => (rubroFiltro === "Todos" || (y.rubro || y.cat) === rubroFiltro) && (subrubroFiltro === "Todos" || y.subrubro === subrubroFiltro)).map((y) => y.tipoIntervencion).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
     var f = (() => {
         var y = l === "Todos" ? t : t.filter((P) => P.cat === l);
         rubroFiltro !== "Todos" && (y = y.filter((P) => (P.rubro || P.cat) === rubroFiltro));
@@ -48909,52 +48922,62 @@ K &&
                         flexWrap: "wrap",
                         gap: 8,
                         marginBottom: 14,
-                        alignItems: "center",
+                        alignItems: "flex-start",
                       },
                       children: [
-                        e.jsx("span", {
-                          style: { fontSize: 11, color: a.muted, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em" },
-                          children: "Taxonomía:",
-                        }),
-                        e.jsxs("select", {
-                          style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", width: "auto" }),
-                          value: rubroFiltro,
-                          onChange: (y) => {
-                            setRubroFiltro(y.target.value);
-                            setSubrubroFiltro("Todos");
-                          },
+                        e.jsxs("div", {
+                          style: { display: "flex", flexDirection: "column", gap: 2 },
                           children: [
-                            e.jsx("option", { value: "Todos", children: "Rubro: todos" }),
-                            rubrosPresentes.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                            e.jsx("label", { style: { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em", color: a.muted }, children: "Rubro" }),
+                            e.jsxs("select", {
+                              style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", minWidth: 180 }),
+                              value: rubroFiltro,
+                              title: rubroFiltro !== "Todos" ? rubroFiltro : undefined,
+                              onChange: (y) => { setRubroFiltro(y.target.value); setSubrubroFiltro("Todos"); setTipoFiltro("Todos"); },
+                              children: [
+                                e.jsx("option", { value: "Todos", children: "Todos (" + t.length + ")" }),
+                                rubrosPresentes.map((y) => { var cnt = t.filter((x) => (x.rubro || x.cat) === y).length; return e.jsx("option", { value: y, title: y, children: y + " (" + cnt + ")" }, y); }),
+                              ],
+                            }),
                           ],
                         }),
-                        e.jsxs("select", {
-                          style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", width: "auto" }),
-                          value: subrubroFiltro,
-                          onChange: (y) => setSubrubroFiltro(y.target.value),
+                        e.jsxs("div", {
+                          style: { display: "flex", flexDirection: "column", gap: 2 },
                           children: [
-                            e.jsx("option", { value: "Todos", children: "Subrubro: todos" }),
-                            subrubrosPresentes.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                            e.jsx("label", { style: { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em", color: a.muted }, children: "Subrubro" }),
+                            e.jsxs("select", {
+                              style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", minWidth: 180 }),
+                              value: subrubroFiltro,
+                              title: subrubroFiltro !== "Todos" ? subrubroFiltro : undefined,
+                              onChange: (y) => { setSubrubroFiltro(y.target.value); setTipoFiltro("Todos"); },
+                              children: [
+                                e.jsx("option", { value: "Todos", children: "Todos (" + subrubrosPresentes.length + " subrubros)" }),
+                                subrubrosPresentes.map((y) => { var base = rubroFiltro === "Todos" ? t : t.filter((x) => (x.rubro || x.cat) === rubroFiltro); var cnt = base.filter((x) => x.subrubro === y).length; return e.jsx("option", { value: y, title: y, children: y + " (" + cnt + ")" }, y); }),
+                              ],
+                            }),
                           ],
                         }),
-                        e.jsxs("select", {
-                          style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", width: "auto" }),
-                          value: tipoFiltro,
-                          onChange: (y) => setTipoFiltro(y.target.value),
+                        e.jsxs("div", {
+                          style: { display: "flex", flexDirection: "column", gap: 2 },
                           children: [
-                            e.jsx("option", { value: "Todos", children: "Tipo de intervención: todos" }),
-                            tiposPresentes.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                            e.jsx("label", { style: { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em", color: a.muted }, children: "Tipo de intervención" }),
+                            e.jsxs("select", {
+                              style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", minWidth: 180 }),
+                              value: tipoFiltro,
+                              title: tipoFiltro !== "Todos" ? tipoFiltro : undefined,
+                              onChange: (y) => setTipoFiltro(y.target.value),
+                              children: [
+                                e.jsx("option", { value: "Todos", children: "Todos (" + tiposPresentes.length + " tipos)" }),
+                                tiposPresentes.map((y) => { var base2 = t.filter((x) => (rubroFiltro === "Todos" || (x.rubro || x.cat) === rubroFiltro) && (subrubroFiltro === "Todos" || x.subrubro === subrubroFiltro)); var cnt = base2.filter((x) => x.tipoIntervencion === y).length; return e.jsx("option", { value: y, title: y, children: y + " (" + cnt + ")" }, y); }),
+                              ],
+                            }),
                           ],
                         }),
                         (rubroFiltro !== "Todos" || subrubroFiltro !== "Todos" || tipoFiltro !== "Todos") &&
                           e.jsx("button", {
-                            onClick: () => {
-                              setRubroFiltro("Todos");
-                              setSubrubroFiltro("Todos");
-                              setTipoFiltro("Todos");
-                            },
-                            style: { fontSize: 11, padding: "4px 8px", borderRadius: 6, border: "1px solid " + a.border, background: "var(--surface)", color: a.muted, cursor: "pointer" },
-                            children: "✕ Limpiar taxonomía",
+                            onClick: () => { setRubroFiltro("Todos"); setSubrubroFiltro("Todos"); setTipoFiltro("Todos"); },
+                            style: { fontSize: 11, padding: "4px 10px", borderRadius: 6, border: "1px solid " + a.accent, background: "transparent", color: a.accent, cursor: "pointer", fontWeight: 700, marginTop: 18 },
+                            children: "✕ Limpiar filtros",
                           }),
                       ],
                     }),

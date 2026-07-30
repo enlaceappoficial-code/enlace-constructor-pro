@@ -1,11 +1,11 @@
 {
   "name": "ECP canonical production baseline",
-  "acceptedAt": "2026-07-30T04:29:12.274Z",
+  "acceptedAt": "2026-07-30T04:49:36.826Z",
   "entrypoint": "src/index.html",
   "bundle": "src/assets/index.js",
   "sha256": {
     "entrypoint": "667B9A87740DC1F868F8FB1CA27C43B241C71E9B7B29AC92C9976015BFEE4BAC",
-    "bundle": "70183B7BCDE3631365B63E688F9CACBD3A70E1FD9D26EADA185CF044453CD53E"
+    "bundle": "CBBBBD16B71AEE57AD987B949524204C08BAF8C5238DFAA01B9E4812B4E3D03E"
   },
   "minimumCounts": {
     "catalog": 311,
