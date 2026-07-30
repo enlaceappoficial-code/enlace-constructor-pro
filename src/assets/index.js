@@ -40907,7 +40907,108 @@ MATERIALES:
       [S, O] = V(!0),
       [cargosSugeridos, setCargosSugeridos] = V(null),
       [mostrarSelectorSoluciones, setMostrarSelectorSoluciones] = V(!1),
-      [destinoActivoCapituloId, setDestinoActivoCapituloId] = V(null);
+      [destinoActivoCapituloId, setDestinoActivoCapituloId] = V(null),
+      [historialTamano, setHistorialTamano] = V(0);
+    // --- Historial temporal (undo) ---
+    // Vive solo en memoria (useRef, nunca localStorage/respaldos) y solo dura
+    // mientras este presupuesto está abierto: se limpia al guardar, cancelar,
+    // o si cambia el presupuesto que se está editando.
+    var historialRef = Re.useRef([]);
+    var HISTORIAL_MAX = 30;
+    var _cloneEstado = function(estado) {
+      return JSON.parse(JSON.stringify({
+        items: estado.items || [],
+        capitulos: estado.capitulos || [],
+        notas: estado.notas || "",
+        notasInternas: estado.notasInternas || "",
+        descripcion: estado.descripcion || "",
+        clienteId: estado.clienteId || "",
+        fecha: estado.fecha || "",
+        descuento: !!estado.descuento,
+        plazoEjecucion: estado.plazoEjecucion,
+        modoCosteo: estado.modoCosteo || "completo",
+        sinIva: !!estado.sinIva,
+      }));
+    };
+    // Una entrada de historial captura el estado del presupuesto (items,
+    // capitulos, orden dentro de "orden", notas, datos generales) más el
+    // capítulo activo, que vive como estado de React separado de I.
+    var _snapshotCompleto = function(estadoActual) {
+      return {
+        estado: _cloneEstado(estadoActual),
+        destinoActivoCapituloId: destinoActivoCapituloId,
+      };
+    };
+    var pushHistorial = function(estadoActual) {
+      var hist = historialRef.current;
+      if (hist.length >= HISTORIAL_MAX) hist.shift();
+      hist.push(_snapshotCompleto(estadoActual));
+      setHistorialTamano(hist.length);
+    };
+    // Captura diferida para campos de texto/número: iniciarEdicionCampo()
+    // guarda el estado ANTES de la primera modificación de una edición en
+    // curso; confirmarEdicionCampo() (en blur) recién ahí empuja esa copia
+    // al historial. Así una edición de muchas teclas produce un solo estado
+    // deshacible, no uno por tecla.
+    var _pendingEditSnapshot = Re.useRef(null);
+    var iniciarEdicionCampo = function() {
+      if (_pendingEditSnapshot.current == null) {
+        _pendingEditSnapshot.current = _snapshotCompleto(I);
+      }
+    };
+    var confirmarEdicionCampo = function() {
+      if (_pendingEditSnapshot.current != null) {
+        var hist = historialRef.current;
+        if (hist.length >= HISTORIAL_MAX) hist.shift();
+        hist.push(_pendingEditSnapshot.current);
+        setHistorialTamano(hist.length);
+        _pendingEditSnapshot.current = null;
+      }
+    };
+    var limpiarHistorial = function() {
+      _pendingEditSnapshot.current = null;
+      historialRef.current = [];
+      setHistorialTamano(0);
+    };
+    var deshacerUltimo = function() {
+      var hist = historialRef.current;
+      if (!hist.length) return;
+      var snap = hist.pop();
+      setHistorialTamano(hist.length);
+      D(function(cur) {
+        return u(d({}, cur), snap.estado);
+      });
+      setDestinoActivoCapituloId(
+        snap.destinoActivoCapituloId != null ? snap.destinoActivoCapituloId : null,
+      );
+    };
+    var deshacerUltimoRef = Re.useRef(deshacerUltimo);
+    deshacerUltimoRef.current = deshacerUltimo;
+    Re.useEffect(function () {
+      function onKeyDownDeshacer(ev) {
+        if (!(ev.ctrlKey || ev.metaKey)) return;
+        if (ev.key !== "z" && ev.key !== "Z") return;
+        var activo = document.activeElement;
+        var enCampoEditable =
+          activo &&
+          (activo.tagName === "INPUT" ||
+            activo.tagName === "TEXTAREA" ||
+            activo.isContentEditable);
+        if (enCampoEditable) return;
+        ev.preventDefault();
+        deshacerUltimoRef.current();
+      }
+      window.addEventListener("keydown", onKeyDownDeshacer);
+      return function () {
+        window.removeEventListener("keydown", onKeyDownDeshacer);
+      };
+    }, []);
+    Re.useEffect(
+      function () {
+        limpiarHistorial();
+      },
+      [m && m.id],
+    );
     const catalogItemSatisface = (cid, key) => {
       var ci = i.find((W) => String(W.id) === String(cid));
       return !!(
@@ -41115,6 +41216,7 @@ MATERIALES:
           )
           .reduce((sum, it) => sum + calcularLineaPresupuesto(it).totalLinea, 0),
       agregarCapitulo = () => {
+        pushHistorial(I);
         var nId = null;
         D((J) => {
           var caps = J.capitulos || [];
@@ -41148,7 +41250,8 @@ MATERIALES:
             ),
           }),
         ),
-      moverCapitulo = (capId, direccion) =>
+      moverCapitulo = (capId, direccion) => {
+        pushHistorial(I);
         D((J) => {
           var caps = [...(J.capitulos || [])].sort(
             (a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0),
@@ -41171,7 +41274,8 @@ MATERIALES:
               return c;
             }),
           });
-        }),
+        });
+      },
       eliminarCapitulo = (capId) => {
         var tieneItems = (I.items || []).some((it) => it.capituloId === capId);
         if (
@@ -41181,6 +41285,7 @@ MATERIALES:
           )
         )
           return;
+        pushHistorial(I);
         D((J) =>
           u(d({}, J), {
             capitulos: (J.capitulos || []).filter((c) => c.id !== capId),
@@ -41190,13 +41295,16 @@ MATERIALES:
           }),
         );
       },
-      moverItemACapitulo = (T, capId) =>
+      moverItemACapitulo = (T, capId) => {
+        pushHistorial(I);
         D((J) => {
           var items = [...J.items];
           items[T] = u(d({}, items[T]), { capituloId: capId || "" });
           return u(d({}, J), { items });
-        }),
-      reordenarItemEnGrupo = (T, direccion, capId) =>
+        });
+      },
+      reordenarItemEnGrupo = (T, direccion, capId) => {
+        pushHistorial(I);
         D((J) => {
           var items = [...(J.items || [])];
           var grupo = items
@@ -41225,7 +41333,8 @@ MATERIALES:
           items[idxA] = u(d({}, items[idxA]), { ordenDentroCapitulo: ordenB });
           items[idxB] = u(d({}, items[idxB]), { ordenDentroCapitulo: ordenA });
           return u(d({}, J), { items });
-        }),
+        });
+      },
       Z = () => {
         if (!I.clienteId || !I.descripcion) {
           b("⚠️ Completa cliente y descripción");
@@ -41235,6 +41344,7 @@ MATERIALES:
           b("⚠️ Agrega al menos un ítem");
           return;
         }
+        limpiarHistorial();
         var capitulosConSubtotal = (I.capitulos || []).map((cap) =>
           u(d({}, cap), { subtotal: Math.round(subtotalCapitulo(cap.id)) }),
         );
@@ -41309,6 +41419,7 @@ K &&
                   _tipoCosto: L._tipoCosto || (L._cid ? "auto" : "mo"),
                 });
               });
+              pushHistorial(I);
               (D((L) =>
                 u(d({}, L), {
                   items:
@@ -41331,6 +41442,7 @@ K &&
             destinoActivoCapituloId: destinoActivoCapituloId,
             onClose: () => setMostrarSelectorSoluciones(!1),
             onApply: (resultado) => {
+              pushHistorial(I);
               D((W) => u(d({}, W), { items: resultado.items }));
               var todasSugerencias = [];
               (resultado.agregados || []).forEach((catItem) => {
@@ -41349,7 +41461,10 @@ K &&
             setMateriales: setMateriales,
             cfg: r,
             cantItem: parseFloat(I.items[k.idx] && I.items[k.idx].cant) || 1,
-            onConfirm: (W, T, L, E, customMats, pMO, pGG, pUtil, moOverride) => Y(k.idx, W, T, L, E, customMats, pMO, pGG, pUtil, moOverride),
+            onConfirm: (W, T, L, E, customMats, pMO, pGG, pUtil, moOverride) => {
+              pushHistorial(I);
+              Y(k.idx, W, T, L, E, customMats, pMO, pGG, pUtil, moOverride);
+            },
             onSkip: () => R(null),
             customData: I.items[k.idx],
           }),
@@ -41525,7 +41640,7 @@ K &&
               children: [
                 e.jsx("button", {
                   style: c.btn("s"),
-                  onClick: s,
+                  onClick: () => { limpiarHistorial(); s(); },
                   children: "Cancelar",
                 }),
                 e.jsx("button", {
@@ -41819,15 +41934,29 @@ K &&
                             }),
                             e.jsx("button", {
                               style: c.btn("g"),
-                              onClick: () =>
+                              onClick: () => {
+                                pushHistorial(I);
                                 D((W) => {
                                   var newItem = f();
-                                  if (usaCapitulos && destinoActivoCapituloId && destinoActivoCapituloId !== "sin-capitulo") {
+                                  if (W.capitulos && W.capitulos.length > 0 && destinoActivoCapituloId && destinoActivoCapituloId !== "sin-capitulo") {
                                     newItem.capituloId = destinoActivoCapituloId;
                                   }
                                   return u(d({}, W), { items: [...W.items, newItem] });
-                                }),
+                                });
+                              },
                               children: "+ Agregar ítem",
+                            }),
+                            e.jsx("button", {
+                              style: u(d({}, c.btn("s")), {
+                                fontSize: 12,
+                                padding: "5px 10px",
+                                opacity: historialTamano === 0 ? 0.4 : 1,
+                                cursor: historialTamano === 0 ? "not-allowed" : "pointer",
+                              }),
+                              disabled: historialTamano === 0,
+                              title: historialTamano === 0 ? "No hay cambios para deshacer" : "Deshacer último cambio (" + historialTamano + " disponible" + (historialTamano !== 1 ? "s" : "") + ")",
+                              onClick: deshacerUltimo,
+                              children: "↶ Deshacer",
                             }),
                           ],
                         }),
@@ -41931,8 +42060,10 @@ K &&
                                 e.jsx("input", {
                                   value: cap.codigo || "",
                                   placeholder: "Código",
+                                  onFocus: iniciarEdicionCampo,
                                   onChange: (ev) => actualizarCapitulo(cap.id, "codigo", ev.target.value),
                                   onBlur: (ev) => {
+                                    confirmarEdicionCampo();
                                     const val = ev.target.value.trim();
                                     if (!val) {
                                       alert("El código del capítulo no puede estar vacío.");
@@ -41953,6 +42084,8 @@ K &&
                                       id: "cap_name_" + cap.id,
                                       value: cap.nombre || "",
                                       placeholder: "Nombre del capítulo",
+                                      onFocus: iniciarEdicionCampo,
+                                      onBlur: confirmarEdicionCampo,
                                       onChange: (ev) => actualizarCapitulo(cap.id, "nombre", ev.target.value),
                                       style: u(d({}, c.inp), { flex: 1, fontWeight: 700, fontSize: 13, padding: "4px 6px" }),
                                     }),
@@ -42020,6 +42153,8 @@ K &&
                                         flex: 1
                                       }),
                                       value: W.desc,
+                                      onFocus: iniciarEdicionCampo,
+                                      onBlur: confirmarEdicionCampo,
                                       onChange: (M) =>
                                         ee(T, "desc", M.target.value),
                                       placeholder: "Descripción…",
@@ -42034,6 +42169,8 @@ K &&
                                   }),
                                   type: "number",
                                   value: W.cant,
+                                  onFocus: iniciarEdicionCampo,
+                                  onBlur: confirmarEdicionCampo,
                                   onChange: (M) =>
                                     ee(T, "cant", M.target.value),
                                   min: "0",
@@ -42070,6 +42207,8 @@ K &&
                                     padding: "6px 8px",
                                   }),
                                   value: W.unidad,
+                                  onFocus: iniciarEdicionCampo,
+                                  onBlur: confirmarEdicionCampo,
                                   onChange: (M) =>
                                     ee(T, "unidad", M.target.value),
                                 }),
@@ -42087,6 +42226,8 @@ K &&
                                       }),
                                       type: "number",
                                       value: Math.round(W.precio || 0),
+                                      onFocus: iniciarEdicionCampo,
+                                      onBlur: confirmarEdicionCampo,
                                       onChange: (M) =>
                                         D((J) => {
                                           var re = [...J.items];
@@ -42120,6 +42261,8 @@ K &&
                                   }),
                                   type: "number",
                                   value: Math.round(me_tmp),
+                                  onFocus: iniciarEdicionCampo,
+                                  onBlur: confirmarEdicionCampo,
                                   onChange: (M) =>
                                     D((J) => {
                                       var re = [...J.items];
@@ -42143,6 +42286,8 @@ K &&
                                   }),
                                   type: "number",
                                   value: Math.round(de_tmp),
+                                  onFocus: iniciarEdicionCampo,
+                                  onBlur: confirmarEdicionCampo,
                                   onChange: (M) =>
                                     D((J) => {
                                       var re = [...J.items];
@@ -42302,14 +42447,16 @@ K &&
                                     padding: "5px 6px",
                                     fontSize: 17,
                                   }),
-                                  onClick: () =>
+                                  onClick: () => {
+                                    pushHistorial(I);
                                     D((M) =>
                                       u(d({}, M), {
                                         items: M.items.filter(
                                           (q, J) => J !== T,
                                         ),
                                       }),
-                                    ),
+                                    );
+                                  },
                                   children: "×",
                                 }),
                               ],
