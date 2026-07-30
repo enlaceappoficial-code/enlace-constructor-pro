@@ -23931,19 +23931,25 @@ ${r.empresa}`;
                                       (parseFloat(a.ordenDentroCapitulo) || 0) - (parseFloat(b.ordenDentroCapitulo) || 0),
                                   );
                               var salidaExcel = [];
-                              capsOrdExcel.forEach((cap) => {
+                              capsOrdExcel.forEach((cap, capIdx) => {
                                 var itemsCap = porCapExcel(cap.id);
                                 if (!itemsCap.length) return;
                                 salidaExcel.push({
                                   __esCapitulo: !0,
                                   __nombre: (cap.codigo ? cap.codigo + " — " : "") + (cap.nombre || "Capítulo"),
                                 });
-                                salidaExcel.push(...itemsCap);
+                                itemsCap.forEach((it, itIdx) => {
+                                  it.__numJerarquico = `${capIdx + 1}.${itIdx + 1}`;
+                                  salidaExcel.push(it);
+                                });
                               });
                               var sinCapExcel = porCapExcel(null);
                               if (sinCapExcel.length) {
                                 salidaExcel.push({ __esCapitulo: !0, __nombre: "Sin capítulo" });
-                                salidaExcel.push(...sinCapExcel);
+                                sinCapExcel.forEach((it, itIdx) => {
+                                  it.__numJerarquico = `${itIdx + 1}`;
+                                  salidaExcel.push(it);
+                                });
                               }
                               return salidaExcel;
                             })();
@@ -23956,7 +23962,7 @@ ${r.empresa}`;
                             numExportable++;
                             var Lg = calcularLineaPresupuesto(G);
                             ($.push([
-                              numExportable,
+                              G.__numJerarquico || numExportable,
                               G.desc || "",
                               Lg.cantidadIngresada,
                               G.unidad || "",
@@ -41086,13 +41092,15 @@ MATERIALES:
               : it.capituloId === capId,
           )
           .reduce((sum, it) => sum + calcularLineaPresupuesto(it).totalLinea, 0),
-      agregarCapitulo = () =>
+      agregarCapitulo = () => {
+        var nId = null;
         D((J) => {
           var caps = J.capitulos || [];
           var maxId = caps.reduce((mx, c) => Math.max(mx, parseInt(c.id) || 0), 0);
           var maxOrden = caps.reduce((mx, c) => Math.max(mx, parseFloat(c.orden) || 0), 0);
+          nId = maxId + 1;
           var nuevo = {
-            id: maxId + 1,
+            id: nId,
             codigo: "",
             nombre: "Nuevo capítulo",
             orden: maxOrden + 1,
@@ -41100,7 +41108,15 @@ MATERIALES:
             subtotal: 0,
           };
           return u(d({}, J), { capitulos: [...caps, nuevo] });
-        }),
+        });
+        setTimeout(() => {
+          var el = document.getElementById("cap_name_" + nId);
+          if (el) {
+            el.focus();
+            el.select();
+          }
+        }, 50);
+      },
       actualizarCapitulo = (capId, campo, valor) =>
         D((J) =>
           u(d({}, J), {
@@ -41830,7 +41846,7 @@ K &&
                         (a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0),
                       );
                       if (capsOrdenados.length === 0)
-                        return (I.items || []).map((W, T) => renderFilaItem(W, T, false, capsOrdenados));
+                        return (I.items || []).map((W, T) => renderFilaItem(W, T, false, capsOrdenados, `${T + 1}`));
                       var itemsConIndice = (I.items || []).map((W, T) => ({ W, T }));
                       var itemsDeGrupo = (capId) =>
                         itemsConIndice
@@ -41887,24 +41903,25 @@ K &&
                                   placeholder: "Código",
                                   onChange: (ev) => actualizarCapitulo(cap.id, "codigo", ev.target.value),
                                   style: u(d({}, c.inp), { width: 56, fontSize: 12, padding: "4px 6px" }),
-                                }),
-                              esSinCapitulo
-                                ? e.jsx("div", { style: { fontWeight: 700, fontSize: 13, color: a.muted, flex: 1 }, children: "Sin capítulo" })
-                                : e.jsx("input", {
-                                    value: cap.nombre || "",
-                                    placeholder: "Nombre del capítulo",
-                                    onChange: (ev) => actualizarCapitulo(cap.id, "nombre", ev.target.value),
-                                    style: u(d({}, c.inp), { flex: 1, fontWeight: 700, fontSize: 13, padding: "4px 6px" }),
                                   }),
-                              e.jsxs("div", { style: { fontSize: 12, color: a.accent, fontWeight: 700, whiteSpace: "nowrap" }, children: ["Subtotal: ", ne(Math.round(subtotal))] }),
-                              !esSinCapitulo &&
-                                e.jsx("button", {
-                                  title: "Eliminar capítulo",
-                                  onClick: () => eliminarCapitulo(cap.id),
-                                  style: u(d({}, c.btn("d")), { padding: "4px 8px", fontSize: 13 }),
-                                  children: "✕",
-                                }),
-                            ],
+                                esSinCapitulo
+                                  ? e.jsx("div", { style: { fontWeight: 700, fontSize: 13, color: a.muted, flex: 1 }, children: "Sin capítulo" })
+                                  : e.jsx("input", {
+                                      id: "cap_name_" + cap.id,
+                                      value: cap.nombre || "",
+                                      placeholder: "Nombre del capítulo",
+                                      onChange: (ev) => actualizarCapitulo(cap.id, "nombre", ev.target.value),
+                                      style: u(d({}, c.inp), { flex: 1, fontWeight: 700, fontSize: 13, padding: "4px 6px" }),
+                                    }),
+                                e.jsxs("div", { style: { fontSize: 12, color: a.accent, fontWeight: 700, whiteSpace: "nowrap" }, children: ["Subtotal: ", ne(Math.round(subtotal))] }),
+                                !esSinCapitulo &&
+                                  e.jsx("button", {
+                                    title: "Eliminar capítulo",
+                                    onClick: () => eliminarCapitulo(cap.id),
+                                    style: u(d({}, c.btn("d")), { padding: "4px 8px", fontSize: 13 }),
+                                    children: "✕",
+                                  }),
+                              ],
                           },
                           "cap_" + (esSinCapitulo ? "sin" : cap.id),
                         );
@@ -41912,15 +41929,15 @@ K &&
                       var salida = [];
                       capsOrdenados.forEach((cap, capIdx) => {
                         salida.push(renderEncabezado(cap, capIdx));
-                        itemsDeGrupo(cap.id).forEach(({ W, T }) => salida.push(renderFilaItem(W, T, true, capsOrdenados)));
+                        itemsDeGrupo(cap.id).forEach(({ W, T }, itemIdx) => salida.push(renderFilaItem(W, T, true, capsOrdenados, `${capIdx + 1}.${itemIdx + 1}`)));
                       });
                       var sinCap = itemsDeGrupo(null);
                       if (sinCap.length > 0) {
                         salida.push(renderEncabezado(null, -1));
-                        sinCap.forEach(({ W, T }) => salida.push(renderFilaItem(W, T, true, capsOrdenados)));
+                        sinCap.forEach(({ W, T }, itemIdx) => salida.push(renderFilaItem(W, T, true, capsOrdenados, `${itemIdx + 1}`)));
                       }
                       return salida;
-                    })((W, T, usaCapitulos, capsOrdenados) => {
+                    })((W, T, usaCapitulos, capsOrdenados, numJerarquico) => {
                       var L = W._cid
                           ? i.find((M) => M.id === parseInt(W._cid))
                           : null,
@@ -41948,15 +41965,22 @@ K &&
                                 alignItems: "center",
                               },
                               children: [
-                                e.jsx("input", {
-                                  style: u(d({}, c.inp), {
-                                    fontSize: 13,
-                                    padding: "6px 8px",
-                                  }),
-                                  value: W.desc,
-                                  onChange: (M) =>
-                                    ee(T, "desc", M.target.value),
-                                  placeholder: "Descripción…",
+                                e.jsxs("div", {
+                                  style: { display: "flex", alignItems: "center", gap: 6 },
+                                  children: [
+                                    numJerarquico && e.jsx("span", { style: { fontWeight: 700, color: a.muted, fontSize: 12, minWidth: 20 }, children: numJerarquico }),
+                                    e.jsx("input", {
+                                      style: u(d({}, c.inp), {
+                                        fontSize: 13,
+                                        padding: "6px 8px",
+                                        flex: 1
+                                      }),
+                                      value: W.desc,
+                                      onChange: (M) =>
+                                        ee(T, "desc", M.target.value),
+                                      placeholder: "Descripción…",
+                                    })
+                                  ]
                                 }),
                                 e.jsx("input", {
                                   style: u(d({}, c.inp), {
@@ -44923,7 +44947,7 @@ K &&
                 })()
               : [{ cap: null, items: G }];
             var filaNum = 0;
-            gruposPdf.forEach((grp) => {
+            gruposPdf.forEach((grp, capIdx) => {
               if (usaCapitulosPdf) {
                 if (S > 255) {
                   f.addPage();
@@ -44943,7 +44967,7 @@ K &&
                 );
                 S += 9;
               }
-              grp.items.forEach((Z) => {
+              grp.items.forEach((Z, itemIdx) => {
                 var W = 8,
                   T = filaNum % 2 === 0 ? [248, 250, 252] : [255, 255, 255];
                 (f.setFillColor(...T),
@@ -44971,7 +44995,7 @@ K &&
                 (f.setFont("helvetica", "normal"),
                   f.setFontSize(8.5),
                   f.setTextColor(50, 60, 75),
-                  f.text("" + (filaNum + 1), A + 2, S + 5.3),
+                  f.text(usaCapitulosPdf ? (!grp.cap ? "" + (itemIdx + 1) : "" + (capIdx + 1) + "." + (itemIdx + 1)) : "" + (filaNum + 1), A + 2, S + 5.3),
                   f.text((Z.desc || "").slice(0, 55), A + 12, S + 5.3),
                   f.text("" + Lshow, ie === "separado" ? A + 110 : A + 120, S + 5.3, {
                     align: "right",
