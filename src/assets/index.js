@@ -40958,11 +40958,19 @@ MATERIALES:
     };
     var confirmarEdicionCampo = function() {
       if (_pendingEditSnapshot.current != null) {
+        var pendiente = _pendingEditSnapshot.current;
+        _pendingEditSnapshot.current = null;
+        // Si el campo recibió foco y perdió el foco sin cambios reales
+        // (p.ej. solo se pasó por él para hacer blur de otro campo), no
+        // vale la pena gastar un cupo del historial en un estado idéntico.
+        var sinCambios =
+          JSON.stringify(pendiente.estado) === JSON.stringify(_cloneEstado(I)) &&
+          pendiente.destinoActivoCapituloId === destinoActivoCapituloId;
+        if (sinCambios) return;
         var hist = historialRef.current;
         if (hist.length >= HISTORIAL_MAX) hist.shift();
-        hist.push(_pendingEditSnapshot.current);
+        hist.push(pendiente);
         setHistorialTamano(hist.length);
-        _pendingEditSnapshot.current = null;
       }
     };
     var limpiarHistorial = function() {
