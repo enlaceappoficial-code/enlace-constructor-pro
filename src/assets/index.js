@@ -34656,7 +34656,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
         precio: catItem.precio,
         _cid: String(catItem.id),
         _tipoCosto: "auto",
-        capituloId: capId || "",
+        capituloId: capId && capId !== "sin-capitulo" ? capId : "",
       };
       if (apuMatch) item._apuMatUnit = parseFloat(li(apuMatch, materiales || [], cfg).matTotal) || 0;
       return item;
@@ -40510,13 +40510,13 @@ MATERIALES:
     },
   ];
 
-  function EcpSelectorSoluciones({ catalog, apus, materiales, cfg, budgetItems, capitulos, onClose, onApply, capituloActivoId }) {
+  function EcpSelectorSoluciones({ catalog, apus, materiales, cfg, budgetItems, capitulos, onClose, onApply, destinoActivoCapituloId }) {
     const [paso, setPaso] = V("lista"),
       [solucionId, setSolucionId] = V(null),
       [cantidades, setCantidades] = V({}),
       [marcadas, setMarcadas] = V(() => new Set()),
       [grupoElegido, setGrupoElegido] = V({}),
-      [capituloDestino, setCapituloDestino] = V(capituloActivoId || "");
+      [capituloDestino, setCapituloDestino] = V(destinoActivoCapituloId || "");
 
     var solucion = SOLUCIONES_COMPUESTAS_ACTIVAS.find((sv) => sv.id === solucionId) || null;
     var catalogPorId = new Map((catalog || []).map((cv) => [cv.id, cv]));
@@ -40533,7 +40533,7 @@ MATERIALES:
           else if (!(p.grupoSeleccion in grupoInit)) grupoInit[p.grupoSeleccion] = null;
         } else if (p.obligatoria) marcInit.add(p.catalogId);
       });
-      (setSolucionId(sol.id), setCantidades(cantInit), setMarcadas(marcInit), setGrupoElegido(grupoInit), setCapituloDestino(capituloActivoId || ""), setPaso("detalle"));
+      (setSolucionId(sol.id), setCantidades(cantInit), setMarcadas(marcInit), setGrupoElegido(grupoInit), setCapituloDestino(destinoActivoCapituloId || ""), setPaso("detalle"));
     }
 
     function estaSeleccionada(p) {
@@ -40572,7 +40572,7 @@ MATERIALES:
         precio: catItem.precio,
         _cid: String(catItem.id),
         _tipoCosto: "auto",
-        capituloId: capId || "",
+        capituloId: capId && capId !== "sin-capitulo" ? capId : "",
       };
       if (apuMatch) item._apuMatUnit = parseFloat(li(apuMatch, materiales || [], cfg).matTotal) || 0;
       (parseFloat(catItem.cantidadMinimaFacturable) > 0) && (item._cantidadMinimaFacturable = parseFloat(catItem.cantidadMinimaFacturable));
@@ -40887,7 +40887,7 @@ MATERIALES:
       [S, O] = V(!0),
       [cargosSugeridos, setCargosSugeridos] = V(null),
       [mostrarSelectorSoluciones, setMostrarSelectorSoluciones] = V(!1),
-      [capituloActivoId, setCapituloActivoId] = V(null);
+      [destinoActivoCapituloId, setDestinoActivoCapituloId] = V(null);
     const catalogItemSatisface = (cid, key) => {
       var ci = i.find((W) => String(W.id) === String(cid));
       return !!(
@@ -41054,6 +41054,7 @@ MATERIALES:
             unidad: W.unidad,
             precio: W.precio,
             _tipoCosto: "auto",
+            capituloId: destinoActivoCapituloId && destinoActivoCapituloId !== "sin-capitulo" ? destinoActivoCapituloId : "",
           });
         T && (L._apuMatUnit = parseFloat(li(T, l || [], r).matTotal) || 0);
         (parseFloat(W.cantidadMinimaFacturable) > 0) &&
@@ -41110,7 +41111,7 @@ MATERIALES:
           };
           return u(d({}, J), { capitulos: [...caps, nuevo] });
         });
-        setCapituloActivoId(nId);
+        setDestinoActivoCapituloId(nId);
         setTimeout(() => {
           var el = document.getElementById("cap_name_" + nId);
           if (el) {
@@ -41307,7 +41308,7 @@ K &&
             cfg: r,
             budgetItems: I.items,
             capitulos: I.capitulos,
-            capituloActivoId: capituloActivoId,
+            destinoActivoCapituloId: destinoActivoCapituloId,
             onClose: () => setMostrarSelectorSoluciones(!1),
             onApply: (resultado) => {
               D((W) => u(d({}, W), { items: resultado.items }));
@@ -41801,8 +41802,8 @@ K &&
                               onClick: () =>
                                 D((W) => {
                                   var newItem = f();
-                                  if (usaCapitulos && capituloActivoId) {
-                                    newItem.capituloId = capituloActivoId;
+                                  if (usaCapitulos && destinoActivoCapituloId && destinoActivoCapituloId !== "sin-capitulo") {
+                                    newItem.capituloId = destinoActivoCapituloId;
                                   }
                                   return u(d({}, W), { items: [...W.items, newItem] });
                                 }),
@@ -41873,13 +41874,13 @@ K &&
                         return e.jsxs(
                           "div",
                           {
-                            onClick: () => { if (!esSinCapitulo) setCapituloActivoId(cap.id); },
+                            onClick: () => { setDestinoActivoCapituloId(esSinCapitulo ? "sin-capitulo" : cap.id); },
                             style: {
                               display: "flex",
                               alignItems: "center",
                               gap: 8,
-                              background: (!esSinCapitulo && cap.id === capituloActivoId) ? (a.accent + "11") : a.sb,
-                              border: `1px solid ${(!esSinCapitulo && cap.id === capituloActivoId) ? a.accent : a.border}`,
+                              background: (esSinCapitulo ? destinoActivoCapituloId === "sin-capitulo" : cap.id === destinoActivoCapituloId) ? (a.accent + "11") : a.sb,
+                              border: `1px solid ${(esSinCapitulo ? destinoActivoCapituloId === "sin-capitulo" : cap.id === destinoActivoCapituloId) ? a.accent : a.border}`,
                               borderRadius: 8,
                               padding: "8px 10px",
                               margin: "10px 0 6px",
@@ -41976,7 +41977,7 @@ K &&
                       return e.jsxs(
                         "div",
                         {
-                          onClick: () => { if (W.capituloId) setCapituloActivoId(W.capituloId); },
+                          onClick: () => { if (W.capituloId) setDestinoActivoCapituloId(W.capituloId); },
                           children: [
                             e.jsxs("div", {
                               style: {
