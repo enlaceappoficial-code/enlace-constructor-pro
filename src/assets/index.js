@@ -18,6 +18,7 @@ var eu = (Mt, at, nt) =>
     if (Zp) for (var nt of Zp(at)) ox.call(at, nt) && eu(Mt, nt, at[nt]);
     return Mt;
   },
+  FEATURE_ASISTENTE_INTELIGENTE = false,
   u = (Mt, at) => rx(Mt, ax(at));
 (function () {
   "use strict";
@@ -41227,7 +41228,7 @@ MATERIALES:
             onClose: () => A(null),
           }),
         
-                mostrarAsistente && e.jsx(AsistenteInteligenteModal, {
+        FEATURE_ASISTENTE_INTELIGENTE && mostrarAsistente && e.jsx(AsistenteInteligenteModal, {
           catalog: i,
           paso: asisPaso,
           setPaso: setAsisPaso,
@@ -41251,7 +41252,7 @@ K &&
             onClose: () => { 
             if (plantillaDelAsistente) {
                 setPlantillaDelAsistente(null);
-                setMostrarAsistente(!0);
+                if (FEATURE_ASISTENTE_INTELIGENTE) setMostrarAsistente(!0);
             }
             y(!1); 
           },
@@ -41748,7 +41749,7 @@ K &&
                               onClick: () => y(!0),
                               children: "📋 Plantilla",
                             }),
-                            e.jsx("button", {
+                            FEATURE_ASISTENTE_INTELIGENTE && e.jsx("button", {
                               style: u(d({}, c.btn("p")), {
                                 fontSize: 12,
                                 padding: "5px 10px",
