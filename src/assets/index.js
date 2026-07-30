@@ -40950,22 +40950,31 @@ MATERIALES:
     // curso; confirmarEdicionCampo() (en blur) recién ahí empuja esa copia
     // al historial. Así una edición de muchas teclas produce un solo estado
     // deshacible, no uno por tecla.
+    //
+    // La comparación de "¿cambió algo?" se hace con el valor crudo del input
+    // (ev.target.value en foco y en blur), no releyendo el estado React "I":
+    // si el blur llega en el mismo tick que el último onChange, "I" en este
+    // closure puede seguir siendo el valor previo al cambio (React todavía no
+    // terminó de re-renderizar), lo que hacía descartar por error historiales
+    // de cambios reales. El valor del input en el DOM siempre es el actual.
     var _pendingEditSnapshot = Re.useRef(null);
-    var iniciarEdicionCampo = function() {
+    var _pendingValorInicial = Re.useRef(void 0);
+    var iniciarEdicionCampo = function(valorInicial) {
       if (_pendingEditSnapshot.current == null) {
         _pendingEditSnapshot.current = _snapshotCompleto(I);
+        _pendingValorInicial.current = valorInicial;
       }
     };
-    var confirmarEdicionCampo = function() {
+    var confirmarEdicionCampo = function(valorFinal) {
       if (_pendingEditSnapshot.current != null) {
         var pendiente = _pendingEditSnapshot.current;
+        var valorInicial = _pendingValorInicial.current;
         _pendingEditSnapshot.current = null;
-        // Si el campo recibió foco y perdió el foco sin cambios reales
-        // (p.ej. solo se pasó por él para hacer blur de otro campo), no
-        // vale la pena gastar un cupo del historial en un estado idéntico.
+        _pendingValorInicial.current = void 0;
         var sinCambios =
-          JSON.stringify(pendiente.estado) === JSON.stringify(_cloneEstado(I)) &&
-          pendiente.destinoActivoCapituloId === destinoActivoCapituloId;
+          valorInicial !== void 0 &&
+          valorFinal !== void 0 &&
+          String(valorInicial) === String(valorFinal);
         if (sinCambios) return;
         var hist = historialRef.current;
         if (hist.length >= HISTORIAL_MAX) hist.shift();
@@ -42068,10 +42077,10 @@ K &&
                                 e.jsx("input", {
                                   value: cap.codigo || "",
                                   placeholder: "Código",
-                                  onFocus: iniciarEdicionCampo,
+                                  onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
                                   onChange: (ev) => actualizarCapitulo(cap.id, "codigo", ev.target.value),
                                   onBlur: (ev) => {
-                                    confirmarEdicionCampo();
+                                    confirmarEdicionCampo(ev.target.value);
                                     const val = ev.target.value.trim();
                                     if (!val) {
                                       alert("El código del capítulo no puede estar vacío.");
@@ -42092,8 +42101,8 @@ K &&
                                       id: "cap_name_" + cap.id,
                                       value: cap.nombre || "",
                                       placeholder: "Nombre del capítulo",
-                                      onFocus: iniciarEdicionCampo,
-                                      onBlur: confirmarEdicionCampo,
+                                      onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                      onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                       onChange: (ev) => actualizarCapitulo(cap.id, "nombre", ev.target.value),
                                       style: u(d({}, c.inp), { flex: 1, fontWeight: 700, fontSize: 13, padding: "4px 6px" }),
                                     }),
@@ -42161,8 +42170,8 @@ K &&
                                         flex: 1
                                       }),
                                       value: W.desc,
-                                      onFocus: iniciarEdicionCampo,
-                                      onBlur: confirmarEdicionCampo,
+                                      onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                      onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                       onChange: (M) =>
                                         ee(T, "desc", M.target.value),
                                       placeholder: "Descripción…",
@@ -42177,8 +42186,8 @@ K &&
                                   }),
                                   type: "number",
                                   value: W.cant,
-                                  onFocus: iniciarEdicionCampo,
-                                  onBlur: confirmarEdicionCampo,
+                                  onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                  onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                   onChange: (M) =>
                                     ee(T, "cant", M.target.value),
                                   min: "0",
@@ -42215,8 +42224,8 @@ K &&
                                     padding: "6px 8px",
                                   }),
                                   value: W.unidad,
-                                  onFocus: iniciarEdicionCampo,
-                                  onBlur: confirmarEdicionCampo,
+                                  onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                  onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                   onChange: (M) =>
                                     ee(T, "unidad", M.target.value),
                                 }),
@@ -42234,8 +42243,8 @@ K &&
                                       }),
                                       type: "number",
                                       value: Math.round(W.precio || 0),
-                                      onFocus: iniciarEdicionCampo,
-                                      onBlur: confirmarEdicionCampo,
+                                      onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                      onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                       onChange: (M) =>
                                         D((J) => {
                                           var re = [...J.items];
@@ -42269,8 +42278,8 @@ K &&
                                   }),
                                   type: "number",
                                   value: Math.round(me_tmp),
-                                  onFocus: iniciarEdicionCampo,
-                                  onBlur: confirmarEdicionCampo,
+                                  onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                  onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                   onChange: (M) =>
                                     D((J) => {
                                       var re = [...J.items];
@@ -42294,8 +42303,8 @@ K &&
                                   }),
                                   type: "number",
                                   value: Math.round(de_tmp),
-                                  onFocus: iniciarEdicionCampo,
-                                  onBlur: confirmarEdicionCampo,
+                                  onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                  onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                   onChange: (M) =>
                                     D((J) => {
                                       var re = [...J.items];
