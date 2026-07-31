@@ -40908,7 +40908,22 @@ MATERIALES:
       [cargosSugeridos, setCargosSugeridos] = V(null),
       [mostrarSelectorSoluciones, setMostrarSelectorSoluciones] = V(!1),
       [destinoActivoCapituloId, setDestinoActivoCapituloId] = V(null),
-      [historialTamano, setHistorialTamano] = V(0);
+      [historialTamano, setHistorialTamano] = V(0),
+      [itemSeleccionado, setItemSeleccionado] = V(null),
+      [hayPartidaCopiada, setHayPartidaCopiada] = V(!1);
+    // --- Portapapeles interno de partidas (duplicar / copiar / pegar) ---
+    // Solo vive en memoria (useRef) mientras este presupuesto está abierto;
+    // nunca localStorage ni portapapeles del sistema. Se limpia junto con el
+    // historial de deshacer (guardar, cancelar, cambiar de presupuesto).
+    var clipboardPartidaRef = Re.useRef(null);
+    var _uidCounterRef = Re.useRef(0);
+    var _generarItemUid = function() {
+      _uidCounterRef.current += 1;
+      return "it_" + Date.now().toString(36) + "_" + _uidCounterRef.current;
+    };
+    var _cloneItem = function(item) {
+      return JSON.parse(JSON.stringify(item));
+    };
     // --- Historial temporal (undo) ---
     // Vive solo en memoria (useRef, nunca localStorage/respaldos) y solo dura
     // mientras este presupuesto está abierto: se limpia al guardar, cancelar,
@@ -40982,6 +40997,11 @@ MATERIALES:
         setHistorialTamano(hist.length);
       }
     };
+    var limpiarPortapapeles = function() {
+      clipboardPartidaRef.current = null;
+      setHayPartidaCopiada(!1);
+      setItemSeleccionado(null);
+    };
     var limpiarHistorial = function() {
       _pendingEditSnapshot.current = null;
       historialRef.current = [];
@@ -40999,12 +41019,91 @@ MATERIALES:
         snap.destinoActivoCapituloId != null ? snap.destinoActivoCapituloId : null,
       );
     };
+    // Duplicar: copia profunda de la partida en T, insertada inmediatamente
+    // debajo (mismo capítulo, mismo ordenDentroCapitulo para que el orden
+    // relativo se preserve incluso con capítulos activos). Un solo estado
+    // de deshacer por duplicado.
+    var duplicarPartida = function(T) {
+      if (!I.items[T]) return;
+      pushHistorial(I);
+      D(function(J) {
+        var items = [...J.items];
+        if (!items[T]) return J;
+        var copia = _cloneItem(items[T]);
+        copia._uid = _generarItemUid();
+        items.splice(T + 1, 0, copia);
+        return u(d({}, J), { items: items });
+      });
+      setItemSeleccionado(T + 1);
+    };
+    // Copiar: guarda una copia profunda de la partida seleccionada en el
+    // portapapeles interno (solo memoria, nunca localStorage ni el
+    // portapapeles del sistema). No modifica el presupuesto ni el historial.
+    var copiarPartida = function(T) {
+      if (T == null || !I.items[T]) return;
+      var item = I.items[T];
+      clipboardPartidaRef.current = {
+        item: _cloneItem(item),
+        capituloIdOrigen: item.capituloId || "",
+      };
+      setHayPartidaCopiada(!0);
+      setItemSeleccionado(T);
+    };
+    // Pegar: inserta una copia profunda de la partida copiada. Destino:
+    // capítulo activo si existe, si no el capítulo de origen. Posición:
+    // debajo de refIdx si esa partida pertenece al capítulo destino, si no
+    // al final del grupo destino.
+    var pegarPartida = function(refIdx) {
+      var clip = clipboardPartidaRef.current;
+      if (!clip) return;
+      pushHistorial(I);
+      D(function(J) {
+        var items = [...J.items];
+        var destino =
+          destinoActivoCapituloId != null && destinoActivoCapituloId !== ""
+            ? destinoActivoCapituloId === "sin-capitulo"
+              ? ""
+              : destinoActivoCapituloId
+            : clip.capituloIdOrigen;
+        var copia = _cloneItem(clip.item);
+        copia._uid = _generarItemUid();
+        copia.capituloId = destino;
+        if (
+          refIdx != null &&
+          items[refIdx] &&
+          (items[refIdx].capituloId || "") === (destino || "")
+        ) {
+          copia.ordenDentroCapitulo = items[refIdx].ordenDentroCapitulo;
+          items.splice(refIdx + 1, 0, copia);
+        } else {
+          var maxOrden = items.reduce(function(mx, it) {
+            return (it.capituloId || "") === (destino || "")
+              ? Math.max(mx, parseFloat(it.ordenDentroCapitulo) || 0)
+              : mx;
+          }, -Infinity);
+          copia.ordenDentroCapitulo = maxOrden === -Infinity ? 0 : maxOrden + 1;
+          items.push(copia);
+        }
+        return u(d({}, J), { items: items });
+      });
+    };
     var deshacerUltimoRef = Re.useRef(deshacerUltimo);
     deshacerUltimoRef.current = deshacerUltimo;
+    var duplicarPartidaRef = Re.useRef(duplicarPartida);
+    duplicarPartidaRef.current = duplicarPartida;
+    var copiarPartidaRef = Re.useRef(copiarPartida);
+    copiarPartidaRef.current = copiarPartida;
+    var pegarPartidaRef = Re.useRef(pegarPartida);
+    pegarPartidaRef.current = pegarPartida;
+    var itemSeleccionadoRef = Re.useRef(itemSeleccionado);
+    itemSeleccionadoRef.current = itemSeleccionado;
+    var hayPartidaCopiadaRef = Re.useRef(hayPartidaCopiada);
+    hayPartidaCopiadaRef.current = hayPartidaCopiada;
     Re.useEffect(function () {
       function onKeyDownDeshacer(ev) {
         if (!(ev.ctrlKey || ev.metaKey)) return;
-        if (ev.key !== "z" && ev.key !== "Z") return;
+        var key = (ev.key || "").toLowerCase();
+        if (key !== "z" && key !== "d" && key !== "c" && key !== "v") return;
         var activo = document.activeElement;
         var enCampoEditable =
           activo &&
@@ -41012,8 +41111,29 @@ MATERIALES:
             activo.tagName === "TEXTAREA" ||
             activo.isContentEditable);
         if (enCampoEditable) return;
-        ev.preventDefault();
-        deshacerUltimoRef.current();
+        if (key === "z") {
+          ev.preventDefault();
+          deshacerUltimoRef.current();
+          return;
+        }
+        if (key === "d") {
+          if (itemSeleccionadoRef.current == null) return;
+          ev.preventDefault();
+          duplicarPartidaRef.current(itemSeleccionadoRef.current);
+          return;
+        }
+        if (key === "c") {
+          if (itemSeleccionadoRef.current == null) return;
+          ev.preventDefault();
+          copiarPartidaRef.current(itemSeleccionadoRef.current);
+          return;
+        }
+        if (key === "v") {
+          if (!hayPartidaCopiadaRef.current) return;
+          ev.preventDefault();
+          pegarPartidaRef.current(itemSeleccionadoRef.current);
+          return;
+        }
       }
       window.addEventListener("keydown", onKeyDownDeshacer);
       return function () {
@@ -41023,6 +41143,7 @@ MATERIALES:
     Re.useEffect(
       function () {
         limpiarHistorial();
+        limpiarPortapapeles();
       },
       [m && m.id],
     );
@@ -41362,6 +41483,7 @@ MATERIALES:
           return;
         }
         limpiarHistorial();
+        limpiarPortapapeles();
         var capitulosConSubtotal = (I.capitulos || []).map((cap) =>
           u(d({}, cap), { subtotal: Math.round(subtotalCapitulo(cap.id)) }),
         );
@@ -41657,7 +41779,7 @@ K &&
               children: [
                 e.jsx("button", {
                   style: c.btn("s"),
-                  onClick: () => { limpiarHistorial(); s(); },
+                  onClick: () => { limpiarHistorial(); limpiarPortapapeles(); s(); },
                   children: "Cancelar",
                 }),
                 e.jsx("button", {
@@ -42147,7 +42269,15 @@ K &&
                       return e.jsxs(
                         "div",
                         {
-                          onClick: () => { if (W.capituloId) setDestinoActivoCapituloId(W.capituloId); },
+                          onClick: () => {
+                            setItemSeleccionado(T);
+                            if (W.capituloId) setDestinoActivoCapituloId(W.capituloId);
+                          },
+                          style: {
+                            background: itemSeleccionado === T ? (a.accent + "0d") : "transparent",
+                            border: `1px solid ${itemSeleccionado === T ? a.accent : "transparent"}`,
+                            borderRadius: 6,
+                          },
                           children: [
                             e.jsxs("div", {
                               style: {
@@ -42542,6 +42672,25 @@ K &&
                                     onClick: () =>
                                       R({ idx: T, catItem: L, apu: E || { id: "manual_" + T, nombre: W.desc || "Ítem Manual", unidad: W.unidad || "unidad", materiales: [], pctMO: g, pctGG: B, pctUtilidad: v, rendimiento: 0, dotacion: 1 } }),
                                     children: E ? "🔧 Ver y ajustar materiales del APU" : "🔧 Definir materiales manualmente",
+                                  }),
+                                  e.jsx("button", {
+                                    title: "Duplicar partida",
+                                    onClick: (ev) => { ev.stopPropagation(); duplicarPartida(T); },
+                                    style: { background: a.sb, border: `1px solid ${a.border}`, borderRadius: 6, color: a.muted, cursor: "pointer", fontSize: 13, padding: "3px 8px", flexShrink: 0 },
+                                    children: "⧉",
+                                  }),
+                                  e.jsx("button", {
+                                    title: "Copiar partida",
+                                    onClick: (ev) => { ev.stopPropagation(); copiarPartida(T); },
+                                    style: { background: a.sb, border: `1px solid ${a.border}`, borderRadius: 6, color: a.muted, cursor: "pointer", fontSize: 13, padding: "3px 8px", flexShrink: 0 },
+                                    children: "⎘",
+                                  }),
+                                  e.jsx("button", {
+                                    title: hayPartidaCopiada ? "Pegar partida" : "No hay ninguna partida copiada",
+                                    disabled: !hayPartidaCopiada,
+                                    onClick: (ev) => { ev.stopPropagation(); pegarPartida(T); },
+                                    style: { background: a.sb, border: `1px solid ${a.border}`, borderRadius: 6, color: a.muted, cursor: hayPartidaCopiada ? "pointer" : "not-allowed", fontSize: 13, padding: "3px 8px", flexShrink: 0, opacity: hayPartidaCopiada ? 1 : 0.4 },
+                                    children: "📋",
                                   }),
                                 ],
                               }),
