@@ -41099,10 +41099,21 @@ MATERIALES:
     itemSeleccionadoRef.current = itemSeleccionado;
     var hayPartidaCopiadaRef = Re.useRef(hayPartidaCopiada);
     hayPartidaCopiadaRef.current = hayPartidaCopiada;
+    var guardarPresupuestoRef = Re.useRef(null);
     Re.useEffect(function () {
       function onKeyDownDeshacer(ev) {
         if (!(ev.ctrlKey || ev.metaKey)) return;
         var key = (ev.key || "").toLowerCase();
+        if (key === "s") {
+          // Ctrl+S guarda sin salir, incluso con el foco dentro de un campo
+          // (no hay conflicto de edición de texto como con Ctrl+D/C/V), y
+          // reemplaza el diálogo nativo "Guardar página" del navegador.
+          ev.preventDefault();
+          if (guardarPresupuestoRef.current) {
+            guardarPresupuestoRef.current({ salir: !1 });
+          }
+          return;
+        }
         if (key !== "z" && key !== "d" && key !== "c" && key !== "v") return;
         var activo = document.activeElement;
         var enCampoEditable =
@@ -41473,7 +41484,11 @@ MATERIALES:
           return u(d({}, J), { items });
         });
       },
-      Z = () => {
+      // Función única de persistencia: usada tanto por "Guardar" (se queda
+      // en el editor) como por "Guardar y salir" (vuelve al listado). No
+      // duplica lógica de guardado entre ambos botones/atajos.
+      guardarPresupuesto = (opts) => {
+        var salir = !opts || opts.salir !== !1;
         if (!I.clienteId || !I.descripcion) {
           b("⚠️ Completa cliente y descripción");
           return;
@@ -41489,7 +41504,7 @@ MATERIALES:
         );
         o(
           d(
-            u(d({}, I), { pctMO: g, pctGG: B, pctUtil: v, capitulos: capitulosConSubtotal }),
+            u(d({}, I), { pctMO: g, pctGG: B, pctUtil: v, capitulos: capitulosConSubtotal, _salir: salir }),
             m && I.customId && parseInt(I.customId) !== parseInt(m.id)
               ? { _newId: parseInt(I.customId) }
               : {},
@@ -41497,6 +41512,7 @@ MATERIALES:
         );
       },
       X = m && m._isDuplicate;
+    guardarPresupuestoRef.current = guardarPresupuesto;
     return e.jsxs("div", {
       children: [
         P &&
@@ -41783,9 +41799,15 @@ K &&
                   children: "Cancelar",
                 }),
                 e.jsx("button", {
-                  style: c.btn("p"),
-                  onClick: Z,
+                  title: "Guardar sin salir del presupuesto (Ctrl+S)",
+                  style: c.btn("s"),
+                  onClick: () => guardarPresupuesto({ salir: !1 }),
                   children: "💾 Guardar",
+                }),
+                e.jsx("button", {
+                  style: c.btn("p"),
+                  onClick: () => guardarPresupuesto({ salir: !0 }),
+                  children: "Guardar y salir",
                 }),
               ],
             }),
@@ -43116,7 +43138,7 @@ K &&
                           padding: "12px",
                           fontSize: 17,
                         }),
-                        onClick: Z,
+                        onClick: () => guardarPresupuesto({ salir: !0 }),
                         children: "💾 Guardar Presupuesto",
                       }),
                     ],
@@ -79673,6 +79695,8 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       Q(opportunity ? "🔒 Presupuesto N° " + budgetRecord.id + " vinculado a licitación " + targetIdMP : "🔓 Presupuesto N° " + budgetRecord.id + " desvinculado");
     };
     var oe = (H) => {
+        var salir = !(H && H._salir === !1);
+        H = u(d({}, H), { _salir: void 0 });
         if (H && H._pendingClientName) {
           var pendingClientName = String(H._pendingClientName || "").trim();
           var normalizeClientName = function (value) { return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim(); };
@@ -79842,7 +79866,16 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             o((Me) => u(d({}, Me), { nextNum: Qp + 1 })));
           syncBudgetToTender(createdBudget, Qp);
         }
-        (R(null), f("history"), Q("✅ Presupuesto guardado"));
+        if (salir) {
+          (R(null), f("history"), Q("✅ Presupuesto guardado"));
+        } else {
+          // Guardar sin salir: el usuario permanece en el mismo presupuesto.
+          // Al pasar de "nuevo" a "editando" con el id ya asignado, el
+          // próximo guardado se detecta como actualización (evita duplicar).
+          R(ae ? Zg : createdBudget);
+          f("edit");
+          Q("✅ Presupuesto guardado correctamente");
+        }
       },
       ce = (H) => {
         var ae =
