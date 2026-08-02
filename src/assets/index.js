@@ -40797,6 +40797,90 @@ MATERIALES:
       }),
     });
   }
+  function ModalProteccionSalida({
+    tieneCliente,
+    faltaDescripcion,
+    onGuardarYSalir,
+    onGuardarBorrador,
+    onSeguirEditando,
+    onSalirSinGuardar,
+  }) {
+    return e.jsx("div", {
+      style: {
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,.6)",
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      children: e.jsxs("div", {
+        style: {
+          background: a.card,
+          border: `1px solid ${a.border}`,
+          borderRadius: 14,
+          padding: "28px 32px",
+          maxWidth: 420,
+          width: "90%",
+          boxShadow: "0 8px 32px rgba(0,0,0,.4)",
+        },
+        children: [
+          e.jsx("div", {
+            style: { fontSize: 18, fontWeight: 700, color: a.text, marginBottom: 8 },
+            children: tieneCliente
+              ? "Tienes cambios sin guardar"
+              : "Falta cliente para guardar el presupuesto",
+          }),
+          e.jsx("div", {
+            style: { fontSize: 14, color: a.muted, marginBottom: faltaDescripcion ? 12 : 24 },
+            children: tieneCliente
+              ? "Este presupuesto tiene cambios pendientes. Si sales ahora, podrías perder información importante."
+              : "Ya tienes trabajo avanzado en este presupuesto, pero aún no has asociado un cliente. Antes de salir, elige cómo quieres continuar.",
+          }),
+          faltaDescripcion &&
+            e.jsx("div", {
+              style: {
+                background: "rgba(251,146,60,0.1)",
+                border: "1px solid #fb923c",
+                borderRadius: 8,
+                padding: "8px 12px",
+                fontSize: 12,
+                color: "#fb923c",
+                marginBottom: 24,
+              },
+              children: "⚠️ También falta la descripción de la obra.",
+            }),
+          e.jsxs("div", {
+            style: { display: "flex", flexDirection: "column", gap: 8 },
+            children: [
+              tieneCliente
+                ? e.jsx("button", {
+                    style: c.btn("p"),
+                    onClick: onGuardarYSalir,
+                    children: "💾 Guardar y salir",
+                  })
+                : e.jsx("button", {
+                    style: c.btn("p"),
+                    onClick: onGuardarBorrador,
+                    children: "📋 Guardar como borrador sin cliente",
+                  }),
+              e.jsx("button", {
+                style: c.btn("s"),
+                onClick: onSeguirEditando,
+                children: "Seguir editando",
+              }),
+              e.jsx("button", {
+                style: c.btn("d"),
+                onClick: onSalirSinGuardar,
+                children: "Salir sin guardar",
+              }),
+            ],
+          }),
+        ],
+      }),
+    });
+  }
   function lg({
     clients: t,
     catalog: i,
@@ -40810,6 +40894,7 @@ MATERIALES:
     onDeletePlantillaUser: C,
     setToast: b,
     setMateriales: setMateriales,
+    guardRef,
   }) {
     var h = () => {
         const W = r.moItems || [],
@@ -40910,7 +40995,16 @@ MATERIALES:
       [destinoActivoCapituloId, setDestinoActivoCapituloId] = V(null),
       [historialTamano, setHistorialTamano] = V(0),
       [itemSeleccionado, setItemSeleccionado] = V(null),
-      [hayPartidaCopiada, setHayPartidaCopiada] = V(!1);
+      [hayPartidaCopiada, setHayPartidaCopiada] = V(!1),
+      [modalSalida, setModalSalida] = V(null);
+    // --- Protección de salida / guardado incompleto ---
+    // "dirty" se calcula comparando el estado actual contra una foto tomada
+    // al montar (y renovada tras cada guardado exitoso). Usa comparación
+    // estructural en vez de historialTamano porque este último no cubre
+    // cliente/fecha/notas/estado/hitos (solo ítems, capítulos y algunos
+    // campos de fila con blur), y el spec exige detectar cualquier cambio.
+    var initialIRef = Re.useRef(I);
+    var dirty = JSON.stringify(I) !== JSON.stringify(initialIRef.current);
     // --- Portapapeles interno de partidas (duplicar / copiar / pegar) ---
     // Solo vive en memoria (useRef) mientras este presupuesto está abierto;
     // nunca localStorage ni portapapeles del sistema. Se limpia junto con el
@@ -41155,6 +41249,13 @@ MATERIALES:
       function () {
         limpiarHistorial();
         limpiarPortapapeles();
+        // Resetea la base de comparación de "dirty" al cambiar de
+        // presupuesto (defensa adicional: en la práctica esta instancia de
+        // lg siempre se remonta al abrir otro presupuesto, lo que ya
+        // reinicia initialIRef por sí solo, pero este efecto cubre además
+        // la transición "nuevo" → "editando" tras el primer guardado sin
+        // salir, donde lg permanece montado).
+        initialIRef.current = I;
       },
       [m && m.id],
     );
@@ -41489,7 +41590,8 @@ MATERIALES:
       // duplica lógica de guardado entre ambos botones/atajos.
       guardarPresupuesto = (opts) => {
         var salir = !opts || opts.salir !== !1;
-        if (!I.clienteId || !I.descripcion) {
+        var permitirIncompleto = !!(opts && opts.permitirIncompleto);
+        if (!permitirIncompleto && (!I.clienteId || !I.descripcion)) {
           b("⚠️ Completa cliente y descripción");
           return;
         }
@@ -41499,12 +41601,20 @@ MATERIALES:
         }
         limpiarHistorial();
         limpiarPortapapeles();
+        initialIRef.current = I;
         var capitulosConSubtotal = (I.capitulos || []).map((cap) =>
           u(d({}, cap), { subtotal: Math.round(subtotalCapitulo(cap.id)) }),
         );
         o(
           d(
-            u(d({}, I), { pctMO: g, pctGG: B, pctUtil: v, capitulos: capitulosConSubtotal, _salir: salir }),
+            u(d({}, I), {
+              pctMO: g,
+              pctGG: B,
+              pctUtil: v,
+              capitulos: capitulosConSubtotal,
+              _salir: salir,
+              _borrador: permitirIncompleto && !I.clienteId ? !0 : void 0,
+            }),
             m && I.customId && parseInt(I.customId) !== parseInt(m.id)
               ? { _newId: parseInt(I.customId) }
               : {},
@@ -41513,6 +41623,37 @@ MATERIALES:
       },
       X = m && m._isDuplicate;
     guardarPresupuestoRef.current = guardarPresupuesto;
+    // Intenta salir del editor: si hay cambios sin guardar, muestra el modal
+    // de protección en vez de ejecutar onLeave de inmediato. onLeave es la
+    // navegación real (Cancelar, o el botón del menú lateral que el usuario
+    // intentó usar) capturada por quien llama a intentarSalir.
+    var intentarSalir = function(onLeave) {
+      if (dirty) {
+        setModalSalida({ onLeave: onLeave });
+      } else {
+        onLeave();
+      }
+    };
+    if (guardRef) {
+      guardRef.current = { dirty: dirty, intentarSalir: intentarSalir };
+    }
+    Re.useEffect(function() {
+      return function() {
+        if (guardRef) guardRef.current = null;
+      };
+    }, []);
+    Re.useEffect(function() {
+      function onBeforeUnload(ev) {
+        if (dirty) {
+          ev.preventDefault();
+          ev.returnValue = "";
+        }
+      }
+      window.addEventListener("beforeunload", onBeforeUnload);
+      return function() {
+        window.removeEventListener("beforeunload", onBeforeUnload);
+      };
+    }, [dirty]);
     return e.jsxs("div", {
       children: [
         P &&
@@ -41531,7 +41672,25 @@ MATERIALES:
             },
             onClose: () => A(null),
           }),
-        
+        modalSalida &&
+          e.jsx(ModalProteccionSalida, {
+            tieneCliente: !!I.clienteId,
+            faltaDescripcion: !I.descripcion,
+            onGuardarYSalir: () => {
+              guardarPresupuesto({ salir: !0, permitirIncompleto: !0 });
+              setModalSalida(null);
+            },
+            onGuardarBorrador: () => {
+              guardarPresupuesto({ salir: !0, permitirIncompleto: !0 });
+              setModalSalida(null);
+            },
+            onSeguirEditando: () => setModalSalida(null),
+            onSalirSinGuardar: () => {
+              var onLeave = modalSalida.onLeave;
+              setModalSalida(null);
+              onLeave();
+            },
+          }),
         FEATURE_ASISTENTE_INTELIGENTE && mostrarAsistente && e.jsx(AsistenteInteligenteModal, {
           catalog: i,
           paso: asisPaso,
@@ -41795,14 +41954,8 @@ K &&
               children: [
                 e.jsx("button", {
                   style: c.btn("s"),
-                  onClick: () => { limpiarHistorial(); limpiarPortapapeles(); s(); },
+                  onClick: () => intentarSalir(() => { limpiarHistorial(); limpiarPortapapeles(); s(); }),
                   children: "Cancelar",
-                }),
-                e.jsx("button", {
-                  title: "Guardar sin salir del presupuesto (Ctrl+S)",
-                  style: c.btn("s"),
-                  onClick: () => guardarPresupuesto({ salir: !1 }),
-                  children: "💾 Guardar",
                 }),
                 e.jsx("button", {
                   style: c.btn("p"),
@@ -42024,8 +42177,10 @@ K &&
                     e.jsxs("div", {
                       style: {
                         display: "flex",
+                        flexWrap: "wrap",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        gap: 8,
                         marginBottom: 11,
                       },
                       children: [
@@ -42055,7 +42210,7 @@ K &&
                           ],
                         }),
                         e.jsxs("div", {
-                          style: { display: "flex", gap: 6 },
+                          style: { display: "flex", flexWrap: "wrap", gap: 6, rowGap: 8 },
                           children: [
                             e.jsx("button", {
                               style: u(d({}, c.btn("s")), {
@@ -42106,6 +42261,15 @@ K &&
                                 });
                               },
                               children: "+ Agregar ítem",
+                            }),
+                            e.jsx("button", {
+                              title: "Guardar sin salir del presupuesto (Ctrl+S)",
+                              style: u(d({}, c.btn("s")), {
+                                fontSize: 12,
+                                padding: "5px 10px",
+                              }),
+                              onClick: () => guardarPresupuesto({ salir: !1 }),
+                              children: "💾 Guardar",
                             }),
                             e.jsx("button", {
                               style: u(d({}, c.btn("s")), {
@@ -46221,9 +46385,27 @@ K &&
                               e.jsx("td", {
                                 style: c.td,
                                 children:
-                                  G &&
-                                  G.nombre &&
-                                  G.nombre.split(" ").slice(0, 3).join(" "),
+                                  G && G.nombre
+                                    ? G.nombre.split(" ").slice(0, 3).join(" ")
+                                    : Q._borrador && !Q.clienteId
+                                      ? e.jsx("span", {
+                                          title: "Borrador guardado sin cliente asociado",
+                                          style: {
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            gap: 4,
+                                            padding: "2px 6px",
+                                            borderRadius: 999,
+                                            background: "rgba(251,146,60,.10)",
+                                            border: "1px solid rgba(251,146,60,.4)",
+                                            color: "#fb923c",
+                                            fontSize: 9.5,
+                                            fontWeight: 800,
+                                            whiteSpace: "nowrap",
+                                          },
+                                          children: "📋 Borrador · Sin cliente",
+                                        })
+                                      : null,
                               }),
                               e.jsx("td", {
                                 style: u(d({}, c.td), {
@@ -79540,6 +79722,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         return de > H ? u(d({}, ae), { estado: "Vencido" }) : ae;
       });
     }, [B, l.validez]);
+    const editorGuardRef = Re.useRef(null);
     const [x, f] = V("dashboard"),
       [configStartTab, setConfigStartTab] = V("identidad"),
       [I, D] = V(() => !pt("welcomeSeen", !1)),
@@ -80268,6 +80451,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             plantillasUser: P,
             onDeletePlantillaUser: O,
             setToast: Q,
+            guardRef: editorGuardRef,
           });
         if (x === "dashboard")
           return e.jsx(Qf, {
@@ -81415,20 +81599,31 @@ Esta acción no se puede deshacer.`) &&
                                 },
                               ),
                               onClick: () => {
-                                (R(null),
-                                  ae.k !== "lista" && Z(null),
-                                  x === "config" &&
-                                    ae.k !== "config" &&
-                                    r &&
-                                    Q(
-                                      "⚠️ Tienes cambios sin guardar en Configuración",
-                                    ),
-                                  f(ae.k));
+                                var leave = () => {
+                                  (R(null),
+                                    ae.k !== "lista" && Z(null),
+                                    x === "config" &&
+                                      ae.k !== "config" &&
+                                      r &&
+                                      Q(
+                                        "⚠️ Tienes cambios sin guardar en Configuración",
+                                      ),
+                                    f(ae.k));
+                                  if (
+                                    ae.k === "licitaciones" &&
+                                    typeof setUnreadAlerts !== "undefined"
+                                  )
+                                    setUnreadAlerts(0);
+                                };
                                 if (
-                                  ae.k === "licitaciones" &&
-                                  typeof setUnreadAlerts !== "undefined"
-                                )
-                                  setUnreadAlerts(0);
+                                  (x === "new" || x === "edit") &&
+                                  editorGuardRef.current &&
+                                  editorGuardRef.current.dirty
+                                ) {
+                                  editorGuardRef.current.intentarSalir(leave);
+                                } else {
+                                  leave();
+                                }
                               },
                               children: [
                                 e.jsx("span", {
