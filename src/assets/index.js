@@ -33254,9 +33254,7 @@ ${r.empresa}`;
           nombre: "Baño",
           orden: 1,
           soluciones: [{ solucionId: "sol-006-remodelacion-basica-bano", obligatoria: true }],
-          partidasDirectas: [
-            { catalogId: 40516, obligatoria: false, cantidadSugerida: 12 }
-          ]
+          partidasDirectas: []
         }
       ],
       preguntasIniciales: [
@@ -33280,8 +33278,7 @@ ${r.empresa}`;
           orden: 1,
           soluciones: [{ solucionId: "sol-004-cambio-piso-ceramico", obligatoria: true }],
           partidasDirectas: [
-            { catalogId: 337, obligatoria: true, cantidadSugerida: 3 },
-            { catalogId: 40007, obligatoria: false, cantidadSugerida: 1 }
+            { catalogId: 337, obligatoria: true, cantidadSugerida: 3 }
           ]
         }
       ],
@@ -33308,9 +33305,7 @@ ${r.empresa}`;
             { solucionId: "sol-001-filtracion-techumbre", obligatoria: false },
             { solucionId: "sol-002-cambio-canaleta-bajante", obligatoria: true }
           ],
-          partidasDirectas: [
-            { catalogId: 79, obligatoria: false, cantidadSugerida: 20 }
-          ]
+          partidasDirectas: []
         }
       ],
       preguntasIniciales: [
@@ -33334,10 +33329,7 @@ ${r.empresa}`;
           nombre: "Pintura y Terminaciones",
           orden: 1,
           soluciones: [{ solucionId: "sol-003-pintura-interior-habitacion", obligatoria: true }],
-          partidasDirectas: [
-            { catalogId: 40, obligatoria: true, cantidadSugerida: 50 },
-            { catalogId: 41, obligatoria: false, cantidadSugerida: 5 }
-          ]
+          partidasDirectas: []
         }
       ],
       preguntasIniciales: [
@@ -33345,7 +33337,7 @@ ${r.empresa}`;
         "¿Las puertas y ventanas de madera requieren pintura de esmalte?"
       ],
       advertencias: [
-        "La solución sol-003 solo incluye muros, por lo que cielos y puertas se cargan como partidas directas adicionales."
+        "La solución sol-003 ya incluye muros (obligatorio), cielos y puertas/ventanas como opciones seleccionables; no se agregan partidas directas adicionales."
       ]
     },
     // Plantillas suspendidas hasta completar partidas, materiales y APU validados.
