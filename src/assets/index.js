@@ -36423,6 +36423,31 @@ ${re.getDate()}/${re.getMonth() + 1}`,
           n("❌ No se pudo exportar a MS Project");
         }
       };
+    var filaIndexPorId = {};
+    vistaTareas.forEach((fila, idx) => {
+      filaIndexPorId[fila.tarea.id] = idx;
+    });
+    var conexionesGantt = [];
+    vistaTareas.forEach((fila) => {
+      if (fila.esResumen) return;
+      var tarea = fila.tarea,
+        idxSucc = filaIndexPorId[tarea.id];
+      (tarea.predecesoras || []).forEach((predId) => {
+        var idxPred = filaIndexPorId[predId];
+        if (idxPred === void 0 || esTareaResumen(g, predId)) return;
+        var fePred = fechasCalc[predId] || { inicio: 0, duracion: 1 },
+          feSucc = fechasCalc[tarea.id] || { inicio: 0, duracion: 1 },
+          xPredFin = X(fePred.inicio + fePred.duracion),
+          yPred = idxPred * Y + Y / 2,
+          xSuccIni = X(feSucc.inicio),
+          ySucc = idxSucc * Y + Y / 2,
+          xMedio = xPredFin + 8;
+        conexionesGantt.push({
+          key: predId + "-" + tarea.id,
+          points: `${xPredFin},${yPred} ${xMedio},${yPred} ${xMedio},${ySucc} ${xSuccIni},${ySucc}`,
+        });
+      });
+    });
     return e.jsxs("div", {
       style: { padding: "24px 28px", maxWidth: 1200, margin: "0 auto" },
       children: [
@@ -36590,7 +36615,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
               ],
             }),
             e.jsxs("div", {
-              style: { display: "flex", gap: 8, marginTop: 14 },
+              style: { display: "flex", gap: 8, marginTop: 14, flexWrap: "wrap" },
               children: [
                 e.jsxs("button", {
                   style: u(d({}, c.btn("p")), {
@@ -36614,6 +36639,31 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                         }),
                         onClick: y,
                         children: "➕ Agregar tarea",
+                      }),
+                      e.jsx("div", {
+                        style: { width: 1, alignSelf: "stretch", background: a.border, margin: "0 2px" },
+                      }),
+                      [
+                        [subirSeleccionada, "↑ Subir"],
+                        [bajarSeleccionada, "↓ Bajar"],
+                        [aplicarSangria, "→ Sangría"],
+                        [quitarSangria, "← Quitar sangría"],
+                        [enlazarSeleccionadas, "🔗 Enlazar"],
+                        [desenlazarSeleccionadas, "⛓ Desenlazar"],
+                        [agregarHito, "◆ Hito"],
+                      ].map(([accion, etiqueta]) =>
+                        e.jsx(
+                          "button",
+                          {
+                            style: u(d({}, c.btn("s")), { padding: "7px 10px", fontSize: 12 }),
+                            onClick: accion,
+                            children: etiqueta,
+                          },
+                          etiqueta,
+                        ),
+                      ),
+                      e.jsx("div", {
+                        style: { width: 1, alignSelf: "stretch", background: a.border, margin: "0 2px" },
                       }),
                       e.jsxs("button", {
                         style: u(d({}, c.btn("s")), {
@@ -36800,35 +36850,6 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                   e.jsx("div", {
                     style: u(d({}, c.ct), { marginBottom: 12 }),
                     children: "Tareas",
-                  }),
-                  e.jsxs("div", {
-                    style: {
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: 4,
-                      marginBottom: 10,
-                      paddingBottom: 10,
-                      borderBottom: `1px solid ${a.border}`,
-                    },
-                    children: [
-                      [subirSeleccionada, "↑ Subir"],
-                      [bajarSeleccionada, "↓ Bajar"],
-                      [aplicarSangria, "→ Sangría"],
-                      [quitarSangria, "← Quitar sangría"],
-                      [enlazarSeleccionadas, "🔗 Enlazar"],
-                      [desenlazarSeleccionadas, "⛓ Desenlazar"],
-                      [agregarHito, "◆ Hito"],
-                    ].map(([accion, etiqueta]) =>
-                      e.jsx(
-                        "button",
-                        {
-                          style: u(d({}, c.btn("s")), { padding: "4px 8px", fontSize: 11 }),
-                          onClick: accion,
-                          children: etiqueta,
-                        },
-                        etiqueta,
-                      ),
-                    ),
                   }),
                   e.jsx("div", {
                     style: { maxHeight: 500, overflowY: "auto" },
@@ -37051,7 +37072,10 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                             ),
                           ],
                         }),
-                        vistaTareas.map((fila, M) => {
+                        e.jsxs("div", {
+                          style: { position: "relative" },
+                          children: [
+                            vistaTareas.map((fila, M) => {
                           var E = fila.tarea,
                             feE = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion };
                           return e.jsxs(
@@ -37172,6 +37196,41 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                             },
                             E.id,
                           );
+                        }),
+                            e.jsxs("svg", {
+                              style: {
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: Z,
+                                height: vistaTareas.length * Y,
+                                pointerEvents: "none",
+                              },
+                              children: [
+                                e.jsx("defs", {
+                                  children: e.jsx("marker", {
+                                    id: "flechaGanttDep",
+                                    viewBox: "0 0 10 10",
+                                    refX: "8",
+                                    refY: "5",
+                                    markerWidth: "6",
+                                    markerHeight: "6",
+                                    orient: "auto-start-reverse",
+                                    children: e.jsx("path", { d: "M0,0 L10,5 L0,10 z", fill: a.accent }),
+                                  }),
+                                }),
+                                conexionesGantt.map((cx) =>
+                                  e.jsx("polyline", {
+                                    points: cx.points,
+                                    fill: "none",
+                                    stroke: a.accent,
+                                    strokeWidth: 1.5,
+                                    markerEnd: "url(#flechaGanttDep)",
+                                  }, cx.key),
+                                ),
+                              ],
+                            }),
+                          ],
                         }),
                       ],
                     }),
