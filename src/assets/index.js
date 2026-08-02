@@ -48545,8 +48545,13 @@ K &&
     try { apusAll = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_apus") || "[]") || []; } catch (e) {}
     try { materialesAll = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_materiales") || "[]") || []; } catch (e) {}
     try { cfgAll = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_cfg") || "{}") || {}; } catch (e) {}
-    var apu = apusAll.find((a2) => parseInt(a2 && a2.catalogId) === parseInt(catalogId)) || null;
-    if (!apu) return { apu: null, materialesDetalle: [], calculo: null };
+    var candidatos = apusAll.filter((a2) => parseInt(a2 && a2.catalogId) === parseInt(catalogId));
+    // Si hay APUs duplicadas para la misma partida (dato local desactualizado),
+    // se usa la de mayor id (la más reciente), nunca la primera que aparezca.
+    var apu = candidatos.length
+      ? candidatos.reduce((best, cur) => (parseInt(cur.id) > parseInt(best.id) ? cur : best))
+      : null;
+    if (!apu) return { apu: null, materialesDetalle: [], calculo: null, apusCandidatos: 0 };
     var materialById = {};
     materialesAll.forEach((m) => { materialById[parseInt(m.id)] = m; });
     var calculo = li(apu, materialesAll, cfgAll);
@@ -48562,9 +48567,25 @@ K &&
         subtotal: cantidad * precioUnit,
       };
     });
-    return { apu, materialesDetalle, calculo };
+    return { apu, materialesDetalle, calculo, apusCandidatos: candidatos.length };
   }
-  function ModalDetallePartida({ catalogItem, onClose }) {
+  var CAMPOS_TAXONOMIA_PARTIDA = ["rubro", "subrubro", "tipoIntervencion", "sistemaConstructivo", "alcance", "especialidad"];
+  function resolverTaxonomiaConFallbackCanonico(catalogItem) {
+    // La copia combinada (localStorage) puede provenir de un registro local
+    // anterior a la incorporación de taxonomía moderna al catálogo canónico
+    // (qi). Se completa SOLO la taxonomía faltante desde qi, sin sobrescribir
+    // ningún otro campo (precio, descripción, etc. siempre vienen de la copia
+    // combinada real que usa la UI) y sin persistir nada en localStorage.
+    var canonico = (qi || []).find((c) => c.id === catalogItem.id);
+    if (!canonico) return catalogItem;
+    var out = d({}, catalogItem);
+    CAMPOS_TAXONOMIA_PARTIDA.forEach((campo) => {
+      if (!out[campo] && canonico[campo]) out[campo] = canonico[campo];
+    });
+    return out;
+  }
+  function ModalDetallePartida({ catalogItem: catalogItemOriginal, onClose }) {
+    var catalogItem = resolverTaxonomiaConFallbackCanonico(catalogItemOriginal);
     var detalle = cargarDetalleApuPartida(catalogItem.id);
     var apu = detalle.apu;
     var calculo = detalle.calculo;
