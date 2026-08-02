@@ -48540,6 +48540,210 @@ K &&
       ],
     });
   }
+  function cargarDetalleApuPartida(catalogId) {
+    var apusAll = [], materialesAll = [], cfgAll = {};
+    try { apusAll = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_apus") || "[]") || []; } catch (e) {}
+    try { materialesAll = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_materiales") || "[]") || []; } catch (e) {}
+    try { cfgAll = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_cfg") || "{}") || {}; } catch (e) {}
+    var apu = apusAll.find((a2) => parseInt(a2 && a2.catalogId) === parseInt(catalogId)) || null;
+    if (!apu) return { apu: null, materialesDetalle: [], calculo: null };
+    var materialById = {};
+    materialesAll.forEach((m) => { materialById[parseInt(m.id)] = m; });
+    var calculo = li(apu, materialesAll, cfgAll);
+    var materialesDetalle = (Array.isArray(apu.materiales) ? apu.materiales : []).map((line) => {
+      var mat = materialById[parseInt(line.materialId)] || {};
+      var cantidad = parseFloat(line.cantidad) || 0;
+      var precioUnit = parseFloat(mat.precio) || 0;
+      return {
+        nombre: mat.nombre || "Material " + line.materialId,
+        unidad: mat.unidad || "",
+        cantidad,
+        precioUnit,
+        subtotal: cantidad * precioUnit,
+      };
+    });
+    return { apu, materialesDetalle, calculo };
+  }
+  function ModalDetallePartida({ catalogItem, onClose }) {
+    var detalle = cargarDetalleApuPartida(catalogItem.id);
+    var apu = detalle.apu;
+    var calculo = detalle.calculo;
+    var tieneApu = !!apu;
+    var esSubcontrato = tieneApu && !!apu.esSubcontrato;
+    var precioCatalogo = parseFloat(catalogItem.precio) || 0;
+    var precioCalculado = calculo ? calculo.precioFinal : 0;
+    var diferenciaAbs = tieneApu ? precioCatalogo - precioCalculado : 0;
+    var diferenciaPct = tieneApu && precioCalculado > 0 ? (diferenciaAbs / precioCalculado) * 100 : 0;
+    var difSignificativa = tieneApu && Math.abs(diferenciaPct) > 5;
+    var Campo = (label, value) =>
+      e.jsxs("div", {
+        children: [
+          e.jsx("div", { style: { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em", color: a.muted, marginBottom: 2 }, children: label }),
+          e.jsx("div", { style: { fontSize: 14, fontWeight: 700, color: a.text }, children: value || "—" }),
+        ],
+      });
+    var Fila = (label, value, strong) =>
+      e.jsxs("div", {
+        style: { display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid " + a.border, fontSize: strong ? 14 : 13 },
+        children: [
+          e.jsx("div", { style: { color: a.muted }, children: label }),
+          e.jsx("div", { style: { color: strong ? a.accent : a.text, fontWeight: strong ? 900 : 700 }, children: value }),
+        ],
+      });
+    var Seccion = (titulo, children) =>
+      e.jsxs("div", {
+        style: { marginTop: 18 },
+        children: [
+          e.jsx("div", { style: { fontSize: 13, fontWeight: 900, color: a.text, marginBottom: 8 }, children: titulo }),
+          children,
+        ],
+      });
+    return e.jsx("div", {
+      style: { position: "fixed", inset: 0, background: "rgba(0,0,0,.85)", zIndex: 6500, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 },
+      onClick: onClose,
+      children: e.jsxs("div", {
+        style: { background: a.card, border: "1px solid " + a.border, borderRadius: 14, padding: "24px 28px", maxWidth: 760, width: "100%", maxHeight: "88vh", overflowY: "auto", boxShadow: "0 8px 32px rgba(0,0,0,.5)" },
+        onClick: (ev) => ev.stopPropagation(),
+        children: [
+          e.jsxs("div", {
+            style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 },
+            children: [
+              e.jsxs("div", {
+                children: [
+                  e.jsx("div", { style: { fontSize: 12, color: a.muted, fontWeight: 700 }, children: "Detalle de partida · ID de catálogo: " + catalogItem.id }),
+                  e.jsx("div", { style: { fontSize: 18, fontWeight: 800, color: a.text, marginTop: 4 }, children: catalogItem.desc }),
+                  e.jsxs("div", {
+                    style: { fontSize: 12, color: a.muted, marginTop: 2 },
+                    children: [catalogItem.rubro || catalogItem.cat, catalogItem.subrubro && " · " + catalogItem.subrubro],
+                  }),
+                ],
+              }),
+              e.jsx("button", {
+                onClick: onClose,
+                style: { background: "transparent", border: "1px solid " + a.border, borderRadius: 8, color: a.muted, cursor: "pointer", fontSize: 14, padding: "4px 10px", flexShrink: 0 },
+                children: "✕",
+              }),
+            ],
+          }),
+          e.jsxs("div", {
+            style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10, margin: "16px 0", padding: 12, background: a.sb, borderRadius: 10 },
+            children: [
+              Campo("Categoría", catalogItem.cat),
+              Campo("Unidad", catalogItem.unidad),
+              Campo("Precio neto", ne(precioCatalogo)),
+              Campo("Precio con IVA", ne(Math.round(precioCatalogo * 1.19))),
+            ],
+          }),
+          !tieneApu &&
+            e.jsx("div", {
+              style: { background: "rgba(56,189,248,0.1)", border: "1px solid #38bdf8", borderRadius: 8, padding: 12, marginBottom: 4, fontSize: 13, color: a.text },
+              children: "Esta partida no tiene un APU vinculado.",
+            }),
+          tieneApu &&
+            Seccion(
+              "APU vinculado: " + (apu.nombre || "—"),
+              e.jsxs(e.Fragment, {
+                children: [
+                  e.jsxs("div", { style: { fontSize: 12, color: a.muted, marginBottom: 8 }, children: [esSubcontrato ? "Subcontrato" : apu.categoria || apu.tipo || "—", " · ", apu.unidad] }),
+                  !esSubcontrato &&
+                    e.jsx("div", {
+                      style: { border: "1px solid " + a.border, borderRadius: 10, overflow: "hidden" },
+                      children: [
+                        e.jsx("div", {
+                          style: { display: "grid", gridTemplateColumns: "1fr 70px 90px 100px", gap: 8, padding: "8px 12px", background: a.sb, fontSize: 11, fontWeight: 700, color: a.muted, textTransform: "uppercase" },
+                          children: ["Material", "Cant.", "Precio un.", "Subtotal"].map((h) => e.jsx("div", { style: h === "Material" ? {} : { textAlign: "right" }, children: h }, h)),
+                        }),
+                        detalle.materialesDetalle.length
+                          ? detalle.materialesDetalle.map((mLine, idx) =>
+                              e.jsxs(
+                                "div",
+                                {
+                                  style: { display: "grid", gridTemplateColumns: "1fr 70px 90px 100px", gap: 8, padding: "7px 12px", fontSize: 12, borderTop: "1px solid " + a.border, alignItems: "center" },
+                                  children: [
+                                    e.jsx("div", { style: { color: a.text }, children: mLine.nombre }),
+                                    e.jsx("div", { style: { color: a.muted, textAlign: "right" }, children: mLine.cantidad + (mLine.unidad ? " " + mLine.unidad : "") }),
+                                    e.jsx("div", { style: { color: a.muted, textAlign: "right" }, children: ne(mLine.precioUnit) }),
+                                    e.jsx("div", { style: { color: a.text, fontWeight: 700, textAlign: "right" }, children: ne(Math.round(mLine.subtotal)) }),
+                                  ],
+                                },
+                                idx,
+                              ),
+                            )
+                          : e.jsx("div", { style: { padding: 12, fontSize: 12, color: a.muted }, children: "Sin materiales" }),
+                      ],
+                    }),
+                ],
+              }),
+            ),
+          tieneApu &&
+            Seccion(
+              "Desglose de costo",
+              e.jsxs("div", {
+                children: [
+                  Fila(esSubcontrato ? "Costo de subcontrato" : "Costo materiales", ne(Math.round(calculo.base))),
+                  !esSubcontrato && Fila("Mano de obra (" + calculo.moLabel + ")", ne(Math.round(calculo.moTotal))),
+                  Fila("GG (" + (parseFloat(apu.pctGG) || 0) + "%)", ne(Math.round(calculo.ggTotal))),
+                  Fila("Utilidad (" + (parseFloat(apu.pctUtilidad) || 0) + "%)", ne(Math.round(calculo.utilTotal))),
+                  Fila("PRECIO FINAL (calculado por APU)", ne(calculo.precioFinal), !0),
+                ],
+              }),
+            ),
+          tieneApu &&
+            Seccion(
+              "Comparación de precios",
+              e.jsxs("div", {
+                children: [
+                  Fila("Precio guardado en catálogo", ne(precioCatalogo)),
+                  Fila("Precio calculado por APU", ne(precioCalculado)),
+                  Fila("Diferencia", (diferenciaAbs >= 0 ? "+" : "") + ne(diferenciaAbs)),
+                  Fila("Diferencia %", (diferenciaPct >= 0 ? "+" : "") + diferenciaPct.toFixed(2).replace(".", ",") + "%"),
+                  e.jsx("div", {
+                    style: {
+                      marginTop: 10,
+                      display: "inline-block",
+                      padding: "4px 12px",
+                      borderRadius: 20,
+                      fontSize: 12,
+                      fontWeight: 800,
+                      background: difSignificativa ? "rgba(251,146,60,0.15)" : "rgba(52,211,153,0.15)",
+                      color: difSignificativa ? "#fb923c" : "#34d399",
+                      border: "1px solid " + (difSignificativa ? "#fb923c" : "#34d399"),
+                    },
+                    children: difSignificativa ? "⚠️ Revisar" : "✅ Coincide",
+                  }),
+                ],
+              }),
+            ),
+          Seccion(
+            "📋 Reglas comerciales",
+            e.jsxs("div", {
+              children: [
+                Fila("Cantidad mínima facturable", catalogItem.cantidadMinimaFacturable ? catalogItem.cantidadMinimaFacturable + " " + catalogItem.unidad : "—"),
+                Fila("Precio mínimo de la partida", catalogItem.precioMinimoPartida ? ne(catalogItem.precioMinimoPartida) : "—"),
+                Fila("Requiere movilización", catalogItem.requiereMovilizacion ? "Sí" : "No"),
+                Fila("Requiere visita técnica", catalogItem.requiereVisitaTecnica ? "Sí" : "No"),
+                Fila("Requiere trabajo en altura", catalogItem.requiereTrabajoAltura ? "Sí" : "No"),
+                Fila("Requiere retiro de residuos", catalogItem.requiereRetiroResiduos ? "Sí" : "No"),
+              ],
+            }),
+          ),
+          Seccion(
+            "🏷️ Clasificación técnica",
+            e.jsxs("div", {
+              children: [
+                Fila("Rubro", catalogItem.rubro || "—"),
+                Fila("Subrubro", catalogItem.subrubro || "—"),
+                Fila("Tipo de intervención", catalogItem.tipoIntervencion || "—"),
+                Fila("Sistema constructivo", catalogItem.sistemaConstructivo || "—"),
+                Fila("Alcance", catalogItem.alcance || "—"),
+                Fila("Especialidad", catalogItem.especialidad || "—"),
+              ],
+            }),
+          ),
+        ],
+      }),
+    });
+  }
   function vg({ catalog: t, setCatalog: i, setToast: r }) {
     var n = [...new Set(t.map((y) => y.cat))];
     var rubrosPresentes = [...new Set(t.map((y) => y.rubro || y.cat))].sort((a, b) => a.localeCompare(b, "es"));
@@ -48559,7 +48763,8 @@ K &&
       [categoriaHeredada, setCategoriaHeredada] = V(""),
       [rubroFiltro, setRubroFiltro] = V("Todos"),
       [subrubroFiltro, setSubrubroFiltro] = V("Todos"),
-      [tipoFiltro, setTipoFiltro] = V("Todos");
+      [tipoFiltro, setTipoFiltro] = V("Todos"),
+      [detalleId, setDetalleId] = V(null);
     var subrubrosPresentes = [...new Set(t.filter((y) => rubroFiltro === "Todos" || (y.rubro || y.cat) === rubroFiltro).map((y) => y.subrubro).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
     var tiposPresentes = [...new Set(t.filter((y) => (rubroFiltro === "Todos" || (y.rubro || y.cat) === rubroFiltro) && (subrubroFiltro === "Todos" || y.subrubro === subrubroFiltro)).map((y) => y.tipoIntervencion).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
     var f = (() => {
@@ -49695,6 +49900,15 @@ K &&
                                       style: { display: "flex", gap: 5 },
                                       children: [
                                         e.jsx("button", {
+                                          style: u(d({}, c.btn("g")), { fontSize: 11, whiteSpace: "nowrap" }),
+                                          title: "Ver detalle técnico completo (solo lectura)",
+                                          onClick: (P) => {
+                                            P.stopPropagation();
+                                            setDetalleId(y.id);
+                                          },
+                                          children: "🔍 Ver detalle",
+                                        }),
+                                        e.jsx("button", {
                                           style: c.btn("g"),
                                           onClick: (P) => {
                                             P.stopPropagation();
@@ -50251,6 +50465,16 @@ K &&
             }),
           ],
         }),
+        detalleId !== null &&
+          (() => {
+            var catalogItemDetalle = t.find((y) => y.id === detalleId);
+            return catalogItemDetalle
+              ? e.jsx(ModalDetallePartida, {
+                  catalogItem: catalogItemDetalle,
+                  onClose: () => setDetalleId(null),
+                })
+              : null;
+          })(),
       ],
     });
   }
