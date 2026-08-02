@@ -35668,6 +35668,17 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
     }
     return false;
   }
+  var COLUMNAS_TABLA_GANTT = [
+    { clave: "sel", ancho: 36 },
+    { clave: "id", ancho: 55 },
+    { clave: "nombre", ancho: 220 },
+    { clave: "inicio", ancho: 110 },
+    { clave: "fin", ancho: 110 },
+    { clave: "duracion", ancho: 80 },
+    { clave: "predecesora", ancho: 90 },
+    { clave: "acciones", ancho: 45 },
+  ];
+  var TABLA_TAREAS_ANCHO_MIN = COLUMNAS_TABLA_GANTT.reduce((sum, c2) => sum + c2.ancho, 0);
   function tg({ budgets: t, licitaciones: i, cfg: r, setToast: n }) {
     var l = [
         "#3b82f6",
@@ -35759,8 +35770,32 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       [colapsados, setColapsados] = V(() => new Set()),
       [seleccionadas, setSeleccionadas] = V(() => new Set()),
       [panelTareasVisible, setPanelTareasVisible] = V(!0),
+      [anchoTareasPx, setAnchoTareasPx] = V(null),
       [fechaCalendarioSeleccionada, setFechaCalendarioSeleccionada] = V(null),
       [historialGanttTamano, setHistorialGanttTamano] = V(0);
+    var gridPanelesRef = Re.useRef(null);
+    var ANCHO_TAREAS_MIN = 480;
+    var iniciarArrastrePanelTareas = function (ev) {
+      ev.preventDefault();
+      var contenedor = gridPanelesRef.current;
+      if (!contenedor) return;
+      var rectContenedor = contenedor.getBoundingClientRect(),
+        panelTareas = contenedor.firstElementChild,
+        anchoInicial = panelTareas ? panelTareas.getBoundingClientRect().width : rectContenedor.width * 0.5,
+        xInicial = ev.clientX;
+      var mover = function (e2) {
+        var delta = e2.clientX - xInicial,
+          maximo = rectContenedor.width * 0.7,
+          nuevoAncho = Math.max(ANCHO_TAREAS_MIN, Math.min(maximo, anchoInicial + delta));
+        setAnchoTareasPx(Math.round(nuevoAncho));
+      };
+      var soltar = function () {
+        window.removeEventListener("mousemove", mover);
+        window.removeEventListener("mouseup", soltar);
+      };
+      window.addEventListener("mousemove", mover);
+      window.addEventListener("mouseup", soltar);
+    };
     var historialGanttRef = Re.useRef([]);
     var HISTORIAL_GANTT_MAX = 30;
     var pushHistorialGantt = function (estadoTareas) {
@@ -37184,16 +37219,18 @@ ${re.getDate()}/${re.getMonth() + 1}`,
         v &&
           g.length > 0 &&
           e.jsxs("div", {
+            ref: gridPanelesRef,
             style: {
               display: "grid",
-              gridTemplateColumns: panelTareasVisible ? "35% 65%" : "1fr",
-              gap: 16,
+              gridTemplateColumns: panelTareasVisible
+                ? `${anchoTareasPx ? anchoTareasPx + "px" : "50%"} 6px 1fr`
+                : "1fr",
               alignItems: "start",
             },
             children: [
               panelTareasVisible &&
                 e.jsxs("div", {
-                  style: u(d({}, c.card), { padding: "14px 0 0 0", overflow: "hidden" }),
+                  style: u(d({}, c.card), { padding: "14px 0 0 0", overflow: "hidden", minWidth: 0 }),
                   children: [
                     e.jsxs("div", {
                       style: {
@@ -37215,22 +37252,68 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                       ],
                     }),
                     e.jsx("div", {
-                      style: { maxHeight: 500, overflowY: "auto" },
+                      style: { maxHeight: 500, overflow: "auto" },
                       children: e.jsxs("table", {
-                        style: { width: "100%", borderCollapse: "collapse" },
+                        style: { width: "100%", minWidth: TABLA_TAREAS_ANCHO_MIN, borderCollapse: "collapse" },
                         children: [
+                          e.jsx("colgroup", {
+                            children: COLUMNAS_TABLA_GANTT.map((col) =>
+                              e.jsx("col", { style: { width: col.ancho }, key: col.clave }),
+                            ),
+                          }),
                           e.jsx("thead", {
                             children: e.jsxs("tr", {
                               style: { background: a.sb, borderBottom: `2px solid ${a.border}` },
                               children: [
-                                e.jsx("th", { style: { width: 24, padding: "6px 2px" } }),
-                                e.jsx("th", { style: { width: 40, padding: "6px 2px", fontSize: 9, color: a.muted, textAlign: "left", textTransform: "uppercase" }, children: "ID" }),
-                                e.jsx("th", { style: { padding: "6px 4px", fontSize: 9, color: a.muted, textAlign: "left", textTransform: "uppercase" }, children: "Nombre" }),
-                                e.jsx("th", { style: { width: 92, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase" }, children: "Inicio" }),
-                                e.jsx("th", { style: { width: 92, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase" }, children: "Fin" }),
-                                e.jsx("th", { style: { width: 44, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase" }, children: "Dur." }),
-                                e.jsx("th", { style: { width: 60, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase" }, children: "Predec." }),
-                                e.jsx("th", { style: { width: 24, padding: "6px 2px" } }),
+                                e.jsx("th", {
+                                  style: {
+                                    width: 36,
+                                    padding: "6px 2px",
+                                    position: "sticky",
+                                    left: 0,
+                                    top: 0,
+                                    zIndex: 3,
+                                    background: a.sb,
+                                  },
+                                }),
+                                e.jsx("th", {
+                                  style: {
+                                    width: 55,
+                                    padding: "6px 2px",
+                                    fontSize: 9,
+                                    color: a.muted,
+                                    textAlign: "left",
+                                    textTransform: "uppercase",
+                                    position: "sticky",
+                                    left: 36,
+                                    top: 0,
+                                    zIndex: 3,
+                                    background: a.sb,
+                                  },
+                                  children: "ID",
+                                }),
+                                e.jsx("th", {
+                                  style: {
+                                    width: 220,
+                                    padding: "6px 4px",
+                                    fontSize: 9,
+                                    color: a.muted,
+                                    textAlign: "left",
+                                    textTransform: "uppercase",
+                                    position: "sticky",
+                                    left: 91,
+                                    top: 0,
+                                    zIndex: 3,
+                                    background: a.sb,
+                                    boxShadow: `2px 0 0 ${a.border}`,
+                                  },
+                                  children: "Nombre",
+                                }),
+                                e.jsx("th", { style: { width: 110, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Inicio" }),
+                                e.jsx("th", { style: { width: 110, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Fin" }),
+                                e.jsx("th", { style: { width: 80, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Duración" }),
+                                e.jsx("th", { style: { width: 90, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Predecesora" }),
+                                e.jsx("th", { style: { width: 45, padding: "6px 2px", position: "sticky", top: 0, zIndex: 2, background: a.sb } }),
                               ],
                             }),
                           }),
@@ -37244,19 +37327,20 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                   .filter(Boolean)
                                   .join(", "),
                                 inicioISO = fechaISOLocalGantt(feE.inicioFecha),
-                                finISO = fechaISOLocalGantt(feE.finFecha);
+                                finISO = fechaISOLocalGantt(feE.finFecha),
+                                fondoFila = fila.esResumen ? a.accent + "1a" : M % 2 === 0 ? a.card : a.sb;
                               return e.jsxs(
                                 "tr",
                                 {
                                   style: {
                                     height: Y,
-                                    background: fila.esResumen ? a.accent + "1a" : M % 2 === 0 ? "transparent" : a.sb,
+                                    background: fondoFila,
                                     boxShadow: seleccionadas.has(E.id) ? `inset 0 0 0 2px ${a.accent}` : "none",
                                     borderBottom: `1px solid ${a.border}`,
                                   },
                                   children: [
                                     e.jsx("td", {
-                                      style: { borderLeft: `3px solid ${E.color}`, padding: "0 2px", textAlign: "center" },
+                                      style: { borderLeft: `3px solid ${E.color}`, padding: "0 2px", textAlign: "center", position: "sticky", left: 0, zIndex: 1, background: fondoFila },
                                       children: e.jsx("input", {
                                         type: "checkbox",
                                         checked: seleccionadas.has(E.id),
@@ -37265,14 +37349,15 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                       }),
                                     }),
                                     e.jsx("td", {
-                                      style: { padding: "0 4px", fontSize: 10, fontWeight: 800, color: fila.esResumen ? a.accent : a.muted, whiteSpace: "nowrap" },
+                                      style: { padding: "0 4px", fontSize: 10, fontWeight: 800, color: fila.esResumen ? a.accent : a.muted, whiteSpace: "nowrap", position: "sticky", left: 36, zIndex: 1, background: fondoFila },
+                                      title: fila.codigo,
                                       children: [
                                         fila.esResumen ? (colapsados.has(E.id) ? "▶ " : "▼ ") : "",
                                         fila.codigo,
                                       ].join(""),
                                     }),
                                     e.jsx("td", {
-                                      style: { padding: `0 4px 0 ${4 + fila.nivel * 14}px` },
+                                      style: { padding: `0 4px 0 ${4 + fila.nivel * 14}px`, position: "sticky", left: 91, zIndex: 1, background: fondoFila, boxShadow: `2px 0 0 ${a.border}` },
                                       children: e.jsxs("div", {
                                         style: { display: "flex", alignItems: "center", gap: 4 },
                                         children: [
@@ -37292,20 +37377,23 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                               fontSize: 12,
                                               padding: "3px 6px",
                                               fontWeight: fila.esResumen ? 700 : 400,
+                                              overflow: "hidden",
+                                              textOverflow: "ellipsis",
                                             }),
                                             value: E.nombre,
                                             onChange: (q) => P(E.id, "nombre", q.target.value),
                                             onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
                                             onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
                                             placeholder: "Nombre tarea",
+                                            title: E.nombre,
                                           }),
                                         ],
                                       }),
                                     }),
                                     e.jsx("td", {
-                                      style: { padding: "0 2px" },
+                                      style: { padding: "0 4px" },
                                       children: e.jsx("input", {
-                                        style: u(d({}, c.inp), { width: "100%", fontSize: 10, padding: "3px 2px", boxSizing: "border-box" }),
+                                        style: u(d({}, c.inp), { width: "100%", fontSize: 11, padding: "3px 4px", boxSizing: "border-box" }),
                                         type: "date",
                                         value: inicioISO,
                                         onChange: (q) => actualizarFechaTarea(E.id, "inicio", q.target.value),
@@ -37318,9 +37406,9 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                       }),
                                     }),
                                     e.jsx("td", {
-                                      style: { padding: "0 2px" },
+                                      style: { padding: "0 4px" },
                                       children: e.jsx("input", {
-                                        style: u(d({}, c.inp), { width: "100%", fontSize: 10, padding: "3px 2px", boxSizing: "border-box" }),
+                                        style: u(d({}, c.inp), { width: "100%", fontSize: 11, padding: "3px 4px", boxSizing: "border-box" }),
                                         type: "date",
                                         value: finISO,
                                         onChange: (q) => actualizarFechaTarea(E.id, "fin", q.target.value),
@@ -37329,9 +37417,9 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                       }),
                                     }),
                                     e.jsx("td", {
-                                      style: { padding: "0 2px" },
+                                      style: { padding: "0 4px" },
                                       children: e.jsx("input", {
-                                        style: u(d({}, c.inp), { width: "100%", fontSize: 10, padding: "3px 2px", textAlign: "center", boxSizing: "border-box" }),
+                                        style: u(d({}, c.inp), { width: "100%", fontSize: 11, padding: "3px 4px", textAlign: "center", boxSizing: "border-box" }),
                                         type: "number",
                                         value: fila.esResumen ? feE.duracionLaboral : E.duracion,
                                         onChange: (q) => P(E.id, "duracion", parseInt(q.target.value) || 1),
@@ -37344,6 +37432,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                     }),
                                     e.jsx("td", {
                                       style: { padding: "0 4px", fontSize: 10, color: a.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
+                                      title: predecesorasTexto || "",
                                       children: predecesorasTexto || "—",
                                     }),
                                     e.jsx("td", {
@@ -37366,8 +37455,25 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                     }),
                   ],
                 }),
+              panelTareasVisible &&
+                e.jsx("div", {
+                  onMouseDown: iniciarArrastrePanelTareas,
+                  title: "Arrastrar para redimensionar",
+                  style: {
+                    alignSelf: "stretch",
+                    minHeight: 200,
+                    cursor: "col-resize",
+                    display: "flex",
+                    alignItems: "stretch",
+                    justifyContent: "center",
+                    padding: "0 2px",
+                  },
+                  children: e.jsx("div", {
+                    style: { width: 2, background: a.border, borderRadius: 2, margin: "0 auto" },
+                  }),
+                }),
               e.jsxs("div", {
-                style: u(d({}, c.card), { overflowX: "auto" }),
+                style: u(d({}, c.card), { overflowX: "auto", minWidth: 0 }),
                 children: [
                   e.jsxs("div", {
                     style: u(d({}, c.ct), {
