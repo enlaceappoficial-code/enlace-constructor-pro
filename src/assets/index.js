@@ -35517,26 +35517,94 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
     recorrer(null, "");
     return codigos;
   }
-  function calcularFechasGantt(tareas) {
+  function parsearFechaLocalGantt(iso) {
+    if (iso instanceof Date) return new Date(iso.getFullYear(), iso.getMonth(), iso.getDate());
+    var partes = String(iso).split("-").map(Number);
+    return new Date(partes[0], (partes[1] || 1) - 1, partes[2] || 1);
+  }
+  function fechaISOLocalGantt(fecha) {
+    var y = fecha.getFullYear(),
+      m = fecha.getMonth() + 1,
+      d = fecha.getDate();
+    return y + "-" + (m < 10 ? "0" : "") + m + "-" + (d < 10 ? "0" : "") + d;
+  }
+  function esDiaLaboralGantt(fecha, diasNoLaboralesSet) {
+    if (fecha.getDay() === 0) return false;
+    return !diasNoLaboralesSet.has(fechaISOLocalGantt(fecha));
+  }
+  function siguienteDiaLaboralGantt(fecha, diasNoLaboralesSet) {
+    var f = new Date(fecha.getTime());
+    while (!esDiaLaboralGantt(f, diasNoLaboralesSet)) f.setDate(f.getDate() + 1);
+    return f;
+  }
+  function sumarDiasCalendarioGantt(fecha, offset) {
+    var f = new Date(fecha.getTime());
+    f.setDate(f.getDate() + offset);
+    return f;
+  }
+  function sumarDiasLaboralesGantt(fechaInicioLaboral, duracionLaboral, diasNoLaboralesSet) {
+    var f = new Date(fechaInicioLaboral.getTime()),
+      contados = 1;
+    while (contados < duracionLaboral) {
+      f.setDate(f.getDate() + 1);
+      if (esDiaLaboralGantt(f, diasNoLaboralesSet)) contados++;
+    }
+    return f;
+  }
+  function contarDiasLaboralesEntreGantt(fechaA, fechaB, diasNoLaboralesSet) {
+    if (fechaB < fechaA) return 1;
+    var f = new Date(fechaA.getTime()),
+      contados = 0;
+    while (f <= fechaB) {
+      if (esDiaLaboralGantt(f, diasNoLaboralesSet)) contados++;
+      f.setDate(f.getDate() + 1);
+    }
+    return Math.max(1, contados);
+  }
+  function diasCalendarioEntreGantt(fechaA, fechaB) {
+    var MS_DIA = 86400000;
+    return Math.round((fechaB.getTime() - fechaA.getTime()) / MS_DIA);
+  }
+  function calcularFechasGantt(tareas, fechaInicioISO, diasNoLaborales) {
+    var diasNoLaboralesSet = new Set(diasNoLaborales || []);
+    var fechaBase = parsearFechaLocalGantt(fechaInicioISO || new Date());
     var efectivo = {};
     tareas.forEach((t) => {
       efectivo[t.id] = {
-        inicio: parseFloat(t.inicio) || 0,
-        duracion: t.esHito ? 0 : Math.max(1, parseFloat(t.duracion) || 1),
+        inicioFecha: sumarDiasCalendarioGantt(fechaBase, parseFloat(t.inicio) || 0),
+        finFecha: null,
+        duracionLaboral: t.esHito ? 0 : Math.max(1, parseFloat(t.duracion) || 1),
       };
     });
     var hojas = tareas.filter((t) => !esTareaResumen(tareas, t.id));
     for (var pasada = 0; pasada <= hojas.length; pasada++) {
       var cambio = false;
       hojas.forEach((t) => {
-        var preds = (t.predecesoras || []).map((pid) => efectivo[pid]).filter(Boolean);
+        var preds = (t.predecesoras || []).map((pid) => efectivo[pid]).filter(Boolean),
+          base = efectivo[t.id],
+          nuevaInicioFecha;
         if (preds.length) {
-          var finMax = Math.max.apply(null, preds.map((pr) => pr.inicio + pr.duracion));
-          if (efectivo[t.id].inicio !== finMax) {
-            efectivo[t.id].inicio = finMax;
-            cambio = true;
-          }
+          var finMax = null;
+          preds.forEach((pr) => {
+            var fin = pr.finFecha || pr.inicioFecha;
+            if (finMax === null || fin.getTime() > finMax.getTime()) finMax = fin;
+          });
+          nuevaInicioFecha = siguienteDiaLaboralGantt(sumarDiasCalendarioGantt(finMax, 1), diasNoLaboralesSet);
+        } else {
+          nuevaInicioFecha = siguienteDiaLaboralGantt(base.inicioFecha, diasNoLaboralesSet);
         }
+        var nuevaFinFecha = t.esHito
+          ? nuevaInicioFecha
+          : sumarDiasLaboralesGantt(nuevaInicioFecha, base.duracionLaboral, diasNoLaboralesSet);
+        if (
+          !base.finFecha ||
+          nuevaInicioFecha.getTime() !== base.inicioFecha.getTime() ||
+          nuevaFinFecha.getTime() !== base.finFecha.getTime()
+        ) {
+          cambio = true;
+        }
+        base.inicioFecha = nuevaInicioFecha;
+        base.finFecha = nuevaFinFecha;
       });
       if (!cambio) break;
     }
@@ -35546,17 +35614,31 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       hijos.forEach((h) => {
         if (esTareaResumen(tareas, h.id)) calcularResumen(h.id);
       });
-      var inicios = hijos.map((h) => efectivo[h.id].inicio);
-      var fines = hijos.map((h) => efectivo[h.id].inicio + efectivo[h.id].duracion);
+      var inicios = hijos.map((h) => efectivo[h.id].inicioFecha.getTime()),
+        fines = hijos.map((h) => efectivo[h.id].finFecha.getTime()),
+        inicioFecha = new Date(Math.min.apply(null, inicios)),
+        finFecha = new Date(Math.max.apply(null, fines));
       efectivo[id] = {
-        inicio: Math.min.apply(null, inicios),
-        duracion: Math.max.apply(null, fines) - Math.min.apply(null, inicios),
+        inicioFecha: inicioFecha,
+        finFecha: finFecha,
+        duracionLaboral: contarDiasLaboralesEntreGantt(inicioFecha, finFecha, diasNoLaboralesSet),
       };
     }
     tareas.forEach((t) => {
       if (esTareaResumen(tareas, t.id)) calcularResumen(t.id);
     });
-    return efectivo;
+    var salida = {};
+    Object.keys(efectivo).forEach((id) => {
+      var ef = efectivo[id];
+      salida[id] = {
+        inicio: diasCalendarioEntreGantt(fechaBase, ef.inicioFecha),
+        duracion: ef.duracionLaboral > 0 ? diasCalendarioEntreGantt(ef.inicioFecha, ef.finFecha) + 1 : 0,
+        inicioFecha: ef.inicioFecha,
+        finFecha: ef.finFecha,
+        duracionLaboral: ef.duracionLaboral,
+      };
+    });
+    return salida;
   }
   function construirVistaGantt(tareas, colapsados) {
     var codigos = calcularWBSGantt(tareas);
@@ -35665,10 +35747,19 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           return !1;
         }
       }),
+      [diasNoLaborales, setDiasNoLaborales] = V(() => {
+        try {
+          const E = localStorage.getItem("enlace_gantt_v1");
+          return E ? JSON.parse(E).diasNoLaborales || [] : [];
+        } catch (E) {
+          return [];
+        }
+      }),
       [f, I] = V(!1),
       [colapsados, setColapsados] = V(() => new Set()),
       [seleccionadas, setSeleccionadas] = V(() => new Set()),
       [panelTareasVisible, setPanelTareasVisible] = V(!0),
+      [fechaCalendarioSeleccionada, setFechaCalendarioSeleccionada] = V(null),
       [historialGanttTamano, setHistorialGanttTamano] = V(0);
     var historialGanttRef = Re.useRef([]);
     var HISTORIAL_GANTT_MAX = 30;
@@ -35723,6 +35814,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
             fechaInicio: j,
             tareas: g,
             nextId: B,
+            diasNoLaborales: diasNoLaborales,
           }),
         );
         if (p) {
@@ -35744,6 +35836,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
               fechaInicio: j,
               tareas: g,
               nextId: B,
+              diasNoLaborales: diasNoLaborales,
               nombre: q,
               savedAt: new Date().toISOString(),
             }),
@@ -35757,7 +35850,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
         var E = setTimeout(() => guardarGanttAhora(!1), 800);
         return () => clearTimeout(E);
       }
-    }, [g, b, j, v]);
+    }, [g, b, j, v, diasNoLaborales]);
     var D = (() => {
         var E = [];
         try {
@@ -35778,6 +35871,8 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           F(E.fechaInicio),
           z(E.tareas),
           w(E.nextId || E.tareas.length + 1),
+          setDiasNoLaborales(E.diasNoLaborales || []),
+          setFechaCalendarioSeleccionada(null),
           x(!0),
           I(!1),
           setSeleccionadas(new Set()),
@@ -36129,7 +36224,9 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
         ]),
           w((prev) => prev + 1));
       },
-      fechasCalc = calcularFechasGantt(g),
+      fechasCalc = calcularFechasGantt(g, j, diasNoLaborales),
+      diasNoLaboralesSet = new Set(diasNoLaborales),
+      hoyISOGantt = fechaISOLocalGantt(new Date()),
       codigosPorId = calcularWBSGantt(g),
       vistaTareas = construirVistaGantt(g, colapsados),
       O =
@@ -36144,31 +36241,36 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       U = () => {
         if (b === "dias")
           return Array.from({ length: O }, (q, J) => {
-            var re = new Date(j);
-            return (
-              re.setDate(re.getDate() + J),
-              { label: `${re.getDate()}/${re.getMonth() + 1}`, dias: 1, idx: J }
-            );
+            var re = sumarDiasCalendarioGantt(parsearFechaLocalGantt(j), J),
+              iso = fechaISOLocalGantt(re),
+              nombreDia = re.toLocaleDateString("es-CL", { weekday: "short" }).replace(".", "");
+            return {
+              label: `${nombreDia.charAt(0).toUpperCase() + nombreDia.slice(1)} ${re.getDate()}`,
+              dias: 1,
+              idx: J,
+              iso: iso,
+              esDomingo: re.getDay() === 0,
+              esNoLaboral: diasNoLaboralesSet.has(iso),
+              esHoy: iso === hoyISOGantt,
+              esSeleccionado: iso === fechaCalendarioSeleccionada,
+            };
           });
         if (b === "semanas") {
           var E = Math.ceil(O / 7) + 1;
           return Array.from({ length: E }, (q, J) => {
-            var re = new Date(j);
-            return (
-              re.setDate(re.getDate() + J * 7),
-              {
-                label: `Sem ${J + 1}
+            var re = sumarDiasCalendarioGantt(parsearFechaLocalGantt(j), J * 7);
+            return {
+              label: `Sem ${J + 1}
 ${re.getDate()}/${re.getMonth() + 1}`,
-                dias: 7,
-                idx: J,
-              }
-            );
+              dias: 7,
+              idx: J,
+            };
           });
         }
         if (b === "meses") {
           var M = Math.ceil(O / 30) + 1;
           return Array.from({ length: M }, (q, J) => {
-            var re = new Date(j);
+            var re = parsearFechaLocalGantt(j);
             return (
               re.setMonth(re.getMonth() + J),
               {
@@ -36185,6 +36287,14 @@ ${re.getDate()}/${re.getMonth() + 1}`,
         return [];
       },
       $ = U(),
+      fondoColumnaGantt = (col) =>
+        !col
+          ? "transparent"
+          : col.esNoLaboral
+            ? "repeating-linear-gradient(45deg, rgba(220,38,38,.22) 0 4px, rgba(220,38,38,.08) 4px 8px)"
+            : col.esDomingo
+              ? "rgba(148,163,184,.18)"
+              : "transparent",
       ee = b === "dias" ? 38 : b === "semanas" ? 72 : 88,
       Y = 44,
       le = 220,
@@ -36202,11 +36312,8 @@ ${re.getDate()}/${re.getMonth() + 1}`,
             ? Math.max(ee * 0.4, (E / 7) * ee)
             : Math.max(ee * 0.3, (E / 30) * ee),
       T = (E) => {
-        var M = new Date(j);
-        return (
-          M.setDate(M.getDate() + E),
-          M.toLocaleDateString("es-CL", { day: "2-digit", month: "2-digit" })
-        );
+        var M = sumarDiasCalendarioGantt(parsearFechaLocalGantt(j), E);
+        return M.toLocaleDateString("es-CL", { day: "2-digit", month: "2-digit" });
       },
       L = () => {
         var E =
@@ -36425,29 +36532,37 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                 ? `Carta Gantt — ${E.descripcion}`
                 : `Carta Gantt — ${E.nombreObra || E.idMP}`
               : "Carta Gantt",
-            q = new Date(j),
+            q = parsearFechaLocalGantt(j),
             J = (re) =>
               String(re || "")
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
                 .replace(/\"/g, "&quot;"),
-            re = (xe) => {
-              var he = new Date(q);
-              return (
-                he.setDate(he.getDate() + (parseFloat(xe) || 0)),
-                he.toISOString().replace(/\.\d{3}Z$/, "")
-              );
-            },
+            re = (fecha) => fechaISOLocalGantt(fecha) + "T00:00:00",
             vistaExport = construirVistaGantt(g, new Set()),
             idsValidos = new Set(g.map((xe) => xe.id)),
+            HORARIO_LABORAL = "<WorkingTimes><WorkingTime><FromTime>08:00:00</FromTime><ToTime>13:00:00</ToTime></WorkingTime><WorkingTime><FromTime>14:00:00</FromTime><ToTime>18:00:00</ToTime></WorkingTime></WorkingTimes>",
+            weekDaysXml = [1, 2, 3, 4, 5, 6, 7]
+              .map((dayType) => {
+                var laborable = dayType !== 1;
+                return `<WeekDay><DayType>${dayType}</DayType><DayWorking>${laborable ? 1 : 0}</DayWorking>${laborable ? HORARIO_LABORAL : ""}</WeekDay>`;
+              })
+              .join(""),
+            exceptionsXml = (diasNoLaborales || [])
+              .map((iso) => {
+                var f2 = re(parsearFechaLocalGantt(iso));
+                return `<Exception><TimePeriod><FromDate>${f2}</FromDate><ToDate>${f2}</ToDate></TimePeriod><DayWorking>0</DayWorking></Exception>`;
+              })
+              .join(""),
+            calendarsXml = `<Calendars><Calendar><UID>1</UID><Name>Estandar (Lun-Sab, domingo no laborable)</Name><IsBaseCalendar>1</IsBaseCalendar><WeekDays>${weekDaysXml}</WeekDays><Exceptions>${exceptionsXml}</Exceptions></Calendar></Calendars>`,
             Q = vistaExport
               .map((fila) => {
                 var xe = fila.tarea,
-                  feXe = fechasCalc[xe.id] || { inicio: xe.inicio, duracion: xe.duracion },
-                  ke = re(feXe.inicio),
-                  At = re(feXe.inicio + feXe.duracion),
-                  ci = Math.max(0, Math.round((feXe.duracion || 0) * 8)),
+                  feXe = fechasCalc[xe.id] || { inicioFecha: q, finFecha: q, duracionLaboral: 1 },
+                  ke = re(feXe.inicioFecha),
+                  At = re(feXe.finFecha),
+                  ci = Math.max(0, Math.round((feXe.duracionLaboral || 0) * 8)),
                   predecessorLinks = (xe.predecesoras || [])
                     .filter((pid) => idsValidos.has(pid))
                     .map(
@@ -36455,10 +36570,10 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                         `<PredecessorLink><PredecessorUID>${pid}</PredecessorUID><Type>1</Type><CrossProject>0</CrossProject></PredecessorLink>`,
                     )
                     .join("");
-                return `<Task><UID>${xe.id}</UID><ID>${xe.id}</ID><Name>${J(xe.nombre || "")}</Name><OutlineLevel>${fila.nivel + 1}</OutlineLevel><OutlineNumber>${J(fila.codigo)}</OutlineNumber><WBS>${J(fila.codigo)}</WBS><Start>${ke}</Start><Finish>${At}</Finish><Duration>PT${ci}H0M0S</Duration><DurationFormat>7</DurationFormat><Summary>${fila.esResumen ? 1 : 0}</Summary><Milestone>${xe.esHito ? 1 : 0}</Milestone>${predecessorLinks}</Task>`;
+                return `<Task><UID>${xe.id}</UID><ID>${xe.id}</ID><Name>${J(xe.nombre || "")}</Name><OutlineLevel>${fila.nivel + 1}</OutlineLevel><OutlineNumber>${J(fila.codigo)}</OutlineNumber><WBS>${J(fila.codigo)}</WBS><Start>${ke}</Start><Finish>${At}</Finish><Duration>PT${ci}H0M0S</Duration><DurationFormat>7</DurationFormat><Summary>${fila.esResumen ? 1 : 0}</Summary><Milestone>${xe.esHito ? 1 : 0}</Milestone><CalendarUID>1</CalendarUID>${predecessorLinks}</Task>`;
               })
               .join(""),
-            G = `<?xml version="1.0" encoding="UTF-8"?>\n<Project xmlns="http://schemas.microsoft.com/project">\n<Name>${J(M)}</Name>\n<StartDate>${q.toISOString().replace(/\.\d{3}Z$/, "")}</StartDate>\n<Tasks>\n${Q}\n</Tasks>\n</Project>`,
+            G = `<?xml version="1.0" encoding="UTF-8"?>\n<Project xmlns="http://schemas.microsoft.com/project">\n<Name>${J(M)}</Name>\n<StartDate>${re(q)}</StartDate>\n<CalendarUID>1</CalendarUID>\n${calendarsXml}\n<Tasks>\n${Q}\n</Tasks>\n</Project>`,
             ie = new Blob([G], { type: "application/xml;charset=utf-8" }),
             oe = URL.createObjectURL(ie),
             ce = document.createElement("a");
@@ -36476,6 +36591,34 @@ ${re.getDate()}/${re.getMonth() + 1}`,
           n("❌ No se pudo exportar a MS Project");
         }
       };
+    var actualizarFechaTarea = function (id, campo, valorISO) {
+      if (!valorISO) return;
+      var tarea = g.find((x) => x.id === id);
+      if (!tarea) return;
+      pushHistorialGantt(g);
+      if (campo === "inicio") {
+        var nuevaInicioFecha = siguienteDiaLaboralGantt(parsearFechaLocalGantt(valorISO), diasNoLaboralesSet);
+        P(id, "inicio", diasCalendarioEntreGantt(parsearFechaLocalGantt(j), nuevaInicioFecha));
+      } else if (campo === "fin") {
+        var fe = fechasCalc[id],
+          inicioFecha = fe ? fe.inicioFecha : parsearFechaLocalGantt(j),
+          finFecha = parsearFechaLocalGantt(valorISO);
+        if (finFecha < inicioFecha) finFecha = inicioFecha;
+        P(id, "duracion", contarDiasLaboralesEntreGantt(inicioFecha, finFecha, diasNoLaboralesSet));
+      }
+    };
+    var marcarFechaNoLaboral = function () {
+      if (!fechaCalendarioSeleccionada) return;
+      setDiasNoLaborales((prev) =>
+        prev.includes(fechaCalendarioSeleccionada) ? prev : [...prev, fechaCalendarioSeleccionada],
+      );
+      n("🚫 " + fechaCalendarioSeleccionada + " marcado como no laboral");
+    };
+    var marcarFechaLaboral = function () {
+      if (!fechaCalendarioSeleccionada) return;
+      setDiasNoLaborales((prev) => prev.filter((f2) => f2 !== fechaCalendarioSeleccionada));
+      n("✓ " + fechaCalendarioSeleccionada + " marcado como laboral");
+    };
     var filaIndexPorId = {};
     vistaTareas.forEach((fila, idx) => {
       filaIndexPorId[fila.tarea.id] = idx;
@@ -36770,6 +36913,70 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                   ],
                 }),
                 v &&
+                  b === "dias" &&
+                  fechaCalendarioSeleccionada &&
+                  e.jsxs("div", {
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      flexWrap: "wrap",
+                      padding: "8px 10px",
+                      background: a.sb,
+                      borderRadius: 8,
+                      border: `1px solid ${a.border}`,
+                    },
+                    children: [
+                      e.jsxs("span", {
+                        style: { fontSize: 12, color: a.text, fontWeight: 600 },
+                        children: [
+                          "📅 Fecha seleccionada: ",
+                          (() => {
+                            var fSel = parsearFechaLocalGantt(fechaCalendarioSeleccionada),
+                              nombreDia = fSel.toLocaleDateString("es-CL", { weekday: "long" });
+                            return (
+                              nombreDia.charAt(0).toUpperCase() +
+                              nombreDia.slice(1) +
+                              " " +
+                              fSel.toLocaleDateString("es-CL", { day: "2-digit", month: "2-digit", year: "numeric" })
+                            );
+                          })(),
+                        ],
+                      }),
+                      e.jsx("button", {
+                        style: u(d({}, c.btn("d")), {
+                          padding: "5px 10px",
+                          fontSize: 12,
+                          opacity: diasNoLaboralesSet.has(fechaCalendarioSeleccionada) || fechaCalendarioSeleccionada === null ? 0.4 : 1,
+                          cursor: diasNoLaboralesSet.has(fechaCalendarioSeleccionada) ? "not-allowed" : "pointer",
+                        }),
+                        disabled: diasNoLaboralesSet.has(fechaCalendarioSeleccionada),
+                        onClick: marcarFechaNoLaboral,
+                        title: diasNoLaboralesSet.has(fechaCalendarioSeleccionada) ? "Ya está marcada como no laboral" : "Marcar esta fecha como no laboral",
+                        children: "🚫 Marcar no laboral",
+                      }),
+                      e.jsx("button", {
+                        style: u(d({}, c.btn("s")), {
+                          padding: "5px 10px",
+                          fontSize: 12,
+                          opacity: !diasNoLaboralesSet.has(fechaCalendarioSeleccionada) ? 0.4 : 1,
+                          cursor: !diasNoLaboralesSet.has(fechaCalendarioSeleccionada) ? "not-allowed" : "pointer",
+                        }),
+                        disabled: !diasNoLaboralesSet.has(fechaCalendarioSeleccionada),
+                        onClick: marcarFechaLaboral,
+                        title: diasNoLaboralesSet.has(fechaCalendarioSeleccionada)
+                          ? "Volver a marcar esta fecha como laboral"
+                          : "Esta fecha ya es laboral",
+                        children: "✓ Marcar laboral",
+                      }),
+                      e.jsx("button", {
+                        style: u(d({}, c.btn("s")), { padding: "5px 10px", fontSize: 12, marginLeft: "auto" }),
+                        onClick: () => setFechaCalendarioSeleccionada(null),
+                        children: "Cerrar",
+                      }),
+                    ],
+                  }),
+                v &&
                   e.jsxs("div", {
                     style: {
                       display: "flex",
@@ -37009,152 +37216,152 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                     }),
                     e.jsx("div", {
                       style: { maxHeight: 500, overflowY: "auto" },
-                      children: vistaTareas.map((fila, M) => {
-                        var E = fila.tarea,
-                          feE = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion },
-                          predecesorasTexto = (E.predecesoras || [])
-                            .map((pid) => codigosPorId[pid])
-                            .filter(Boolean)
-                            .join(", "),
-                          lineaSecundaria = fila.esResumen
-                            ? `${T(feE.inicio)} → ${T(feE.inicio + feE.duracion)} (${feE.duracion}d, calc. desde subtareas)`
-                            : predecesorasTexto
-                              ? "Predecesora: " + predecesorasTexto
-                              : "";
-                        return e.jsxs(
-                          "div",
-                          {
-                            style: {
-                              display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "center",
-                              height: Y,
-                              boxSizing: "border-box",
-                              padding: `0 8px 0 ${8 + fila.nivel * 14}px`,
-                              background: fila.esResumen ? a.accent + "1a" : M % 2 === 0 ? "transparent" : a.sb,
-                              borderLeft: `3px solid ${E.color}`,
-                              borderBottom: `1px solid ${a.border}`,
-                              outline: seleccionadas.has(E.id) ? `2px solid ${a.accent}` : "none",
-                              outlineOffset: -2,
-                            },
-                            children: [
-                              e.jsxs("div", {
-                                style: { display: "flex", alignItems: "center", gap: 5 },
-                                children: [
-                                  e.jsx("input", {
-                                    type: "checkbox",
-                                    checked: seleccionadas.has(E.id),
-                                    onChange: () => toggleSeleccion(E.id, !0),
-                                    title: "Seleccionar tarea",
-                                    style: { flexShrink: 0 },
-                                  }),
-                                  fila.esResumen
-                                    ? e.jsx("button", {
-                                        onClick: () => toggleColapso(E.id),
-                                        style: {
-                                          background: "transparent",
-                                          border: "none",
-                                          cursor: "pointer",
-                                          color: a.muted,
-                                          fontSize: 11,
-                                          padding: 0,
-                                          width: 12,
-                                          flexShrink: 0,
-                                        },
-                                        children: colapsados.has(E.id) ? "▶" : "▼",
-                                      })
-                                    : e.jsx("span", { style: { width: 12, flexShrink: 0 } }),
-                                  fila.codigo &&
-                                    e.jsx("span", {
-                                      style: {
-                                        fontSize: 10,
-                                        fontWeight: 800,
-                                        color: fila.esResumen ? a.accent : a.muted,
-                                        flexShrink: 0,
-                                        minWidth: 22,
-                                      },
-                                      children: fila.codigo,
-                                    }),
-                                  E.esHito &&
-                                    e.jsx("span", { style: { fontSize: 11, flexShrink: 0 }, children: "◆" }),
-                                  e.jsx("input", {
-                                    style: u(d({}, c.inp), {
-                                      flex: 1,
-                                      minWidth: 0,
-                                      fontSize: 12,
-                                      padding: "3px 6px",
-                                      fontWeight: fila.esResumen ? 700 : 400,
-                                    }),
-                                    value: E.nombre,
-                                    onChange: (q) => P(E.id, "nombre", q.target.value),
-                                    onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
-                                    onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
-                                    placeholder: "Nombre tarea",
-                                  }),
-                                  !fila.esResumen &&
-                                    e.jsx("input", {
-                                      style: u(d({}, c.inp), {
-                                        width: 34,
-                                        flexShrink: 0,
-                                        fontSize: 11,
-                                        padding: "3px 3px",
-                                        textAlign: "center",
-                                      }),
-                                      type: "number",
-                                      value: (E.predecesoras || []).length > 0 ? feE.inicio : E.inicio,
-                                      onChange: (q) => P(E.id, "inicio", parseInt(q.target.value) || 0),
-                                      onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
-                                      onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
-                                      min: "0",
-                                      disabled: (E.predecesoras || []).length > 0,
-                                      title: (E.predecesoras || []).length > 0
-                                        ? "Inicio (calculado desde la predecesora)"
-                                        : "Inicio (día)",
-                                    }),
-                                  !fila.esResumen &&
-                                    e.jsx("input", {
-                                      style: u(d({}, c.inp), {
-                                        width: 34,
-                                        flexShrink: 0,
-                                        fontSize: 11,
-                                        padding: "3px 3px",
-                                        textAlign: "center",
-                                      }),
-                                      type: "number",
-                                      value: E.duracion,
-                                      onChange: (q) => P(E.id, "duracion", parseInt(q.target.value) || 1),
-                                      onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
-                                      onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
-                                      min: "0",
-                                      disabled: !!E.esHito,
-                                      title: "Duración (días)",
-                                    }),
-                                  e.jsx("button", {
-                                    style: u(d({}, c.btn("d")), { padding: "2px 5px", fontSize: 12, flexShrink: 0 }),
-                                    onClick: () => A(E.id),
-                                    title: "Eliminar tarea",
-                                    children: "×",
-                                  }),
-                                ],
-                              }),
-                              lineaSecundaria &&
-                                e.jsx("div", {
+                      children: e.jsxs("table", {
+                        style: { width: "100%", borderCollapse: "collapse" },
+                        children: [
+                          e.jsx("thead", {
+                            children: e.jsxs("tr", {
+                              style: { background: a.sb, borderBottom: `2px solid ${a.border}` },
+                              children: [
+                                e.jsx("th", { style: { width: 24, padding: "6px 2px" } }),
+                                e.jsx("th", { style: { width: 40, padding: "6px 2px", fontSize: 9, color: a.muted, textAlign: "left", textTransform: "uppercase" }, children: "ID" }),
+                                e.jsx("th", { style: { padding: "6px 4px", fontSize: 9, color: a.muted, textAlign: "left", textTransform: "uppercase" }, children: "Nombre" }),
+                                e.jsx("th", { style: { width: 92, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase" }, children: "Inicio" }),
+                                e.jsx("th", { style: { width: 92, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase" }, children: "Fin" }),
+                                e.jsx("th", { style: { width: 44, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase" }, children: "Dur." }),
+                                e.jsx("th", { style: { width: 60, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase" }, children: "Predec." }),
+                                e.jsx("th", { style: { width: 24, padding: "6px 2px" } }),
+                              ],
+                            }),
+                          }),
+                          e.jsx("tbody", {
+                            children: vistaTareas.map((fila, M) => {
+                              var E = fila.tarea,
+                                feE = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion, inicioFecha: parsearFechaLocalGantt(j), finFecha: parsearFechaLocalGantt(j) },
+                                tienePredecesoras = (E.predecesoras || []).length > 0,
+                                predecesorasTexto = (E.predecesoras || [])
+                                  .map((pid) => codigosPorId[pid])
+                                  .filter(Boolean)
+                                  .join(", "),
+                                inicioISO = fechaISOLocalGantt(feE.inicioFecha),
+                                finISO = fechaISOLocalGantt(feE.finFecha);
+                              return e.jsxs(
+                                "tr",
+                                {
                                   style: {
-                                    fontSize: 9,
-                                    color: fila.esResumen ? a.muted : a.accent,
-                                    fontWeight: fila.esResumen ? 400 : 700,
-                                    marginTop: 1,
-                                    paddingLeft: 17,
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
+                                    height: Y,
+                                    background: fila.esResumen ? a.accent + "1a" : M % 2 === 0 ? "transparent" : a.sb,
+                                    boxShadow: seleccionadas.has(E.id) ? `inset 0 0 0 2px ${a.accent}` : "none",
+                                    borderBottom: `1px solid ${a.border}`,
                                   },
-                                  children: lineaSecundaria,
-                                }),
-                            ],
-                          },
-                          E.id,
-                        );
+                                  children: [
+                                    e.jsx("td", {
+                                      style: { borderLeft: `3px solid ${E.color}`, padding: "0 2px", textAlign: "center" },
+                                      children: e.jsx("input", {
+                                        type: "checkbox",
+                                        checked: seleccionadas.has(E.id),
+                                        onChange: () => toggleSeleccion(E.id, !0),
+                                        title: "Seleccionar tarea",
+                                      }),
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 4px", fontSize: 10, fontWeight: 800, color: fila.esResumen ? a.accent : a.muted, whiteSpace: "nowrap" },
+                                      children: [
+                                        fila.esResumen ? (colapsados.has(E.id) ? "▶ " : "▼ ") : "",
+                                        fila.codigo,
+                                      ].join(""),
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: `0 4px 0 ${4 + fila.nivel * 14}px` },
+                                      children: e.jsxs("div", {
+                                        style: { display: "flex", alignItems: "center", gap: 4 },
+                                        children: [
+                                          fila.esResumen
+                                            ? e.jsx("button", {
+                                                onClick: () => toggleColapso(E.id),
+                                                style: { background: "transparent", border: "none", cursor: "pointer", color: a.muted, fontSize: 10, padding: 0, flexShrink: 0 },
+                                                title: colapsados.has(E.id) ? "Expandir" : "Contraer",
+                                                children: colapsados.has(E.id) ? "▶" : "▼",
+                                              })
+                                            : null,
+                                          E.esHito && e.jsx("span", { style: { fontSize: 11, flexShrink: 0 }, children: "◆" }),
+                                          e.jsx("input", {
+                                            style: u(d({}, c.inp), {
+                                              flex: 1,
+                                              minWidth: 60,
+                                              fontSize: 12,
+                                              padding: "3px 6px",
+                                              fontWeight: fila.esResumen ? 700 : 400,
+                                            }),
+                                            value: E.nombre,
+                                            onChange: (q) => P(E.id, "nombre", q.target.value),
+                                            onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
+                                            onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
+                                            placeholder: "Nombre tarea",
+                                          }),
+                                        ],
+                                      }),
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 2px" },
+                                      children: e.jsx("input", {
+                                        style: u(d({}, c.inp), { width: "100%", fontSize: 10, padding: "3px 2px", boxSizing: "border-box" }),
+                                        type: "date",
+                                        value: inicioISO,
+                                        onChange: (q) => actualizarFechaTarea(E.id, "inicio", q.target.value),
+                                        disabled: fila.esResumen || tienePredecesoras,
+                                        title: fila.esResumen
+                                          ? "Calculado desde subtareas"
+                                          : tienePredecesoras
+                                            ? "Calculado desde la predecesora"
+                                            : "Inicio",
+                                      }),
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 2px" },
+                                      children: e.jsx("input", {
+                                        style: u(d({}, c.inp), { width: "100%", fontSize: 10, padding: "3px 2px", boxSizing: "border-box" }),
+                                        type: "date",
+                                        value: finISO,
+                                        onChange: (q) => actualizarFechaTarea(E.id, "fin", q.target.value),
+                                        disabled: fila.esResumen || !!E.esHito,
+                                        title: fila.esResumen ? "Calculado desde subtareas" : "Fin (solo días laborales)",
+                                      }),
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 2px" },
+                                      children: e.jsx("input", {
+                                        style: u(d({}, c.inp), { width: "100%", fontSize: 10, padding: "3px 2px", textAlign: "center", boxSizing: "border-box" }),
+                                        type: "number",
+                                        value: fila.esResumen ? feE.duracionLaboral : E.duracion,
+                                        onChange: (q) => P(E.id, "duracion", parseInt(q.target.value) || 1),
+                                        onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
+                                        onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
+                                        min: "0",
+                                        disabled: fila.esResumen || !!E.esHito,
+                                        title: "Duración (días laborales)",
+                                      }),
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 4px", fontSize: 10, color: a.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
+                                      children: predecesorasTexto || "—",
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 2px", textAlign: "center" },
+                                      children: e.jsx("button", {
+                                        style: u(d({}, c.btn("d")), { padding: "2px 4px", fontSize: 11 }),
+                                        onClick: () => A(E.id),
+                                        title: "Eliminar tarea",
+                                        children: "×",
+                                      }),
+                                    }),
+                                  ],
+                                },
+                                E.id,
+                              );
+                            }),
+                          }),
+                        ],
                       }),
                     }),
                   ],
@@ -37207,9 +37414,10 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                               children: "TAREA",
                             }),
                             $.map((E, M) =>
-                              e.jsx(
+                              e.jsxs(
                                 "div",
                                 {
+                                  onClick: b === "dias" ? () => setFechaCalendarioSeleccionada(E.iso === fechaCalendarioSeleccionada ? null : E.iso) : void 0,
                                   style: {
                                     width: ee,
                                     flexShrink: 0,
@@ -37221,8 +37429,28 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                     borderLeft: `1px solid ${a.border}`,
                                     lineHeight: 1.35,
                                     whiteSpace: "pre-line",
+                                    background: fondoColumnaGantt(E),
+                                    cursor: b === "dias" ? "pointer" : "default",
+                                    outline: E.esSeleccionado ? `2px solid ${a.accent}` : "none",
+                                    outlineOffset: -2,
+                                    position: "relative",
                                   },
-                                  children: E.label,
+                                  children: [
+                                    E.label,
+                                    E.esHoy &&
+                                      e.jsx("div", {
+                                        style: {
+                                          position: "absolute",
+                                          bottom: 2,
+                                          left: "50%",
+                                          transform: "translateX(-50%)",
+                                          width: 4,
+                                          height: 4,
+                                          borderRadius: "50%",
+                                          background: a.accent,
+                                        },
+                                      }),
+                                  ],
                                 },
                                 M,
                               ),
@@ -37279,6 +37507,9 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                         height: Y,
                                         flexShrink: 0,
                                         borderLeft: `1px solid ${a.border}`,
+                                        background: fondoColumnaGantt(q),
+                                        outline: q.esSeleccionado ? `2px solid ${a.accent}` : "none",
+                                        outlineOffset: -2,
                                       },
                                     },
                                     J,
