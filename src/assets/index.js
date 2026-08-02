@@ -35668,52 +35668,93 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       [f, I] = V(!1),
       [colapsados, setColapsados] = V(() => new Set()),
       [seleccionadas, setSeleccionadas] = V(() => new Set()),
-      [panelTareasVisible, setPanelTareasVisible] = V(!0);
+      [panelTareasVisible, setPanelTareasVisible] = V(!0),
+      [historialGanttTamano, setHistorialGanttTamano] = V(0);
+    var historialGanttRef = Re.useRef([]);
+    var HISTORIAL_GANTT_MAX = 30;
+    var pushHistorialGantt = function (estadoTareas) {
+      var hist = historialGanttRef.current;
+      if (hist.length >= HISTORIAL_GANTT_MAX) hist.shift();
+      hist.push(JSON.parse(JSON.stringify(estadoTareas)));
+      setHistorialGanttTamano(hist.length);
+    };
+    var deshacerGantt = function () {
+      var hist = historialGanttRef.current;
+      if (!hist.length) return;
+      var snap = hist.pop();
+      setHistorialGanttTamano(hist.length);
+      z(snap);
+      n("↶ Cambio deshecho");
+    };
+    var _pendingEditSnapshotGantt = Re.useRef(null);
+    var _pendingValorInicialGantt = Re.useRef(void 0);
+    var iniciarEdicionCampoGantt = function (valorInicial) {
+      if (_pendingEditSnapshotGantt.current == null) {
+        _pendingEditSnapshotGantt.current = JSON.parse(JSON.stringify(g));
+        _pendingValorInicialGantt.current = valorInicial;
+      }
+    };
+    var confirmarEdicionCampoGantt = function (valorFinal) {
+      if (_pendingEditSnapshotGantt.current != null) {
+        var pendiente = _pendingEditSnapshotGantt.current;
+        var valorInicial = _pendingValorInicialGantt.current;
+        _pendingEditSnapshotGantt.current = null;
+        _pendingValorInicialGantt.current = void 0;
+        var sinCambios =
+          valorInicial !== void 0 &&
+          valorFinal !== void 0 &&
+          String(valorInicial) === String(valorFinal);
+        if (sinCambios) return;
+        var hist = historialGanttRef.current;
+        if (hist.length >= HISTORIAL_GANTT_MAX) hist.shift();
+        hist.push(pendiente);
+        setHistorialGanttTamano(hist.length);
+      }
+    };
+    var guardarGanttAhora = function (mostrarToast) {
+      var J, re;
+      try {
+        localStorage.setItem(
+          "enlace_gantt_v1",
+          JSON.stringify({
+            origen: s,
+            selectedId: p,
+            escala: b,
+            fechaInicio: j,
+            tareas: g,
+            nextId: B,
+          }),
+        );
+        if (p) {
+          var M = "enlace_gantt_" + s + "_" + p,
+            q =
+              s === "presupuesto"
+                ? ((J = (t || []).find((Q) => Q.id === parseInt(p))) == null
+                    ? void 0
+                    : J.descripcion) || "N° " + p
+                : ((re = (i || []).find((Q) => Q.id === parseInt(p))) == null
+                    ? void 0
+                    : re.nombreObra) || "Licit. " + p;
+          localStorage.setItem(
+            M,
+            JSON.stringify({
+              origen: s,
+              selectedId: p,
+              escala: b,
+              fechaInicio: j,
+              tareas: g,
+              nextId: B,
+              nombre: q,
+              savedAt: new Date().toISOString(),
+            }),
+          );
+        }
+        if (mostrarToast) n("💾 Gantt guardado");
+      } catch (Q) {}
+    };
     Re.useEffect(() => {
       if (!(!v || g.length === 0)) {
-        var E = setTimeout(() => {
-          var J, re;
-          try {
-            if (
-              (localStorage.setItem(
-                "enlace_gantt_v1",
-                JSON.stringify({
-                  origen: s,
-                  selectedId: p,
-                  escala: b,
-                  fechaInicio: j,
-                  tareas: g,
-                  nextId: B,
-                }),
-              ),
-              p)
-            ) {
-              var M = "enlace_gantt_" + s + "_" + p,
-                q =
-                  s === "presupuesto"
-                    ? ((J = (t || []).find((Q) => Q.id === parseInt(p))) == null
-                        ? void 0
-                        : J.descripcion) || "N° " + p
-                    : ((re = (i || []).find((Q) => Q.id === parseInt(p))) ==
-                      null
-                        ? void 0
-                        : re.nombreObra) || "Licit. " + p;
-              localStorage.setItem(
-                M,
-                JSON.stringify({
-                  origen: s,
-                  selectedId: p,
-                  escala: b,
-                  fechaInicio: j,
-                  tareas: g,
-                  nextId: B,
-                  nombre: q,
-                  savedAt: new Date().toISOString(),
-                }),
-              );
-            }
-          } catch (Q) {}
-        }, 800);
+        var E = setTimeout(() => guardarGanttAhora(!1), 800);
         return () => clearTimeout(E);
       }
     }, [g, b, j, v]);
@@ -35741,6 +35782,8 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           I(!1),
           setSeleccionadas(new Set()),
           setColapsados(new Set()),
+          (historialGanttRef.current = []),
+          setHistorialGanttTamano(0),
           n("✅ Gantt cargado: " + E.nombre));
       },
       R = (E, M) => {
@@ -35761,6 +35804,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
               label: `${E.idMP || "—"} — ${E.nombreObra || "Sin nombre"}`,
             })),
       y = () => {
+        pushHistorialGantt(g);
         (z((E) => [
           ...E,
           {
@@ -35780,6 +35824,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       P = (E, M, q) =>
         z((J) => J.map((re) => (re.id === E ? u(d({}, re), { [M]: q }) : re))),
       A = (E) => {
+        pushHistorialGantt(g);
         (z((prev) => {
           var aEliminar = new Set([E]);
           var cambiado = !0;
@@ -35810,6 +35855,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           n("⚠️ Selecciona un origen primero.");
           return;
         }
+        if (g.length > 0) pushHistorialGantt(g);
         var E = [],
           siguienteId = 1;
         if (s === "presupuesto") {
@@ -35947,6 +35993,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
         });
       },
       moverTarea = (id, dir) => {
+        pushHistorialGantt(g);
         z((prev) => {
           var arr = [...prev],
             tarea = arr.find((t2) => t2.id === id);
@@ -35982,6 +36029,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           n("⚠️ Selecciona al menos una tarea.");
           return;
         }
+        pushHistorialGantt(g);
         z((prev) => {
           var arr = prev.map((t2) => d({}, t2));
           seleccionadas.forEach((id) => {
@@ -36004,6 +36052,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           n("⚠️ Selecciona al menos una tarea.");
           return;
         }
+        pushHistorialGantt(g);
         z((prev) => {
           var arr = prev.map((t2) => d({}, t2));
           seleccionadas.forEach((id) => {
@@ -36020,6 +36069,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           n("⚠️ Selecciona al menos 2 tareas para enlazar.");
           return;
         }
+        pushHistorialGantt(g);
         var vista = construirVistaGantt(g, colapsados),
           idsEnOrden = vista.map((f2) => f2.tarea.id).filter((id) => seleccionadas.has(id)),
           nuevasTareas = g.map((t2) => u(d({}, t2), { predecesoras: [...(t2.predecesoras || [])] })),
@@ -36044,6 +36094,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           n("⚠️ Selecciona las tareas enlazadas para desenlazar.");
           return;
         }
+        pushHistorialGantt(g);
         (z((prev) =>
           prev.map((t2) =>
             seleccionadas.has(t2.id)
@@ -36056,6 +36107,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           n("⛓ Enlace eliminado"));
       },
       agregarHito = () => {
+        pushHistorialGantt(g);
         var parentId = null;
         if (seleccionadas.size === 1) {
           var selTask = g.find((t2) => t2.id === [...seleccionadas][0]);
@@ -36774,6 +36826,34 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                           children: "⛓ Desenlazar",
                         }),
                       ]),
+                      e.jsx("div", { style: { width: 1, flexShrink: 0, alignSelf: "stretch", background: a.border } }),
+                      Grupo("Cambios", [
+                        e.jsx("button", {
+                          title: "Guardar el Gantt ahora",
+                          style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                          onClick: () => guardarGanttAhora(!0),
+                          children: "💾 Guardar",
+                        }),
+                        e.jsx("button", {
+                          style: u(d({}, c.btn("s")), {
+                            padding: "6px 9px",
+                            fontSize: 12,
+                            opacity: historialGanttTamano === 0 ? 0.4 : 1,
+                            cursor: historialGanttTamano === 0 ? "not-allowed" : "pointer",
+                          }),
+                          disabled: historialGanttTamano === 0,
+                          title:
+                            historialGanttTamano === 0
+                              ? "No hay cambios para deshacer"
+                              : "Deshacer último cambio (" +
+                                historialGanttTamano +
+                                " disponible" +
+                                (historialGanttTamano !== 1 ? "s" : "") +
+                                ")",
+                          onClick: deshacerGantt,
+                          children: "↶ Deshacer",
+                        }),
+                      ]),
                     ],
                   }),
               ],
@@ -37007,6 +37087,8 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                     }),
                                     value: E.nombre,
                                     onChange: (q) => P(E.id, "nombre", q.target.value),
+                                    onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
+                                    onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
                                     placeholder: "Nombre tarea",
                                   }),
                                   !fila.esResumen &&
@@ -37021,6 +37103,8 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                       type: "number",
                                       value: (E.predecesoras || []).length > 0 ? feE.inicio : E.inicio,
                                       onChange: (q) => P(E.id, "inicio", parseInt(q.target.value) || 0),
+                                      onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
+                                      onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
                                       min: "0",
                                       disabled: (E.predecesoras || []).length > 0,
                                       title: (E.predecesoras || []).length > 0
@@ -37039,6 +37123,8 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                       type: "number",
                                       value: E.duracion,
                                       onChange: (q) => P(E.id, "duracion", parseInt(q.target.value) || 1),
+                                      onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
+                                      onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
                                       min: "0",
                                       disabled: !!E.esHito,
                                       title: "Duración (días)",
