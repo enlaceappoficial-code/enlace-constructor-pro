@@ -35667,7 +35667,8 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       }),
       [f, I] = V(!1),
       [colapsados, setColapsados] = V(() => new Set()),
-      [seleccionadas, setSeleccionadas] = V(() => new Set());
+      [seleccionadas, setSeleccionadas] = V(() => new Set()),
+      [panelTareasVisible, setPanelTareasVisible] = V(!0);
     Re.useEffect(() => {
       if (!(!v || g.length === 0)) {
         var E = setTimeout(() => {
@@ -36132,8 +36133,8 @@ ${re.getDate()}/${re.getMonth() + 1}`,
         return [];
       },
       $ = U(),
-      ee = b === "dias" ? 32 : b === "semanas" ? 64 : 80,
-      Y = 36,
+      ee = b === "dias" ? 38 : b === "semanas" ? 72 : 88,
+      Y = 44,
       le = 220,
       Z = le + $.length * ee,
       X = (E) =>
@@ -36427,27 +36428,57 @@ ${re.getDate()}/${re.getMonth() + 1}`,
     vistaTareas.forEach((fila, idx) => {
       filaIndexPorId[fila.tarea.id] = idx;
     });
+    var resolverAncestroVisibleGantt = (id) => {
+      var actual = id;
+      while (actual !== void 0 && filaIndexPorId[actual] === void 0) {
+        var tareaActual = g.find((x) => x.id === actual);
+        actual = tareaActual ? tareaActual.parentId || void 0 : void 0;
+      }
+      return actual;
+    };
     var conexionesGantt = [];
     vistaTareas.forEach((fila) => {
       if (fila.esResumen) return;
       var tarea = fila.tarea,
         idxSucc = filaIndexPorId[tarea.id];
       (tarea.predecesoras || []).forEach((predId) => {
-        var idxPred = filaIndexPorId[predId];
-        if (idxPred === void 0 || esTareaResumen(g, predId)) return;
-        var fePred = fechasCalc[predId] || { inicio: 0, duracion: 1 },
+        if (esTareaResumen(g, predId)) return;
+        // Si la predecesora está oculta (dentro de una tarea resumen colapsada),
+        // la flecha se redirige visualmente al resumen visible más cercano —
+        // ajuste solo de presentación, no cambia predecesoras ni fechas guardadas.
+        var predIdVisible = resolverAncestroVisibleGantt(predId),
+          idxPred = predIdVisible === void 0 ? void 0 : filaIndexPorId[predIdVisible];
+        if (idxPred === void 0) return;
+        var fePred = fechasCalc[predIdVisible] || { inicio: 0, duracion: 1 },
           feSucc = fechasCalc[tarea.id] || { inicio: 0, duracion: 1 },
           xPredFin = X(fePred.inicio + fePred.duracion),
           yPred = idxPred * Y + Y / 2,
           xSuccIni = X(feSucc.inicio),
           ySucc = idxSucc * Y + Y / 2,
-          xMedio = xPredFin + 8;
+          xMedio = xPredFin + 10;
         conexionesGantt.push({
           key: predId + "-" + tarea.id,
           points: `${xPredFin},${yPred} ${xMedio},${yPred} ${xMedio},${ySucc} ${xSuccIni},${ySucc}`,
         });
       });
     });
+    var Grupo = (titulo, hijos, extraStyle) =>
+      e.jsxs("div", {
+        style: u(d({}, { display: "flex", flexDirection: "column", gap: 4 }), extraStyle || {}),
+        children: [
+          e.jsx("div", {
+            style: {
+              fontSize: 9,
+              fontWeight: 800,
+              color: a.muted,
+              textTransform: "uppercase",
+              letterSpacing: ".06em",
+            },
+            children: titulo,
+          }),
+          e.jsx("div", { style: { display: "flex", gap: 5, flexWrap: "wrap" }, children: hijos }),
+        ],
+      });
     return e.jsxs("div", {
       style: { padding: "24px 28px", maxWidth: 1200, margin: "0 auto" },
       children: [
@@ -36615,13 +36646,14 @@ ${re.getDate()}/${re.getMonth() + 1}`,
               ],
             }),
             e.jsxs("div", {
-              style: { display: "flex", gap: 8, marginTop: 14, flexWrap: "wrap" },
+              style: { marginTop: 14, display: "flex", flexDirection: "column", gap: 10 },
               children: [
                 e.jsxs("button", {
                   style: u(d({}, c.btn("p")), {
                     padding: "9px 18px",
                     fontSize: 13,
                     fontWeight: 700,
+                    alignSelf: "flex-start",
                   }),
                   onClick: S,
                   children: [
@@ -36630,90 +36662,104 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                   ],
                 }),
                 v &&
-                  e.jsxs(e.Fragment, {
+                  e.jsxs("div", {
+                    style: {
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 16,
+                      alignItems: "flex-start",
+                      paddingTop: 10,
+                      borderTop: `1px solid ${a.border}`,
+                    },
                     children: [
-                      e.jsx("button", {
-                        style: u(d({}, c.btn("g")), {
-                          padding: "9px 14px",
-                          fontSize: 13,
+                      Grupo("Tareas", [
+                        e.jsx("button", {
+                          style: u(d({}, c.btn("g")), { padding: "6px 10px", fontSize: 12 }),
+                          onClick: y,
+                          children: "➕ Agregar tarea",
                         }),
-                        onClick: y,
-                        children: "➕ Agregar tarea",
-                      }),
-                      e.jsx("div", {
-                        style: { width: 1, alignSelf: "stretch", background: a.border, margin: "0 2px" },
-                      }),
-                      [
-                        [subirSeleccionada, "↑ Subir"],
-                        [bajarSeleccionada, "↓ Bajar"],
-                        [aplicarSangria, "→ Sangría"],
-                        [quitarSangria, "← Quitar sangría"],
-                        [enlazarSeleccionadas, "🔗 Enlazar"],
-                        [desenlazarSeleccionadas, "⛓ Desenlazar"],
-                        [agregarHito, "◆ Hito"],
-                      ].map(([accion, etiqueta]) =>
-                        e.jsx(
-                          "button",
-                          {
-                            style: u(d({}, c.btn("s")), { padding: "7px 10px", fontSize: 12 }),
-                            onClick: accion,
-                            children: etiqueta,
-                          },
-                          etiqueta,
+                        e.jsx("button", {
+                          style: u(d({}, c.btn("g")), { padding: "6px 10px", fontSize: 12 }),
+                          onClick: agregarHito,
+                          children: "◆ Hito",
+                        }),
+                      ]),
+                      e.jsx("div", { style: { width: 1, alignSelf: "stretch", background: a.border } }),
+                      Grupo(
+                        "Orden",
+                        [
+                          [subirSeleccionada, "↑ Subir"],
+                          [bajarSeleccionada, "↓ Bajar"],
+                          [aplicarSangria, "→ Sangría"],
+                          [quitarSangria, "← Quitar sangría"],
+                        ].map(([accion, etiqueta]) =>
+                          e.jsx(
+                            "button",
+                            {
+                              style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                              onClick: accion,
+                              children: etiqueta,
+                            },
+                            etiqueta,
+                          ),
                         ),
                       ),
-                      e.jsx("div", {
-                        style: { width: 1, alignSelf: "stretch", background: a.border, margin: "0 2px" },
-                      }),
-                      e.jsxs("button", {
-                        style: u(d({}, c.btn("s")), {
-                          padding: "9px 14px",
-                          fontSize: 13,
-                          marginLeft: "auto",
+                      e.jsx("div", { style: { width: 1, alignSelf: "stretch", background: a.border } }),
+                      Grupo("Dependencias", [
+                        e.jsx("button", {
+                          style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                          onClick: enlazarSeleccionadas,
+                          children: "🔗 Enlazar",
                         }),
-                        onClick: () => I((E) => !E),
-                        children: [
-                          "📂 Mis Gantts ",
-                          D.length > 0 &&
-                            e.jsx("span", {
-                              style: {
-                                background: a.accent,
-                                color: "#050a10",
-                                borderRadius: 99,
-                                fontSize: 10,
-                                padding: "1px 6px",
-                                marginLeft: 4,
-                              },
-                              children: D.length,
-                            }),
+                        e.jsx("button", {
+                          style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                          onClick: desenlazarSeleccionadas,
+                          children: "⛓ Desenlazar",
+                        }),
+                      ]),
+                      e.jsx("div", { style: { width: 1, alignSelf: "stretch", background: a.border } }),
+                      Grupo(
+                        "Archivos",
+                        [
+                          e.jsxs("button", {
+                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                            onClick: () => I((E) => !E),
+                            children: [
+                              "📂 Mis Gantts",
+                              D.length > 0 &&
+                                e.jsx("span", {
+                                  style: {
+                                    background: a.accent,
+                                    color: "#050a10",
+                                    borderRadius: 99,
+                                    fontSize: 10,
+                                    padding: "1px 6px",
+                                    marginLeft: 4,
+                                  },
+                                  children: D.length,
+                                }),
+                            ],
+                          }),
+                          e.jsx("button", {
+                            style: u(d({}, c.btn("g")), { padding: "6px 9px", fontSize: 12 }),
+                            onClick: L,
+                            children: "🖨️ PDF",
+                          }),
+                          e.jsx("button", {
+                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                            onClick: Ee,
+                            children: "📊 Excel",
+                          }),
+                          e.jsx("button", {
+                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                            title:
+                              "Descarga un .xml para importar en Microsoft Project.\nLuego: Archivo → Abrir → selecciona el .xml",
+                            onClick: Me,
+                            children: "🗂️ MS Project",
+                          }),
                         ],
-                      }),
-                      e.jsx("button", {
-                        style: u(d({}, c.btn("g")), {
-                          padding: "9px 14px",
-                          fontSize: 13,
-                        }),
-                        onClick: L,
-                        children: "🖨️ Imprimir / PDF",
-                      }),
-                      e.jsx("button", {
-                        style: u(d({}, c.btn("s")), {
-                          padding: "9px 14px",
-                          fontSize: 13,
-                        }),
-                        onClick: Ee,
-                        children: "📊 Exportar Excel",
-                      }),
-                      e.jsx("button", {
-                        style: u(d({}, c.btn("s")), {
-                          padding: "9px 14px",
-                          fontSize: 13,
-                        }),
-                        title:
-                          "Descarga un .xml para importar en Microsoft Project.\nLuego: Archivo → Abrir → selecciona el .xml",
-                        onClick: Me,
-                        children: "🗂️ MS Project (XML)",
-                      }),
+                        { marginLeft: "auto" },
+                      ),
                     ],
                   }),
               ],
@@ -36839,193 +36885,200 @@ ${re.getDate()}/${re.getMonth() + 1}`,
           e.jsxs("div", {
             style: {
               display: "grid",
-              gridTemplateColumns: "340px 1fr",
+              gridTemplateColumns: panelTareasVisible ? "35% 65%" : "1fr",
               gap: 16,
               alignItems: "start",
             },
             children: [
-              e.jsxs("div", {
-                style: c.card,
-                children: [
-                  e.jsx("div", {
-                    style: u(d({}, c.ct), { marginBottom: 12 }),
-                    children: "Tareas",
-                  }),
-                  e.jsx("div", {
-                    style: { maxHeight: 500, overflowY: "auto" },
-                    children: vistaTareas.map((fila) => {
-                      var E = fila.tarea,
-                        feE = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion },
-                        predecesorasTexto = (E.predecesoras || [])
-                          .map((pid) => codigosPorId[pid])
-                          .filter(Boolean)
-                          .join(", ");
-                      return e.jsxs(
-                        "div",
-                        {
-                          style: {
-                            background: fila.esResumen ? a.accent + "14" : a.sb,
-                            borderRadius: 8,
-                            padding: "10px 12px",
-                            marginBottom: 6,
-                            marginLeft: fila.nivel * 16,
-                            borderLeft: `3px solid ${E.color}`,
-                            outline: seleccionadas.has(E.id) ? `2px solid ${a.accent}` : "none",
-                          },
-                          children: [
-                            e.jsxs("div", {
-                              style: {
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 6,
-                                marginBottom: 6,
-                              },
-                              children: [
-                                e.jsx("input", {
-                                  type: "checkbox",
-                                  checked: seleccionadas.has(E.id),
-                                  onChange: (q) => toggleSeleccion(E.id, !0),
-                                  title: "Seleccionar tarea",
-                                }),
-                                fila.esResumen &&
-                                  e.jsx("button", {
-                                    onClick: () => toggleColapso(E.id),
-                                    style: {
-                                      background: "transparent",
-                                      border: "none",
-                                      cursor: "pointer",
-                                      color: a.muted,
-                                      fontSize: 12,
-                                      padding: 0,
-                                      width: 14,
-                                    },
-                                    children: colapsados.has(E.id) ? "▶" : "▼",
-                                  }),
-                                fila.codigo &&
-                                  e.jsx("span", {
-                                    style: { fontSize: 10, fontWeight: 700, color: a.muted, flexShrink: 0 },
-                                    children: fila.codigo,
-                                  }),
-                                E.esHito &&
-                                  e.jsx("span", { style: { fontSize: 12, flexShrink: 0 }, children: "◆" }),
-                                e.jsx("input", {
-                                  style: u(d({}, c.inp), {
-                                    flex: 1,
-                                    fontSize: 12,
-                                    padding: "4px 7px",
-                                    fontWeight: fila.esResumen ? 700 : 400,
-                                  }),
-                                  value: E.nombre,
-                                  onChange: (q) => P(E.id, "nombre", q.target.value),
-                                  placeholder: "Nombre tarea",
-                                }),
-                                e.jsx("button", {
-                                  style: u(d({}, c.btn("d")), {
-                                    padding: "3px 6px",
-                                    fontSize: 13,
-                                  }),
-                                  onClick: () => A(E.id),
-                                  children: "×",
-                                }),
-                              ],
-                            }),
-                            fila.esResumen
-                              ? e.jsxs("div", {
-                                  style: { fontSize: 10, color: a.muted },
-                                  children: [
-                                    "Tarea resumen · ",
-                                    T(feE.inicio),
-                                    " → ",
-                                    T(feE.inicio + feE.duracion),
-                                    " (",
-                                    feE.duracion,
-                                    " días, calculado desde sus subtareas)",
-                                  ],
-                                })
-                              : e.jsxs(e.Fragment, {
-                                  children: [
-                                    e.jsxs("div", {
-                                      style: {
-                                        display: "grid",
-                                        gridTemplateColumns: "1fr 1fr",
-                                        gap: 6,
-                                      },
-                                      children: [
-                                        e.jsxs("div", {
-                                          children: [
-                                            e.jsx("div", {
-                                              style: { fontSize: 10, color: a.muted, marginBottom: 3 },
-                                              children: "INICIO (día)",
-                                            }),
-                                            e.jsx("input", {
-                                              style: u(d({}, c.inp), {
-                                                fontSize: 12,
-                                                padding: "3px 6px",
-                                                textAlign: "center",
-                                              }),
-                                              type: "number",
-                                              value: (E.predecesoras || []).length > 0 ? feE.inicio : E.inicio,
-                                              onChange: (q) => P(E.id, "inicio", parseInt(q.target.value) || 0),
-                                              min: "0",
-                                              disabled: (E.predecesoras || []).length > 0,
-                                              title: (E.predecesoras || []).length > 0 ? "Calculado automáticamente desde la predecesora" : "",
-                                            }),
-                                          ],
-                                        }),
-                                        e.jsxs("div", {
-                                          children: [
-                                            e.jsx("div", {
-                                              style: { fontSize: 10, color: a.muted, marginBottom: 3 },
-                                              children: "DURACIÓN (días)",
-                                            }),
-                                            e.jsx("input", {
-                                              style: u(d({}, c.inp), {
-                                                fontSize: 12,
-                                                padding: "3px 6px",
-                                                textAlign: "center",
-                                              }),
-                                              type: "number",
-                                              value: E.duracion,
-                                              onChange: (q) => P(E.id, "duracion", parseInt(q.target.value) || 1),
-                                              min: "0",
-                                              disabled: !!E.esHito,
-                                            }),
-                                          ],
-                                        }),
-                                      ],
-                                    }),
-                                    e.jsxs("div", {
-                                      style: { marginTop: 6, fontSize: 10, color: a.muted },
-                                      children: [
-                                        T(feE.inicio),
-                                        " → ",
-                                        T(feE.inicio + feE.duracion),
-                                        " (",
-                                        feE.duracion,
-                                        " días)",
-                                      ],
-                                    }),
-                                    predecesorasTexto &&
-                                      e.jsxs("div", {
-                                        style: { marginTop: 3, fontSize: 10, color: a.accent, fontWeight: 700 },
-                                        children: ["Predecesora: ", predecesorasTexto],
-                                      }),
-                                  ],
-                                }),
-                          ],
-                        },
-                        E.id,
-                      );
+              panelTareasVisible &&
+                e.jsxs("div", {
+                  style: u(d({}, c.card), { padding: "14px 0 0 0", overflow: "hidden" }),
+                  children: [
+                    e.jsxs("div", {
+                      style: {
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: 4,
+                        padding: "0 14px 10px 14px",
+                        borderBottom: `1px solid ${a.border}`,
+                      },
+                      children: [
+                        e.jsx("div", { style: c.ct, children: "Tareas" }),
+                        e.jsx("button", {
+                          onClick: () => setPanelTareasVisible(!1),
+                          style: u(d({}, c.btn("s")), { padding: "3px 8px", fontSize: 11 }),
+                          title: "Ocultar panel de tareas y ampliar el diagrama",
+                          children: "◀ Ocultar",
+                        }),
+                      ],
                     }),
-                  }),
-                ],
-              }),
+                    e.jsx("div", {
+                      style: { maxHeight: 500, overflowY: "auto" },
+                      children: vistaTareas.map((fila, M) => {
+                        var E = fila.tarea,
+                          feE = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion },
+                          predecesorasTexto = (E.predecesoras || [])
+                            .map((pid) => codigosPorId[pid])
+                            .filter(Boolean)
+                            .join(", "),
+                          lineaSecundaria = fila.esResumen
+                            ? `${T(feE.inicio)} → ${T(feE.inicio + feE.duracion)} (${feE.duracion}d, calc. desde subtareas)`
+                            : predecesorasTexto
+                              ? "Predecesora: " + predecesorasTexto
+                              : "";
+                        return e.jsxs(
+                          "div",
+                          {
+                            style: {
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              height: Y,
+                              boxSizing: "border-box",
+                              padding: `0 8px 0 ${8 + fila.nivel * 14}px`,
+                              background: fila.esResumen ? a.accent + "1a" : M % 2 === 0 ? "transparent" : a.sb,
+                              borderLeft: `3px solid ${E.color}`,
+                              borderBottom: `1px solid ${a.border}`,
+                              outline: seleccionadas.has(E.id) ? `2px solid ${a.accent}` : "none",
+                              outlineOffset: -2,
+                            },
+                            children: [
+                              e.jsxs("div", {
+                                style: { display: "flex", alignItems: "center", gap: 5 },
+                                children: [
+                                  e.jsx("input", {
+                                    type: "checkbox",
+                                    checked: seleccionadas.has(E.id),
+                                    onChange: () => toggleSeleccion(E.id, !0),
+                                    title: "Seleccionar tarea",
+                                    style: { flexShrink: 0 },
+                                  }),
+                                  fila.esResumen
+                                    ? e.jsx("button", {
+                                        onClick: () => toggleColapso(E.id),
+                                        style: {
+                                          background: "transparent",
+                                          border: "none",
+                                          cursor: "pointer",
+                                          color: a.muted,
+                                          fontSize: 11,
+                                          padding: 0,
+                                          width: 12,
+                                          flexShrink: 0,
+                                        },
+                                        children: colapsados.has(E.id) ? "▶" : "▼",
+                                      })
+                                    : e.jsx("span", { style: { width: 12, flexShrink: 0 } }),
+                                  fila.codigo &&
+                                    e.jsx("span", {
+                                      style: {
+                                        fontSize: 10,
+                                        fontWeight: 800,
+                                        color: fila.esResumen ? a.accent : a.muted,
+                                        flexShrink: 0,
+                                        minWidth: 22,
+                                      },
+                                      children: fila.codigo,
+                                    }),
+                                  E.esHito &&
+                                    e.jsx("span", { style: { fontSize: 11, flexShrink: 0 }, children: "◆" }),
+                                  e.jsx("input", {
+                                    style: u(d({}, c.inp), {
+                                      flex: 1,
+                                      minWidth: 0,
+                                      fontSize: 12,
+                                      padding: "3px 6px",
+                                      fontWeight: fila.esResumen ? 700 : 400,
+                                    }),
+                                    value: E.nombre,
+                                    onChange: (q) => P(E.id, "nombre", q.target.value),
+                                    placeholder: "Nombre tarea",
+                                  }),
+                                  !fila.esResumen &&
+                                    e.jsx("input", {
+                                      style: u(d({}, c.inp), {
+                                        width: 34,
+                                        flexShrink: 0,
+                                        fontSize: 11,
+                                        padding: "3px 3px",
+                                        textAlign: "center",
+                                      }),
+                                      type: "number",
+                                      value: (E.predecesoras || []).length > 0 ? feE.inicio : E.inicio,
+                                      onChange: (q) => P(E.id, "inicio", parseInt(q.target.value) || 0),
+                                      min: "0",
+                                      disabled: (E.predecesoras || []).length > 0,
+                                      title: (E.predecesoras || []).length > 0
+                                        ? "Inicio (calculado desde la predecesora)"
+                                        : "Inicio (día)",
+                                    }),
+                                  !fila.esResumen &&
+                                    e.jsx("input", {
+                                      style: u(d({}, c.inp), {
+                                        width: 34,
+                                        flexShrink: 0,
+                                        fontSize: 11,
+                                        padding: "3px 3px",
+                                        textAlign: "center",
+                                      }),
+                                      type: "number",
+                                      value: E.duracion,
+                                      onChange: (q) => P(E.id, "duracion", parseInt(q.target.value) || 1),
+                                      min: "0",
+                                      disabled: !!E.esHito,
+                                      title: "Duración (días)",
+                                    }),
+                                  e.jsx("button", {
+                                    style: u(d({}, c.btn("d")), { padding: "2px 5px", fontSize: 12, flexShrink: 0 }),
+                                    onClick: () => A(E.id),
+                                    title: "Eliminar tarea",
+                                    children: "×",
+                                  }),
+                                ],
+                              }),
+                              lineaSecundaria &&
+                                e.jsx("div", {
+                                  style: {
+                                    fontSize: 9,
+                                    color: fila.esResumen ? a.muted : a.accent,
+                                    fontWeight: fila.esResumen ? 400 : 700,
+                                    marginTop: 1,
+                                    paddingLeft: 17,
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                  },
+                                  children: lineaSecundaria,
+                                }),
+                            ],
+                          },
+                          E.id,
+                        );
+                      }),
+                    }),
+                  ],
+                }),
               e.jsxs("div", {
                 style: u(d({}, c.card), { overflowX: "auto" }),
                 children: [
-                  e.jsx("div", {
-                    style: u(d({}, c.ct), { marginBottom: 12 }),
-                    children: "Diagrama",
+                  e.jsxs("div", {
+                    style: u(d({}, c.ct), {
+                      marginBottom: 12,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }),
+                    children: [
+                      e.jsx("span", { children: "Diagrama" }),
+                      !panelTareasVisible &&
+                        e.jsx("button", {
+                          onClick: () => setPanelTareasVisible(!0),
+                          style: u(d({}, c.btn("s")), { padding: "3px 8px", fontSize: 11, textTransform: "none" }),
+                          title: "Mostrar panel de tareas",
+                          children: "▶ Mostrar tareas",
+                        }),
+                    ],
                   }),
                   e.jsx("div", {
                     style: { overflowX: "auto" },
@@ -37037,16 +37090,19 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                             display: "flex",
                             borderBottom: `2px solid ${a.border}`,
                             marginBottom: 0,
+                            background: a.sb,
+                            borderRadius: "8px 8px 0 0",
                           },
                           children: [
                             e.jsx("div", {
                               style: {
                                 width: le,
                                 flexShrink: 0,
-                                fontSize: 11,
-                                color: a.muted,
-                                padding: "6px 8px",
-                                fontWeight: 700,
+                                fontSize: 12,
+                                color: a.text,
+                                padding: "9px 8px",
+                                fontWeight: 800,
+                                letterSpacing: ".03em",
                               },
                               children: "TAREA",
                             }),
@@ -37057,12 +37113,13 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                   style: {
                                     width: ee,
                                     flexShrink: 0,
-                                    fontSize: 10,
-                                    color: a.muted,
+                                    fontSize: 11,
+                                    fontWeight: 700,
+                                    color: a.text,
                                     textAlign: "center",
-                                    padding: "4px 2px",
+                                    padding: "8px 2px",
                                     borderLeft: `1px solid ${a.border}`,
-                                    lineHeight: 1.3,
+                                    lineHeight: 1.35,
                                     whiteSpace: "pre-line",
                                   },
                                   children: E.label,
@@ -37086,7 +37143,11 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                 alignItems: "center",
                                 height: Y,
                                 borderBottom: `1px solid ${a.border}`,
-                                background: M % 2 === 0 ? "transparent" : a.sb,
+                                background: fila.esResumen
+                                  ? a.accent + "1a"
+                                  : M % 2 === 0
+                                    ? "transparent"
+                                    : a.sb,
                                 position: "relative",
                               },
                               children: [
@@ -37100,9 +37161,14 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                     textOverflow: "ellipsis",
                                     whiteSpace: "nowrap",
                                     color: a.text,
-                                    fontWeight: fila.esResumen ? 700 : 400,
+                                    fontWeight: fila.esResumen ? 800 : 400,
                                   },
-                                  children: [fila.codigo, " ", E.nombre],
+                                  children: [
+                                    fila.esResumen ? (colapsados.has(E.id) ? "▶ " : "▼ ") : "",
+                                    fila.codigo,
+                                    " ",
+                                    E.nombre,
+                                  ],
                                 }),
                                 $.map((q, J) =>
                                   e.jsx(
@@ -37211,20 +37277,22 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                   children: e.jsx("marker", {
                                     id: "flechaGanttDep",
                                     viewBox: "0 0 10 10",
-                                    refX: "8",
+                                    refX: "8.5",
                                     refY: "5",
-                                    markerWidth: "6",
-                                    markerHeight: "6",
+                                    markerWidth: "7",
+                                    markerHeight: "7",
                                     orient: "auto-start-reverse",
-                                    children: e.jsx("path", { d: "M0,0 L10,5 L0,10 z", fill: a.accent }),
+                                    children: e.jsx("path", { d: "M0,0 L10,5 L0,10 z", fill: "#dc2626" }),
                                   }),
                                 }),
                                 conexionesGantt.map((cx) =>
                                   e.jsx("polyline", {
                                     points: cx.points,
                                     fill: "none",
-                                    stroke: a.accent,
-                                    strokeWidth: 1.5,
+                                    stroke: "#dc2626",
+                                    strokeWidth: 2,
+                                    strokeLinecap: "round",
+                                    strokeLinejoin: "round",
                                     markerEnd: "url(#flechaGanttDep)",
                                   }, cx.key),
                                 ),
