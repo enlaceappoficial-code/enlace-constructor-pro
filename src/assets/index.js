@@ -36649,17 +36649,72 @@ ${re.getDate()}/${re.getMonth() + 1}`,
             e.jsxs("div", {
               style: { marginTop: 14, display: "flex", flexDirection: "column", gap: 10 },
               children: [
-                e.jsxs("button", {
-                  style: u(d({}, c.btn("p")), {
-                    padding: "9px 18px",
-                    fontSize: 13,
-                    fontWeight: 700,
-                    alignSelf: "flex-start",
-                  }),
-                  onClick: S,
+                e.jsxs("div", {
+                  style: {
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 16,
+                    rowGap: 10,
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  },
                   children: [
-                    "⚡ Cargar tareas desde ",
-                    s === "presupuesto" ? "presupuesto" : "licitación",
+                    e.jsxs("button", {
+                      style: u(d({}, c.btn("p")), {
+                        padding: "9px 18px",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        flexShrink: 0,
+                      }),
+                      onClick: S,
+                      children: [
+                        "⚡ Cargar tareas desde ",
+                        s === "presupuesto" ? "presupuesto" : "licitación",
+                      ],
+                    }),
+                    v &&
+                      Grupo(
+                        "Archivos",
+                        [
+                          e.jsxs("button", {
+                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                            onClick: () => I((E) => !E),
+                            children: [
+                              "📂 Mis Gantts",
+                              D.length > 0 &&
+                                e.jsx("span", {
+                                  style: {
+                                    background: a.accent,
+                                    color: "#050a10",
+                                    borderRadius: 99,
+                                    fontSize: 10,
+                                    padding: "1px 6px",
+                                    marginLeft: 4,
+                                  },
+                                  children: D.length,
+                                }),
+                            ],
+                          }),
+                          e.jsx("button", {
+                            style: u(d({}, c.btn("g")), { padding: "6px 9px", fontSize: 12 }),
+                            onClick: L,
+                            children: "🖨️ PDF",
+                          }),
+                          e.jsx("button", {
+                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                            onClick: Ee,
+                            children: "📊 Excel",
+                          }),
+                          e.jsx("button", {
+                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                            title:
+                              "Descarga un .xml para importar en Microsoft Project.\nLuego: Archivo → Abrir → selecciona el .xml",
+                            onClick: Me,
+                            children: "🗂️ MS Project",
+                          }),
+                        ],
+                        { marginLeft: "auto" },
+                      ),
                   ],
                 }),
                 v &&
@@ -36719,48 +36774,6 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                           children: "⛓ Desenlazar",
                         }),
                       ]),
-                      e.jsx("div", { style: { width: 1, flexShrink: 0, alignSelf: "stretch", background: a.border } }),
-                      Grupo(
-                        "Archivos",
-                        [
-                          e.jsxs("button", {
-                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
-                            onClick: () => I((E) => !E),
-                            children: [
-                              "📂 Mis Gantts",
-                              D.length > 0 &&
-                                e.jsx("span", {
-                                  style: {
-                                    background: a.accent,
-                                    color: "#050a10",
-                                    borderRadius: 99,
-                                    fontSize: 10,
-                                    padding: "1px 6px",
-                                    marginLeft: 4,
-                                  },
-                                  children: D.length,
-                                }),
-                            ],
-                          }),
-                          e.jsx("button", {
-                            style: u(d({}, c.btn("g")), { padding: "6px 9px", fontSize: 12 }),
-                            onClick: L,
-                            children: "🖨️ PDF",
-                          }),
-                          e.jsx("button", {
-                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
-                            onClick: Ee,
-                            children: "📊 Excel",
-                          }),
-                          e.jsx("button", {
-                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
-                            title:
-                              "Descarga un .xml para importar en Microsoft Project.\nLuego: Archivo → Abrir → selecciona el .xml",
-                            onClick: Me,
-                            children: "🗂️ MS Project",
-                          }),
-                        ],
-                      ),
                     ],
                   }),
               ],
