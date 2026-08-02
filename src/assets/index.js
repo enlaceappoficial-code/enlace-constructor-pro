@@ -48624,8 +48624,13 @@ K &&
               __missingApu: !oe,
             });
           },
-          U = String(B || "").trim(),
-          R = A(U),
+          U = String(B || "").trim();
+        if (/^\d+$/.test(U)) {
+          var idBuscado = parseInt(U, 10),
+            porId = y.filter((Z) => parseInt(Z.id) === idBuscado);
+          if (porId.length) return porId.map(O);
+        }
+        var R = A(U),
           K = R.split(/\s+/).filter(Boolean),
           D = { sp: !1, su: !1, sa: !1 },
           k = [];
@@ -49504,6 +49509,7 @@ K &&
                         e.jsx("thead", {
                           children: e.jsx("tr", {
                             children: [
+                              "ID",
                               "Cat.",
                               "Descripción",
                               "APUs",
@@ -49512,7 +49518,17 @@ K &&
                               "c/IVA",
                               "",
                             ].map((y) =>
-                              e.jsx("th", { style: c.th, children: y }, y),
+                              e.jsx(
+                                "th",
+                                {
+                                  style:
+                                    y === "ID"
+                                      ? u(d({}, c.th), { width: 44 })
+                                      : c.th,
+                                  children: y,
+                                },
+                                y,
+                              ),
                             ),
                           }),
                         }),
@@ -49550,6 +49566,15 @@ K &&
                                 },
                                 style: { cursor: "pointer" },
                                 children: [
+                                  e.jsx("td", {
+                                    style: u(d({}, c.td), {
+                                      fontSize: 11,
+                                      color: a.muted,
+                                      fontWeight: 700,
+                                      whiteSpace: "nowrap",
+                                    }),
+                                    children: y.id,
+                                  }),
                                   e.jsx("td", {
                                     style: c.td,
                                     children: e.jsx("span", {
@@ -49728,6 +49753,17 @@ K &&
                   children:
                     g !== null ? "✏ Editar Partida" : "➕ Nueva Partida",
                 }),
+                g !== null &&
+                  e.jsx("div", {
+                    style: {
+                      fontSize: 12,
+                      color: a.muted,
+                      fontWeight: 700,
+                      marginTop: 4,
+                      marginBottom: 4,
+                    },
+                    children: "ID de catálogo: " + g,
+                  }),
                 g !== null &&
                   (() => {
                     var A = [];
