@@ -36464,7 +36464,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
     });
     var Grupo = (titulo, hijos, extraStyle) =>
       e.jsxs("div", {
-        style: u(d({}, { display: "flex", flexDirection: "column", gap: 4 }), extraStyle || {}),
+        style: u(d({}, { display: "flex", flexDirection: "column", gap: 4, flexShrink: 0 }), extraStyle || {}),
         children: [
           e.jsx("div", {
             style: {
@@ -36473,10 +36473,11 @@ ${re.getDate()}/${re.getMonth() + 1}`,
               color: a.muted,
               textTransform: "uppercase",
               letterSpacing: ".06em",
+              whiteSpace: "nowrap",
             },
             children: titulo,
           }),
-          e.jsx("div", { style: { display: "flex", gap: 5, flexWrap: "wrap" }, children: hijos }),
+          e.jsx("div", { style: { display: "flex", gap: 5, flexWrap: "nowrap" }, children: hijos }),
         ],
       });
     return e.jsxs("div", {
@@ -36667,6 +36668,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                       display: "flex",
                       flexWrap: "wrap",
                       gap: 16,
+                      rowGap: 12,
                       alignItems: "flex-start",
                       paddingTop: 10,
                       borderTop: `1px solid ${a.border}`,
@@ -36684,7 +36686,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                           children: "◆ Hito",
                         }),
                       ]),
-                      e.jsx("div", { style: { width: 1, alignSelf: "stretch", background: a.border } }),
+                      e.jsx("div", { style: { width: 1, flexShrink: 0, alignSelf: "stretch", background: a.border } }),
                       Grupo(
                         "Orden",
                         [
@@ -36704,7 +36706,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                           ),
                         ),
                       ),
-                      e.jsx("div", { style: { width: 1, alignSelf: "stretch", background: a.border } }),
+                      e.jsx("div", { style: { width: 1, flexShrink: 0, alignSelf: "stretch", background: a.border } }),
                       Grupo("Dependencias", [
                         e.jsx("button", {
                           style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
@@ -36717,7 +36719,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                           children: "⛓ Desenlazar",
                         }),
                       ]),
-                      e.jsx("div", { style: { width: 1, alignSelf: "stretch", background: a.border } }),
+                      e.jsx("div", { style: { width: 1, flexShrink: 0, alignSelf: "stretch", background: a.border } }),
                       Grupo(
                         "Archivos",
                         [
@@ -36758,7 +36760,6 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                             children: "🗂️ MS Project",
                           }),
                         ],
-                        { marginLeft: "auto" },
                       ),
                     ],
                   }),
