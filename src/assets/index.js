@@ -35499,6 +35499,93 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       ],
     });
   });
+  function hijosDeTarea(tareas, parentId) {
+    return tareas.filter((t) => (t.parentId || null) === (parentId || null));
+  }
+  function esTareaResumen(tareas, id) {
+    return tareas.some((t) => (t.parentId || null) === id);
+  }
+  function calcularWBSGantt(tareas) {
+    var codigos = {};
+    function recorrer(parentId, prefijo) {
+      hijosDeTarea(tareas, parentId).forEach((t, idx) => {
+        var codigo = prefijo ? prefijo + "." + (idx + 1) : String(idx + 1);
+        codigos[t.id] = codigo;
+        recorrer(t.id, codigo);
+      });
+    }
+    recorrer(null, "");
+    return codigos;
+  }
+  function calcularFechasGantt(tareas) {
+    var efectivo = {};
+    tareas.forEach((t) => {
+      efectivo[t.id] = {
+        inicio: parseFloat(t.inicio) || 0,
+        duracion: t.esHito ? 0 : Math.max(1, parseFloat(t.duracion) || 1),
+      };
+    });
+    var hojas = tareas.filter((t) => !esTareaResumen(tareas, t.id));
+    for (var pasada = 0; pasada <= hojas.length; pasada++) {
+      var cambio = false;
+      hojas.forEach((t) => {
+        var preds = (t.predecesoras || []).map((pid) => efectivo[pid]).filter(Boolean);
+        if (preds.length) {
+          var finMax = Math.max.apply(null, preds.map((pr) => pr.inicio + pr.duracion));
+          if (efectivo[t.id].inicio !== finMax) {
+            efectivo[t.id].inicio = finMax;
+            cambio = true;
+          }
+        }
+      });
+      if (!cambio) break;
+    }
+    function calcularResumen(id) {
+      var hijos = hijosDeTarea(tareas, id);
+      if (hijos.length === 0) return;
+      hijos.forEach((h) => {
+        if (esTareaResumen(tareas, h.id)) calcularResumen(h.id);
+      });
+      var inicios = hijos.map((h) => efectivo[h.id].inicio);
+      var fines = hijos.map((h) => efectivo[h.id].inicio + efectivo[h.id].duracion);
+      efectivo[id] = {
+        inicio: Math.min.apply(null, inicios),
+        duracion: Math.max.apply(null, fines) - Math.min.apply(null, inicios),
+      };
+    }
+    tareas.forEach((t) => {
+      if (esTareaResumen(tareas, t.id)) calcularResumen(t.id);
+    });
+    return efectivo;
+  }
+  function construirVistaGantt(tareas, colapsados) {
+    var codigos = calcularWBSGantt(tareas);
+    var filas = [];
+    function recorrer(parentId, nivel) {
+      hijosDeTarea(tareas, parentId).forEach((t) => {
+        var tieneHijos = esTareaResumen(tareas, t.id);
+        filas.push({ tarea: t, nivel, codigo: codigos[t.id] || "", esResumen: tieneHijos });
+        if (tieneHijos && !colapsados.has(t.id)) recorrer(t.id, nivel + 1);
+      });
+    }
+    recorrer(null, 0);
+    return filas;
+  }
+  function generaCicloGantt(tareas, desdeId, haciaId) {
+    if (desdeId === haciaId) return true;
+    var pila = [haciaId],
+      visitado = new Set();
+    while (pila.length) {
+      var actual = pila.pop();
+      if (actual === desdeId) return true;
+      if (visitado.has(actual)) continue;
+      visitado.add(actual);
+      tareas.forEach((t) => {
+        if ((t.predecesoras || []).includes(actual)) pila.push(t.id);
+      });
+    }
+    return false;
+  }
   function tg({ budgets: t, licitaciones: i, cfg: r, setToast: n }) {
     var l = [
         "#3b82f6",
@@ -35578,7 +35665,9 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           return !1;
         }
       }),
-      [f, I] = V(!1);
+      [f, I] = V(!1),
+      [colapsados, setColapsados] = V(() => new Set()),
+      [seleccionadas, setSeleccionadas] = V(() => new Set());
     Re.useEffect(() => {
       if (!(!v || g.length === 0)) {
         var E = setTimeout(() => {
@@ -35649,6 +35738,8 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           w(E.nextId || E.tareas.length + 1),
           x(!0),
           I(!1),
+          setSeleccionadas(new Set()),
+          setColapsados(new Set()),
           n("✅ Gantt cargado: " + E.nombre));
       },
       R = (E, M) => {
@@ -35678,40 +35769,115 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
             duracion: 5,
             color: l[B % l.length],
             responsable: "",
+            parentId: null,
+            predecesoras: [],
+            esHito: !1,
           },
         ]),
           w((E) => E + 1));
       },
       P = (E, M, q) =>
         z((J) => J.map((re) => (re.id === E ? u(d({}, re), { [M]: q }) : re))),
-      A = (E) => z((M) => M.filter((q) => q.id !== E)),
+      A = (E) => {
+        (z((prev) => {
+          var aEliminar = new Set([E]);
+          var cambiado = !0;
+          while (cambiado) {
+            cambiado = !1;
+            prev.forEach((t2) => {
+              if (t2.parentId && aEliminar.has(t2.parentId) && !aEliminar.has(t2.id)) {
+                (aEliminar.add(t2.id), (cambiado = !0));
+              }
+            });
+          }
+          return prev
+            .filter((t2) => !aEliminar.has(t2.id))
+            .map((t2) =>
+              u(d({}, t2), {
+                predecesoras: (t2.predecesoras || []).filter((pid) => !aEliminar.has(pid)),
+              }),
+            );
+        }),
+          setSeleccionadas((prev) => {
+            var next = new Set(prev);
+            next.delete(E);
+            return next;
+          }));
+      },
       S = () => {
         if (!p) {
           n("⚠️ Selecciona un origen primero.");
           return;
         }
-        var E = [];
+        var E = [],
+          siguienteId = 1;
         if (s === "presupuesto") {
           var M = t && t.find((Q) => Q.id === parseInt(p));
           if (!M) {
             n("⚠️ Presupuesto no encontrado.");
             return;
           }
-          var q = 0;
-          E = M.items
-            .filter((Q) => Q.desc)
-            .map((Q, G) => {
-              var ie = Math.max(1, Math.ceil((parseFloat(Q.cant) || 1) / 5)),
-                oe = {
-                  id: G + 1,
-                  nombre: Q.desc,
-                  inicio: q,
-                  duracion: ie,
-                  color: l[G % l.length],
-                  responsable: "",
-                };
-              return ((q += ie), oe);
+          var capitulosOrdenados = [...(M.capitulos || [])].sort(
+              (a2, b2) => (parseFloat(a2.orden) || 0) - (parseFloat(b2.orden) || 0),
+            ),
+            itemsConDesc = (M.items || []).filter((Q) => Q.desc),
+            cursor = 0;
+          capitulosOrdenados.forEach((cap) => {
+            var itemsDelCap = itemsConDesc.filter((Q) => Q.capituloId === cap.id);
+            if (itemsDelCap.length === 0) return;
+            var capTaskId = siguienteId++;
+            E.push({
+              id: capTaskId,
+              nombre: cap.nombre || "Capítulo",
+              inicio: cursor,
+              duracion: 1,
+              color: l[(capTaskId - 1) % l.length],
+              responsable: "",
+              parentId: null,
+              predecesoras: [],
+              esHito: !1,
+              codigoCapitulo: cap.codigo || "",
             });
+            itemsDelCap.forEach((Q) => {
+              var dias = Math.max(1, Math.ceil((parseFloat(Q.cant) || 1) / 5)),
+                itemTaskId = siguienteId++;
+              (E.push({
+                id: itemTaskId,
+                nombre: Q.desc,
+                inicio: cursor,
+                duracion: dias,
+                color: l[(itemTaskId - 1) % l.length],
+                responsable: "",
+                parentId: capTaskId,
+                predecesoras: [],
+                esHito: !1,
+              }),
+                (cursor += dias));
+            });
+          });
+          var itemsSinCapitulo = itemsConDesc.filter(
+            (Q) => !capitulosOrdenados.some((cap) => cap.id === Q.capituloId),
+          );
+          itemsSinCapitulo.forEach((Q) => {
+            var dias = Math.max(1, Math.ceil((parseFloat(Q.cant) || 1) / 5)),
+              itemTaskId = siguienteId++;
+            (E.push({
+              id: itemTaskId,
+              nombre: Q.desc,
+              inicio: cursor,
+              duracion: dias,
+              color: l[(itemTaskId - 1) % l.length],
+              responsable: "",
+              parentId: null,
+              predecesoras: [],
+              esHito: !1,
+            }),
+              (cursor += dias));
+          });
+          if (E.length === 0) {
+            n("⚠️ El presupuesto no tiene partidas para importar.");
+            return;
+          }
         } else {
           var J = i && i.find((Q) => Q.id === parseInt(p));
           if (!J) {
@@ -35727,34 +35893,200 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           if (re.length === 0)
             E = [
               {
-                id: 1,
+                id: siguienteId++,
                 nombre: "Etapa 1",
                 inicio: 0,
                 duracion: 10,
                 color: l[0],
                 responsable: "",
+                parentId: null,
+                predecesoras: [],
+                esHito: !1,
               },
             ];
           else {
             var q = 0;
-            E = re.map((G, ie) => {
-              var oe = {
-                id: ie + 1,
-                nombre: G.trim(),
-                inicio: q,
-                duracion: 7,
-                color: l[ie % l.length],
-                responsable: "",
-              };
+            E = re.map((G) => {
+              var idTarea = siguienteId++,
+                oe = {
+                  id: idTarea,
+                  nombre: G.trim(),
+                  inicio: q,
+                  duracion: 7,
+                  color: l[(idTarea - 1) % l.length],
+                  responsable: "",
+                  parentId: null,
+                  predecesoras: [],
+                  esHito: !1,
+                };
               return ((q += 7), oe);
             });
           }
         }
-        (w(E.length + 1), z(E), x(!0));
+        (w(siguienteId),
+          z(E),
+          x(!0),
+          setSeleccionadas(new Set()),
+          setColapsados(new Set()));
       },
+      toggleSeleccion = (id, multi) => {
+        setSeleccionadas((prev) => {
+          var next = multi ? new Set(prev) : new Set();
+          if (next.has(id) && multi) next.delete(id);
+          else next.add(id);
+          return next;
+        });
+      },
+      toggleColapso = (id) => {
+        setColapsados((prev) => {
+          var next = new Set(prev);
+          if (next.has(id)) next.delete(id);
+          else next.add(id);
+          return next;
+        });
+      },
+      moverTarea = (id, dir) => {
+        z((prev) => {
+          var arr = [...prev],
+            tarea = arr.find((t2) => t2.id === id);
+          if (!tarea) return prev;
+          var hermanos = arr.filter((t2) => (t2.parentId || null) === (tarea.parentId || null)),
+            pos = hermanos.findIndex((t2) => t2.id === id),
+            destino = pos + dir;
+          if (destino < 0 || destino >= hermanos.length) return prev;
+          var otroId = hermanos[destino].id,
+            i1 = arr.findIndex((t2) => t2.id === id),
+            i2 = arr.findIndex((t2) => t2.id === otroId),
+            tmp = arr[i1];
+          ((arr[i1] = arr[i2]), (arr[i2] = tmp));
+          return arr;
+        });
+      },
+      subirSeleccionada = () => {
+        if (seleccionadas.size !== 1) {
+          n("⚠️ Selecciona una sola tarea para mover.");
+          return;
+        }
+        moverTarea([...seleccionadas][0], -1);
+      },
+      bajarSeleccionada = () => {
+        if (seleccionadas.size !== 1) {
+          n("⚠️ Selecciona una sola tarea para mover.");
+          return;
+        }
+        moverTarea([...seleccionadas][0], 1);
+      },
+      aplicarSangria = () => {
+        if (seleccionadas.size === 0) {
+          n("⚠️ Selecciona al menos una tarea.");
+          return;
+        }
+        z((prev) => {
+          var arr = prev.map((t2) => d({}, t2));
+          seleccionadas.forEach((id) => {
+            var tarea = arr.find((t2) => t2.id === id);
+            if (!tarea) return;
+            var hermanos = arr.filter(
+                (t2) => (t2.parentId || null) === (tarea.parentId || null),
+              ),
+              pos = hermanos.findIndex((t2) => t2.id === id);
+            if (pos <= 0) return;
+            var nuevoPadre = hermanos[pos - 1];
+            if (nuevoPadre.id === id) return;
+            tarea.parentId = nuevoPadre.id;
+          });
+          return arr;
+        });
+      },
+      quitarSangria = () => {
+        if (seleccionadas.size === 0) {
+          n("⚠️ Selecciona al menos una tarea.");
+          return;
+        }
+        z((prev) => {
+          var arr = prev.map((t2) => d({}, t2));
+          seleccionadas.forEach((id) => {
+            var tarea = arr.find((t2) => t2.id === id);
+            if (!tarea || !tarea.parentId) return;
+            var padre = arr.find((t2) => t2.id === tarea.parentId);
+            tarea.parentId = padre ? padre.parentId || null : null;
+          });
+          return arr;
+        });
+      },
+      enlazarSeleccionadas = () => {
+        if (seleccionadas.size < 2) {
+          n("⚠️ Selecciona al menos 2 tareas para enlazar.");
+          return;
+        }
+        var vista = construirVistaGantt(g, colapsados),
+          idsEnOrden = vista.map((f2) => f2.tarea.id).filter((id) => seleccionadas.has(id)),
+          nuevasTareas = g.map((t2) => u(d({}, t2), { predecesoras: [...(t2.predecesoras || [])] })),
+          bloqueado = !1;
+        for (var idx = 1; idx < idsEnOrden.length; idx++) {
+          var desdeId = idsEnOrden[idx - 1],
+            haciaId = idsEnOrden[idx],
+            haciaTask = nuevasTareas.find((t2) => t2.id === haciaId);
+          if (desdeId === haciaId || !haciaTask) continue;
+          if ((haciaTask.predecesoras || []).includes(desdeId)) continue;
+          if (generaCicloGantt(nuevasTareas, desdeId, haciaId)) {
+            bloqueado = !0;
+            continue;
+          }
+          haciaTask.predecesoras = [...(haciaTask.predecesoras || []), desdeId];
+        }
+        (z(nuevasTareas),
+          n(bloqueado ? "⚠️ Algunos enlaces se omitieron por generar ciclos." : "🔗 Tareas enlazadas"));
+      },
+      desenlazarSeleccionadas = () => {
+        if (seleccionadas.size < 2) {
+          n("⚠️ Selecciona las tareas enlazadas para desenlazar.");
+          return;
+        }
+        (z((prev) =>
+          prev.map((t2) =>
+            seleccionadas.has(t2.id)
+              ? u(d({}, t2), {
+                  predecesoras: (t2.predecesoras || []).filter((pid) => !seleccionadas.has(pid)),
+                })
+              : t2,
+          ),
+        ),
+          n("⛓ Enlace eliminado"));
+      },
+      agregarHito = () => {
+        var parentId = null;
+        if (seleccionadas.size === 1) {
+          var selTask = g.find((t2) => t2.id === [...seleccionadas][0]);
+          if (selTask) parentId = selTask.parentId || null;
+        }
+        (z((prev) => [
+          ...prev,
+          {
+            id: B,
+            nombre: "Nuevo hito",
+            inicio: 0,
+            duracion: 0,
+            color: l[B % l.length],
+            responsable: "",
+            parentId,
+            predecesoras: [],
+            esHito: !0,
+          },
+        ]),
+          w((prev) => prev + 1));
+      },
+      fechasCalc = calcularFechasGantt(g),
+      codigosPorId = calcularWBSGantt(g),
+      vistaTareas = construirVistaGantt(g, colapsados),
       O =
         g.length > 0
-          ? Math.max(...g.map((E) => E.inicio + E.duracion)) + 2
+          ? Math.max(
+              ...g.map((E) => {
+                var fe = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion };
+                return fe.inicio + fe.duracion;
+              }),
+            ) + 2
           : 30,
       U = () => {
         if (b === "dias")
@@ -35837,17 +36169,20 @@ ${re.getDate()}/${re.getMonth() + 1}`,
             (Q) =>
               `<th style="min-width:${ee}px;padding:4px;font-size:10px;text-align:center;background:#1a3060;color:#fff;border:1px solid #ccc">${Q.label.replace(/\n/g, "<br/>")}</th>`,
           ).join(""),
-          J = g
-            .map((Q) => {
-              var G = $.map((ie) => {
-                var oe = ie.idx * ie.dias,
-                  ce = oe + ie.dias,
-                  te = Q.inicio,
-                  fe = Q.inicio + Q.duracion,
-                  ve = te < ce && fe > oe;
-                return `<td style="border:1px solid #eee;min-width:${ee}px;padding:0 2px;height:20px">${ve ? '<div style="height:12px;border:2px solid ' + Q.color + ';border-radius:3px"></div>' : ""}</td>`;
-              }).join("");
-              return `<tr><td style="padding:4px 8px;font-size:11px;border:1px solid #eee;white-space:nowrap">${Q.nombre}</td>${G}</tr>`;
+          J = vistaTareas
+            .map((fila) => {
+              var Q = fila.tarea,
+                feQ = fechasCalc[Q.id] || { inicio: Q.inicio, duracion: Q.duracion },
+                G = $.map((ie) => {
+                  var oe = ie.idx * ie.dias,
+                    ce = oe + ie.dias,
+                    te = feQ.inicio,
+                    fe = feQ.inicio + feQ.duracion,
+                    ve = te < ce && fe > oe;
+                  return `<td style="border:1px solid #eee;min-width:${ee}px;padding:0 2px;height:20px">${ve ? '<div style="height:12px;border:2px solid ' + Q.color + ';border-radius:3px"></div>' : ""}</td>`;
+                }).join(""),
+                nombreIndentado = "&nbsp;".repeat(fila.nivel * 3) + (fila.codigo ? fila.codigo + " — " : "") + Q.nombre;
+              return `<tr><td style="padding:4px 8px;font-size:11px;border:1px solid #eee;white-space:nowrap;${fila.esResumen ? "font-weight:bold" : ""}">${nombreIndentado}</td>${G}</tr>`;
             })
             .join(""),
           re = window.open("", "_blank");
@@ -35916,13 +36251,15 @@ ${re.getDate()}/${re.getMonth() + 1}`,
               [],
               ["Tarea", ...re],
             ];
-          g.forEach((xe) => {
-            var he = [xe.nombre || ""];
+          vistaTareas.forEach((fila) => {
+            var xe = fila.tarea,
+              feXe = fechasCalc[xe.id] || { inicio: xe.inicio, duracion: xe.duracion },
+              he = ["  ".repeat(fila.nivel) + (fila.codigo ? fila.codigo + " " : "") + (xe.nombre || "")];
             (($ || []).forEach((je) => {
               var ke = je.idx * je.dias,
                 At = ke + je.dias,
-                ci = xe.inicio,
-                li = xe.inicio + xe.duracion,
+                ci = feXe.inicio,
+                li = feXe.inicio + feXe.duracion,
                 ui = ci < At && li > ke;
               he.push(ui ? "■" : "");
             }),
@@ -35979,7 +36316,9 @@ ${re.getDate()}/${re.getMonth() + 1}`,
             he && (he.s = ce);
           }
           for (var je = 4; je < Q.length; je++) {
-            var ke = g[je - 4] || {},
+            var filaKe = vistaTareas[je - 4] || {},
+              ke = filaKe.tarea || {},
+              feKe = fechasCalc[ke.id] || { inicio: ke.inicio, duracion: ke.duracion },
               At = fe(ke.color);
             for (var ci = 0; ci < ie; ci++) {
               var li = G[q.utils.encode_cell({ r: je, c: ci })];
@@ -35996,8 +36335,8 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                   var ui = $[ci - 1],
                     Wi = ui.idx * ui.dias,
                     di = Wi + ui.dias,
-                    yi = ke.inicio,
-                    Pi = ke.inicio + ke.duracion,
+                    yi = feKe.inicio,
+                    Pi = feKe.inicio + feKe.duracion,
                     Mi = yi < di && Pi > Wi;
                   Mi &&
                     ((li.v = "■"),
@@ -36043,20 +36382,30 @@ ${re.getDate()}/${re.getMonth() + 1}`,
             re = (xe) => {
               var he = new Date(q);
               return (
-                he.setDate(he.getDate() + (parseInt(xe) || 0)),
-                he.toISOString()
+                he.setDate(he.getDate() + (parseFloat(xe) || 0)),
+                he.toISOString().replace(/\.\d{3}Z$/, "")
               );
             },
-            Q = g
-              .map((xe, he) => {
-                var je = he + 1,
-                  ke = re(xe.inicio),
-                  At = re(xe.inicio + xe.duracion),
-                  ci = Math.max(0, (parseInt(xe.duracion) || 0) * 8);
-                return `<Task><UID>${je}</UID><ID>${je}</ID><Name>${J(xe.nombre || "")}</Name><Start>${ke}</Start><Finish>${At}</Finish><Duration>PT${ci}H0M0S</Duration><Manual>1</Manual></Task>`;
+            vistaExport = construirVistaGantt(g, new Set()),
+            idsValidos = new Set(g.map((xe) => xe.id)),
+            Q = vistaExport
+              .map((fila) => {
+                var xe = fila.tarea,
+                  feXe = fechasCalc[xe.id] || { inicio: xe.inicio, duracion: xe.duracion },
+                  ke = re(feXe.inicio),
+                  At = re(feXe.inicio + feXe.duracion),
+                  ci = Math.max(0, Math.round((feXe.duracion || 0) * 8)),
+                  predecessorLinks = (xe.predecesoras || [])
+                    .filter((pid) => idsValidos.has(pid))
+                    .map(
+                      (pid) =>
+                        `<PredecessorLink><PredecessorUID>${pid}</PredecessorUID><Type>1</Type><CrossProject>0</CrossProject></PredecessorLink>`,
+                    )
+                    .join("");
+                return `<Task><UID>${xe.id}</UID><ID>${xe.id}</ID><Name>${J(xe.nombre || "")}</Name><OutlineLevel>${fila.nivel + 1}</OutlineLevel><OutlineNumber>${J(fila.codigo)}</OutlineNumber><WBS>${J(fila.codigo)}</WBS><Start>${ke}</Start><Finish>${At}</Finish><Duration>PT${ci}H0M0S</Duration><DurationFormat>7</DurationFormat><Summary>${fila.esResumen ? 1 : 0}</Summary><Milestone>${xe.esHito ? 1 : 0}</Milestone>${predecessorLinks}</Task>`;
               })
               .join(""),
-            G = `<?xml version="1.0" encoding="UTF-8"?>\n<Project xmlns="http://schemas.microsoft.com/project">\n<Name>${J(M)}</Name>\n<StartDate>${q.toISOString()}</StartDate>\n<Tasks>\n<Task><UID>0</UID><ID>0</ID><Name>${J(M)}</Name><Summary>1</Summary></Task>\n${Q}\n</Tasks>\n</Project>`,
+            G = `<?xml version="1.0" encoding="UTF-8"?>\n<Project xmlns="http://schemas.microsoft.com/project">\n<Name>${J(M)}</Name>\n<StartDate>${q.toISOString().replace(/\.\d{3}Z$/, "")}</StartDate>\n<Tasks>\n${Q}\n</Tasks>\n</Project>`,
             ie = new Blob([G], { type: "application/xml;charset=utf-8" }),
             oe = URL.createObjectURL(ie),
             ce = document.createElement("a");
@@ -36452,18 +36801,55 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                     style: u(d({}, c.ct), { marginBottom: 12 }),
                     children: "Tareas",
                   }),
+                  e.jsxs("div", {
+                    style: {
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 4,
+                      marginBottom: 10,
+                      paddingBottom: 10,
+                      borderBottom: `1px solid ${a.border}`,
+                    },
+                    children: [
+                      [subirSeleccionada, "↑ Subir"],
+                      [bajarSeleccionada, "↓ Bajar"],
+                      [aplicarSangria, "→ Sangría"],
+                      [quitarSangria, "← Quitar sangría"],
+                      [enlazarSeleccionadas, "🔗 Enlazar"],
+                      [desenlazarSeleccionadas, "⛓ Desenlazar"],
+                      [agregarHito, "◆ Hito"],
+                    ].map(([accion, etiqueta]) =>
+                      e.jsx(
+                        "button",
+                        {
+                          style: u(d({}, c.btn("s")), { padding: "4px 8px", fontSize: 11 }),
+                          onClick: accion,
+                          children: etiqueta,
+                        },
+                        etiqueta,
+                      ),
+                    ),
+                  }),
                   e.jsx("div", {
                     style: { maxHeight: 500, overflowY: "auto" },
-                    children: g.map((E, M) =>
-                      e.jsxs(
+                    children: vistaTareas.map((fila) => {
+                      var E = fila.tarea,
+                        feE = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion },
+                        predecesorasTexto = (E.predecesoras || [])
+                          .map((pid) => codigosPorId[pid])
+                          .filter(Boolean)
+                          .join(", ");
+                      return e.jsxs(
                         "div",
                         {
                           style: {
-                            background: a.sb,
+                            background: fila.esResumen ? a.accent + "14" : a.sb,
                             borderRadius: 8,
                             padding: "10px 12px",
-                            marginBottom: 8,
+                            marginBottom: 6,
+                            marginLeft: fila.nivel * 16,
                             borderLeft: `3px solid ${E.color}`,
+                            outline: seleccionadas.has(E.id) ? `2px solid ${a.accent}` : "none",
                           },
                           children: [
                             e.jsxs("div", {
@@ -36475,14 +36861,41 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                               },
                               children: [
                                 e.jsx("input", {
+                                  type: "checkbox",
+                                  checked: seleccionadas.has(E.id),
+                                  onChange: (q) => toggleSeleccion(E.id, !0),
+                                  title: "Seleccionar tarea",
+                                }),
+                                fila.esResumen &&
+                                  e.jsx("button", {
+                                    onClick: () => toggleColapso(E.id),
+                                    style: {
+                                      background: "transparent",
+                                      border: "none",
+                                      cursor: "pointer",
+                                      color: a.muted,
+                                      fontSize: 12,
+                                      padding: 0,
+                                      width: 14,
+                                    },
+                                    children: colapsados.has(E.id) ? "▶" : "▼",
+                                  }),
+                                fila.codigo &&
+                                  e.jsx("span", {
+                                    style: { fontSize: 10, fontWeight: 700, color: a.muted, flexShrink: 0 },
+                                    children: fila.codigo,
+                                  }),
+                                E.esHito &&
+                                  e.jsx("span", { style: { fontSize: 12, flexShrink: 0 }, children: "◆" }),
+                                e.jsx("input", {
                                   style: u(d({}, c.inp), {
                                     flex: 1,
                                     fontSize: 12,
                                     padding: "4px 7px",
+                                    fontWeight: fila.esResumen ? 700 : 400,
                                   }),
                                   value: E.nombre,
-                                  onChange: (q) =>
-                                    P(E.id, "nombre", q.target.value),
+                                  onChange: (q) => P(E.id, "nombre", q.target.value),
                                   placeholder: "Nombre tarea",
                                 }),
                                 e.jsx("button", {
@@ -36495,91 +36908,94 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                 }),
                               ],
                             }),
-                            e.jsxs("div", {
-                              style: {
-                                display: "grid",
-                                gridTemplateColumns: "1fr 1fr",
-                                gap: 6,
-                              },
-                              children: [
-                                e.jsxs("div", {
+                            fila.esResumen
+                              ? e.jsxs("div", {
+                                  style: { fontSize: 10, color: a.muted },
                                   children: [
-                                    e.jsx("div", {
+                                    "Tarea resumen · ",
+                                    T(feE.inicio),
+                                    " → ",
+                                    T(feE.inicio + feE.duracion),
+                                    " (",
+                                    feE.duracion,
+                                    " días, calculado desde sus subtareas)",
+                                  ],
+                                })
+                              : e.jsxs(e.Fragment, {
+                                  children: [
+                                    e.jsxs("div", {
                                       style: {
-                                        fontSize: 10,
-                                        color: a.muted,
-                                        marginBottom: 3,
+                                        display: "grid",
+                                        gridTemplateColumns: "1fr 1fr",
+                                        gap: 6,
                                       },
-                                      children: "INICIO (día)",
+                                      children: [
+                                        e.jsxs("div", {
+                                          children: [
+                                            e.jsx("div", {
+                                              style: { fontSize: 10, color: a.muted, marginBottom: 3 },
+                                              children: "INICIO (día)",
+                                            }),
+                                            e.jsx("input", {
+                                              style: u(d({}, c.inp), {
+                                                fontSize: 12,
+                                                padding: "3px 6px",
+                                                textAlign: "center",
+                                              }),
+                                              type: "number",
+                                              value: (E.predecesoras || []).length > 0 ? feE.inicio : E.inicio,
+                                              onChange: (q) => P(E.id, "inicio", parseInt(q.target.value) || 0),
+                                              min: "0",
+                                              disabled: (E.predecesoras || []).length > 0,
+                                              title: (E.predecesoras || []).length > 0 ? "Calculado automáticamente desde la predecesora" : "",
+                                            }),
+                                          ],
+                                        }),
+                                        e.jsxs("div", {
+                                          children: [
+                                            e.jsx("div", {
+                                              style: { fontSize: 10, color: a.muted, marginBottom: 3 },
+                                              children: "DURACIÓN (días)",
+                                            }),
+                                            e.jsx("input", {
+                                              style: u(d({}, c.inp), {
+                                                fontSize: 12,
+                                                padding: "3px 6px",
+                                                textAlign: "center",
+                                              }),
+                                              type: "number",
+                                              value: E.duracion,
+                                              onChange: (q) => P(E.id, "duracion", parseInt(q.target.value) || 1),
+                                              min: "0",
+                                              disabled: !!E.esHito,
+                                            }),
+                                          ],
+                                        }),
+                                      ],
                                     }),
-                                    e.jsx("input", {
-                                      style: u(d({}, c.inp), {
-                                        fontSize: 12,
-                                        padding: "3px 6px",
-                                        textAlign: "center",
+                                    e.jsxs("div", {
+                                      style: { marginTop: 6, fontSize: 10, color: a.muted },
+                                      children: [
+                                        T(feE.inicio),
+                                        " → ",
+                                        T(feE.inicio + feE.duracion),
+                                        " (",
+                                        feE.duracion,
+                                        " días)",
+                                      ],
+                                    }),
+                                    predecesorasTexto &&
+                                      e.jsxs("div", {
+                                        style: { marginTop: 3, fontSize: 10, color: a.accent, fontWeight: 700 },
+                                        children: ["Predecesora: ", predecesorasTexto],
                                       }),
-                                      type: "number",
-                                      value: E.inicio,
-                                      onChange: (q) =>
-                                        P(
-                                          E.id,
-                                          "inicio",
-                                          parseInt(q.target.value) || 0,
-                                        ),
-                                      min: "0",
-                                    }),
                                   ],
                                 }),
-                                e.jsxs("div", {
-                                  children: [
-                                    e.jsx("div", {
-                                      style: {
-                                        fontSize: 10,
-                                        color: a.muted,
-                                        marginBottom: 3,
-                                      },
-                                      children: "DURACIÓN (días)",
-                                    }),
-                                    e.jsx("input", {
-                                      style: u(d({}, c.inp), {
-                                        fontSize: 12,
-                                        padding: "3px 6px",
-                                        textAlign: "center",
-                                      }),
-                                      type: "number",
-                                      value: E.duracion,
-                                      onChange: (q) =>
-                                        P(
-                                          E.id,
-                                          "duracion",
-                                          parseInt(q.target.value) || 1,
-                                        ),
-                                      min: "1",
-                                    }),
-                                  ],
-                                }),
-                              ],
-                            }),
-                            e.jsxs("div", {
-                              style: {
-                                marginTop: 6,
-                                fontSize: 10,
-                                color: a.muted,
-                              },
-                              children: [
-                                T(E.inicio),
-                                " → ",
-                                T(E.inicio + E.duracion),
-                                " (",
-                                E.duracion,
-                                " días)",
-                              ],
-                            }),
                           ],
                         },
                         E.id,
-                      ),
-                    ),
+                      );
+                    }),
                   }),
                 ],
               }),
@@ -36635,8 +37051,10 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                             ),
                           ],
                         }),
-                        g.map((E, M) =>
-                          e.jsxs(
+                        vistaTareas.map((fila, M) => {
+                          var E = fila.tarea,
+                            feE = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion };
+                          return e.jsxs(
                             "div",
                             {
                               style: {
@@ -36648,18 +37066,19 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                 position: "relative",
                               },
                               children: [
-                                e.jsx("div", {
+                                e.jsxs("div", {
                                   style: {
                                     width: le,
                                     flexShrink: 0,
                                     fontSize: 12,
-                                    padding: "0 8px",
+                                    padding: `0 8px 0 ${8 + fila.nivel * 14}px`,
                                     overflow: "hidden",
                                     textOverflow: "ellipsis",
                                     whiteSpace: "nowrap",
                                     color: a.text,
+                                    fontWeight: fila.esResumen ? 700 : 400,
                                   },
-                                  children: E.nombre,
+                                  children: [fila.codigo, " ", E.nombre],
                                 }),
                                 $.map((q, J) =>
                                   e.jsx(
@@ -36675,34 +37094,85 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                     J,
                                   ),
                                 ),
-                                e.jsx("div", {
-                                  style: {
-                                    position: "absolute",
-                                    left: X(E.inicio),
-                                    width: W(E.duracion),
-                                    height: 22,
-                                    top: (Y - 22) / 2,
-                                    background: E.color,
-                                    borderRadius: 4,
-                                    opacity: 0.85,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontSize: 10,
-                                    color: "#fff",
-                                    fontWeight: 600,
-                                    overflow: "hidden",
-                                    whiteSpace: "nowrap",
-                                    padding: "0 6px",
-                                    boxShadow: "0 1px 4px rgba(0,0,0,.3)",
-                                  },
-                                  children: W(E.duracion) > 40 ? E.nombre : "",
-                                }),
+                                fila.esResumen
+                                  ? e.jsxs(e.Fragment, {
+                                      children: [
+                                        e.jsx("div", {
+                                          style: {
+                                            position: "absolute",
+                                            left: X(feE.inicio),
+                                            width: Math.max(4, W(feE.duracion)),
+                                            height: 8,
+                                            top: (Y - 8) / 2,
+                                            background: "#1a3060",
+                                            borderRadius: 2,
+                                          },
+                                        }),
+                                        e.jsx("div", {
+                                          style: {
+                                            position: "absolute",
+                                            left: X(feE.inicio) - 1,
+                                            width: 8,
+                                            height: 14,
+                                            top: (Y - 14) / 2,
+                                            background: "#1a3060",
+                                            clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+                                          },
+                                        }),
+                                        e.jsx("div", {
+                                          style: {
+                                            position: "absolute",
+                                            left: X(feE.inicio) + Math.max(4, W(feE.duracion)) - 7,
+                                            width: 8,
+                                            height: 14,
+                                            top: (Y - 14) / 2,
+                                            background: "#1a3060",
+                                            clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+                                          },
+                                        }),
+                                      ],
+                                    })
+                                  : E.esHito
+                                    ? e.jsx("div", {
+                                        style: {
+                                          position: "absolute",
+                                          left: X(feE.inicio) - 7,
+                                          width: 14,
+                                          height: 14,
+                                          top: (Y - 14) / 2,
+                                          background: E.color,
+                                          transform: "rotate(45deg)",
+                                          boxShadow: "0 1px 4px rgba(0,0,0,.3)",
+                                        },
+                                      })
+                                    : e.jsx("div", {
+                                        style: {
+                                          position: "absolute",
+                                          left: X(feE.inicio),
+                                          width: W(feE.duracion),
+                                          height: 22,
+                                          top: (Y - 22) / 2,
+                                          background: E.color,
+                                          borderRadius: 4,
+                                          opacity: 0.85,
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                          fontSize: 10,
+                                          color: "#fff",
+                                          fontWeight: 600,
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          padding: "0 6px",
+                                          boxShadow: "0 1px 4px rgba(0,0,0,.3)",
+                                        },
+                                        children: W(feE.duracion) > 40 ? E.nombre : "",
+                                      }),
                               ],
                             },
                             E.id,
-                          ),
-                        ),
+                          );
+                        }),
                       ],
                     }),
                   }),
