@@ -64198,6 +64198,122 @@ K &&
       p = m === 11 ? "0" : m === 10 ? "K" : String(m);
     return r === p;
   }
+  var ABOUT_SECCIONES = [
+    {
+      id: "info",
+      title: "Información general",
+      body: [
+        { t: "p", c: "Enlace Constructor Pro es una herramienta de apoyo para la elaboración de presupuestos, control de partidas, cubicaciones, planificación mediante Carta Gantt y generación de documentación asociada a proyectos de construcción." },
+        { t: "p", c: "Sus cálculos, precios, rendimientos y resultados son referenciales y deben ser revisados por el profesional responsable antes de su utilización contractual, técnica o comercial." },
+      ],
+    },
+    {
+      id: "quienes",
+      title: "Quiénes somos",
+      body: [
+        { t: "p", c: "ENLACE es una iniciativa orientada al desarrollo de soluciones digitales para la gestión técnica y económica de proyectos de construcción." },
+        { t: "p", c: "Enlace Constructor Pro fue diseñado para apoyar a profesionales, contratistas, oficinas técnicas y empresas en la organización, análisis y presentación de sus proyectos." },
+      ],
+    },
+    {
+      id: "mision",
+      title: "Misión y visión",
+      body: [
+        { t: "h", c: "Misión" },
+        { t: "p", c: "Brindar una herramienta práctica, profesional y accesible que facilite la gestión de presupuestos y planificación de obras, mejorando la productividad, el orden y la toma de decisiones en el sector de la construcción." },
+        { t: "h", c: "Visión" },
+        { t: "p", c: "Convertir a Enlace Constructor Pro en una plataforma de referencia para profesionales y empresas del sector construcción, integrando progresivamente nuevas funciones, automatizaciones y módulos especializados para la administración integral de proyectos." },
+      ],
+    },
+    {
+      id: "licencia",
+      title: "Licencia de uso",
+      body: [
+        { t: "p", c: "La adquisición o descarga autorizada de Enlace Constructor Pro otorga al usuario una licencia de uso limitada, no exclusiva, intransferible y revocable, exclusivamente para fines internos, técnicos, administrativos o comerciales propios." },
+        { t: "p", c: "Queda estrictamente prohibido, sin autorización expresa y por escrito de ENLACE:" },
+        { t: "ul", items: [
+          "Copiar, revender o sublicenciar el software.",
+          "Distribuirlo de forma gratuita o comercial.",
+          "Compartir instaladores, licencias o enlaces privados de descarga.",
+          "Publicarlo en redes sociales, foros, grupos, nubes públicas o sitios de descarga.",
+          "Modificar, descompilar, desensamblar o aplicar ingeniería inversa.",
+          "Replicar total o parcialmente su estructura, interfaz, lógica o base de datos con fines comerciales.",
+        ] },
+        { t: "p", c: "La difusión o distribución no autorizada podrá dar lugar a la suspensión de la licencia y al ejercicio de las acciones legales correspondientes." },
+      ],
+    },
+    {
+      id: "propiedad",
+      title: "Propiedad intelectual",
+      body: [
+        { t: "p", c: "Todos los derechos de propiedad intelectual, industrial, visual, funcional y documental de Enlace Constructor Pro pertenecen a ENLACE." },
+        { t: "p", c: "Esta protección incluye su marca, interfaz, diseño, catálogos, bases de datos, lógica operativa, código, documentación, plantillas y elementos gráficos." },
+        { t: "p", c: "El uso autorizado del software no transfiere al usuario ningún derecho de propiedad sobre estos elementos." },
+      ],
+    },
+    {
+      id: "privacidad",
+      title: "Privacidad y confidencialidad",
+      body: [
+        { t: "p", c: "La información ingresada por el usuario en el software, incluyendo clientes, presupuestos, partidas, calendarios, documentos y proyectos, pertenece exclusivamente al usuario." },
+        { t: "p", c: "ENLACE no comercializa ni redistribuye dicha información." },
+        { t: "p", c: "Cuando los datos se almacenan localmente en el equipo del usuario, la responsabilidad de su respaldo, custodia y seguridad corresponde al usuario." },
+      ],
+    },
+    {
+      id: "responsabilidad",
+      title: "Responsabilidad profesional",
+      body: [
+        { t: "h", c: "Exclusión de garantías" },
+        { t: "p", c: "El software se entrega «tal cual», como herramienta de apoyo profesional." },
+        { t: "p", c: "ENLACE no garantiza que el funcionamiento sea completamente ininterrumpido o libre de errores, ni garantiza resultados comerciales, adjudicación de licitaciones o rentabilidad de proyectos." },
+        { t: "p", c: "Los precios, rendimientos, cubicaciones, análisis y programaciones generados por el sistema deben ser revisados y validados por el usuario o profesional responsable." },
+        { t: "h", c: "Limitación de responsabilidad" },
+        { t: "p", c: "ENLACE no será responsable por:" },
+        { t: "ul", items: [
+          "Errores de digitación o configuración del usuario.",
+          "Diferencias entre precios de mercado y valores referenciales.",
+          "Errores en cubicaciones, presupuestos o programaciones no revisados.",
+          "Pérdida de información por falta de respaldo.",
+          "Pérdida de contratos, lucro cesante o perjuicios comerciales.",
+          "Uso incorrecto de los documentos generados.",
+        ] },
+        { t: "p", c: "La responsabilidad técnica, matemática, económica y contractual de los documentos emitidos mediante el software corresponde al usuario." },
+      ],
+    },
+    {
+      id: "soporte",
+      title: "Actualizaciones y soporte",
+      body: [
+        { t: "p", c: "Las actualizaciones, mejoras, nuevas plantillas, ajustes de catálogos, nuevas partidas, correcciones y módulos adicionales estarán sujetas al plan, licencia o modalidad comercial vigente." },
+        { t: "p", c: "ENLACE podrá ofrecer actualizaciones menores, paquetes de plantillas, mejoras funcionales, catálogos actualizados y nuevos módulos en futuras versiones." },
+        { t: "p", c: "La adquisición de una licencia perpetua no implica necesariamente acceso gratuito e indefinido a todas las futuras versiones o servicios." },
+      ],
+    },
+    {
+      id: "suspension",
+      title: "Suspensión de licencia",
+      body: [
+        { t: "p", c: "ENLACE podrá suspender o revocar la licencia en casos de:" },
+        { t: "ul", items: [
+          "Piratería.",
+          "Distribución no autorizada.",
+          "Alteración o evasión de licencias.",
+          "Uso fraudulento.",
+          "Publicación de instaladores o enlaces privados.",
+          "Incumplimiento de estas condiciones.",
+        ] },
+        { t: "p", c: "En caso de suspensión, el usuario deberá cesar el uso del software y eliminar las copias no autorizadas." },
+      ],
+    },
+    {
+      id: "jurisdiccion",
+      title: "Jurisdicción",
+      body: [
+        { t: "p", c: "Cualquier controversia relacionada con la adquisición, instalación o uso de Enlace Constructor Pro se regirá por la legislación aplicable al domicilio legal de ENLACE y será sometida a los tribunales competentes, salvo acuerdo distinto por escrito." },
+      ],
+    },
+  ];
   function Gg({
     cfg: t,
     setCfg: i,
@@ -64213,7 +64329,9 @@ K &&
     initialTab: initialTab,
   }) {
     const [h, j] = V(t),
-      [F, g] = V(initialTab || "identidad");
+      [F, g] = V(initialTab || "identidad"),
+      [aboutOpen, setAboutOpen] = V({ info: !0 });
+    var toggleAbout = (id) => setAboutOpen((prev) => u(d({}, prev), { [id]: !prev[id] }));
     var z = (x) => {
         (j(x), s && s(!0));
       },
@@ -66001,39 +66119,72 @@ K &&
             children: [
               e.jsx("div", { style: c.ct, children: "ℹ️ Sobre la aplicación" }),
               e.jsxs("div", {
-                style: { fontSize: 13, lineHeight: 1.6, color: a.text, whiteSpace: "pre-wrap" },
+                style: {
+                  background: a.surface,
+                  border: `1px solid ${a.border}`,
+                  borderRadius: 12,
+                  padding: "18px 20px",
+                  marginBottom: 18,
+                },
                 children: [
-                  e.jsx("strong", { children: "📜 Términos y Condiciones de Licencia y Uso — Enlace Constructor Pro (ECP)" }),
-                  "\n\n",
-                  e.jsx("strong", { children: "Versión del software:" }), " Enlace Constructor Pro v1.7.0\n",
-                  e.jsx("strong", { children: "Titular de los derechos:" }), " ENLACE\n",
-                  e.jsx("strong", { children: "Sitio web oficial:" }), " ", e.jsx("a", { href: "#", onClick: (t) => { t.preventDefault(); window.__TAURI__ ? window.__TAURI__.shell.open("https://redenlace.cl/constructor-pro") : window.open("https://redenlace.cl/constructor-pro") }, style: { color: a.accent || "#3b82f6", textDecoration: "underline", cursor: "pointer" }, children: "https://redenlace.cl/constructor-pro" }), "\n\n",
-                  e.jsx("strong", { children: "1. Concesión de Licencia y Adquisición (Compra)" }), "\n",
-                  "Licencia de uso: Al adquirir o descargar el software, ENLACE otorga al usuario una licencia de uso limitada, no exclusiva, intransferible y revocable para utilizar Enlace Constructor Pro únicamente con fines internos o comerciales en su propia actividad profesional o empresarial.\n",
-                  "Reventa prohibida: Queda estrictamente prohibida la reventa, sublicenciamiento, alquiler, distribución comercial o comercialización de Enlace Constructor Pro, ya sea de forma parcial o total, sin el consentimiento expreso y por escrito de ENLACE.\n\n",
-                  e.jsx("strong", { children: "2. Propiedad Intelectual" }), "\n",
-                  "Titularidad: Todos los derechos de propiedad intelectual, industrial, marcas, interfaces gráficas, algoritmos y bases de datos integradas en Enlace Constructor Pro son propiedad exclusiva de ENLACE y están protegidos por las leyes y tratados internacionales de derechos de autor.\n",
-                  "Prohibición de modificación: El usuario no podrá aplicar ingeniería inversa, descompilar, desensamblar, modificar, alterar, traducir ni crear obras derivadas basadas en el software o en su código fuente.\n\n",
-                  e.jsx("strong", { children: "3. Difusión y Copias no Autorizadas" }), "\n",
-                  "Uso personal/empresarial: La licencia adquirida autoriza la instalación y uso del software en los dispositivos propiedad del usuario o de la empresa adquiriente.\n",
-                  "Restricción de difusión masiva: Se prohíbe terminantemente la distribución masiva, publicación de enlaces de descarga en foros, redes sociales, sitios de piratería, o el alojamiento de Enlace Constructor Pro en servidores públicos o nubes de acceso público.\n\n",
-                  e.jsx("strong", { children: "4. Exclusión de Garantías" }), "\n",
-                  "El software se proporciona «tal cual» (as is). ENLACE no garantiza que el funcionamiento de Enlace Constructor Pro sea ininterrumpido o esté completamente libre de errores.\n",
-                  "ENLACE no garantiza la adjudicación de licitaciones, rentabilidad de proyectos o la exactitud absoluta de los rendimientos constructivos sugeridos, los cuales son valores referenciales sujetos a revisión del profesional a cargo.\n\n",
-                  e.jsx("strong", { children: "5. Limitación de Responsabilidad (Importante para Licitaciones)" }), "\n",
-                  "Responsabilidad de presupuestos: La verificación técnica, matemática y económica de las cantidades de obra (cubicaciones), precios unitarios, rendimientos, leyes sociales e impuestos generados mediante el software es de exclusiva responsabilidad del usuario.\n",
-                  "Desvinculación legal: ENLACE no asumirá ninguna responsabilidad por lucro cesante, daños indirectos, pérdida de contratos, errores en licitaciones (públicas o privadas), multas, o cualquier otra pérdida económica derivada del uso o incapacidad de uso del software o de los resultados obtenidos por éste.\n\n",
-                  e.jsx("strong", { children: "6. Privacidad y Confidencialidad" }), "\n",
-                  "Datos del cliente: Toda la información, bases de datos de clientes, presupuestos y proyectos creados por el usuario dentro de Enlace Constructor Pro son de su exclusiva propiedad y confidencialidad. ENLACE no accede, comparte ni comercializa la información confidencial de las obras o proyectos gestionados localmente por el usuario en el software.\n\n",
-                  e.jsx("strong", { children: "7. Actualizaciones y Soporte" }), "\n",
-                  "El soporte técnico y las actualizaciones (mejoras de rendimiento, actualización de catálogo de materiales, corrección de bugs) estarán sujetos a los términos específicos del plan de mantenimiento, versión o suscripción que el usuario haya adquirido. ENLACE no tiene obligación de entregar actualizaciones gratuitas a versiones perpetuas a menos que se indique lo contrario en el momento de la compra.\n\n",
-                  e.jsx("strong", { children: "8. Rescisión y Suspensión de la Licencia" }), "\n",
-                  "ENLACE se reserva el derecho de rescindir o suspender de forma inmediata, y sin derecho a reembolso, la licencia de cualquier usuario o entidad que incumpla los presentes términos (por ejemplo, ante la detección de piratería, alteración de claves o difusión no autorizada). En caso de rescisión, el usuario deberá cesar todo uso del software y eliminar todas las copias instaladas en sus equipos.\n\n",
-                  e.jsx("strong", { children: "9. Jurisdicción y Ley Aplicable" }), "\n",
-                  "Cualquier controversia, disputa o reclamación legal derivada de la interpretación, adquisición o uso de Enlace Constructor Pro se regirá por las leyes vigentes del país/región de domicilio fiscal de ENLACE, sometiéndose las partes a los tribunales competentes de dicha jurisdicción."
-                ]
-              })
-            ]
+                  e.jsx("div", { style: { fontSize: 20, fontWeight: 800, color: a.text, marginBottom: 2 }, children: "Enlace Constructor Pro" }),
+                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accent, marginBottom: 12 }, children: ["Versión 1.7.0 · Edición de lanzamiento"] }),
+                  e.jsxs("div", { style: { fontSize: 12, color: a.muted, lineHeight: 2 }, children: [
+                    e.jsxs("div", { children: [e.jsx("strong", { style: { color: a.text }, children: "Titular de derechos: " }), "ENLACE"] }),
+                    e.jsxs("div", { children: [
+                      e.jsx("strong", { style: { color: a.text }, children: "Sitio web oficial: " }),
+                      e.jsx("a", {
+                        href: "#",
+                        onClick: (t) => { t.preventDefault(); window.__TAURI__ ? window.__TAURI__.shell.open("https://redenlace.cl/constructor-pro") : window.open("https://redenlace.cl/constructor-pro") },
+                        style: { color: a.blue, textDecoration: "underline", cursor: "pointer" },
+                        children: "https://redenlace.cl/constructor-pro",
+                      }),
+                    ] }),
+                  ] }),
+                ],
+              }),
+              ...ABOUT_SECCIONES.map((sec, idx) =>
+                e.jsxs("div", {
+                  key: sec.id,
+                  style: { marginBottom: 8, border: `1px solid ${a.border}`, borderRadius: 8, overflow: "hidden" },
+                  children: [
+                    e.jsxs("button", {
+                      type: "button",
+                      onClick: () => toggleAbout(sec.id),
+                      style: {
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "11px 14px",
+                        background: a.surface,
+                        border: "none",
+                        color: a.text,
+                        cursor: "pointer",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        textAlign: "left",
+                      },
+                      children: [
+                        (idx + 1) + ". " + sec.title,
+                        e.jsx("span", { style: { color: a.accent, flexShrink: 0, marginLeft: 10 }, children: aboutOpen[sec.id] ? "▲" : "▼" }),
+                      ],
+                    }),
+                    aboutOpen[sec.id] &&
+                      e.jsx("div", {
+                        style: { padding: "14px 16px", fontSize: 13, lineHeight: 1.7, color: a.text, maxWidth: 720 },
+                        children: sec.body.map((item, bi) =>
+                          item.t === "h"
+                            ? e.jsx("div", { key: bi, style: { fontSize: 12, fontWeight: 700, color: a.accent, textTransform: "uppercase", letterSpacing: ".04em", marginTop: bi ? 14 : 0, marginBottom: 6 }, children: item.c })
+                            : item.t === "ul"
+                            ? e.jsx("ul", { key: bi, style: { margin: "2px 0 12px", paddingLeft: 20, display: "flex", flexDirection: "column", gap: 4 }, children: item.items.map((li, li2) => e.jsx("li", { key: li2, children: li })) })
+                            : e.jsx("p", { key: bi, style: { margin: "0 0 10px" }, children: item.c }),
+                        ),
+                      }),
+                  ],
+                }),
+              ),
+            ],
           }),
               ]
             })
