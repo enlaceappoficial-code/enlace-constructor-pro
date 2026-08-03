@@ -1,0 +1,2179 @@
+[
+  {
+    "id": 1,
+    "desc": "Pintura muros interiores (2 manos)",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Pinturas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 2,
+    "desc": "Pintura muros exteriores (2 manos)",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Pinturas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 3,
+    "desc": "Pintura cielos",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Cielos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 4,
+    "desc": "Pintura puertas y ventanas (2 manos)",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Ventanas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 5,
+    "desc": "Pintura anticorrosiva estructura met.",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Pinturas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 6,
+    "desc": "Pintura repaso 1 mano (mantención)",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Pinturas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 10,
+    "desc": "Radier hormigón H-20",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 11,
+    "desc": "Radier hormigón H-25",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 12,
+    "desc": "Muro albañilería reforzada c/bloques",
+    "r": "Albañilería",
+    "sr": "Albañilería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 13,
+    "desc": "Muro albañilería ladrillo fiscal",
+    "r": "Albañilería",
+    "sr": "Albañilería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 14,
+    "desc": "Fundación corrida H-20",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 15,
+    "desc": "Losa hormigón H-20",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 16,
+    "desc": "Losa hormigón H-25",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 17,
+    "desc": "Estuco exterior",
+    "r": "Albañilería",
+    "sr": "Albañilería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 18,
+    "desc": "Estuco interior",
+    "r": "Albañilería",
+    "sr": "Albañilería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 19,
+    "desc": "Reparación estuco exterior parcial",
+    "r": "Albañilería",
+    "sr": "Albañilería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 20,
+    "desc": "Muro perimetral Metalcon C150 + OSB + estuco",
+    "r": "Construcción liviana",
+    "sr": "Cierres y muros perimetrales",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 21,
+    "desc": "Muro perimetral Metalcon C200 + OSB + estuco",
+    "r": "Construcción liviana",
+    "sr": "Cierres y muros perimetrales",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 22,
+    "desc": "Tabique Metalcon 89mm + lana + 1 placa yeso",
+    "r": "Construcción liviana",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 23,
+    "desc": "Tabique Metalcon 65mm doble placa yeso",
+    "r": "Construcción liviana",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 24,
+    "desc": "Tabique Metalcon 65mm 1 placa yeso simple",
+    "r": "Construcción liviana",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 25,
+    "desc": "Tabique Metalcon 89mm + placa RH baño/cocina",
+    "r": "Construcción liviana",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 26,
+    "desc": "Tabique Metalcon 65mm en remodelación",
+    "r": "Construcción liviana",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 30,
+    "desc": "Techumbre Metalcon correas + omegas + zinc 0.35",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 31,
+    "desc": "Techumbre Metalcon correas + omegas + zinc 0.5",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 32,
+    "desc": "Techumbre Metalcon C150 + policarbonato",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 33,
+    "desc": "Cambio zinc ondulado estructura Metalcon",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Techumbres y aguas lluvias",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 35,
+    "desc": "Cielo yeso cartón 1 placa Metalcon",
+    "r": "Cielos y terminaciones",
+    "sr": "Cielos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 36,
+    "desc": "Cielo yeso cartón doble placa Metalcon",
+    "r": "Cielos y terminaciones",
+    "sr": "Cielos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 37,
+    "desc": "Cielo yeso RH (humedad) baño/cocina",
+    "r": "Cielos y terminaciones",
+    "sr": "Cielos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 38,
+    "desc": "Ampliación cielo yeso en remodelación",
+    "r": "Construcción liviana",
+    "sr": "Cielos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 40,
+    "desc": "Techumbre cerchas pino 1x4 + correas + zinc 0.35",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 41,
+    "desc": "Techumbre cerchas pino 1x4 + correas + zinc 0.5",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 42,
+    "desc": "Techumbre correas pino 2x3 + zinc 0.35 (simple)",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 43,
+    "desc": "Cambio zinc ondulado estructura madera",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Techumbres y aguas lluvias",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 44,
+    "desc": "Reparación cercha pino (parcial)",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Techumbres y aguas lluvias",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 45,
+    "desc": "Tabique madera pino 2x4 + OSB + lana",
+    "r": "Construcción liviana",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 46,
+    "desc": "Tabique madera pino 2x3 + volcanita",
+    "r": "Construcción liviana",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 47,
+    "desc": "Cielo madera terciado 9mm",
+    "r": "Cielos y terminaciones",
+    "sr": "Cielos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 48,
+    "desc": "Cielo madera volcanita sobre correas pino",
+    "r": "Cielos y terminaciones",
+    "sr": "Cielos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 50,
+    "desc": "Cubierta membrana asfáltica 4mm (terraza plana)",
+    "r": "Impermeabilización",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 51,
+    "desc": "Repaso impermeabilizante cubierta plana",
+    "r": "Impermeabilización",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 52,
+    "desc": "Sellado fisuras muro exterior",
+    "r": "Impermeabilización",
+    "sr": "Impermeabilización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 53,
+    "desc": "Impermeabilización fundación cristalizante",
+    "r": "Impermeabilización",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 60,
+    "desc": "Cerámico piso 45x45cm",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 61,
+    "desc": "Porcelanato 60x60cm",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 62,
+    "desc": "Piso flotante laminado AC4",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 63,
+    "desc": "Cerámico muro ducha 30x60cm",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 64,
+    "desc": "Cambio cerámico piso (inc. retiro)",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 65,
+    "desc": "Cambio piso flotante (inc. retiro)",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 66,
+    "desc": "Reparación cerámico pisos/sócalos",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 67,
+    "desc": "Reparación cerámico muros",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 70,
+    "desc": "Puerta interior HDF 80x200cm + marcos",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Puertas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 71,
+    "desc": "Puerta exterior madera sólida 90x200cm",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Puertas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 72,
+    "desc": "Ventana PVC corredera 100x100cm",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Ventanas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 73,
+    "desc": "Ventana PVC termopanel 100x100cm",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Ventanas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 74,
+    "desc": "Cambio ventana PVC (inc. retiro old)",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Ventanas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 75,
+    "desc": "Reparación muebles cocina",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Mobiliario y equipamiento",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 76,
+    "desc": "Cornisas perfil MDF",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Puertas, ventanas y carpinterías",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 77,
+    "desc": "Guardapolvos MDF",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Puertas, ventanas y carpinterías",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 80,
+    "desc": "Punto de luz (foco LED empotrado)",
+    "r": "Instalaciones eléctricas",
+    "sr": "Iluminación",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 81,
+    "desc": "Punto toma corriente triple 16A",
+    "r": "Instalaciones eléctricas",
+    "sr": "Tomas e interruptores",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 82,
+    "desc": "Punto eléctrico completo (luz + toma)",
+    "r": "Instalaciones eléctricas",
+    "sr": "Instalaciones eléctricas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 83,
+    "desc": "Tablero distribución 8 circuitos",
+    "r": "Instalaciones eléctricas",
+    "sr": "Tableros y protecciones eléctricas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 84,
+    "desc": "Instalación eléctrica completa vivienda 60m²",
+    "r": "Instalaciones eléctricas",
+    "sr": "Instalaciones eléctricas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 85,
+    "desc": "Cambio foco LED (mantención)",
+    "r": "Instalaciones eléctricas",
+    "sr": "Instalaciones eléctricas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 86,
+    "desc": "Reparación toma corriente (mantención)",
+    "r": "Instalaciones eléctricas",
+    "sr": "Tomas e interruptores",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 90,
+    "desc": "Punto agua fría PPR 20mm",
+    "r": "Instalaciones sanitarias",
+    "sr": "Agua potable",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 91,
+    "desc": "Punto agua caliente PPR 20mm",
+    "r": "Instalaciones sanitarias",
+    "sr": "Agua potable",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 92,
+    "desc": "Instalación sanitaria completa baño",
+    "r": "Instalaciones sanitarias",
+    "sr": "Instalaciones sanitarias",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 93,
+    "desc": "Artefactos sanitarios c/cubículos",
+    "r": "Instalaciones sanitarias",
+    "sr": "Instalaciones sanitarias",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 94,
+    "desc": "Cambio llave de paso (mantención)",
+    "r": "Instalaciones sanitarias",
+    "sr": "Instalaciones sanitarias",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 95,
+    "desc": "Instalación gas 45KL (duchas y baño)",
+    "r": "Instalaciones de gas",
+    "sr": "Artefactos y grifería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 96,
+    "desc": "Instalación cilindros 45KL casino",
+    "r": "Instalaciones de gas",
+    "sr": "Instalaciones de gas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 97,
+    "desc": "Sello verde y prueba hermeticidad",
+    "r": "Instalaciones de gas",
+    "sr": "Pruebas, inspección y certificación",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 98,
+    "desc": "Gestión convenio Gasco",
+    "r": "Servicios profesionales",
+    "sr": "Tramitación y coordinación",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 100,
+    "desc": "Demolición tabique (retiro escombros inc.)",
+    "r": "Demoliciones y desmontajes",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 101,
+    "desc": "Demolición cielo existente",
+    "r": "Demoliciones y desmontajes",
+    "sr": "Cielos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 102,
+    "desc": "Demolición muro albañilería",
+    "r": "Demoliciones y desmontajes",
+    "sr": "Demoliciones",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 103,
+    "desc": "Demolición radier / solera",
+    "r": "Demoliciones y desmontajes",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 105,
+    "desc": "Canal PVC 3m + bajante (ml ojalaería)",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Canaletas y bajantes",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 106,
+    "desc": "Ojalaería completa (canal + bajante + tapasol)",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Canaletas y bajantes",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 107,
+    "desc": "Cambio canal y bajante existente",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Canaletas y bajantes",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 110,
+    "desc": "Carpeta Seremi Salud",
+    "r": "Servicios profesionales",
+    "sr": "Regularización y trámites",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 111,
+    "desc": "Carpeta Registro Patentes",
+    "r": "Servicios profesionales",
+    "sr": "Regularización y trámites",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 115,
+    "desc": "Reinstalación citófono",
+    "r": "Corrientes débiles y seguridad electrónica",
+    "sr": "Citofonía y videoportero",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 116,
+    "desc": "Celosías y cambio de ventanas",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Ventanas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 120,
+    "desc": "Reja tubular (fabricación + instalación)",
+    "r": "Estructuras metálicas",
+    "sr": "Cerrajería metálica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 121,
+    "desc": "Protección ventana (fabricación + instalación)",
+    "r": "Estructuras metálicas",
+    "sr": "Ventanas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 122,
+    "desc": "Portón corredera (fabricación + instalación)",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 123,
+    "desc": "Pilar tubular 100x100x3mm (fabricación + inst.)",
+    "r": "Estructuras metálicas",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 124,
+    "desc": "Cierre perimetral tubular c/malla (fab. + inst.)",
+    "r": "Estructuras metálicas",
+    "sr": "Cierres y muros perimetrales",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 125,
+    "desc": "Escalera metálica recta (fabricación + inst.)",
+    "r": "Estructuras metálicas",
+    "sr": "Cerrajería metálica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 126,
+    "desc": "Baranda / pasamanos metálico (fab. + inst.)",
+    "r": "Estructuras metálicas",
+    "sr": "Cerrajería metálica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 127,
+    "desc": "Portón abatible 2 hojas (fabricación + inst.)",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 128,
+    "desc": "Cobertizo / pérgola metálica (fab. + inst.)",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 129,
+    "desc": "Marco metálico puerta / ventana (fab. + inst.)",
+    "r": "Estructuras metálicas",
+    "sr": "Ventanas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 130,
+    "desc": "Excavación manual fundaciones",
+    "r": "Movimiento de tierras",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 131,
+    "desc": "Excavación mecánica (retroexcavadora)",
+    "r": "Movimiento de tierras",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 132,
+    "desc": "Relleno compactado material selecto",
+    "r": "Movimiento de tierras",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 133,
+    "desc": "Nivelación y compactación terreno",
+    "r": "Movimiento de tierras",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 134,
+    "desc": "Retiro y transporte de escombros",
+    "r": "Movimiento de tierras",
+    "sr": "Retiro y transporte de escombros",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 135,
+    "desc": "Vereda hormigón H-20 7cm",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 136,
+    "desc": "Adoquín peatonal 6cm c/base granular",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 137,
+    "desc": "Solera prefabricada 15x30cm (inst.)",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 138,
+    "desc": "Estacionamiento hormigón H-20 10cm",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 139,
+    "desc": "Muro contención hormigón armado H-25",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 140,
+    "desc": "Cerco perimetral poste HEB c/cadena",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 141,
+    "desc": "Inst. split 9.000 BTU frío/calor (subcontr.)",
+    "r": "Climatización y ventilación",
+    "sr": "Climatización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 142,
+    "desc": "Inst. split 12.000 BTU frío/calor (subcontr.)",
+    "r": "Climatización y ventilación",
+    "sr": "Climatización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 143,
+    "desc": "Inst. split 18.000 BTU frío/calor (subcontr.)",
+    "r": "Climatización y ventilación",
+    "sr": "Climatización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 144,
+    "desc": "Extractor / ventilador baño c/ducto (inst.)",
+    "r": "Climatización y ventilación",
+    "sr": "Climatización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 145,
+    "desc": "Cámara CCTV IP 2MP exterior (instalación)",
+    "r": "Corrientes débiles y seguridad electrónica",
+    "sr": "Seguridad electrónica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 146,
+    "desc": "DVR 4 canales 1080p + disco 1TB (inst.)",
+    "r": "Corrientes débiles y seguridad electrónica",
+    "sr": "Seguridad electrónica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 147,
+    "desc": "Alarma domiciliaria básica (inst.)",
+    "r": "Corrientes débiles y seguridad electrónica",
+    "sr": "Seguridad electrónica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 148,
+    "desc": "Control acceso magnético puerta (inst.)",
+    "r": "Corrientes débiles y seguridad electrónica",
+    "sr": "Puertas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 150,
+    "desc": "Pilar H-25 armado (cualquier sección)",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 151,
+    "desc": "Pilar H-30 armado (cualquier sección)",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 152,
+    "desc": "Viga H-25 armada (cualquier sección)",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 153,
+    "desc": "Viga H-30 armada (cualquier sección)",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 154,
+    "desc": "Losa H-25 armada",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 155,
+    "desc": "Losa H-30 armada",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 156,
+    "desc": "Fundación corrida H-25 armada",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 157,
+    "desc": "Zapata aislada H-25 armada",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 158,
+    "desc": "Moldaje metálico pilar (arriendo+inst.)",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 159,
+    "desc": "Enfierradura habilitada y colocada",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 160,
+    "desc": "Cámara de inspección hormigón ø60cm",
+    "r": "Alcantarillado y drenaje",
+    "sr": "Cámaras de inspección",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 161,
+    "desc": "Colector PVC ø110mm instalado",
+    "r": "Alcantarillado y drenaje",
+    "sr": "Redes de alcantarillado",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 162,
+    "desc": "Colector PVC ø160mm instalado",
+    "r": "Alcantarillado y drenaje",
+    "sr": "Redes de alcantarillado",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 163,
+    "desc": "Red alcantarillado vivienda completa",
+    "r": "Alcantarillado y drenaje",
+    "sr": "Redes de alcantarillado",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 164,
+    "desc": "Trampa de grasa 30L (inst.)",
+    "r": "Alcantarillado y drenaje",
+    "sr": "Trampas de grasa",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 165,
+    "desc": "Llave de paso esfera 3/4\" (reemplazo)",
+    "r": "Instalaciones sanitarias",
+    "sr": "Instalaciones sanitarias",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 166,
+    "desc": "Medidor agua fría 1/2\" + conexión",
+    "r": "Instalaciones sanitarias",
+    "sr": "Agua potable",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 167,
+    "desc": "Estanque elevado 500L + estructura",
+    "r": "Instalaciones sanitarias",
+    "sr": "Instalaciones sanitarias",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 170,
+    "desc": "Bodega de faena 3x3m (arm.+desarm.)",
+    "r": "Obras preliminares",
+    "sr": "Instalaciones de faena",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 171,
+    "desc": "Cerco perimetral obras (inst.+retiro)",
+    "r": "Obras preliminares",
+    "sr": "Instalaciones de faena",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 172,
+    "desc": "Letrero de obra 1.2x2.4m",
+    "r": "Obras preliminares",
+    "sr": "Instalaciones de faena",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 173,
+    "desc": "Baño químico arrendado (mes)",
+    "r": "Obras preliminares",
+    "sr": "Instalaciones de faena",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 174,
+    "desc": "Instalación eléctrica provisoria faena",
+    "r": "Obras preliminares",
+    "sr": "Instalaciones de faena",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 175,
+    "desc": "Agua provisoria faena (conexión+punto)",
+    "r": "Obras preliminares",
+    "sr": "Instalaciones de faena",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 180,
+    "desc": "Asfalto frío reparación bacheo",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 181,
+    "desc": "Sello bituminoso doble tratamiento",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 182,
+    "desc": "Carpeta asfáltica caliente 5cm (subcontr.)",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 183,
+    "desc": "Base estabilizada granular 15cm",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 184,
+    "desc": "Señalética horizontal pintura vial",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Pinturas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 185,
+    "desc": "Tachón reflectante (inst.)",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 186,
+    "desc": "Berma HEB/piedra bolón",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 187,
+    "desc": "Excavación piscina (maquinaria)",
+    "r": "Piscinas",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 188,
+    "desc": "Estructura hormigón armado piscina H-25",
+    "r": "Piscinas",
+    "sr": "Piscinas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 189,
+    "desc": "Impermeabilización piscina (membrana)",
+    "r": "Piscinas",
+    "sr": "Piscinas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 190,
+    "desc": "Revestimiento gresite/cerámico piscina",
+    "r": "Piscinas",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 191,
+    "desc": "Sistema filtración + bomba (inst.)",
+    "r": "Piscinas",
+    "sr": "Piscinas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 192,
+    "desc": "Iluminación subacuática LED (por punto)",
+    "r": "Piscinas",
+    "sr": "Iluminación",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 193,
+    "desc": "Escalera acero inoxidable piscina",
+    "r": "Piscinas",
+    "sr": "Piscinas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 194,
+    "desc": "Vereda perimetral piscina hormigón",
+    "r": "Piscinas",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 195,
+    "desc": "Canaleta perimetral piscina (drenaje)",
+    "r": "Piscinas",
+    "sr": "Piscinas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 196,
+    "desc": "Quincho estructura madera (fabricación+inst.)",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 197,
+    "desc": "Quincho estructura metálica (fabricación+inst.)",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 198,
+    "desc": "Cubierta zinc quincho/pérgola",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 199,
+    "desc": "Pérgola madera tratada (fabricación+inst.)",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 200,
+    "desc": "Deck madera tratada exterior",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 201,
+    "desc": "Deck composite (WPC) exterior",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 202,
+    "desc": "Terraza hormigón pulido exterior",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 203,
+    "desc": "Pavimento adoquín jardín c/base",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 204,
+    "desc": "Hormigón estampado/decorativo",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 205,
+    "desc": "Gravilla volcánica decorativa e=5cm",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 206,
+    "desc": "Jardín (preparación terreno + pasto)",
+    "r": "Paisajismo y riego",
+    "sr": "Áreas verdes y riego",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 207,
+    "desc": "Sistema riego automático (por zona)",
+    "r": "Paisajismo y riego",
+    "sr": "Áreas verdes y riego",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 208,
+    "desc": "Muro jardín albañilería decorativa",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Áreas verdes y riego",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 209,
+    "desc": "Iluminación exterior (por punto)",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Iluminación",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 210,
+    "desc": "Revalses (moldaje contorno radier)",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 211,
+    "desc": "Enfierradura malla electrosoldada colocada",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 212,
+    "desc": "Impermeabilización bajo radier (polietileno)",
+    "r": "Impermeabilización",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 213,
+    "desc": "Nivelación y compactación terreno (máquina)",
+    "r": "Movimiento de tierras",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 214,
+    "desc": "Revalses - solo mano de obra",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón y fundaciones",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 215,
+    "desc": "Enfierradura malla electrosoldada - solo MO",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 216,
+    "desc": "Impermeabilización bajo radier - solo MO",
+    "r": "Impermeabilización",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 217,
+    "desc": "Nivelación y compactación terreno - solo MO",
+    "r": "Movimiento de tierras",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 218,
+    "desc": "Radier H-20 e=8cm completo (exc+relleno+revalse+radier)",
+    "r": "Hormigón y fundaciones",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 219,
+    "desc": "Radier H-25 e=10cm armado completo",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 220,
+    "desc": "Ducha + grifería termostática (inst.)",
+    "r": "Instalaciones sanitarias",
+    "sr": "Artefactos y grifería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 221,
+    "desc": "Lavamanos + grifería (inst.)",
+    "r": "Instalaciones sanitarias",
+    "sr": "Artefactos y grifería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 222,
+    "desc": "WC con bidet incluido (inst.)",
+    "r": "Instalaciones sanitarias",
+    "sr": "Artefactos y grifería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 223,
+    "desc": "Cableado principal 4mm² (ml)",
+    "r": "Instalaciones eléctricas",
+    "sr": "Cableado",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 224,
+    "desc": "Reparación gotera techumbre zinc (parche)",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 226,
+    "desc": "Cambio piso Vinílico (instalación)",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 227,
+    "desc": "Cambio piso Vinílico (inc. retiro piso existente)",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 310,
+    "desc": "Visita Técnica / Diagnóstico",
+    "r": "Servicios profesionales",
+    "sr": "Visita técnica y diagnóstico",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 311,
+    "desc": "Reparación filtración techumbre (parche/tapagoteras)",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 312,
+    "desc": "Limpieza y destape de canaletas y bajantes",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Canaletas y bajantes",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 313,
+    "desc": "Lijado y pintura esmalte/anticorrosivo reja o portón",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Pinturas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 314,
+    "desc": "Cambio herrajes / flotador estanque WC",
+    "r": "Instalaciones sanitarias",
+    "sr": "Artefactos y grifería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 315,
+    "desc": "Destape de WC o cámara de inspección domiciliaria",
+    "r": "Alcantarillado y drenaje",
+    "sr": "Destapes y mantención correctiva",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 316,
+    "desc": "Cambio de sifón lavamanos / lavaplatos",
+    "r": "Instalaciones sanitarias",
+    "sr": "Artefactos y grifería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 317,
+    "desc": "Detección cortocircuito y revisión tablero",
+    "r": "Instalaciones eléctricas",
+    "sr": "Tableros y protecciones eléctricas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 318,
+    "desc": "Cambio de enchufe/interruptor en mal estado",
+    "r": "Instalaciones eléctricas",
+    "sr": "Tomas e interruptores",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 319,
+    "desc": "Cambio de chapa/cerradura puerta",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Quincallería y cerraduras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 320,
+    "desc": "Reparación parche yeso/empaste muro dañado",
+    "r": "Cielos y terminaciones",
+    "sr": "Reparación de superficies interiores",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 321,
+    "desc": "Cierre provisorio de obra en placa OSB",
+    "r": "Obras preliminares",
+    "sr": "Instalaciones de faena",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 322,
+    "desc": "Demolición tabique liviano con retiro a botadero",
+    "r": "Demoliciones y desmontajes",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 323,
+    "desc": "Excavación manual de fundación hasta 0,80 m",
+    "r": "Movimiento de tierras",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 324,
+    "desc": "Fundación aislada de hormigón armado",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 325,
+    "desc": "Pilar de hormigón armado",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 326,
+    "desc": "Viga de hormigón armado",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 327,
+    "desc": "Muro cortina aluminio y vidrio termopanel",
+    "r": "Fachadas y cerramientos",
+    "sr": "Muro cortina",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 328,
+    "desc": "Ventana PVC termopanel instalada",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Ventanas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 329,
+    "desc": "Rampa accesible de hormigón con pasamanos",
+    "r": "Accesibilidad universal",
+    "sr": "Accesibilidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 330,
+    "desc": "Pavimento podotáctil de alerta o avance",
+    "r": "Accesibilidad universal",
+    "sr": "Accesibilidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 331,
+    "desc": "Red húmeda interior completa por gabinete",
+    "r": "Protección contra incendios",
+    "sr": "Protección contra incendios",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 332,
+    "desc": "Extintor PQS 6 kg instalado y señalizado",
+    "r": "Protección contra incendios",
+    "sr": "Protección contra incendios",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 333,
+    "desc": "Puerta cortafuego F-60 instalada",
+    "r": "Protección contra incendios",
+    "sr": "Puertas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 334,
+    "desc": "Punto de red Cat 6 certificado",
+    "r": "Corrientes débiles y seguridad electrónica",
+    "sr": "Seguridad electrónica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 335,
+    "desc": "Punto cámara CCTV IP canalizado",
+    "r": "Corrientes débiles y seguridad electrónica",
+    "sr": "Seguridad electrónica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 336,
+    "desc": "Sistema citofonía o videoportero básico",
+    "r": "Corrientes débiles y seguridad electrónica",
+    "sr": "Seguridad electrónica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 337,
+    "desc": "Mueble base de cocina melamina con cubierta",
+    "r": "Equipamiento y mobiliario",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 338,
+    "desc": "Mueble aéreo de cocina melamina",
+    "r": "Equipamiento y mobiliario",
+    "sr": "Mobiliario y equipamiento",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 339,
+    "desc": "Mesón de atención comercial laminado",
+    "r": "Equipamiento y mobiliario",
+    "sr": "Equipamiento y mobiliario",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 340,
+    "desc": "Sistema solar fotovoltaico on-grid 1 kWp",
+    "r": "Aislación y eficiencia energética",
+    "sr": "Energía solar",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 341,
+    "desc": "Termo solar domiciliario 200 L instalado",
+    "r": "Aislación y eficiencia energética",
+    "sr": "Energía solar",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 342,
+    "desc": "Mantención preventiva tablero eléctrico",
+    "r": "Mantención general",
+    "sr": "Tableros y protecciones eléctricas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 343,
+    "desc": "Limpieza y mantención equipo split mural",
+    "r": "Mantención general",
+    "sr": "Climatización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 344,
+    "desc": "Sellado preventivo de juntas y fisuras exteriores",
+    "r": "Mantención general",
+    "sr": "Mantención general",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 345,
+    "desc": "Demolición controlada cierre pandereta H=2,0 m",
+    "r": "Demoliciones y desmontajes",
+    "sr": "Demoliciones",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 346,
+    "desc": "Retiro poste hormigón prefabricado de cierre",
+    "r": "Demoliciones y desmontajes",
+    "sr": "Retiro y transporte de escombros",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 347,
+    "desc": "Demolición selectiva dado de fundación existente",
+    "r": "Demoliciones y desmontajes",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 348,
+    "desc": "Traslado interno de escombros en pendiente hasta 25 m",
+    "r": "Demoliciones y desmontajes",
+    "sr": "Retiro y transporte de escombros",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 349,
+    "desc": "Retiro escombros camión tolva con carguío y botadero",
+    "r": "Demoliciones y desmontajes",
+    "sr": "Retiro y transporte de escombros",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 350,
+    "desc": "Reutilización dado existente con platina y anclaje químico",
+    "r": "Estructuras metálicas",
+    "sr": "Artefactos y grifería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 351,
+    "desc": "Fundación nueva para poste metálico de cierre",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 352,
+    "desc": "Poste perfil acero 40x40x4 mm fabricado e instalado",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 353,
+    "desc": "Paño malla ACMA 1G 3,00x1,85 m marco ángulo 25x25x3 mm",
+    "r": "Estructuras metálicas",
+    "sr": "Cierres y muros perimetrales",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 354,
+    "desc": "Paño malla ACMA 1G 3,00x1,85 m marco ángulo 25x25x4 mm",
+    "r": "Estructuras metálicas",
+    "sr": "Cierres y muros perimetrales",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 355,
+    "desc": "Paño corto escalonado malla ACMA 1G 1,50x1,85 m marco 3 mm",
+    "r": "Estructuras metálicas",
+    "sr": "Cierres y muros perimetrales",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 356,
+    "desc": "Paño corto escalonado malla ACMA 1G 1,50x1,85 m marco 4 mm",
+    "r": "Estructuras metálicas",
+    "sr": "Cierres y muros perimetrales",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 357,
+    "desc": "Limpieza y perfilado final de franja de cierre",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 358,
+    "desc": "Cierre Acmafor 3D 2.5m verde c/postes",
+    "r": "Estructuras metálicas",
+    "sr": "Cierres y muros perimetrales",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 359,
+    "desc": "Repintado interior con tratamiento de humedad/hongos",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Pinturas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 360,
+    "desc": "Pintura de cielo americano o placa yeso-cartón",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Cielos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 361,
+    "desc": "Lavado a presión y pintura de fachada exterior",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Pinturas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 362,
+    "desc": "Limpieza fina post obra o entrega",
+    "r": "Limpieza, pruebas y entrega",
+    "sr": "Limpieza final de obra",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 363,
+    "desc": "Traslado y acarreo de mobiliario (mudanza interna)",
+    "r": "Servicios profesionales",
+    "sr": "Logística y apoyo de obra",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 364,
+    "desc": "Jornada adicional de especialista a trato",
+    "r": "Servicios profesionales",
+    "sr": "Mano de obra especializada",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 365,
+    "desc": "Letrero acrílico luminoso con letras corpóreas",
+    "r": "Equipamiento y mobiliario",
+    "sr": "Mobiliario y equipamiento",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 366,
+    "desc": "Vitrina exhibidora de melamina con vidrio",
+    "r": "Equipamiento y mobiliario",
+    "sr": "Mobiliario y equipamiento",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 367,
+    "desc": "Mueble para punto de venta o caja registradora",
+    "r": "Equipamiento y mobiliario",
+    "sr": "Mobiliario y equipamiento",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 368,
+    "desc": "Instalación de WC estándar con cisterna",
+    "r": "Instalaciones sanitarias",
+    "sr": "Artefactos y grifería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 369,
+    "desc": "Instalación de ducha con mezcladora simple",
+    "r": "Instalaciones sanitarias",
+    "sr": "Artefactos y grifería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 370,
+    "desc": "Instalación de tina o bañera",
+    "r": "Instalaciones sanitarias",
+    "sr": "Artefactos y grifería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 371,
+    "desc": "Ampliación de red de desagüe PVC interior",
+    "r": "Alcantarillado y drenaje",
+    "sr": "Redes de alcantarillado",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 372,
+    "desc": "Instalación de calefont a gas 10L",
+    "r": "Instalaciones de gas",
+    "sr": "Redes de gas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 373,
+    "desc": "Ampliación de red de gas residencial en cobre",
+    "r": "Instalaciones de gas",
+    "sr": "Redes de gas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 374,
+    "desc": "Instalación de regulador y manguera de gas licuado",
+    "r": "Instalaciones de gas",
+    "sr": "Redes de gas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 375,
+    "desc": "Instalación de detector de gas GLP",
+    "r": "Instalaciones de gas",
+    "sr": "Redes de gas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 382,
+    "desc": "Correa Metalcon omega 100x30mm e=0.85mm instalada",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 383,
+    "desc": "Correa Metalcon omega 100x30mm e=1.5mm reforzada instalada",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 384,
+    "desc": "Correa Metalcon C200x50mm e=2.0mm (techo de mayor luz) instalada",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 385,
+    "desc": "Viga cajón Metalcon 2xC 150mm soldada (dintel/viga)",
+    "r": "Estructuras metálicas",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 386,
+    "desc": "Viga cajón Metalcon 2xC 200mm soldada (luces mayores)",
+    "r": "Estructuras metálicas",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 387,
+    "desc": "Perfil Z 150mm e=2.0mm instalado (correa o refuerzo)",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 388,
+    "desc": "Perfil angular acero 50x50x3mm instalado (arriostramiento)",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 389,
+    "desc": "Base de poste o columna metálica con placa y pernos de anclaje",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 390,
+    "desc": "Tabique Metalcon estructural reforzado 90x38mm (muro de carga liviano)",
+    "r": "Estructuras metálicas",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 391,
+    "desc": "Tabique Metalcon estructural liviano 60x38mm",
+    "r": "Estructuras metálicas",
+    "sr": "Tabiquería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 392,
+    "desc": "Muro Metalcon perimetral económico 100x50mm e=0.85mm",
+    "r": "Estructuras metálicas",
+    "sr": "Cierres y muros perimetrales",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 393,
+    "desc": "Muro Metalcon perimetral reforzado 150x50mm e=1.0mm",
+    "r": "Estructuras metálicas",
+    "sr": "Cierres y muros perimetrales",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 394,
+    "desc": "Muro albañilería bloques 14cm (sin refuerzo)",
+    "r": "Albañilería",
+    "sr": "Albañilería",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 395,
+    "desc": "Hormigón elaborado en obra (dosificación artesanal)",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón y fundaciones",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 396,
+    "desc": "Base granular compactada para radier o pavimento",
+    "r": "Hormigón y fundaciones",
+    "sr": "Pavimentos y vialidad",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 397,
+    "desc": "Relleno o enrocado con piedra bolón",
+    "r": "Albañilería",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 398,
+    "desc": "Enlucido o relleno con yeso en muros interiores",
+    "r": "Albañilería",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 399,
+    "desc": "Instalación de cercha prefabricada pino 8m de luz",
+    "r": "Construcción liviana",
+    "sr": "Construcción liviana",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 400,
+    "desc": "Entramado o refuerzo con polín pino 2x2\"",
+    "r": "Construcción liviana",
+    "sr": "Construcción liviana",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 401,
+    "desc": "Viga o dintel de madera pino 2x8\"",
+    "r": "Construcción liviana",
+    "sr": "Hormigón estructural",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 402,
+    "desc": "Cielo o entrepiso con terciado estructural 12mm",
+    "r": "Cielos y terminaciones",
+    "sr": "Cielos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 403,
+    "desc": "Cubierta zinc teja española instalada",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 404,
+    "desc": "Cubierta policarbonato alveolar 8mm instalada",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 405,
+    "desc": "Limatesa de zinc instalada",
+    "r": "Techumbres y aguas lluvias",
+    "sr": "Cubiertas y techumbres",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 406,
+    "desc": "Impermeabilización acrílica de techumbre",
+    "r": "Impermeabilización",
+    "sr": "Impermeabilización de cubiertas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 407,
+    "desc": "Piso flotante laminado AC5 (uso comercial)",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 408,
+    "desc": "Renovación de fragua en juntas de piso o revestimiento",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos y revestimientos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 409,
+    "desc": "Fijación de piso de parquet con adhesivo (madera de cargo del cliente)",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 410,
+    "desc": "Piso vinílico adherido con adhesivo acrílico (instalación pegada)",
+    "r": "Pisos y revestimientos",
+    "sr": "Pisos",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 411,
+    "desc": "Suministro de equipo split 9.000 BTU (sin instalación)",
+    "r": "Climatización y ventilación",
+    "sr": "Climatización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 412,
+    "desc": "Suministro de equipo split 12.000 BTU (sin instalación)",
+    "r": "Climatización y ventilación",
+    "sr": "Climatización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 413,
+    "desc": "Suministro de equipo split 18.000 BTU (sin instalación)",
+    "r": "Climatización y ventilación",
+    "sr": "Climatización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 414,
+    "desc": "Instalación de split (mano de obra, equipo de cliente o comprado aparte)",
+    "r": "Climatización y ventilación",
+    "sr": "Climatización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 415,
+    "desc": "Aislación térmica de muro con poliestireno EPS 50mm",
+    "r": "Aislación y eficiencia energética",
+    "sr": "Aislación térmica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 416,
+    "desc": "Aislación térmica de muro o techo con poliestireno EPS 100mm",
+    "r": "Aislación y eficiencia energética",
+    "sr": "Aislación térmica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 417,
+    "desc": "Impermeabilización de muro bajo nivel con membrana deltaforce",
+    "r": "Impermeabilización",
+    "sr": "Impermeabilización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 418,
+    "desc": "Ventana proyectante PVC 60x60cm instalada",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Ventanas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 419,
+    "desc": "Perfil de terminación de aluminio instalado",
+    "r": "Puertas, ventanas y carpinterías",
+    "sr": "Puertas, ventanas y carpinterías",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 420,
+    "desc": "Tabique cortafuego con placa yeso RF 15mm",
+    "r": "Protección contra incendios",
+    "sr": "Compartimentación resistente al fuego",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 421,
+    "desc": "Impermeabilización de muro con manta drenante geodren",
+    "r": "Impermeabilización",
+    "sr": "Impermeabilización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 422,
+    "desc": "Cambio de ampolleta o foco LED",
+    "r": "Instalaciones eléctricas",
+    "sr": "Instalaciones eléctricas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 423,
+    "desc": "Red de desagüe PVC 4\" (colector principal)",
+    "r": "Alcantarillado y drenaje",
+    "sr": "Redes de alcantarillado",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 424,
+    "desc": "Red de gas en cobre 3/4\" (matriz o alimentación principal)",
+    "r": "Instalaciones de gas",
+    "sr": "Redes de gas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 425,
+    "desc": "Fijación con tornillo autorroscante en perfil metálico (por caja)",
+    "r": "Estructuras metálicas",
+    "sr": "Estructuras metálicas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 426,
+    "desc": "Entibación de excavación con plancha metálica",
+    "r": "Movimiento de tierras",
+    "sr": "Movimiento de tierras",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 427,
+    "desc": "Poste HEB de acero para cierre o estructura exterior",
+    "r": "Obras exteriores y urbanización",
+    "sr": "Obras exteriores y urbanización",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 428,
+    "desc": "Instalación de alarma domiciliaria básica",
+    "r": "Corrientes débiles y seguridad electrónica",
+    "sr": "Seguridad electrónica",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 429,
+    "desc": "Refuerzo puntual con fierro corrugado 8mm",
+    "r": "Hormigón y fundaciones",
+    "sr": "Hormigón y fundaciones",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 430,
+    "desc": "Instalación de estanque elevado 500L (base existente)",
+    "r": "Instalaciones sanitarias",
+    "sr": "Instalaciones sanitarias",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 431,
+    "desc": "Arriendo de baño químico (mensual)",
+    "r": "Obras preliminares",
+    "sr": "Instalaciones de faena",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 432,
+    "desc": "Transporte en camión tolva 8 m³ (flete general)",
+    "r": "Servicios profesionales",
+    "sr": "Transporte y logística de obra",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 433,
+    "desc": "Kit de insumos para pintura (brochas, bandejas, lijas, masilla)",
+    "r": "Pinturas y recubrimientos",
+    "sr": "Pinturas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 376,
+    "desc": "Tablero de distribución 4 circuitos",
+    "r": "Instalaciones eléctricas",
+    "sr": "Tableros y protecciones eléctricas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 377,
+    "desc": "Tablero de distribución 12 circuitos",
+    "r": "Instalaciones eléctricas",
+    "sr": "Tableros y protecciones eléctricas",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 378,
+    "desc": "Cableado de circuito reforzado 6mm² (calefont/A.A.)",
+    "r": "Instalaciones eléctricas",
+    "sr": "Cableado",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 379,
+    "desc": "Cableado de circuito industrial/hornillas 10mm²",
+    "r": "Instalaciones eléctricas",
+    "sr": "Cableado",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 380,
+    "desc": "Instalación de luminaria LED panel embutido 24W",
+    "r": "Instalaciones eléctricas",
+    "sr": "Iluminación",
+    "sug": "Completar vacíos"
+  },
+  {
+    "id": 381,
+    "desc": "Instalación de barra LED bajo mueble",
+    "r": "Instalaciones eléctricas",
+    "sr": "Mobiliario y equipamiento",
+    "sug": "Completar vacíos"
+  }
+]

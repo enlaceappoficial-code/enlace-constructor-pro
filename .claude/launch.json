@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ecp-static",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/serve_src_static.js"],
+      "port": 8080
+    }
+  ]
+}

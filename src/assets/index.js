@@ -18,6 +18,7 @@ var eu = (Mt, at, nt) =>
     if (Zp) for (var nt of Zp(at)) ox.call(at, nt) && eu(Mt, nt, at[nt]);
     return Mt;
   },
+  FEATURE_ASISTENTE_INTELIGENTE = false,
   u = (Mt, at) => rx(Mt, ax(at));
 (function () {
   "use strict";
@@ -13493,6 +13494,64 @@ Error generating stack: ` +
         alcance: "Suministro e instalación",
         especialidad: "Ingeniería eléctrica"
       },
+      /* ═══ AMPLIACIÓN 2026-08-02 — RENOVACIÓN DE CUBIERTAS SOBRE OSB ═══ */
+      {id:434,cat:"Techumbres",desc:"Retiro de cubierta existente de zinc ondulado",unidad:"m²",precio:2318,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Desmontaje",
+        sistemaConstructivo: "Zinc",
+        alcance: "Desmontaje y retiro",
+        especialidad: "Techumbres",
+        requiereTrabajoAltura: true
+      },
+      {id:435,cat:"Techumbres",desc:"Instalación de tablero OSB estructural en cubierta",unidad:"m²",precio:17585,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Madera",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres",
+        requiereTrabajoAltura: true
+      },
+      {id:436,cat:"Techumbres",desc:"Impermeabilización con membrana asfáltica sobre OSB",unidad:"m²",precio:32631,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "No aplica",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres",
+        requiereTrabajoAltura: true
+      },
+      {id:437,cat:"Techumbres",desc:"Instalación de teja asfáltica sobre OSB",unidad:"m²",precio:18533,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Teja asfáltica",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres",
+        requiereTrabajoAltura: true
+      },
+      {id:438,cat:"Techumbres",desc:"Instalación de cubierta de zinc emballetado sobre OSB",unidad:"m²",precio:32079,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Obra nueva",
+        sistemaConstructivo: "Zinc",
+        alcance: "Suministro e instalación",
+        especialidad: "Techumbres",
+        requiereTrabajoAltura: true
+      },
+      {id:439,cat:"Techumbres",desc:"Revisión y evaluación de estructura existente de techumbre",unidad:"gl",precio:57960,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Servicio profesional",
+        sistemaConstructivo: "No aplica",
+        alcance: "Servicio completo",
+        especialidad: "Techumbres",
+        requiereTrabajoAltura: true,
+        requiereRevisionEstructural: true,
+        estadoRevision: "pendiente",
+        notaVisiblePendiente: "Pendiente de revisión estructural después del retiro de la cubierta."
+      },
     ],
     Rn = [
       {
@@ -15660,6 +15719,10 @@ Error generating stack: ` +
       {id:479, cat:"Pintura", nombre:"Fungicida/sellador antihongos para muros", unidad:"galón", precio:9500},
       {id:480, cat:"Servicios Generales", nombre:"Kit insumos limpieza fina post obra", unidad:"gl", precio:18000},
       {id:481, cat:"Fachadas y Vidrios", nombre:"Vidrio templado 6mm", unidad:"m²", precio:55000},
+      /* ═══ AMPLIACIÓN 2026-08-02 — RENOVACIÓN DE CUBIERTAS SOBRE OSB ═══ */
+      {id:482, cat:"Techumbres", nombre:"Teja asfáltica arquitectónica laminada", unidad:"m²", precio:9800},
+      {id:483, cat:"Techumbres", nombre:"Plancha zinc emballetado prepintado 0.5mm", unidad:"m²", precio:16500},
+      {id:484, cat:"Techumbres", nombre:"Clip fijación oculta zinc emballetado", unidad:"unidad", precio:450},
     ],
     Ip = {
       Pintura: 45,
@@ -19651,7 +19714,43 @@ Error generating stack: ` +
        unidad:"gl", catalogId:433, esSubcontrato:false, precioSubcontrato:0, pctMO:5, pctGG:10, pctUtilidad:10,
        rendimiento:20, dotacion:1,
        baseTecnica:{metodo:"Suministro de insumos y herramientas menores de aplicación para un proyecto de pintura",supuestos:"Cantidad referencial para un proyecto estándar; ajustar según superficie",editable:true},
-       materiales:[{materialId:10,cantidad:2},{materialId:11,cantidad:1},{materialId:13,cantidad:3},{materialId:17,cantidad:1}]}
+       materiales:[{materialId:10,cantidad:2},{materialId:11,cantidad:1},{materialId:13,cantidad:3},{materialId:17,cantidad:1}]},
+      {id:40591, tipo:"Desmontaje", estructura:"General",
+       nombre:"Retiro de cubierta existente de zinc ondulado", categoria:"Techumbres",
+       unidad:"m²", catalogId:434, esSubcontrato:false, precioSubcontrato:0, precioMO:1800, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:45, dotacion:2,
+       baseTecnica:{metodo:"Desmontaje manual de planchas de zinc ondulado y su tornillería, con acopio en el mismo predio",supuestos:"Cuadrilla de 2 personas; no incluye transporte ni disposición de residuos, los que se cotizan por separado",editable:true},
+       materiales:[]},
+      {id:40592, tipo:"Nueva Construcción", estructura:"Madera",
+       nombre:"Instalación de tablero OSB estructural en cubierta", categoria:"Techumbres",
+       unidad:"m²", catalogId:435, esSubcontrato:false, precioSubcontrato:0, precioMO:2571, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:28, dotacion:2,
+       baseTecnica:{metodo:"Instalación de placas OSB estructural sobre correas o cerchas existentes, fijadas con clavado según especificación del fabricante",supuestos:"Cuadrilla de 2 personas; considera estructura de soporte (correas/cerchas) ya instalada y en buen estado",editable:true},
+       materiales:[{materialId:128,cantidad:0.38},{materialId:133,cantidad:0.09}]},
+      {id:40593, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Impermeabilización con membrana asfáltica sobre OSB", categoria:"Techumbres",
+       unidad:"m²", catalogId:436, esSubcontrato:false, precioSubcontrato:0, precioMO:3600, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:20, dotacion:2,
+       baseTecnica:{metodo:"Aplicación de membrana asfáltica autoadherente sobre tablero OSB, con traslapos según especificación del fabricante",supuestos:"Cuadrilla de 2 personas; superficie de OSB limpia, seca y sin fijaciones sobresalientes",editable:true},
+       materiales:[{materialId:170,cantidad:1.15}]},
+      {id:40594, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Instalación de teja asfáltica sobre OSB", categoria:"Techumbres",
+       unidad:"m²", catalogId:437, esSubcontrato:false, precioSubcontrato:0, precioMO:3273, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:22, dotacion:2,
+       baseTecnica:{metodo:"Instalación de tejas asfálticas sobre OSB con clavado según patrón del fabricante, incluye hiladas de inicio",supuestos:"Cuadrilla de 2 personas; no incluye membrana de impermeabilización, la que se cotiza como partida independiente",editable:true},
+       materiales:[{materialId:482,cantidad:1.1},{materialId:133,cantidad:0.12}]},
+      {id:40595, tipo:"Nueva Construcción", estructura:"General",
+       nombre:"Instalación de cubierta de zinc emballetado sobre OSB", categoria:"Techumbres",
+       unidad:"m²", catalogId:438, esSubcontrato:false, precioSubcontrato:0, precioMO:4500, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:16, dotacion:2,
+       baseTecnica:{metodo:"Instalación de planchas de zinc emballetado (junta alzada) sobre OSB con clips de fijación oculta y traslapos laterales",supuestos:"Cuadrilla de 2 personas; no incluye membrana de impermeabilización, la que se cotiza como partida independiente",editable:true},
+       materiales:[{materialId:483,cantidad:1.08},{materialId:484,cantidad:5},{materialId:112,cantidad:0.12}]},
+      {id:40596, tipo:"Mantención", estructura:"General",
+       nombre:"Revisión y evaluación de estructura existente de techumbre", categoria:"Techumbres",
+       unidad:"gl", catalogId:439, esSubcontrato:false, precioSubcontrato:0, precioMO:45000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Inspección visual y manual de cerchas, costaneras, fijaciones, nivelación y estado general de la estructura de techumbre una vez retirada la cubierta existente",supuestos:"Incluye levantamiento fotográfico y registro de hallazgos; no incluye ensayos de laboratorio ni reparaciones, las que se cotizan aparte según el resultado de la revisión",editable:true},
+       materiales:[]}
     ].map((t) => d({ rendimiento: 30, dotacion: 1 }, t)),
     Kl = (t) => {
       window.__isElectron &&
@@ -20477,8 +20576,7 @@ Error generating stack: ` +
                   { l: "Total", x: 194, r: !0 },
                 ],
           ce = ie === "separado" ? 118 : 126,
-          te = ie === "separado" ? 136 : 147,
-          fe = ie === "separado" ? 46 : 52;
+          te = ie === "separado" ? 136 : 147;
         return (
           o.setFillColor(...q),
           o.rect(14, G, 182, 8, "F"),
@@ -20533,10 +20631,31 @@ Error generating stack: ` +
                 hr = Lve.cantidadFacturable,
                 jr = Lve.precioUnitario,
                 Pr = Lve.totalLinea,
-                tieneNota = !!Lve.reglaAplicada,
-                Fr = tieneNota ? 12 : 8,
-                yTxt = tieneNota ? G + 4.3 : G + 5.3,
+                notaTxt = ve._notaVisible || Lve.motivo,
+                tieneNota = !!Lve.reglaAplicada || !!ve._notaVisible,
                 gr = xr % 2 === 0 ? re : Q;
+              var descMaxWidth = ce - 25 - 3;
+              o.setFont("helvetica", "normal");
+              o.setFontSize(8.5);
+              var descLines = o.splitTextToSize(ve.desc || "", descMaxWidth);
+              var notaLines = [];
+              if (tieneNota) {
+                o.setFont("helvetica", "italic");
+                o.setFontSize(6.5);
+                notaLines = o.splitTextToSize(notaTxt, descMaxWidth);
+                o.setFont("helvetica", "normal");
+                o.setFontSize(8.5);
+              }
+              var descLineH = 3.6, notaLineH = 2.8, gapDescNota = 4;
+              var Fr =
+                5.3 +
+                (descLines.length - 1) * descLineH +
+                (tieneNota ? gapDescNota + (notaLines.length - 1) * notaLineH : 0) +
+                2.7;
+              if (G + Fr > 262) {
+                (o.addPage(), (G = 18));
+              }
+              var yTxt = G + 5.3;
               (o.setFillColor(...gr),
                 o.rect(14, G, 182, Fr, "F"),
                 o.setDrawColor(220, 225, 235),
@@ -20545,14 +20664,16 @@ Error generating stack: ` +
                 o.setFont("helvetica", "normal"),
                 o.setFontSize(8.5),
                 o.setTextColor(50, 60, 75),
-                o.text("" + (xr + 1), 16, yTxt),
-                o.text((ve.desc || "").slice(0, fe), 25, yTxt));
+                o.text("" + (xr + 1), 16, yTxt));
+              descLines.forEach((linea, li) => o.text(linea, 25, yTxt + li * descLineH));
               if (tieneNota) {
+                var lastDescY = yTxt + (descLines.length - 1) * descLineH,
+                  notaY = lastDescY + gapDescNota;
                 (o.setFont("helvetica", "italic"),
                   o.setFontSize(6.5),
-                  o.setTextColor(180, 83, 9),
-                  o.text(Lve.motivo.slice(0, 95), 25, G + 9.3),
-                  o.setFont("helvetica", "normal"),
+                  o.setTextColor(180, 83, 9));
+                notaLines.forEach((linea, li) => o.text(linea, 25, notaY + li * notaLineH));
+                (o.setFont("helvetica", "normal"),
                   o.setFontSize(8.5),
                   o.setTextColor(50, 60, 75));
               }
@@ -22077,9 +22198,11 @@ Error generating stack: ` +
           var qty = cantShow + " " + (I.unidad || "");
           var descHtml =
             (I.desc || "") +
-            (Lts.reglaAplicada
-              ? '<div style="font-size:10px;color:#b45309;margin-top:2px">' + Lts.motivo + "</div>"
-              : "");
+            (I._notaVisible
+              ? '<div style="font-size:10px;color:#b45309;margin-top:2px">' + I._notaVisible + "</div>"
+              : Lts.reglaAplicada
+                ? '<div style="font-size:10px;color:#b45309;margin-top:2px">' + Lts.motivo + "</div>"
+                : "");
           if (modo === "separado")
             return (
               acc +
@@ -23930,19 +24053,25 @@ ${r.empresa}`;
                                       (parseFloat(a.ordenDentroCapitulo) || 0) - (parseFloat(b.ordenDentroCapitulo) || 0),
                                   );
                               var salidaExcel = [];
-                              capsOrdExcel.forEach((cap) => {
+                              capsOrdExcel.forEach((cap, capIdx) => {
                                 var itemsCap = porCapExcel(cap.id);
                                 if (!itemsCap.length) return;
                                 salidaExcel.push({
                                   __esCapitulo: !0,
                                   __nombre: (cap.codigo ? cap.codigo + " — " : "") + (cap.nombre || "Capítulo"),
                                 });
-                                salidaExcel.push(...itemsCap);
+                                itemsCap.forEach((it, itIdx) => {
+                                  it.__numJerarquico = `${cap.codigo || (capIdx + 1)}.${itIdx + 1}`;
+                                  salidaExcel.push(it);
+                                });
                               });
                               var sinCapExcel = porCapExcel(null);
                               if (sinCapExcel.length) {
                                 salidaExcel.push({ __esCapitulo: !0, __nombre: "Sin capítulo" });
-                                salidaExcel.push(...sinCapExcel);
+                                sinCapExcel.forEach((it, itIdx) => {
+                                  it.__numJerarquico = `${itIdx + 1}`;
+                                  salidaExcel.push(it);
+                                });
                               }
                               return salidaExcel;
                             })();
@@ -23955,15 +24084,15 @@ ${r.empresa}`;
                             numExportable++;
                             var Lg = calcularLineaPresupuesto(G);
                             ($.push([
-                              numExportable,
+                              G.__numJerarquico || numExportable,
                               G.desc || "",
                               Lg.cantidadIngresada,
                               G.unidad || "",
                               Lg.precioUnitario,
                               Lg.totalLinea,
                             ]),
-                              Lg.reglaAplicada &&
-                                $.push(["", "  » " + Lg.motivo, "", "", "", ""]));
+                              (G._notaVisible || Lg.reglaAplicada) &&
+                                $.push(["", "  » " + (G._notaVisible || Lg.motivo), "", "", "", ""]));
                           }),
                             $.push([""]),
                             $.push(["", "", "", "", "Subtotal Neto:", R]),
@@ -24467,10 +24596,10 @@ ${r.empresa}`;
                                   },
                                   children: [
                                     D.desc,
-                                    Luf.reglaAplicada &&
+                                    (D._notaVisible || Luf.reglaAplicada) &&
                                       e.jsx("div", {
                                         style: { fontSize: 11, color: "#b45309", marginTop: 2 },
-                                        children: Luf.motivo,
+                                        children: D._notaVisible || Luf.motivo,
                                       }),
                                   ],
                                 }),
@@ -33247,9 +33376,7 @@ ${r.empresa}`;
           nombre: "Baño",
           orden: 1,
           soluciones: [{ solucionId: "sol-006-remodelacion-basica-bano", obligatoria: true }],
-          partidasDirectas: [
-            { catalogId: 40516, obligatoria: false, cantidadSugerida: 12 }
-          ]
+          partidasDirectas: []
         }
       ],
       preguntasIniciales: [
@@ -33273,8 +33400,7 @@ ${r.empresa}`;
           orden: 1,
           soluciones: [{ solucionId: "sol-004-cambio-piso-ceramico", obligatoria: true }],
           partidasDirectas: [
-            { catalogId: 337, obligatoria: true, cantidadSugerida: 3 },
-            { catalogId: 40007, obligatoria: false, cantidadSugerida: 1 }
+            { catalogId: 337, obligatoria: true, cantidadSugerida: 3 }
           ]
         }
       ],
@@ -33301,9 +33427,7 @@ ${r.empresa}`;
             { solucionId: "sol-001-filtracion-techumbre", obligatoria: false },
             { solucionId: "sol-002-cambio-canaleta-bajante", obligatoria: true }
           ],
-          partidasDirectas: [
-            { catalogId: 79, obligatoria: false, cantidadSugerida: 20 }
-          ]
+          partidasDirectas: []
         }
       ],
       preguntasIniciales: [
@@ -33327,10 +33451,7 @@ ${r.empresa}`;
           nombre: "Pintura y Terminaciones",
           orden: 1,
           soluciones: [{ solucionId: "sol-003-pintura-interior-habitacion", obligatoria: true }],
-          partidasDirectas: [
-            { catalogId: 40, obligatoria: true, cantidadSugerida: 50 },
-            { catalogId: 41, obligatoria: false, cantidadSugerida: 5 }
-          ]
+          partidasDirectas: []
         }
       ],
       preguntasIniciales: [
@@ -33338,50 +33459,159 @@ ${r.empresa}`;
         "¿Las puertas y ventanas de madera requieren pintura de esmalte?"
       ],
       advertencias: [
-        "La solución sol-003 solo incluye muros, por lo que cielos y puertas se cargan como partidas directas adicionales."
+        "La solución sol-003 ya incluye muros (obligatorio), cielos y puertas/ventanas como opciones seleccionables; no se agregan partidas directas adicionales."
+      ]
+    },
+    // Plantillas suspendidas hasta completar partidas, materiales y APU validados.
+    {
+      id: "ampliacion",
+      oculta: true,
+      nombre: "🏠 Ampliación Habitación",
+      desc: "Ampliación con estructura, cubierta, terminaciones. [Plantilla rápida]",
+      esModerna: true,
+      esRapida: true,
+      capitulos: [
+        {
+          codigo: "CAP1",
+          nombre: "Partidas Incluidas",
+          orden: 1,
+          partidasDirectas: [
+            { catalogId: 10, cantidadSugerida: 12, obligatoria: false },
+            { catalogId: 12, cantidadSugerida: 24, obligatoria: false },
+            { catalogId: 40, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 48, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 22, cantidadSugerida: 12, obligatoria: false },
+            { catalogId: 17, cantidadSugerida: 24, obligatoria: false },
+            { catalogId: 18, cantidadSugerida: 36, obligatoria: false },
+            { catalogId: 62, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 70, cantidadSugerida: 1, obligatoria: false },
+            { catalogId: 1, cantidadSugerida: 36, obligatoria: false },
+            { catalogId: 80, cantidadSugerida: 3, obligatoria: false },
+            { catalogId: 81, cantidadSugerida: 3, obligatoria: false }
+          ],
+          soluciones: []
+        }
       ]
     },
     {
-      id: "ampliacion",
-      nombre: "🏠 Ampliación Habitación",
-      desc: "[Próximamente] Plantilla en actualización",
-      bloqueada: true,
-      items: []
-    },
-    {
       id: "radier",
+      oculta: true,
       nombre: "🏗️ Radier + Pavimento",
-      desc: "[Próximamente] Plantilla en actualización",
-      bloqueada: true,
-      items: []
+      desc: "Radier de hormigón con terminación cerámica o piso flotante. [Plantilla rápida]",
+      esModerna: true,
+      esRapida: true,
+      capitulos: [
+        {
+          codigo: "CAP1",
+          nombre: "Partidas Incluidas",
+          orden: 1,
+          partidasDirectas: [
+            { catalogId: 130, cantidadSugerida: 3, obligatoria: false },
+            { catalogId: 213, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 210, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 212, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 211, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 10, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 60, cantidadSugerida: 20, obligatoria: false }
+          ],
+          soluciones: []
+        }
+      ]
     },
     {
       id: "electrico",
+      oculta: true,
       nombre: "⚡ Instalación Eléctrica",
-      desc: "[Próximamente] Plantilla en actualización",
-      bloqueada: true,
-      items: []
+      desc: "Instalación eléctrica básica domiciliaria. [Plantilla rápida]",
+      esModerna: true,
+      esRapida: true,
+      capitulos: [
+        {
+          codigo: "CAP1",
+          nombre: "Partidas Incluidas",
+          orden: 1,
+          partidasDirectas: [
+            { catalogId: 80, cantidadSugerida: 10, obligatoria: false },
+            { catalogId: 81, cantidadSugerida: 8, obligatoria: false },
+            { catalogId: 82, cantidadSugerida: 2, obligatoria: false },
+            { catalogId: 83, cantidadSugerida: 1, obligatoria: false },
+            { catalogId: 223, cantidadSugerida: 20, obligatoria: false }
+          ],
+          soluciones: []
+        }
+      ]
     },
     {
       id: "cierre",
+      oculta: true,
       nombre: "🚧 Cierre Perimetral",
-      desc: "[Próximamente] Plantilla en actualización",
-      bloqueada: true,
-      items: []
+      desc: "Reja perimetral metálica con fundaciones. [Plantilla rápida]",
+      esModerna: true,
+      esRapida: true,
+      capitulos: [
+        {
+          codigo: "CAP1",
+          nombre: "Partidas Incluidas",
+          orden: 1,
+          partidasDirectas: [
+            { catalogId: 120, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 14, cantidadSugerida: 0.8, obligatoria: false },
+            { catalogId: 123, cantidadSugerida: 6, obligatoria: false },
+            { catalogId: 129, cantidadSugerida: 1, obligatoria: false },
+            { catalogId: 5, cantidadSugerida: 20, obligatoria: false }
+          ],
+          soluciones: []
+        }
+      ]
     },
     {
       id: "quincho",
+      oculta: true,
       nombre: "🥩 Quincho / Área Exterior",
-      desc: "[Próximamente] Plantilla en actualización",
-      bloqueada: true,
-      items: []
+      desc: "Quincho con terraza y pavimento exterior. [Plantilla rápida]",
+      esModerna: true,
+      esRapida: true,
+      capitulos: [
+        {
+          codigo: "CAP1",
+          nombre: "Partidas Incluidas",
+          orden: 1,
+          partidasDirectas: [
+            { catalogId: 196, cantidadSugerida: 16, obligatoria: false },
+            { catalogId: 198, cantidadSugerida: 18, obligatoria: false },
+            { catalogId: 200, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 203, cantidadSugerida: 30, obligatoria: false },
+            { catalogId: 209, cantidadSugerida: 4, obligatoria: false }
+          ],
+          soluciones: []
+        }
+      ]
     },
     {
       id: "piscina",
+      oculta: true,
       nombre: "🏊 Piscina Básica",
-      desc: "[Próximamente] Plantilla en actualización",
-      bloqueada: true,
-      items: []
+      desc: "Piscina rectangular con sistema de filtración. [Plantilla rápida]",
+      esModerna: true,
+      esRapida: true,
+      capitulos: [
+        {
+          codigo: "CAP1",
+          nombre: "Partidas Incluidas",
+          orden: 1,
+          partidasDirectas: [
+            { catalogId: 187, cantidadSugerida: 40, obligatoria: false },
+            { catalogId: 188, cantidadSugerida: 8, obligatoria: false },
+            { catalogId: 189, cantidadSugerida: 60, obligatoria: false },
+            { catalogId: 190, cantidadSugerida: 50, obligatoria: false },
+            { catalogId: 191, cantidadSugerida: 1, obligatoria: false },
+            { catalogId: 193, cantidadSugerida: 1, obligatoria: false },
+            { catalogId: 194, cantidadSugerida: 20, obligatoria: false },
+            { catalogId: 192, cantidadSugerida: 2, obligatoria: false }
+          ],
+          soluciones: []
+        }
+      ]
     }
   ];
   function Jf({ budget: t, budgets: i, clients: r, cfg: n, onClose: l }) {
@@ -34459,7 +34689,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       [paso, setPaso] = V(plantillaAsistente ? "revision" : "lista"),
       [marcadas, setMarcadas] = V(() => new Set());
 
-    var p = Xf,
+    var p = Xf.filter(pl => !pl.oculta),
       C = s === "user" ? r : p;
 
     var catalogPorId = new Map((catalog || []).map((cv) => [cv.id, cv]));
@@ -34522,7 +34752,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       setPaso("revision");
     }
     
-    S(() => {
+    Re.useEffect(() => {
       if (plantillaAsistente) {
         prepararPlantillaModerna(plantillaAsistente);
       }
@@ -34540,7 +34770,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
         precio: catItem.precio,
         _cid: String(catItem.id),
         _tipoCosto: "auto",
-        capituloId: capId || "",
+        capituloId: capId && capId !== "sin-capitulo" ? capId : "",
       };
       if (apuMatch) item._apuMatUnit = parseFloat(li(apuMatch, materiales || [], cfg).matTotal) || 0;
       return item;
@@ -34612,6 +34842,21 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
     }
 
     if (paso === "revision" && l && l.esModerna) {
+      var itemsParaCargar = 0;
+      (l.capitulos || []).forEach(cap => {
+        (cap.partidasDirectas || []).forEach(pd => {
+          if (pd.obligatoria || marcadas.has(pd.catalogId)) itemsParaCargar++;
+        });
+        (cap.soluciones || []).forEach(solRef => {
+          var sol = SOLUCIONES_COMPUESTAS_ACTIVAS.find(s => s.id === solRef.solucionId);
+          if (sol) {
+            sol.partidas.forEach(sp => {
+              if (sp.obligatoria || marcadas.has(sp.catalogId)) itemsParaCargar++;
+            });
+          }
+        });
+      });
+
       return e.jsx("div", {
         style: {
           position: "fixed",
@@ -34716,12 +34961,17 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
               ]
             }),
 
+            itemsParaCargar === 0 && e.jsx("div", {
+              style: { color: "#ef4444", fontSize: 13, textAlign: "center", marginTop: 10, fontWeight: 600 },
+              children: "⚠️ Selecciona al menos una partida para continuar."
+            }),
             e.jsxs("div", {
               style: { display: "flex", gap: 8, marginTop: 10 },
               children: [
                 e.jsx("button", {
-                  style: u(d({}, c.btn("p")), { flex: 1, padding: "10px", fontWeight: 700 }),
-                  onClick: aplicarPlantillaModerna,
+                  style: u(d({}, c.btn("p")), { flex: 1, padding: "10px", fontWeight: 700, opacity: itemsParaCargar === 0 ? 0.5 : 1 }),
+                  onClick: itemsParaCargar === 0 ? null : aplicarPlantillaModerna,
+                  disabled: itemsParaCargar === 0,
                   children: "✅ Confirmar y Cargar"
                 }),
                 e.jsx("button", {
@@ -35008,7 +35258,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
     var F = ["Todas", ...new Set(i.map((v) => v.cat))],
       rubrosPresentes = [...new Set(i.map((v) => v.rubro || v.cat))].sort((a2, b2) => a2.localeCompare(b2, "es")),
       subrubrosPresentes = [...new Set(i.filter((v) => rubroFiltro === "Todos" || (v.rubro || v.cat) === rubroFiltro).map((v) => v.subrubro).filter(Boolean))].sort((a2, b2) => a2.localeCompare(b2, "es")),
-      tiposPresentes = [...new Set(i.map((v) => v.tipoIntervencion).filter(Boolean))].sort((a2, b2) => a2.localeCompare(b2, "es")),
+      tiposPresentes = [...new Set(i.filter((v) => (rubroFiltro === "Todos" || (v.rubro || v.cat) === rubroFiltro) && (subrubroFiltro === "Todos" || v.subrubro === subrubroFiltro)).map((v) => v.tipoIntervencion).filter(Boolean))].sort((a2, b2) => a2.localeCompare(b2, "es")),
       g = i.filter((v) => {
         var x = h === "Todas" || v.cat === h,
           f =
@@ -35106,37 +35356,57 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
               )
             }),
             e.jsxs("div", {
-              style: { display: "flex", gap: 5, marginTop: 6 },
+              style: { display: "flex", flexDirection: "column", gap: 6, marginTop: 8 },
               children: [
-                e.jsxs("select", {
-                  value: rubroFiltro,
-                  onChange: (v) => {
-                    setRubroFiltro(v.target.value);
-                    setSubrubroFiltro("Todos");
-                  },
-                  style: u(d({}, s.inp), { flex: 1, minWidth: 0, fontSize: 10, cursor: "pointer", padding: "4px 6px" }),
+                e.jsxs("div", {
                   children: [
-                    e.jsx("option", { value: "Todos", children: "Rubro" }),
-                    rubrosPresentes.map((v) => e.jsx("option", { value: v, children: v }, v)),
+                    e.jsx("div", { style: { fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: o.muted, marginBottom: 3 }, children: "Rubro" }),
+                    e.jsxs("select", {
+                      value: rubroFiltro,
+                      title: rubroFiltro !== "Todos" ? rubroFiltro : undefined,
+                      onChange: (v) => { setRubroFiltro(v.target.value); setSubrubroFiltro("Todos"); setTipoFiltro("Todos"); },
+                      style: u(d({}, s.inp), { width: "100%", boxSizing: "border-box", fontSize: 11, cursor: "pointer", padding: "4px 6px" }),
+                      children: [
+                        e.jsx("option", { value: "Todos", children: "Todos (" + i.length + ")" }),
+                        rubrosPresentes.map((v) => { var cnt = i.filter((x) => (x.rubro || x.cat) === v).length; return e.jsx("option", { value: v, title: v, children: v + " (" + cnt + ")" }, v); }),
+                      ],
+                    }),
                   ],
                 }),
-                e.jsxs("select", {
-                  value: subrubroFiltro,
-                  onChange: (v) => setSubrubroFiltro(v.target.value),
-                  style: u(d({}, s.inp), { flex: 1, minWidth: 0, fontSize: 10, cursor: "pointer", padding: "4px 6px" }),
+                e.jsxs("div", {
                   children: [
-                    e.jsx("option", { value: "Todos", children: "Subrubro" }),
-                    subrubrosPresentes.map((v) => e.jsx("option", { value: v, children: v }, v)),
+                    e.jsx("div", { style: { fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: o.muted, marginBottom: 3 }, children: "Subrubro" }),
+                    e.jsxs("select", {
+                      value: subrubroFiltro,
+                      title: subrubroFiltro !== "Todos" ? subrubroFiltro : undefined,
+                      onChange: (v) => { setSubrubroFiltro(v.target.value); setTipoFiltro("Todos"); },
+                      style: u(d({}, s.inp), { width: "100%", boxSizing: "border-box", fontSize: 11, cursor: "pointer", padding: "4px 6px" }),
+                      children: [
+                        e.jsx("option", { value: "Todos", children: "Todos (" + (rubroFiltro === "Todos" ? i : i.filter((x) => (x.rubro || x.cat) === rubroFiltro)).filter((x) => x.subrubro).length + ")" }),
+                        subrubrosPresentes.map((v) => { var base = rubroFiltro === "Todos" ? i : i.filter((x) => (x.rubro || x.cat) === rubroFiltro); var cnt = base.filter((x) => x.subrubro === v).length; return e.jsx("option", { value: v, title: v, children: v + " (" + cnt + ")" }, v); }),
+                      ],
+                    }),
                   ],
                 }),
-                e.jsxs("select", {
-                  value: tipoFiltro,
-                  onChange: (v) => setTipoFiltro(v.target.value),
-                  style: u(d({}, s.inp), { flex: 1, minWidth: 0, fontSize: 10, cursor: "pointer", padding: "4px 6px" }),
+                e.jsxs("div", {
                   children: [
-                    e.jsx("option", { value: "Todos", children: "Tipo" }),
-                    tiposPresentes.map((v) => e.jsx("option", { value: v, children: v }, v)),
+                    e.jsx("div", { style: { fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".05em", color: o.muted, marginBottom: 3 }, children: "Tipo de intervención" }),
+                    e.jsxs("select", {
+                      value: tipoFiltro,
+                      title: tipoFiltro !== "Todos" ? tipoFiltro : undefined,
+                      onChange: (v) => setTipoFiltro(v.target.value),
+                      style: u(d({}, s.inp), { width: "100%", boxSizing: "border-box", fontSize: 11, cursor: "pointer", padding: "4px 6px" }),
+                      children: [
+                        e.jsx("option", { value: "Todos", children: "Todos (" + tiposPresentes.length + " tipos)" }),
+                        tiposPresentes.map((v) => { var base2 = i.filter((x) => (rubroFiltro === "Todos" || (x.rubro || x.cat) === rubroFiltro) && (subrubroFiltro === "Todos" || x.subrubro === subrubroFiltro)); var cnt = base2.filter((x) => x.tipoIntervencion === v).length; return e.jsx("option", { value: v, title: v, children: v + " (" + cnt + ")" }, v); }),
+                      ],
+                    }),
                   ],
+                }),
+                (rubroFiltro !== "Todos" || subrubroFiltro !== "Todos" || tipoFiltro !== "Todos") && e.jsx("button", {
+                  onClick: () => { setRubroFiltro("Todos"); setSubrubroFiltro("Todos"); setTipoFiltro("Todos"); },
+                  style: { fontSize: 10, padding: "3px 8px", borderRadius: 6, border: "1px solid " + o.accent, background: "transparent", color: o.accent, cursor: "pointer", fontWeight: 700, alignSelf: "flex-start" },
+                  children: "✕ Limpiar filtros",
                 }),
               ],
             }),
@@ -35351,6 +35621,185 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
       ],
     });
   });
+  function hijosDeTarea(tareas, parentId) {
+    return tareas.filter((t) => (t.parentId || null) === (parentId || null));
+  }
+  function esTareaResumen(tareas, id) {
+    return tareas.some((t) => (t.parentId || null) === id);
+  }
+  function calcularWBSGantt(tareas) {
+    var codigos = {};
+    function recorrer(parentId, prefijo) {
+      hijosDeTarea(tareas, parentId).forEach((t, idx) => {
+        var codigo = prefijo ? prefijo + "." + (idx + 1) : String(idx + 1);
+        codigos[t.id] = codigo;
+        recorrer(t.id, codigo);
+      });
+    }
+    recorrer(null, "");
+    return codigos;
+  }
+  function parsearFechaLocalGantt(iso) {
+    if (iso instanceof Date) return new Date(iso.getFullYear(), iso.getMonth(), iso.getDate());
+    var partes = String(iso).split("-").map(Number);
+    return new Date(partes[0], (partes[1] || 1) - 1, partes[2] || 1);
+  }
+  function fechaISOLocalGantt(fecha) {
+    var y = fecha.getFullYear(),
+      m = fecha.getMonth() + 1,
+      d = fecha.getDate();
+    return y + "-" + (m < 10 ? "0" : "") + m + "-" + (d < 10 ? "0" : "") + d;
+  }
+  function esDiaLaboralGantt(fecha, diasNoLaboralesSet) {
+    if (fecha.getDay() === 0) return false;
+    return !diasNoLaboralesSet.has(fechaISOLocalGantt(fecha));
+  }
+  function siguienteDiaLaboralGantt(fecha, diasNoLaboralesSet) {
+    var f = new Date(fecha.getTime());
+    while (!esDiaLaboralGantt(f, diasNoLaboralesSet)) f.setDate(f.getDate() + 1);
+    return f;
+  }
+  function sumarDiasCalendarioGantt(fecha, offset) {
+    var f = new Date(fecha.getTime());
+    f.setDate(f.getDate() + offset);
+    return f;
+  }
+  function sumarDiasLaboralesGantt(fechaInicioLaboral, duracionLaboral, diasNoLaboralesSet) {
+    var f = new Date(fechaInicioLaboral.getTime()),
+      contados = 1;
+    while (contados < duracionLaboral) {
+      f.setDate(f.getDate() + 1);
+      if (esDiaLaboralGantt(f, diasNoLaboralesSet)) contados++;
+    }
+    return f;
+  }
+  function contarDiasLaboralesEntreGantt(fechaA, fechaB, diasNoLaboralesSet) {
+    if (fechaB < fechaA) return 1;
+    var f = new Date(fechaA.getTime()),
+      contados = 0;
+    while (f <= fechaB) {
+      if (esDiaLaboralGantt(f, diasNoLaboralesSet)) contados++;
+      f.setDate(f.getDate() + 1);
+    }
+    return Math.max(1, contados);
+  }
+  function diasCalendarioEntreGantt(fechaA, fechaB) {
+    var MS_DIA = 86400000;
+    return Math.round((fechaB.getTime() - fechaA.getTime()) / MS_DIA);
+  }
+  function calcularFechasGantt(tareas, fechaInicioISO, diasNoLaborales) {
+    var diasNoLaboralesSet = new Set(diasNoLaborales || []);
+    var fechaBase = parsearFechaLocalGantt(fechaInicioISO || new Date());
+    var efectivo = {};
+    tareas.forEach((t) => {
+      efectivo[t.id] = {
+        inicioFecha: sumarDiasCalendarioGantt(fechaBase, parseFloat(t.inicio) || 0),
+        finFecha: null,
+        duracionLaboral: t.esHito ? 0 : Math.max(1, parseFloat(t.duracion) || 1),
+      };
+    });
+    var hojas = tareas.filter((t) => !esTareaResumen(tareas, t.id));
+    for (var pasada = 0; pasada <= hojas.length; pasada++) {
+      var cambio = false;
+      hojas.forEach((t) => {
+        var preds = (t.predecesoras || []).map((pid) => efectivo[pid]).filter(Boolean),
+          base = efectivo[t.id],
+          nuevaInicioFecha;
+        if (preds.length) {
+          var finMax = null;
+          preds.forEach((pr) => {
+            var fin = pr.finFecha || pr.inicioFecha;
+            if (finMax === null || fin.getTime() > finMax.getTime()) finMax = fin;
+          });
+          nuevaInicioFecha = siguienteDiaLaboralGantt(sumarDiasCalendarioGantt(finMax, 1), diasNoLaboralesSet);
+        } else {
+          nuevaInicioFecha = siguienteDiaLaboralGantt(base.inicioFecha, diasNoLaboralesSet);
+        }
+        var nuevaFinFecha = t.esHito
+          ? nuevaInicioFecha
+          : sumarDiasLaboralesGantt(nuevaInicioFecha, base.duracionLaboral, diasNoLaboralesSet);
+        if (
+          !base.finFecha ||
+          nuevaInicioFecha.getTime() !== base.inicioFecha.getTime() ||
+          nuevaFinFecha.getTime() !== base.finFecha.getTime()
+        ) {
+          cambio = true;
+        }
+        base.inicioFecha = nuevaInicioFecha;
+        base.finFecha = nuevaFinFecha;
+      });
+      if (!cambio) break;
+    }
+    function calcularResumen(id) {
+      var hijos = hijosDeTarea(tareas, id);
+      if (hijos.length === 0) return;
+      hijos.forEach((h) => {
+        if (esTareaResumen(tareas, h.id)) calcularResumen(h.id);
+      });
+      var inicios = hijos.map((h) => efectivo[h.id].inicioFecha.getTime()),
+        fines = hijos.map((h) => efectivo[h.id].finFecha.getTime()),
+        inicioFecha = new Date(Math.min.apply(null, inicios)),
+        finFecha = new Date(Math.max.apply(null, fines));
+      efectivo[id] = {
+        inicioFecha: inicioFecha,
+        finFecha: finFecha,
+        duracionLaboral: contarDiasLaboralesEntreGantt(inicioFecha, finFecha, diasNoLaboralesSet),
+      };
+    }
+    tareas.forEach((t) => {
+      if (esTareaResumen(tareas, t.id)) calcularResumen(t.id);
+    });
+    var salida = {};
+    Object.keys(efectivo).forEach((id) => {
+      var ef = efectivo[id];
+      salida[id] = {
+        inicio: diasCalendarioEntreGantt(fechaBase, ef.inicioFecha),
+        duracion: ef.duracionLaboral > 0 ? diasCalendarioEntreGantt(ef.inicioFecha, ef.finFecha) + 1 : 0,
+        inicioFecha: ef.inicioFecha,
+        finFecha: ef.finFecha,
+        duracionLaboral: ef.duracionLaboral,
+      };
+    });
+    return salida;
+  }
+  function construirVistaGantt(tareas, colapsados) {
+    var codigos = calcularWBSGantt(tareas);
+    var filas = [];
+    function recorrer(parentId, nivel) {
+      hijosDeTarea(tareas, parentId).forEach((t) => {
+        var tieneHijos = esTareaResumen(tareas, t.id);
+        filas.push({ tarea: t, nivel, codigo: codigos[t.id] || "", esResumen: tieneHijos });
+        if (tieneHijos && !colapsados.has(t.id)) recorrer(t.id, nivel + 1);
+      });
+    }
+    recorrer(null, 0);
+    return filas;
+  }
+  function generaCicloGantt(tareas, desdeId, haciaId) {
+    if (desdeId === haciaId) return true;
+    var pila = [haciaId],
+      visitado = new Set();
+    while (pila.length) {
+      var actual = pila.pop();
+      if (actual === desdeId) return true;
+      if (visitado.has(actual)) continue;
+      visitado.add(actual);
+      tareas.forEach((t) => {
+        if ((t.predecesoras || []).includes(actual)) pila.push(t.id);
+      });
+    }
+    return false;
+  }
+  var COLUMNAS_TABLA_GANTT = [
+    { clave: "sel", ancho: 36 },
+    { clave: "id", ancho: 55 },
+    { clave: "nombre", ancho: 250 },
+    { clave: "inicio", ancho: 100 },
+    { clave: "duracion", ancho: 40 },
+    { clave: "predecesora", ancho: 40 },
+    { clave: "acciones", ancho: 45 },
+  ];
+  var TABLA_TAREAS_ANCHO_MIN = COLUMNAS_TABLA_GANTT.reduce((sum, c2) => sum + c2.ancho, 0);
   function tg({ budgets: t, licitaciones: i, cfg: r, setToast: n }) {
     var l = [
         "#3b82f6",
@@ -35430,55 +35879,134 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           return !1;
         }
       }),
-      [f, I] = V(!1);
+      [diasNoLaborales, setDiasNoLaborales] = V(() => {
+        try {
+          const E = localStorage.getItem("enlace_gantt_v1");
+          return E ? JSON.parse(E).diasNoLaborales || [] : [];
+        } catch (E) {
+          return [];
+        }
+      }),
+      [f, I] = V(!1),
+      [colapsados, setColapsados] = V(() => new Set()),
+      [seleccionadas, setSeleccionadas] = V(() => new Set()),
+      [panelTareasVisible, setPanelTareasVisible] = V(!0),
+      [anchoTareasPx, setAnchoTareasPx] = V(null),
+      [fechaCalendarioSeleccionada, setFechaCalendarioSeleccionada] = V(null),
+      [historialGanttTamano, setHistorialGanttTamano] = V(0);
+    var gridPanelesRef = Re.useRef(null);
+    var ANCHO_TAREAS_MIN = 480;
+    var iniciarArrastrePanelTareas = function (ev) {
+      ev.preventDefault();
+      var contenedor = gridPanelesRef.current;
+      if (!contenedor) return;
+      var rectContenedor = contenedor.getBoundingClientRect(),
+        panelTareas = contenedor.firstElementChild,
+        anchoInicial = panelTareas ? panelTareas.getBoundingClientRect().width : rectContenedor.width * 0.5,
+        xInicial = ev.clientX;
+      var mover = function (e2) {
+        var delta = e2.clientX - xInicial,
+          maximo = rectContenedor.width * 0.7,
+          nuevoAncho = Math.max(ANCHO_TAREAS_MIN, Math.min(maximo, anchoInicial + delta));
+        setAnchoTareasPx(Math.round(nuevoAncho));
+      };
+      var soltar = function () {
+        window.removeEventListener("mousemove", mover);
+        window.removeEventListener("mouseup", soltar);
+      };
+      window.addEventListener("mousemove", mover);
+      window.addEventListener("mouseup", soltar);
+    };
+    var historialGanttRef = Re.useRef([]);
+    var HISTORIAL_GANTT_MAX = 30;
+    var pushHistorialGantt = function (estadoTareas) {
+      var hist = historialGanttRef.current;
+      if (hist.length >= HISTORIAL_GANTT_MAX) hist.shift();
+      hist.push(JSON.parse(JSON.stringify(estadoTareas)));
+      setHistorialGanttTamano(hist.length);
+    };
+    var deshacerGantt = function () {
+      var hist = historialGanttRef.current;
+      if (!hist.length) return;
+      var snap = hist.pop();
+      setHistorialGanttTamano(hist.length);
+      z(snap);
+      n("↶ Cambio deshecho");
+    };
+    var _pendingEditSnapshotGantt = Re.useRef(null);
+    var _pendingValorInicialGantt = Re.useRef(void 0);
+    var iniciarEdicionCampoGantt = function (valorInicial) {
+      if (_pendingEditSnapshotGantt.current == null) {
+        _pendingEditSnapshotGantt.current = JSON.parse(JSON.stringify(g));
+        _pendingValorInicialGantt.current = valorInicial;
+      }
+    };
+    var confirmarEdicionCampoGantt = function (valorFinal) {
+      if (_pendingEditSnapshotGantt.current != null) {
+        var pendiente = _pendingEditSnapshotGantt.current;
+        var valorInicial = _pendingValorInicialGantt.current;
+        _pendingEditSnapshotGantt.current = null;
+        _pendingValorInicialGantt.current = void 0;
+        var sinCambios =
+          valorInicial !== void 0 &&
+          valorFinal !== void 0 &&
+          String(valorInicial) === String(valorFinal);
+        if (sinCambios) return;
+        var hist = historialGanttRef.current;
+        if (hist.length >= HISTORIAL_GANTT_MAX) hist.shift();
+        hist.push(pendiente);
+        setHistorialGanttTamano(hist.length);
+      }
+    };
+    var guardarGanttAhora = function (mostrarToast) {
+      var J, re;
+      try {
+        localStorage.setItem(
+          "enlace_gantt_v1",
+          JSON.stringify({
+            origen: s,
+            selectedId: p,
+            escala: b,
+            fechaInicio: j,
+            tareas: g,
+            nextId: B,
+            diasNoLaborales: diasNoLaborales,
+          }),
+        );
+        if (p) {
+          var M = "enlace_gantt_" + s + "_" + p,
+            q =
+              s === "presupuesto"
+                ? ((J = (t || []).find((Q) => Q.id === parseInt(p))) == null
+                    ? void 0
+                    : J.descripcion) || "N° " + p
+                : ((re = (i || []).find((Q) => Q.id === parseInt(p))) == null
+                    ? void 0
+                    : re.nombreObra) || "Licit. " + p;
+          localStorage.setItem(
+            M,
+            JSON.stringify({
+              origen: s,
+              selectedId: p,
+              escala: b,
+              fechaInicio: j,
+              tareas: g,
+              nextId: B,
+              diasNoLaborales: diasNoLaborales,
+              nombre: q,
+              savedAt: new Date().toISOString(),
+            }),
+          );
+        }
+        if (mostrarToast) n("💾 Gantt guardado");
+      } catch (Q) {}
+    };
     Re.useEffect(() => {
       if (!(!v || g.length === 0)) {
-        var E = setTimeout(() => {
-          var J, re;
-          try {
-            if (
-              (localStorage.setItem(
-                "enlace_gantt_v1",
-                JSON.stringify({
-                  origen: s,
-                  selectedId: p,
-                  escala: b,
-                  fechaInicio: j,
-                  tareas: g,
-                  nextId: B,
-                }),
-              ),
-              p)
-            ) {
-              var M = "enlace_gantt_" + s + "_" + p,
-                q =
-                  s === "presupuesto"
-                    ? ((J = (t || []).find((Q) => Q.id === parseInt(p))) == null
-                        ? void 0
-                        : J.descripcion) || "N° " + p
-                    : ((re = (i || []).find((Q) => Q.id === parseInt(p))) ==
-                      null
-                        ? void 0
-                        : re.nombreObra) || "Licit. " + p;
-              localStorage.setItem(
-                M,
-                JSON.stringify({
-                  origen: s,
-                  selectedId: p,
-                  escala: b,
-                  fechaInicio: j,
-                  tareas: g,
-                  nextId: B,
-                  nombre: q,
-                  savedAt: new Date().toISOString(),
-                }),
-              );
-            }
-          } catch (Q) {}
-        }, 800);
+        var E = setTimeout(() => guardarGanttAhora(!1), 800);
         return () => clearTimeout(E);
       }
-    }, [g, b, j, v]);
+    }, [g, b, j, v, diasNoLaborales]);
     var D = (() => {
         var E = [];
         try {
@@ -35499,8 +36027,14 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           F(E.fechaInicio),
           z(E.tareas),
           w(E.nextId || E.tareas.length + 1),
+          setDiasNoLaborales(E.diasNoLaborales || []),
+          setFechaCalendarioSeleccionada(null),
           x(!0),
           I(!1),
+          setSeleccionadas(new Set()),
+          setColapsados(new Set()),
+          (historialGanttRef.current = []),
+          setHistorialGanttTamano(0),
           n("✅ Gantt cargado: " + E.nombre));
       },
       R = (E, M) => {
@@ -35521,6 +36055,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
               label: `${E.idMP || "—"} — ${E.nombreObra || "Sin nombre"}`,
             })),
       y = () => {
+        pushHistorialGantt(g);
         (z((E) => [
           ...E,
           {
@@ -35530,40 +36065,117 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
             duracion: 5,
             color: l[B % l.length],
             responsable: "",
+            parentId: null,
+            predecesoras: [],
+            esHito: !1,
           },
         ]),
           w((E) => E + 1));
       },
       P = (E, M, q) =>
         z((J) => J.map((re) => (re.id === E ? u(d({}, re), { [M]: q }) : re))),
-      A = (E) => z((M) => M.filter((q) => q.id !== E)),
+      A = (E) => {
+        pushHistorialGantt(g);
+        (z((prev) => {
+          var aEliminar = new Set([E]);
+          var cambiado = !0;
+          while (cambiado) {
+            cambiado = !1;
+            prev.forEach((t2) => {
+              if (t2.parentId && aEliminar.has(t2.parentId) && !aEliminar.has(t2.id)) {
+                (aEliminar.add(t2.id), (cambiado = !0));
+              }
+            });
+          }
+          return prev
+            .filter((t2) => !aEliminar.has(t2.id))
+            .map((t2) =>
+              u(d({}, t2), {
+                predecesoras: (t2.predecesoras || []).filter((pid) => !aEliminar.has(pid)),
+              }),
+            );
+        }),
+          setSeleccionadas((prev) => {
+            var next = new Set(prev);
+            next.delete(E);
+            return next;
+          }));
+      },
       S = () => {
         if (!p) {
           n("⚠️ Selecciona un origen primero.");
           return;
         }
-        var E = [];
+        if (g.length > 0) pushHistorialGantt(g);
+        var E = [],
+          siguienteId = 1;
         if (s === "presupuesto") {
           var M = t && t.find((Q) => Q.id === parseInt(p));
           if (!M) {
             n("⚠️ Presupuesto no encontrado.");
             return;
           }
-          var q = 0;
-          E = M.items
-            .filter((Q) => Q.desc)
-            .map((Q, G) => {
-              var ie = Math.max(1, Math.ceil((parseFloat(Q.cant) || 1) / 5)),
-                oe = {
-                  id: G + 1,
-                  nombre: Q.desc,
-                  inicio: q,
-                  duracion: ie,
-                  color: l[G % l.length],
-                  responsable: "",
-                };
-              return ((q += ie), oe);
+          var capitulosOrdenados = [...(M.capitulos || [])].sort(
+              (a2, b2) => (parseFloat(a2.orden) || 0) - (parseFloat(b2.orden) || 0),
+            ),
+            itemsConDesc = (M.items || []).filter((Q) => Q.desc),
+            cursor = 0;
+          capitulosOrdenados.forEach((cap) => {
+            var itemsDelCap = itemsConDesc.filter((Q) => Q.capituloId === cap.id);
+            if (itemsDelCap.length === 0) return;
+            var capTaskId = siguienteId++;
+            E.push({
+              id: capTaskId,
+              nombre: cap.nombre || "Capítulo",
+              inicio: cursor,
+              duracion: 1,
+              color: l[(capTaskId - 1) % l.length],
+              responsable: "",
+              parentId: null,
+              predecesoras: [],
+              esHito: !1,
+              codigoCapitulo: cap.codigo || "",
             });
+            itemsDelCap.forEach((Q) => {
+              var dias = Math.max(1, Math.ceil((parseFloat(Q.cant) || 1) / 5)),
+                itemTaskId = siguienteId++;
+              (E.push({
+                id: itemTaskId,
+                nombre: Q.desc,
+                inicio: cursor,
+                duracion: dias,
+                color: l[(itemTaskId - 1) % l.length],
+                responsable: "",
+                parentId: capTaskId,
+                predecesoras: [],
+                esHito: !1,
+              }),
+                (cursor += dias));
+            });
+          });
+          var itemsSinCapitulo = itemsConDesc.filter(
+            (Q) => !capitulosOrdenados.some((cap) => cap.id === Q.capituloId),
+          );
+          itemsSinCapitulo.forEach((Q) => {
+            var dias = Math.max(1, Math.ceil((parseFloat(Q.cant) || 1) / 5)),
+              itemTaskId = siguienteId++;
+            (E.push({
+              id: itemTaskId,
+              nombre: Q.desc,
+              inicio: cursor,
+              duracion: dias,
+              color: l[(itemTaskId - 1) % l.length],
+              responsable: "",
+              parentId: null,
+              predecesoras: [],
+              esHito: !1,
+            }),
+              (cursor += dias));
+          });
+          if (E.length === 0) {
+            n("⚠️ El presupuesto no tiene partidas para importar.");
+            return;
+          }
         } else {
           var J = i && i.find((Q) => Q.id === parseInt(p));
           if (!J) {
@@ -35579,63 +36191,242 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
           if (re.length === 0)
             E = [
               {
-                id: 1,
+                id: siguienteId++,
                 nombre: "Etapa 1",
                 inicio: 0,
                 duracion: 10,
                 color: l[0],
                 responsable: "",
+                parentId: null,
+                predecesoras: [],
+                esHito: !1,
               },
             ];
           else {
             var q = 0;
-            E = re.map((G, ie) => {
-              var oe = {
-                id: ie + 1,
-                nombre: G.trim(),
-                inicio: q,
-                duracion: 7,
-                color: l[ie % l.length],
-                responsable: "",
-              };
+            E = re.map((G) => {
+              var idTarea = siguienteId++,
+                oe = {
+                  id: idTarea,
+                  nombre: G.trim(),
+                  inicio: q,
+                  duracion: 7,
+                  color: l[(idTarea - 1) % l.length],
+                  responsable: "",
+                  parentId: null,
+                  predecesoras: [],
+                  esHito: !1,
+                };
               return ((q += 7), oe);
             });
           }
         }
-        (w(E.length + 1), z(E), x(!0));
+        (w(siguienteId),
+          z(E),
+          x(!0),
+          setSeleccionadas(new Set()),
+          setColapsados(new Set()));
       },
+      toggleSeleccion = (id, multi) => {
+        setSeleccionadas((prev) => {
+          var next = multi ? new Set(prev) : new Set();
+          if (next.has(id) && multi) next.delete(id);
+          else next.add(id);
+          return next;
+        });
+      },
+      toggleColapso = (id) => {
+        setColapsados((prev) => {
+          var next = new Set(prev);
+          if (next.has(id)) next.delete(id);
+          else next.add(id);
+          return next;
+        });
+      },
+      moverTarea = (id, dir) => {
+        pushHistorialGantt(g);
+        z((prev) => {
+          var arr = [...prev],
+            tarea = arr.find((t2) => t2.id === id);
+          if (!tarea) return prev;
+          var hermanos = arr.filter((t2) => (t2.parentId || null) === (tarea.parentId || null)),
+            pos = hermanos.findIndex((t2) => t2.id === id),
+            destino = pos + dir;
+          if (destino < 0 || destino >= hermanos.length) return prev;
+          var otroId = hermanos[destino].id,
+            i1 = arr.findIndex((t2) => t2.id === id),
+            i2 = arr.findIndex((t2) => t2.id === otroId),
+            tmp = arr[i1];
+          ((arr[i1] = arr[i2]), (arr[i2] = tmp));
+          return arr;
+        });
+      },
+      subirSeleccionada = () => {
+        if (seleccionadas.size !== 1) {
+          n("⚠️ Selecciona una sola tarea para mover.");
+          return;
+        }
+        moverTarea([...seleccionadas][0], -1);
+      },
+      bajarSeleccionada = () => {
+        if (seleccionadas.size !== 1) {
+          n("⚠️ Selecciona una sola tarea para mover.");
+          return;
+        }
+        moverTarea([...seleccionadas][0], 1);
+      },
+      aplicarSangria = () => {
+        if (seleccionadas.size === 0) {
+          n("⚠️ Selecciona al menos una tarea.");
+          return;
+        }
+        pushHistorialGantt(g);
+        z((prev) => {
+          var arr = prev.map((t2) => d({}, t2));
+          seleccionadas.forEach((id) => {
+            var tarea = arr.find((t2) => t2.id === id);
+            if (!tarea) return;
+            var hermanos = arr.filter(
+                (t2) => (t2.parentId || null) === (tarea.parentId || null),
+              ),
+              pos = hermanos.findIndex((t2) => t2.id === id);
+            if (pos <= 0) return;
+            var nuevoPadre = hermanos[pos - 1];
+            if (nuevoPadre.id === id) return;
+            tarea.parentId = nuevoPadre.id;
+          });
+          return arr;
+        });
+      },
+      quitarSangria = () => {
+        if (seleccionadas.size === 0) {
+          n("⚠️ Selecciona al menos una tarea.");
+          return;
+        }
+        pushHistorialGantt(g);
+        z((prev) => {
+          var arr = prev.map((t2) => d({}, t2));
+          seleccionadas.forEach((id) => {
+            var tarea = arr.find((t2) => t2.id === id);
+            if (!tarea || !tarea.parentId) return;
+            var padre = arr.find((t2) => t2.id === tarea.parentId);
+            tarea.parentId = padre ? padre.parentId || null : null;
+          });
+          return arr;
+        });
+      },
+      enlazarSeleccionadas = () => {
+        if (seleccionadas.size < 2) {
+          n("⚠️ Selecciona al menos 2 tareas para enlazar.");
+          return;
+        }
+        pushHistorialGantt(g);
+        var vista = construirVistaGantt(g, colapsados),
+          idsEnOrden = vista.map((f2) => f2.tarea.id).filter((id) => seleccionadas.has(id)),
+          nuevasTareas = g.map((t2) => u(d({}, t2), { predecesoras: [...(t2.predecesoras || [])] })),
+          bloqueado = !1;
+        for (var idx = 1; idx < idsEnOrden.length; idx++) {
+          var desdeId = idsEnOrden[idx - 1],
+            haciaId = idsEnOrden[idx],
+            haciaTask = nuevasTareas.find((t2) => t2.id === haciaId);
+          if (desdeId === haciaId || !haciaTask) continue;
+          if ((haciaTask.predecesoras || []).includes(desdeId)) continue;
+          if (generaCicloGantt(nuevasTareas, desdeId, haciaId)) {
+            bloqueado = !0;
+            continue;
+          }
+          haciaTask.predecesoras = [...(haciaTask.predecesoras || []), desdeId];
+        }
+        (z(nuevasTareas),
+          n(bloqueado ? "⚠️ Algunos enlaces se omitieron por generar ciclos." : "🔗 Tareas enlazadas"));
+      },
+      desenlazarSeleccionadas = () => {
+        if (seleccionadas.size < 2) {
+          n("⚠️ Selecciona las tareas enlazadas para desenlazar.");
+          return;
+        }
+        pushHistorialGantt(g);
+        (z((prev) =>
+          prev.map((t2) =>
+            seleccionadas.has(t2.id)
+              ? u(d({}, t2), {
+                  predecesoras: (t2.predecesoras || []).filter((pid) => !seleccionadas.has(pid)),
+                })
+              : t2,
+          ),
+        ),
+          n("⛓ Enlace eliminado"));
+      },
+      agregarHito = () => {
+        pushHistorialGantt(g);
+        var parentId = null;
+        if (seleccionadas.size === 1) {
+          var selTask = g.find((t2) => t2.id === [...seleccionadas][0]);
+          if (selTask) parentId = selTask.parentId || null;
+        }
+        (z((prev) => [
+          ...prev,
+          {
+            id: B,
+            nombre: "Nuevo hito",
+            inicio: 0,
+            duracion: 0,
+            color: l[B % l.length],
+            responsable: "",
+            parentId,
+            predecesoras: [],
+            esHito: !0,
+          },
+        ]),
+          w((prev) => prev + 1));
+      },
+      fechasCalc = calcularFechasGantt(g, j, diasNoLaborales),
+      diasNoLaboralesSet = new Set(diasNoLaborales),
+      hoyISOGantt = fechaISOLocalGantt(new Date()),
+      codigosPorId = calcularWBSGantt(g),
+      vistaTareas = construirVistaGantt(g, colapsados),
       O =
         g.length > 0
-          ? Math.max(...g.map((E) => E.inicio + E.duracion)) + 2
+          ? Math.max(
+              ...g.map((E) => {
+                var fe = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion };
+                return fe.inicio + fe.duracion;
+              }),
+            ) + 2
           : 30,
       U = () => {
         if (b === "dias")
           return Array.from({ length: O }, (q, J) => {
-            var re = new Date(j);
-            return (
-              re.setDate(re.getDate() + J),
-              { label: `${re.getDate()}/${re.getMonth() + 1}`, dias: 1, idx: J }
-            );
+            var re = sumarDiasCalendarioGantt(parsearFechaLocalGantt(j), J),
+              iso = fechaISOLocalGantt(re),
+              nombreDia = re.toLocaleDateString("es-CL", { weekday: "short" }).replace(".", "");
+            return {
+              label: `${nombreDia.charAt(0).toUpperCase() + nombreDia.slice(1)} ${re.getDate()}`,
+              dias: 1,
+              idx: J,
+              iso: iso,
+              esDomingo: re.getDay() === 0,
+              esNoLaboral: diasNoLaboralesSet.has(iso),
+              esHoy: iso === hoyISOGantt,
+              esSeleccionado: iso === fechaCalendarioSeleccionada,
+            };
           });
         if (b === "semanas") {
           var E = Math.ceil(O / 7) + 1;
           return Array.from({ length: E }, (q, J) => {
-            var re = new Date(j);
-            return (
-              re.setDate(re.getDate() + J * 7),
-              {
-                label: `Sem ${J + 1}
+            var re = sumarDiasCalendarioGantt(parsearFechaLocalGantt(j), J * 7);
+            return {
+              label: `Sem ${J + 1}
 ${re.getDate()}/${re.getMonth() + 1}`,
-                dias: 7,
-                idx: J,
-              }
-            );
+              dias: 7,
+              idx: J,
+            };
           });
         }
         if (b === "meses") {
           var M = Math.ceil(O / 30) + 1;
           return Array.from({ length: M }, (q, J) => {
-            var re = new Date(j);
+            var re = parsearFechaLocalGantt(j);
             return (
               re.setMonth(re.getMonth() + J),
               {
@@ -35652,8 +36443,16 @@ ${re.getDate()}/${re.getMonth() + 1}`,
         return [];
       },
       $ = U(),
-      ee = b === "dias" ? 32 : b === "semanas" ? 64 : 80,
-      Y = 36,
+      fondoColumnaGantt = (col) =>
+        !col
+          ? "transparent"
+          : col.esNoLaboral
+            ? "repeating-linear-gradient(45deg, rgba(220,38,38,.22) 0 4px, rgba(220,38,38,.08) 4px 8px)"
+            : col.esDomingo
+              ? "rgba(148,163,184,.18)"
+              : "transparent",
+      ee = b === "dias" ? 38 : b === "semanas" ? 72 : 88,
+      Y = 44,
       le = 220,
       Z = le + $.length * ee,
       X = (E) =>
@@ -35669,11 +36468,8 @@ ${re.getDate()}/${re.getMonth() + 1}`,
             ? Math.max(ee * 0.4, (E / 7) * ee)
             : Math.max(ee * 0.3, (E / 30) * ee),
       T = (E) => {
-        var M = new Date(j);
-        return (
-          M.setDate(M.getDate() + E),
-          M.toLocaleDateString("es-CL", { day: "2-digit", month: "2-digit" })
-        );
+        var M = sumarDiasCalendarioGantt(parsearFechaLocalGantt(j), E);
+        return M.toLocaleDateString("es-CL", { day: "2-digit", month: "2-digit" });
       },
       L = () => {
         var E =
@@ -35689,17 +36485,20 @@ ${re.getDate()}/${re.getMonth() + 1}`,
             (Q) =>
               `<th style="min-width:${ee}px;padding:4px;font-size:10px;text-align:center;background:#1a3060;color:#fff;border:1px solid #ccc">${Q.label.replace(/\n/g, "<br/>")}</th>`,
           ).join(""),
-          J = g
-            .map((Q) => {
-              var G = $.map((ie) => {
-                var oe = ie.idx * ie.dias,
-                  ce = oe + ie.dias,
-                  te = Q.inicio,
-                  fe = Q.inicio + Q.duracion,
-                  ve = te < ce && fe > oe;
-                return `<td style="border:1px solid #eee;min-width:${ee}px;padding:0 2px;height:20px">${ve ? '<div style="height:12px;border:2px solid ' + Q.color + ';border-radius:3px"></div>' : ""}</td>`;
-              }).join("");
-              return `<tr><td style="padding:4px 8px;font-size:11px;border:1px solid #eee;white-space:nowrap">${Q.nombre}</td>${G}</tr>`;
+          J = vistaTareas
+            .map((fila) => {
+              var Q = fila.tarea,
+                feQ = fechasCalc[Q.id] || { inicio: Q.inicio, duracion: Q.duracion },
+                G = $.map((ie) => {
+                  var oe = ie.idx * ie.dias,
+                    ce = oe + ie.dias,
+                    te = feQ.inicio,
+                    fe = feQ.inicio + feQ.duracion,
+                    ve = te < ce && fe > oe;
+                  return `<td style="border:1px solid #eee;min-width:${ee}px;padding:0 2px;height:20px">${ve ? '<div style="height:12px;border:2px solid ' + Q.color + ';border-radius:3px"></div>' : ""}</td>`;
+                }).join(""),
+                nombreIndentado = "&nbsp;".repeat(fila.nivel * 3) + (fila.codigo ? fila.codigo + " — " : "") + Q.nombre;
+              return `<tr><td style="padding:4px 8px;font-size:11px;border:1px solid #eee;white-space:nowrap;${fila.esResumen ? "font-weight:bold" : ""}">${nombreIndentado}</td>${G}</tr>`;
             })
             .join(""),
           re = window.open("", "_blank");
@@ -35768,13 +36567,15 @@ ${re.getDate()}/${re.getMonth() + 1}`,
               [],
               ["Tarea", ...re],
             ];
-          g.forEach((xe) => {
-            var he = [xe.nombre || ""];
+          vistaTareas.forEach((fila) => {
+            var xe = fila.tarea,
+              feXe = fechasCalc[xe.id] || { inicio: xe.inicio, duracion: xe.duracion },
+              he = ["  ".repeat(fila.nivel) + (fila.codigo ? fila.codigo + " " : "") + (xe.nombre || "")];
             (($ || []).forEach((je) => {
               var ke = je.idx * je.dias,
                 At = ke + je.dias,
-                ci = xe.inicio,
-                li = xe.inicio + xe.duracion,
+                ci = feXe.inicio,
+                li = feXe.inicio + feXe.duracion,
                 ui = ci < At && li > ke;
               he.push(ui ? "■" : "");
             }),
@@ -35831,7 +36632,9 @@ ${re.getDate()}/${re.getMonth() + 1}`,
             he && (he.s = ce);
           }
           for (var je = 4; je < Q.length; je++) {
-            var ke = g[je - 4] || {},
+            var filaKe = vistaTareas[je - 4] || {},
+              ke = filaKe.tarea || {},
+              feKe = fechasCalc[ke.id] || { inicio: ke.inicio, duracion: ke.duracion },
               At = fe(ke.color);
             for (var ci = 0; ci < ie; ci++) {
               var li = G[q.utils.encode_cell({ r: je, c: ci })];
@@ -35848,8 +36651,8 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                   var ui = $[ci - 1],
                     Wi = ui.idx * ui.dias,
                     di = Wi + ui.dias,
-                    yi = ke.inicio,
-                    Pi = ke.inicio + ke.duracion,
+                    yi = feKe.inicio,
+                    Pi = feKe.inicio + feKe.duracion,
                     Mi = yi < di && Pi > Wi;
                   Mi &&
                     ((li.v = "■"),
@@ -35885,30 +36688,48 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                 ? `Carta Gantt — ${E.descripcion}`
                 : `Carta Gantt — ${E.nombreObra || E.idMP}`
               : "Carta Gantt",
-            q = new Date(j),
+            q = parsearFechaLocalGantt(j),
             J = (re) =>
               String(re || "")
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
                 .replace(/\"/g, "&quot;"),
-            re = (xe) => {
-              var he = new Date(q);
-              return (
-                he.setDate(he.getDate() + (parseInt(xe) || 0)),
-                he.toISOString()
-              );
-            },
-            Q = g
-              .map((xe, he) => {
-                var je = he + 1,
-                  ke = re(xe.inicio),
-                  At = re(xe.inicio + xe.duracion),
-                  ci = Math.max(0, (parseInt(xe.duracion) || 0) * 8);
-                return `<Task><UID>${je}</UID><ID>${je}</ID><Name>${J(xe.nombre || "")}</Name><Start>${ke}</Start><Finish>${At}</Finish><Duration>PT${ci}H0M0S</Duration><Manual>1</Manual></Task>`;
+            re = (fecha) => fechaISOLocalGantt(fecha) + "T00:00:00",
+            vistaExport = construirVistaGantt(g, new Set()),
+            idsValidos = new Set(g.map((xe) => xe.id)),
+            HORARIO_LABORAL = "<WorkingTimes><WorkingTime><FromTime>08:00:00</FromTime><ToTime>13:00:00</ToTime></WorkingTime><WorkingTime><FromTime>14:00:00</FromTime><ToTime>18:00:00</ToTime></WorkingTime></WorkingTimes>",
+            weekDaysXml = [1, 2, 3, 4, 5, 6, 7]
+              .map((dayType) => {
+                var laborable = dayType !== 1;
+                return `<WeekDay><DayType>${dayType}</DayType><DayWorking>${laborable ? 1 : 0}</DayWorking>${laborable ? HORARIO_LABORAL : ""}</WeekDay>`;
               })
               .join(""),
-            G = `<?xml version="1.0" encoding="UTF-8"?>\n<Project xmlns="http://schemas.microsoft.com/project">\n<Name>${J(M)}</Name>\n<StartDate>${q.toISOString()}</StartDate>\n<Tasks>\n<Task><UID>0</UID><ID>0</ID><Name>${J(M)}</Name><Summary>1</Summary></Task>\n${Q}\n</Tasks>\n</Project>`,
+            exceptionsXml = (diasNoLaborales || [])
+              .map((iso) => {
+                var f2 = re(parsearFechaLocalGantt(iso));
+                return `<Exception><TimePeriod><FromDate>${f2}</FromDate><ToDate>${f2}</ToDate></TimePeriod><DayWorking>0</DayWorking></Exception>`;
+              })
+              .join(""),
+            calendarsXml = `<Calendars><Calendar><UID>1</UID><Name>Estandar (Lun-Sab, domingo no laborable)</Name><IsBaseCalendar>1</IsBaseCalendar><WeekDays>${weekDaysXml}</WeekDays><Exceptions>${exceptionsXml}</Exceptions></Calendar></Calendars>`,
+            Q = vistaExport
+              .map((fila) => {
+                var xe = fila.tarea,
+                  feXe = fechasCalc[xe.id] || { inicioFecha: q, finFecha: q, duracionLaboral: 1 },
+                  ke = re(feXe.inicioFecha),
+                  At = re(feXe.finFecha),
+                  ci = Math.max(0, Math.round((feXe.duracionLaboral || 0) * 8)),
+                  predecessorLinks = (xe.predecesoras || [])
+                    .filter((pid) => idsValidos.has(pid))
+                    .map(
+                      (pid) =>
+                        `<PredecessorLink><PredecessorUID>${pid}</PredecessorUID><Type>1</Type><CrossProject>0</CrossProject></PredecessorLink>`,
+                    )
+                    .join("");
+                return `<Task><UID>${xe.id}</UID><ID>${xe.id}</ID><Name>${J(xe.nombre || "")}</Name><OutlineLevel>${fila.nivel + 1}</OutlineLevel><OutlineNumber>${J(fila.codigo)}</OutlineNumber><WBS>${J(fila.codigo)}</WBS><Start>${ke}</Start><Finish>${At}</Finish><Duration>PT${ci}H0M0S</Duration><DurationFormat>7</DurationFormat><Summary>${fila.esResumen ? 1 : 0}</Summary><Milestone>${xe.esHito ? 1 : 0}</Milestone><CalendarUID>1</CalendarUID>${predecessorLinks}</Task>`;
+              })
+              .join(""),
+            G = `<?xml version="1.0" encoding="UTF-8"?>\n<Project xmlns="http://schemas.microsoft.com/project">\n<Name>${J(M)}</Name>\n<StartDate>${re(q)}</StartDate>\n<CalendarUID>1</CalendarUID>\n${calendarsXml}\n<Tasks>\n${Q}\n</Tasks>\n</Project>`,
             ie = new Blob([G], { type: "application/xml;charset=utf-8" }),
             oe = URL.createObjectURL(ie),
             ce = document.createElement("a");
@@ -35926,6 +36747,90 @@ ${re.getDate()}/${re.getMonth() + 1}`,
           n("❌ No se pudo exportar a MS Project");
         }
       };
+    var actualizarFechaTarea = function (id, campo, valorISO) {
+      if (!valorISO) return;
+      var tarea = g.find((x) => x.id === id);
+      if (!tarea) return;
+      pushHistorialGantt(g);
+      if (campo === "inicio") {
+        var nuevaInicioFecha = siguienteDiaLaboralGantt(parsearFechaLocalGantt(valorISO), diasNoLaboralesSet);
+        P(id, "inicio", diasCalendarioEntreGantt(parsearFechaLocalGantt(j), nuevaInicioFecha));
+      } else if (campo === "fin") {
+        var fe = fechasCalc[id],
+          inicioFecha = fe ? fe.inicioFecha : parsearFechaLocalGantt(j),
+          finFecha = parsearFechaLocalGantt(valorISO);
+        if (finFecha < inicioFecha) finFecha = inicioFecha;
+        P(id, "duracion", contarDiasLaboralesEntreGantt(inicioFecha, finFecha, diasNoLaboralesSet));
+      }
+    };
+    var marcarFechaNoLaboral = function () {
+      if (!fechaCalendarioSeleccionada) return;
+      setDiasNoLaborales((prev) =>
+        prev.includes(fechaCalendarioSeleccionada) ? prev : [...prev, fechaCalendarioSeleccionada],
+      );
+      n("🚫 " + fechaCalendarioSeleccionada + " marcado como no laboral");
+    };
+    var marcarFechaLaboral = function () {
+      if (!fechaCalendarioSeleccionada) return;
+      setDiasNoLaborales((prev) => prev.filter((f2) => f2 !== fechaCalendarioSeleccionada));
+      n("✓ " + fechaCalendarioSeleccionada + " marcado como laboral");
+    };
+    var filaIndexPorId = {};
+    vistaTareas.forEach((fila, idx) => {
+      filaIndexPorId[fila.tarea.id] = idx;
+    });
+    var resolverAncestroVisibleGantt = (id) => {
+      var actual = id;
+      while (actual !== void 0 && filaIndexPorId[actual] === void 0) {
+        var tareaActual = g.find((x) => x.id === actual);
+        actual = tareaActual ? tareaActual.parentId || void 0 : void 0;
+      }
+      return actual;
+    };
+    var conexionesGantt = [];
+    vistaTareas.forEach((fila) => {
+      if (fila.esResumen) return;
+      var tarea = fila.tarea,
+        idxSucc = filaIndexPorId[tarea.id];
+      (tarea.predecesoras || []).forEach((predId) => {
+        if (esTareaResumen(g, predId)) return;
+        // Si la predecesora está oculta (dentro de una tarea resumen colapsada),
+        // la flecha se redirige visualmente al resumen visible más cercano —
+        // ajuste solo de presentación, no cambia predecesoras ni fechas guardadas.
+        var predIdVisible = resolverAncestroVisibleGantt(predId),
+          idxPred = predIdVisible === void 0 ? void 0 : filaIndexPorId[predIdVisible];
+        if (idxPred === void 0) return;
+        var fePred = fechasCalc[predIdVisible] || { inicio: 0, duracion: 1 },
+          feSucc = fechasCalc[tarea.id] || { inicio: 0, duracion: 1 },
+          xPredFin = X(fePred.inicio + fePred.duracion),
+          yPred = idxPred * Y + Y / 2,
+          xSuccIni = X(feSucc.inicio),
+          ySucc = idxSucc * Y + Y / 2,
+          xMedio = xPredFin + 10;
+        conexionesGantt.push({
+          key: predId + "-" + tarea.id,
+          points: `${xPredFin},${yPred} ${xMedio},${yPred} ${xMedio},${ySucc} ${xSuccIni},${ySucc}`,
+        });
+      });
+    });
+    var Grupo = (titulo, hijos, extraStyle) =>
+      e.jsxs("div", {
+        style: u(d({}, { display: "flex", flexDirection: "column", gap: 4, flexShrink: 0 }), extraStyle || {}),
+        children: [
+          e.jsx("div", {
+            style: {
+              fontSize: 9,
+              fontWeight: 800,
+              color: a.muted,
+              textTransform: "uppercase",
+              letterSpacing: ".06em",
+              whiteSpace: "nowrap",
+            },
+            children: titulo,
+          }),
+          e.jsx("div", { style: { display: "flex", gap: 5, flexWrap: "nowrap" }, children: hijos }),
+        ],
+      });
     return e.jsxs("div", {
       style: { padding: "24px 28px", maxWidth: 1200, margin: "0 auto" },
       children: [
@@ -36093,80 +36998,225 @@ ${re.getDate()}/${re.getMonth() + 1}`,
               ],
             }),
             e.jsxs("div", {
-              style: { display: "flex", gap: 8, marginTop: 14 },
+              style: { marginTop: 14, display: "flex", flexDirection: "column", gap: 10 },
               children: [
-                e.jsxs("button", {
-                  style: u(d({}, c.btn("p")), {
-                    padding: "9px 18px",
-                    fontSize: 13,
-                    fontWeight: 700,
-                  }),
-                  onClick: S,
+                e.jsxs("div", {
+                  style: {
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 16,
+                    rowGap: 10,
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  },
                   children: [
-                    "⚡ Cargar tareas desde ",
-                    s === "presupuesto" ? "presupuesto" : "licitación",
+                    e.jsxs("button", {
+                      style: u(d({}, c.btn("p")), {
+                        padding: "9px 18px",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        flexShrink: 0,
+                      }),
+                      onClick: S,
+                      children: [
+                        "⚡ Cargar tareas desde ",
+                        s === "presupuesto" ? "presupuesto" : "licitación",
+                      ],
+                    }),
+                    v &&
+                      Grupo(
+                        "Archivos",
+                        [
+                          e.jsxs("button", {
+                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                            onClick: () => I((E) => !E),
+                            children: [
+                              "📂 Mis Gantts",
+                              D.length > 0 &&
+                                e.jsx("span", {
+                                  style: {
+                                    background: a.accent,
+                                    color: "#050a10",
+                                    borderRadius: 99,
+                                    fontSize: 10,
+                                    padding: "1px 6px",
+                                    marginLeft: 4,
+                                  },
+                                  children: D.length,
+                                }),
+                            ],
+                          }),
+                          e.jsx("button", {
+                            style: u(d({}, c.btn("g")), { padding: "6px 9px", fontSize: 12 }),
+                            onClick: L,
+                            children: "🖨️ PDF",
+                          }),
+                          e.jsx("button", {
+                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                            onClick: Ee,
+                            children: "📊 Excel",
+                          }),
+                          e.jsx("button", {
+                            style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                            title:
+                              "Descarga un .xml para importar en Microsoft Project.\nLuego: Archivo → Abrir → selecciona el .xml",
+                            onClick: Me,
+                            children: "🗂️ MS Project",
+                          }),
+                        ],
+                        { marginLeft: "auto" },
+                      ),
                   ],
                 }),
                 v &&
-                  e.jsxs(e.Fragment, {
+                  b === "dias" &&
+                  fechaCalendarioSeleccionada &&
+                  e.jsxs("div", {
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      flexWrap: "wrap",
+                      padding: "8px 10px",
+                      background: a.sb,
+                      borderRadius: 8,
+                      border: `1px solid ${a.border}`,
+                    },
                     children: [
-                      e.jsx("button", {
-                        style: u(d({}, c.btn("g")), {
-                          padding: "9px 14px",
-                          fontSize: 13,
-                        }),
-                        onClick: y,
-                        children: "➕ Agregar tarea",
-                      }),
-                      e.jsxs("button", {
-                        style: u(d({}, c.btn("s")), {
-                          padding: "9px 14px",
-                          fontSize: 13,
-                          marginLeft: "auto",
-                        }),
-                        onClick: () => I((E) => !E),
+                      e.jsxs("span", {
+                        style: { fontSize: 12, color: a.text, fontWeight: 600 },
                         children: [
-                          "📂 Mis Gantts ",
-                          D.length > 0 &&
-                            e.jsx("span", {
-                              style: {
-                                background: a.accent,
-                                color: "#050a10",
-                                borderRadius: 99,
-                                fontSize: 10,
-                                padding: "1px 6px",
-                                marginLeft: 4,
-                              },
-                              children: D.length,
-                            }),
+                          "📅 Fecha seleccionada: ",
+                          (() => {
+                            var fSel = parsearFechaLocalGantt(fechaCalendarioSeleccionada),
+                              nombreDia = fSel.toLocaleDateString("es-CL", { weekday: "long" });
+                            return (
+                              nombreDia.charAt(0).toUpperCase() +
+                              nombreDia.slice(1) +
+                              " " +
+                              fSel.toLocaleDateString("es-CL", { day: "2-digit", month: "2-digit", year: "numeric" })
+                            );
+                          })(),
                         ],
                       }),
                       e.jsx("button", {
-                        style: u(d({}, c.btn("g")), {
-                          padding: "9px 14px",
-                          fontSize: 13,
+                        style: u(d({}, c.btn("d")), {
+                          padding: "5px 10px",
+                          fontSize: 12,
+                          opacity: diasNoLaboralesSet.has(fechaCalendarioSeleccionada) || fechaCalendarioSeleccionada === null ? 0.4 : 1,
+                          cursor: diasNoLaboralesSet.has(fechaCalendarioSeleccionada) ? "not-allowed" : "pointer",
                         }),
-                        onClick: L,
-                        children: "🖨️ Imprimir / PDF",
+                        disabled: diasNoLaboralesSet.has(fechaCalendarioSeleccionada),
+                        onClick: marcarFechaNoLaboral,
+                        title: diasNoLaboralesSet.has(fechaCalendarioSeleccionada) ? "Ya está marcada como no laboral" : "Marcar esta fecha como no laboral",
+                        children: "🚫 Marcar no laboral",
                       }),
                       e.jsx("button", {
                         style: u(d({}, c.btn("s")), {
-                          padding: "9px 14px",
-                          fontSize: 13,
+                          padding: "5px 10px",
+                          fontSize: 12,
+                          opacity: !diasNoLaboralesSet.has(fechaCalendarioSeleccionada) ? 0.4 : 1,
+                          cursor: !diasNoLaboralesSet.has(fechaCalendarioSeleccionada) ? "not-allowed" : "pointer",
                         }),
-                        onClick: Ee,
-                        children: "📊 Exportar Excel",
+                        disabled: !diasNoLaboralesSet.has(fechaCalendarioSeleccionada),
+                        onClick: marcarFechaLaboral,
+                        title: diasNoLaboralesSet.has(fechaCalendarioSeleccionada)
+                          ? "Volver a marcar esta fecha como laboral"
+                          : "Esta fecha ya es laboral",
+                        children: "✓ Marcar laboral",
                       }),
                       e.jsx("button", {
-                        style: u(d({}, c.btn("s")), {
-                          padding: "9px 14px",
-                          fontSize: 13,
-                        }),
-                        title:
-                          "Descarga un .xml para importar en Microsoft Project.\nLuego: Archivo → Abrir → selecciona el .xml",
-                        onClick: Me,
-                        children: "🗂️ MS Project (XML)",
+                        style: u(d({}, c.btn("s")), { padding: "5px 10px", fontSize: 12, marginLeft: "auto" }),
+                        onClick: () => setFechaCalendarioSeleccionada(null),
+                        children: "Cerrar",
                       }),
+                    ],
+                  }),
+                v &&
+                  e.jsxs("div", {
+                    style: {
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 16,
+                      rowGap: 12,
+                      alignItems: "flex-start",
+                      paddingTop: 10,
+                      borderTop: `1px solid ${a.border}`,
+                    },
+                    children: [
+                      Grupo("Tareas", [
+                        e.jsx("button", {
+                          style: u(d({}, c.btn("g")), { padding: "6px 10px", fontSize: 12 }),
+                          onClick: y,
+                          children: "➕ Agregar tarea",
+                        }),
+                        e.jsx("button", {
+                          style: u(d({}, c.btn("g")), { padding: "6px 10px", fontSize: 12 }),
+                          onClick: agregarHito,
+                          children: "◆ Hito",
+                        }),
+                      ]),
+                      e.jsx("div", { style: { width: 1, flexShrink: 0, alignSelf: "stretch", background: a.border } }),
+                      Grupo(
+                        "Orden",
+                        [
+                          [subirSeleccionada, "↑ Subir"],
+                          [bajarSeleccionada, "↓ Bajar"],
+                          [aplicarSangria, "→ Sangría"],
+                          [quitarSangria, "← Quitar sangría"],
+                        ].map(([accion, etiqueta]) =>
+                          e.jsx(
+                            "button",
+                            {
+                              style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                              onClick: accion,
+                              children: etiqueta,
+                            },
+                            etiqueta,
+                          ),
+                        ),
+                      ),
+                      e.jsx("div", { style: { width: 1, flexShrink: 0, alignSelf: "stretch", background: a.border } }),
+                      Grupo("Dependencias", [
+                        e.jsx("button", {
+                          style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                          onClick: enlazarSeleccionadas,
+                          children: "🔗 Enlazar",
+                        }),
+                        e.jsx("button", {
+                          style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                          onClick: desenlazarSeleccionadas,
+                          children: "⛓ Desenlazar",
+                        }),
+                      ]),
+                      e.jsx("div", { style: { width: 1, flexShrink: 0, alignSelf: "stretch", background: a.border } }),
+                      Grupo("Cambios", [
+                        e.jsx("button", {
+                          title: "Guardar el Gantt ahora",
+                          style: u(d({}, c.btn("s")), { padding: "6px 9px", fontSize: 12 }),
+                          onClick: () => guardarGanttAhora(!0),
+                          children: "💾 Guardar",
+                        }),
+                        e.jsx("button", {
+                          style: u(d({}, c.btn("s")), {
+                            padding: "6px 9px",
+                            fontSize: 12,
+                            opacity: historialGanttTamano === 0 ? 0.4 : 1,
+                            cursor: historialGanttTamano === 0 ? "not-allowed" : "pointer",
+                          }),
+                          disabled: historialGanttTamano === 0,
+                          title:
+                            historialGanttTamano === 0
+                              ? "No hay cambios para deshacer"
+                              : "Deshacer último cambio (" +
+                                historialGanttTamano +
+                                " disponible" +
+                                (historialGanttTamano !== 1 ? "s" : "") +
+                                ")",
+                          onClick: deshacerGantt,
+                          children: "↶ Deshacer",
+                        }),
+                      ]),
                     ],
                   }),
               ],
@@ -36290,157 +37340,266 @@ ${re.getDate()}/${re.getMonth() + 1}`,
         v &&
           g.length > 0 &&
           e.jsxs("div", {
+            ref: gridPanelesRef,
             style: {
               display: "grid",
-              gridTemplateColumns: "340px 1fr",
-              gap: 16,
+              gridTemplateColumns: panelTareasVisible
+                ? `${anchoTareasPx ? anchoTareasPx + "px" : "50%"} 6px 1fr`
+                : "1fr",
               alignItems: "start",
             },
             children: [
-              e.jsxs("div", {
-                style: c.card,
-                children: [
-                  e.jsx("div", {
-                    style: u(d({}, c.ct), { marginBottom: 12 }),
-                    children: "Tareas",
-                  }),
-                  e.jsx("div", {
-                    style: { maxHeight: 500, overflowY: "auto" },
-                    children: g.map((E, M) =>
-                      e.jsxs(
-                        "div",
-                        {
-                          style: {
-                            background: a.sb,
-                            borderRadius: 8,
-                            padding: "10px 12px",
-                            marginBottom: 8,
-                            borderLeft: `3px solid ${E.color}`,
-                          },
-                          children: [
-                            e.jsxs("div", {
-                              style: {
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 6,
-                                marginBottom: 6,
-                              },
+              panelTareasVisible &&
+                e.jsxs("div", {
+                  style: u(d({}, c.card), { padding: "14px 0 0 0", overflow: "hidden", minWidth: 0 }),
+                  children: [
+                    e.jsxs("div", {
+                      style: {
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: 4,
+                        padding: "0 14px 10px 14px",
+                        borderBottom: `1px solid ${a.border}`,
+                      },
+                      children: [
+                        e.jsx("div", { style: c.ct, children: "Tareas" }),
+                        e.jsx("button", {
+                          onClick: () => setPanelTareasVisible(!1),
+                          style: u(d({}, c.btn("s")), { padding: "3px 8px", fontSize: 11 }),
+                          title: "Ocultar panel de tareas y ampliar el diagrama",
+                          children: "◀ Ocultar",
+                        }),
+                      ],
+                    }),
+                    e.jsx("div", {
+                      style: { maxHeight: 500, overflow: "auto" },
+                      children: e.jsxs("table", {
+                        style: { width: TABLA_TAREAS_ANCHO_MIN, tableLayout: "fixed", borderCollapse: "collapse" },
+                        children: [
+                          e.jsx("colgroup", {
+                            children: COLUMNAS_TABLA_GANTT.map((col) =>
+                              e.jsx("col", { style: { width: col.ancho }, key: col.clave }),
+                            ),
+                          }),
+                          e.jsx("thead", {
+                            children: e.jsxs("tr", {
+                              style: { background: a.sb, borderBottom: `2px solid ${a.border}` },
                               children: [
-                                e.jsx("input", {
-                                  style: u(d({}, c.inp), {
-                                    flex: 1,
-                                    fontSize: 12,
-                                    padding: "4px 7px",
-                                  }),
-                                  value: E.nombre,
-                                  onChange: (q) =>
-                                    P(E.id, "nombre", q.target.value),
-                                  placeholder: "Nombre tarea",
+                                e.jsx("th", {
+                                  style: {
+                                    width: 36,
+                                    padding: "6px 2px",
+                                    position: "sticky",
+                                    left: 0,
+                                    top: 0,
+                                    zIndex: 3,
+                                    background: a.sb,
+                                  },
                                 }),
-                                e.jsx("button", {
-                                  style: u(d({}, c.btn("d")), {
-                                    padding: "3px 6px",
-                                    fontSize: 13,
-                                  }),
-                                  onClick: () => A(E.id),
-                                  children: "×",
+                                e.jsx("th", {
+                                  style: {
+                                    width: 55,
+                                    padding: "6px 2px",
+                                    fontSize: 9,
+                                    color: a.muted,
+                                    textAlign: "left",
+                                    textTransform: "uppercase",
+                                    position: "sticky",
+                                    left: 36,
+                                    top: 0,
+                                    zIndex: 3,
+                                    background: a.sb,
+                                  },
+                                  children: "ID",
                                 }),
+                                e.jsx("th", {
+                                  style: {
+                                    width: 250,
+                                    padding: "6px 4px",
+                                    fontSize: 9,
+                                    color: a.muted,
+                                    textAlign: "left",
+                                    textTransform: "uppercase",
+                                    position: "sticky",
+                                    left: 91,
+                                    top: 0,
+                                    zIndex: 3,
+                                    background: a.sb,
+                                    boxShadow: `2px 0 0 ${a.border}`,
+                                  },
+                                  children: "Nombre",
+                                }),
+                                e.jsx("th", { style: { width: 100, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Inicio" }),
+                                e.jsx("th", { style: { width: 40, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Duración" }),
+                                e.jsx("th", { style: { width: 40, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Predecesora" }),
+                                e.jsx("th", { style: { width: 45, padding: "6px 2px", position: "sticky", top: 0, zIndex: 2, background: a.sb } }),
                               ],
                             }),
-                            e.jsxs("div", {
-                              style: {
-                                display: "grid",
-                                gridTemplateColumns: "1fr 1fr",
-                                gap: 6,
-                              },
-                              children: [
-                                e.jsxs("div", {
+                          }),
+                          e.jsx("tbody", {
+                            children: vistaTareas.map((fila, M) => {
+                              var E = fila.tarea,
+                                feE = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion, inicioFecha: parsearFechaLocalGantt(j), finFecha: parsearFechaLocalGantt(j) },
+                                tienePredecesoras = (E.predecesoras || []).length > 0,
+                                predecesorasTexto = (E.predecesoras || [])
+                                  .map((pid) => codigosPorId[pid])
+                                  .filter(Boolean)
+                                  .join(", "),
+                                inicioISO = fechaISOLocalGantt(feE.inicioFecha),
+                                fondoFila = fila.esResumen ? a.accent + "1a" : M % 2 === 0 ? a.card : a.sb;
+                              return e.jsxs(
+                                "tr",
+                                {
+                                  style: {
+                                    height: Y,
+                                    background: fondoFila,
+                                    boxShadow: seleccionadas.has(E.id) ? `inset 0 0 0 2px ${a.accent}` : "none",
+                                    borderBottom: `1px solid ${a.border}`,
+                                  },
                                   children: [
-                                    e.jsx("div", {
-                                      style: {
-                                        fontSize: 10,
-                                        color: a.muted,
-                                        marginBottom: 3,
-                                      },
-                                      children: "INICIO (día)",
-                                    }),
-                                    e.jsx("input", {
-                                      style: u(d({}, c.inp), {
-                                        fontSize: 12,
-                                        padding: "3px 6px",
-                                        textAlign: "center",
+                                    e.jsx("td", {
+                                      style: { borderLeft: `3px solid ${E.color}`, padding: "0 2px", textAlign: "center", position: "sticky", left: 0, zIndex: 1, background: fondoFila },
+                                      children: e.jsx("input", {
+                                        type: "checkbox",
+                                        checked: seleccionadas.has(E.id),
+                                        onChange: () => toggleSeleccion(E.id, !0),
+                                        title: "Seleccionar tarea",
                                       }),
-                                      type: "number",
-                                      value: E.inicio,
-                                      onChange: (q) =>
-                                        P(
-                                          E.id,
-                                          "inicio",
-                                          parseInt(q.target.value) || 0,
-                                        ),
-                                      min: "0",
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 4px", fontSize: 10, fontWeight: 800, color: fila.esResumen ? a.accent : a.muted, whiteSpace: "nowrap", position: "sticky", left: 36, zIndex: 1, background: fondoFila },
+                                      title: fila.codigo,
+                                      children: [
+                                        fila.esResumen ? (colapsados.has(E.id) ? "▶ " : "▼ ") : "",
+                                        fila.codigo,
+                                      ].join(""),
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: `0 4px 0 ${4 + fila.nivel * 14}px`, position: "sticky", left: 91, zIndex: 1, background: fondoFila, boxShadow: `2px 0 0 ${a.border}` },
+                                      children: e.jsxs("div", {
+                                        style: { display: "flex", alignItems: "center", gap: 4 },
+                                        children: [
+                                          fila.esResumen
+                                            ? e.jsx("button", {
+                                                onClick: () => toggleColapso(E.id),
+                                                style: { background: "transparent", border: "none", cursor: "pointer", color: a.muted, fontSize: 10, padding: 0, flexShrink: 0 },
+                                                title: colapsados.has(E.id) ? "Expandir" : "Contraer",
+                                                children: colapsados.has(E.id) ? "▶" : "▼",
+                                              })
+                                            : null,
+                                          E.esHito && e.jsx("span", { style: { fontSize: 11, flexShrink: 0 }, children: "◆" }),
+                                          e.jsx("input", {
+                                            style: u(d({}, c.inp), {
+                                              flex: 1,
+                                              minWidth: 60,
+                                              fontSize: 12,
+                                              padding: "3px 6px",
+                                              fontWeight: fila.esResumen ? 700 : 400,
+                                              overflow: "hidden",
+                                              textOverflow: "ellipsis",
+                                            }),
+                                            value: E.nombre,
+                                            onChange: (q) => P(E.id, "nombre", q.target.value),
+                                            onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
+                                            onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
+                                            placeholder: "Nombre tarea",
+                                            title: E.nombre,
+                                          }),
+                                        ],
+                                      }),
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 4px" },
+                                      children: e.jsx("input", {
+                                        style: u(d({}, c.inp), { width: "100%", fontSize: 11, padding: "3px 4px", boxSizing: "border-box" }),
+                                        type: "date",
+                                        value: inicioISO,
+                                        onChange: (q) => actualizarFechaTarea(E.id, "inicio", q.target.value),
+                                        disabled: fila.esResumen || tienePredecesoras,
+                                        title: fila.esResumen
+                                          ? "Calculado desde subtareas"
+                                          : tienePredecesoras
+                                            ? "Calculado desde la predecesora"
+                                            : "Inicio",
+                                      }),
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 2px" },
+                                      children: e.jsx("input", {
+                                        style: u(d({}, c.inp), { width: "100%", fontSize: 11, padding: "3px 2px", textAlign: "center", boxSizing: "border-box" }),
+                                        type: "number",
+                                        value: fila.esResumen ? feE.duracionLaboral : E.duracion,
+                                        onChange: (q) => P(E.id, "duracion", parseInt(q.target.value) || 1),
+                                        onFocus: (q) => iniciarEdicionCampoGantt(q.target.value),
+                                        onBlur: (q) => confirmarEdicionCampoGantt(q.target.value),
+                                        min: "0",
+                                        disabled: fila.esResumen || !!E.esHito,
+                                        title: "Duración (días laborales) — Fin: " + feE.finFecha.toLocaleDateString("es-CL"),
+                                      }),
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 2px", fontSize: 10, color: a.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
+                                      title: predecesorasTexto || "",
+                                      children: predecesorasTexto || "—",
+                                    }),
+                                    e.jsx("td", {
+                                      style: { padding: "0 2px", textAlign: "center" },
+                                      children: e.jsx("button", {
+                                        style: u(d({}, c.btn("d")), { padding: "2px 4px", fontSize: 11 }),
+                                        onClick: () => A(E.id),
+                                        title: "Eliminar tarea",
+                                        children: "×",
+                                      }),
                                     }),
                                   ],
-                                }),
-                                e.jsxs("div", {
-                                  children: [
-                                    e.jsx("div", {
-                                      style: {
-                                        fontSize: 10,
-                                        color: a.muted,
-                                        marginBottom: 3,
-                                      },
-                                      children: "DURACIÓN (días)",
-                                    }),
-                                    e.jsx("input", {
-                                      style: u(d({}, c.inp), {
-                                        fontSize: 12,
-                                        padding: "3px 6px",
-                                        textAlign: "center",
-                                      }),
-                                      type: "number",
-                                      value: E.duracion,
-                                      onChange: (q) =>
-                                        P(
-                                          E.id,
-                                          "duracion",
-                                          parseInt(q.target.value) || 1,
-                                        ),
-                                      min: "1",
-                                    }),
-                                  ],
-                                }),
-                              ],
+                                },
+                                E.id,
+                              );
                             }),
-                            e.jsxs("div", {
-                              style: {
-                                marginTop: 6,
-                                fontSize: 10,
-                                color: a.muted,
-                              },
-                              children: [
-                                T(E.inicio),
-                                " → ",
-                                T(E.inicio + E.duracion),
-                                " (",
-                                E.duracion,
-                                " días)",
-                              ],
-                            }),
-                          ],
-                        },
-                        E.id,
-                      ),
-                    ),
+                          }),
+                        ],
+                      }),
+                    }),
+                  ],
+                }),
+              panelTareasVisible &&
+                e.jsx("div", {
+                  onMouseDown: iniciarArrastrePanelTareas,
+                  title: "Arrastrar para redimensionar",
+                  style: {
+                    alignSelf: "stretch",
+                    minHeight: 200,
+                    cursor: "col-resize",
+                    display: "flex",
+                    alignItems: "stretch",
+                    justifyContent: "center",
+                    padding: "0 2px",
+                  },
+                  children: e.jsx("div", {
+                    style: { width: 2, background: a.border, borderRadius: 2, margin: "0 auto" },
                   }),
-                ],
-              }),
+                }),
               e.jsxs("div", {
-                style: u(d({}, c.card), { overflowX: "auto" }),
+                style: u(d({}, c.card), { overflowX: "auto", minWidth: 0 }),
                 children: [
-                  e.jsx("div", {
-                    style: u(d({}, c.ct), { marginBottom: 12 }),
-                    children: "Diagrama",
+                  e.jsxs("div", {
+                    style: u(d({}, c.ct), {
+                      marginBottom: 12,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }),
+                    children: [
+                      e.jsx("span", { children: "Diagrama" }),
+                      !panelTareasVisible &&
+                        e.jsx("button", {
+                          onClick: () => setPanelTareasVisible(!0),
+                          style: u(d({}, c.btn("s")), { padding: "3px 8px", fontSize: 11, textTransform: "none" }),
+                          title: "Mostrar panel de tareas",
+                          children: "▶ Mostrar tareas",
+                        }),
+                    ],
                   }),
                   e.jsx("div", {
                     style: { overflowX: "auto" },
@@ -36452,43 +37611,73 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                             display: "flex",
                             borderBottom: `2px solid ${a.border}`,
                             marginBottom: 0,
+                            background: a.sb,
+                            borderRadius: "8px 8px 0 0",
                           },
                           children: [
                             e.jsx("div", {
                               style: {
                                 width: le,
                                 flexShrink: 0,
-                                fontSize: 11,
-                                color: a.muted,
-                                padding: "6px 8px",
-                                fontWeight: 700,
+                                fontSize: 12,
+                                color: a.text,
+                                padding: "9px 8px",
+                                fontWeight: 800,
+                                letterSpacing: ".03em",
                               },
                               children: "TAREA",
                             }),
                             $.map((E, M) =>
-                              e.jsx(
+                              e.jsxs(
                                 "div",
                                 {
+                                  onClick: b === "dias" ? () => setFechaCalendarioSeleccionada(E.iso === fechaCalendarioSeleccionada ? null : E.iso) : void 0,
                                   style: {
                                     width: ee,
                                     flexShrink: 0,
-                                    fontSize: 10,
-                                    color: a.muted,
+                                    fontSize: 11,
+                                    fontWeight: 700,
+                                    color: a.text,
                                     textAlign: "center",
-                                    padding: "4px 2px",
+                                    padding: "8px 2px",
                                     borderLeft: `1px solid ${a.border}`,
-                                    lineHeight: 1.3,
+                                    lineHeight: 1.35,
                                     whiteSpace: "pre-line",
+                                    background: fondoColumnaGantt(E),
+                                    cursor: b === "dias" ? "pointer" : "default",
+                                    outline: E.esSeleccionado ? `2px solid ${a.accent}` : "none",
+                                    outlineOffset: -2,
+                                    position: "relative",
                                   },
-                                  children: E.label,
+                                  children: [
+                                    E.label,
+                                    E.esHoy &&
+                                      e.jsx("div", {
+                                        style: {
+                                          position: "absolute",
+                                          bottom: 2,
+                                          left: "50%",
+                                          transform: "translateX(-50%)",
+                                          width: 4,
+                                          height: 4,
+                                          borderRadius: "50%",
+                                          background: a.accent,
+                                        },
+                                      }),
+                                  ],
                                 },
                                 M,
                               ),
                             ),
                           ],
                         }),
-                        g.map((E, M) =>
-                          e.jsxs(
+                        e.jsxs("div", {
+                          style: { position: "relative" },
+                          children: [
+                            vistaTareas.map((fila, M) => {
+                          var E = fila.tarea,
+                            feE = fechasCalc[E.id] || { inicio: E.inicio, duracion: E.duracion };
+                          return e.jsxs(
                             "div",
                             {
                               style: {
@@ -36496,22 +37685,32 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                 alignItems: "center",
                                 height: Y,
                                 borderBottom: `1px solid ${a.border}`,
-                                background: M % 2 === 0 ? "transparent" : a.sb,
+                                background: fila.esResumen
+                                  ? a.accent + "1a"
+                                  : M % 2 === 0
+                                    ? "transparent"
+                                    : a.sb,
                                 position: "relative",
                               },
                               children: [
-                                e.jsx("div", {
+                                e.jsxs("div", {
                                   style: {
                                     width: le,
                                     flexShrink: 0,
                                     fontSize: 12,
-                                    padding: "0 8px",
+                                    padding: `0 8px 0 ${8 + fila.nivel * 14}px`,
                                     overflow: "hidden",
                                     textOverflow: "ellipsis",
                                     whiteSpace: "nowrap",
                                     color: a.text,
+                                    fontWeight: fila.esResumen ? 800 : 400,
                                   },
-                                  children: E.nombre,
+                                  children: [
+                                    fila.esResumen ? (colapsados.has(E.id) ? "▶ " : "▼ ") : "",
+                                    fila.codigo,
+                                    " ",
+                                    E.nombre,
+                                  ],
                                 }),
                                 $.map((q, J) =>
                                   e.jsx(
@@ -36522,39 +37721,130 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                         height: Y,
                                         flexShrink: 0,
                                         borderLeft: `1px solid ${a.border}`,
+                                        background: fondoColumnaGantt(q),
+                                        outline: q.esSeleccionado ? `2px solid ${a.accent}` : "none",
+                                        outlineOffset: -2,
                                       },
                                     },
                                     J,
                                   ),
                                 ),
-                                e.jsx("div", {
-                                  style: {
-                                    position: "absolute",
-                                    left: X(E.inicio),
-                                    width: W(E.duracion),
-                                    height: 22,
-                                    top: (Y - 22) / 2,
-                                    background: E.color,
-                                    borderRadius: 4,
-                                    opacity: 0.85,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontSize: 10,
-                                    color: "#fff",
-                                    fontWeight: 600,
-                                    overflow: "hidden",
-                                    whiteSpace: "nowrap",
-                                    padding: "0 6px",
-                                    boxShadow: "0 1px 4px rgba(0,0,0,.3)",
-                                  },
-                                  children: W(E.duracion) > 40 ? E.nombre : "",
-                                }),
+                                fila.esResumen
+                                  ? e.jsxs(e.Fragment, {
+                                      children: [
+                                        e.jsx("div", {
+                                          style: {
+                                            position: "absolute",
+                                            left: X(feE.inicio),
+                                            width: Math.max(4, W(feE.duracion)),
+                                            height: 8,
+                                            top: (Y - 8) / 2,
+                                            background: "#1a3060",
+                                            borderRadius: 2,
+                                          },
+                                        }),
+                                        e.jsx("div", {
+                                          style: {
+                                            position: "absolute",
+                                            left: X(feE.inicio) - 1,
+                                            width: 8,
+                                            height: 14,
+                                            top: (Y - 14) / 2,
+                                            background: "#1a3060",
+                                            clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+                                          },
+                                        }),
+                                        e.jsx("div", {
+                                          style: {
+                                            position: "absolute",
+                                            left: X(feE.inicio) + Math.max(4, W(feE.duracion)) - 7,
+                                            width: 8,
+                                            height: 14,
+                                            top: (Y - 14) / 2,
+                                            background: "#1a3060",
+                                            clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+                                          },
+                                        }),
+                                      ],
+                                    })
+                                  : E.esHito
+                                    ? e.jsx("div", {
+                                        style: {
+                                          position: "absolute",
+                                          left: X(feE.inicio) - 7,
+                                          width: 14,
+                                          height: 14,
+                                          top: (Y - 14) / 2,
+                                          background: E.color,
+                                          transform: "rotate(45deg)",
+                                          boxShadow: "0 1px 4px rgba(0,0,0,.3)",
+                                        },
+                                      })
+                                    : e.jsx("div", {
+                                        style: {
+                                          position: "absolute",
+                                          left: X(feE.inicio),
+                                          width: W(feE.duracion),
+                                          height: 22,
+                                          top: (Y - 22) / 2,
+                                          background: E.color,
+                                          borderRadius: 4,
+                                          opacity: 0.85,
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "center",
+                                          fontSize: 10,
+                                          color: "#fff",
+                                          fontWeight: 600,
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          padding: "0 6px",
+                                          boxShadow: "0 1px 4px rgba(0,0,0,.3)",
+                                        },
+                                        children: W(feE.duracion) > 40 ? E.nombre : "",
+                                      }),
                               ],
                             },
                             E.id,
-                          ),
-                        ),
+                          );
+                        }),
+                            e.jsxs("svg", {
+                              style: {
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: Z,
+                                height: vistaTareas.length * Y,
+                                pointerEvents: "none",
+                              },
+                              children: [
+                                e.jsx("defs", {
+                                  children: e.jsx("marker", {
+                                    id: "flechaGanttDep",
+                                    viewBox: "0 0 10 10",
+                                    refX: "8.5",
+                                    refY: "5",
+                                    markerWidth: "7",
+                                    markerHeight: "7",
+                                    orient: "auto-start-reverse",
+                                    children: e.jsx("path", { d: "M0,0 L10,5 L0,10 z", fill: "#dc2626" }),
+                                  }),
+                                }),
+                                conexionesGantt.map((cx) =>
+                                  e.jsx("polyline", {
+                                    points: cx.points,
+                                    fill: "none",
+                                    stroke: "#dc2626",
+                                    strokeWidth: 2,
+                                    strokeLinecap: "round",
+                                    strokeLinejoin: "round",
+                                    markerEnd: "url(#flechaGanttDep)",
+                                  }, cx.key),
+                                ),
+                              ],
+                            }),
+                          ],
+                        }),
                       ],
                     }),
                   }),
@@ -40372,15 +41662,43 @@ MATERIALES:
       estado: "activa",
       requierePartidasNuevas: false,
     },
+    {
+      id: "sol-007-renovacion-cubierta-osb",
+      nombre: "Renovación de cubierta sobre OSB",
+      descripcion: "Renovación completa de cubierta mediante instalación de tablero OSB estructural sobre la estructura existente, con revisión obligatoria de la estructura una vez retirada la cubierta, reparación puntual opcional, impermeabilización opcional y terminación final a elección entre teja asfáltica o zinc emballetado.",
+      rubro: "Techumbres y aguas lluvias",
+      tipoIntervencion: "Reposición",
+      partidas: [
+        { catalogId: 434, cantidadBase: 30, formulaCantidad: "por m²: superficie de cubierta existente de zinc ondulado a retirar", obligatoria: false, editable: true, motivo: "Opcional: incluir solo si la cubierta actual es de zinc ondulado y debe retirarse antes de instalar el OSB; no aplica si la estructura ya está sin cubierta." },
+        { catalogId: 439, cantidadBase: 1, formulaCantidad: "fija: 1 gl (revisión técnica de la estructura completa expuesta tras el retiro de la cubierta)", obligatoria: true, editable: true, motivo: "Obligatoria de verificación: revisión y evaluación de cerchas, costaneras, fijaciones, nivelación, corrosión y humedad de la estructura una vez retirada la cubierta existente. No incluye reparaciones ni refuerzos — solo diagnóstico." },
+        { catalogId: 44, cantidadBase: 1, formulaCantidad: "por unidad: cerchas de madera dañadas detectadas en la revisión (ajustar según resultado de la inspección)", obligatoria: false, editable: true, motivo: "Reparación puntual de cercha de madera detectada en la revisión estructural. Reparaciones estructurales: definir después de inspección — aún no existen partidas de catálogo para reemplazo de costaneras, refuerzo estructural general de techumbre, reparación de estructura Metalcon ni tratamiento de madera afectada." },
+        { catalogId: 435, cantidadBase: 30, formulaCantidad: "por m²: superficie de cubierta a cubrir con tablero OSB estructural", obligatoria: true, editable: true, motivo: "Ítem principal: base estructural OSB sobre la que se instala la impermeabilización y la terminación final." },
+        { catalogId: 436, cantidadBase: 30, formulaCantidad: "por m²: superficie de OSB a impermeabilizar con membrana asfáltica", obligatoria: false, editable: true, motivo: "Seleccionable: se recomienda como protección bajo la terminación final, pero puede omitirse según especificación del proyecto." },
+        { catalogId: 437, cantidadBase: 30, formulaCantidad: "por m²: superficie de OSB a terminar con teja asfáltica", obligatoria: false, editable: true, motivo: "Terminación alternativa 1 de 2: teja asfáltica. Excluyente con la partida 438 — elegir solo una terminación final.", excluyeCatalogIds: [438], grupoSeleccion: "grp-terminacion-cubierta-osb", seleccionMinima: 0, seleccionMaxima: 1 },
+        { catalogId: 438, cantidadBase: 30, formulaCantidad: "por m²: superficie de OSB a terminar con cubierta de zinc emballetado", obligatoria: false, editable: true, motivo: "Terminación alternativa 2 de 2: zinc emballetado. Excluyente con la partida 437 — elegir solo una terminación final.", excluyeCatalogIds: [437], grupoSeleccion: "grp-terminacion-cubierta-osb", seleccionMinima: 0, seleccionMaxima: 1 },
+      ],
+      preguntas: ["¿La cubierta actual es de zinc ondulado y debe retirarse, o ya está sin cubierta?", "¿Cuál es la superficie total en m² de la cubierta a renovar?", "¿Se detectaron elementos deteriorados, deformados, oxidados o fuera de nivel durante la revisión estructural?", "¿Se aplicará membrana asfáltica de impermeabilización sobre el OSB?", "¿La terminación final será teja asfáltica o zinc emballetado?"],
+      advertencias: [
+        "Alcance condicionado: el valor considera revisión de la estructura una vez retirada la cubierta existente. Si se detectan elementos deteriorados, deformados, oxidados o fuera de nivel, los trabajos de reparación o refuerzo deberán cotizarse y aprobarse adicionalmente antes de continuar.",
+        "Verificar en terreno el estado de la estructura de soporte (correas/cerchas), la pendiente de la cubierta, la ventilación de la techumbre y el estado de las canales antes de cotizar.",
+        "Reparaciones estructurales: definir después de inspección. Solo existe partida de catálogo para reparación puntual de cercha de madera (44); reemplazo de costaneras, refuerzo estructural general de techumbre, reparación de estructura Metalcon y tratamiento de madera afectada aún no tienen partida — no se inventaron precios, cotizar aparte una vez conocido el alcance real.",
+        "Canaletas y remates laterales para techumbre colonial sobre OSB: no existe partida específica en el catálogo; documentar como pendiente y cotizar por separado si el proyecto lo requiere.",
+        "Las partidas 437 y 438 son excluyentes entre sí: son terminaciones alternativas y no deben coexistir en la misma solución aplicada.",
+        "El retiro de la cubierta existente (434) no incluye transporte ni disposición de residuos; si corresponde, cotizar por separado.",
+      ],
+      requiereVisita: true,
+      estado: "activa",
+      requierePartidasNuevas: false,
+    },
   ];
 
-  function EcpSelectorSoluciones({ catalog, apus, materiales, cfg, budgetItems, capitulos, onClose, onApply }) {
+  function EcpSelectorSoluciones({ catalog, apus, materiales, cfg, budgetItems, capitulos, onClose, onApply, destinoActivoCapituloId }) {
     const [paso, setPaso] = V("lista"),
       [solucionId, setSolucionId] = V(null),
       [cantidades, setCantidades] = V({}),
       [marcadas, setMarcadas] = V(() => new Set()),
       [grupoElegido, setGrupoElegido] = V({}),
-      [capituloDestino, setCapituloDestino] = V("");
+      [capituloDestino, setCapituloDestino] = V(destinoActivoCapituloId || "");
 
     var solucion = SOLUCIONES_COMPUESTAS_ACTIVAS.find((sv) => sv.id === solucionId) || null;
     var catalogPorId = new Map((catalog || []).map((cv) => [cv.id, cv]));
@@ -40397,7 +41715,7 @@ MATERIALES:
           else if (!(p.grupoSeleccion in grupoInit)) grupoInit[p.grupoSeleccion] = null;
         } else if (p.obligatoria) marcInit.add(p.catalogId);
       });
-      (setSolucionId(sol.id), setCantidades(cantInit), setMarcadas(marcInit), setGrupoElegido(grupoInit), setCapituloDestino(""), setPaso("detalle"));
+      (setSolucionId(sol.id), setCantidades(cantInit), setMarcadas(marcInit), setGrupoElegido(grupoInit), setCapituloDestino(destinoActivoCapituloId || ""), setPaso("detalle"));
     }
 
     function estaSeleccionada(p) {
@@ -40436,7 +41754,7 @@ MATERIALES:
         precio: catItem.precio,
         _cid: String(catItem.id),
         _tipoCosto: "auto",
-        capituloId: capId || "",
+        capituloId: capId && capId !== "sin-capitulo" ? capId : "",
       };
       if (apuMatch) item._apuMatUnit = parseFloat(li(apuMatch, materiales || [], cfg).matTotal) || 0;
       (parseFloat(catItem.cantidadMinimaFacturable) > 0) && (item._cantidadMinimaFacturable = parseFloat(catItem.cantidadMinimaFacturable));
@@ -40447,6 +41765,9 @@ MATERIALES:
       catItem.sistemaConstructivo && (item._sistemaConstructivo = catItem.sistemaConstructivo);
       catItem.alcance && (item._alcance = catItem.alcance);
       catItem.especialidad && (item._especialidad = catItem.especialidad);
+      catItem.requiereRevisionEstructural && (item._requiereRevisionEstructural = true);
+      catItem.estadoRevision && (item._estadoRevision = catItem.estadoRevision);
+      catItem.notaVisiblePendiente && (item._notaVisible = catItem.notaVisiblePendiente);
       item._solucionOrigenId = solucion.id;
       item._solucionOrigenNombre = solucion.nombre;
       return item;
@@ -40641,6 +41962,90 @@ MATERIALES:
       }),
     });
   }
+  function ModalProteccionSalida({
+    tieneCliente,
+    faltaDescripcion,
+    onGuardarYSalir,
+    onGuardarBorrador,
+    onSeguirEditando,
+    onSalirSinGuardar,
+  }) {
+    return e.jsx("div", {
+      style: {
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,.6)",
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      children: e.jsxs("div", {
+        style: {
+          background: a.card,
+          border: `1px solid ${a.border}`,
+          borderRadius: 14,
+          padding: "28px 32px",
+          maxWidth: 420,
+          width: "90%",
+          boxShadow: "0 8px 32px rgba(0,0,0,.4)",
+        },
+        children: [
+          e.jsx("div", {
+            style: { fontSize: 18, fontWeight: 700, color: a.text, marginBottom: 8 },
+            children: tieneCliente
+              ? "Tienes cambios sin guardar"
+              : "Falta cliente para guardar el presupuesto",
+          }),
+          e.jsx("div", {
+            style: { fontSize: 14, color: a.muted, marginBottom: faltaDescripcion ? 12 : 24 },
+            children: tieneCliente
+              ? "Este presupuesto tiene cambios pendientes. Si sales ahora, podrías perder información importante."
+              : "Ya tienes trabajo avanzado en este presupuesto, pero aún no has asociado un cliente. Antes de salir, elige cómo quieres continuar.",
+          }),
+          faltaDescripcion &&
+            e.jsx("div", {
+              style: {
+                background: "rgba(251,146,60,0.1)",
+                border: "1px solid #fb923c",
+                borderRadius: 8,
+                padding: "8px 12px",
+                fontSize: 12,
+                color: "#fb923c",
+                marginBottom: 24,
+              },
+              children: "⚠️ También falta la descripción de la obra.",
+            }),
+          e.jsxs("div", {
+            style: { display: "flex", flexDirection: "column", gap: 8 },
+            children: [
+              tieneCliente
+                ? e.jsx("button", {
+                    style: c.btn("p"),
+                    onClick: onGuardarYSalir,
+                    children: "💾 Guardar y salir",
+                  })
+                : e.jsx("button", {
+                    style: c.btn("p"),
+                    onClick: onGuardarBorrador,
+                    children: "📋 Guardar como borrador sin cliente",
+                  }),
+              e.jsx("button", {
+                style: c.btn("s"),
+                onClick: onSeguirEditando,
+                children: "Seguir editando",
+              }),
+              e.jsx("button", {
+                style: c.btn("d"),
+                onClick: onSalirSinGuardar,
+                children: "Salir sin guardar",
+              }),
+            ],
+          }),
+        ],
+      }),
+    });
+  }
   function lg({
     clients: t,
     catalog: i,
@@ -40654,6 +42059,7 @@ MATERIALES:
     onDeletePlantillaUser: C,
     setToast: b,
     setMateriales: setMateriales,
+    guardRef,
   }) {
     var h = () => {
         const W = r.moItems || [],
@@ -40750,7 +42156,274 @@ MATERIALES:
       [P, A] = V(null),
       [S, O] = V(!0),
       [cargosSugeridos, setCargosSugeridos] = V(null),
-      [mostrarSelectorSoluciones, setMostrarSelectorSoluciones] = V(!1);
+      [mostrarSelectorSoluciones, setMostrarSelectorSoluciones] = V(!1),
+      [destinoActivoCapituloId, setDestinoActivoCapituloId] = V(null),
+      [historialTamano, setHistorialTamano] = V(0),
+      [itemSeleccionado, setItemSeleccionado] = V(null),
+      [hayPartidaCopiada, setHayPartidaCopiada] = V(!1),
+      [modalSalida, setModalSalida] = V(null);
+    // --- Protección de salida / guardado incompleto ---
+    // "dirty" se calcula comparando el estado actual contra una foto tomada
+    // al montar (y renovada tras cada guardado exitoso). Usa comparación
+    // estructural en vez de historialTamano porque este último no cubre
+    // cliente/fecha/notas/estado/hitos (solo ítems, capítulos y algunos
+    // campos de fila con blur), y el spec exige detectar cualquier cambio.
+    var initialIRef = Re.useRef(I);
+    var dirty = JSON.stringify(I) !== JSON.stringify(initialIRef.current);
+    // --- Portapapeles interno de partidas (duplicar / copiar / pegar) ---
+    // Solo vive en memoria (useRef) mientras este presupuesto está abierto;
+    // nunca localStorage ni portapapeles del sistema. Se limpia junto con el
+    // historial de deshacer (guardar, cancelar, cambiar de presupuesto).
+    var clipboardPartidaRef = Re.useRef(null);
+    var _uidCounterRef = Re.useRef(0);
+    var _generarItemUid = function() {
+      _uidCounterRef.current += 1;
+      return "it_" + Date.now().toString(36) + "_" + _uidCounterRef.current;
+    };
+    var _cloneItem = function(item) {
+      return JSON.parse(JSON.stringify(item));
+    };
+    // --- Historial temporal (undo) ---
+    // Vive solo en memoria (useRef, nunca localStorage/respaldos) y solo dura
+    // mientras este presupuesto está abierto: se limpia al guardar, cancelar,
+    // o si cambia el presupuesto que se está editando.
+    var historialRef = Re.useRef([]);
+    var HISTORIAL_MAX = 30;
+    var _cloneEstado = function(estado) {
+      return JSON.parse(JSON.stringify({
+        items: estado.items || [],
+        capitulos: estado.capitulos || [],
+        notas: estado.notas || "",
+        notasInternas: estado.notasInternas || "",
+        descripcion: estado.descripcion || "",
+        clienteId: estado.clienteId || "",
+        fecha: estado.fecha || "",
+        descuento: !!estado.descuento,
+        plazoEjecucion: estado.plazoEjecucion,
+        modoCosteo: estado.modoCosteo || "completo",
+        sinIva: !!estado.sinIva,
+      }));
+    };
+    // Una entrada de historial captura el estado del presupuesto (items,
+    // capitulos, orden dentro de "orden", notas, datos generales) más el
+    // capítulo activo, que vive como estado de React separado de I.
+    var _snapshotCompleto = function(estadoActual) {
+      return {
+        estado: _cloneEstado(estadoActual),
+        destinoActivoCapituloId: destinoActivoCapituloId,
+      };
+    };
+    var pushHistorial = function(estadoActual) {
+      var hist = historialRef.current;
+      if (hist.length >= HISTORIAL_MAX) hist.shift();
+      hist.push(_snapshotCompleto(estadoActual));
+      setHistorialTamano(hist.length);
+    };
+    // Captura diferida para campos de texto/número: iniciarEdicionCampo()
+    // guarda el estado ANTES de la primera modificación de una edición en
+    // curso; confirmarEdicionCampo() (en blur) recién ahí empuja esa copia
+    // al historial. Así una edición de muchas teclas produce un solo estado
+    // deshacible, no uno por tecla.
+    //
+    // La comparación de "¿cambió algo?" se hace con el valor crudo del input
+    // (ev.target.value en foco y en blur), no releyendo el estado React "I":
+    // si el blur llega en el mismo tick que el último onChange, "I" en este
+    // closure puede seguir siendo el valor previo al cambio (React todavía no
+    // terminó de re-renderizar), lo que hacía descartar por error historiales
+    // de cambios reales. El valor del input en el DOM siempre es el actual.
+    var _pendingEditSnapshot = Re.useRef(null);
+    var _pendingValorInicial = Re.useRef(void 0);
+    var iniciarEdicionCampo = function(valorInicial) {
+      if (_pendingEditSnapshot.current == null) {
+        _pendingEditSnapshot.current = _snapshotCompleto(I);
+        _pendingValorInicial.current = valorInicial;
+      }
+    };
+    var confirmarEdicionCampo = function(valorFinal) {
+      if (_pendingEditSnapshot.current != null) {
+        var pendiente = _pendingEditSnapshot.current;
+        var valorInicial = _pendingValorInicial.current;
+        _pendingEditSnapshot.current = null;
+        _pendingValorInicial.current = void 0;
+        var sinCambios =
+          valorInicial !== void 0 &&
+          valorFinal !== void 0 &&
+          String(valorInicial) === String(valorFinal);
+        if (sinCambios) return;
+        var hist = historialRef.current;
+        if (hist.length >= HISTORIAL_MAX) hist.shift();
+        hist.push(pendiente);
+        setHistorialTamano(hist.length);
+      }
+    };
+    var limpiarPortapapeles = function() {
+      clipboardPartidaRef.current = null;
+      setHayPartidaCopiada(!1);
+      setItemSeleccionado(null);
+    };
+    var limpiarHistorial = function() {
+      _pendingEditSnapshot.current = null;
+      historialRef.current = [];
+      setHistorialTamano(0);
+    };
+    var deshacerUltimo = function() {
+      var hist = historialRef.current;
+      if (!hist.length) return;
+      var snap = hist.pop();
+      setHistorialTamano(hist.length);
+      D(function(cur) {
+        return u(d({}, cur), snap.estado);
+      });
+      setDestinoActivoCapituloId(
+        snap.destinoActivoCapituloId != null ? snap.destinoActivoCapituloId : null,
+      );
+    };
+    // Duplicar: copia profunda de la partida en T, insertada inmediatamente
+    // debajo (mismo capítulo, mismo ordenDentroCapitulo para que el orden
+    // relativo se preserve incluso con capítulos activos). Un solo estado
+    // de deshacer por duplicado.
+    var duplicarPartida = function(T) {
+      if (!I.items[T]) return;
+      pushHistorial(I);
+      D(function(J) {
+        var items = [...J.items];
+        if (!items[T]) return J;
+        var copia = _cloneItem(items[T]);
+        copia._uid = _generarItemUid();
+        items.splice(T + 1, 0, copia);
+        return u(d({}, J), { items: items });
+      });
+      setItemSeleccionado(T + 1);
+    };
+    // Copiar: guarda una copia profunda de la partida seleccionada en el
+    // portapapeles interno (solo memoria, nunca localStorage ni el
+    // portapapeles del sistema). No modifica el presupuesto ni el historial.
+    var copiarPartida = function(T) {
+      if (T == null || !I.items[T]) return;
+      var item = I.items[T];
+      clipboardPartidaRef.current = {
+        item: _cloneItem(item),
+        capituloIdOrigen: item.capituloId || "",
+      };
+      setHayPartidaCopiada(!0);
+      setItemSeleccionado(T);
+    };
+    // Pegar: inserta una copia profunda de la partida copiada. Destino:
+    // capítulo activo si existe, si no el capítulo de origen. Posición:
+    // debajo de refIdx si esa partida pertenece al capítulo destino, si no
+    // al final del grupo destino.
+    var pegarPartida = function(refIdx) {
+      var clip = clipboardPartidaRef.current;
+      if (!clip) return;
+      pushHistorial(I);
+      D(function(J) {
+        var items = [...J.items];
+        var destino =
+          destinoActivoCapituloId != null && destinoActivoCapituloId !== ""
+            ? destinoActivoCapituloId === "sin-capitulo"
+              ? ""
+              : destinoActivoCapituloId
+            : clip.capituloIdOrigen;
+        var copia = _cloneItem(clip.item);
+        copia._uid = _generarItemUid();
+        copia.capituloId = destino;
+        if (
+          refIdx != null &&
+          items[refIdx] &&
+          (items[refIdx].capituloId || "") === (destino || "")
+        ) {
+          copia.ordenDentroCapitulo = items[refIdx].ordenDentroCapitulo;
+          items.splice(refIdx + 1, 0, copia);
+        } else {
+          var maxOrden = items.reduce(function(mx, it) {
+            return (it.capituloId || "") === (destino || "")
+              ? Math.max(mx, parseFloat(it.ordenDentroCapitulo) || 0)
+              : mx;
+          }, -Infinity);
+          copia.ordenDentroCapitulo = maxOrden === -Infinity ? 0 : maxOrden + 1;
+          items.push(copia);
+        }
+        return u(d({}, J), { items: items });
+      });
+    };
+    var deshacerUltimoRef = Re.useRef(deshacerUltimo);
+    deshacerUltimoRef.current = deshacerUltimo;
+    var duplicarPartidaRef = Re.useRef(duplicarPartida);
+    duplicarPartidaRef.current = duplicarPartida;
+    var copiarPartidaRef = Re.useRef(copiarPartida);
+    copiarPartidaRef.current = copiarPartida;
+    var pegarPartidaRef = Re.useRef(pegarPartida);
+    pegarPartidaRef.current = pegarPartida;
+    var itemSeleccionadoRef = Re.useRef(itemSeleccionado);
+    itemSeleccionadoRef.current = itemSeleccionado;
+    var hayPartidaCopiadaRef = Re.useRef(hayPartidaCopiada);
+    hayPartidaCopiadaRef.current = hayPartidaCopiada;
+    var guardarPresupuestoRef = Re.useRef(null);
+    Re.useEffect(function () {
+      function onKeyDownDeshacer(ev) {
+        if (!(ev.ctrlKey || ev.metaKey)) return;
+        var key = (ev.key || "").toLowerCase();
+        if (key === "s") {
+          // Ctrl+S guarda sin salir, incluso con el foco dentro de un campo
+          // (no hay conflicto de edición de texto como con Ctrl+D/C/V), y
+          // reemplaza el diálogo nativo "Guardar página" del navegador.
+          ev.preventDefault();
+          if (guardarPresupuestoRef.current) {
+            guardarPresupuestoRef.current({ salir: !1 });
+          }
+          return;
+        }
+        if (key !== "z" && key !== "d" && key !== "c" && key !== "v") return;
+        var activo = document.activeElement;
+        var enCampoEditable =
+          activo &&
+          (activo.tagName === "INPUT" ||
+            activo.tagName === "TEXTAREA" ||
+            activo.isContentEditable);
+        if (enCampoEditable) return;
+        if (key === "z") {
+          ev.preventDefault();
+          deshacerUltimoRef.current();
+          return;
+        }
+        if (key === "d") {
+          if (itemSeleccionadoRef.current == null) return;
+          ev.preventDefault();
+          duplicarPartidaRef.current(itemSeleccionadoRef.current);
+          return;
+        }
+        if (key === "c") {
+          if (itemSeleccionadoRef.current == null) return;
+          ev.preventDefault();
+          copiarPartidaRef.current(itemSeleccionadoRef.current);
+          return;
+        }
+        if (key === "v") {
+          if (!hayPartidaCopiadaRef.current) return;
+          ev.preventDefault();
+          pegarPartidaRef.current(itemSeleccionadoRef.current);
+          return;
+        }
+      }
+      window.addEventListener("keydown", onKeyDownDeshacer);
+      return function () {
+        window.removeEventListener("keydown", onKeyDownDeshacer);
+      };
+    }, []);
+    Re.useEffect(
+      function () {
+        limpiarHistorial();
+        limpiarPortapapeles();
+        // Resetea la base de comparación de "dirty" al cambiar de
+        // presupuesto (defensa adicional: en la práctica esta instancia de
+        // lg siempre se remonta al abrir otro presupuesto, lo que ya
+        // reinicia initialIRef por sí solo, pero este efecto cubre además
+        // la transición "nuevo" → "editando" tras el primer guardado sin
+        // salir, donde lg permanece montado).
+        initialIRef.current = I;
+      },
+      [m && m.id],
+    );
     const catalogItemSatisface = (cid, key) => {
       var ci = i.find((W) => String(W.id) === String(cid));
       return !!(
@@ -40917,6 +42590,7 @@ MATERIALES:
             unidad: W.unidad,
             precio: W.precio,
             _tipoCosto: "auto",
+            capituloId: destinoActivoCapituloId && destinoActivoCapituloId !== "sin-capitulo" ? destinoActivoCapituloId : "",
           });
         T && (L._apuMatUnit = parseFloat(li(T, l || [], r).matTotal) || 0);
         (parseFloat(W.cantidadMinimaFacturable) > 0) &&
@@ -40932,6 +42606,9 @@ MATERIALES:
         W.sistemaConstructivo && (L._sistemaConstructivo = W.sistemaConstructivo);
         W.alcance && (L._alcance = W.alcance);
         W.especialidad && (L._especialidad = W.especialidad);
+        W.requiereRevisionEstructural && (L._requiereRevisionEstructural = true);
+        W.estadoRevision && (L._estadoRevision = W.estadoRevision);
+        W.notaVisiblePendiente && (L._notaVisible = W.notaVisiblePendiente);
         var E = [...I.items, L],
           M = E.length - 1;
         D((q) => u(d({}, q), { items: E }));
@@ -40956,21 +42633,33 @@ MATERIALES:
               : it.capituloId === capId,
           )
           .reduce((sum, it) => sum + calcularLineaPresupuesto(it).totalLinea, 0),
-      agregarCapitulo = () =>
+      agregarCapitulo = () => {
+        pushHistorial(I);
+        var nId = null;
         D((J) => {
           var caps = J.capitulos || [];
           var maxId = caps.reduce((mx, c) => Math.max(mx, parseInt(c.id) || 0), 0);
           var maxOrden = caps.reduce((mx, c) => Math.max(mx, parseFloat(c.orden) || 0), 0);
+          nId = maxId + 1;
           var nuevo = {
-            id: maxId + 1,
-            codigo: "",
+            id: nId,
+            codigo: nId.toString(),
             nombre: "Nuevo capítulo",
             orden: maxOrden + 1,
             descripcionOpcional: "",
             subtotal: 0,
           };
           return u(d({}, J), { capitulos: [...caps, nuevo] });
-        }),
+        });
+        setDestinoActivoCapituloId(nId);
+        setTimeout(() => {
+          var el = document.getElementById("cap_name_" + nId);
+          if (el) {
+            el.focus();
+            el.select();
+          }
+        }, 50);
+      },
       actualizarCapitulo = (capId, campo, valor) =>
         D((J) =>
           u(d({}, J), {
@@ -40979,7 +42668,8 @@ MATERIALES:
             ),
           }),
         ),
-      moverCapitulo = (capId, direccion) =>
+      moverCapitulo = (capId, direccion) => {
+        pushHistorial(I);
         D((J) => {
           var caps = [...(J.capitulos || [])].sort(
             (a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0),
@@ -41002,7 +42692,8 @@ MATERIALES:
               return c;
             }),
           });
-        }),
+        });
+      },
       eliminarCapitulo = (capId) => {
         var tieneItems = (I.items || []).some((it) => it.capituloId === capId);
         if (
@@ -41012,6 +42703,7 @@ MATERIALES:
           )
         )
           return;
+        pushHistorial(I);
         D((J) =>
           u(d({}, J), {
             capitulos: (J.capitulos || []).filter((c) => c.id !== capId),
@@ -41021,13 +42713,16 @@ MATERIALES:
           }),
         );
       },
-      moverItemACapitulo = (T, capId) =>
+      moverItemACapitulo = (T, capId) => {
+        pushHistorial(I);
         D((J) => {
           var items = [...J.items];
           items[T] = u(d({}, items[T]), { capituloId: capId || "" });
           return u(d({}, J), { items });
-        }),
-      reordenarItemEnGrupo = (T, direccion, capId) =>
+        });
+      },
+      reordenarItemEnGrupo = (T, direccion, capId) => {
+        pushHistorial(I);
         D((J) => {
           var items = [...(J.items || [])];
           var grupo = items
@@ -41056,9 +42751,15 @@ MATERIALES:
           items[idxA] = u(d({}, items[idxA]), { ordenDentroCapitulo: ordenB });
           items[idxB] = u(d({}, items[idxB]), { ordenDentroCapitulo: ordenA });
           return u(d({}, J), { items });
-        }),
-      Z = () => {
-        if (!I.clienteId || !I.descripcion) {
+        });
+      },
+      // Función única de persistencia: usada tanto por "Guardar" (se queda
+      // en el editor) como por "Guardar y salir" (vuelve al listado). No
+      // duplica lógica de guardado entre ambos botones/atajos.
+      guardarPresupuesto = (opts) => {
+        var salir = !opts || opts.salir !== !1;
+        var permitirIncompleto = !!(opts && opts.permitirIncompleto);
+        if (!permitirIncompleto && (!I.clienteId || !I.descripcion)) {
           b("⚠️ Completa cliente y descripción");
           return;
         }
@@ -41066,12 +42767,22 @@ MATERIALES:
           b("⚠️ Agrega al menos un ítem");
           return;
         }
+        limpiarHistorial();
+        limpiarPortapapeles();
+        initialIRef.current = I;
         var capitulosConSubtotal = (I.capitulos || []).map((cap) =>
           u(d({}, cap), { subtotal: Math.round(subtotalCapitulo(cap.id)) }),
         );
         o(
           d(
-            u(d({}, I), { pctMO: g, pctGG: B, pctUtil: v, capitulos: capitulosConSubtotal }),
+            u(d({}, I), {
+              pctMO: g,
+              pctGG: B,
+              pctUtil: v,
+              capitulos: capitulosConSubtotal,
+              _salir: salir,
+              _borrador: permitirIncompleto && !I.clienteId ? !0 : void 0,
+            }),
             m && I.customId && parseInt(I.customId) !== parseInt(m.id)
               ? { _newId: parseInt(I.customId) }
               : {},
@@ -41079,6 +42790,38 @@ MATERIALES:
         );
       },
       X = m && m._isDuplicate;
+    guardarPresupuestoRef.current = guardarPresupuesto;
+    // Intenta salir del editor: si hay cambios sin guardar, muestra el modal
+    // de protección en vez de ejecutar onLeave de inmediato. onLeave es la
+    // navegación real (Cancelar, o el botón del menú lateral que el usuario
+    // intentó usar) capturada por quien llama a intentarSalir.
+    var intentarSalir = function(onLeave) {
+      if (dirty) {
+        setModalSalida({ onLeave: onLeave });
+      } else {
+        onLeave();
+      }
+    };
+    if (guardRef) {
+      guardRef.current = { dirty: dirty, intentarSalir: intentarSalir };
+    }
+    Re.useEffect(function() {
+      return function() {
+        if (guardRef) guardRef.current = null;
+      };
+    }, []);
+    Re.useEffect(function() {
+      function onBeforeUnload(ev) {
+        if (dirty) {
+          ev.preventDefault();
+          ev.returnValue = "";
+        }
+      }
+      window.addEventListener("beforeunload", onBeforeUnload);
+      return function() {
+        window.removeEventListener("beforeunload", onBeforeUnload);
+      };
+    }, [dirty]);
     return e.jsxs("div", {
       children: [
         P &&
@@ -41097,8 +42840,26 @@ MATERIALES:
             },
             onClose: () => A(null),
           }),
-        
-                mostrarAsistente && e.jsx(AsistenteInteligenteModal, {
+        modalSalida &&
+          e.jsx(ModalProteccionSalida, {
+            tieneCliente: !!I.clienteId,
+            faltaDescripcion: !I.descripcion,
+            onGuardarYSalir: () => {
+              guardarPresupuesto({ salir: !0, permitirIncompleto: !0 });
+              setModalSalida(null);
+            },
+            onGuardarBorrador: () => {
+              guardarPresupuesto({ salir: !0, permitirIncompleto: !0 });
+              setModalSalida(null);
+            },
+            onSeguirEditando: () => setModalSalida(null),
+            onSalirSinGuardar: () => {
+              var onLeave = modalSalida.onLeave;
+              setModalSalida(null);
+              onLeave();
+            },
+          }),
+        FEATURE_ASISTENTE_INTELIGENTE && mostrarAsistente && e.jsx(AsistenteInteligenteModal, {
           catalog: i,
           paso: asisPaso,
           setPaso: setAsisPaso,
@@ -41113,12 +42874,16 @@ MATERIALES:
         }),
 K &&
           e.jsx(Zf, { plantillaAsistente: plantillaDelAsistente,
+            catalog: i,
+            cfg: r,
+            apus: n,
+            materiales: l,
             plantillasUser: p || [],
             onDeleteUser: C,
             onClose: () => { 
             if (plantillaDelAsistente) {
                 setPlantillaDelAsistente(null);
-                setMostrarAsistente(!0);
+                if (FEATURE_ASISTENTE_INTELIGENTE) setMostrarAsistente(!0);
             }
             y(!1); 
           },
@@ -41136,6 +42901,7 @@ K &&
                   _tipoCosto: L._tipoCosto || (L._cid ? "auto" : "mo"),
                 });
               });
+              pushHistorial(I);
               (D((L) =>
                 u(d({}, L), {
                   items:
@@ -41155,8 +42921,10 @@ K &&
             cfg: r,
             budgetItems: I.items,
             capitulos: I.capitulos,
+            destinoActivoCapituloId: destinoActivoCapituloId,
             onClose: () => setMostrarSelectorSoluciones(!1),
             onApply: (resultado) => {
+              pushHistorial(I);
               D((W) => u(d({}, W), { items: resultado.items }));
               var todasSugerencias = [];
               (resultado.agregados || []).forEach((catItem) => {
@@ -41175,7 +42943,10 @@ K &&
             setMateriales: setMateriales,
             cfg: r,
             cantItem: parseFloat(I.items[k.idx] && I.items[k.idx].cant) || 1,
-            onConfirm: (W, T, L, E, customMats, pMO, pGG, pUtil, moOverride) => Y(k.idx, W, T, L, E, customMats, pMO, pGG, pUtil, moOverride),
+            onConfirm: (W, T, L, E, customMats, pMO, pGG, pUtil, moOverride) => {
+              pushHistorial(I);
+              Y(k.idx, W, T, L, E, customMats, pMO, pGG, pUtil, moOverride);
+            },
             onSkip: () => R(null),
             customData: I.items[k.idx],
           }),
@@ -41351,13 +43122,13 @@ K &&
               children: [
                 e.jsx("button", {
                   style: c.btn("s"),
-                  onClick: s,
+                  onClick: () => intentarSalir(() => { limpiarHistorial(); limpiarPortapapeles(); s(); }),
                   children: "Cancelar",
                 }),
                 e.jsx("button", {
                   style: c.btn("p"),
-                  onClick: Z,
-                  children: "💾 Guardar",
+                  onClick: () => guardarPresupuesto({ salir: !0 }),
+                  children: "Guardar y salir",
                 }),
               ],
             }),
@@ -41574,8 +43345,10 @@ K &&
                     e.jsxs("div", {
                       style: {
                         display: "flex",
+                        flexWrap: "wrap",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        gap: 8,
                         marginBottom: 11,
                       },
                       children: [
@@ -41605,7 +43378,7 @@ K &&
                           ],
                         }),
                         e.jsxs("div", {
-                          style: { display: "flex", gap: 6 },
+                          style: { display: "flex", flexWrap: "wrap", gap: 6, rowGap: 8 },
                           children: [
                             e.jsx("button", {
                               style: u(d({}, c.btn("s")), {
@@ -41615,7 +43388,7 @@ K &&
                               onClick: () => y(!0),
                               children: "📋 Plantilla",
                             }),
-                            e.jsx("button", {
+                            FEATURE_ASISTENTE_INTELIGENTE && e.jsx("button", {
                               style: u(d({}, c.btn("p")), {
                                 fontSize: 12,
                                 padding: "5px 10px",
@@ -41645,11 +43418,38 @@ K &&
                             }),
                             e.jsx("button", {
                               style: c.btn("g"),
-                              onClick: () =>
-                                D((W) =>
-                                  u(d({}, W), { items: [...W.items, f()] }),
-                                ),
+                              onClick: () => {
+                                pushHistorial(I);
+                                D((W) => {
+                                  var newItem = f();
+                                  if (W.capitulos && W.capitulos.length > 0 && destinoActivoCapituloId && destinoActivoCapituloId !== "sin-capitulo") {
+                                    newItem.capituloId = destinoActivoCapituloId;
+                                  }
+                                  return u(d({}, W), { items: [...W.items, newItem] });
+                                });
+                              },
                               children: "+ Agregar ítem",
+                            }),
+                            e.jsx("button", {
+                              title: "Guardar sin salir del presupuesto (Ctrl+S)",
+                              style: u(d({}, c.btn("s")), {
+                                fontSize: 12,
+                                padding: "5px 10px",
+                              }),
+                              onClick: () => guardarPresupuesto({ salir: !1 }),
+                              children: "💾 Guardar",
+                            }),
+                            e.jsx("button", {
+                              style: u(d({}, c.btn("s")), {
+                                fontSize: 12,
+                                padding: "5px 10px",
+                                opacity: historialTamano === 0 ? 0.4 : 1,
+                                cursor: historialTamano === 0 ? "not-allowed" : "pointer",
+                              }),
+                              disabled: historialTamano === 0,
+                              title: historialTamano === 0 ? "No hay cambios para deshacer" : "Deshacer último cambio (" + historialTamano + " disponible" + (historialTamano !== 1 ? "s" : "") + ")",
+                              onClick: deshacerUltimo,
+                              children: "↶ Deshacer",
                             }),
                           ],
                         }),
@@ -41696,7 +43496,7 @@ K &&
                         (a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0),
                       );
                       if (capsOrdenados.length === 0)
-                        return (I.items || []).map((W, T) => renderFilaItem(W, T, false, capsOrdenados));
+                        return (I.items || []).map((W, T) => renderFilaItem(W, T, false, capsOrdenados, `${T + 1}`));
                       var itemsConIndice = (I.items || []).map((W, T) => ({ W, T }));
                       var itemsDeGrupo = (capId) =>
                         itemsConIndice
@@ -41716,15 +43516,17 @@ K &&
                         return e.jsxs(
                           "div",
                           {
+                            onClick: () => { setDestinoActivoCapituloId(esSinCapitulo ? "sin-capitulo" : cap.id); },
                             style: {
                               display: "flex",
                               alignItems: "center",
                               gap: 8,
-                              background: a.sb,
-                              border: `1px solid ${a.border}`,
+                              background: (esSinCapitulo ? destinoActivoCapituloId === "sin-capitulo" : cap.id === destinoActivoCapituloId) ? (a.accent + "11") : a.sb,
+                              border: `1px solid ${(esSinCapitulo ? destinoActivoCapituloId === "sin-capitulo" : cap.id === destinoActivoCapituloId) ? a.accent : a.border}`,
                               borderRadius: 8,
                               padding: "8px 10px",
                               margin: "10px 0 6px",
+                              cursor: "pointer",
                             },
                             children: [
                               !esSinCapitulo &&
@@ -41751,26 +43553,44 @@ K &&
                                 e.jsx("input", {
                                   value: cap.codigo || "",
                                   placeholder: "Código",
+                                  onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
                                   onChange: (ev) => actualizarCapitulo(cap.id, "codigo", ev.target.value),
+                                  onBlur: (ev) => {
+                                    confirmarEdicionCampo(ev.target.value);
+                                    const val = ev.target.value.trim();
+                                    if (!val) {
+                                      alert("El código del capítulo no puede estar vacío.");
+                                      actualizarCapitulo(cap.id, "codigo", cap.id.toString());
+                                      return;
+                                    }
+                                    const repetido = I.capitulos.some(c => c.id !== cap.id && c.codigo === val);
+                                    if (repetido) {
+                                      alert("Ya existe un capítulo con el código " + val);
+                                      actualizarCapitulo(cap.id, "codigo", cap.id.toString());
+                                    }
+                                  },
                                   style: u(d({}, c.inp), { width: 56, fontSize: 12, padding: "4px 6px" }),
-                                }),
-                              esSinCapitulo
-                                ? e.jsx("div", { style: { fontWeight: 700, fontSize: 13, color: a.muted, flex: 1 }, children: "Sin capítulo" })
-                                : e.jsx("input", {
-                                    value: cap.nombre || "",
-                                    placeholder: "Nombre del capítulo",
-                                    onChange: (ev) => actualizarCapitulo(cap.id, "nombre", ev.target.value),
-                                    style: u(d({}, c.inp), { flex: 1, fontWeight: 700, fontSize: 13, padding: "4px 6px" }),
                                   }),
-                              e.jsxs("div", { style: { fontSize: 12, color: a.accent, fontWeight: 700, whiteSpace: "nowrap" }, children: ["Subtotal: ", ne(Math.round(subtotal))] }),
-                              !esSinCapitulo &&
-                                e.jsx("button", {
-                                  title: "Eliminar capítulo",
-                                  onClick: () => eliminarCapitulo(cap.id),
-                                  style: u(d({}, c.btn("d")), { padding: "4px 8px", fontSize: 13 }),
-                                  children: "✕",
-                                }),
-                            ],
+                                esSinCapitulo
+                                  ? e.jsx("div", { style: { fontWeight: 700, fontSize: 13, color: a.muted, flex: 1 }, children: "Sin capítulo" })
+                                  : e.jsx("input", {
+                                      id: "cap_name_" + cap.id,
+                                      value: cap.nombre || "",
+                                      placeholder: "Nombre del capítulo",
+                                      onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                      onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
+                                      onChange: (ev) => actualizarCapitulo(cap.id, "nombre", ev.target.value),
+                                      style: u(d({}, c.inp), { flex: 1, fontWeight: 700, fontSize: 13, padding: "4px 6px" }),
+                                    }),
+                                e.jsxs("div", { style: { fontSize: 12, color: a.accent, fontWeight: 700, whiteSpace: "nowrap" }, children: ["Subtotal: ", ne(Math.round(subtotal))] }),
+                                !esSinCapitulo &&
+                                  e.jsx("button", {
+                                    title: "Eliminar capítulo",
+                                    onClick: () => eliminarCapitulo(cap.id),
+                                    style: u(d({}, c.btn("d")), { padding: "4px 8px", fontSize: 13 }),
+                                    children: "✕",
+                                  }),
+                              ],
                           },
                           "cap_" + (esSinCapitulo ? "sin" : cap.id),
                         );
@@ -41778,15 +43598,15 @@ K &&
                       var salida = [];
                       capsOrdenados.forEach((cap, capIdx) => {
                         salida.push(renderEncabezado(cap, capIdx));
-                        itemsDeGrupo(cap.id).forEach(({ W, T }) => salida.push(renderFilaItem(W, T, true, capsOrdenados)));
+                        itemsDeGrupo(cap.id).forEach(({ W, T }, itemIdx) => salida.push(renderFilaItem(W, T, true, capsOrdenados, `${cap.codigo || (capIdx + 1)}.${itemIdx + 1}`)));
                       });
                       var sinCap = itemsDeGrupo(null);
                       if (sinCap.length > 0) {
                         salida.push(renderEncabezado(null, -1));
-                        sinCap.forEach(({ W, T }) => salida.push(renderFilaItem(W, T, true, capsOrdenados)));
+                        sinCap.forEach(({ W, T }, itemIdx) => salida.push(renderFilaItem(W, T, true, capsOrdenados, `${itemIdx + 1}`)));
                       }
                       return salida;
-                    })((W, T, usaCapitulos, capsOrdenados) => {
+                    })((W, T, usaCapitulos, capsOrdenados, numJerarquico) => {
                       var L = W._cid
                           ? i.find((M) => M.id === parseInt(W._cid))
                           : null,
@@ -41803,6 +43623,15 @@ K &&
                       return e.jsxs(
                         "div",
                         {
+                          onClick: () => {
+                            setItemSeleccionado(T);
+                            if (W.capituloId) setDestinoActivoCapituloId(W.capituloId);
+                          },
+                          style: {
+                            background: itemSeleccionado === T ? (a.accent + "0d") : "transparent",
+                            border: `1px solid ${itemSeleccionado === T ? a.accent : "transparent"}`,
+                            borderRadius: 6,
+                          },
                           children: [
                             e.jsxs("div", {
                               style: {
@@ -41814,15 +43643,24 @@ K &&
                                 alignItems: "center",
                               },
                               children: [
-                                e.jsx("input", {
-                                  style: u(d({}, c.inp), {
-                                    fontSize: 13,
-                                    padding: "6px 8px",
-                                  }),
-                                  value: W.desc,
-                                  onChange: (M) =>
-                                    ee(T, "desc", M.target.value),
-                                  placeholder: "Descripción…",
+                                e.jsxs("div", {
+                                  style: { display: "flex", alignItems: "center", gap: 6 },
+                                  children: [
+                                    numJerarquico && e.jsx("span", { style: { fontWeight: 700, color: a.muted, fontSize: 12, minWidth: 20 }, children: numJerarquico }),
+                                    e.jsx("input", {
+                                      style: u(d({}, c.inp), {
+                                        fontSize: 13,
+                                        padding: "6px 8px",
+                                        flex: 1
+                                      }),
+                                      value: W.desc,
+                                      onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                      onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
+                                      onChange: (M) =>
+                                        ee(T, "desc", M.target.value),
+                                      placeholder: "Descripción…",
+                                    })
+                                  ]
                                 }),
                                 e.jsx("input", {
                                   style: u(d({}, c.inp), {
@@ -41832,6 +43670,8 @@ K &&
                                   }),
                                   type: "number",
                                   value: W.cant,
+                                  onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                  onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                   onChange: (M) =>
                                     ee(T, "cant", M.target.value),
                                   min: "0",
@@ -41868,6 +43708,8 @@ K &&
                                     padding: "6px 8px",
                                   }),
                                   value: W.unidad,
+                                  onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                  onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                   onChange: (M) =>
                                     ee(T, "unidad", M.target.value),
                                 }),
@@ -41885,6 +43727,8 @@ K &&
                                       }),
                                       type: "number",
                                       value: Math.round(W.precio || 0),
+                                      onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                      onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                       onChange: (M) =>
                                         D((J) => {
                                           var re = [...J.items];
@@ -41918,6 +43762,8 @@ K &&
                                   }),
                                   type: "number",
                                   value: Math.round(me_tmp),
+                                  onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                  onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                   onChange: (M) =>
                                     D((J) => {
                                       var re = [...J.items];
@@ -41941,6 +43787,8 @@ K &&
                                   }),
                                   type: "number",
                                   value: Math.round(de_tmp),
+                                  onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
+                                  onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
                                   onChange: (M) =>
                                     D((J) => {
                                       var re = [...J.items];
@@ -42100,81 +43948,103 @@ K &&
                                     padding: "5px 6px",
                                     fontSize: 17,
                                   }),
-                                  onClick: () =>
+                                  onClick: () => {
+                                    pushHistorial(I);
                                     D((M) =>
                                       u(d({}, M), {
                                         items: M.items.filter(
                                           (q, J) => J !== T,
                                         ),
                                       }),
-                                    ),
+                                    );
+                                  },
                                   children: "×",
                                 }),
                               ],
                             }),
-                            e.jsx("div", {
+                            e.jsxs("div", {
                                 style: {
-                                  gridColumn: "span 6",
-                                  marginBottom: 6,
-                                  marginTop: -2,
-                                },
-                                children: e.jsx("button", {
-                                  style: {
-                                    background: a.sb,
-                                    border: `1px solid ${a.border}`,
-                                    borderRadius: 6,
-                                    padding: "3px 10px",
-                                    fontSize: 12,
-                                    color: E ? "#34d399" : "#60a5fa",
-                                    cursor: "pointer",
-                                    fontWeight: 600,
-                                  },
-                                  onClick: () =>
-                                    R({ idx: T, catItem: L, apu: E || { id: "manual_" + T, nombre: W.desc || "Ítem Manual", unidad: W.unidad || "unidad", materiales: [], pctMO: g, pctGG: B, pctUtilidad: v, rendimiento: 0, dotacion: 1 } }),
-                                  children: E ? "🔧 Ver y ajustar materiales del APU" : "🔧 Definir materiales manualmente",
-                                }),
-                              }),
-                            usaCapitulos &&
-                              e.jsxs("div", {
-                                style: {
+                                  gridColumn: "span 10",
                                   display: "flex",
+                                  flexWrap: "wrap",
                                   alignItems: "center",
-                                  gap: 6,
+                                  gap: 8,
                                   marginBottom: 8,
                                   marginTop: -2,
                                 },
                                 children: [
-                                  e.jsx("span", { style: { fontSize: 11, color: a.muted }, children: "Capítulo:" }),
-                                  e.jsxs("select", {
-                                    value: W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : "",
-                                    onChange: (ev) => moverItemACapitulo(T, ev.target.value ? parseInt(ev.target.value) : ""),
-                                    style: { fontSize: 11, padding: "3px 5px", background: a.sb, color: a.text, border: `1px solid ${a.border}`, borderRadius: 5 },
-                                    children: [
-                                      e.jsx("option", { value: "", children: "Sin capítulo" }, "sin"),
-                                      ...capsOrdenados.map((cap) => e.jsx("option", { value: cap.id, children: cap.nombre || "Capítulo " + cap.id }, cap.id)),
-                                    ],
+                                  usaCapitulos &&
+                                    e.jsxs("div", {
+                                      style: { display: "flex", alignItems: "center", gap: 6 },
+                                      children: [
+                                        e.jsx("span", { style: { fontSize: 11, color: a.muted }, children: "Capítulo:" }),
+                                        e.jsxs("select", {
+                                          value: W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : "",
+                                          onChange: (ev) => moverItemACapitulo(T, ev.target.value ? parseInt(ev.target.value) : ""),
+                                          style: { fontSize: 11, padding: "3px 5px", background: a.sb, color: a.text, border: `1px solid ${a.border}`, borderRadius: 5 },
+                                          children: [
+                                            e.jsx("option", { value: "", children: "Sin capítulo" }, "sin"),
+                                            ...capsOrdenados.map((cap) => e.jsx("option", { value: cap.id, children: cap.nombre || "Capítulo " + cap.id }, cap.id)),
+                                          ],
+                                        }),
+                                        e.jsx("button", {
+                                          title: "Subir dentro del capítulo",
+                                          onClick: () =>
+                                            reordenarItemEnGrupo(
+                                              T,
+                                              -1,
+                                              W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : null,
+                                            ),
+                                          style: { background: "transparent", border: `1px solid ${a.border}`, borderRadius: 4, color: a.muted, cursor: "pointer", fontSize: 11, padding: "1px 5px" },
+                                          children: "▲",
+                                        }),
+                                        e.jsx("button", {
+                                          title: "Bajar dentro del capítulo",
+                                          onClick: () =>
+                                            reordenarItemEnGrupo(
+                                              T,
+                                              1,
+                                              W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : null,
+                                            ),
+                                          style: { background: "transparent", border: `1px solid ${a.border}`, borderRadius: 4, color: a.muted, cursor: "pointer", fontSize: 11, padding: "1px 5px" },
+                                          children: "▼",
+                                        }),
+                                      ],
+                                    }),
+                                  e.jsx("button", {
+                                    style: {
+                                      background: a.sb,
+                                      border: `1px solid ${a.border}`,
+                                      borderRadius: 6,
+                                      padding: "3px 10px",
+                                      fontSize: 12,
+                                      color: E ? "#34d399" : "#60a5fa",
+                                      cursor: "pointer",
+                                      fontWeight: 600,
+                                      flexShrink: 0,
+                                    },
+                                    onClick: () =>
+                                      R({ idx: T, catItem: L, apu: E || { id: "manual_" + T, nombre: W.desc || "Ítem Manual", unidad: W.unidad || "unidad", materiales: [], pctMO: g, pctGG: B, pctUtilidad: v, rendimiento: 0, dotacion: 1 } }),
+                                    children: E ? "🔧 Ver y ajustar materiales del APU" : "🔧 Definir materiales manualmente",
                                   }),
                                   e.jsx("button", {
-                                    title: "Subir dentro del capítulo",
-                                    onClick: () =>
-                                      reordenarItemEnGrupo(
-                                        T,
-                                        -1,
-                                        W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : null,
-                                      ),
-                                    style: { background: "transparent", border: `1px solid ${a.border}`, borderRadius: 4, color: a.muted, cursor: "pointer", fontSize: 11, padding: "1px 5px" },
-                                    children: "▲",
+                                    title: "Duplicar partida",
+                                    onClick: (ev) => { ev.stopPropagation(); duplicarPartida(T); },
+                                    style: { background: a.sb, border: `1px solid ${a.border}`, borderRadius: 6, color: a.muted, cursor: "pointer", fontSize: 13, padding: "3px 8px", flexShrink: 0 },
+                                    children: "⧉",
                                   }),
                                   e.jsx("button", {
-                                    title: "Bajar dentro del capítulo",
-                                    onClick: () =>
-                                      reordenarItemEnGrupo(
-                                        T,
-                                        1,
-                                        W.capituloId && capsOrdenados.some((c) => c.id === W.capituloId) ? W.capituloId : null,
-                                      ),
-                                    style: { background: "transparent", border: `1px solid ${a.border}`, borderRadius: 4, color: a.muted, cursor: "pointer", fontSize: 11, padding: "1px 5px" },
-                                    children: "▼",
+                                    title: "Copiar partida",
+                                    onClick: (ev) => { ev.stopPropagation(); copiarPartida(T); },
+                                    style: { background: a.sb, border: `1px solid ${a.border}`, borderRadius: 6, color: a.muted, cursor: "pointer", fontSize: 13, padding: "3px 8px", flexShrink: 0 },
+                                    children: "⎘",
+                                  }),
+                                  e.jsx("button", {
+                                    title: hayPartidaCopiada ? "Pegar partida" : "No hay ninguna partida copiada",
+                                    disabled: !hayPartidaCopiada,
+                                    onClick: (ev) => { ev.stopPropagation(); pegarPartida(T); },
+                                    style: { background: a.sb, border: `1px solid ${a.border}`, borderRadius: 6, color: a.muted, cursor: hayPartidaCopiada ? "pointer" : "not-allowed", fontSize: 13, padding: "3px 8px", flexShrink: 0, opacity: hayPartidaCopiada ? 1 : 0.4 },
+                                    children: "📋",
                                   }),
                                 ],
                               }),
@@ -42600,7 +44470,7 @@ K &&
                           padding: "12px",
                           fontSize: 17,
                         }),
-                        onClick: Z,
+                        onClick: () => guardarPresupuesto({ salir: !0 }),
                         children: "💾 Guardar Presupuesto",
                       }),
                     ],
@@ -44271,42 +46141,52 @@ K &&
               var U = 10 + O;
               const $ = O % 2 === 0 ? "FFFFFF" : x;
               var ee = (parseFloat(S.cant) || 0) * (parseFloat(S.precio) || 0);
-              (f(
-                U,
-                0,
-                O + 1,
-                "n",
-                I($, { sz: 10 }, { horizontal: "center" }, D),
-              ),
-                f(U, 1, S.desc || "", "s", I($, { sz: 10 }, {}, D)),
-                f(
+              if (S.__esCapitulo) {
+                f(U, 0, "", "s", I(v, {}, {}));
+                f(U, 1, S.__nombre || "", "s", I(v, { bold: !0, sz: 11, color: { rgb: "FFFFFF" } }, {}, D));
+                f(U, 2, "", "s", I(v, {}, {}));
+                f(U, 3, "", "s", I(v, {}, {}));
+                f(U, 4, "", "s", I(v, {}, {}));
+                f(U, 5, "", "s", I(v, {}, {}));
+                B["!merges"].push({ s: { r: U, c: 1 }, e: { r: U, c: 5 } });
+              } else {
+                (f(
                   U,
-                  2,
-                  parseFloat(S.cant) || 0,
-                  "n",
-                  I($, { sz: 10 }, { horizontal: "center" }, D),
-                ),
-                f(
-                  U,
-                  3,
-                  S.unidad || "",
+                  0,
+                  S.__numJerarquico || (O + 1),
                   "s",
                   I($, { sz: 10 }, { horizontal: "center" }, D),
                 ),
-                f(
-                  U,
-                  4,
-                  parseFloat(S.precio) || 0,
-                  "n",
-                  I($, { sz: 10 }, { horizontal: "right" }, D),
-                ),
-                f(
-                  U,
-                  5,
-                  ee,
-                  "n",
-                  I($, { bold: !0, sz: 10 }, { horizontal: "right" }, D),
-                ));
+                  f(U, 1, S.desc || "", "s", I($, { sz: 10 }, {}, D)),
+                  f(
+                    U,
+                    2,
+                    parseFloat(S.cant) || 0,
+                    "n",
+                    I($, { sz: 10 }, { horizontal: "center" }, D),
+                  ),
+                  f(
+                    U,
+                    3,
+                    S.unidad || "",
+                    "s",
+                    I($, { sz: 10 }, { horizontal: "center" }, D),
+                  ),
+                  f(
+                    U,
+                    4,
+                    parseFloat(S.precio) || 0,
+                    "n",
+                    I($, { sz: 10 }, { horizontal: "right" }, D),
+                  ),
+                  f(
+                    U,
+                    5,
+                    ee,
+                    "n",
+                    I($, { bold: !0, sz: 10 }, { horizontal: "right" }, D),
+                  ));
+              }
             }));
           var k = 10 + t.items.length;
           for (let S = 0; S < 6; S++) f(k, S, "", "s", I(v, {}, {}));
@@ -44789,7 +46669,7 @@ K &&
                 })()
               : [{ cap: null, items: G }];
             var filaNum = 0;
-            gruposPdf.forEach((grp) => {
+            gruposPdf.forEach((grp, capIdx) => {
               if (usaCapitulosPdf) {
                 if (S > 255) {
                   f.addPage();
@@ -44809,7 +46689,7 @@ K &&
                 );
                 S += 9;
               }
-              grp.items.forEach((Z) => {
+              grp.items.forEach((Z, itemIdx) => {
                 var W = 8,
                   T = filaNum % 2 === 0 ? [248, 250, 252] : [255, 255, 255];
                 (f.setFillColor(...T),
@@ -44837,7 +46717,7 @@ K &&
                 (f.setFont("helvetica", "normal"),
                   f.setFontSize(8.5),
                   f.setTextColor(50, 60, 75),
-                  f.text("" + (filaNum + 1), A + 2, S + 5.3),
+                  f.text(usaCapitulosPdf ? (!grp.cap ? "" + (itemIdx + 1) : "" + (grp.cap.codigo || (capIdx + 1)) + "." + (itemIdx + 1)) : "" + (filaNum + 1), A + 2, S + 5.3),
                   f.text((Z.desc || "").slice(0, 55), A + 12, S + 5.3),
                   f.text("" + Lshow, ie === "separado" ? A + 110 : A + 120, S + 5.3, {
                     align: "right",
@@ -45673,9 +47553,27 @@ K &&
                               e.jsx("td", {
                                 style: c.td,
                                 children:
-                                  G &&
-                                  G.nombre &&
-                                  G.nombre.split(" ").slice(0, 3).join(" "),
+                                  G && G.nombre
+                                    ? G.nombre.split(" ").slice(0, 3).join(" ")
+                                    : Q._borrador && !Q.clienteId
+                                      ? e.jsx("span", {
+                                          title: "Borrador guardado sin cliente asociado",
+                                          style: {
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            gap: 4,
+                                            padding: "2px 6px",
+                                            borderRadius: 999,
+                                            background: "rgba(251,146,60,.10)",
+                                            border: "1px solid rgba(251,146,60,.4)",
+                                            color: "#fb923c",
+                                            fontSize: 9.5,
+                                            fontWeight: 800,
+                                            whiteSpace: "nowrap",
+                                          },
+                                          children: "📋 Borrador · Sin cliente",
+                                        })
+                                      : null,
                               }),
                               e.jsx("td", {
                                 style: u(d({}, c.td), {
@@ -47810,10 +49708,234 @@ K &&
       ],
     });
   }
+  function cargarDetalleApuPartida(catalogId) {
+    var apusAll = [], materialesAll = [], cfgAll = {};
+    try { apusAll = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_apus") || "[]") || []; } catch (e) {}
+    try { materialesAll = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_materiales") || "[]") || []; } catch (e) {}
+    try { cfgAll = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_cfg") || "{}") || {}; } catch (e) {}
+    var candidatos = apusAll.filter((a2) => parseInt(a2 && a2.catalogId) === parseInt(catalogId));
+    // Si hay APUs duplicadas para la misma partida (dato local desactualizado),
+    // se usa la de mayor id (la más reciente), nunca la primera que aparezca.
+    var apu = candidatos.length
+      ? candidatos.reduce((best, cur) => (parseInt(cur.id) > parseInt(best.id) ? cur : best))
+      : null;
+    if (!apu) return { apu: null, materialesDetalle: [], calculo: null, apusCandidatos: 0 };
+    var materialById = {};
+    materialesAll.forEach((m) => { materialById[parseInt(m.id)] = m; });
+    var calculo = li(apu, materialesAll, cfgAll);
+    var materialesDetalle = (Array.isArray(apu.materiales) ? apu.materiales : []).map((line) => {
+      var mat = materialById[parseInt(line.materialId)] || {};
+      var cantidad = parseFloat(line.cantidad) || 0;
+      var precioUnit = parseFloat(mat.precio) || 0;
+      return {
+        nombre: mat.nombre || "Material " + line.materialId,
+        unidad: mat.unidad || "",
+        cantidad,
+        precioUnit,
+        subtotal: cantidad * precioUnit,
+      };
+    });
+    return { apu, materialesDetalle, calculo, apusCandidatos: candidatos.length };
+  }
+  var CAMPOS_TAXONOMIA_PARTIDA = ["rubro", "subrubro", "tipoIntervencion", "sistemaConstructivo", "alcance", "especialidad"];
+  function resolverTaxonomiaConFallbackCanonico(catalogItem) {
+    // La copia combinada (localStorage) puede provenir de un registro local
+    // anterior a la incorporación de taxonomía moderna al catálogo canónico
+    // (qi). Se completa SOLO la taxonomía faltante desde qi, sin sobrescribir
+    // ningún otro campo (precio, descripción, etc. siempre vienen de la copia
+    // combinada real que usa la UI) y sin persistir nada en localStorage.
+    var canonico = (qi || []).find((c) => c.id === catalogItem.id);
+    if (!canonico) return catalogItem;
+    var out = d({}, catalogItem);
+    CAMPOS_TAXONOMIA_PARTIDA.forEach((campo) => {
+      if (!out[campo] && canonico[campo]) out[campo] = canonico[campo];
+    });
+    return out;
+  }
+  function ModalDetallePartida({ catalogItem: catalogItemOriginal, onClose }) {
+    var catalogItem = resolverTaxonomiaConFallbackCanonico(catalogItemOriginal);
+    var detalle = cargarDetalleApuPartida(catalogItem.id);
+    var apu = detalle.apu;
+    var calculo = detalle.calculo;
+    var tieneApu = !!apu;
+    var esSubcontrato = tieneApu && !!apu.esSubcontrato;
+    var precioCatalogo = parseFloat(catalogItem.precio) || 0;
+    var precioCalculado = calculo ? calculo.precioFinal : 0;
+    var diferenciaAbs = tieneApu ? precioCatalogo - precioCalculado : 0;
+    var diferenciaPct = tieneApu && precioCalculado > 0 ? (diferenciaAbs / precioCalculado) * 100 : 0;
+    var difSignificativa = tieneApu && Math.abs(diferenciaPct) > 5;
+    var Campo = (label, value) =>
+      e.jsxs("div", {
+        children: [
+          e.jsx("div", { style: { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em", color: a.muted, marginBottom: 2 }, children: label }),
+          e.jsx("div", { style: { fontSize: 14, fontWeight: 700, color: a.text }, children: value || "—" }),
+        ],
+      });
+    var Fila = (label, value, strong) =>
+      e.jsxs("div", {
+        style: { display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid " + a.border, fontSize: strong ? 14 : 13 },
+        children: [
+          e.jsx("div", { style: { color: a.muted }, children: label }),
+          e.jsx("div", { style: { color: strong ? a.accent : a.text, fontWeight: strong ? 900 : 700 }, children: value }),
+        ],
+      });
+    var Seccion = (titulo, children) =>
+      e.jsxs("div", {
+        style: { marginTop: 18 },
+        children: [
+          e.jsx("div", { style: { fontSize: 13, fontWeight: 900, color: a.text, marginBottom: 8 }, children: titulo }),
+          children,
+        ],
+      });
+    return e.jsx("div", {
+      style: { position: "fixed", inset: 0, background: "rgba(0,0,0,.85)", zIndex: 6500, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 },
+      onClick: onClose,
+      children: e.jsxs("div", {
+        style: { background: a.card, border: "1px solid " + a.border, borderRadius: 14, padding: "24px 28px", maxWidth: 760, width: "100%", maxHeight: "88vh", overflowY: "auto", boxShadow: "0 8px 32px rgba(0,0,0,.5)" },
+        onClick: (ev) => ev.stopPropagation(),
+        children: [
+          e.jsxs("div", {
+            style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 },
+            children: [
+              e.jsxs("div", {
+                children: [
+                  e.jsx("div", { style: { fontSize: 12, color: a.muted, fontWeight: 700 }, children: "Detalle de partida · ID de catálogo: " + catalogItem.id }),
+                  e.jsx("div", { style: { fontSize: 18, fontWeight: 800, color: a.text, marginTop: 4 }, children: catalogItem.desc }),
+                  e.jsxs("div", {
+                    style: { fontSize: 12, color: a.muted, marginTop: 2 },
+                    children: [catalogItem.rubro || catalogItem.cat, catalogItem.subrubro && " · " + catalogItem.subrubro],
+                  }),
+                ],
+              }),
+              e.jsx("button", {
+                onClick: onClose,
+                style: { background: "transparent", border: "1px solid " + a.border, borderRadius: 8, color: a.muted, cursor: "pointer", fontSize: 14, padding: "4px 10px", flexShrink: 0 },
+                children: "✕",
+              }),
+            ],
+          }),
+          e.jsxs("div", {
+            style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10, margin: "16px 0", padding: 12, background: a.sb, borderRadius: 10 },
+            children: [
+              Campo("Categoría", catalogItem.cat),
+              Campo("Unidad", catalogItem.unidad),
+              Campo("Precio neto", ne(precioCatalogo)),
+              Campo("Precio con IVA", ne(Math.round(precioCatalogo * 1.19))),
+            ],
+          }),
+          !tieneApu &&
+            e.jsx("div", {
+              style: { background: "rgba(56,189,248,0.1)", border: "1px solid #38bdf8", borderRadius: 8, padding: 12, marginBottom: 4, fontSize: 13, color: a.text },
+              children: "Esta partida no tiene un APU vinculado.",
+            }),
+          tieneApu &&
+            Seccion(
+              "APU vinculado: " + (apu.nombre || "—"),
+              e.jsxs(e.Fragment, {
+                children: [
+                  e.jsxs("div", { style: { fontSize: 12, color: a.muted, marginBottom: 8 }, children: [esSubcontrato ? "Subcontrato" : apu.categoria || apu.tipo || "—", " · ", apu.unidad] }),
+                  !esSubcontrato &&
+                    e.jsx("div", {
+                      style: { border: "1px solid " + a.border, borderRadius: 10, overflow: "hidden" },
+                      children: [
+                        e.jsx("div", {
+                          style: { display: "grid", gridTemplateColumns: "1fr 70px 90px 100px", gap: 8, padding: "8px 12px", background: a.sb, fontSize: 11, fontWeight: 700, color: a.muted, textTransform: "uppercase" },
+                          children: ["Material", "Cant.", "Precio un.", "Subtotal"].map((h) => e.jsx("div", { style: h === "Material" ? {} : { textAlign: "right" }, children: h }, h)),
+                        }),
+                        detalle.materialesDetalle.length
+                          ? detalle.materialesDetalle.map((mLine, idx) =>
+                              e.jsxs(
+                                "div",
+                                {
+                                  style: { display: "grid", gridTemplateColumns: "1fr 70px 90px 100px", gap: 8, padding: "7px 12px", fontSize: 12, borderTop: "1px solid " + a.border, alignItems: "center" },
+                                  children: [
+                                    e.jsx("div", { style: { color: a.text }, children: mLine.nombre }),
+                                    e.jsx("div", { style: { color: a.muted, textAlign: "right" }, children: mLine.cantidad + (mLine.unidad ? " " + mLine.unidad : "") }),
+                                    e.jsx("div", { style: { color: a.muted, textAlign: "right" }, children: ne(mLine.precioUnit) }),
+                                    e.jsx("div", { style: { color: a.text, fontWeight: 700, textAlign: "right" }, children: ne(Math.round(mLine.subtotal)) }),
+                                  ],
+                                },
+                                idx,
+                              ),
+                            )
+                          : e.jsx("div", { style: { padding: 12, fontSize: 12, color: a.muted }, children: "Sin materiales" }),
+                      ],
+                    }),
+                ],
+              }),
+            ),
+          tieneApu &&
+            Seccion(
+              "Desglose de costo",
+              e.jsxs("div", {
+                children: [
+                  Fila(esSubcontrato ? "Costo de subcontrato" : "Costo materiales", ne(Math.round(calculo.base))),
+                  !esSubcontrato && Fila("Mano de obra (" + calculo.moLabel + ")", ne(Math.round(calculo.moTotal))),
+                  Fila("GG (" + (parseFloat(apu.pctGG) || 0) + "%)", ne(Math.round(calculo.ggTotal))),
+                  Fila("Utilidad (" + (parseFloat(apu.pctUtilidad) || 0) + "%)", ne(Math.round(calculo.utilTotal))),
+                  Fila("PRECIO FINAL (calculado por APU)", ne(calculo.precioFinal), !0),
+                ],
+              }),
+            ),
+          tieneApu &&
+            Seccion(
+              "Comparación de precios",
+              e.jsxs("div", {
+                children: [
+                  Fila("Precio guardado en catálogo", ne(precioCatalogo)),
+                  Fila("Precio calculado por APU", ne(precioCalculado)),
+                  Fila("Diferencia", (diferenciaAbs >= 0 ? "+" : "") + ne(diferenciaAbs)),
+                  Fila("Diferencia %", (diferenciaPct >= 0 ? "+" : "") + diferenciaPct.toFixed(2).replace(".", ",") + "%"),
+                  e.jsx("div", {
+                    style: {
+                      marginTop: 10,
+                      display: "inline-block",
+                      padding: "4px 12px",
+                      borderRadius: 20,
+                      fontSize: 12,
+                      fontWeight: 800,
+                      background: difSignificativa ? "rgba(251,146,60,0.15)" : "rgba(52,211,153,0.15)",
+                      color: difSignificativa ? "#fb923c" : "#34d399",
+                      border: "1px solid " + (difSignificativa ? "#fb923c" : "#34d399"),
+                    },
+                    children: difSignificativa ? "⚠️ Revisar" : "✅ Coincide",
+                  }),
+                ],
+              }),
+            ),
+          Seccion(
+            "📋 Reglas comerciales",
+            e.jsxs("div", {
+              children: [
+                Fila("Cantidad mínima facturable", catalogItem.cantidadMinimaFacturable ? catalogItem.cantidadMinimaFacturable + " " + catalogItem.unidad : "—"),
+                Fila("Precio mínimo de la partida", catalogItem.precioMinimoPartida ? ne(catalogItem.precioMinimoPartida) : "—"),
+                Fila("Requiere movilización", catalogItem.requiereMovilizacion ? "Sí" : "No"),
+                Fila("Requiere visita técnica", catalogItem.requiereVisitaTecnica ? "Sí" : "No"),
+                Fila("Requiere trabajo en altura", catalogItem.requiereTrabajoAltura ? "Sí" : "No"),
+                Fila("Requiere retiro de residuos", catalogItem.requiereRetiroResiduos ? "Sí" : "No"),
+              ],
+            }),
+          ),
+          Seccion(
+            "🏷️ Clasificación técnica",
+            e.jsxs("div", {
+              children: [
+                Fila("Rubro", catalogItem.rubro || "—"),
+                Fila("Subrubro", catalogItem.subrubro || "—"),
+                Fila("Tipo de intervención", catalogItem.tipoIntervencion || "—"),
+                Fila("Sistema constructivo", catalogItem.sistemaConstructivo || "—"),
+                Fila("Alcance", catalogItem.alcance || "—"),
+                Fila("Especialidad", catalogItem.especialidad || "—"),
+              ],
+            }),
+          ),
+        ],
+      }),
+    });
+  }
   function vg({ catalog: t, setCatalog: i, setToast: r }) {
     var n = [...new Set(t.map((y) => y.cat))];
     var rubrosPresentes = [...new Set(t.map((y) => y.rubro || y.cat))].sort((a, b) => a.localeCompare(b, "es"));
-    var tiposPresentes = [...new Set(t.map((y) => y.tipoIntervencion).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
     const TAXO_RUBROS = ["Obras preliminares", "Demoliciones y desmontajes", "Movimiento de tierras", "Hormigón y fundaciones", "Albañilería", "Estructuras metálicas", "Construcción liviana", "Techumbres y aguas lluvias", "Impermeabilización", "Aislación y eficiencia energética", "Fachadas y cerramientos", "Puertas, ventanas y carpinterías", "Pisos y revestimientos", "Cielos y terminaciones", "Pinturas y recubrimientos", "Instalaciones sanitarias", "Alcantarillado y drenaje", "Instalaciones de gas", "Instalaciones eléctricas", "Corrientes débiles y seguridad electrónica", "Climatización y ventilación", "Protección contra incendios", "Accesibilidad universal", "Equipamiento y mobiliario", "Obras exteriores y urbanización", "Paisajismo y riego", "Piscinas", "Servicios profesionales", "Mantención general", "Limpieza, pruebas y entrega"],
       TAXO_TIPOS = ["Obra nueva", "Ampliación", "Remodelación", "Reposición", "Reparación", "Mantención preventiva", "Mantención correctiva", "Demolición", "Desmontaje", "Regularización", "Servicio profesional"],
       TAXO_ALCANCES = ["Solo suministro", "Solo instalación", "Solo mano de obra", "Suministro e instalación", "Fabricación e instalación", "Desmontaje y retiro", "Reparación parcial", "Servicio completo", "Subcontrato"];
@@ -47830,15 +49952,10 @@ K &&
       [categoriaHeredada, setCategoriaHeredada] = V(""),
       [rubroFiltro, setRubroFiltro] = V("Todos"),
       [subrubroFiltro, setSubrubroFiltro] = V("Todos"),
-      [tipoFiltro, setTipoFiltro] = V("Todos");
-    var subrubrosPresentes = [
-      ...new Set(
-        t
-          .filter((y) => rubroFiltro === "Todos" || (y.rubro || y.cat) === rubroFiltro)
-          .map((y) => y.subrubro)
-          .filter(Boolean),
-      ),
-    ].sort((a, b) => a.localeCompare(b, "es"));
+      [tipoFiltro, setTipoFiltro] = V("Todos"),
+      [detalleId, setDetalleId] = V(null);
+    var subrubrosPresentes = [...new Set(t.filter((y) => rubroFiltro === "Todos" || (y.rubro || y.cat) === rubroFiltro).map((y) => y.subrubro).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
+    var tiposPresentes = [...new Set(t.filter((y) => (rubroFiltro === "Todos" || (y.rubro || y.cat) === rubroFiltro) && (subrubroFiltro === "Todos" || y.subrubro === subrubroFiltro)).map((y) => y.tipoIntervencion).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
     var f = (() => {
         var y = l === "Todos" ? t : t.filter((P) => P.cat === l);
         rubroFiltro !== "Todos" && (y = y.filter((P) => (P.rubro || P.cat) === rubroFiltro));
@@ -47901,8 +50018,13 @@ K &&
               __missingApu: !oe,
             });
           },
-          U = String(B || "").trim(),
-          R = A(U),
+          U = String(B || "").trim();
+        if (/^\d+$/.test(U)) {
+          var idBuscado = parseInt(U, 10),
+            porId = y.filter((Z) => parseInt(Z.id) === idBuscado);
+          if (porId.length) return porId.map(O);
+        }
+        var R = A(U),
           K = R.split(/\s+/).filter(Boolean),
           D = { sp: !1, su: !1, sa: !1 },
           k = [];
@@ -48716,52 +50838,62 @@ K &&
                         flexWrap: "wrap",
                         gap: 8,
                         marginBottom: 14,
-                        alignItems: "center",
+                        alignItems: "flex-start",
                       },
                       children: [
-                        e.jsx("span", {
-                          style: { fontSize: 11, color: a.muted, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em" },
-                          children: "Taxonomía:",
-                        }),
-                        e.jsxs("select", {
-                          style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", width: "auto" }),
-                          value: rubroFiltro,
-                          onChange: (y) => {
-                            setRubroFiltro(y.target.value);
-                            setSubrubroFiltro("Todos");
-                          },
+                        e.jsxs("div", {
+                          style: { display: "flex", flexDirection: "column", gap: 2 },
                           children: [
-                            e.jsx("option", { value: "Todos", children: "Rubro: todos" }),
-                            rubrosPresentes.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                            e.jsx("label", { style: { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em", color: a.muted }, children: "Rubro" }),
+                            e.jsxs("select", {
+                              style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", minWidth: 180 }),
+                              value: rubroFiltro,
+                              title: rubroFiltro !== "Todos" ? rubroFiltro : undefined,
+                              onChange: (y) => { setRubroFiltro(y.target.value); setSubrubroFiltro("Todos"); setTipoFiltro("Todos"); },
+                              children: [
+                                e.jsx("option", { value: "Todos", children: "Todos (" + t.length + ")" }),
+                                rubrosPresentes.map((y) => { var cnt = t.filter((x) => (x.rubro || x.cat) === y).length; return e.jsx("option", { value: y, title: y, children: y + " (" + cnt + ")" }, y); }),
+                              ],
+                            }),
                           ],
                         }),
-                        e.jsxs("select", {
-                          style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", width: "auto" }),
-                          value: subrubroFiltro,
-                          onChange: (y) => setSubrubroFiltro(y.target.value),
+                        e.jsxs("div", {
+                          style: { display: "flex", flexDirection: "column", gap: 2 },
                           children: [
-                            e.jsx("option", { value: "Todos", children: "Subrubro: todos" }),
-                            subrubrosPresentes.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                            e.jsx("label", { style: { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em", color: a.muted }, children: "Subrubro" }),
+                            e.jsxs("select", {
+                              style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", minWidth: 180 }),
+                              value: subrubroFiltro,
+                              title: subrubroFiltro !== "Todos" ? subrubroFiltro : undefined,
+                              onChange: (y) => { setSubrubroFiltro(y.target.value); setTipoFiltro("Todos"); },
+                              children: [
+                                e.jsx("option", { value: "Todos", children: "Todos (" + subrubrosPresentes.length + " subrubros)" }),
+                                subrubrosPresentes.map((y) => { var base = rubroFiltro === "Todos" ? t : t.filter((x) => (x.rubro || x.cat) === rubroFiltro); var cnt = base.filter((x) => x.subrubro === y).length; return e.jsx("option", { value: y, title: y, children: y + " (" + cnt + ")" }, y); }),
+                              ],
+                            }),
                           ],
                         }),
-                        e.jsxs("select", {
-                          style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", width: "auto" }),
-                          value: tipoFiltro,
-                          onChange: (y) => setTipoFiltro(y.target.value),
+                        e.jsxs("div", {
+                          style: { display: "flex", flexDirection: "column", gap: 2 },
                           children: [
-                            e.jsx("option", { value: "Todos", children: "Tipo de intervención: todos" }),
-                            tiposPresentes.map((y) => e.jsx("option", { value: y, children: y }, y)),
+                            e.jsx("label", { style: { fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em", color: a.muted }, children: "Tipo de intervención" }),
+                            e.jsxs("select", {
+                              style: u(d({}, c.sel), { fontSize: 12, padding: "4px 8px", minWidth: 180 }),
+                              value: tipoFiltro,
+                              title: tipoFiltro !== "Todos" ? tipoFiltro : undefined,
+                              onChange: (y) => setTipoFiltro(y.target.value),
+                              children: [
+                                e.jsx("option", { value: "Todos", children: "Todos (" + tiposPresentes.length + " tipos)" }),
+                                tiposPresentes.map((y) => { var base2 = t.filter((x) => (rubroFiltro === "Todos" || (x.rubro || x.cat) === rubroFiltro) && (subrubroFiltro === "Todos" || x.subrubro === subrubroFiltro)); var cnt = base2.filter((x) => x.tipoIntervencion === y).length; return e.jsx("option", { value: y, title: y, children: y + " (" + cnt + ")" }, y); }),
+                              ],
+                            }),
                           ],
                         }),
                         (rubroFiltro !== "Todos" || subrubroFiltro !== "Todos" || tipoFiltro !== "Todos") &&
                           e.jsx("button", {
-                            onClick: () => {
-                              setRubroFiltro("Todos");
-                              setSubrubroFiltro("Todos");
-                              setTipoFiltro("Todos");
-                            },
-                            style: { fontSize: 11, padding: "4px 8px", borderRadius: 6, border: "1px solid " + a.border, background: "var(--surface)", color: a.muted, cursor: "pointer" },
-                            children: "✕ Limpiar taxonomía",
+                            onClick: () => { setRubroFiltro("Todos"); setSubrubroFiltro("Todos"); setTipoFiltro("Todos"); },
+                            style: { fontSize: 11, padding: "4px 10px", borderRadius: 6, border: "1px solid " + a.accent, background: "transparent", color: a.accent, cursor: "pointer", fontWeight: 700, marginTop: 18 },
+                            children: "✕ Limpiar filtros",
                           }),
                       ],
                     }),
@@ -48771,6 +50903,7 @@ K &&
                         e.jsx("thead", {
                           children: e.jsx("tr", {
                             children: [
+                              "ID",
                               "Cat.",
                               "Descripción",
                               "APUs",
@@ -48779,7 +50912,17 @@ K &&
                               "c/IVA",
                               "",
                             ].map((y) =>
-                              e.jsx("th", { style: c.th, children: y }, y),
+                              e.jsx(
+                                "th",
+                                {
+                                  style:
+                                    y === "ID"
+                                      ? u(d({}, c.th), { width: 44 })
+                                      : c.th,
+                                  children: y,
+                                },
+                                y,
+                              ),
                             ),
                           }),
                         }),
@@ -48817,6 +50960,15 @@ K &&
                                 },
                                 style: { cursor: "pointer" },
                                 children: [
+                                  e.jsx("td", {
+                                    style: u(d({}, c.td), {
+                                      fontSize: 11,
+                                      color: a.muted,
+                                      fontWeight: 700,
+                                      whiteSpace: "nowrap",
+                                    }),
+                                    children: y.id,
+                                  }),
                                   e.jsx("td", {
                                     style: c.td,
                                     children: e.jsx("span", {
@@ -48937,6 +51089,15 @@ K &&
                                       style: { display: "flex", gap: 5 },
                                       children: [
                                         e.jsx("button", {
+                                          style: u(d({}, c.btn("g")), { fontSize: 11, whiteSpace: "nowrap" }),
+                                          title: "Ver detalle técnico completo (solo lectura)",
+                                          onClick: (P) => {
+                                            P.stopPropagation();
+                                            setDetalleId(y.id);
+                                          },
+                                          children: "🔍 Ver detalle",
+                                        }),
+                                        e.jsx("button", {
                                           style: c.btn("g"),
                                           onClick: (P) => {
                                             P.stopPropagation();
@@ -48995,6 +51156,17 @@ K &&
                   children:
                     g !== null ? "✏ Editar Partida" : "➕ Nueva Partida",
                 }),
+                g !== null &&
+                  e.jsx("div", {
+                    style: {
+                      fontSize: 12,
+                      color: a.muted,
+                      fontWeight: 700,
+                      marginTop: 4,
+                      marginBottom: 4,
+                    },
+                    children: "ID de catálogo: " + g,
+                  }),
                 g !== null &&
                   (() => {
                     var A = [];
@@ -49482,6 +51654,16 @@ K &&
             }),
           ],
         }),
+        detalleId !== null &&
+          (() => {
+            var catalogItemDetalle = t.find((y) => y.id === detalleId);
+            return catalogItemDetalle
+              ? e.jsx(ModalDetallePartida, {
+                  catalogItem: catalogItemDetalle,
+                  onClose: () => setDetalleId(null),
+                })
+              : null;
+          })(),
       ],
     });
   }
@@ -62016,6 +64198,122 @@ K &&
       p = m === 11 ? "0" : m === 10 ? "K" : String(m);
     return r === p;
   }
+  var ABOUT_SECCIONES = [
+    {
+      id: "info",
+      title: "Información general",
+      body: [
+        { t: "p", c: "Enlace Constructor Pro es una herramienta de apoyo para la elaboración de presupuestos, control de partidas, cubicaciones, planificación mediante Carta Gantt y generación de documentación asociada a proyectos de construcción." },
+        { t: "p", c: "Sus cálculos, precios, rendimientos y resultados son referenciales y deben ser revisados por el profesional responsable antes de su utilización contractual, técnica o comercial." },
+      ],
+    },
+    {
+      id: "quienes",
+      title: "Quiénes somos",
+      body: [
+        { t: "p", c: "ENLACE es una iniciativa orientada al desarrollo de soluciones digitales para la gestión técnica y económica de proyectos de construcción." },
+        { t: "p", c: "Enlace Constructor Pro fue diseñado para apoyar a profesionales, contratistas, oficinas técnicas y empresas en la organización, análisis y presentación de sus proyectos." },
+      ],
+    },
+    {
+      id: "mision",
+      title: "Misión y visión",
+      body: [
+        { t: "h", c: "Misión" },
+        { t: "p", c: "Brindar una herramienta práctica, profesional y accesible que facilite la gestión de presupuestos y planificación de obras, mejorando la productividad, el orden y la toma de decisiones en el sector de la construcción." },
+        { t: "h", c: "Visión" },
+        { t: "p", c: "Convertir a Enlace Constructor Pro en una plataforma de referencia para profesionales y empresas del sector construcción, integrando progresivamente nuevas funciones, automatizaciones y módulos especializados para la administración integral de proyectos." },
+      ],
+    },
+    {
+      id: "licencia",
+      title: "Licencia de uso",
+      body: [
+        { t: "p", c: "La adquisición o descarga autorizada de Enlace Constructor Pro otorga al usuario una licencia de uso limitada, no exclusiva, intransferible y revocable, exclusivamente para fines internos, técnicos, administrativos o comerciales propios." },
+        { t: "p", c: "Queda estrictamente prohibido, sin autorización expresa y por escrito de ENLACE:" },
+        { t: "ul", items: [
+          "Copiar, revender o sublicenciar el software.",
+          "Distribuirlo de forma gratuita o comercial.",
+          "Compartir instaladores, licencias o enlaces privados de descarga.",
+          "Publicarlo en redes sociales, foros, grupos, nubes públicas o sitios de descarga.",
+          "Modificar, descompilar, desensamblar o aplicar ingeniería inversa.",
+          "Replicar total o parcialmente su estructura, interfaz, lógica o base de datos con fines comerciales.",
+        ] },
+        { t: "p", c: "La difusión o distribución no autorizada podrá dar lugar a la suspensión de la licencia y al ejercicio de las acciones legales correspondientes." },
+      ],
+    },
+    {
+      id: "propiedad",
+      title: "Propiedad intelectual",
+      body: [
+        { t: "p", c: "Todos los derechos de propiedad intelectual, industrial, visual, funcional y documental de Enlace Constructor Pro pertenecen a ENLACE." },
+        { t: "p", c: "Esta protección incluye su marca, interfaz, diseño, catálogos, bases de datos, lógica operativa, código, documentación, plantillas y elementos gráficos." },
+        { t: "p", c: "El uso autorizado del software no transfiere al usuario ningún derecho de propiedad sobre estos elementos." },
+      ],
+    },
+    {
+      id: "privacidad",
+      title: "Privacidad y confidencialidad",
+      body: [
+        { t: "p", c: "La información ingresada por el usuario en el software, incluyendo clientes, presupuestos, partidas, calendarios, documentos y proyectos, pertenece exclusivamente al usuario." },
+        { t: "p", c: "ENLACE no comercializa ni redistribuye dicha información." },
+        { t: "p", c: "Cuando los datos se almacenan localmente en el equipo del usuario, la responsabilidad de su respaldo, custodia y seguridad corresponde al usuario." },
+      ],
+    },
+    {
+      id: "responsabilidad",
+      title: "Responsabilidad profesional",
+      body: [
+        { t: "h", c: "Exclusión de garantías" },
+        { t: "p", c: "El software se entrega «tal cual», como herramienta de apoyo profesional." },
+        { t: "p", c: "ENLACE no garantiza que el funcionamiento sea completamente ininterrumpido o libre de errores, ni garantiza resultados comerciales, adjudicación de licitaciones o rentabilidad de proyectos." },
+        { t: "p", c: "Los precios, rendimientos, cubicaciones, análisis y programaciones generados por el sistema deben ser revisados y validados por el usuario o profesional responsable." },
+        { t: "h", c: "Limitación de responsabilidad" },
+        { t: "p", c: "ENLACE no será responsable por:" },
+        { t: "ul", items: [
+          "Errores de digitación o configuración del usuario.",
+          "Diferencias entre precios de mercado y valores referenciales.",
+          "Errores en cubicaciones, presupuestos o programaciones no revisados.",
+          "Pérdida de información por falta de respaldo.",
+          "Pérdida de contratos, lucro cesante o perjuicios comerciales.",
+          "Uso incorrecto de los documentos generados.",
+        ] },
+        { t: "p", c: "La responsabilidad técnica, matemática, económica y contractual de los documentos emitidos mediante el software corresponde al usuario." },
+      ],
+    },
+    {
+      id: "soporte",
+      title: "Actualizaciones y soporte",
+      body: [
+        { t: "p", c: "Las actualizaciones, mejoras, nuevas plantillas, ajustes de catálogos, nuevas partidas, correcciones y módulos adicionales estarán sujetas al plan, licencia o modalidad comercial vigente." },
+        { t: "p", c: "ENLACE podrá ofrecer actualizaciones menores, paquetes de plantillas, mejoras funcionales, catálogos actualizados y nuevos módulos en futuras versiones." },
+        { t: "p", c: "La adquisición de una licencia perpetua no implica necesariamente acceso gratuito e indefinido a todas las futuras versiones o servicios." },
+      ],
+    },
+    {
+      id: "suspension",
+      title: "Suspensión de licencia",
+      body: [
+        { t: "p", c: "ENLACE podrá suspender o revocar la licencia en casos de:" },
+        { t: "ul", items: [
+          "Piratería.",
+          "Distribución no autorizada.",
+          "Alteración o evasión de licencias.",
+          "Uso fraudulento.",
+          "Publicación de instaladores o enlaces privados.",
+          "Incumplimiento de estas condiciones.",
+        ] },
+        { t: "p", c: "En caso de suspensión, el usuario deberá cesar el uso del software y eliminar las copias no autorizadas." },
+      ],
+    },
+    {
+      id: "jurisdiccion",
+      title: "Jurisdicción",
+      body: [
+        { t: "p", c: "Cualquier controversia relacionada con la adquisición, instalación o uso de Enlace Constructor Pro se regirá por la legislación aplicable al domicilio legal de ENLACE y será sometida a los tribunales competentes, salvo acuerdo distinto por escrito." },
+      ],
+    },
+  ];
   function Gg({
     cfg: t,
     setCfg: i,
@@ -62031,7 +64329,9 @@ K &&
     initialTab: initialTab,
   }) {
     const [h, j] = V(t),
-      [F, g] = V(initialTab || "identidad");
+      [F, g] = V(initialTab || "identidad"),
+      [aboutOpen, setAboutOpen] = V({ info: !0 });
+    var toggleAbout = (id) => setAboutOpen((prev) => u(d({}, prev), { [id]: !prev[id] }));
     var z = (x) => {
         (j(x), s && s(!0));
       },
@@ -63819,39 +66119,72 @@ K &&
             children: [
               e.jsx("div", { style: c.ct, children: "ℹ️ Sobre la aplicación" }),
               e.jsxs("div", {
-                style: { fontSize: 13, lineHeight: 1.6, color: a.text, whiteSpace: "pre-wrap" },
+                style: {
+                  background: a.surface,
+                  border: `1px solid ${a.border}`,
+                  borderRadius: 12,
+                  padding: "18px 20px",
+                  marginBottom: 18,
+                },
                 children: [
-                  e.jsx("strong", { children: "📜 Términos y Condiciones de Licencia y Uso — Enlace Constructor Pro (ECP)" }),
-                  "\n\n",
-                  e.jsx("strong", { children: "Versión del software:" }), " Enlace Constructor Pro v1.2\n",
-                  e.jsx("strong", { children: "Titular de los derechos:" }), " ENLACE\n",
-                  e.jsx("strong", { children: "Sitio web oficial:" }), " ", e.jsx("a", { href: "#", onClick: (t) => { t.preventDefault(); window.__TAURI__ ? window.__TAURI__.shell.open("https://redenlace.cl/constructor-pro") : window.open("https://redenlace.cl/constructor-pro") }, style: { color: a.accent || "#3b82f6", textDecoration: "underline", cursor: "pointer" }, children: "https://redenlace.cl/constructor-pro" }), "\n\n",
-                  e.jsx("strong", { children: "1. Concesión de Licencia y Adquisición (Compra)" }), "\n",
-                  "Licencia de uso: Al adquirir o descargar el software, ENLACE otorga al usuario una licencia de uso limitada, no exclusiva, intransferible y revocable para utilizar Enlace Constructor Pro únicamente con fines internos o comerciales en su propia actividad profesional o empresarial.\n",
-                  "Reventa prohibida: Queda estrictamente prohibida la reventa, sublicenciamiento, alquiler, distribución comercial o comercialización de Enlace Constructor Pro, ya sea de forma parcial o total, sin el consentimiento expreso y por escrito de ENLACE.\n\n",
-                  e.jsx("strong", { children: "2. Propiedad Intelectual" }), "\n",
-                  "Titularidad: Todos los derechos de propiedad intelectual, industrial, marcas, interfaces gráficas, algoritmos y bases de datos integradas en Enlace Constructor Pro son propiedad exclusiva de ENLACE y están protegidos por las leyes y tratados internacionales de derechos de autor.\n",
-                  "Prohibición de modificación: El usuario no podrá aplicar ingeniería inversa, descompilar, desensamblar, modificar, alterar, traducir ni crear obras derivadas basadas en el software o en su código fuente.\n\n",
-                  e.jsx("strong", { children: "3. Difusión y Copias no Autorizadas" }), "\n",
-                  "Uso personal/empresarial: La licencia adquirida autoriza la instalación y uso del software en los dispositivos propiedad del usuario o de la empresa adquiriente.\n",
-                  "Restricción de difusión masiva: Se prohíbe terminantemente la distribución masiva, publicación de enlaces de descarga en foros, redes sociales, sitios de piratería, o el alojamiento de Enlace Constructor Pro en servidores públicos o nubes de acceso público.\n\n",
-                  e.jsx("strong", { children: "4. Exclusión de Garantías" }), "\n",
-                  "El software se proporciona «tal cual» (as is). ENLACE no garantiza que el funcionamiento de Enlace Constructor Pro sea ininterrumpido o esté completamente libre de errores.\n",
-                  "ENLACE no garantiza la adjudicación de licitaciones, rentabilidad de proyectos o la exactitud absoluta de los rendimientos constructivos sugeridos, los cuales son valores referenciales sujetos a revisión del profesional a cargo.\n\n",
-                  e.jsx("strong", { children: "5. Limitación de Responsabilidad (Importante para Licitaciones)" }), "\n",
-                  "Responsabilidad de presupuestos: La verificación técnica, matemática y económica de las cantidades de obra (cubicaciones), precios unitarios, rendimientos, leyes sociales e impuestos generados mediante el software es de exclusiva responsabilidad del usuario.\n",
-                  "Desvinculación legal: ENLACE no asumirá ninguna responsabilidad por lucro cesante, daños indirectos, pérdida de contratos, errores en licitaciones (públicas o privadas), multas, o cualquier otra pérdida económica derivada del uso o incapacidad de uso del software o de los resultados obtenidos por éste.\n\n",
-                  e.jsx("strong", { children: "6. Privacidad y Confidencialidad" }), "\n",
-                  "Datos del cliente: Toda la información, bases de datos de clientes, presupuestos y proyectos creados por el usuario dentro de Enlace Constructor Pro son de su exclusiva propiedad y confidencialidad. ENLACE no accede, comparte ni comercializa la información confidencial de las obras o proyectos gestionados localmente por el usuario en el software.\n\n",
-                  e.jsx("strong", { children: "7. Actualizaciones y Soporte" }), "\n",
-                  "El soporte técnico y las actualizaciones (mejoras de rendimiento, actualización de catálogo de materiales, corrección de bugs) estarán sujetos a los términos específicos del plan de mantenimiento, versión o suscripción que el usuario haya adquirido. ENLACE no tiene obligación de entregar actualizaciones gratuitas a versiones perpetuas a menos que se indique lo contrario en el momento de la compra.\n\n",
-                  e.jsx("strong", { children: "8. Rescisión y Suspensión de la Licencia" }), "\n",
-                  "ENLACE se reserva el derecho de rescindir o suspender de forma inmediata, y sin derecho a reembolso, la licencia de cualquier usuario o entidad que incumpla los presentes términos (por ejemplo, ante la detección de piratería, alteración de claves o difusión no autorizada). En caso de rescisión, el usuario deberá cesar todo uso del software y eliminar todas las copias instaladas en sus equipos.\n\n",
-                  e.jsx("strong", { children: "9. Jurisdicción y Ley Aplicable" }), "\n",
-                  "Cualquier controversia, disputa o reclamación legal derivada de la interpretación, adquisición o uso de Enlace Constructor Pro se regirá por las leyes vigentes del país/región de domicilio fiscal de ENLACE, sometiéndose las partes a los tribunales competentes de dicha jurisdicción."
-                ]
-              })
-            ]
+                  e.jsx("div", { style: { fontSize: 20, fontWeight: 800, color: a.text, marginBottom: 2 }, children: "Enlace Constructor Pro" }),
+                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accent, marginBottom: 12 }, children: ["Versión 1.7.0 · Edición de lanzamiento"] }),
+                  e.jsxs("div", { style: { fontSize: 12, color: a.muted, lineHeight: 2 }, children: [
+                    e.jsxs("div", { children: [e.jsx("strong", { style: { color: a.text }, children: "Titular de derechos: " }), "ENLACE"] }),
+                    e.jsxs("div", { children: [
+                      e.jsx("strong", { style: { color: a.text }, children: "Sitio web oficial: " }),
+                      e.jsx("a", {
+                        href: "#",
+                        onClick: (t) => { t.preventDefault(); window.__TAURI__ ? window.__TAURI__.shell.open("https://redenlace.cl/constructor-pro") : window.open("https://redenlace.cl/constructor-pro") },
+                        style: { color: a.blue, textDecoration: "underline", cursor: "pointer" },
+                        children: "https://redenlace.cl/constructor-pro",
+                      }),
+                    ] }),
+                  ] }),
+                ],
+              }),
+              ...ABOUT_SECCIONES.map((sec, idx) =>
+                e.jsxs("div", {
+                  key: sec.id,
+                  style: { marginBottom: 8, border: `1px solid ${a.border}`, borderRadius: 8, overflow: "hidden" },
+                  children: [
+                    e.jsxs("button", {
+                      type: "button",
+                      onClick: () => toggleAbout(sec.id),
+                      style: {
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "11px 14px",
+                        background: a.surface,
+                        border: "none",
+                        color: a.text,
+                        cursor: "pointer",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        textAlign: "left",
+                      },
+                      children: [
+                        (idx + 1) + ". " + sec.title,
+                        e.jsx("span", { style: { color: a.accent, flexShrink: 0, marginLeft: 10 }, children: aboutOpen[sec.id] ? "▲" : "▼" }),
+                      ],
+                    }),
+                    aboutOpen[sec.id] &&
+                      e.jsx("div", {
+                        style: { padding: "14px 16px", fontSize: 13, lineHeight: 1.7, color: a.text, maxWidth: 720 },
+                        children: sec.body.map((item, bi) =>
+                          item.t === "h"
+                            ? e.jsx("div", { key: bi, style: { fontSize: 12, fontWeight: 700, color: a.accent, textTransform: "uppercase", letterSpacing: ".04em", marginTop: bi ? 14 : 0, marginBottom: 6 }, children: item.c })
+                            : item.t === "ul"
+                            ? e.jsx("ul", { key: bi, style: { margin: "2px 0 12px", paddingLeft: 20, display: "flex", flexDirection: "column", gap: 4 }, children: item.items.map((li, li2) => e.jsx("li", { key: li2, children: li })) })
+                            : e.jsx("p", { key: bi, style: { margin: "0 0 10px" }, children: item.c }),
+                        ),
+                      }),
+                  ],
+                }),
+              ),
+            ],
           }),
               ]
             })
@@ -78989,6 +81322,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         return de > H ? u(d({}, ae), { estado: "Vencido" }) : ae;
       });
     }, [B, l.validez]);
+    const editorGuardRef = Re.useRef(null);
     const [x, f] = V("dashboard"),
       [configStartTab, setConfigStartTab] = V("identidad"),
       [I, D] = V(() => !pt("welcomeSeen", !1)),
@@ -79144,6 +81478,8 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       Q(opportunity ? "🔒 Presupuesto N° " + budgetRecord.id + " vinculado a licitación " + targetIdMP : "🔓 Presupuesto N° " + budgetRecord.id + " desvinculado");
     };
     var oe = (H) => {
+        var salir = !(H && H._salir === !1);
+        H = u(d({}, H), { _salir: void 0 });
         if (H && H._pendingClientName) {
           var pendingClientName = String(H._pendingClientName || "").trim();
           var normalizeClientName = function (value) { return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim(); };
@@ -79313,7 +81649,16 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             o((Me) => u(d({}, Me), { nextNum: Qp + 1 })));
           syncBudgetToTender(createdBudget, Qp);
         }
-        (R(null), f("history"), Q("✅ Presupuesto guardado"));
+        if (salir) {
+          (R(null), f("history"), Q("✅ Presupuesto guardado"));
+        } else {
+          // Guardar sin salir: el usuario permanece en el mismo presupuesto.
+          // Al pasar de "nuevo" a "editando" con el id ya asignado, el
+          // próximo guardado se detecta como actualización (evita duplicar).
+          R(ae ? Zg : createdBudget);
+          f("edit");
+          Q("✅ Presupuesto guardado correctamente");
+        }
       },
       ce = (H) => {
         var ae =
@@ -79706,6 +82051,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             plantillasUser: P,
             onDeletePlantillaUser: O,
             setToast: Q,
+            guardRef: editorGuardRef,
           });
         if (x === "dashboard")
           return e.jsx(Qf, {
@@ -80853,20 +83199,31 @@ Esta acción no se puede deshacer.`) &&
                                 },
                               ),
                               onClick: () => {
-                                (R(null),
-                                  ae.k !== "lista" && Z(null),
-                                  x === "config" &&
-                                    ae.k !== "config" &&
-                                    r &&
-                                    Q(
-                                      "⚠️ Tienes cambios sin guardar en Configuración",
-                                    ),
-                                  f(ae.k));
+                                var leave = () => {
+                                  (R(null),
+                                    ae.k !== "lista" && Z(null),
+                                    x === "config" &&
+                                      ae.k !== "config" &&
+                                      r &&
+                                      Q(
+                                        "⚠️ Tienes cambios sin guardar en Configuración",
+                                      ),
+                                    f(ae.k));
+                                  if (
+                                    ae.k === "licitaciones" &&
+                                    typeof setUnreadAlerts !== "undefined"
+                                  )
+                                    setUnreadAlerts(0);
+                                };
                                 if (
-                                  ae.k === "licitaciones" &&
-                                  typeof setUnreadAlerts !== "undefined"
-                                )
-                                  setUnreadAlerts(0);
+                                  (x === "new" || x === "edit") &&
+                                  editorGuardRef.current &&
+                                  editorGuardRef.current.dirty
+                                ) {
+                                  editorGuardRef.current.intentarSalir(leave);
+                                } else {
+                                  leave();
+                                }
                               },
                               children: [
                                 e.jsx("span", {
@@ -81202,7 +83559,7 @@ Esta acción no se puede deshacer.`) &&
                 textDecoration: "underline",
                 cursor: "pointer"
               },
-              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.2")
+              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.0")
             }),
           ],
         }),

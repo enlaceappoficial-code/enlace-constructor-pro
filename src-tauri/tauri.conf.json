@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "Enlace Constructor Pro",
-    "version": "1.0.3"
+    "version": "1.7.0"
   },
   "tauri": {
     "allowlist": {
