@@ -66005,7 +66005,7 @@ K &&
                 children: [
                   e.jsx("strong", { children: "📜 Términos y Condiciones de Licencia y Uso — Enlace Constructor Pro (ECP)" }),
                   "\n\n",
-                  e.jsx("strong", { children: "Versión del software:" }), " Enlace Constructor Pro v1.2\n",
+                  e.jsx("strong", { children: "Versión del software:" }), " Enlace Constructor Pro v1.7.0\n",
                   e.jsx("strong", { children: "Titular de los derechos:" }), " ENLACE\n",
                   e.jsx("strong", { children: "Sitio web oficial:" }), " ", e.jsx("a", { href: "#", onClick: (t) => { t.preventDefault(); window.__TAURI__ ? window.__TAURI__.shell.open("https://redenlace.cl/constructor-pro") : window.open("https://redenlace.cl/constructor-pro") }, style: { color: a.accent || "#3b82f6", textDecoration: "underline", cursor: "pointer" }, children: "https://redenlace.cl/constructor-pro" }), "\n\n",
                   e.jsx("strong", { children: "1. Concesión de Licencia y Adquisición (Compra)" }), "\n",
@@ -83408,7 +83408,7 @@ Esta acción no se puede deshacer.`) &&
                 textDecoration: "underline",
                 cursor: "pointer"
               },
-              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.2")
+              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.0")
             }),
           ],
         }),
