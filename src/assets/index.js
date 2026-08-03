@@ -35671,7 +35671,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
   var COLUMNAS_TABLA_GANTT = [
     { clave: "sel", ancho: 36 },
     { clave: "id", ancho: 55 },
-    { clave: "nombre", ancho: 220 },
+    { clave: "nombre", ancho: 250 },
     { clave: "inicio", ancho: 100 },
     { clave: "duracion", ancho: 40 },
     { clave: "predecesora", ancho: 40 },
@@ -37293,7 +37293,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                 }),
                                 e.jsx("th", {
                                   style: {
-                                    width: 220,
+                                    width: 250,
                                     padding: "6px 4px",
                                     fontSize: 9,
                                     color: a.muted,
