@@ -35671,10 +35671,10 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
   var COLUMNAS_TABLA_GANTT = [
     { clave: "sel", ancho: 36 },
     { clave: "id", ancho: 55 },
-    { clave: "nombre", ancho: 365 },
-    { clave: "inicio", ancho: 105 },
-    { clave: "duracion", ancho: 60 },
-    { clave: "predecesora", ancho: 80 },
+    { clave: "nombre", ancho: 280 },
+    { clave: "inicio", ancho: 100 },
+    { clave: "duracion", ancho: 40 },
+    { clave: "predecesora", ancho: 40 },
     { clave: "acciones", ancho: 45 },
   ];
   var TABLA_TAREAS_ANCHO_MIN = COLUMNAS_TABLA_GANTT.reduce((sum, c2) => sum + c2.ancho, 0);
@@ -37253,7 +37253,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                     e.jsx("div", {
                       style: { maxHeight: 500, overflow: "auto" },
                       children: e.jsxs("table", {
-                        style: { width: "100%", minWidth: TABLA_TAREAS_ANCHO_MIN, borderCollapse: "collapse" },
+                        style: { width: TABLA_TAREAS_ANCHO_MIN, tableLayout: "fixed", borderCollapse: "collapse" },
                         children: [
                           e.jsx("colgroup", {
                             children: COLUMNAS_TABLA_GANTT.map((col) =>
@@ -37293,7 +37293,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                 }),
                                 e.jsx("th", {
                                   style: {
-                                    width: 365,
+                                    width: 280,
                                     padding: "6px 4px",
                                     fontSize: 9,
                                     color: a.muted,
@@ -37308,9 +37308,9 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                   },
                                   children: "Nombre",
                                 }),
-                                e.jsx("th", { style: { width: 105, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Inicio" }),
-                                e.jsx("th", { style: { width: 60, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Duración" }),
-                                e.jsx("th", { style: { width: 80, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Predecesora" }),
+                                e.jsx("th", { style: { width: 100, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Inicio" }),
+                                e.jsx("th", { style: { width: 40, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Duración" }),
+                                e.jsx("th", { style: { width: 40, padding: "6px 2px", fontSize: 9, color: a.muted, textTransform: "uppercase", position: "sticky", top: 0, zIndex: 2, background: a.sb }, children: "Predecesora" }),
                                 e.jsx("th", { style: { width: 45, padding: "6px 2px", position: "sticky", top: 0, zIndex: 2, background: a.sb } }),
                               ],
                             }),
@@ -37403,9 +37403,9 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                       }),
                                     }),
                                     e.jsx("td", {
-                                      style: { padding: "0 4px" },
+                                      style: { padding: "0 2px" },
                                       children: e.jsx("input", {
-                                        style: u(d({}, c.inp), { width: "100%", fontSize: 11, padding: "3px 4px", textAlign: "center", boxSizing: "border-box" }),
+                                        style: u(d({}, c.inp), { width: "100%", fontSize: 11, padding: "3px 2px", textAlign: "center", boxSizing: "border-box" }),
                                         type: "number",
                                         value: fila.esResumen ? feE.duracionLaboral : E.duracion,
                                         onChange: (q) => P(E.id, "duracion", parseInt(q.target.value) || 1),
@@ -37417,7 +37417,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                       }),
                                     }),
                                     e.jsx("td", {
-                                      style: { padding: "0 4px", fontSize: 10, color: a.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
+                                      style: { padding: "0 2px", fontSize: 10, color: a.muted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" },
                                       title: predecesorasTexto || "",
                                       children: predecesorasTexto || "—",
                                     }),
