@@ -20576,8 +20576,7 @@ Error generating stack: ` +
                   { l: "Total", x: 194, r: !0 },
                 ],
           ce = ie === "separado" ? 118 : 126,
-          te = ie === "separado" ? 136 : 147,
-          fe = ie === "separado" ? 46 : 52;
+          te = ie === "separado" ? 136 : 147;
         return (
           o.setFillColor(...q),
           o.rect(14, G, 182, 8, "F"),
@@ -20632,10 +20631,31 @@ Error generating stack: ` +
                 hr = Lve.cantidadFacturable,
                 jr = Lve.precioUnitario,
                 Pr = Lve.totalLinea,
+                notaTxt = ve._notaVisible || Lve.motivo,
                 tieneNota = !!Lve.reglaAplicada || !!ve._notaVisible,
-                Fr = tieneNota ? 12 : 8,
-                yTxt = tieneNota ? G + 4.3 : G + 5.3,
                 gr = xr % 2 === 0 ? re : Q;
+              var descMaxWidth = ce - 25 - 3;
+              o.setFont("helvetica", "normal");
+              o.setFontSize(8.5);
+              var descLines = o.splitTextToSize(ve.desc || "", descMaxWidth);
+              var notaLines = [];
+              if (tieneNota) {
+                o.setFont("helvetica", "italic");
+                o.setFontSize(6.5);
+                notaLines = o.splitTextToSize(notaTxt, descMaxWidth);
+                o.setFont("helvetica", "normal");
+                o.setFontSize(8.5);
+              }
+              var descLineH = 3.6, notaLineH = 2.8, gapDescNota = 4;
+              var Fr =
+                5.3 +
+                (descLines.length - 1) * descLineH +
+                (tieneNota ? gapDescNota + (notaLines.length - 1) * notaLineH : 0) +
+                2.7;
+              if (G + Fr > 262) {
+                (o.addPage(), (G = 18));
+              }
+              var yTxt = G + 5.3;
               (o.setFillColor(...gr),
                 o.rect(14, G, 182, Fr, "F"),
                 o.setDrawColor(220, 225, 235),
@@ -20644,14 +20664,16 @@ Error generating stack: ` +
                 o.setFont("helvetica", "normal"),
                 o.setFontSize(8.5),
                 o.setTextColor(50, 60, 75),
-                o.text("" + (xr + 1), 16, yTxt),
-                o.text((ve.desc || "").slice(0, fe), 25, yTxt));
+                o.text("" + (xr + 1), 16, yTxt));
+              descLines.forEach((linea, li) => o.text(linea, 25, yTxt + li * descLineH));
               if (tieneNota) {
+                var lastDescY = yTxt + (descLines.length - 1) * descLineH,
+                  notaY = lastDescY + gapDescNota;
                 (o.setFont("helvetica", "italic"),
                   o.setFontSize(6.5),
-                  o.setTextColor(180, 83, 9),
-                  o.text((ve._notaVisible || Lve.motivo).slice(0, 95), 25, G + 9.3),
-                  o.setFont("helvetica", "normal"),
+                  o.setTextColor(180, 83, 9));
+                notaLines.forEach((linea, li) => o.text(linea, 25, notaY + li * notaLineH));
+                (o.setFont("helvetica", "normal"),
                   o.setFontSize(8.5),
                   o.setTextColor(50, 60, 75));
               }
