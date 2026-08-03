@@ -13540,6 +13540,18 @@ Error generating stack: ` +
         especialidad: "Techumbres",
         requiereTrabajoAltura: true
       },
+      {id:439,cat:"Techumbres",desc:"Revisión y evaluación de estructura existente de techumbre",unidad:"gl",precio:57960,
+        rubro: "Techumbres y aguas lluvias",
+        subrubro: "Cubiertas y techumbres",
+        tipoIntervencion: "Servicio profesional",
+        sistemaConstructivo: "No aplica",
+        alcance: "Servicio completo",
+        especialidad: "Techumbres",
+        requiereTrabajoAltura: true,
+        requiereRevisionEstructural: true,
+        estadoRevision: "pendiente",
+        notaVisiblePendiente: "Pendiente de revisión estructural después del retiro de la cubierta."
+      },
     ],
     Rn = [
       {
@@ -19732,7 +19744,13 @@ Error generating stack: ` +
        unidad:"m²", catalogId:438, esSubcontrato:false, precioSubcontrato:0, precioMO:4500, pctMO:0, pctGG:12, pctUtilidad:15,
        rendimiento:16, dotacion:2,
        baseTecnica:{metodo:"Instalación de planchas de zinc emballetado (junta alzada) sobre OSB con clips de fijación oculta y traslapos laterales",supuestos:"Cuadrilla de 2 personas; no incluye membrana de impermeabilización, la que se cotiza como partida independiente",editable:true},
-       materiales:[{materialId:483,cantidad:1.08},{materialId:484,cantidad:5},{materialId:112,cantidad:0.12}]}
+       materiales:[{materialId:483,cantidad:1.08},{materialId:484,cantidad:5},{materialId:112,cantidad:0.12}]},
+      {id:40596, tipo:"Mantención", estructura:"General",
+       nombre:"Revisión y evaluación de estructura existente de techumbre", categoria:"Techumbres",
+       unidad:"gl", catalogId:439, esSubcontrato:false, precioSubcontrato:0, precioMO:45000, pctMO:0, pctGG:12, pctUtilidad:15,
+       rendimiento:1, dotacion:1,
+       baseTecnica:{metodo:"Inspección visual y manual de cerchas, costaneras, fijaciones, nivelación y estado general de la estructura de techumbre una vez retirada la cubierta existente",supuestos:"Incluye levantamiento fotográfico y registro de hallazgos; no incluye ensayos de laboratorio ni reparaciones, las que se cotizan aparte según el resultado de la revisión",editable:true},
+       materiales:[]}
     ].map((t) => d({ rendimiento: 30, dotacion: 1 }, t)),
     Kl = (t) => {
       window.__isElectron &&
@@ -20614,7 +20632,7 @@ Error generating stack: ` +
                 hr = Lve.cantidadFacturable,
                 jr = Lve.precioUnitario,
                 Pr = Lve.totalLinea,
-                tieneNota = !!Lve.reglaAplicada,
+                tieneNota = !!Lve.reglaAplicada || !!ve._notaVisible,
                 Fr = tieneNota ? 12 : 8,
                 yTxt = tieneNota ? G + 4.3 : G + 5.3,
                 gr = xr % 2 === 0 ? re : Q;
@@ -20632,7 +20650,7 @@ Error generating stack: ` +
                 (o.setFont("helvetica", "italic"),
                   o.setFontSize(6.5),
                   o.setTextColor(180, 83, 9),
-                  o.text(Lve.motivo.slice(0, 95), 25, G + 9.3),
+                  o.text((ve._notaVisible || Lve.motivo).slice(0, 95), 25, G + 9.3),
                   o.setFont("helvetica", "normal"),
                   o.setFontSize(8.5),
                   o.setTextColor(50, 60, 75));
@@ -22158,9 +22176,11 @@ Error generating stack: ` +
           var qty = cantShow + " " + (I.unidad || "");
           var descHtml =
             (I.desc || "") +
-            (Lts.reglaAplicada
-              ? '<div style="font-size:10px;color:#b45309;margin-top:2px">' + Lts.motivo + "</div>"
-              : "");
+            (I._notaVisible
+              ? '<div style="font-size:10px;color:#b45309;margin-top:2px">' + I._notaVisible + "</div>"
+              : Lts.reglaAplicada
+                ? '<div style="font-size:10px;color:#b45309;margin-top:2px">' + Lts.motivo + "</div>"
+                : "");
           if (modo === "separado")
             return (
               acc +
@@ -24049,8 +24069,8 @@ ${r.empresa}`;
                               Lg.precioUnitario,
                               Lg.totalLinea,
                             ]),
-                              Lg.reglaAplicada &&
-                                $.push(["", "  » " + Lg.motivo, "", "", "", ""]));
+                              (G._notaVisible || Lg.reglaAplicada) &&
+                                $.push(["", "  » " + (G._notaVisible || Lg.motivo), "", "", "", ""]));
                           }),
                             $.push([""]),
                             $.push(["", "", "", "", "Subtotal Neto:", R]),
@@ -24554,10 +24574,10 @@ ${r.empresa}`;
                                   },
                                   children: [
                                     D.desc,
-                                    Luf.reglaAplicada &&
+                                    (D._notaVisible || Luf.reglaAplicada) &&
                                       e.jsx("div", {
                                         style: { fontSize: 11, color: "#b45309", marginTop: 2 },
-                                        children: Luf.motivo,
+                                        children: D._notaVisible || Luf.motivo,
                                       }),
                                   ],
                                 }),
@@ -41623,18 +41643,27 @@ MATERIALES:
     {
       id: "sol-007-renovacion-cubierta-osb",
       nombre: "Renovación de cubierta sobre OSB",
-      descripcion: "Renovación completa de cubierta mediante instalación de tablero OSB estructural sobre la estructura existente, con impermeabilización opcional y terminación final a elección entre teja asfáltica o zinc emballetado.",
+      descripcion: "Renovación completa de cubierta mediante instalación de tablero OSB estructural sobre la estructura existente, con revisión obligatoria de la estructura una vez retirada la cubierta, reparación puntual opcional, impermeabilización opcional y terminación final a elección entre teja asfáltica o zinc emballetado.",
       rubro: "Techumbres y aguas lluvias",
       tipoIntervencion: "Reposición",
       partidas: [
         { catalogId: 434, cantidadBase: 30, formulaCantidad: "por m²: superficie de cubierta existente de zinc ondulado a retirar", obligatoria: false, editable: true, motivo: "Opcional: incluir solo si la cubierta actual es de zinc ondulado y debe retirarse antes de instalar el OSB; no aplica si la estructura ya está sin cubierta." },
+        { catalogId: 439, cantidadBase: 1, formulaCantidad: "fija: 1 gl (revisión técnica de la estructura completa expuesta tras el retiro de la cubierta)", obligatoria: true, editable: true, motivo: "Obligatoria de verificación: revisión y evaluación de cerchas, costaneras, fijaciones, nivelación, corrosión y humedad de la estructura una vez retirada la cubierta existente. No incluye reparaciones ni refuerzos — solo diagnóstico." },
+        { catalogId: 44, cantidadBase: 1, formulaCantidad: "por unidad: cerchas de madera dañadas detectadas en la revisión (ajustar según resultado de la inspección)", obligatoria: false, editable: true, motivo: "Reparación puntual de cercha de madera detectada en la revisión estructural. Reparaciones estructurales: definir después de inspección — aún no existen partidas de catálogo para reemplazo de costaneras, refuerzo estructural general de techumbre, reparación de estructura Metalcon ni tratamiento de madera afectada." },
         { catalogId: 435, cantidadBase: 30, formulaCantidad: "por m²: superficie de cubierta a cubrir con tablero OSB estructural", obligatoria: true, editable: true, motivo: "Ítem principal: base estructural OSB sobre la que se instala la impermeabilización y la terminación final." },
         { catalogId: 436, cantidadBase: 30, formulaCantidad: "por m²: superficie de OSB a impermeabilizar con membrana asfáltica", obligatoria: false, editable: true, motivo: "Seleccionable: se recomienda como protección bajo la terminación final, pero puede omitirse según especificación del proyecto." },
         { catalogId: 437, cantidadBase: 30, formulaCantidad: "por m²: superficie de OSB a terminar con teja asfáltica", obligatoria: false, editable: true, motivo: "Terminación alternativa 1 de 2: teja asfáltica. Excluyente con la partida 438 — elegir solo una terminación final.", excluyeCatalogIds: [438], grupoSeleccion: "grp-terminacion-cubierta-osb", seleccionMinima: 0, seleccionMaxima: 1 },
         { catalogId: 438, cantidadBase: 30, formulaCantidad: "por m²: superficie de OSB a terminar con cubierta de zinc emballetado", obligatoria: false, editable: true, motivo: "Terminación alternativa 2 de 2: zinc emballetado. Excluyente con la partida 437 — elegir solo una terminación final.", excluyeCatalogIds: [437], grupoSeleccion: "grp-terminacion-cubierta-osb", seleccionMinima: 0, seleccionMaxima: 1 },
       ],
-      preguntas: ["¿La cubierta actual es de zinc ondulado y debe retirarse, o ya está sin cubierta?", "¿Cuál es la superficie total en m² de la cubierta a renovar?", "¿Se aplicará membrana asfáltica de impermeabilización sobre el OSB?", "¿La terminación final será teja asfáltica o zinc emballetado?"],
-      advertencias: ["Verificar en terreno el estado de la estructura de soporte (correas/cerchas), la pendiente de la cubierta, la ventilación de la techumbre y el estado de las canales antes de cotizar.", "Las partidas 437 y 438 son excluyentes entre sí: son terminaciones alternativas y no deben coexistir en la misma solución aplicada.", "El retiro de la cubierta existente (434) no incluye transporte ni disposición de residuos; si corresponde, cotizar por separado."],
+      preguntas: ["¿La cubierta actual es de zinc ondulado y debe retirarse, o ya está sin cubierta?", "¿Cuál es la superficie total en m² de la cubierta a renovar?", "¿Se detectaron elementos deteriorados, deformados, oxidados o fuera de nivel durante la revisión estructural?", "¿Se aplicará membrana asfáltica de impermeabilización sobre el OSB?", "¿La terminación final será teja asfáltica o zinc emballetado?"],
+      advertencias: [
+        "Alcance condicionado: el valor considera revisión de la estructura una vez retirada la cubierta existente. Si se detectan elementos deteriorados, deformados, oxidados o fuera de nivel, los trabajos de reparación o refuerzo deberán cotizarse y aprobarse adicionalmente antes de continuar.",
+        "Verificar en terreno el estado de la estructura de soporte (correas/cerchas), la pendiente de la cubierta, la ventilación de la techumbre y el estado de las canales antes de cotizar.",
+        "Reparaciones estructurales: definir después de inspección. Solo existe partida de catálogo para reparación puntual de cercha de madera (44); reemplazo de costaneras, refuerzo estructural general de techumbre, reparación de estructura Metalcon y tratamiento de madera afectada aún no tienen partida — no se inventaron precios, cotizar aparte una vez conocido el alcance real.",
+        "Canaletas y remates laterales para techumbre colonial sobre OSB: no existe partida específica en el catálogo; documentar como pendiente y cotizar por separado si el proyecto lo requiere.",
+        "Las partidas 437 y 438 son excluyentes entre sí: son terminaciones alternativas y no deben coexistir en la misma solución aplicada.",
+        "El retiro de la cubierta existente (434) no incluye transporte ni disposición de residuos; si corresponde, cotizar por separado.",
+      ],
       requiereVisita: true,
       estado: "activa",
       requierePartidasNuevas: false,
@@ -41714,6 +41743,9 @@ MATERIALES:
       catItem.sistemaConstructivo && (item._sistemaConstructivo = catItem.sistemaConstructivo);
       catItem.alcance && (item._alcance = catItem.alcance);
       catItem.especialidad && (item._especialidad = catItem.especialidad);
+      catItem.requiereRevisionEstructural && (item._requiereRevisionEstructural = true);
+      catItem.estadoRevision && (item._estadoRevision = catItem.estadoRevision);
+      catItem.notaVisiblePendiente && (item._notaVisible = catItem.notaVisiblePendiente);
       item._solucionOrigenId = solucion.id;
       item._solucionOrigenNombre = solucion.nombre;
       return item;
@@ -42552,6 +42584,9 @@ MATERIALES:
         W.sistemaConstructivo && (L._sistemaConstructivo = W.sistemaConstructivo);
         W.alcance && (L._alcance = W.alcance);
         W.especialidad && (L._especialidad = W.especialidad);
+        W.requiereRevisionEstructural && (L._requiereRevisionEstructural = true);
+        W.estadoRevision && (L._estadoRevision = W.estadoRevision);
+        W.notaVisiblePendiente && (L._notaVisible = W.notaVisiblePendiente);
         var E = [...I.items, L],
           M = E.length - 1;
         D((q) => u(d({}, q), { items: E }));
