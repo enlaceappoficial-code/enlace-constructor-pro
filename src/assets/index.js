@@ -66236,6 +66236,7 @@ K &&
     onClearAll: p,
     onImportUpdatePack: Zu,
     updateHistory: Xu,
+    soloLectura: SL,
   }) {
     var [C, b] = V(Hp),
       [h, j] = V(null),
@@ -66291,6 +66292,11 @@ K &&
           URL.revokeObjectURL(A));
       },
       I = (y) => {
+        if (SL) {
+          n("Esta función requiere una licencia activa. Tus datos se conservan y puedes consultarlos o respaldarlos.");
+          j(null);
+          return;
+        }
         (r(y.data),
           j(null),
           n(
@@ -66303,6 +66309,11 @@ K &&
         ($p(P), b(P), n("Respaldo eliminado"));
       },
       k = (y) => {
+        if (SL) {
+          n("Esta función requiere una licencia activa. Tus datos se conservan y puedes consultarlos o respaldarlos.");
+          y.target.value = "";
+          return;
+        }
         var P = y.target.files[0];
         if (P) {
           var A = new FileReader();
@@ -66996,6 +67007,10 @@ K &&
                     marginLeft: 16,
                   }),
                   onClick: () => {
+                    if (SL) {
+                      n("Esta función requiere una licencia activa. Tus datos se conservan y puedes consultarlos o respaldarlos.");
+                      return;
+                    }
                     if (
                       window.confirm(`¿Reparar vínculos APU↔Material?
 
@@ -67067,6 +67082,10 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                     marginLeft: 16,
                   }),
                   onClick: () => {
+                    if (SL) {
+                      n("Esta función requiere una licencia activa. Tus datos se conservan y puedes consultarlos o respaldarlos.");
+                      return;
+                    }
                     if (
                       window.confirm(
                         "¿Reordenar IDs de materiales? Se actualizarán también todos los APUs vinculados.",
@@ -81478,6 +81497,10 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       Q(opportunity ? "🔒 Presupuesto N° " + budgetRecord.id + " vinculado a licitación " + targetIdMP : "🔓 Presupuesto N° " + budgetRecord.id + " desvinculado");
     };
     var oe = (H) => {
+        if (modoSoloLecturaPorLicencia) {
+          avisoSoloLectura();
+          return;
+        }
         var salir = !(H && H._salir === !1);
         H = u(d({}, H), { _salir: void 0 });
         if (H && H._pendingClientName) {
@@ -81661,6 +81684,10 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         }
       },
       ce = (H) => {
+        if (modoSoloLecturaPorLicencia) {
+          avisoSoloLectura();
+          return;
+        }
         var ae =
             (B.length ? Math.max(...B.map((m) => Number(m.id) || 0)) : 0) + 1,
           N = u(d({}, H), {
@@ -81788,7 +81815,12 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         (l.licenciaCodigo && ve.valid && ve.expired),
       Ce =
         (l.licenciaCodigo && ve.valid && !ve.expired && l.version) || "starter",
-      Ie = l.licenciaCodigo && ve.reason === "rut_mismatch";
+      Ie = l.licenciaCodigo && ve.reason === "rut_mismatch",
+      modoSoloLecturaPorLicencia = be;
+    const avisoSoloLectura = () =>
+      Q("Esta función requiere una licencia activa. Tus datos se conservan y puedes consultarlos o respaldarlos.");
+    const gsl = (setter) =>
+      modoSoloLecturaPorLicencia ? () => avisoSoloLectura() : setter;
     const tryAdminUnlock = () => {
       if (adminPin === "171912")
         (setAdminGate(!1), setAdminPin(""), setGenResult(null), setAdminPanel(!0));
@@ -82035,7 +82067,15 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
         documentos: "Documentos de Obra",
       },
       xe = () => {
-        if (x === "new" || (x === "edit" && k))
+        if (x === "new" || (x === "edit" && k)) {
+          if (modoSoloLecturaPorLicencia)
+            return e.jsxs("div", {
+              style: c.card,
+              children: [
+                e.jsx("div", { style: { fontSize: 16, fontWeight: 700, marginBottom: 8, color: a.text }, children: "🔒 Función no disponible" }),
+                e.jsx("div", { style: { fontSize: 13, color: a.muted }, children: "Esta función requiere una licencia activa. Tus datos se conservan y puedes consultarlos o respaldarlos." }),
+              ],
+            });
           return e.jsx(lg, {
             clients: p,
             catalog: b,
@@ -82053,16 +82093,18 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             setToast: Q,
             guardRef: editorGuardRef,
           });
+        }
         if (x === "dashboard")
           return e.jsx(Qf, {
             budgets: v,
             clients: p,
-            setClients: C,
+            setClients: gsl(C),
             cfg: l,
             materiales: j,
             licitaciones: s,
             onView: (H) => $(H),
             onNew: () => {
+              if (modoSoloLecturaPorLicencia) { avisoSoloLectura(); return; }
               (R(null), f("new"));
             },
             onGoClients: () => f("clients"),
@@ -82072,6 +82114,7 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
             apus: g,
             catalog: b,
             onClearDemo: () => {
+              if (modoSoloLecturaPorLicencia) { avisoSoloLectura(); return; }
               confirm(`¿Eliminar TODOS los datos de ejemplo?
 
 Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acción no se puede deshacer.`) &&
@@ -82091,11 +82134,12 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
         if (x === "history")
           return e.jsx(gg, {
             budgets: v,
-            setBudgets: w,
+            setBudgets: gsl(w),
             clients: p,
             cfg: l,
             onView: (H) => $(H),
             onEdit: (H) => {
+              if (modoSoloLecturaPorLicencia) { $(H.id); return; }
               (R(u(d({}, H), { _isDuplicate: !1 })), f("edit"));
             },
             onDuplicate: ce,
@@ -82108,6 +82152,7 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
             },
             setHistorialBudget: y,
             onNew: () => {
+              if (modoSoloLecturaPorLicencia) { avisoSoloLectura(); return; }
               (R(null), f("new"));
             },
             plantillasUser: P,
@@ -82138,7 +82183,7 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
         if (x === "clients")
           return e.jsx(hg, {
             clients: p,
-            setClients: C,
+            setClients: gsl(C),
             budgets: B,
             cfg: l,
             setToast: Q,
@@ -82221,7 +82266,7 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
               ecp_quickstart: localStorage.getItem("ecp_quickstart") || "0",
               ecp_qsteps: JSON.parse(localStorage.getItem("ecp_qsteps") || "[false,false,false]")
             },
-            onRestore: (H) => {
+            onRestore: gsl((H) => {
               (H.cfg && o(H.cfg),
                 H.budgets && w(H.budgets),
                 H.clients && C(H.clients),
@@ -82239,15 +82284,16 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
                 H.ecp_quickstart && localStorage.setItem("ecp_quickstart", H.ecp_quickstart),
                 H.ecp_qsteps && localStorage.setItem("ecp_qsteps", JSON.stringify(H.ecp_qsteps)),
                 Q("✅ Datos restaurados correctamente"));
-            },
+            }),
             setToast: Q,
             materiales: j,
-            setMateriales: F,
+            setMateriales: gsl(F),
             apus: g,
-            setApus: z,
-            onImportUpdatePack: analizarPaqueteImportado,
+            setApus: gsl(z),
+            onImportUpdatePack: gsl(analizarPaqueteImportado),
             updateHistory: updateHistory,
-            onClearAll: () => {
+            soloLectura: modoSoloLecturaPorLicencia,
+            onClearAll: gsl(() => {
               confirm(`¿Borrar TODOS los datos?
 
 Esta acción no se puede deshacer.`) &&
@@ -82260,7 +82306,7 @@ Esta acción no se puede deshacer.`) &&
                 z(Ai),
                 m(xa),
                 Q("🗑️ Datos reiniciados"));
-            },
+            }),
           });
         if (x === "tu_plan")
           return e.jsx(Hg, { cfg: l, setCfg: o, setToast: Q });
@@ -83715,6 +83761,7 @@ Esta acción no se puede deshacer.`) &&
                       e.jsx("button", {
                         style: u(d({}, c.btn("p")), { background: fe }),
                         onClick: () => {
+                          if (modoSoloLecturaPorLicencia) { avisoSoloLectura(); return; }
                           (R(null), f("new"));
                         },
                         children: "+ Nuevo Presupuesto",
@@ -83885,6 +83932,48 @@ Esta acción no se puede deshacer.`) &&
                       }),
                     ],
                   }),
+                modoSoloLecturaPorLicencia &&
+                  e.jsxs("div", {
+                    style: {
+                      marginBottom: 12,
+                      borderRadius: 10,
+                      padding: "10px 14px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      flexWrap: "wrap",
+                      gap: 10,
+                      background: t === "light" ? "#fff7ed" : "#221a0e",
+                      border: t === "light" ? "1px solid #fdba74" : "1px solid #3e2c18",
+                    },
+                    children: [
+                      e.jsx("div", {
+                        style: {
+                          fontSize: 12,
+                          lineHeight: 1.4,
+                          color: t === "light" ? "#7c2d12" : "#fbbf24",
+                          flex: "1 1 260px",
+                        },
+                        children:
+                          "Período de evaluación finalizado. Tus datos se conservan y puedes consultarlos o respaldarlos. Activa una licencia para volver a crear, editar y exportar.",
+                      }),
+                      e.jsx("button", {
+                        style: {
+                          padding: "7px 14px",
+                          fontSize: 12,
+                          borderRadius: 8,
+                          cursor: "pointer",
+                          background: "#f5a020",
+                          border: "1px solid rgba(0,0,0,0.08)",
+                          color: "#000",
+                          fontWeight: 800,
+                          flexShrink: 0,
+                        },
+                        onClick: () => f("tu_plan"),
+                        children: "Activar licencia",
+                      }),
+                    ],
+                  }),
                 xe(),
               ],
             }),
@@ -83898,17 +83987,10 @@ Esta acción no se puede deshacer.`) &&
             clients: p,
             cfg: l,
             onClose: () => $(null),
-            onDownload: (H) => {
+            onDownload: gsl((H) => {
               const ae = p.find((N) => N.id === H.clienteId) || {};
               zr(H, ae, l, "simple");
-            },
-          }),
-        be &&
-          e.jsx(Lg, {
-            cfg: l,
-            onActivate: (H, ae) => {
-              o((N) => u(d({}, N), { licenciaCodigo: H, version: ae.version }));
-            },
+            }),
           }),
         q &&
           e.jsx(Fg, {
