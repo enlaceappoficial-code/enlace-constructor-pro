@@ -66205,7 +66205,13 @@ K &&
   function $p(t) {
     try {
       localStorage.setItem(_p, JSON.stringify(t));
-    } catch (i) {}
+      return !0;
+    } catch (i) {
+      try {
+        console.error("[ECP] No se pudo escribir el respaldo en almacenamiento local:", i && i.name);
+      } catch (r) {}
+      return !1;
+    }
   }
   function Vp(t, i) {
     var r = Hp(),
@@ -66222,7 +66228,23 @@ K &&
         },
       },
       l = [n, ...r].slice(0, rs);
-    return ($p(l), l);
+    if (!$p(l)) return { ok: !1, list: r, entry: null };
+    var o = Hp(),
+      s = o.find((y) => y.id === n.id),
+      m =
+        !!s &&
+        s.fecha === n.fecha &&
+        !!s.data &&
+        !!s.data.cfg &&
+        Array.isArray(s.data.clients) &&
+        Array.isArray(s.data.budgets);
+    if (!m) {
+      try {
+        console.error("[ECP] El respaldo se escribió pero no verificó íntegro al releerlo.");
+      } catch (y) {}
+      return { ok: !1, list: r, entry: null };
+    }
+    return { ok: !0, list: l, entry: n };
   }
   function _g({
     cfg: t,
@@ -66239,7 +66261,10 @@ K &&
     soloLectura: SL,
   }) {
     var [C, b] = V(Hp),
-      [h, j] = V(null),
+      [imp, setImp] = V(null),
+      [impBusy, setImpBusy] = V(!1),
+      [repairPreview, setRepairPreview] = V(null),
+      [repairBusy, setRepairBusy] = V(!1),
       [F, g] = V(() => {
         try {
           return localStorage.getItem("ecp_backup_auto") === "true";
@@ -66262,22 +66287,11 @@ K &&
           return null;
         }
       });
-    Re.useEffect(() => {
-      if (F) {
-        var y = Date.now(),
-          P = w ? new Date(w).getTime() : 0,
-          A = (y - P) / (1e3 * 60 * 60);
-        if (A >= z) {
-          var S = Vp(i, "Automático");
-          b(S);
-          var O = new Date().toISOString();
-          (localStorage.setItem("ecp_backup_last", O), v(O));
-        }
-      }
-    }, []);
     var x = () => {
         var y = Vp(i, "Manual");
-        (b(y), n("✅ Respaldo creado correctamente"));
+        y.ok
+          ? (b(y.list), n("✅ Respaldo creado correctamente"))
+          : n("No fue posible guardar el respaldo. Libera espacio o descarga una copia externa antes de continuar.");
       },
       f = (y) => {
         var P = new Blob([JSON.stringify(y.data, null, 2)], {
@@ -66291,18 +66305,76 @@ K &&
           S.click(),
           URL.revokeObjectURL(A));
       },
-      I = (y) => {
+      validarRespaldoImportado = (obj) => {
+        if (!obj || typeof obj !== "object" || Array.isArray(obj))
+          return "El archivo no contiene un objeto JSON válido.";
+        if (!obj.cfg || typeof obj.cfg !== "object" || Array.isArray(obj.cfg))
+          return "El archivo no tiene una configuración (cfg) válida.";
+        if (!Array.isArray(obj.clients))
+          return "El archivo no tiene una lista de clientes (clients) válida.";
+        if (!Array.isArray(obj.budgets))
+          return "El archivo no tiene una lista de presupuestos (budgets) válida.";
+        if (obj.catalog !== void 0 && !Array.isArray(obj.catalog))
+          return "El campo catalog del archivo no tiene el formato esperado.";
+        if (obj.materiales !== void 0 && !Array.isArray(obj.materiales))
+          return "El campo materiales del archivo no tiene el formato esperado.";
+        if (obj.apus !== void 0 && !Array.isArray(obj.apus))
+          return "El campo apus del archivo no tiene el formato esperado.";
+        if (obj.gantt !== void 0 && obj.gantt !== null && typeof obj.gantt !== "object")
+          return "El campo gantt del archivo no tiene el formato esperado.";
+        return "";
+      },
+      iniciarRestauracion = (data, meta) => {
         if (SL) {
           n("Esta función requiere una licencia activa. Tus datos se conservan y puedes consultarlos o respaldarlos.");
-          j(null);
           return;
         }
-        (r(y.data),
-          j(null),
-          n(
-            "✅ Datos restaurados desde respaldo del " +
-              new Date(y.fecha).toLocaleDateString("es-CL"),
-          ));
+        var err = validarRespaldoImportado(data);
+        if (err) {
+          n("⚠️ " + err);
+          return;
+        }
+        setImp({
+          data,
+          meta: meta || {},
+          restoreLicense: !1,
+          stats: {
+            clientes: (data.clients || []).length,
+            presupuestos: (data.budgets || []).length,
+            partidas: (data.budgets || []).reduce((acc, bu) => acc + ((bu.items || []).length), 0),
+            materiales: (data.materiales || []).length,
+            apus: (data.apus || []).length,
+            gantt: !!data.gantt,
+            configuracion: !!data.cfg,
+          },
+        });
+      },
+      confirmarRestauracion = () => {
+        if (!imp || impBusy) return;
+        setImpBusy(!0);
+        var pre = Vp(i, "Antes de restaurar");
+        if (!pre.ok) {
+          setImpBusy(!1);
+          n("No fue posible guardar el respaldo. Libera espacio o descarga una copia externa antes de continuar.");
+          return;
+        }
+        b(pre.list);
+        var finalData = d({}, imp.data);
+        if (!imp.restoreLicense) {
+          finalData = u(d({}, finalData), {
+            cfg: u(d({}, finalData.cfg || {}), {
+              licenciaCodigo: t.licenciaCodigo,
+              version: t.version,
+            }),
+          });
+        }
+        r(finalData);
+        setImpBusy(!1);
+        n(
+          "✅ Datos restaurados correctamente" +
+            (imp.meta.fecha ? " — respaldo del " + R(imp.meta.fecha) : ""),
+        );
+        setImp(null);
       },
       D = (y) => {
         var P = C.filter((A) => A.id !== y);
@@ -66315,22 +66387,103 @@ K &&
           return;
         }
         var P = y.target.files[0];
-        if (P) {
-          var A = new FileReader();
-          ((A.onload = (S) => {
-            try {
-              var O = JSON.parse(S.target.result);
-              if (!O.budgets && !O.cfg) {
-                n("⚠️ Archivo no válido");
-                return;
-              }
-              (r(O), n("✅ Datos importados desde archivo"));
-            } catch (U) {
-              n("⚠️ Error al leer el archivo");
-            }
-          }),
-            A.readAsText(P));
+        y.target.value = "";
+        if (!P) return;
+        if (P.size > 26214400) {
+          n("⚠️ El archivo es demasiado grande para ser un respaldo válido.");
+          return;
         }
+        var A = new FileReader();
+        ((A.onload = (S) => {
+          var O;
+          try {
+            O = JSON.parse(S.target.result);
+          } catch (U) {
+            n("⚠️ El archivo no contiene JSON válido.");
+            return;
+          }
+          iniciarRestauracion(O, { source: "archivo", fileName: P.name });
+        }),
+          (A.onerror = () => n("⚠️ Error al leer el archivo")),
+          A.readAsText(P));
+      },
+      normalizarNombreMaterial = (y) => (y || "").trim().toLowerCase(),
+      analizarVinculosApuMaterial = () => {
+        var validos = 0,
+          corregibles = 0,
+          ambiguos = 0,
+          noResueltos = 0,
+          detalleCorregibles = [];
+        s.forEach((apu) => {
+          (apu.materiales || []).forEach((item) => {
+            if (l.some((mat) => mat.id === item.materialId)) {
+              validos++;
+              return;
+            }
+            var canonico = Qi.find((mat) => mat.id === item.materialId);
+            if (!canonico) {
+              noResueltos++;
+              return;
+            }
+            var nombreBuscado = normalizarNombreMaterial(canonico.nombre),
+              coincidencias = l.filter((mat) => normalizarNombreMaterial(mat.nombre) === nombreBuscado);
+            if (coincidencias.length === 1) {
+              corregibles++;
+              detalleCorregibles.push({ apuId: apu.id, materialIdViejo: item.materialId, materialIdNuevo: coincidencias[0].id });
+            } else if (coincidencias.length > 1) ambiguos++;
+            else noResueltos++;
+          });
+        });
+        return {
+          apusRevisados: s.length,
+          validos,
+          corregibles,
+          ambiguos,
+          noResueltos,
+          detalleCorregibles,
+        };
+      },
+      aplicarReparacionVinculos = () => {
+        var totalCambios = 0,
+          nuevos = s.map((apu) => {
+            var cambios = 0,
+              materialesNuevos = (apu.materiales || []).map((item) => {
+                if (l.some((mat) => mat.id === item.materialId)) return item;
+                var canonico = Qi.find((mat) => mat.id === item.materialId);
+                if (!canonico) return item;
+                var nombreBuscado = normalizarNombreMaterial(canonico.nombre),
+                  coincidencias = l.filter((mat) => normalizarNombreMaterial(mat.nombre) === nombreBuscado);
+                if (coincidencias.length === 1) {
+                  cambios++;
+                  return u(d({}, item), { materialId: coincidencias[0].id });
+                }
+                return item;
+              });
+            if (cambios === 0) return apu;
+            totalCambios += cambios;
+            return u(d({}, apu), { materiales: materialesNuevos });
+          });
+        return { nuevos, totalCambios };
+      },
+      confirmarReparacionVinculos = () => {
+        if (repairBusy || !repairPreview) return;
+        setRepairBusy(!0);
+        var pre = Vp(i, "Antes de reparar vínculos");
+        if (!pre.ok) {
+          setRepairBusy(!1);
+          n("No fue posible guardar el respaldo. Libera espacio o descarga una copia externa antes de continuar.");
+          return;
+        }
+        b(pre.list);
+        var resultado = aplicarReparacionVinculos();
+        m(resultado.nuevos);
+        setRepairBusy(!1);
+        setRepairPreview(null);
+        n(
+          resultado.totalCambios > 0
+            ? "✅ Vínculos reparados — " + resultado.totalCambios + " referencia(s) APU↔Material corregidas"
+            : "✅ Revisión completa — no había vínculos rotos que reparar",
+        );
       },
       Yu = (y) => {
         var P = y.target.files[0];
@@ -66377,7 +66530,7 @@ K &&
     return e.jsxs("div", {
       style: { maxWidth: 780, margin: "0 auto", padding: "0 0 40px" },
       children: [
-        h &&
+        imp &&
           e.jsx("div", {
             style: {
               position: "fixed",
@@ -66387,6 +66540,7 @@ K &&
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              padding: 16,
             },
             children: e.jsxs("div", {
               style: {
@@ -66394,41 +66548,88 @@ K &&
                 border: `1px solid ${a.border}`,
                 borderRadius: 14,
                 padding: "24px 28px",
-                maxWidth: 400,
+                maxWidth: 460,
                 width: "100%",
+                maxHeight: "85vh",
+                overflowY: "auto",
               },
               children: [
                 e.jsx("div", {
-                  style: { fontSize: 16, fontWeight: 700, marginBottom: 8 },
-                  children: "⚠️ Restaurar respaldo",
+                  style: { fontSize: 16, fontWeight: 700, marginBottom: 8, color: a.text },
+                  children: "Vista previa de restauración",
+                }),
+                e.jsxs("div", {
+                  style: { fontSize: 12, color: a.muted, marginBottom: 14, lineHeight: 1.6 },
+                  children: [
+                    imp.meta.source === "archivo"
+                      ? e.jsxs("div", {
+                          children: ["Archivo seleccionado: ", e.jsx("strong", { style: { color: a.text }, children: imp.meta.fileName || "—" })],
+                        })
+                      : e.jsx("div", { children: "Origen: respaldo del historial" }),
+                    imp.meta.fecha
+                      ? e.jsxs("div", {
+                          children: ["Fecha del respaldo: ", e.jsx("strong", { style: { color: a.text }, children: R(imp.meta.fecha) })],
+                        })
+                      : null,
+                  ],
                 }),
                 e.jsxs("div", {
                   style: {
-                    fontSize: 13,
-                    color: a.muted,
-                    marginBottom: 20,
-                    lineHeight: 1.6,
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 6,
+                    fontSize: 12.5,
+                    color: a.text,
+                    marginBottom: 16,
+                    background: "var(--surface)",
+                    padding: "10px 12px",
+                    borderRadius: 8,
                   },
                   children: [
-                    "Se reemplazarán ",
-                    e.jsx("strong", {
-                      style: { color: a.text },
-                      children: "todos los datos actuales",
+                    e.jsxs("div", { children: ["Clientes: ", e.jsx("strong", { children: imp.stats.clientes })] }),
+                    e.jsxs("div", { children: ["Presupuestos: ", e.jsx("strong", { children: imp.stats.presupuestos })] }),
+                    e.jsxs("div", { children: ["Partidas: ", e.jsx("strong", { children: imp.stats.partidas })] }),
+                    e.jsxs("div", { children: ["Materiales: ", e.jsx("strong", { children: imp.stats.materiales })] }),
+                    e.jsxs("div", { children: ["APU: ", e.jsx("strong", { children: imp.stats.apus })] }),
+                    e.jsxs("div", { children: ["Carta Gantt: ", e.jsx("strong", { children: imp.stats.gantt ? "Sí" : "No incluida" })] }),
+                    e.jsxs("div", {
+                      style: { gridColumn: "1 / -1" },
+                      children: ["Configuración: ", e.jsx("strong", { children: imp.stats.configuracion ? "Incluida" : "No incluida" })],
                     }),
-                    " con el respaldo del ",
-                    e.jsx("strong", {
-                      style: { color: a.text },
-                      children: R(h.fecha),
-                    }),
-                    ". Esta acción no se puede deshacer.",
                   ],
                 }),
+                e.jsx("div", {
+                  style: { fontSize: 12, color: "#f87171", marginBottom: 14, lineHeight: 1.5 },
+                  children: "La restauración reemplazará los datos actuales incluidos en este archivo. Se creará un respaldo automático antes de continuar.",
+                }),
+                e.jsxs("label", {
+                  style: { display: "flex", alignItems: "flex-start", gap: 8, fontSize: 12.5, color: a.text, marginBottom: 8, cursor: "pointer" },
+                  children: [
+                    e.jsx("input", {
+                      type: "checkbox",
+                      checked: imp.restoreLicense,
+                      onChange: (ev) => setImp((cur) => u(d({}, cur), { restoreLicense: ev.target.checked })),
+                      style: { marginTop: 2 },
+                    }),
+                    "Restaurar también la información de licencia",
+                  ],
+                }),
+                imp.restoreLicense
+                  ? e.jsx("div", {
+                      style: { fontSize: 11.5, color: "#f59e0b", marginBottom: 14, lineHeight: 1.4 },
+                      children: "⚠️ Esto reemplazará tu licencia activa actual por la que venía en este respaldo.",
+                    })
+                  : e.jsx("div", {
+                      style: { fontSize: 11.5, color: a.muted, marginBottom: 14 },
+                      children: "Tu licencia activa actual se conservará.",
+                    }),
                 e.jsxs("div", {
                   style: { display: "flex", gap: 8 },
                   children: [
                     e.jsx("button", {
                       style: u(d({}, c.btn("s")), { flex: 1 }),
-                      onClick: () => j(null),
+                      onClick: () => setImp(null),
+                      disabled: impBusy,
                       children: "Cancelar",
                     }),
                     e.jsx("button", {
@@ -66436,9 +66637,92 @@ K &&
                         flex: 2,
                         background: "#ef4444",
                         border: "none",
+                        opacity: impBusy ? 0.7 : 1,
                       }),
-                      onClick: () => I(h),
-                      children: "Restaurar de todas formas",
+                      onClick: confirmarRestauracion,
+                      disabled: impBusy,
+                      children: impBusy ? "Restaurando…" : "Crear respaldo previo y restaurar",
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          }),
+        repairPreview &&
+          e.jsx("div", {
+            style: {
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,.8)",
+              zIndex: 7e3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 16,
+            },
+            children: e.jsxs("div", {
+              style: {
+                background: a.card,
+                border: `1px solid ${a.border}`,
+                borderRadius: 14,
+                padding: "24px 28px",
+                maxWidth: 460,
+                width: "100%",
+                maxHeight: "85vh",
+                overflowY: "auto",
+              },
+              children: [
+                e.jsx("div", {
+                  style: { fontSize: 16, fontWeight: 700, marginBottom: 14, color: a.text },
+                  children: "Vista previa — Reparar vínculos APU↔Material",
+                }),
+                e.jsxs("div", {
+                  style: {
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 6,
+                    fontSize: 12.5,
+                    color: a.text,
+                    marginBottom: 16,
+                    background: "var(--surface)",
+                    padding: "10px 12px",
+                    borderRadius: 8,
+                  },
+                  children: [
+                    e.jsxs("div", { children: ["APU revisados: ", e.jsx("strong", { children: repairPreview.apusRevisados })] }),
+                    e.jsxs("div", { children: ["Vínculos válidos: ", e.jsx("strong", { style: { color: "#4ade80" }, children: repairPreview.validos })] }),
+                    e.jsxs("div", { children: ["Vínculos que serán corregidos: ", e.jsx("strong", { style: { color: "#f59e0b" }, children: repairPreview.corregibles })] }),
+                    e.jsxs("div", { children: ["Casos ambiguos: ", e.jsx("strong", { style: { color: "#f87171" }, children: repairPreview.ambiguos })] }),
+                    e.jsxs("div", { style: { gridColumn: "1 / -1" }, children: ["Casos no resueltos: ", e.jsx("strong", { style: { color: "#f87171" }, children: repairPreview.noResueltos })] }),
+                  ],
+                }),
+                (repairPreview.ambiguos > 0 || repairPreview.noResueltos > 0) &&
+                  e.jsx("div", {
+                    style: { fontSize: 11.5, color: a.muted, marginBottom: 14, lineHeight: 1.4 },
+                    children: "Los casos ambiguos y no resueltos no se modifican automáticamente — quedan para revisión manual.",
+                  }),
+                e.jsx("div", {
+                  style: { fontSize: 12, color: "#f87171", marginBottom: 16, lineHeight: 1.5 },
+                  children: "Esta herramienta corregirá únicamente referencias de materiales dañadas. No reemplazará ni restaurará los demás valores de los APU.",
+                }),
+                e.jsxs("div", {
+                  style: { display: "flex", gap: 8 },
+                  children: [
+                    e.jsx("button", {
+                      style: u(d({}, c.btn("s")), { flex: 1 }),
+                      onClick: () => setRepairPreview(null),
+                      disabled: repairBusy,
+                      children: "Cancelar",
+                    }),
+                    e.jsx("button", {
+                      style: u(d({}, c.btn("w")), { flex: 2, opacity: repairBusy ? 0.7 : 1 }),
+                      onClick: confirmarReparacionVinculos,
+                      disabled: repairBusy || repairPreview.corregibles === 0,
+                      children: repairBusy
+                        ? "Reparando…"
+                        : repairPreview.corregibles === 0
+                          ? "Nada que reparar"
+                          : "Crear respaldo y reparar " + repairPreview.corregibles + " vínculo(s)",
                     }),
                   ],
                 }),
@@ -66798,7 +67082,7 @@ K &&
                                     }),
                                     e.jsx("button", {
                                       style: u(d({}, c.btn("s")), { fontSize: 11, padding: "5px 10px" }),
-                                      onClick: () => j(y),
+                                      onClick: () => iniciarRestauracion(y.data, { source: "historial", fecha: y.fecha }),
                                       title: "Restaurar estos datos",
                                       children: "↩",
                                     }),
@@ -67011,40 +67295,7 @@ K &&
                       n("Esta función requiere una licencia activa. Tus datos se conservan y puedes consultarlos o respaldarlos.");
                       return;
                     }
-                    if (
-                      window.confirm(`¿Reparar vínculos APU↔Material?
-
-Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres de materiales actuales. Esta acción es segura y no borra datos.`)
-                    ) {
-                      var y = new Map(
-                          l.map((U) => [
-                            (U.nombre || "").trim().toLowerCase(),
-                            U.id,
-                          ]),
-                        ),
-                        P = 0,
-                        A = Ai.map((U) =>
-                          u(d({}, U), {
-                            materiales: (U.materiales || []).map(($) => {
-                              var ee = Qi.find((Z) => Z.id === $.materialId);
-                              if (!ee) return $;
-                              var Y = (ee.nombre || "").trim().toLowerCase(),
-                                le = y.get(Y);
-                              return le !== void 0 && le !== $.materialId
-                                ? (P++, u(d({}, $), { materialId: le }))
-                                : $;
-                            }),
-                          }),
-                        ),
-                        S = new Set(Ai.map((U) => U.id)),
-                        O = s.filter((U) => !S.has(U.id));
-                      (m([...A, ...O]),
-                        n(
-                          "✅ Vínculos reparados — " +
-                            P +
-                            " referencias APU↔Material actualizadas",
-                        ));
-                    }
+                    setRepairPreview(analizarVinculosApuMaterial());
                   },
                   children: "🔧 Reparar ahora",
                 }),
@@ -67091,6 +67342,12 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                         "¿Reordenar IDs de materiales? Se actualizarán también todos los APUs vinculados.",
                       )
                     ) {
+                      var pre = Vp(i, "Antes de reordenar IDs");
+                      if (!pre.ok) {
+                        n("No fue posible guardar el respaldo. Libera espacio o descarga una copia externa antes de continuar.");
+                        return;
+                      }
+                      b(pre.list);
                       var y = [...l].sort((O, U) => {
                           var $ = (O.cat || "").localeCompare(
                             U.cat || "",
@@ -67170,7 +67427,15 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
                     flexShrink: 0,
                     marginLeft: 16,
                   }),
-                  onClick: p,
+                  onClick: () => {
+                    var pre = Vp(i, "Antes de reiniciar datos");
+                    if (!pre.ok) {
+                      n("No fue posible guardar el respaldo. Libera espacio o descarga una copia externa antes de continuar.");
+                      return;
+                    }
+                    b(pre.list);
+                    p();
+                  },
                   children: "🗑 Borrar todo",
                 }),
               ],
@@ -81821,6 +82086,48 @@ Se reconstruirán los vínculos de todos los APUs del sistema usando los nombres
       Q("Esta función requiere una licencia activa. Tus datos se conservan y puedes consultarlos o respaldarlos.");
     const gsl = (setter) =>
       modoSoloLecturaPorLicencia ? () => avisoSoloLectura() : setter;
+    var respaldoAllData = {
+      cfg: l,
+      budgets: B,
+      clients: p,
+      catalog: b,
+      materiales: j,
+      apus: g,
+      licitaciones: s,
+      proveedores: JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_proveedores") || "[]"),
+      price_history: JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_price_history") || "[]"),
+      cubicaciones_guardadas: JSON.parse(localStorage.getItem("cubicaciones_guardadas") || "[]"),
+      cortes_guardados: JSON.parse(localStorage.getItem("cortes_guardados") || "[]"),
+      cub_libre: JSON.parse(localStorage.getItem("cub_libre") || "[]"),
+      gantt: JSON.parse(localStorage.getItem("enlace_gantt_v1") || "null"),
+      apus_ignorados: JSON.parse(localStorage.getItem("apus_ignorados") || "[]"),
+      ecp_quickstart: localStorage.getItem("ecp_quickstart") || "0",
+      ecp_qsteps: JSON.parse(localStorage.getItem("ecp_qsteps") || "[false,false,false]"),
+    };
+    var respaldoAutoEjecutado = Re.useRef(!1);
+    Re.useEffect(() => {
+      if (respaldoAutoEjecutado.current) return;
+      respaldoAutoEjecutado.current = !0;
+      try {
+        if (localStorage.getItem("ecp_backup_auto") !== "true") return;
+        var horas = parseInt(localStorage.getItem("ecp_backup_hours") || "24", 10);
+        if (![12, 24, 168, 360].includes(horas)) horas = 24;
+        var ultimo = localStorage.getItem("ecp_backup_last"),
+          transcurridas = ultimo ? (Date.now() - new Date(ultimo).getTime()) / 36e5 : Infinity;
+        if (transcurridas < horas) return;
+        var res = Vp(respaldoAllData, "Automático");
+        if (res.ok) {
+          localStorage.setItem("ecp_backup_last", new Date().toISOString());
+          Q("💾 Respaldo automático creado");
+        } else {
+          Q("⚠️ No fue posible crear el respaldo automático. Libera espacio o descarga una copia externa antes de continuar.");
+        }
+      } catch (err) {
+        try {
+          console.error("[ECP] Error en respaldo automático de inicio:", err && err.name);
+        } catch (e2) {}
+      }
+    }, []);
     const tryAdminUnlock = () => {
       if (adminPin === "171912")
         (setAdminGate(!1), setAdminPin(""), setGenResult(null), setAdminPanel(!0));
@@ -82248,24 +82555,7 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
         if (x === "backup")
           return e.jsx(_g, {
             cfg: l,
-            allData: {
-              cfg: l,
-              budgets: B,
-              clients: p,
-              catalog: b,
-              materiales: j,
-              apus: g,
-              licitaciones: s,
-              proveedores: JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_proveedores") || "[]"),
-              price_history: JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_price_history") || "[]"),
-              cubicaciones_guardadas: JSON.parse(localStorage.getItem("cubicaciones_guardadas") || "[]"),
-              cortes_guardados: JSON.parse(localStorage.getItem("cortes_guardados") || "[]"),
-              cub_libre: JSON.parse(localStorage.getItem("cub_libre") || "[]"),
-              gantt: JSON.parse(localStorage.getItem("enlace_gantt_v1") || "null"),
-              apus_ignorados: JSON.parse(localStorage.getItem("apus_ignorados") || "[]"),
-              ecp_quickstart: localStorage.getItem("ecp_quickstart") || "0",
-              ecp_qsteps: JSON.parse(localStorage.getItem("ecp_qsteps") || "[false,false,false]")
-            },
+            allData: respaldoAllData,
             onRestore: gsl((H) => {
               (H.cfg && o(H.cfg),
                 H.budgets && w(H.budgets),
