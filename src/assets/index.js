@@ -23454,13 +23454,39 @@ Error generating stack: ` +
     var presentacionCfg = String(cfg.empresaPresentacion || "").trim();
     var presentacionTrimada = presentacionCfg.length > 700 ? presentacionCfg.substring(0, 700).replace(/\s+\S*$/, "") + "…" : presentacionCfg;
     var tieneIVA = !presupuesto.sinIva;
+    // La introducción por defecto se arma con datos reales de la obra —etapas,
+    // cantidad de partidas y plazo— en vez de una fórmula que sirve para
+    // cualquier proyecto. Sigue siendo editable por el usuario.
+    var introduccionPorDefecto = (function () {
+      var obra = presupuesto.descripcion || "los trabajos solicitados";
+      var quien = corp.nombreComercial || "nuestra empresa";
+      var caps = estructuraCapitulosObra(presupuesto);
+      var partidas = caps.reduce(function (acc, cap) { return acc + ((cap.partidas || []).length); }, 0);
+      var nombres = caps.map(function (cap) { return String(cap.nombre || "").trim(); }).filter(Boolean);
+      var etapasReales = caps.length > 1 && nombres.length > 1;
+      var listado = "";
+      if (etapasReales) {
+        var visibles = nombres.slice(0, 4);
+        listado = visibles.length > 1 ? visibles.slice(0, -1).join(", ") + " y " + visibles[visibles.length - 1] : visibles[0];
+        if (nombres.length > visibles.length) listado += ", entre otras";
+      }
+      var frasePartidas = partidas > 0 ? (partidas === 1 ? "una partida" : partidas + " partidas") : "";
+      var texto = "Agradecemos la oportunidad de presentar esta propuesta para " + obra + ". ";
+      texto += etapasReales
+        ? "En " + quien + " revisamos el alcance solicitado y estructuramos la obra en " + caps.length + " etapas: " + listado + ". "
+        : "En " + quien + " revisamos en detalle el trabajo requerido. ";
+      if (frasePartidas) texto += (etapasReales ? "En total son " : "La obra contempla ") + frasePartidas + ", con un plazo estimado de " + plazo + " días corridos. ";
+      else texto += "El plazo estimado de ejecución es de " + plazo + " días corridos. ";
+      texto += "En las páginas siguientes encontrará qué contempla cada parte del trabajo, la inversión asociada y las condiciones bajo las cuales lo ejecutamos.";
+      return texto;
+    })();
     return {
       fecha: new Date().toISOString().split("T")[0],
       destinatario: cliente.contacto || cliente.nombre || "",
       empresaCliente: cliente.empresa || cliente.nombre || "",
       saludo: "Estimado/a",
       asunto: "Presentación de propuesta — " + (presupuesto.descripcion || "su proyecto"),
-      introduccion: "Por medio de la presente, " + (corp.nombreComercial || "nuestra empresa") + " tiene el agrado de presentar nuestra propuesta técnica y económica para la ejecución de los trabajos correspondientes a " + (presupuesto.descripcion || "los trabajos solicitados") + ". La propuesta ha sido elaborada tomando en cuenta el alcance, las especificaciones técnicas y los plazos requeridos para el proyecto.",
+      introduccion: introduccionPorDefecto,
       presentacionEmpresa: presentacionTrimada,
       resumenProyecto: "El detalle de ítems y capítulos se incluye en el presupuesto adjunto. El monto total" + (tieneIVA ? " incluye IVA" : " es neto, sin IVA") + " y considera un plazo de ejecución de " + plazo + " días a partir de la fecha de inicio de los trabajos.",
       vigencia: "Esta propuesta tiene una vigencia de 30 días a partir de la fecha de emisión.",
