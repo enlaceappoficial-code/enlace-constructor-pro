@@ -1,10 +1,12 @@
 {
   "name": "enlace-constructor-pro",
   "private": true,
-  "version": "1.7.0",
+  "version": "1.7.2",
   "scripts": {
     "tauri": "tauri",
     "dev": "tauri dev",
+    "postinstall": "node scripts/sync_docx_vendor.js",
+    "vendor:docx": "node scripts/sync_docx_vendor.js",
     "verify:canonical": "node scripts/verify_canonical.js",
     "canonical:accept": "node scripts/accept_canonical_baseline.js",
     "prebuild": "npm run verify:canonical",
@@ -14,6 +16,7 @@
     "@tauri-apps/api": "^1.6.0",
     "acorn-jsx": "^5.3.2",
     "cors-anywhere": "^0.4.4",
+    "docx": "8.5.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

@@ -13,3 +13,5 @@ _backups/
 *.log
 ECP_AUDITORIA_COMPLETA.zip
 ECP_AUDITORIA_COMPLETA/
+# Scripts temporales de depuracion (no forman parte del producto)
+scratch/

@@ -20589,9 +20589,7 @@ Error generating stack: ` +
           (G += 8),
           (() => {
             var itemsFiltradosZr = obtenerItemsPresupuestoExportables(t.items);
-            var capsOrdZr = Array.isArray(t.capitulos)
-              ? [...t.capitulos].sort((a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0))
-              : [];
+            var capsOrdZr = Array.isArray(t.capitulos) ? t.capitulos : [];
             var gruposZr;
             if (capsOrdZr.length === 0) {
               gruposZr = [{ cap: null, items: itemsFiltradosZr }];
@@ -20608,10 +20606,11 @@ Error generating stack: ` +
             var numZr = 0;
             gruposZr.forEach((grp) => {
               if (usaCapsZr) {
-                if (G > 255) {
+                if (G > 247) {
                   o.addPage();
                   G = 18;
                 }
+                var subtotalGrupoZr = grp.items.reduce((sum, item) => sum + calcularLineaPresupuesto(item).totalLinea, 0);
                 o.setFillColor(...q);
                 o.rect(14, G, 182, 7, "F");
                 o.setFont("helvetica", "bold");
@@ -20622,6 +20621,7 @@ Error generating stack: ` +
                   16,
                   G + 5,
                 );
+                o.text("Subtotal: " + s(Math.round(subtotalGrupoZr)), 194, G + 5, { align: "right" });
                 G += 9;
               }
               grp.items.forEach((ve) => {
@@ -20782,7 +20782,9 @@ Error generating stack: ` +
         );
       },
       v = (M, q = 20) => (M + q > 274 ? (o.addPage(), 16) : M),
+      renderObs = (M) => { var txt=t.notasCliente!=null?t.notasCliente:t.notas||""; if(!txt.trim()) return M; o.setFont("helvetica","normal");o.setFontSize(8.5);var ls=o.splitTextToSize(txt,174),h=13+ls.length*4;if(M+h>264){o.addPage();M=16;}o.setFillColor(248,250,252);o.roundedRect(14,M,182,h,2,2,"F");o.setFont("helvetica","bold");o.text("OBSERVACIONES DEL PRESUPUESTO",18,M+6);o.setFont("helvetica","normal");ls.forEach((ln,i)=>o.text(ln,18,M+12+i*4));return M+h+6; },
       x = (M) => {
+        M = renderObs(M);
         ((M = v(M, 42)),
           (M += 2),
           o.setDrawColor(210, 215, 225),
@@ -20815,7 +20817,6 @@ Error generating stack: ` +
           [
             ...J,
             "• Pagos a nombre de " + r.empresa + " — RUT: " + r.rut,
-            ...(t.notas ? ["• Observaciones: " + t.notas] : []),
           ].forEach((re) => {
             ((M = v(M, 6)), o.text(re, 14, M), (M += 5));
           }),
@@ -21662,10 +21663,107 @@ Error generating stack: ` +
         "</td></tr></table></div></body></html>";
     return G0;
   }
-  function Mf(t, i, r) {
+  function _normDesglose(v) { return String(v == null ? "" : v).trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " "); }
+  function estructuraDesglose(presupuesto) {
+    presupuesto = presupuesto || {};
+    var items = Array.isArray(presupuesto.items) ? presupuesto.items.filter(function (x) { return x && x.desc; }) : [];
+    var caps = Array.isArray(presupuesto.capitulos) ? presupuesto.capitulos.filter(Boolean) : [];
+    var grupos = caps.length ? caps.map(function (cap, n) { return { id: cap.id, codigo: cap.codigo || String(n + 1), nombre: cap.nombre || "Capítulo " + (n + 1), items: items.filter(function (x) { return String(x.capituloId) === String(cap.id); }) }; }) : [{ id: "general", codigo: "", nombre: "Alcance general de la obra", items: items }];
+    if (caps.length) { var ids = new Set(caps.map(function (cap) { return String(cap.id); })), sueltos = items.filter(function (x) { return x.capituloId == null || !ids.has(String(x.capituloId)); }); if (sueltos.length) grupos.push({ id: "sin-capitulo", codigo: "", nombre: "Sin capítulo", items: sueltos }); }
+    return grupos.map(function (grupo, gi) {
+      var ocurrencias = {}, capKey = _normDesglose((grupo.codigo || "") + "|" + grupo.nombre + "|" + gi);
+      return { id: grupo.id, codigo: grupo.codigo || "", nombre: grupo.nombre, orden: gi, partidas: grupo.items.map(function (item) {
+        var descKey = _normDesglose(item.desc), base = capKey + "|" + descKey; ocurrencias[base] = (ocurrencias[base] || 0) + 1;
+        var linea = calcularLineaPresupuesto(item);
+        return { clave: item._uid ? "uid:" + item._uid : "legacy:" + base + "|" + ocurrencias[base], uid: item._uid || "", descripcion: item.desc || "", cantidad: Number(linea.cantidadIngresada) || 0, unidad: item.unidad || "", precioUnitario: Number(linea.precioUnitario) || 0, totalPresupuesto: Number(linea.totalLinea) || 0, apuMaterialUnitario: Number(item._apuMatUnit) || 0, tipoCosto: item._tipoCosto || (item._cid ? "auto" : "mo") };
+      }) };
+    });
+  }
+  function normalizarDesgloseInterno(presupuesto, cfg, entrada) {
+    var previo = entrada || obtenerDocumentoObraConfig(presupuesto, "desgloseInterno") || {};
+    return { estado: previo.estado || "Borrador", _estadoDocumento: previo._estadoDocumento || "borrador", actualizadoEn: previo.actualizadoEn || "", modoCalculo: previo.modoCalculo === "manual" ? "manual" : "automatico", porcentajeGG: previo.porcentajeGG == null ? Number(cfg && cfg.pctGG) || 0 : Number(previo.porcentajeGG) || 0, porcentajeUtilidad: previo.porcentajeUtilidad == null ? Number(cfg && (cfg.pctUtil || cfg.pctUtilidad)) || 0 : Number(previo.porcentajeUtilidad) || 0, ajustesPorPartida: Object.assign({}, previo.ajustesPorPartida || {}), observaciones: previo.observaciones || "", estructura: Array.isArray(previo.estructura) && previo.estructura.length ? previo.estructura : estructuraDesglose(presupuesto) };
+  }
+  function componentesDesglose(partida, doc) {
+    var total = Math.max(0, Number(partida.totalPresupuesto) || 0), cant = Number(partida.cantidad) || 0, mat = 0;
+    if (partida.tipoCosto === "mat") mat = total; else if (partida.tipoCosto !== "mo") mat = Math.max(0, Math.min(total, (Number(partida.apuMaterialUnitario) || 0) * cant));
+    var resto = total - mat, factor = (1 + doc.porcentajeGG / 100) * (1 + doc.porcentajeUtilidad / 100), mo = factor > 0 ? resto / factor : resto, gg = mo * doc.porcentajeGG / 100, util = (mo + gg) * doc.porcentajeUtilidad / 100;
+    mat = Math.round(mat); mo = Math.round(mo); gg = Math.round(gg); util = Math.round(util); util += Math.round(total) - mat - mo - gg - util;
+    var aj = doc.ajustesPorPartida[partida.clave]; if (doc.modoCalculo === "manual" && aj) { mat = Number(aj.materiales) || 0; mo = Number(aj.manoObra) || 0; gg = Number(aj.gastosGenerales) || 0; util = Number(aj.utilidad) || 0; }
+    return { materiales: mat, manoObra: mo, gastosGenerales: gg, utilidad: util, totalInterno: mat + mo + gg + util };
+  }
+  function calcularDesgloseInterno(presupuesto, cfg, entrada) {
+    var doc = normalizarDesgloseInterno(presupuesto, cfg, entrada), total = { materiales: 0, manoObra: 0, gastosGenerales: 0, utilidad: 0, costoInterno: 0 };
+    var capitulos = doc.estructura.map(function (cap) { var sub = { materiales: 0, manoObra: 0, gastosGenerales: 0, utilidad: 0, totalInterno: 0 }, partidas = (cap.partidas || []).map(function (p) { var c0 = componentesDesglose(p, doc); sub.materiales += c0.materiales; sub.manoObra += c0.manoObra; sub.gastosGenerales += c0.gastosGenerales; sub.utilidad += c0.utilidad; sub.totalInterno += c0.totalInterno; return Object.assign({}, p, c0); }); total.materiales += sub.materiales; total.manoObra += sub.manoObra; total.gastosGenerales += sub.gastosGenerales; total.utilidad += sub.utilidad; total.costoInterno += sub.totalInterno; return Object.assign({}, cap, { partidas: partidas, subtotal: sub }); });
+    var eco = Ee((presupuesto && presupuesto.items) || [], cfg || {}, presupuesto && presupuesto.descuento, presupuesto && presupuesto.modoCosteo, presupuesto && presupuesto.sinIva) || {}, neto = Number(eco.sub) || 0, diferencia = neto - total.costoInterno;
+    return { documento: doc, capitulos: capitulos, totales: total, precioOfertadoNeto: neto, precioTotalPresupuesto: Number(eco.total) || neto, diferencia: diferencia, margen: neto ? diferencia / neto : 0 };
+  }
+  function htmlDesgloseInterno(presupuesto, cliente, cfg, entrada) {
+    var d0 = calcularDesgloseInterno(presupuesto, cfg, entrada), doc = d0.documento;
+    var esc = function (v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }, mon = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    var cuerpos = d0.capitulos.map(function (cap) {
+      var filas = cap.partidas.map(function (p) { return '<tr class="item"><td>' + esc(p.descripcion) + '</td><td class="n">' + esc(p.cantidad) + '</td><td class="c">' + esc(p.unidad) + '</td><td class="n">' + mon(p.precioUnitario) + '</td><td class="n">' + mon(p.materiales) + '</td><td class="n">' + mon(p.manoObra) + '</td><td class="n">' + mon(p.gastosGenerales) + '</td><td class="n">' + mon(p.utilidad) + '</td><td class="n b">' + mon(p.totalInterno) + '</td></tr>'; }).join("");
+      var s = cap.subtotal; return '<tbody><tr class="cap"><td colspan="9">' + esc((cap.codigo ? cap.codigo + " — " : "") + cap.nombre) + '<span>' + cap.partidas.length + ' partidas</span></td></tr>' + (filas || '<tr><td colspan="9" class="empty">Sin partidas</td></tr>') + '<tr class="sub"><td colspan="4">Subtotal ' + esc(cap.nombre) + '</td><td class="n">' + mon(s.materiales) + '</td><td class="n">' + mon(s.manoObra) + '</td><td class="n">' + mon(s.gastosGenerales) + '</td><td class="n">' + mon(s.utilidad) + '</td><td class="n">' + mon(s.totalInterno) + '</td></tr></tbody>';
+    }).join("");
+    var logo = cfg && (cfg.logoCliente || cfg.logo), aviso = Math.abs(d0.diferencia) > 1 ? '<div class="warn">Existe una diferencia entre el desglose interno y el total del presupuesto.</div>' : "";
+    var css = '*{box-sizing:border-box}body{font:11px Arial;color:#172033;margin:0;padding:22px}.np{padding:8px 18px;background:#1a3060;color:#fff;border:0;border-radius:6px;margin-bottom:14px}.head{display:flex;justify-content:space-between;border-bottom:4px solid #f5a020;padding-bottom:10px}.head img{max-height:55px;max-width:180px}.head h1{color:#1a3060;margin:4px 0}.title{text-align:right}.title b{display:block;color:#1a3060;font-size:17px}.title strong{font-size:25px;color:#f5a020}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#f3f6fa;border-left:4px solid #f5a020;padding:10px;margin:12px 0}.facts{display:flex;gap:18px;margin:10px 0;color:#42536b}table{width:100%;border-collapse:collapse;table-layout:fixed}th{background:#1a3060;color:#fff;padding:7px 5px;font-size:8px;text-transform:uppercase}td{padding:6px;border-bottom:1px solid #e1e7ef;word-wrap:break-word}.n{text-align:right;white-space:nowrap}.c{text-align:center}.b{font-weight:bold}.cap{break-after:avoid}.cap td{background:#f5a020;color:#1a3060;font-weight:bold}.cap span{float:right;font-size:9px}.item{break-inside:avoid}.item:nth-child(odd) td{background:#f8fafc}.sub td{background:#e7edf6;color:#1a3060;font-weight:bold;border-top:2px solid #1a3060}.empty{text-align:center;color:#64748b}.sum{width:470px;max-width:100%;margin:14px 0 0 auto}.sum div{display:flex;justify-content:space-between;padding:6px 9px}.sum .dark{background:#1a3060;color:#fff}.sum .orange{background:#f5a020;color:#1a3060}.warn{margin-top:10px;padding:9px;background:#fff4df;border:1px solid #f5a020;color:#764700;font-weight:bold}.obs{white-space:pre-wrap;margin-top:12px;padding:10px;background:#f8fafc;border-left:4px solid #1a3060}.foot{text-align:center;color:#718096;border-top:1px solid #ddd;margin-top:16px;padding-top:7px;font-size:9px}@page{size:A4 landscape;margin:10mm}@media print{body{padding:0}.np{display:none}}';
+    return '<!doctype html><html><head><meta charset="utf-8"><title>Desglose Interno</title><style>' + css + '</style></head><body><button class="np" onclick="print()">🖨 Imprimir / Guardar PDF</button><div class="head"><div>' + (logo ? '<img src="' + esc(logo) + '">' : "") + '<h1>' + esc((cfg && cfg.empresa) || "Empresa") + '</h1><span>' + esc((cfg && cfg.rut) || "") + '</span></div><div class="title"><b>DESGLOSE INTERNO</b><strong>N° ' + esc(presupuesto.id || "") + '</strong><div>' + esc(new Date(presupuesto.fecha || Date.now()).toLocaleDateString("es-CL")) + '</div></div></div><div class="meta"><div><b>Cliente:</b> ' + esc((cliente && cliente.nombre) || "Sin cliente") + '</div><div><b>Proyecto:</b> ' + esc(presupuesto.descripcion || "") + '</div></div><div class="facts"><b>' + (doc.modoCalculo === "manual" ? "Ajuste manual" : "Cálculo automático") + '</b><span>GG ' + doc.porcentajeGG + '%</span><span>Utilidad ' + doc.porcentajeUtilidad + '%</span></div><table><colgroup><col style="width:28%"><col style="width:7%"><col style="width:6%"><col style="width:11%"><col style="width:10%"><col style="width:10%"><col style="width:10%"><col style="width:8%"><col style="width:10%"></colgroup><thead><tr><th>Partida</th><th>Cant.</th><th>Unidad</th><th>Precio unit.</th><th>Materiales</th><th>Mano de obra</th><th>GG</th><th>Utilidad</th><th>Total partida</th></tr></thead>' + cuerpos + '</table><div class="sum"><div><span>Materiales</span><b>' + mon(d0.totales.materiales) + '</b></div><div><span>Mano de obra</span><b>' + mon(d0.totales.manoObra) + '</b></div><div><span>Gastos generales</span><b>' + mon(d0.totales.gastosGenerales) + '</b></div><div><span>Utilidad</span><b>' + mon(d0.totales.utilidad) + '</b></div><div class="dark"><span>Costo interno</span><b>' + mon(d0.totales.costoInterno) + '</b></div><div><span>Precio ofertado neto</span><b>' + mon(d0.precioOfertadoNeto) + '</b></div><div><span>Precio total presupuesto</span><b>' + mon(d0.precioTotalPresupuesto) + '</b></div><div class="orange"><span>Diferencia / margen</span><b>' + mon(d0.diferencia) + ' · ' + (d0.margen * 100).toFixed(1) + '%</b></div></div>' + aviso + (doc.observaciones ? '<div class="obs"><b>Observación interna</b><br>' + esc(doc.observaciones) + '</div>' : "") + '' + renderBloqueFirmaCorporativa(cfg) + '</body></html>';
+  }
+  async function guardarXlsxDesgloseConEstilo(X, wb, meta, nombre) {
+    if (!window.JSZip) await zt("assets/vendor/jszip-3.10.1.min.js");
+    if (!window.JSZip) throw Error("JSZip local no disponible");
+    var zip = await window.JSZip.loadAsync(X.write(wb, { bookType: "xlsx", type: "array" }));
+    var styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="&quot;$&quot;#,##0"/></numFmts><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="11"/><name val="Calibri"/></font><font><b/><color rgb="FF1A3060"/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="6"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF1A3060"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF5A020"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EEF7"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF7F9FC"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border/><border><bottom style="thin"><color rgb="FFD7DEE8"/></bottom></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="10"><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="0" fontId="2" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="1" fillId="2" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="2" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="0" fillId="5" borderId="1" xfId="0" applyNumberFormat="1" applyFill="1"/><xf numFmtId="10" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1"/><xf numFmtId="0" fontId="0" fillId="5" borderId="1" xfId="0" applyFill="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+    zip.file("xl/styles.xml", styles);
+    var xml = await zip.file("xl/worksheets/sheet1.xml").async("string");
+    var ref = function (col, row) { var n = col + 1, s = ""; while (n) { var x = (n - 1) % 26; s = String.fromCharCode(65 + x) + s; n = Math.floor((n - 1) / 26); } return s + row; };
+    var setStyle = function (cell, style) { var re = new RegExp('<c([^>]*\\br="' + cell + '"[^>]*)>'); xml = xml.replace(re, function (_, attrs) { attrs = attrs.replace(/\s+s="\d+"/, ""); return '<c' + attrs + ' s="' + style + '">'; }); };
+    var paint = function (rows, textStyle, numberStyle) { rows.forEach(function (row) { for (var col = 0; col < 9; col++) setStyle(ref(col, row), col >= 3 ? numberStyle : textStyle); }); };
+    paint([1, 5], 1, 1); paint(meta.caps, 2, 2); paint(meta.subs, 3, 3); paint([meta.total], 1, 4); paint([meta.offered], 3, 3); paint([meta.difference, meta.margin], 2, 5); meta.items.forEach(function (row, index) { paint([row], index % 2 ? 9 : 0, index % 2 ? 7 : 6); });
+    setStyle("E3", 8); setStyle("H3", 8); setStyle("I" + meta.margin, 8);
+    xml = xml.replace(/<sheetViews>[\s\S]*?<\/sheetViews>/, '<sheetViews><sheetView workbookViewId="0"><pane xSplit="1" ySplit="5" topLeftCell="B6" activePane="bottomRight" state="frozen"/><selection pane="bottomRight" activeCell="B6" sqref="B6"/></sheetView></sheetViews>');
+    xml = xml.replace(/<pageMargins[^>]*\/>/g, "").replace(/<pageSetup[^>]*\/>/g, "").replace("</worksheet>", '<pageMargins left="0.25" right="0.25" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>');
+    zip.file("xl/worksheets/sheet1.xml", xml);
+    var summaryXml = await zip.file("xl/worksheets/sheet2.xml").async("string");
+    var setSummaryStyle = function (cell, style) { var re = new RegExp('<c([^>]*\\br="' + cell + '"[^>]*)>'); summaryXml = summaryXml.replace(re, function (_, attrs) { attrs = attrs.replace(/\s+s="\d+"/, ""); return '<c' + attrs + ' s="' + style + '">'; }); };
+    ["A1", "B1"].forEach(function (cell) { setSummaryStyle(cell, 1); });
+    for (var summaryRow = 5; summaryRow <= 10; summaryRow++) { setSummaryStyle("A" + summaryRow, 3); setSummaryStyle("B" + summaryRow, 6); }
+    ["A11", "B11"].forEach(function (cell, index) { setSummaryStyle(cell, index ? 5 : 2); });
+    setSummaryStyle("A12", 2); setSummaryStyle("B12", 8);
+    summaryXml = summaryXml.replace(/<pageMargins[^>]*\/>/g, "").replace(/<pageSetup[^>]*\/>/g, "").replace("</worksheet>", '<pageMargins left="0.35" right="0.35" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="1"/></worksheet>');
+    zip.file("xl/worksheets/sheet2.xml", summaryXml);
+    var workbookXml = await zip.file("xl/workbook.xml").async("string"), names = '<definedNames><definedName name="_xlnm.Print_Titles" localSheetId="0">&apos;Desglose Interno&apos;!$1:$5</definedName><definedName name="_xlnm.Print_Area" localSheetId="0">&apos;Desglose Interno&apos;!$A$1:$I$' + meta.lastRow + '</definedName></definedNames>';
+    workbookXml = workbookXml.replace(/<definedNames>[\s\S]*?<\/definedNames>/, "").replace("</workbook>", names + "</workbook>"); zip.file("xl/workbook.xml", workbookXml);
+    var blob = await zip.generateAsync({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), url = URL.createObjectURL(blob), link = document.createElement("a"); link.href = url; link.download = nombre; document.body.appendChild(link); link.click(); link.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+  }
+  async function excelDesgloseInterno(presupuesto, cliente, cfg, entrada, toast) {
+    try {
+      toast && toast("⏳ Preparando Excel editable...");
+      if (!window.XLSX) await zt("xlsx.full.min.js");
+      var X = window.XLSX; if (!X) throw Error("Biblioteca Excel local no disponible");
+      var d0 = calcularDesgloseInterno(presupuesto, cfg, entrada), rows = [[(cfg && cfg.empresa) || "Empresa", "", "", "", "", "", "DESGLOSE INTERNO", "", "N° " + (presupuesto.id || "")], ["Cliente", (cliente && cliente.nombre) || "Sin cliente", "", "Proyecto", presupuesto.descripcion || "", "", "Fecha", presupuesto.fecha || "", ""], ["Modo", d0.documento.modoCalculo === "manual" ? "Ajuste manual" : "Cálculo automático", "", "GG", d0.documento.porcentajeGG / 100, "", "Utilidad", d0.documento.porcentajeUtilidad / 100, ""], [], ["Partida", "Cantidad", "Unidad", "Precio unitario", "Materiales", "Mano de obra", "Gastos generales", "Utilidad", "Total partida"]], caps = [], subs = [], items = [];
+      d0.capitulos.forEach(function (cap) {
+        caps.push(rows.length + 1); rows.push([(cap.codigo ? cap.codigo + " — " : "") + cap.nombre, "", "", "", "", "", "", "", ""]); var first = rows.length + 1;
+        cap.partidas.forEach(function (p) { var rr = rows.length + 1; items.push(rr); rows.push([p.descripcion, p.cantidad, p.unidad, p.precioUnitario, p.materiales, p.manoObra, p.gastosGenerales, p.utilidad, { f: "SUM(E" + rr + ":H" + rr + ")" }]); });
+        var last = rows.length, sr = rows.length + 1; subs.push(sr); var sf = function (col) { return last >= first ? { f: "SUM(" + col + first + ":" + col + last + ")" } : 0; }; rows.push(["Subtotal " + cap.nombre, "", "", "", sf("E"), sf("F"), sf("G"), sf("H"), sf("I")]);
+      });
+      rows.push([]); var tr = rows.length + 1, sumf = function (col) { return { f: subs.map(function (r) { return col + r; }).join("+") || "0" }; }; rows.push(["TOTALES GENERALES", "", "", "", sumf("E"), sumf("F"), sumf("G"), sumf("H"), sumf("I")]);
+      var or = rows.length + 1; rows.push(["Precio ofertado neto", "", "", "", "", "", "", "", d0.precioOfertadoNeto]); var dr = rows.length + 1; rows.push(["Diferencia", "", "", "", "", "", "", "", { f: "I" + or + "-I" + tr }]); var mr = rows.length + 1; rows.push(["Margen", "", "", "", "", "", "", "", { f: "IF(I" + or + "=0,0,I" + dr + "/I" + or + ")" }]); rows.push([]); var obs = rows.length + 1; rows.push(["Observaciones", d0.documento.observaciones || "", "", "", "", "", "", "", ""]);
+      var ws = X.utils.aoa_to_sheet(rows), navy = "1A3060", orange = "F5A020", pale = "E8EEF7", white = "FFFFFF";
+      var sty = function (fill, color, bold, align) { return { fill: { patternType: "solid", fgColor: { rgb: fill } }, font: { color: { rgb: color }, bold: bold }, alignment: { vertical: "center", horizontal: align, wrapText: !0 }, border: { bottom: { style: "thin", color: { rgb: "D7DEE8" } } } }; };
+      ws["!merges"] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }, { s: { r: 0, c: 6 }, e: { r: 0, c: 7 } }, { s: { r: obs - 1, c: 1 }, e: { r: obs - 1, c: 8 } }].concat(caps.map(function (r) { return { s: { r: r - 1, c: 0 }, e: { r: r - 1, c: 8 } }; }));
+      ws["!cols"] = [{ wch: 48 }, { wch: 11 }, { wch: 9 }, { wch: 16 }, { wch: 16 }, { wch: 17 }, { wch: 18 }, { wch: 14 }, { wch: 17 }]; ws["!autofilter"] = { ref: "A5:I" + (tr - 2) }; ws["!freeze"] = { xSplit: 1, ySplit: 5, topLeftCell: "B6", state: "frozen" }; ws["!pageSetup"] = { orientation: "landscape", fitToWidth: 1, fitToHeight: 0, paperSize: 9 }; ws["!margins"] = { left: .25, right: .25, top: .5, bottom: .5, header: .2, footer: .2 }; ws["!printHeader"] = ["1:5"];
+      function paint(rowList, fill, color, bold) { rowList.forEach(function (r) { for (var col = 0; col < 9; col++) { var cell = ws[X.utils.encode_cell({ r: r - 1, c: col })]; if (cell) cell.s = sty(fill, color, bold, col >= 3 ? "right" : col === 1 || col === 2 ? "center" : "left"); } }); }
+      paint([1, 5], navy, white, !0); paint(caps, orange, navy, !0); paint(subs, pale, navy, !0); paint([tr], navy, white, !0); paint([or], pale, navy, !0); paint([dr, mr], orange, navy, !0); items.forEach(function (rr, n) { paint([rr], n % 2 ? "F7F9FC" : white, navy, !1); });
+      items.concat(subs, [tr, or, dr]).forEach(function (rr) { for (var col = 3; col < 9; col++) { var cell = ws[X.utils.encode_cell({ r: rr - 1, c: col })]; if (cell) cell.z = '"$"#,##0'; } }); if (ws["I" + mr]) ws["I" + mr].z = "0.0%"; if (ws.E3) ws.E3.z = "0.0%"; if (ws.H3) ws.H3.z = "0.0%";
+      var wb = X.utils.book_new(); X.utils.book_append_sheet(wb, ws, "Desglose Interno");
+      var summary = X.utils.aoa_to_sheet([[(cfg && cfg.empresa) || "Empresa", "RESUMEN DESGLOSE INTERNO"], ["Presupuesto", "N° " + (presupuesto.id || "")], ["Cliente", (cliente && cliente.nombre) || "Sin cliente"], [], ["Total materiales", { f: "'Desglose Interno'!E" + tr }], ["Total mano de obra", { f: "'Desglose Interno'!F" + tr }], ["Total GG", { f: "'Desglose Interno'!G" + tr }], ["Total utilidad", { f: "'Desglose Interno'!H" + tr }], ["Costo interno", { f: "'Desglose Interno'!I" + tr }], ["Precio ofertado", { f: "'Desglose Interno'!I" + or }], ["Diferencia", { f: "'Desglose Interno'!I" + dr }], ["Margen", { f: "'Desglose Interno'!I" + mr }]]); summary["!cols"] = [{ wch: 28 }, { wch: 24 }]; summary["!pageSetup"] = { orientation: "landscape", fitToWidth: 1, fitToHeight: 1 }; for (var sr = 5; sr <= 11; sr++) if (summary["B" + sr]) summary["B" + sr].z = '"$"#,##0'; if (summary.B12) summary.B12.z = "0.0%"; X.utils.book_append_sheet(wb, summary, "Resumen");
+      var clean = function (v) { return String(v || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9_-]+/g, "_"); }; await guardarXlsxDesgloseConEstilo(X, wb, { caps: caps, subs: subs, items: items, total: tr, offered: or, difference: dr, margin: mr, lastRow: obs }, "Desglose_Interno_" + clean(presupuesto.id) + "_" + clean((cliente && cliente.nombre) || "cliente") + ".xlsx"); toast && toast("✅ Excel editable generado");
+    } catch (error) { toast && toast("❌ No se pudo generar Excel: " + (error.message || "error desconocido")); }
+  }
+  function Mf(t, i, r, entrada) {
     var n = window.open("", "_blank");
     if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
-    (n.document.write(Pp(t, i, r)), n.document.close());
+    (n.document.write(htmlDesgloseInterno(t, i, r, entrada)), n.document.close());
   }
   function Tp(t, i, r) {
     var n = (r && r.accentColor) || "#f5a020",
@@ -21857,6 +21955,204 @@ Error generating stack: ` +
     if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (n.document.write(Tp(t, i, r)), n.document.close());
   }
+  function _defaultRolesDotacion(cfg) {
+    var roles = cfg && Array.isArray(cfg.moItems) && cfg.moItems.length ? cfg.moItems : [
+      { id: "maestro1", rol: "Maestro primera", jornal: 47000, horasJornada: 8 },
+      { id: "maestro2", rol: "Maestro segunda", jornal: 38000, horasJornada: 8 },
+      { id: "ayudante", rol: "Ayudante", jornal: 25000, horasJornada: 8 },
+    ];
+    return roles.map(function (rl, ix) { return { id: rl.id || _normDesglose(rl.rol) + "-" + ix, rol: rl.rol || "Rol " + (ix + 1), jornal: Number(rl.jornal) || 0, horasJornada: Number(rl.horasJornada) || 8 }; });
+  }
+  function estructuraDotacion(presupuesto) {
+    presupuesto = presupuesto || {};
+    var items = Array.isArray(presupuesto.items) ? presupuesto.items.filter(function (x) { return x && x.desc; }) : [];
+    var caps = Array.isArray(presupuesto.capitulos) ? presupuesto.capitulos.filter(Boolean) : [];
+    var grupos = caps.length ? caps.map(function (cap, n) { return { id: cap.id, codigo: cap.codigo || String(n + 1), nombre: cap.nombre || "Capítulo " + (n + 1), items: items.filter(function (x) { return String(x.capituloId) === String(cap.id); }) }; }) : [{ id: "general", codigo: "", nombre: "Alcance general de la obra", items: items }];
+    if (caps.length) { var ids = new Set(caps.map(function (cap) { return String(cap.id); })), sueltos = items.filter(function (x) { return x.capituloId == null || !ids.has(String(x.capituloId)); }); if (sueltos.length) grupos.push({ id: "sin-capitulo", codigo: "", nombre: "Sin capítulo", items: sueltos }); }
+    return grupos.map(function (grupo, gi) {
+      var ocurrencias = {}, capKey = _normDesglose((grupo.codigo || "") + "|" + grupo.nombre + "|" + gi);
+      return { id: grupo.id, codigo: grupo.codigo || "", nombre: grupo.nombre, orden: gi, partidas: grupo.items.map(function (item) {
+        var descKey = _normDesglose(item.desc), base = capKey + "|" + descKey; ocurrencias[base] = (ocurrencias[base] || 0) + 1;
+        var linea = calcularLineaPresupuesto(item);
+        return { clave: item._uid ? "uid:" + item._uid : "legacy:" + base + "|" + ocurrencias[base], uid: item._uid || "", descripcion: item.desc || "", cantidad: Number(linea.cantidadIngresada) || 0, unidad: item.unidad || "", rendimiento: Number(item._rendimiento) || 0, dotacion: Number(item._dotacion) || 1 };
+      }) };
+    });
+  }
+  function normalizarResumenDotacion(presupuesto, cfg, entrada) {
+    var previo = entrada || obtenerDocumentoObraConfig(presupuesto, "resumenDotacion") || {};
+    var rolesBase = _defaultRolesDotacion(cfg), valoresRoles = {};
+    rolesBase.forEach(function (rl) { var prev = previo.valoresRoles && previo.valoresRoles[rl.id]; valoresRoles[rl.id] = prev ? { rol: prev.rol || rl.rol, jornal: Number(prev.jornal) || 0, horasJornada: Number(prev.horasJornada) || 8 } : { rol: rl.rol, jornal: rl.jornal, horasJornada: rl.horasJornada }; });
+    return { estado: previo.estado || "Borrador", _estadoDocumento: previo._estadoDocumento || "borrador", actualizadoEn: previo.actualizadoEn || "", modoCalculo: previo.modoCalculo === "manual" ? "manual" : "automatico", valoresRoles: valoresRoles, porcentajeGG: previo.porcentajeGG == null ? Number(cfg && cfg.pctGG) || 0 : Number(previo.porcentajeGG) || 0, porcentajeUtilidad: previo.porcentajeUtilidad == null ? Number(cfg && (cfg.pctUtil || cfg.pctUtilidad)) || 0 : Number(previo.porcentajeUtilidad) || 0, ajustesPorPartida: Object.assign({}, previo.ajustesPorPartida || {}), observaciones: previo.observaciones || "", estructura: Array.isArray(previo.estructura) && previo.estructura.length ? previo.estructura : estructuraDotacion(presupuesto) };
+  }
+  function calcularResumenDotacion(presupuesto, cfg, entrada) {
+    presupuesto = presupuesto || {};
+    var doc = normalizarResumenDotacion(presupuesto, cfg, entrada), rolesOrdenados = Object.keys(doc.valoresRoles);
+    var modo = presupuesto.modoCosteo || "completo", itemsDesc = (presupuesto.items || []).filter(function (x) { return x && x.desc; });
+    var tot = Ee(itemsDesc, cfg || {}, presupuesto.descuento, modo, presupuesto.sinIva) || {};
+    var moTotal = modo === "mo" ? Number(tot.sub) || 0 : Number(tot.noMatSub || tot.sub) || 0;
+    var den = (1 + doc.porcentajeGG / 100) * (1 + doc.porcentajeUtilidad / 100), moBase = den > 0 ? moTotal / den : moTotal;
+    var flatPartidas = []; doc.estructura.forEach(function (cap) { (cap.partidas || []).forEach(function (p) { flatPartidas.push(p); }); });
+    var avgJ = rolesOrdenados.length ? rolesOrdenados.reduce(function (s, rid) { return s + (Number(doc.valoresRoles[rid].jornal) || 0); }, 0) / rolesOrdenados.length : 0;
+    var rawFilas = {}, baseTotalAuto = 0, haySobreescrituraHH = !1;
+    flatPartidas.forEach(function (p) {
+      var aj = doc.ajustesPorPartida[p.clave], manualRow = doc.modoCalculo === "manual" && aj;
+      var rendimiento = manualRow && aj.rendimiento != null ? Number(aj.rendimiento) || 0 : Number(p.rendimiento) || 0;
+      var dotacion = manualRow && aj.dotacion != null ? Number(aj.dotacion) || 0 : Number(p.dotacion) || 1;
+      var hhAuto = rendimiento > 0 ? Math.round((p.cantidad / rendimiento) * dotacion * 8 * 10) / 10 : 0;
+      var hh = manualRow && aj.hh != null ? Number(aj.hh) || 0 : hhAuto;
+      if (manualRow && aj.hh != null) haySobreescrituraHH = !0;
+      var montoManualDirecto = manualRow && aj.montosPorRol ? aj.montosPorRol : null;
+      rawFilas[p.clave] = { hh: hh, montoManualDirecto: montoManualDirecto, aj: aj, manualRow: manualRow, rendimiento: rendimiento, dotacion: dotacion };
+      if (!montoManualDirecto && hh) baseTotalAuto += (hh / 8) * avgJ;
+    });
+    var scale = baseTotalAuto > 0 && moBase > 0 ? moBase / baseTotalAuto : 1;
+    var totalGeneral = { hh: 0, manoObra: 0, gastosGenerales: 0, utilidad: 0, totalMO: 0, porRol: {} };
+    rolesOrdenados.forEach(function (rid) { totalGeneral.porRol[rid] = 0; });
+    var capitulos = doc.estructura.map(function (cap) {
+      var sub = { hh: 0, manoObra: 0, gastosGenerales: 0, utilidad: 0, totalMO: 0, porRol: {} };
+      rolesOrdenados.forEach(function (rid) { sub.porRol[rid] = 0; });
+      var partidas = (cap.partidas || []).map(function (p) {
+        var raw = rawFilas[p.clave], montosPorRol = {};
+        if (raw.montoManualDirecto) rolesOrdenados.forEach(function (rid) { montosPorRol[rid] = Number(raw.montoManualDirecto[rid]) || 0; });
+        else rolesOrdenados.forEach(function (rid) { var rl = doc.valoresRoles[rid], base = raw.hh ? (raw.hh / 8) * (Number(rl.jornal) || 0) / (rolesOrdenados.length || 1) : 0; montosPorRol[rid] = Math.round(base * scale); });
+        var manoObra = rolesOrdenados.reduce(function (s, rid) { return s + montosPorRol[rid]; }, 0);
+        var gg = raw.manualRow && raw.aj.gastosGenerales != null ? Number(raw.aj.gastosGenerales) || 0 : Math.round(manoObra * (doc.porcentajeGG / 100));
+        var util = raw.manualRow && raw.aj.utilidad != null ? Number(raw.aj.utilidad) || 0 : Math.round((manoObra + gg) * (doc.porcentajeUtilidad / 100));
+        var totalMO = manoObra + gg + util;
+        sub.hh += raw.hh; sub.manoObra += manoObra; sub.gastosGenerales += gg; sub.utilidad += util; sub.totalMO += totalMO;
+        rolesOrdenados.forEach(function (rid) { sub.porRol[rid] += montosPorRol[rid]; });
+        return Object.assign({}, p, { rendimiento: raw.rendimiento, dotacion: raw.dotacion, hh: raw.hh, montosPorRol: montosPorRol, manoObra: manoObra, gastosGenerales: gg, utilidad: util, totalMO: totalMO });
+      });
+      totalGeneral.hh += sub.hh; totalGeneral.manoObra += sub.manoObra; totalGeneral.gastosGenerales += sub.gastosGenerales; totalGeneral.utilidad += sub.utilidad; totalGeneral.totalMO += sub.totalMO;
+      rolesOrdenados.forEach(function (rid) { totalGeneral.porRol[rid] += sub.porRol[rid]; });
+      return Object.assign({}, cap, { partidas: partidas, subtotal: sub });
+    });
+    var sinDatosHH = totalGeneral.hh === 0 && flatPartidas.length > 0 && !haySobreescrituraHH;
+    return { documento: doc, rolesOrdenados: rolesOrdenados, capitulos: capitulos, totales: totalGeneral, moTotal: moTotal, moBase: moBase, sinDatosHH: sinDatosHH };
+  }
+  function htmlResumenDotacion(presupuesto, cliente, cfg, entrada) {
+    var d0 = calcularResumenDotacion(presupuesto, cfg, entrada), doc = d0.documento;
+    var esc = function (v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }, mon = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    if (d0.sinDatosHH) return '<!doctype html><html><head><meta charset="utf-8"><title>Resumen de Dotación</title></head><body style="font-family:Arial;padding:40px;text-align:center"><h2 style="color:#666">Sin datos de HH</h2><p style="color:#888;margin-top:12px">Configura rendimiento y dotación en los APUs de cada partida, o activa el ajuste manual, para generar el Resumen de Dotación.</p></body></html>';
+    var colsRol = d0.rolesOrdenados.map(function (rid) { return '<col style="width:' + (44 / Math.max(1, d0.rolesOrdenados.length)) + '%">'; }).join("");
+    var thRol = d0.rolesOrdenados.map(function (rid) { return "<th>" + esc(doc.valoresRoles[rid].rol) + '<br><span style="font-weight:400;font-size:7px;opacity:.85">' + mon(doc.valoresRoles[rid].jornal) + "/día</span></th>"; }).join("");
+    var cuerpos = d0.capitulos.map(function (cap) {
+      var filas = cap.partidas.map(function (p) {
+        var tdRol = d0.rolesOrdenados.map(function (rid) { return '<td class="n">' + mon(p.montosPorRol[rid]) + "</td>"; }).join("");
+        return '<tr class="item"><td>' + esc(p.descripcion) + '</td><td class="n">' + esc(p.cantidad) + '</td><td class="c">' + esc(p.unidad) + '</td><td class="c b">' + p.hh.toFixed(1) + '</td><td class="n">' + mon(p.manoObra) + '</td><td class="n">' + mon(p.gastosGenerales) + '</td><td class="n">' + mon(p.utilidad) + '</td><td class="n b">' + mon(p.totalMO) + "</td>" + tdRol + "</tr>";
+      }).join("");
+      var s = cap.subtotal, tdRolSub = d0.rolesOrdenados.map(function (rid) { return '<td class="n">' + mon(s.porRol[rid]) + "</td>"; }).join("");
+      return '<tbody><tr class="cap"><td colspan="' + (8 + d0.rolesOrdenados.length) + '">' + esc((cap.codigo ? cap.codigo + " — " : "") + cap.nombre) + "<span>" + cap.partidas.length + ' partidas</span></td></tr>' + (filas || '<tr><td colspan="' + (8 + d0.rolesOrdenados.length) + '" class="empty">Sin partidas</td></tr>') + '<tr class="sub"><td colspan="3">Subtotal ' + esc(cap.nombre) + '</td><td class="c">' + s.hh.toFixed(1) + '</td><td class="n">' + mon(s.manoObra) + '</td><td class="n">' + mon(s.gastosGenerales) + '</td><td class="n">' + mon(s.utilidad) + '</td><td class="n">' + mon(s.totalMO) + "</td>" + tdRolSub + "</tr></tbody>";
+    }).join("");
+    var logo = cfg && (cfg.logoCliente || cfg.logo), t = d0.totales;
+    var css = '*{box-sizing:border-box}body{font:11px Arial;color:#172033;margin:0;padding:22px}.np{padding:8px 18px;background:#1a3060;color:#fff;border:0;border-radius:6px;margin-bottom:14px}.head{display:flex;justify-content:space-between;border-bottom:4px solid #f5a020;padding-bottom:10px}.head img{max-height:55px;max-width:180px}.head h1{color:#1a3060;margin:4px 0}.title{text-align:right}.title b{display:block;color:#1a3060;font-size:17px}.title strong{font-size:25px;color:#f5a020}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#f3f6fa;border-left:4px solid #f5a020;padding:10px;margin:12px 0}.facts{display:flex;gap:18px;margin:10px 0;color:#42536b}table{width:100%;border-collapse:collapse;table-layout:fixed}th{background:#1a3060;color:#fff;padding:7px 4px;font-size:8px;text-transform:uppercase}td{padding:6px 4px;border-bottom:1px solid #e1e7ef;word-wrap:break-word;font-size:9.5px}.n{text-align:right;white-space:nowrap}.c{text-align:center}.b{font-weight:bold}.cap{break-after:avoid}.cap td{background:#f5a020;color:#1a3060;font-weight:bold}.cap span{float:right;font-size:9px}.item{break-inside:avoid}.item:nth-child(odd) td{background:#f8fafc}.sub td{background:#e7edf6;color:#1a3060;font-weight:bold;border-top:2px solid #1a3060}.empty{text-align:center;color:#64748b}.sum{width:470px;max-width:100%;margin:14px 0 0 auto}.sum div{display:flex;justify-content:space-between;padding:6px 9px}.sum .dark{background:#1a3060;color:#fff}.sum .orange{background:#f5a020;color:#1a3060}.obs{white-space:pre-wrap;margin-top:12px;padding:10px;background:#f8fafc;border-left:4px solid #1a3060}.foot{text-align:center;color:#718096;border-top:1px solid #ddd;margin-top:16px;padding-top:7px;font-size:9px}@page{size:A4 landscape;margin:10mm}@media print{body{padding:0}.np{display:none}}';
+    return '<!doctype html><html><head><meta charset="utf-8"><title>Resumen de Dotación</title><style>' + css + '</style></head><body><button class="np" onclick="print()">🖨 Imprimir / Guardar PDF</button><div class="head"><div>' + (logo ? '<img src="' + esc(logo) + '">' : "") + "<h1>" + esc((cfg && cfg.empresa) || "Empresa") + "</h1><span>" + esc((cfg && cfg.rut) || "") + '</span></div><div class="title"><b>RESUMEN DE DOTACIÓN</b><strong>N° ' + esc(presupuesto.id || "") + '</strong><div>' + esc(new Date(presupuesto.fecha || Date.now()).toLocaleDateString("es-CL")) + '</div></div></div><div class="meta"><div><b>Cliente:</b> ' + esc((cliente && cliente.nombre) || "Sin cliente") + '</div><div><b>Proyecto:</b> ' + esc(presupuesto.descripcion || "") + '</div></div><div class="facts"><b>' + (doc.modoCalculo === "manual" ? "Ajuste manual" : "Cálculo automático") + '</b><span>GG ' + doc.porcentajeGG + '%</span><span>Utilidad ' + doc.porcentajeUtilidad + '%</span></div><table><colgroup><col style="width:20%"><col style="width:8%"><col style="width:6%"><col style="width:6%"><col style="width:8%"><col style="width:7%"><col style="width:7%"><col style="width:8%">' + colsRol + '</colgroup><thead><tr><th>Partida</th><th>Cantidad</th><th>Unidad</th><th>HH</th><th>Mano de obra</th><th>GG</th><th>Utilidad</th><th>Total MO</th>' + thRol + "</tr></thead>" + cuerpos + '</table><div class="sum"><div><span>HH total</span><b>' + t.hh.toFixed(1) + '</b></div><div><span>Mano de obra</span><b>' + mon(t.manoObra) + '</b></div><div><span>Gastos generales</span><b>' + mon(t.gastosGenerales) + '</b></div><div><span>Utilidad</span><b>' + mon(t.utilidad) + '</b></div><div class="dark"><span>Total MO + GG + Utilidad</span><b>' + mon(t.totalMO) + "</b></div>" + d0.rolesOrdenados.map(function (rid) { return "<div><span>" + esc(doc.valoresRoles[rid].rol) + "</span><b>" + mon(t.porRol[rid]) + "</b></div>"; }).join("") + '</div>' + (doc.observaciones ? '<div class="obs"><b>Observación interna</b><br>' + esc(doc.observaciones) + "</div>" : "") + '' + renderBloqueFirmaCorporativa(cfg) + '</body></html>';
+  }
+  function abrirResumenDotacion(t, i, r, entrada) {
+    var n = window.open("", "_blank");
+    if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
+    (n.document.write(htmlResumenDotacion(t, i, r, entrada)), n.document.close());
+  }
+  async function guardarXlsxDotacionConEstilo(X, wb, hojas, nombre) {
+    if (!window.JSZip) await zt("assets/vendor/jszip-3.10.1.min.js");
+    if (!window.JSZip) throw Error("JSZip local no disponible");
+    var zip = await window.JSZip.loadAsync(X.write(wb, { bookType: "xlsx", type: "array" }));
+    var styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="2"><numFmt numFmtId="164" formatCode="&quot;$&quot;#,##0"/><numFmt numFmtId="165" formatCode="0.0%"/></numFmts><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="11"/><name val="Calibri"/></font><font><b/><color rgb="FF1A3060"/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="6"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF1A3060"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF5A020"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EEF7"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF7F9FC"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border/><border><bottom style="thin"><color rgb="FFD7DEE8"/></bottom></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="11"><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="0" fontId="2" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="1" fillId="2" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="2" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="0" fillId="5" borderId="1" xfId="0" applyNumberFormat="1" applyFill="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1"/><xf numFmtId="0" fontId="0" fillId="5" borderId="1" xfId="0" applyFill="1"/><xf numFmtId="164" fontId="2" fillId="4" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+    zip.file("xl/styles.xml", styles);
+    var ref = function (col, row) { var n = col + 1, s = ""; while (n) { var x = (n - 1) % 26; s = String.fromCharCode(65 + x) + s; n = Math.floor((n - 1) / 26); } return s + row; };
+    for (var h = 0; h < hojas.length; h++) {
+      var hoja = hojas[h], xml = await zip.file("xl/worksheets/sheet" + (h + 1) + ".xml").async("string");
+      (function (idxHoja) {
+        var setStyle = function (cell, style) { var re = new RegExp('<c([^>]*\\br="' + cell + '"[^>]*)>'); xml = xml.replace(re, function (_, attrs) { attrs = attrs.replace(/\s+s="\d+"/, ""); return '<c' + attrs + ' s="' + style + '">'; }); };
+        hoja.filas.forEach(function (regla) { for (var col = regla.colDesde; col <= regla.colHasta; col++) setStyle(ref(col, regla.fila), col >= regla.colNumerica ? regla.estiloNum : regla.estiloTexto); });
+        if (hoja.freeze) xml = xml.replace(/<sheetViews>[\s\S]*?<\/sheetViews>/, '<sheetViews><sheetView workbookViewId="0"><pane xSplit="' + hoja.freeze.xSplit + '" ySplit="' + hoja.freeze.ySplit + '" topLeftCell="' + hoja.freeze.topLeftCell + '" activePane="bottomRight" state="frozen"/><selection pane="bottomRight" activeCell="' + hoja.freeze.topLeftCell + '" sqref="' + hoja.freeze.topLeftCell + '"/></sheetView></sheetViews>');
+        xml = xml.replace(/<pageMargins[^>]*\/>/g, "").replace(/<pageSetup[^>]*\/>/g, "").replace("</worksheet>", '<pageMargins left="0.25" right="0.25" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>');
+      })(h);
+      zip.file("xl/worksheets/sheet" + (h + 1) + ".xml", xml);
+    }
+    var workbookXml = await zip.file("xl/workbook.xml").async("string");
+    var titles = hojas.map(function (hoja, idx) { return hoja.printTitles ? '<definedName name="_xlnm.Print_Titles" localSheetId="' + idx + '">&apos;' + hoja.nombre + '&apos;!' + hoja.printTitles + "</definedName>" : ""; }).join("");
+    var areas = hojas.map(function (hoja, idx) { return hoja.printArea ? '<definedName name="_xlnm.Print_Area" localSheetId="' + idx + '">&apos;' + hoja.nombre + '&apos;!' + hoja.printArea + "</definedName>" : ""; }).join("");
+    workbookXml = workbookXml.replace(/<definedNames>[\s\S]*?<\/definedNames>/, "").replace("</workbook>", "<definedNames>" + titles + areas + "</definedNames></workbook>");
+    zip.file("xl/workbook.xml", workbookXml);
+    var blob = await zip.generateAsync({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), url = URL.createObjectURL(blob), link = document.createElement("a");
+    (link.href = url), (link.download = nombre), document.body.appendChild(link), link.click(), link.remove(), setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+  }
+  async function excelResumenDotacion(presupuesto, cliente, cfg, entrada, toast) {
+    try {
+      toast && toast("⏳ Preparando Excel editable...");
+      if (!window.XLSX) await zt("xlsx.full.min.js");
+      var X = window.XLSX; if (!X) throw Error("Biblioteca Excel local no disponible");
+      var d0 = calcularResumenDotacion(presupuesto, cfg, entrada);
+      if (d0.sinDatosHH) throw Error("Sin datos de HH: configura rendimiento y dotación en los APUs, o activa el ajuste manual.");
+      var doc = d0.documento, roles = d0.rolesOrdenados, nRoles = roles.length, nCols = 8 + nRoles;
+      var colLetra = function (col) { var n = col + 1, s = ""; while (n) { var x = (n - 1) % 26; s = String.fromCharCode(65 + x) + s; n = Math.floor((n - 1) / 26); } return s; };
+      var colRolIni = 8;
+      var rowsRoles = [(cfg && cfg.empresa) || "Empresa", "", "", "", "", "", "", "RESUMEN DE DOTACIÓN", "N° " + (presupuesto.id || "")];
+      var rows = [rowsRoles.concat(new Array(Math.max(0, nCols - rowsRoles.length)).fill(""))];
+      var rowMeta = ["Cliente", (cliente && cliente.nombre) || "Sin cliente", "", "Proyecto", presupuesto.descripcion || "", "", "Fecha", presupuesto.fecha || ""];
+      rows.push(rowMeta.concat(new Array(Math.max(0, nCols - rowMeta.length)).fill("")));
+      var rowModo = ["Modo", doc.modoCalculo === "manual" ? "Ajuste manual" : "Cálculo automático", "", "GG", doc.porcentajeGG / 100, "", "Utilidad", doc.porcentajeUtilidad / 100];
+      rows.push(rowModo.concat(new Array(Math.max(0, nCols - rowModo.length)).fill("")));
+      rows.push(new Array(nCols).fill(""));
+      var headerRow = ["Partida", "Cantidad", "Unidad", "HH", "Mano de obra", "Gastos generales", "Utilidad", "Total mano de obra"].concat(roles.map(function (rid) { return doc.valoresRoles[rid].rol; }));
+      rows.push(headerRow);
+      var caps = [], subs = [], items = [];
+      d0.capitulos.forEach(function (cap) {
+        caps.push(rows.length + 1);
+        rows.push([(cap.codigo ? cap.codigo + " — " : "") + cap.nombre].concat(new Array(nCols - 1).fill("")));
+        var first = rows.length + 1;
+        cap.partidas.forEach(function (p) {
+          var rr = rows.length + 1; items.push(rr);
+          var fila = [p.descripcion, p.cantidad, p.unidad, p.hh, p.manoObra, p.gastosGenerales, p.utilidad, { f: "SUM(E" + rr + ":G" + rr + ")" }];
+          roles.forEach(function (rid) { fila.push(p.montosPorRol[rid]); });
+          rows.push(fila);
+        });
+        var last = rows.length, sr = rows.length + 1; subs.push(sr);
+        var sf = function (col) { return last >= first ? { f: "SUM(" + col + first + ":" + col + last + ")" } : 0; };
+        var filaSub = ["Subtotal " + cap.nombre, "", "", sf("D"), sf("E"), sf("F"), sf("G"), sf("H")];
+        roles.forEach(function (rid, ix) { filaSub.push(sf(colLetra(colRolIni + ix))); });
+        rows.push(filaSub);
+      });
+      rows.push(new Array(nCols).fill(""));
+      var tr = rows.length + 1, sumf = function (col) { return { f: subs.map(function (r) { return col + r; }).join("+") || "0" }; };
+      var filaTot = ["TOTALES GENERALES", "", "", sumf("D"), sumf("E"), sumf("F"), sumf("G"), sumf("H")];
+      roles.forEach(function (rid, ix) { filaTot.push(sumf(colLetra(colRolIni + ix))); });
+      rows.push(filaTot);
+      rows.push(new Array(nCols).fill(""));
+      var obs = rows.length + 1;
+      rows.push(["Observaciones", doc.observaciones || ""].concat(new Array(nCols - 2).fill("")));
+      var ws = X.utils.aoa_to_sheet(rows), navy = "1A3060", orange = "F5A020", pale = "E8EEF7", white = "FFFFFF";
+      var sty = function (fill, color, bold, align) { return { fill: { patternType: "solid", fgColor: { rgb: fill } }, font: { color: { rgb: color }, bold: bold }, alignment: { vertical: "center", horizontal: align, wrapText: !0 }, border: { bottom: { style: "thin", color: { rgb: "D7DEE8" } } } }; };
+      ws["!merges"] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 6 } }, { s: { r: 0, c: 7 }, e: { r: 0, c: 8 } }, { s: { r: obs - 1, c: 1 }, e: { r: obs - 1, c: nCols - 1 } }].concat(caps.map(function (r) { return { s: { r: r - 1, c: 0 }, e: { r: r - 1, c: nCols - 1 } }; }));
+      var colsW = [{ wch: 44 }, { wch: 11 }, { wch: 9 }, { wch: 8 }, { wch: 15 }, { wch: 15 }, { wch: 13 }, { wch: 15 }].concat(roles.map(function () { return { wch: 16 }; }));
+      ws["!cols"] = colsW; ws["!autofilter"] = { ref: "A5:" + colLetra(nCols - 1) + (tr - 2) }; ws["!freeze"] = { xSplit: 1, ySplit: 5, topLeftCell: "B6", state: "frozen" }; ws["!pageSetup"] = { orientation: "landscape", fitToWidth: 1, fitToHeight: 0, paperSize: 9 }; ws["!margins"] = { left: .25, right: .25, top: .5, bottom: .5, header: .2, footer: .2 }; ws["!printHeader"] = ["1:5"];
+      var paint = function (rowList, fill, color, bold) { rowList.forEach(function (r) { for (var col = 0; col < nCols; col++) { var cell = ws[X.utils.encode_cell({ r: r - 1, c: col })]; if (cell) cell.s = sty(fill, color, bold, col >= 3 ? "right" : col === 1 || col === 2 ? "center" : "left"); } }); };
+      paint([1, 5], navy, white, !0); paint(caps, orange, navy, !0); paint(subs, pale, navy, !0); paint([tr], navy, white, !0); items.forEach(function (rr, n) { paint([rr], n % 2 ? "F7F9FC" : white, navy, !1); });
+      items.concat(subs, [tr]).forEach(function (rr) { for (var col = 4; col < nCols; col++) { var cell = ws[X.utils.encode_cell({ r: rr - 1, c: col })]; if (cell) cell.z = '"$"#,##0'; } }); if (ws.E3) ws.E3.z = "0.0%"; if (ws.H3) ws.H3.z = "0.0%";
+      var wb = X.utils.book_new(); X.utils.book_append_sheet(wb, ws, "Resumen de Dotación");
+      var filasRol = [["Rol", "Valor diario", "HH asignadas", "Días equivalentes", "Monto total", "% del costo MO"]];
+      roles.forEach(function (rid) {
+        var rl = doc.valoresRoles[rid], monto = d0.totales.porRol[rid] || 0, dias = rl.jornal > 0 ? monto / rl.jornal : 0, horas = dias * (rl.horasJornada || 8);
+        filasRol.push([rl.rol, rl.jornal, Math.round(horas * 10) / 10, Math.round(dias * 10) / 10, monto, d0.totales.manoObra > 0 ? monto / d0.totales.manoObra : 0]);
+      });
+      var wsRol = X.utils.aoa_to_sheet(filasRol);
+      wsRol["!cols"] = [{ wch: 22 }, { wch: 14 }, { wch: 14 }, { wch: 16 }, { wch: 16 }, { wch: 16 }];
+      for (var rr2 = 2; rr2 <= filasRol.length; rr2++) { if (wsRol["B" + rr2]) wsRol["B" + rr2].z = '"$"#,##0'; if (wsRol["E" + rr2]) wsRol["E" + rr2].z = '"$"#,##0'; if (wsRol["F" + rr2]) wsRol["F" + rr2].z = "0.0%"; }
+      X.utils.book_append_sheet(wb, wsRol, "Resumen por Rol");
+      var filasCap = [["Capítulo", "HH", "Mano de obra", "Gastos generales", "Utilidad", "Total"].concat(roles.map(function (rid) { return doc.valoresRoles[rid].rol; }))];
+      d0.capitulos.forEach(function (cap) { var s = cap.subtotal; filasCap.push([cap.nombre, s.hh, s.manoObra, s.gastosGenerales, s.utilidad, s.totalMO].concat(roles.map(function (rid) { return s.porRol[rid]; }))); });
+      var t = d0.totales; filasCap.push(["TOTALES", t.hh, t.manoObra, t.gastosGenerales, t.utilidad, t.totalMO].concat(roles.map(function (rid) { return t.porRol[rid]; })));
+      var wsCap = X.utils.aoa_to_sheet(filasCap);
+      wsCap["!cols"] = [{ wch: 26 }, { wch: 10 }, { wch: 15 }, { wch: 15 }, { wch: 13 }, { wch: 15 }].concat(roles.map(function () { return { wch: 16 }; }));
+      for (var rr3 = 2; rr3 <= filasCap.length; rr3++) for (var cc3 = 2; cc3 <= 5 + nRoles; cc3++) { var cell3 = wsCap[colLetra(cc3 - 1) + rr3]; if (cell3) cell3.z = '"$"#,##0'; }
+      X.utils.book_append_sheet(wb, wsCap, "Resumen por Capítulo");
+      var clean = function (v) { return String(v || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9_-]+/g, "_"); };
+      var hojaDatos = { nombre: "Resumen de Dotación", freeze: { xSplit: 1, ySplit: 5, topLeftCell: "B6" }, printTitles: "$1:$5", printArea: "$A$1:$" + colLetra(nCols - 1) + "$" + obs, filas: [{ fila: 1, colDesde: 0, colHasta: nCols - 1, colNumerica: 7, estiloTexto: 1, estiloNum: 4 }, { fila: 5, colDesde: 0, colHasta: nCols - 1, colNumerica: 3, estiloTexto: 1, estiloNum: 4 }].concat(caps.map(function (r) { return { fila: r, colDesde: 0, colHasta: nCols - 1, colNumerica: 3, estiloTexto: 2, estiloNum: 5 }; })).concat(subs.map(function (r) { return { fila: r, colDesde: 0, colHasta: nCols - 1, colNumerica: 3, estiloTexto: 3, estiloNum: 6 }; })).concat([{ fila: tr, colDesde: 0, colHasta: nCols - 1, colNumerica: 3, estiloTexto: 1, estiloNum: 4 }]).concat(items.map(function (r, ix) { return { fila: r, colDesde: 0, colHasta: nCols - 1, colNumerica: 4, estiloTexto: ix % 2 ? 9 : 0, estiloNum: ix % 2 ? 7 : 6 }; })) };
+      await guardarXlsxDotacionConEstilo(X, wb, [hojaDatos], "Resumen_Dotacion_" + clean(presupuesto.id) + "_" + clean((cliente && cliente.nombre) || "cliente") + ".xlsx");
+      toast && toast("✅ Excel editable generado");
+    } catch (error) { toast && toast("❌ No se pudo generar Excel: " + (error.message || "error desconocido")); }
+  }
   function Rf(t, i, r) {
     const {
       total: n0,
@@ -21992,9 +22288,104 @@ Error generating stack: ` +
     if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (n.document.write(Rf(t, i, r)), n.document.close());
   }
+
+  // Panel de cabecera de la Análisis de Negociación. Descompone el precio
+  // ofertado en tres tramos que suman exactamente la venta: costo protegido,
+  // margen requerido para llegar al mínimo, y margen disponible para negociar.
+  // Cada tramo va rotulado en el pie, porque el color por sí solo no basta.
+  function panelNegociacionHtml(venta, costoProtegido, precioMinimo, holgura, totalConIva, margenMinPct) {
+    var mon = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    venta = Math.max(0, Number(venta) || 0);
+    holgura = Math.max(0, Number(holgura) || 0);
+    costoProtegido = Math.max(0, Number(costoProtegido) || 0);
+    precioMinimo = Math.max(0, Number(precioMinimo) || 0);
+    var requerido = Math.max(0, precioMinimo - costoProtegido);
+    var pctHolgura = venta > 0 ? (holgura / venta) * 100 : 0;
+    var COSTO = "#e4e6ea", REQ = "#2a78d6", LIBRE = "#008300";
+    var estado = pctHolgura >= 5
+      ? { color: "#0ca30c", icono: "✅", texto: "HAY MARGEN PARA NEGOCIAR", fondo: "#eaf6ea", borde: "#b6e0b6" }
+      : (holgura > 0
+        ? { color: "#b07d00", icono: "⚠️", texto: "MARGEN AJUSTADO", fondo: "#fff8e6", borde: "#f2d98a" }
+        : { color: "#d03b3b", icono: "⛔", texto: "SIN MARGEN — NO BAJAR EL PRECIO", fondo: "#fdeaea", borde: "#f0b4b4" });
+    // La barra se escala contra el mayor entre la venta y el precio mínimo: si
+    // el precio ofertado queda bajo el mínimo, los tramos superarían el 100% y
+    // la barra se desbordaría. En ese caso se marca dónde cae el precio real.
+    var denom = Math.max(venta, precioMinimo) || 1;
+    var deficit = Math.max(0, precioMinimo - venta);
+    var pct = function (v) { return venta > 0 ? (v / venta) * 100 : 0; };
+    var ancho = function (v) { return (v / denom) * 100; };
+    var seg = function (valor, color, radio) {
+      var w = ancho(valor);
+      if (w <= 0) return "";
+      return '<div style="flex:0 0 ' + w.toFixed(2) + '%;background:' + color + ';height:38px;' + radio + '"></div>';
+    };
+    var chip = function (color, rotulo, valor) {
+      return '<div style="display:flex;align-items:flex-start;gap:7px;flex:1 1 0"><span style="flex:0 0 auto;width:11px;height:11px;border-radius:3px;background:' + color + ';margin-top:3px"></span>' +
+        '<div><div style="font-size:10.5px;color:#52514e;letter-spacing:.03em">' + rotulo + '</div>' +
+        '<div style="font-size:14px;font-weight:700;color:#0b0b0b">' + mon(valor) + '</div>' +
+        '<div style="font-size:10px;color:#78776f">' + pct(valor).toFixed(1) + '% del precio</div></div></div>';
+    };
+    var mini = function (rotulo, valor, nota) {
+      return '<div style="flex:1 1 0;border:1px solid #dfe1e6;border-radius:8px;padding:10px 12px">' +
+        '<div style="font-size:9.5px;color:#78776f;text-transform:uppercase;letter-spacing:.07em">' + rotulo + '</div>' +
+        '<div style="font-size:17px;font-weight:700;color:#1a3060;margin-top:3px">' + mon(valor) + '</div>' +
+        (nota ? '<div style="font-size:9.5px;color:#78776f;margin-top:2px">' + nota + '</div>' : "") + '</div>';
+    };
+    return '<div style="border:1px solid #dfe1e6;border-radius:12px;padding:18px 20px;margin-bottom:20px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap">' +
+        '<div><div style="font-size:10.5px;color:#78776f;text-transform:uppercase;letter-spacing:.08em">Margen disponible para negociar</div>' +
+        '<div style="font-size:48px;line-height:1.05;font-weight:800;color:' + (holgura > 0 ? "#0b0b0b" : "#d03b3b") + ';margin-top:2px">' + mon(holgura) + '</div>' +
+        '<div style="font-size:12px;color:#52514e;margin-top:2px">' +
+          (deficit > 0
+            ? 'El precio ofertado ya está ' + mon(deficit) + ' bajo el precio mínimo para un margen de ' + (Number(margenMinPct) || 0) + '%. No hay descuento posible sin perder margen.'
+            : 'Equivale a un ' + pctHolgura.toFixed(1) + '% de descuento sobre el precio ofertado, sin bajar del margen mínimo de ' + (Number(margenMinPct) || 0) + '%.') +
+        '</div></div>' +
+        '<div style="background:' + estado.fondo + ';border:1px solid ' + estado.borde + ';color:' + estado.color + ';border-radius:999px;padding:8px 16px;font-size:11.5px;font-weight:800;letter-spacing:.04em;white-space:nowrap">' + estado.icono + ' ' + estado.texto + '</div>' +
+      '</div>' +
+      '<div style="position:relative;margin-top:18px">' +
+        '<div style="display:flex;gap:2px;overflow:hidden">' +
+          seg(costoProtegido, COSTO, "border-radius:4px 0 0 4px") +
+          seg(requerido, REQ, "") +
+          seg(holgura, LIBRE, "border-radius:0 4px 4px 0") +
+        '</div>' +
+        (deficit > 0
+          ? '<div style="position:absolute;top:-4px;bottom:-4px;left:' + ancho(venta).toFixed(2) + '%;width:2px;background:#0b0b0b"></div>' +
+            '<div style="position:absolute;top:100%;left:' + ancho(venta).toFixed(2) + '%;transform:translateX(-100%);font-size:10px;color:#0b0b0b;padding-top:5px;white-space:nowrap">▲ Precio ofertado ' + mon(venta) + '</div>'
+          : "") +
+      '</div>' +
+      '<div style="display:flex;gap:18px;margin-top:12px">' +
+        chip(COSTO, "Costo protegido (intocable)", costoProtegido) +
+        chip(REQ, "Margen requerido hasta el mínimo", requerido) +
+        chip(LIBRE, "Margen disponible", holgura) +
+      '</div>' +
+      '<div style="display:flex;gap:10px;margin-top:16px">' +
+        mini("Precio ofertado (neto)", venta, totalConIva ? "Total con IVA " + mon(totalConIva) : "") +
+        mini("Precio mínimo recomendado", precioMinimo, "Bajo este valor se pierde margen") +
+        mini("Costo estimado de obra", costoProtegido, "Incluye reserva de riesgo") +
+      '</div></div>';
+  }
+
   function Df(t, i, r, u) {
     if (!t) return;
     const { total: n } = Ee(t.items || [], r, t.descuento, t.modoCosteo, t.sinIva);
+    var negoAnalisis = calcularNegociacion(t, r),
+      negoTot = negoAnalisis.total,
+      negoMin = negoAnalisis.margenMinPct,
+      negoCostoProt = (negoAnalisis.partidas || []).reduce(function (acc, q) { return acc + (Number(q.costoProtegido) || 0); }, 0),
+      negoCola = {};
+    (negoAnalisis.partidas || []).forEach(function (q) {
+      var k = String(q.descripcion || "").trim().toLowerCase();
+      (negoCola[k] = negoCola[k] || []).push(q);
+    });
+    var negoPorDesc = function (desc) {
+      var k = String(desc || "").trim().toLowerCase();
+      return negoCola[k] && negoCola[k].length ? negoCola[k].shift() : null;
+    };
+    var negoEstado = function (q) {
+      if (!q) return "eval";
+      if (q.holgura > 0) return "holgada";
+      return q.margenPct >= negoMin ? "ajustada" : "sin";
+    };
     var l = (r && r.accentColor) || "#f5a020",
       o = (r && r.empresa) || "Empresa",
       s = (r && r.logoCliente) || "",
@@ -22008,29 +22399,10 @@ Error generating stack: ` +
           var LdfZ = calcularLineaPresupuesto(z),
             B = LdfZ.totalLinea,
             w = n > 0 ? Math.round((B / n) * 100) : 0,
-            v = (z.desc || "").toLowerCase(),
-            x =
-              v.includes("pintura") ||
-              v.includes("piso") ||
-              v.includes("flotante") ||
-              v.includes("porcelanato") ||
-              v.includes("cerámico") ||
-              v.includes("ceramico") ||
-              v.includes("acabad") ||
-              v.includes("terminac"),
-            f =
-              v.includes("hormigón") ||
-              v.includes("hormigon") ||
-              v.includes("estructur") ||
-              v.includes("fundación") ||
-              v.includes("fundacion") ||
-              v.includes("radier") ||
-              v.includes("instalac") ||
-              v.includes("eléctric") ||
-              v.includes("electrica") ||
-              v.includes("sanitario") ||
-              v.includes("gas") ||
-              v.includes("agua");
+            LdfQ = negoPorDesc(z.desc),
+            LdfE = negoEstado(LdfQ),
+            x = LdfE === "holgada",
+            f = LdfE === "sin";
           return {
             desc: z.desc,
             cant: LdfZ.cantidadIngresada,
@@ -22039,32 +22411,29 @@ Error generating stack: ` +
             pct: w,
             negociable: x,
             innegociable: f,
+            estado: LdfE,
+            holgura: LdfQ ? Math.max(0, Number(LdfQ.holgura) || 0) : 0,
           };
         })
         .sort(function (z, B) {
           return B.subtotal - z.subtotal;
         }),
-      C = p
-        .filter(function (z) {
-          return z.negociable;
-        })
-        .reduce(function (z, B) {
-          return z + B.subtotal;
-        }, 0),
-      b = n > 0 ? Math.round((C / n) * 100) : 0,
-      h = Math.round(n * 0.85),
+      C = Math.max(0, Number(negoTot.holgura) || 0),
+      b = negoTot.venta > 0 ? Math.round((C / negoTot.venta) * 100) : 0,
+      h = Math.round(Number(negoTot.precioMinimo) || 0),
       j = p
         .map(function (z) {
-          var B = z.innegociable
-              ? "#fee2e2"
-              : z.negociable
-                ? "#dcfce7"
-                : "#f8fafc",
-            w = z.innegociable
-              ? '<span style="background:#fee2e2;color:#991b1b;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:bold">🔒 INNEGOCIABLE</span>'
-              : z.negociable
-                ? '<span style="background:#dcfce7;color:#14532d;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:bold">✅ NEGOCIABLE</span>'
-                : '<span style="background:#f1f5f9;color:#475569;font-size:10px;padding:2px 8px;border-radius:8px">— EVALUAR</span>';
+          var pill = function (fondo, borde, color, txt) {
+            return '<span style="background:' + fondo + ';border:1px solid ' + borde + ';color:' + color + ';font-size:10px;padding:2px 9px;border-radius:999px;font-weight:700;white-space:nowrap">' + txt + '</span>';
+          };
+          var B = z.estado === "sin" ? "#fdeaea" : z.estado === "holgada" ? "#eaf6ea" : z.estado === "ajustada" ? "#fff8e6" : "#f8fafc",
+            w = z.estado === "sin"
+              ? pill("#fdeaea", "#f0b4b4", "#d03b3b", "⛔ SIN MARGEN")
+              : z.estado === "holgada"
+                ? pill("#eaf6ea", "#b6e0b6", "#0a7a0a", "✅ NEGOCIABLE " + (z.holgura > 0 ? "$" + Math.round(z.holgura).toLocaleString("es-CL") : ""))
+                : z.estado === "ajustada"
+                  ? pill("#fff8e6", "#f2d98a", "#b07d00", "⚠️ AJUSTADA")
+                  : pill("#f1f5f9", "#dfe1e6", "#475569", "— EVALUAR");
           return (
             '<tr style="background:' +
             B +
@@ -22085,25 +22454,17 @@ Error generating stack: ` +
         })
         .join(""),
       F =
-        '<!DOCTYPE html><html><head><title>Hoja de Negociación</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;padding:40px;max-width:820px;margin:0 auto;font-size:13px}table{width:100%;border-collapse:collapse}th{background:#1a3060;color:#fff;padding:9px 10px;font-size:11px;text-align:left;text-transform:uppercase}@media print{.np{display:none}}</style></head><body><button class="np" onclick="window.print()" style="margin-bottom:20px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px">🖨 Imprimir / PDF</button><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;border-bottom:3px solid #ef4444"><div>' +
+        '<!DOCTYPE html><html><head><title>Análisis de Negociación</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;padding:40px;max-width:820px;margin:0 auto;font-size:13px}table{width:100%;border-collapse:collapse}th{background:#1a3060;color:#fff;padding:9px 10px;font-size:11px;text-align:left;text-transform:uppercase}@media print{.np{display:none}}</style></head><body><button class="np" onclick="window.print()" style="margin-bottom:20px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px">🖨 Imprimir / PDF</button><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;border-bottom:3px solid #ef4444"><div>' +
         m +
         '<div style="font-size:20px;font-weight:bold;color:#1a3060">' +
         o +
-        '</div><div style="font-size:11px;color:#ef4444;font-weight:bold;text-transform:uppercase;margin-top:4px;letter-spacing:.08em">⚠️ DOCUMENTO CONFIDENCIAL — USO INTERNO</div></div><div style="text-align:right"><div style="font-size:12px;font-weight:bold;color:#ef4444;text-transform:uppercase">Hoja de Negociación</div><div style="font-size:24px;font-weight:bold;color:#1a3060">N° ' +
+        '</div><div style="font-size:11px;color:#ef4444;font-weight:bold;text-transform:uppercase;margin-top:4px;letter-spacing:.08em">⚠️ DOCUMENTO CONFIDENCIAL — USO INTERNO</div></div><div style="text-align:right"><div style="font-size:12px;font-weight:bold;color:#ef4444;text-transform:uppercase">Análisis de Negociación</div><div style="font-size:24px;font-weight:bold;color:#1a3060">N° ' +
         t.id +
         '</div><div style="font-size:12px;color:#666">' +
         (i.nombre || "") +
-        '</div></div></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px"><div style="background:#1a3060;color:#fff;padding:12px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#aaa;margin-bottom:4px">PRECIO OFERTADO</div><div style="font-size:18px;font-weight:bold;color:' +
-        l +
-        '">$' +
-        n.toLocaleString("es-CL") +
-        '</div></div><div style="background:#f0fdf4;border:1px solid #86efac;padding:12px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#666;margin-bottom:4px">MARGEN NEGOCIABLE</div><div style="font-size:18px;font-weight:bold;color:#14532d">$' +
-        C.toLocaleString("es-CL") +
-        " (" +
-        b +
-        '%)</div></div><div style="background:#fff8f0;border:1px solid #fed7aa;padding:12px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#666;margin-bottom:4px">PRECIO MÍNIMO</div><div style="font-size:18px;font-weight:bold;color:#92400e">$' +
-        h.toLocaleString("es-CL") +
-        '</div></div><div style="background:#fee2e2;border:1px solid #fca5a5;padding:12px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#666;margin-bottom:4px">BAJO EL MÍNIMO</div><div style="font-size:18px;font-weight:bold;color:#991b1b">RECHAZAR</div></div></div><div style="margin-bottom:20px"><div style="font-size:11px;font-weight:bold;color:#1a3060;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Análisis por partida</div><table><thead><tr><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:120px;text-align:right">Subtotal</th><th style="width:60px;text-align:center">%</th><th style="width:140px">Clasificación</th></tr></thead><tbody>' +
+        '</div></div></div>' +
+        panelNegociacionHtml(negoTot.venta, negoCostoProt, negoTot.precioMinimo, negoTot.holgura, n, negoMin) +
+        '<div style="margin-bottom:20px"><div style="font-size:11px;font-weight:bold;color:#1a3060;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Análisis por partida</div><table><thead><tr><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:120px;text-align:right">Subtotal</th><th style="width:60px;text-align:center">%</th><th style="width:140px">Clasificación</th></tr></thead><tbody>' +
         j +
         '</tbody></table></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px"><div style="background:#f0fdf4;border:1px solid #86efac;padding:14px;border-radius:8px"><div style="font-size:11px;font-weight:bold;color:#14532d;text-transform:uppercase;margin-bottom:8px">Escenarios de rebaja</div><div style="font-size:12px;color:#333;line-height:2"><strong>Si piden 5% menos</strong> ($' +
         Math.round(n * 0.05).toLocaleString("es-CL") +
@@ -22121,272 +22482,1213 @@ Error generating stack: ` +
     if (!g) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (g.document.write(F), g.document.close());
   }
-  function ts(t, i, r) {
-    r = r || {};
-    i = i || {};
-    t = t || {};
-    var modo = t.modoCosteo || "completo";
-    var T = Ee(t.items || [], r, t.descuento, modo, t.sinIva) || {};
-    var total = Number(T.total) || 0,
-      sub = Number(T.sub) || 0,
-      iva = Number(T.iva) || 0,
-      anticipo = Number(T.anticipo) || 0;
-    var matSub = Number(T.matSub) || 0,
-      noMatSub = Number(T.noMatSub) || 0;
-    var ivaPct =
-      r && r.moneda && r.moneda.impuesto !== void 0
-        ? r.moneda.impuesto
-        : Math.round(((r && r.iva) || 0.19) * 100);
-    var subLabel = modo === "mo" ? "Subtotal Mano de Obra" : "Subtotal Neto";
-    var extraTot =
-      modo === "separado"
-        ? '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:12px"><span>Subtotal MO</span><span>$' +
-          Math.round(noMatSub).toLocaleString("es-CL") +
-          "</span></div>" +
-          '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:12px"><span>Subtotal MAT</span><span>$' +
-          Math.round(matSub).toLocaleString("es-CL") +
-          "</span></div>"
-        : "";
-    var accent = (r && r.accentColor) || "#f5a020",
-      empresa = (r && r.empresa) || "Empresa";
-    var logo = r && (r.logoCliente || r.logo || "");
-    var logoHtml = logo
-      ? '<img src="' +
-        logo +
-        '" style="height:70px;object-fit:contain;margin-bottom:6px;display:block"/>'
-      : "";
-    var firmaImg =
-      r && r.firmaImg
-        ? '<img src="' +
-          r.firmaImg +
-          '" style="height:100px;object-fit:contain;display:block;margin:0 auto"/>'
-        : '<div style="height:100px"></div>';
-    var firmaNombre = (r && r.firmaNombre) || empresa;
-    var firmaCargo = (r && r.firmaCargo) || "Representante Legal";
-    var plazo = (t && t.plazoEjecucion) || (r && r.plazoEjecucion) || 30;
-    var ciudad = (r && r.ciudad) || "la República";
-    var fecha = (t && t.fecha) || new Date().toLocaleDateString("es-CL");
-    var cliente = (i && i.nombre) || "Cliente";
-    var saldo = total - anticipo;
-    var anticipoPct = Math.round(((r && r.anticipo) || 0.6) * 100);
-    var cols =
-      modo === "separado"
-        ? '<th style="width:36px">#</th><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:110px;text-align:right">MO</th><th style="width:110px;text-align:right">MAT</th><th style="width:110px;text-align:right">Total</th>'
-        : modo === "mo"
-          ? '<th style="width:36px">#</th><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:110px;text-align:right">MO Unit.</th><th style="width:110px;text-align:right">Total MO</th>'
-          : '<th style="width:36px">#</th><th>Descripción</th><th style="width:100px;text-align:center">Cantidad</th><th style="width:110px;text-align:right">P. Unit.</th><th style="width:110px;text-align:right">Total</th>';
-    var x = (() => {
-        var idx = 0;
-        return obtenerItemsPresupuestoExportables(t.items || []).reduce(function (acc, I) {
-          var Lts = calcularLineaPresupuesto(I),
-            cant = Lts.cantidadFacturable,
-            cantShow = Lts.cantidadIngresada,
-            precio = Lts.precioUnitario,
-            tot = Lts.totalLinea,
-            tipo = I._tipoCosto || (I._cid ? "auto" : "mo"),
-            mat = 0,
-            noMat = 0;
-          if (tipo === "mat") mat = tot;
-          else if (tipo === "mo") noMat = tot;
-          else {
-            var mu = parseFloat(I._apuMatUnit) || 0;
-            mat = Math.max(0, Math.min(tot, mu * cant));
-            noMat = Math.max(0, tot - mat);
-          }
-          if (modo === "mo" && noMat <= 0) return acc;
-          idx++;
-          var qty = cantShow + " " + (I.unidad || "");
-          var descHtml =
-            (I.desc || "") +
-            (I._notaVisible
-              ? '<div style="font-size:10px;color:#b45309;margin-top:2px">' + I._notaVisible + "</div>"
-              : Lts.reglaAplicada
-                ? '<div style="font-size:10px;color:#b45309;margin-top:2px">' + Lts.motivo + "</div>"
-                : "");
-          if (modo === "separado")
-            return (
-              acc +
-              '<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;color:#999;font-size:12px">' +
-              idx +
-              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:12px">' +
-              descHtml +
-              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:12px">' +
-              qty +
-              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
-              Math.round(noMat).toLocaleString("es-CL") +
-              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
-              Math.round(mat).toLocaleString("es-CL") +
-              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:600;font-size:12px">$' +
-              Math.round(tot).toLocaleString("es-CL") +
-              "</td></tr>"
-            );
-          if (modo === "mo") {
-            var moUnit = cant ? noMat / cant : 0;
-            return (
-              acc +
-              '<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;color:#999;font-size:12px">' +
-              idx +
-              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:12px">' +
-              descHtml +
-              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:12px">' +
-              qty +
-              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
-              Math.round(moUnit).toLocaleString("es-CL") +
-              '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:600;font-size:12px">$' +
-              Math.round(noMat).toLocaleString("es-CL") +
-              "</td></tr>"
-            );
-          }
-          return (
-            acc +
-            '<tr><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;color:#999;font-size:12px">' +
-            idx +
-            '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:12px">' +
-            descHtml +
-            '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:12px">' +
-            qty +
-            '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px">$' +
-            Math.round(precio).toLocaleString("es-CL") +
-            '</td><td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:600;font-size:12px">$' +
-            Math.round(tot).toLocaleString("es-CL") +
-            "</td></tr>"
-          );
-        }, "");
-      })(),
-      notaMinTs = obtenerItemsPresupuestoExportables(t.items || [])
-        .map((I) => calcularLineaPresupuesto(I))
-        .filter((L) => L.reglaAplicada)
-        .map((L) => "<li>" + L.motivo + "</li>")
-        .join(""),
-      notaMinHtmlTs = notaMinTs
-        ? '<div style="background:#fffbeb;border:1px solid #fde68a;padding:10px 14px;border-radius:6px;margin-bottom:16px;font-size:11px;color:#78350f"><strong>Nota:</strong> Se aplicaron mínimos comerciales en las siguientes partidas:<ul style="margin:4px 0 0 18px">' +
-          notaMinTs +
-          "</ul></div>"
-        : "",
-      f =
-        '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Contrato de Obra N° ' +
-        t.id +
-        "</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;font-size:12px;line-height:1.6}@media screen{body{background:#d0d5dc;padding:24px 0}.sheet{background:#fff;max-width:820px;margin:0 auto 24px;padding:40px 50px 36px;box-shadow:0 3px 20px rgba(0,0,0,.22)}}@media print{.np{display:none!important}.sheet{padding:0;margin:0;background:#fff}.pagebreak{page-break-before:always;break-before:page;height:0;margin:0;padding:0}@page{margin:15mm 14mm 18mm 14mm}}h3{font-size:10px;color:" +
-        accent +
-        ";font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding-bottom:5px;border-bottom:1.5px solid " +
-        accent +
-        ";margin:18px 0 10px}table{width:100%;border-collapse:collapse}th{background:#1a3060;color:#fff;padding:8px 10px;font-size:10px;text-align:left;text-transform:uppercase;letter-spacing:.04em}th:last-child{text-align:right}.clausula{background:#f9fafb;border-left:3px solid " +
-        accent +
-        ';padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:10px;font-size:12px;line-height:1.65;page-break-inside:avoid}</style></head><body><button class="np" onclick="window.print()" style="display:block;margin:0 auto 0;padding:10px 28px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px;font-family:Arial,sans-serif;font-size:13px;position:sticky;top:0;z-index:100">🖨 Imprimir / Guardar PDF</button><div class="sheet"><div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:16px;border-bottom:2.5px solid ' +
-        accent +
-        ';margin-bottom:20px"><div>' +
-        logoHtml +
-        '<div style="font-size:20px;font-weight:900;color:#1a3060">' +
-        empresa +
-        '</div><div style="font-size:11px;color:#666;margin-top:3px">' +
-        (r && r.rut ? "RUT: " + r.rut + " │ " : "") +
-        ((r && r.ciudad) || "") +
-        '</div><div style="font-size:11px;color:#666">' +
-        (r && r.telefono ? r.telefono + " │ " : "") +
-        ((r && r.email) || "") +
-        '</div></div><div style="text-align:right"><div style="font-size:10px;font-weight:700;color:' +
-        accent +
-        ';text-transform:uppercase;letter-spacing:.1em">Contrato de Obra</div><div style="font-size:36px;font-weight:900;color:#1a3060;line-height:1.1">N° ' +
-        t.id +
-        '</div><div style="font-size:11px;color:#666;margin-top:4px">Fecha: ' +
-        fecha +
-        '</div><div style="margin-top:8px;display:inline-block;padding:3px 12px;border-radius:10px;font-size:11px;font-weight:700;background:' +
-        accent +
-        "22;color:" +
-        accent +
-        ";border:1px solid " +
-        accent +
-        '">' +
-        (t.estado || "") +
-        '</div></div></div><h3>Partes del Contrato</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px"><div style="background:#f5f7fa;padding:13px 15px;border-radius:8px"><div style="font-size:10px;color:#999;text-transform:uppercase;font-weight:700;letter-spacing:.06em;margin-bottom:6px">Contratista</div><div style="font-size:14px;font-weight:800;color:#1a3060;margin-bottom:4px">' +
-        empresa +
-        '</div><div style="font-size:11px;color:#555;line-height:1.7">' +
-        (r && r.rut ? "RUT: " + r.rut + "<br/>" : "") +
-        firmaNombre +
-        " — " +
-        firmaCargo +
-        "<br/>" +
-        (r && r.direccion ? r.direccion : "") +
-        '</div></div><div style="background:#f5f7fa;padding:13px 15px;border-radius:8px"><div style="font-size:10px;color:#999;text-transform:uppercase;font-weight:700;letter-spacing:.06em;margin-bottom:6px">Cliente / Mandante</div><div style="font-size:14px;font-weight:800;color:#1a3060;margin-bottom:4px">' +
-        cliente +
-        '</div><div style="font-size:11px;color:#555;line-height:1.7">' +
-        (i.contacto ? i.contacto + "<br/>" : "") +
-        (i.telefono ? "Tel: " + i.telefono + "<br/>" : "") +
-        (i.email ? i.email : "") +
-        '</div></div></div><h3>Descripción de la Obra</h3><p style="margin-bottom:12px;font-size:12px"><strong>Proyecto: </strong>' +
-        (t.descripcion || "") +
-        '</p><table style="margin-bottom:16px"><thead><tr>' +
-        cols +
-        "</tr></thead><tbody>" +
-        x +
-        "</tbody></table>" +
-        notaMinHtmlTs +
-        '<div style="display:flex;justify-content:flex-end;margin-bottom:22px"><div style="min-width:280px">' +
-        extraTot +
-        '<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:12px"><span>' +
-        subLabel +
-        "</span><span>$" +
-        Math.round(sub).toLocaleString("es-CL") +
-        '</span></div><div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:12px"><span>' +
-        ((r && r.impuestoNombre) ||
-          (r && r.moneda && r.moneda.nombreImp) ||
-          "IVA") +
-        " (" +
-        ivaPct +
-        "%)</span><span>$" +
-        Math.round(iva).toLocaleString("es-CL") +
-        '</span></div><div style="display:flex;justify-content:space-between;padding:10px 14px;background:#1a3060;color:#fff;border-radius:6px;margin-top:8px"><strong style="font-size:13px">TOTAL A PAGAR</strong><strong style="font-size:18px;color:' +
-        accent +
-        '">$' +
-        Math.round(total).toLocaleString("es-CL") +
-        '</strong></div></div></div><h3>Cláusulas del Contrato</h3><div class="clausula"><strong>1. FORMA DE PAGO:</strong> El mandante pagará al contratista la suma total de $' +
-        Math.round(total).toLocaleString("es-CL") +
-        " (impuesto incluido), de la siguiente forma: <strong>Anticipo del " +
-        anticipoPct +
-        "% equivalente a $" +
-        Math.round(anticipo).toLocaleString("es-CL") +
-        "</strong> al inicio de los trabajos; y el saldo de <strong>$" +
-        Math.round(saldo).toLocaleString("es-CL") +
-        '</strong> a la recepción conforme de la obra.</div><div class="clausula"><strong>2. PLAZO DE EJECUCIÓN:</strong> El contratista se compromete a ejecutar los trabajos en un plazo de <strong>' +
-        plazo +
-        ' días hábiles</strong>, contados desde la recepción del anticipo. Cualquier atraso imputable al mandante (falta de acceso, materiales o decisiones) no será responsabilidad del contratista.</div><div class="clausula"><strong>3. RESPONSABILIDAD DEL CONTRATISTA:</strong> El contratista garantiza que los trabajos se ejecutarán conforme a las normas técnicas vigentes en Chile.</div></div><div class="pagebreak"></div><div class="sheet"><div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1.5px solid ' +
-        accent +
-        ';margin-bottom:18px"><div><div style="font-size:13px;font-weight:800;color:#1a3060">Contrato de Obra N° ' +
-        t.id +
-        " — " +
-        empresa +
-        '</div><div style="font-size:11px;color:#666;margin-top:2px">' +
-        (t.descripcion || "") +
-        '</div></div><div style="text-align:right;font-size:11px;color:#666">' +
-        fecha +
-        '<br/><span style="color:' +
-        accent +
-        ';font-weight:700">' +
-        (t.estado || "") +
-        '</span></div></div><div class="clausula"><strong>4. GARANTÍA:</strong> El contratista otorga una garantía de <strong>90 días corridos</strong> sobre los trabajos ejecutados, contados desde la recepción de obra. No incluye daños por mal uso, factores externos o modificaciones realizadas por terceros.</div><div class="clausula"><strong>5. MODIFICACIONES:</strong> Cualquier trabajo adicional no contemplado en este contrato deberá ser acordado por escrito entre las partes y dará origen a un presupuesto complementario.</div><div class="clausula"><strong>6. RESOLUCIÓN DE CONFLICTOS:</strong> En caso de discrepancias, las partes se someten a la jurisdicción de los Tribunales Ordinarios de Justicia de la ciudad de ' +
-        ciudad +
-        '.</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:40px;page-break-inside:avoid;break-inside:avoid"><div style="text-align:center"><div style="height:100px;display:flex;align-items:flex-end;justify-content:center">' +
-        firmaImg +
-        '</div><div style="border-top:1.5px solid #333;padding-top:8px;margin-top:4px"><div style="font-size:13px;font-weight:700;color:#1a3060">' +
-        firmaNombre +
-        '</div><div style="font-size:11px;color:#666;margin-top:2px">' +
-        firmaCargo +
-        " — " +
-        empresa +
-        '</div></div></div><div style="text-align:center"><div style="height:100px"></div><div style="border-top:1.5px solid #333;padding-top:8px"><div style="font-size:13px;font-weight:700;color:#1a3060">' +
-        cliente +
-        '</div><div style="font-size:11px;color:#666;margin-top:2px">RUT: ___________________</div></div></div></div><div style="margin-top:32px;padding-top:10px;border-top:1px solid #eee;font-size:10px;color:#aaa;text-align:center">Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — ' +
-        empresa +
-        " · " +
-        new Date().toLocaleDateString("es-CL") +
-        "</div></div></body></html>";
-    return f;
+  function clausulasContratoPredeterminadas(t) {
+    var numeroPresupuesto = t && t.id != null ? t.id : "";
+    var datos = [
+      ["objeto", "Objeto y alcance", "El objeto del contrato es la ejecución de los trabajos descritos en el presupuesto y en los antecedentes que las partes aprueben."],
+      ["documentos", "Documentos integrantes", "El detalle de partidas, cantidades, precios unitarios y especificaciones se encuentra en el Presupuesto N.° " + numeroPresupuesto + ", que se incorpora como anexo y forma parte integrante del presente contrato."],
+      ["precio", "Precio del contrato", "El precio y su condición tributaria corresponden a los valores indicados en el resumen económico de este documento."],
+      ["pago", "Forma de pago", "Los pagos se efectuarán conforme al anticipo, estados de pago e hitos expresamente acordados por las partes."],
+      ["plazo", "Plazo de ejecución", "El plazo será el señalado en este contrato y se contará desde el evento de inicio indicado por las partes."],
+      ["entrega", "Entrega de terreno y acceso", "El mandante facilitará el acceso y las condiciones necesarias para iniciar los trabajos en la fecha acordada."],
+      ["obligaciones_contratista", "Obligaciones del contratista", "El contratista ejecutará los trabajos con personal competente y conforme a los antecedentes aprobados para la obra."],
+      ["obligaciones_mandante", "Obligaciones del mandante", "El mandante entregará oportunamente los antecedentes, accesos y decisiones que sean necesarios para la ejecución."],
+      ["adicionales", "Trabajos adicionales y modificaciones", "Todo trabajo adicional o modificación de alcance deberá acordarse por escrito, incluyendo su precio y efecto en el plazo."],
+      ["materiales", "Materiales y suministros", "La provisión, recepción y responsabilidad sobre materiales se regirá por lo expresamente indicado en el presupuesto y sus anexos."],
+      ["recepcion", "Recepción de los trabajos", "La recepción se documentará una vez revisado el alcance ejecutado y registradas las observaciones que correspondan."],
+      ["garantia", "Garantías", "La garantía, cuando corresponda, se aplicará por el plazo y bajo las condiciones expresamente indicadas en este contrato."],
+      ["suspension", "Suspensión", "Las partes podrán dejar constancia escrita de una suspensión, su causa y sus efectos sobre el plazo y los costos."],
+      ["termino", "Término anticipado", "El término anticipado y sus efectos deberán constar por escrito, considerando el avance ejecutado y las obligaciones pendientes."],
+      ["fuerza_mayor", "Caso fortuito o fuerza mayor", "Los hechos imprevisibles o inevitables que afecten la ejecución deberán comunicarse oportunamente y evaluarse de buena fe por las partes."],
+      ["controversias", "Resolución de controversias", "Las partes procurarán resolver de buena fe sus diferencias y podrán acordar por escrito el mecanismo aplicable a cada controversia."],
+      ["domicilio", "Domicilio de las partes", "Para efectos de comunicaciones, las partes señalan los domicilios indicados en la identificación del contrato, sin perjuicio de las modificaciones que informen por escrito."],
+    ];
+    return datos.map(function (dato, orden) { return { id: dato[0], numero: orden + 1, titulo: dato[1], contenido: dato[2], orden: orden, activa: !0 }; });
   }
-  function Ep(t, i, r) {
-    var n = ts(t, i, r),
+  function resumenCapitulosContrato(t) {
+    var presupuesto = t || {}, capitulos = Array.isArray(presupuesto.capitulos) ? presupuesto.capitulos : [], items = Array.isArray(presupuesto.items) ? presupuesto.items : [];
+    if (!capitulos.length) return [{ id: "general", codigo: "", nombre: "Alcance general de la obra", subtotal: Math.round(items.reduce(function (suma, item) { return suma + calcularLineaPresupuesto(item).totalLinea; }, 0)) }];
+    var resultado = capitulos.map(function (capitulo) {
+      return { id: capitulo.id, codigo: capitulo.codigo || "", nombre: capitulo.nombre || "Capítulo", subtotal: Math.round(items.filter(function (item) { return String(item.capituloId) === String(capitulo.id); }).reduce(function (suma, item) { return suma + calcularLineaPresupuesto(item).totalLinea; }, 0)) };
+    });
+    var ids = new Set(capitulos.map(function (capitulo) { return String(capitulo.id); }));
+    var sinCapitulo = items.filter(function (item) { return item.capituloId == null || !ids.has(String(item.capituloId)); });
+    if (sinCapitulo.length) resultado.push({ id: "sin_capitulo", codigo: "", nombre: "Partidas sin capítulo", subtotal: Math.round(sinCapitulo.reduce(function (suma, item) { return suma + calcularLineaPresupuesto(item).totalLinea; }, 0)) });
+    return resultado;
+  }
+  function normalizarContratoObra(t, i, r, entrada) {
+    t = t || {}; i = i || {}; r = r || {};
+    var totales = Ee(t.items || [], r, t.descuento, t.modoCosteo, t.sinIva) || {};
+    var impuestoPct = r.moneda && r.moneda.impuesto != null ? Number(r.moneda.impuesto) : Math.round(Number(r.iva == null ? 0.19 : r.iva) * 100);
+    var anticipoPct = Math.round(Number(r.anticipo == null ? 0.6 : r.anticipo) * 10000) / 100;
+    var base = entrada || obtenerDocumentoObraConfig(t, "contratoObra") || {};
+    var predeterminadas = clausulasContratoPredeterminadas(t);
+    var clausulasEntrada = Array.isArray(base.clausulas) && base.clausulas.length ? base.clausulas : predeterminadas;
+    var clausulas = clausulasEntrada.map(function (clausula, indice) {
+      var predeterminada = predeterminadas.find(function (item) { return item.id === clausula.id; }) || {};
+      return { id: clausula.id || "clausula_" + indice, numero: clausula.numero == null ? indice + 1 : clausula.numero, titulo: clausula.titulo || predeterminada.titulo || "Cláusula", contenido: clausula.contenido == null ? predeterminada.contenido || "" : clausula.contenido, orden: clausula.orden == null ? indice : clausula.orden, activa: clausula.activa !== !1 };
+    }).sort(function (A, B) { return A.orden - B.orden; }).map(function (clausula, indice) { return u(d({}, clausula), { numero: indice + 1, orden: indice }); });
+    var montoTotal = base.montoTotal == null ? Number(totales.total) || 0 : Number(base.montoTotal) || 0;
+    var porcentaje = base.anticipoPorcentaje == null ? anticipoPct : Number(base.anticipoPorcentaje) || 0;
+    var corp = obtenerDatosCorporativos(r);
+    return u(d({
+      numero: String(t.id || ""), fecha: t.fecha || new Date().toISOString().slice(0, 10), estado: "Borrador",
+      contratistaNombre: corp.nombreComercial || "Bajo Deslinde", contratistaRut: corp.rut || "", representanteLegal: corp.representanteLegal || "", contratistaDomicilio: r.direccion || "", contratistaCiudad: r.ciudad || "", contratistaTelefono: corp.telefono || "", contratistaCorreo: corp.correo || "",
+      mandanteNombre: i.nombre || i.empresa || "", mandanteRut: i.rut || "", mandanteTelefono: i.telefono || "", mandanteCorreo: i.email || "",
+      direccionObra: i.direccion || "", proyectoNombre: t.descripcion || "", obraCiudad: i.ciudad || i.comuna || "",
+      subtotalNeto: Number(totales.sub) || 0, ivaMonto: Number(totales.iva) || 0, montoTotal: Number(totales.total) || 0, anticipoPorcentaje: anticipoPct,
+      formaPago: "Anticipo y saldo contra estados de pago aprobados.", estadosPago: 1, hitosPago: "Definir hitos y condiciones de aprobación de cada pago.", condicionTributaria: t.sinIva || impuestoPct === 0 ? "Operación sin IVA según la configuración del presupuesto." : "Valores afectos a IVA según la configuración tributaria del presupuesto.", valoresIncluyenIva: !t.sinIva && impuestoPct > 0,
+      plazoNumero: t.plazoEjecucion || 30, plazoUnidad: "días corridos", eventoInicio: "Entrega de terreno y cumplimiento de las condiciones de inicio acordadas", fechaInicio: "", fechaTermino: "", suspensionPlazo: "Las suspensiones o ampliaciones deberán constar por escrito, indicando su causa y efecto en el plazo.",
+      garantiaNumero: "", garantiaUnidad: "días corridos",
+      clausulaAnexo: "El detalle de partidas, cantidades, precios unitarios y especificaciones se encuentra en el Presupuesto N.° " + t.id + ", que se incorpora como anexo y forma parte integrante del presente contrato.", clausulas: clausulas,
+      firmaContratista: corp.nombreComercial || "Bajo Deslinde", firmaRepresentante: corp.representanteLegal || "", firmaContratistaRut: corp.rut || "", firmaMandante: i.nombre || i.empresa || "", firmaMandanteRut: i.rut || "", firmaFecha: "", firmaLugar: r.ciudad || "", incluirFirmaGrafica: !1,
+      incluirInspector: !1, inspectorNombre: "", inspectorRut: "", incluirTestigo: !1, testigoNombre: "", testigoRut: "", incluirAdministrador: !1, administradorNombre: "", administradorRut: "",
+    }, base), { clausulas: clausulas, montoTotal: montoTotal, anticipoPorcentaje: porcentaje });
+  }
+  function datosEconomicosContrato(t, r, contrato) {
+    var totales = Ee((t && t.items) || [], r || {}, t && t.descuento, t && t.modoCosteo, t && t.sinIva) || {};
+    var total = Number(contrato.montoTotal == null ? totales.total : contrato.montoTotal) || 0;
+    var anticipo = Math.round(total * (Number(contrato.anticipoPorcentaje) || 0) / 100);
+    return { subtotal: Number(contrato.subtotalNeto == null ? totales.sub : contrato.subtotalNeto) || 0, iva: Number(contrato.ivaMonto == null ? totales.iva : contrato.ivaMonto) || 0, total: total, anticipo: anticipo, saldo: total - anticipo };
+  }
+  function ts(t, i, r, entradaContrato) {
+    t = t || {}; i = i || {}; r = r || {};
+    var contrato = normalizarContratoObra(t, i, r, entradaContrato), economia = datosEconomicosContrato(t, r, contrato), capitulos = resumenCapitulosContrato(t);
+    var escapar = function (valor) { return String(valor == null ? "" : valor).replace(/[&<>"]/g, function (caracter) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[caracter]; }); };
+    var moneda = function (valor) { return "$" + Math.round(Number(valor) || 0).toLocaleString("es-CL"); };
+    var empresa = contrato.contratistaNombre || r.empresa || "Bajo Deslinde", accent = r.accentColor || "#f5a020", logo = r.logoCliente || r.logo || "";
+    var logoHtml = logo ? '<img src="' + logo + '" style="height:58px;max-width:180px;object-fit:contain;margin-bottom:5px"/>' : "";
+    var filasCapitulos = capitulos.map(function (capitulo) { return '<tr><td>' + escapar(capitulo.codigo || "—") + '</td><td>' + escapar(capitulo.nombre) + '</td><td class="num">' + moneda(capitulo.subtotal) + '</td></tr>'; }).join("");
+    var clausulas = contrato.clausulas.filter(function (clausula) { return clausula.activa !== !1; }).sort(function (A, B) { return A.orden - B.orden; }).map(function (clausula, indice) { return '<section class="clausula"><h3>' + (indice + 1) + '. ' + escapar(clausula.titulo) + '</h3><p>' + escapar(clausula.contenido).replace(/\n/g, "<br>") + '</p></section>'; }).join("");
+    var corp = obtenerDatosCorporativos(r);
+    var corpNombre = escapar(corp.representanteLegal || contrato.firmaRepresentante || "John Arancibia");
+    var corpCargo = escapar(corp.cargoRepresentante || "Representante legal");
+    var corpEmpresa = escapar(corp.nombreComercial || contrato.firmaContratista || "Bajo Deslinde");
+    var corpFirma = corp.firma || "";
+    var corpTel = corp.telefono || "";
+    var corpEmail = corp.correo || "";
+
+    var imgHtml = corpFirma 
+      ? '<div style="margin-bottom:4px"><img src="' + escapar(corpFirma) + '" style="max-height:65px;max-width:220px;object-fit:contain;display:inline-block"/></div>'
+      : '<div style="height:69px"></div>';
+
+    var firmaContratistaHtml = '<div class="firma">' +
+       imgHtml +
+       '<div class="linea"></div>' +
+       '<strong>' + corpNombre + '</strong>' +
+       '<span>' + corpCargo + ' — ' + corpEmpresa + '</span>' +
+       (corpTel || corpEmail ? '<span>' + [corpTel, corpEmail].filter(Boolean).join(" · ") + '</span>' : '') +
+       '</div>';
+
+    var firmaMandanteHtml = '<div class="firma">' +
+       '<div style="height:69px"></div>' +
+       '<div class="linea"></div>' +
+       '<strong>Mandante</strong>' +
+       '<span>' + escapar(contrato.firmaMandante) + '</span>' +
+       '<span>RUT: ' + escapar(contrato.firmaMandanteRut) + '</span>' +
+       '</div>';
+
+    var opcionales = [[contrato.incluirInspector, "Inspector técnico", contrato.inspectorNombre, contrato.inspectorRut], [contrato.incluirTestigo, "Testigo", contrato.testigoNombre, contrato.testigoRut], [contrato.incluirAdministrador, "Administrador", contrato.administradorNombre, contrato.administradorRut]].filter(function (firma) { return firma[0]; }).map(function (firma) {
+       return '<div class="firma">' +
+          '<div style="height:69px"></div>' +
+          '<div class="linea"></div>' +
+          '<strong>' + escapar(firma[1]) + '</strong>' +
+          '<span>' + escapar(firma[2]) + '</span>' +
+          '<span>RUT: ' + escapar(firma[3]) + '</span>' +
+          '</div>';
+    }).join("");
+    var garantia = contrato.garantiaNumero ? escapar(contrato.garantiaNumero + " " + contrato.garantiaUnidad) : "Según lo acordado expresamente por las partes";
+    return '<!doctype html><html><head><meta charset="utf-8"><title>Contrato de Obra ' + escapar(contrato.numero) + '</title><style>@page{size:A4;margin:18mm 16mm 20mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#172033;margin:0;background:#eef2f7}.toolbar{position:sticky;top:0;padding:10px;text-align:center;background:#172033;z-index:5}.toolbar button{background:' + accent + ';border:0;border-radius:6px;padding:9px 18px;font-weight:700;cursor:pointer}.sheet{background:#fff;max-width:210mm;margin:12px auto;padding:16mm;box-shadow:0 3px 18px #0002}.header{display:flex;justify-content:space-between;gap:20px;border-bottom:4px solid ' + accent + ';padding-bottom:12px}.brand{font-size:20px;font-weight:800;color:#1a3060}.title{text-align:right}.title h1{font-size:22px;color:#1a3060;margin:0}.meta{color:#64748b;font-size:11px;margin-top:5px}.partes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.box{border:1px solid #dbe3ec;border-radius:8px;padding:12px;background:#f8fafc;break-inside:avoid}.box h2,.section-title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#1a3060;margin:0 0 8px}.line{font-size:11px;line-height:1.6}.line b{color:#1a3060}table{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:11px}th{background:#1a3060;color:#fff;text-align:left;padding:8px}td{padding:8px;border-bottom:1px solid #dbe3ec}.num{text-align:right}.economia{margin-left:auto;width:320px;break-inside:avoid}.economia .total{background:#1a3060;color:#fff;font-size:14px}.anexo{border-left:4px solid ' + accent + ';padding:9px 12px;background:#fff8e8;font-size:11px;line-height:1.5;break-inside:avoid}.clausula{break-inside:avoid;page-break-inside:avoid;margin:13px 0}.clausula h3{font-size:12px;color:#1a3060;margin:0 0 5px}.clausula p{font-size:11px;line-height:1.55;margin:0;text-align:justify}.firmas{display:grid;grid-template-columns:repeat(2,1fr);gap:38px;margin-top:50px;break-inside:avoid}.firma{text-align:center;font-size:11px;display:flex;flex-direction:column;gap:3px}.linea{border-top:1px solid #334155;margin-bottom:8px}.footer{margin-top:30px;padding-top:8px;border-top:1px solid #dbe3ec;text-align:center;font-size:9px;color:#94a3b8}@media print{body{background:#fff}.toolbar{display:none}.sheet{margin:0;padding:0;box-shadow:none;max-width:none}.clausula{orphans:3;widows:3}}</style></head><body><div class="toolbar"><button onclick="window.print()">Imprimir / Guardar PDF</button></div><main class="sheet"><header class="header"><div>' + logoHtml + '<div class="brand">' + escapar(empresa) + '</div><div class="meta">RUT ' + escapar(contrato.contratistaRut) + '<br>' + escapar(contrato.contratistaDomicilio) + '<br>' + escapar(contrato.contratistaCiudad) + '</div></div><div class="title"><h1>CONTRATO DE OBRA</h1><div class="meta">N.° ' + escapar(contrato.numero) + '<br>Fecha: ' + escapar(contrato.fecha) + '<br>Estado: ' + escapar(contrato.estado) + '</div></div></header><div class="partes"><section class="box"><h2>Contratista</h2><div class="line"><b>Razón social:</b> ' + escapar(contrato.contratistaNombre) + '<br><b>RUT:</b> ' + escapar(contrato.contratistaRut) + '<br><b>Representante:</b> ' + escapar(contrato.representanteLegal) + '<br><b>Contacto:</b> ' + escapar(contrato.contratistaTelefono) + ' · ' + escapar(contrato.contratistaCorreo) + '</div></section><section class="box"><h2>Mandante</h2><div class="line"><b>Nombre / razón social:</b> ' + escapar(contrato.mandanteNombre) + '<br><b>RUT:</b> ' + escapar(contrato.mandanteRut) + '<br><b>Contacto:</b> ' + escapar(contrato.mandanteTelefono) + ' · ' + escapar(contrato.mandanteCorreo) + '</div></section></div><section class="box"><h2>Descripción de la obra</h2><div class="line"><b>Proyecto:</b> ' + escapar(contrato.proyectoNombre) + '<br><b>Dirección:</b> ' + escapar(contrato.direccionObra) + '<br><b>Comuna / ciudad:</b> ' + escapar(contrato.obraCiudad) + '</div></section><h2 class="section-title" style="margin-top:18px">Resumen económico por capítulos</h2><table><thead><tr><th style="width:70px">Código</th><th>Capítulo</th><th class="num" style="width:130px">Subtotal</th></tr></thead><tbody>' + filasCapitulos + '</tbody></table><table class="economia"><tbody><tr><td>Subtotal neto</td><td class="num">' + moneda(economia.subtotal) + '</td></tr>' + (economia.iva || contrato.valoresIncluyenIva ? '<tr><td>IVA</td><td class="num">' + moneda(economia.iva) + '</td></tr>' : '') + '<tr class="total"><td><b>Total del contrato</b></td><td class="num"><b>' + moneda(economia.total) + '</b></td></tr><tr><td>Anticipo (' + escapar(contrato.anticipoPorcentaje) + '%)</td><td class="num">' + moneda(economia.anticipo) + '</td></tr><tr><td>Saldo</td><td class="num">' + moneda(economia.saldo) + '</td></tr></tbody></table><p class="anexo">' + escapar(contrato.clausulaAnexo) + '</p><section class="box"><h2>Condiciones económicas y plazo</h2><div class="line"><b>Forma de pago:</b> ' + escapar(contrato.formaPago) + '<br><b>Estados de pago:</b> ' + escapar(contrato.estadosPago) + '<br><b>Hitos:</b> ' + escapar(contrato.hitosPago) + '<br><b>Condición tributaria:</b> ' + escapar(contrato.condicionTributaria) + '<br><b>Plazo:</b> ' + escapar(contrato.plazoNumero + " " + contrato.plazoUnidad) + '<br><b>Inicio:</b> ' + escapar(contrato.eventoInicio) + '<br><b>Fechas estimadas:</b> ' + escapar(contrato.fechaInicio || "Por definir") + ' a ' + escapar(contrato.fechaTermino || "Por definir") + '<br><b>Suspensión o ampliación:</b> ' + escapar(contrato.suspensionPlazo) + '<br><b>Garantía:</b> ' + garantia + '</div></section><h2 class="section-title" style="margin-top:20px">Cláusulas del contrato</h2>' + clausulas + '<div class="firmas">' + firmaContratistaHtml + firmaMandanteHtml + opcionales + '</div><div class="meta" style="text-align:center;margin-top:25px">Firmado en ' + escapar(contrato.firmaLugar) + ', con fecha ' + escapar(contrato.firmaFecha || contrato.fecha) + '.</div><footer class="footer">' + escapar(empresa) + ' · Contrato de Obra N.° ' + escapar(contrato.numero) + ' · Documento generado por Enlace Constructor Pro. Revise su contenido técnico y legal antes de firmar.</footer></main></body></html>';
+  }
+  function Ep(t, i, r, contratoActual) {
+    var n = ts(t, i, r, contratoActual),
       l = window.open("", "_blank");
     if (!l) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
     (l.document.write(n), l.document.close());
+  }
+  function estructuraCapitulosObra(presupuesto) {
+    presupuesto = presupuesto || {};
+    var items = Array.isArray(presupuesto.items) ? presupuesto.items.filter(function (x) { return x && x.desc; }) : [];
+    var caps = Array.isArray(presupuesto.capitulos) ? presupuesto.capitulos.filter(Boolean) : [];
+    var grupos = caps.length ? caps.map(function (cap, n) { return { id: cap.id, codigo: cap.codigo || String(n + 1), nombre: cap.nombre || "Capítulo " + (n + 1), items: items.filter(function (x) { return String(x.capituloId) === String(cap.id); }) }; }) : [{ id: "general", codigo: "", nombre: "Alcance general de la obra", items: items }];
+    if (caps.length) { var ids = new Set(caps.map(function (cap) { return String(cap.id); })), sueltos = items.filter(function (x) { return x.capituloId == null || !ids.has(String(x.capituloId)); }); if (sueltos.length) grupos.push({ id: "sin-capitulo", codigo: "", nombre: "Sin capítulo", items: sueltos }); }
+    return grupos.map(function (grupo, gi) {
+      return { id: grupo.id, codigo: grupo.codigo || "", nombre: grupo.nombre, orden: gi, partidas: grupo.items.map(function (item, ii) {
+        var linea = calcularLineaPresupuesto(item);
+        return { clave: item._uid ? "uid:" + item._uid : "legacy:" + gi + "|" + ii, uid: item._uid || "", descripcion: item.desc || "", cantidad: Number(linea.cantidadIngresada) || 0, unidad: item.unidad || "", valorContratado: Math.round(Number(linea.totalLinea) || 0) };
+      }) };
+    });
+  }
+  function normalizarEstadoPago(presupuesto, cfg, entrada) {
+    var previo = entrada || obtenerDocumentoObraConfig(presupuesto, "estadoPago") || {};
+    var estados = Array.isArray(previo.estados) ? previo.estados : [];
+    return { estados: estados, estadoEditandoId: previo.estadoEditandoId || (estados.length ? estados[estados.length - 1].id : null), _estadoDocumento: previo._estadoDocumento || "borrador", actualizadoEn: previo.actualizadoEn || "" };
+  }
+  function nuevoEstadoPagoVacio(numero, base) {
+    return { id: "ep_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), numero: numero, fecha: new Date().toISOString().split("T")[0], periodo: "", avances: {}, observaciones: "", estado: "Borrador", firmas: base && base.firmas ? Object.assign({}, base.firmas) : { contratista: "", mandante: "", ito: "" } };
+  }
+  function calcularEstadoPago(presupuesto, cfg, doc, estadoId) {
+    var estructura = estructuraCapitulosObra(presupuesto);
+    var ordenados = (doc.estados || []).slice().sort(function (a0, b0) { return (Number(a0.numero) || 0) - (Number(b0.numero) || 0); });
+    var indiceActual = ordenados.findIndex(function (e0) { return e0.id === estadoId; });
+    var actual = indiceActual >= 0 ? ordenados[indiceActual] : null;
+    var anteriores = indiceActual > 0 ? ordenados.slice(0, indiceActual) : [];
+    var totalGeneral = { valorContratado: 0, montoAnterior: 0, montoPeriodo: 0, montoAcumulado: 0, saldo: 0 };
+    var capitulos = estructura.map(function (cap) {
+      var sub = { valorContratado: 0, montoAnterior: 0, montoPeriodo: 0, montoAcumulado: 0, saldo: 0 };
+      var partidas = cap.partidas.map(function (p) {
+        var avanceAnteriorPct = 0;
+        anteriores.forEach(function (est) { var a0 = est.avances && est.avances[p.clave]; if (a0) avanceAnteriorPct += Number(a0.periodoPct) || 0; });
+        avanceAnteriorPct = Math.max(0, Math.min(100, avanceAnteriorPct));
+        var avancePeriodoPct = actual && actual.avances && actual.avances[p.clave] ? Number(actual.avances[p.clave].periodoPct) || 0 : 0;
+        avancePeriodoPct = Math.max(0, avancePeriodoPct);
+        var avanceAcumuladoPct = Math.min(100, avanceAnteriorPct + avancePeriodoPct);
+        var montoAnterior = Math.round(p.valorContratado * avanceAnteriorPct / 100);
+        var montoAcumulado = Math.round(p.valorContratado * avanceAcumuladoPct / 100);
+        var montoPeriodo = montoAcumulado - montoAnterior;
+        var saldo = p.valorContratado - montoAcumulado;
+        sub.valorContratado += p.valorContratado; sub.montoAnterior += montoAnterior; sub.montoPeriodo += montoPeriodo; sub.montoAcumulado += montoAcumulado; sub.saldo += saldo;
+        return Object.assign({}, p, { avanceAnteriorPct: avanceAnteriorPct, avancePeriodoPct: avancePeriodoPct, avanceAcumuladoPct: avanceAcumuladoPct, montoAnterior: montoAnterior, montoPeriodo: montoPeriodo, montoAcumulado: montoAcumulado, saldo: saldo });
+      });
+      totalGeneral.valorContratado += sub.valorContratado; totalGeneral.montoAnterior += sub.montoAnterior; totalGeneral.montoPeriodo += sub.montoPeriodo; totalGeneral.montoAcumulado += sub.montoAcumulado; totalGeneral.saldo += sub.saldo;
+      return Object.assign({}, cap, { partidas: partidas, subtotal: sub });
+    });
+    var numeroSiguiente = (ordenados.length ? Math.max.apply(null, ordenados.map(function (e0) { return Number(e0.numero) || 0; })) : 0) + 1;
+    return { estado: actual, ultimoEstado: ordenados.length ? ordenados[ordenados.length - 1] : null, numeroSiguiente: numeroSiguiente, capitulos: capitulos, total: totalGeneral, historial: ordenados };
+  }
+  function htmlEstadoPagoActa(presupuesto, cliente, cfg, entrada, estadoId) {
+    var doc = normalizarEstadoPago(presupuesto, cfg, entrada);
+    var calculo = calcularEstadoPago(presupuesto, cfg, doc, estadoId || doc.estadoEditandoId);
+    var esc = function (v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+    var mon = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    var pct = function (v) { return (Number(v) || 0).toFixed(1) + "%"; };
+    if (!calculo.estado) {
+      return '<!doctype html><html><head><meta charset="utf-8"><title>Estado de Pago</title></head><body style="font-family:Arial;padding:40px;text-align:center;color:#64748b"><h2 style="color:#1a3060">Sin estados de pago</h2><p>Crea un estado de pago desde el editor en Documentos de Obra para generar este documento.</p></body></html>';
+    }
+    var estado = calculo.estado;
+    var corp = obtenerDatosCorporativos(cfg);
+    var cuerpos = calculo.capitulos.map(function (cap) {
+      var filas = cap.partidas.map(function (p) { return '<tr class="item"><td>' + esc(p.descripcion) + '</td><td class="n">' + esc(p.cantidad) + '</td><td class="c">' + esc(p.unidad) + '</td><td class="n">' + mon(p.valorContratado) + '</td><td class="n">' + pct(p.avanceAnteriorPct) + '</td><td class="n">' + pct(p.avancePeriodoPct) + '</td><td class="n b">' + pct(p.avanceAcumuladoPct) + '</td><td class="n">' + mon(p.montoAnterior) + '</td><td class="n">' + mon(p.montoPeriodo) + '</td><td class="n b">' + mon(p.montoAcumulado) + '</td><td class="n">' + mon(p.saldo) + '</td></tr>'; }).join("");
+      var s = cap.subtotal, pctAcumSub = s.valorContratado ? (s.montoAcumulado / s.valorContratado * 100) : 0;
+      return '<tbody><tr class="cap"><td colspan="11">' + esc((cap.codigo ? cap.codigo + " — " : "") + cap.nombre) + '<span>' + cap.partidas.length + ' partidas</span></td></tr>' + (filas || '<tr><td colspan="11" class="empty">Sin partidas</td></tr>') + '<tr class="sub"><td colspan="3">Subtotal ' + esc(cap.nombre) + '</td><td class="n">' + mon(s.valorContratado) + '</td><td></td><td></td><td class="n">' + pct(pctAcumSub) + '</td><td class="n">' + mon(s.montoAnterior) + '</td><td class="n">' + mon(s.montoPeriodo) + '</td><td class="n">' + mon(s.montoAcumulado) + '</td><td class="n">' + mon(s.saldo) + '</td></tr></tbody>';
+    }).join("");
+    var logo = cfg && (cfg.logoCliente || cfg.logo);
+    var t = calculo.total, pctTotal = t.valorContratado ? (t.montoAcumulado / t.valorContratado * 100) : 0;
+    var css = '*{box-sizing:border-box}body{font:11px Arial;color:#172033;margin:0;padding:22px}.np{padding:8px 18px;background:#1a3060;color:#fff;border:0;border-radius:6px;margin-bottom:14px}.head{display:flex;justify-content:space-between;border-bottom:4px solid #f5a020;padding-bottom:10px}.head img{max-height:55px;max-width:180px}.head h1{color:#1a3060;margin:4px 0}.title{text-align:right}.title b{display:block;color:#1a3060;font-size:17px}.title strong{font-size:22px;color:#f5a020}.meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;background:#f3f6fa;border-left:4px solid #f5a020;padding:10px;margin:12px 0}table{width:100%;border-collapse:collapse;table-layout:fixed}th{background:#1a3060;color:#fff;padding:6px 4px;font-size:8px;text-transform:uppercase}td{padding:6px 4px;border-bottom:1px solid #e1e7ef;word-wrap:break-word;font-size:10px}.n{text-align:right;white-space:nowrap}.c{text-align:center}.b{font-weight:bold}.cap{break-after:avoid}.cap td{background:#f5a020;color:#1a3060;font-weight:bold}.cap span{float:right;font-size:9px}.item{break-inside:avoid}.item:nth-child(odd) td{background:#f8fafc}.sub td{background:#e7edf6;color:#1a3060;font-weight:bold;border-top:2px solid #1a3060}.empty{text-align:center;color:#64748b}.sum{width:420px;max-width:100%;margin:14px 0 0 auto}.sum div{display:flex;justify-content:space-between;padding:6px 9px}.sum .dark{background:#1a3060;color:#fff}.sum .orange{background:#f5a020;color:#1a3060}.obs{white-space:pre-wrap;margin-top:12px;padding:10px;background:#f8fafc;border-left:4px solid #1a3060}.firmas{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}.firma{text-align:center;font-size:11px}.firma .linea{border-top:1px solid #334155;margin-bottom:8px}.foot{text-align:center;color:#718096;border-top:1px solid #ddd;margin-top:16px;padding-top:7px;font-size:9px}@page{size:A4 landscape;margin:10mm}@media print{body{padding:0}.np{display:none}}';
+    var showMandante = estado.incluirFirmaMandante !== false;
+    var showIto = estado.incluirFirmaIto !== false;
+
+    var corpNombre = esc(corp.representanteLegal || "John Arancibia");
+    var corpCargo = esc(corp.cargoRepresentante || "Representante legal");
+    var corpEmpresa = esc(corp.nombreComercial || "Bajo Deslinde");
+    var corpFirma = corp.firma || "";
+    var corpTel = corp.telefono || "";
+    var corpEmail = corp.correo || "";
+
+    var imgHtml = corpFirma 
+      ? '<div style="margin-bottom:4px"><img src="' + esc(corpFirma) + '" style="max-height:65px;max-width:220px;object-fit:contain;display:inline-block"/></div>'
+      : '<div style="height:69px"></div>';
+
+    var contratistaHtml = '<div class="firma" style="text-align:center;font-size:11px;min-width:200px;">' +
+       imgHtml +
+       '<div class="linea" style="border-top:1px solid #334155;margin-bottom:8px;"></div>' +
+       '<strong>' + corpNombre + '</strong><br>' +
+       '<span style="color:#475569;font-size:10px;">' + corpCargo + ' — ' + corpEmpresa + '</span>' +
+       (corpTel || corpEmail ? '<br><span style="color:#64748b;font-size:9.5px;">' + [corpTel, corpEmail].filter(Boolean).join(" · ") + '</span>' : '') +
+       '</div>';
+
+    var mandanteHtml = showMandante 
+       ? '<div class="firma" style="text-align:center;font-size:11px;min-width:200px;">' +
+         '<div style="height:69px"></div>' +
+         '<div class="linea" style="border-top:1px solid #334155;margin-bottom:8px;"></div>' +
+         '<strong>Mandante</strong><br>' +
+         '<span>' + esc(estado.firmas.mandante || "") + '</span>' +
+         '</div>'
+       : '';
+
+    var itoHtml = showIto 
+       ? '<div class="firma" style="text-align:center;font-size:11px;min-width:200px;">' +
+         '<div style="height:69px"></div>' +
+         '<div class="linea" style="border-top:1px solid #334155;margin-bottom:8px;"></div>' +
+         '<strong>Inspección Técnica</strong><br>' +
+         '<span>' + esc(estado.firmas.ito || "") + '</span>' +
+         '</div>'
+       : '';
+
+    var colCount = 1 + (showMandante ? 1 : 0) + (showIto ? 1 : 0);
+    
+    var firmasHtml = '<div class="firmas" style="display:grid;grid-template-columns:repeat(' + colCount + ', 1fr);gap:40px;margin-top:45px;margin-bottom:25px;break-inside:avoid;justify-items:center;">' +
+       contratistaHtml +
+       mandanteHtml +
+       itoHtml +
+       '</div>';
+
+    return '<!doctype html><html><head><meta charset="utf-8"><title>Estado de Pago N° ' + esc(estado.numero) + '</title><style>' + css + '</style></head><body><button class="np" onclick="print()">🖨 Imprimir / Guardar PDF</button><div class="head"><div>' + (logo ? '<img src="' + esc(logo) + '">' : "") + '<h1>' + esc(corp.nombreComercial || "Empresa") + '</h1><span>' + esc(corp.rut || "") + '</span></div><div class="title"><b>ESTADO DE PAGO</b><strong>N° ' + esc(estado.numero) + '</strong><div>' + esc(estado.fecha) + '</div></div></div><div class="meta"><div><b>Cliente:</b> ' + esc((cliente && cliente.nombre) || "Sin cliente") + '</div><div><b>Proyecto:</b> ' + esc(presupuesto.descripcion || "") + '</div><div><b>Período:</b> ' + esc(estado.periodo || "—") + '</div></div><table><colgroup><col style="width:22%"><col style="width:6%"><col style="width:6%"><col style="width:10%"><col style="width:7%"><col style="width:7%"><col style="width:7%"><col style="width:10%"><col style="width:9%"><col style="width:9%"><col style="width:9%"></colgroup><thead><tr><th>Partida</th><th>Cant.</th><th>Unidad</th><th>Valor contratado</th><th>Av. anterior</th><th>Av. período</th><th>Av. acumulado</th><th>Monto anterior</th><th>Monto período</th><th>Monto acumulado</th><th>Saldo</th></tr></thead>' + cuerpos + '</table><div class="sum"><div><span>Valor contratado</span><b>' + mon(t.valorContratado) + '</b></div><div><span>Monto anterior</span><b>' + mon(t.montoAnterior) + '</b></div><div class="orange"><span>Monto del período</span><b>' + mon(t.montoPeriodo) + '</b></div><div class="dark"><span>Monto acumulado (' + pct(pctTotal) + ')</span><b>' + mon(t.montoAcumulado) + '</b></div><div><span>Saldo por ejecutar</span><b>' + mon(t.saldo) + '</b></div></div>' + (estado.observaciones ? '<div class="obs"><b>Observaciones</b><br>' + esc(estado.observaciones).replace(/\n/g, "<br>") + '</div>' : "") + firmasHtml + '<div class="foot">Estado de Pago N° ' + esc(estado.numero) + ' · Estado: ' + esc(estado.estado) + ' · ' + esc(corp.nombreComercial || "Empresa") + ' · Enlace Constructor Pro</div></body></html>';
+  }
+  function abrirEstadoPagoActa(presupuesto, cliente, cfg, entrada, estadoId) {
+    var n = window.open("", "_blank");
+    if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
+    (n.document.write(htmlEstadoPagoActa(presupuesto, cliente, cfg, entrada, estadoId)), n.document.close());
+  }
+  async function guardarXlsxEstadoPagoConEstilo(X, wb, meta, nombre) {
+    if (!window.JSZip) await zt("assets/vendor/jszip-3.10.1.min.js");
+    if (!window.JSZip) throw Error("JSZip local no disponible");
+    var zip = await window.JSZip.loadAsync(X.write(wb, { bookType: "xlsx", type: "array" }));
+    var styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="&quot;$&quot;#,##0"/></numFmts><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="11"/><name val="Calibri"/></font><font><b/><color rgb="FF1A3060"/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="6"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF1A3060"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF5A020"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EEF7"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF7F9FC"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border/><border><bottom style="thin"><color rgb="FFD7DEE8"/></bottom></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="10"><xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1"/><xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf><xf numFmtId="0" fontId="2" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="0" fontId="2" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="1" fillId="2" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="2" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="0" fillId="5" borderId="1" xfId="0" applyNumberFormat="1" applyFill="1"/><xf numFmtId="10" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1"/><xf numFmtId="0" fontId="0" fillId="5" borderId="1" xfId="0" applyFill="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+    zip.file("xl/styles.xml", styles);
+    var xml = await zip.file("xl/worksheets/sheet1.xml").async("string");
+    var ref = function (col, row) { var n = col + 1, s = ""; while (n) { var x = (n - 1) % 26; s = String.fromCharCode(65 + x) + s; n = Math.floor((n - 1) / 26); } return s + row; };
+    var setStyle = function (cell, style) { var re = new RegExp('<c([^>]*\\br="' + cell + '"[^>]*)>'); xml = xml.replace(re, function (_, attrs) { attrs = attrs.replace(/\s+s="\d+"/, ""); return '<c' + attrs + ' s="' + style + '">'; }); };
+    var paint = function (rows, textStyle, numberStyle, pctCols) { rows.forEach(function (row) { for (var col = 0; col < 11; col++) { var isPct = pctCols && pctCols.indexOf(col) !== -1; setStyle(ref(col, row), isPct ? 8 : (col >= 3 ? numberStyle : textStyle)); } }); };
+    var pctCols = [4, 5, 6];
+    paint([1, 2, 3, 5], 1, 1, pctCols); paint(meta.caps, 2, 2, pctCols); paint(meta.subs, 3, 3, pctCols); paint([meta.total], 1, 4, pctCols);
+    meta.items.forEach(function (row, index) { paint([row], index % 2 ? 9 : 0, index % 2 ? 7 : 6, pctCols); });
+    xml = xml.replace(/<sheetViews>[\s\S]*?<\/sheetViews>/, '<sheetViews><sheetView workbookViewId="0"><pane xSplit="1" ySplit="5" topLeftCell="B6" activePane="bottomRight" state="frozen"/><selection pane="bottomRight" activeCell="B6" sqref="B6"/></sheetView></sheetViews>');
+    xml = xml.replace(/<pageMargins[^>]*\/>/g, "").replace(/<pageSetup[^>]*\/>/g, "").replace("</worksheet>", '<pageMargins left="0.25" right="0.25" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>');
+    zip.file("xl/worksheets/sheet1.xml", xml);
+    var resumenXml = await zip.file("xl/worksheets/sheet2.xml").async("string");
+    var setResumenStyle = function (cell, style) { var re = new RegExp('<c([^>]*\\br="' + cell + '"[^>]*)>'); resumenXml = resumenXml.replace(re, function (_, attrs) { attrs = attrs.replace(/\s+s="\d+"/, ""); return '<c' + attrs + ' s="' + style + '">'; }); };
+    for (var col2 = 0; col2 < 7; col2++) setResumenStyle(ref(col2, 1), 1);
+    for (var rr2 = 2; rr2 <= meta.resumenFilas + 1; rr2++) for (var col3 = 0; col3 < 7; col3++) setResumenStyle(ref(col3, rr2), col3 >= 1 && col3 !== 0 ? (col3 === 5 ? 8 : 6) : 0);
+    resumenXml = resumenXml.replace(/<pageMargins[^>]*\/>/g, "").replace(/<pageSetup[^>]*\/>/g, "").replace("</worksheet>", '<pageMargins left="0.3" right="0.3" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="1"/></worksheet>');
+    zip.file("xl/worksheets/sheet2.xml", resumenXml);
+    var historialXml = await zip.file("xl/worksheets/sheet3.xml").async("string");
+    var setHistorialStyle = function (cell, style) { var re = new RegExp('<c([^>]*\\br="' + cell + '"[^>]*)>'); historialXml = historialXml.replace(re, function (_, attrs) { attrs = attrs.replace(/\s+s="\d+"/, ""); return '<c' + attrs + ' s="' + style + '">'; }); };
+    for (var col4 = 0; col4 < 7; col4++) setHistorialStyle(ref(col4, 1), 1);
+    for (var rr4 = 2; rr4 <= meta.historialFilas + 1; rr4++) for (var col5 = 3; col5 <= 4; col5++) setHistorialStyle(ref(col5, rr4), 6);
+    historialXml = historialXml.replace(/<pageMargins[^>]*\/>/g, "").replace(/<pageSetup[^>]*\/>/g, "").replace("</worksheet>", '<pageMargins left="0.3" right="0.3" top="0.5" bottom="0.5" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="1"/></worksheet>');
+    zip.file("xl/worksheets/sheet3.xml", historialXml);
+    var workbookXml = await zip.file("xl/workbook.xml").async("string"), names = '<definedNames><definedName name="_xlnm.Print_Titles" localSheetId="0">&apos;Estado de Pago&apos;!$1:$5</definedName><definedName name="_xlnm.Print_Area" localSheetId="0">&apos;Estado de Pago&apos;!$A$1:$K$' + meta.lastRow + '</definedName></definedNames>';
+    workbookXml = workbookXml.replace(/<definedNames>[\s\S]*?<\/definedNames>/, "").replace("</workbook>", names + "</workbook>"); zip.file("xl/workbook.xml", workbookXml);
+    var blob = await zip.generateAsync({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), url = URL.createObjectURL(blob), link = document.createElement("a"); link.href = url; link.download = nombre; document.body.appendChild(link); link.click(); link.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+  }
+  async function excelEstadoPago(presupuesto, cliente, cfg, entrada, toast) {
+    try {
+      toast && toast("⏳ Preparando Excel editable...");
+      if (!window.XLSX) await zt("xlsx.full.min.js");
+      var X = window.XLSX; if (!X) throw Error("Biblioteca Excel local no disponible");
+      var doc = normalizarEstadoPago(presupuesto, cfg, entrada);
+      if (!doc.estados.length) { toast && toast("⚠️ Crea al menos un estado de pago antes de exportar"); return; }
+      var estadoId = doc.estadoEditandoId || doc.estados[doc.estados.length - 1].id;
+      var calculo = calcularEstadoPago(presupuesto, cfg, doc, estadoId), estado = calculo.estado;
+      var rows = [[(cfg && cfg.empresa) || "Empresa", "", "", "", "", "", "ESTADO DE PAGO", "", "", "", "N° " + estado.numero], ["Cliente", (cliente && cliente.nombre) || "Sin cliente", "", "Proyecto", presupuesto.descripcion || "", "", "Fecha", estado.fecha || "", "", "Período", estado.periodo || ""], ["Estado", estado.estado || "Borrador", "", "", "", "", "", "", "", "", ""], [], ["Partida", "Cantidad", "Unidad", "Valor contratado", "Av. anterior", "Av. período", "Av. acumulado", "Monto anterior", "Monto período", "Monto acumulado", "Saldo"]], caps = [], subs = [], items = [];
+      calculo.capitulos.forEach(function (cap) {
+        caps.push(rows.length + 1); rows.push([(cap.codigo ? cap.codigo + " — " : "") + cap.nombre, "", "", "", "", "", "", "", "", "", ""]); var first = rows.length + 1;
+        cap.partidas.forEach(function (p) { var rr = rows.length + 1; items.push(rr); rows.push([p.descripcion, p.cantidad, p.unidad, p.valorContratado, p.avanceAnteriorPct / 100, p.avancePeriodoPct / 100, p.avanceAcumuladoPct / 100, p.montoAnterior, p.montoPeriodo, p.montoAcumulado, p.saldo]); });
+        var last = rows.length, sr = rows.length + 1; subs.push(sr);
+        var sf = function (col) { return last >= first ? { f: "SUM(" + col + first + ":" + col + last + ")" } : 0; };
+        rows.push(["Subtotal " + cap.nombre, "", "", sf("D"), "", "", { f: "IF(D" + sr + "=0,0,J" + sr + "/D" + sr + ")" }, sf("H"), sf("I"), sf("J"), sf("K")]);
+      });
+      rows.push([]); var tr = rows.length + 1;
+      var sumf = function (col) { return { f: subs.map(function (r) { return col + r; }).join("+") || "0" }; };
+      rows.push(["TOTAL GENERAL", "", "", sumf("D"), "", "", { f: "IF(D" + tr + "=0,0,J" + tr + "/D" + tr + ")" }, sumf("H"), sumf("I"), sumf("J"), sumf("K")]);
+      rows.push([]); var obs = rows.length + 1; rows.push(["Observaciones", estado.observaciones || "", "", "", "", "", "", "", "", "", ""]);
+      var ws = X.utils.aoa_to_sheet(rows), navy = "1A3060", orange = "F5A020", pale = "E8EEF7", white = "FFFFFF";
+      var sty = function (fill, color, bold, align, isPct) { return { fill: { patternType: "solid", fgColor: { rgb: fill } }, font: { color: { rgb: color }, bold: bold }, alignment: { vertical: "center", horizontal: align, wrapText: !0 }, border: { bottom: { style: "thin", color: { rgb: "D7DEE8" } } }, numFmt: isPct ? "0.0%" : void 0 }; };
+      ws["!merges"] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }, { s: { r: 0, c: 6 }, e: { r: 0, c: 9 } }, { s: { r: obs - 1, c: 1 }, e: { r: obs - 1, c: 10 } }].concat(caps.map(function (r) { return { s: { r: r - 1, c: 0 }, e: { r: r - 1, c: 10 } }; }));
+      ws["!cols"] = [{ wch: 40 }, { wch: 9 }, { wch: 8 }, { wch: 15 }, { wch: 11 }, { wch: 11 }, { wch: 12 }, { wch: 14 }, { wch: 14 }, { wch: 15 }, { wch: 14 }]; ws["!autofilter"] = { ref: "A5:K" + (tr - 2) }; ws["!freeze"] = { xSplit: 1, ySplit: 5, topLeftCell: "B6", state: "frozen" }; ws["!pageSetup"] = { orientation: "landscape", fitToWidth: 1, fitToHeight: 0, paperSize: 9 }; ws["!margins"] = { left: .25, right: .25, top: .5, bottom: .5, header: .2, footer: .2 }; ws["!printHeader"] = ["1:5"];
+      function paint(rowList, fill, color, bold) { rowList.forEach(function (r) { for (var col = 0; col < 11; col++) { var cell = ws[X.utils.encode_cell({ r: r - 1, c: col })]; if (cell) cell.s = sty(fill, color, bold, col >= 3 ? "right" : col === 1 || col === 2 ? "center" : "left", col >= 4 && col <= 6); } }); }
+      paint([1, 2, 3, 5], navy, white, !0); paint(caps, orange, navy, !0); paint(subs, pale, navy, !0); paint([tr], navy, white, !0); items.forEach(function (rr, n) { paint([rr], n % 2 ? "F7F9FC" : white, navy, !1); });
+      items.concat(subs, [tr]).forEach(function (rr) { [3, 7, 8, 9, 10].forEach(function (col) { var cell = ws[X.utils.encode_cell({ r: rr - 1, c: col })]; if (cell) cell.z = '"$"#,##0'; }); [4, 5, 6].forEach(function (col) { var cell = ws[X.utils.encode_cell({ r: rr - 1, c: col })]; if (cell) cell.z = "0.0%"; }); });
+      var wb = X.utils.book_new(); X.utils.book_append_sheet(wb, ws, "Estado de Pago");
+      var resumenRows = [["Capítulo", "Valor contratado", "Monto anterior", "Monto período", "Monto acumulado", "Avance %", "Saldo"]];
+      calculo.capitulos.forEach(function (cap) { var s = cap.subtotal, pctc = s.valorContratado ? s.montoAcumulado / s.valorContratado : 0; resumenRows.push([cap.nombre, s.valorContratado, s.montoAnterior, s.montoPeriodo, s.montoAcumulado, pctc, s.saldo]); });
+      resumenRows.push(["TOTAL", calculo.total.valorContratado, calculo.total.montoAnterior, calculo.total.montoPeriodo, calculo.total.montoAcumulado, calculo.total.valorContratado ? calculo.total.montoAcumulado / calculo.total.valorContratado : 0, calculo.total.saldo]);
+      var resumen = X.utils.aoa_to_sheet(resumenRows); resumen["!cols"] = [{ wch: 32 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 10 }, { wch: 16 }]; resumen["!pageSetup"] = { orientation: "landscape", fitToWidth: 1, fitToHeight: 1 };
+      for (var rr3 = 2; rr3 <= resumenRows.length; rr3++) { [1, 2, 3, 4, 6].forEach(function (col) { var cell = resumen[X.utils.encode_cell({ r: rr3 - 1, c: col })]; if (cell) cell.z = '"$"#,##0'; }); var pc = resumen[X.utils.encode_cell({ r: rr3 - 1, c: 5 })]; if (pc) pc.z = "0.0%"; }
+      X.utils.book_append_sheet(wb, resumen, "Resumen por Capítulo");
+      var historialRows = [["N°", "Fecha", "Período", "Monto período", "Monto acumulado", "Estado", "Observaciones"]];
+      calculo.historial.forEach(function (est) { var c0 = calcularEstadoPago(presupuesto, cfg, doc, est.id); historialRows.push([est.numero, est.fecha, est.periodo || "", c0.total.montoPeriodo, c0.total.montoAcumulado, est.estado || "Borrador", est.observaciones || ""]); });
+      var historial = X.utils.aoa_to_sheet(historialRows); historial["!cols"] = [{ wch: 6 }, { wch: 12 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 12 }, { wch: 40 }]; historial["!pageSetup"] = { orientation: "landscape", fitToWidth: 1, fitToHeight: 1 };
+      for (var rr5 = 2; rr5 <= historialRows.length; rr5++) [3, 4].forEach(function (col) { var cell = historial[X.utils.encode_cell({ r: rr5 - 1, c: col })]; if (cell) cell.z = '"$"#,##0'; });
+      X.utils.book_append_sheet(wb, historial, "Historial");
+      var clean = function (v) { return String(v || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9_-]+/g, "_"); };
+      await guardarXlsxEstadoPagoConEstilo(X, wb, { caps: caps, subs: subs, items: items, total: tr, lastRow: obs, resumenFilas: resumenRows.length - 1, historialFilas: historialRows.length - 1 }, "Estado_de_Pago_" + clean(presupuesto.id) + "_N" + clean(estado.numero) + ".xlsx");
+      toast && toast("✅ Excel editable generado");
+    } catch (error) { toast && toast("❌ No se pudo generar Excel: " + (error.message || "error desconocido")); }
+  }
+  function normalizarFirmaCorporativa(valorFirma) {
+    return valorFirma == null ? "" : String(valorFirma).trim();
+  }
+  function obtenerDatosCorporativos(cfg) {
+    cfg = cfg || {};
+    return {
+      nombreComercial: cfg.empresa || "",
+      rut: cfg.rut || "",
+      representanteLegal: cfg.firmaNombre || "",
+      cargoRepresentante: cfg.firmaCargo || "",
+      firma: normalizarFirmaCorporativa(cfg.firmaImg),
+      telefono: cfg.telefono || cfg.tel || "",
+      correo: cfg.email || cfg.correo || "",
+    };
+  }
+  function renderBloqueFirmaCorporativa(cfg, opciones) {
+    opciones = opciones || {};
+    var corp = obtenerDatosCorporativos(cfg);
+    var esc = function (v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+    var nombre = esc(opciones.firmante || corp.representanteLegal || corp.nombreComercial || "Representante Legal");
+    var cargo = esc(opciones.cargoFirmante || corp.cargoRepresentante || "Representante Legal");
+    var empresa = esc(corp.nombreComercial || "Empresa");
+    var firmaImg = corp.firma || (cfg && cfg.firmaImg) || "";
+    var tel = corp.telefono || (cfg && cfg.telefono) || "";
+    var email = corp.correo || (cfg && cfg.email) || "";
+    var contactoArr = [];
+    if (tel) contactoArr.push(tel);
+    if (email) contactoArr.push(email);
+    var contactoStr = esc(opciones.contacto || contactoArr.join(" · "));
+    var imgHtml = firmaImg 
+      ? '<div style="margin-bottom:4px"><img src="' + esc(firmaImg) + '" style="max-height:65px;max-width:220px;object-fit:contain;display:inline-block"/></div>'
+      : '<div style="height:35px"></div>';
+    return '<div style="margin-top:36px;margin-bottom:24px;text-align:center;font-family:Arial,sans-serif">' +
+      imgHtml +
+      '<div style="width:280px;margin:0 auto;border-top:1.5px solid #1e3a5f;padding-top:6px">' +
+        '<strong style="font-size:14px;color:#1e3a5f;display:block">' + nombre + '</strong>' +
+        '<div style="font-size:12px;color:#475569;margin-top:2px">' + cargo + ' — ' + empresa + '</div>' +
+        (contactoStr ? '<div style="font-size:11px;color:#64748b;margin-top:2px">' + contactoStr + '</div>' : '') +
+      '</div>' +
+    '</div>' +
+    // sinPie: para documentos que ubican las firmas en columnas y necesitan el
+    // pie a lo ancho de la página, no dentro de una de ellas.
+    (opciones.sinPie ? '' :
+      '<div style="margin-top:24px;font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px;font-family:Arial,sans-serif;text-align:center">' +
+        'Documento generado por Enlace Constructor Pro — ' + empresa + ' · ' + esc(new Date().toLocaleDateString("es-CL")) +
+      '</div>');
+  }
+  // Cada ventaja marcada en el Resumen Ejecutivo necesita una razón que la
+  // sostenga: una etiqueta suelta ("Cuadrilla propia") no le dice nada al
+  // cliente. El texto es fijo y verificable contra el contrato.
+  var ARGUMENTOS_VENTAJAS = {
+    materialesPrimeraCalidad: "Los materiales quedan especificados partida por partida en el presupuesto anexo, con marca y cantidad, de modo que puede verificar exactamente qué se instala en su obra.",
+    cuadrillaPropia: "El mismo equipo que inicia la obra la termina. No hay rotación de personal entre faenas ni traspaso de responsabilidades a mitad del trabajo.",
+    sinSubcontratos: "Respondemos directamente por la ejecución completa. No existen terceros a quienes derivar un problema si algo debe corregirse.",
+    garantia90Dias: "Respondemos por defectos de ejecución después de entregada la obra, con el plazo y el alcance establecidos por escrito en el contrato.",
+    plazoGarantizado: "El plazo comprometido queda establecido en el contrato, junto con las únicas causales que podrían modificarlo y el procedimiento para acordarlas.",
+    experienciaComprobada: "Contamos con obras anteriores de características similares, cuyas referencias quedan a su disposición antes de firmar.",
+  };
+
+  function textoListaCotizacion(valor) {
+    if (valor == null) return "";
+    if (Array.isArray(valor)) return valor.filter(Boolean).map(function (x) { return String(x).trim(); }).join("\n");
+    return String(valor).trim();
+  }
+
+  function normalizarCotizacionFormal(presupuesto, cliente, cfg, entrada) {
+    presupuesto = presupuesto || {}; cliente = cliente || {}; cfg = cfg || {};
+    var previo = (presupuesto.documentosObra && presupuesto.documentosObra.cotizacionFormal) || entrada || obtenerDocumentoObraConfig(presupuesto, "cotizacionFormal") || {};
+    
+    var defCarta = normalizarCartaCliente(presupuesto, cliente, cfg);
+    var defResumen = normalizarResumenEjecutivo(presupuesto, cfg);
+    var defContrato = normalizarContratoObra(presupuesto, cliente, cfg);
+    
+    var defPresentacion = defCarta.cuerpo || defCarta.introduccion || "Presentamos a continuación nuestra propuesta comercial para la ejecución del proyecto.";
+    var defResumenEjecutivo = textoListaCotizacion(defResumen.observaciones) || "Esta propuesta contempla la ejecución integral de las partidas especificadas.";
+    var defIncluye = textoListaCotizacion(defResumen.incluye);
+    var defExcluye = textoListaCotizacion(defResumen.noIncluye);
+
+    var defPlazo = defContrato.plazoNumero || "";
+    var defPlazoUnidad = defContrato.plazoUnidad || "días";
+    var defFormaPago = defContrato.formaPago || "";
+    var defHitos = defContrato.hitosPago || "";
+    var defGarantia = defContrato.garantiaNumero ? String(defContrato.garantiaNumero) + " " + (defContrato.garantiaUnidad || "días corridos") : "";
+    
+    var r = {
+      estado: previo.estado || "Borrador",
+      _estadoDocumento: previo._estadoDocumento || "borrador",
+      actualizadoEn: previo.actualizadoEn || "",
+      numero: previo.numero || "COT-" + (presupuesto.id || "001"),
+      fecha: previo.fecha || new Date().toISOString().substring(0, 10),
+      validez: previo.validez == null ? 30 : Number(previo.validez) || 0,
+      
+      presentacion: previo.presentacion || defPresentacion,
+      resumenEjecutivo: previo.resumenEjecutivo || defResumenEjecutivo,
+      incluye: previo.incluye || defIncluye,
+      excluye: previo.excluye || defExcluye,
+      
+      plazo: previo.plazo || defPlazo,
+      plazoUnidad: previo.plazoUnidad || defPlazoUnidad,
+      formaPago: previo.formaPago || defFormaPago,
+      hitos: previo.hitos || defHitos,
+      garantia: previo.garantia || defGarantia,
+      
+      secciones: Object.assign({
+        portada: true,
+        presentacion: true,
+        resumen: true,
+        alcance: true,
+        inversion: true,
+        incluyeExcluye: true,
+        condiciones: true,
+        anexo: true,
+        firmas: true
+      }, previo.secciones || {})
+    };
+    return r;
+  }
+
+  function htmlCotizacionFormal(t, i, r, doc) {
+    doc = normalizarCotizacionFormal(t, i, r, doc);
+    var corp = obtenerDatosCorporativos(r);
+    var esc = function (v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+    var mon = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+
+    var items = obtenerItemsPresupuestoExportables(t.items);
+    var tt = Ee(items, r, t.descuento, t.modoCosteo, t.sinIva) || {};
+    var estructuraAlcance = estructuraCapitulosObra(t);
+    var resumenEj = normalizarResumenEjecutivo(t, r);
+    var sintesis = resumenEj.sintesisPorCapitulo || {};
+
+    var logoUrl = r.logoCliente || r.logo || "";
+    var nombreProyecto = t.descripcion || t.nombre || "Proyecto sin nombre";
+    var nombreCliente = (i && i.nombre) || "Cliente particular";
+    var fechaLarga = (function () {
+      var partes = String(doc.fecha || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!partes) return doc.fecha || "";
+      var meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+      return Number(partes[3]) + " de " + meses[Number(partes[2]) - 1] + " de " + partes[1];
+    })();
+
+    // Numeración correlativa real: las secciones se pueden apagar una por una,
+    // así que el número se asigna al imprimir y no queda un salto de 1 a 3.
+    var nSeccion = 0;
+    var tituloSeccion = function (texto) { nSeccion += 1; return '<h2 class="s-t"><span class="s-n">' + nSeccion + '</span>' + esc(texto) + '</h2>'; };
+    var tituloSuelto = function (texto) { return '<h2 class="s-t s-t--sn">' + esc(texto) + '</h2>'; };
+
+    var listaMarcada = function (texto, tipo) {
+      if (!texto) return "";
+      var bruto = String(texto);
+      var lineas = bruto.indexOf("\n") !== -1 ? bruto.split("\n") : (bruto.indexOf(",") !== -1 ? bruto.split(",") : [bruto]);
+      var limpias = lineas.map(function (linea) {
+        var l = String(linea).trim();
+        if (l.charAt(0) === "•" || l.charAt(0) === "-" || l.charAt(0) === "*") l = l.substring(1).trim();
+        return l;
+      }).filter(Boolean);
+      if (!limpias.length) return "";
+      return '<ul class="lst lst--' + tipo + '">' + limpias.map(function (l) { return "<li>" + esc(l) + "</li>"; }).join("") + "</ul>";
+    };
+
+    var css =
+      '@page { size: A4; margin: 16mm 15mm; }' +
+      '* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }' +
+      'body { font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; color: #172033; margin: 0 auto; padding: 34px 38px; max-width: 900px; line-height: 1.55; font-size: 12.5px; }' +
+      'p { margin: 0 0 9px 0; }' +
+      // Portada
+      '.cov { min-height: 250mm; display: flex; flex-direction: column; page-break-after: always; }' +
+      '.cov-top { border-top: 6px solid #1a3060; padding-top: 26px; }' +
+      '.cov-logo { max-height: 78px; max-width: 240px; object-fit: contain; display: block; margin-bottom: 26px; }' +
+      '.cov-emp { font-size: 17px; font-weight: 700; color: #1a3060; letter-spacing: .01em; }' +
+      '.cov-emp span { display: block; font-size: 11.5px; font-weight: 400; color: #5a6478; margin-top: 2px; }' +
+      '.cov-mid { margin-top: auto; margin-bottom: auto; padding: 40px 0; }' +
+      '.cov-kicker { font-size: 11.5px; letter-spacing: .22em; text-transform: uppercase; color: #f5a020; font-weight: 700; }' +
+      '.cov-h1 { font-size: 39px; line-height: 1.12; font-weight: 800; color: #1a3060; margin: 12px 0 0 0; letter-spacing: -.015em; }' +
+      '.cov-rule { width: 74px; height: 4px; background: #f5a020; margin: 22px 0 24px 0; }' +
+      '.cov-proj { font-size: 16px; color: #2c3a52; max-width: 560px; }' +
+      '.cov-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 220px)); gap: 20px 40px; margin-top: 36px; }' +
+      '.cov-meta dt { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8c96a8; margin-bottom: 3px; }' +
+      '.cov-meta dd { margin: 0; font-size: 13.5px; font-weight: 600; color: #172033; }' +
+      '.cov-foot { border-top: 1px solid #dce3ed; padding-top: 12px; font-size: 10.5px; color: #5a6478; display: flex; justify-content: space-between; gap: 16px; }' +
+      // Encabezado corrido
+      '.hd { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; border-bottom: 2px solid #1a3060; padding-bottom: 10px; margin-bottom: 26px; }' +
+      '.hd-l { font-size: 15px; font-weight: 700; color: #1a3060; }' +
+      '.hd-l span { display: block; font-size: 11px; font-weight: 400; color: #5a6478; margin-top: 2px; }' +
+      '.hd-r { text-align: right; font-size: 10.5px; color: #5a6478; line-height: 1.45; }' +
+      '.hd-r b { color: #172033; font-size: 11.5px; }' +
+      // Secciones
+      '.sec { margin-bottom: 26px; page-break-inside: avoid; }' +
+      '.s-t { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #1a3060; margin: 0 0 12px 0; padding-bottom: 6px; border-bottom: 1px solid #dce3ed; display: flex; align-items: center; gap: 9px; }' +
+      '.s-n { display: inline-flex; align-items: center; justify-content: center; width: 19px; height: 19px; border-radius: 50%; background: #1a3060; color: #fff; font-size: 10.5px; flex: 0 0 auto; }' +
+      '.s-t--sn { color: #5a6478; }' +
+      '.body-txt { white-space: pre-wrap; color: #2c3a52; }' +
+      // Alcance
+      '.cap { border: 1px solid #dce3ed; border-left: 3px solid #f5a020; border-radius: 6px; padding: 12px 15px; margin-bottom: 9px; page-break-inside: avoid; }' +
+      '.cap-h { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }' +
+      '.cap-n { font-size: 13px; font-weight: 700; color: #1a3060; }' +
+      '.cap-m { font-size: 13px; font-weight: 700; color: #172033; white-space: nowrap; }' +
+      '.cap-d { font-size: 11.5px; color: #4a566b; margin-top: 5px; }' +
+      '.cap-c { font-size: 10px; color: #8c96a8; margin-top: 5px; text-transform: uppercase; letter-spacing: .07em; }' +
+      // Inversión
+      '.inv { border: 1px solid #dce3ed; border-radius: 8px; overflow: hidden; page-break-inside: avoid; }' +
+      '.inv-rows { padding: 4px 18px; }' +
+      '.inv-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 12.5px; border-bottom: 1px solid #eef2f7; }' +
+      '.inv-row:last-child { border-bottom: 0; }' +
+      '.inv-row span { color: #4a566b; }' +
+      '.inv-row b { font-weight: 600; }' +
+      '.inv-tot { background: #1a3060; color: #fff; padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }' +
+      '.inv-tot-l { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #b9c6dd; }' +
+      '.inv-tot-v { font-size: 27px; font-weight: 800; color: #fff; letter-spacing: -.01em; }' +
+      '.inv-nota { font-size: 11px; color: #5a6478; margin-top: 8px; }' +
+      // Listas incluye / excluye
+      '.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }' +
+      '.col-h { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }' +
+      '.lst { list-style: none; margin: 0; padding: 0; }' +
+      '.lst li { position: relative; padding-left: 17px; margin-bottom: 6px; font-size: 11.8px; line-height: 1.5; color: #2c3a52; }' +
+      '.lst li::before { position: absolute; left: 0; font-weight: 700; }' +
+      '.lst--inc li::before { content: "\\2713"; color: #0f766e; }' +
+      '.lst--exc li::before { content: "\\2013"; color: #94a3b8; }' +
+      // Condiciones
+      '.cond { display: grid; grid-template-columns: 168px 1fr; gap: 9px 18px; font-size: 12.2px; }' +
+      '.cond dt { font-weight: 600; color: #5a6478; }' +
+      '.cond dd { margin: 0; color: #172033; }' +
+      // Varios
+      '.tbl { width: 100%; border-collapse: collapse; max-width: 430px; font-size: 12px; }' +
+      '.tbl td { padding: 7px 0; border-bottom: 1px solid #eef2f7; }' +
+      '.tbl td:last-child { text-align: right; font-weight: 600; white-space: nowrap; }' +
+      '.tbl tr:last-child td { border-bottom: 0; border-top: 1.5px solid #1a3060; font-weight: 700; }' +
+      '.etapas { list-style: none; margin: 0; padding: 0; counter-reset: et; }' +
+      '.etapas li { position: relative; padding: 0 0 14px 32px; border-left: 2px solid #dce3ed; margin-left: 9px; page-break-inside: avoid; }' +
+      '.etapas li:last-child { border-left-color: transparent; padding-bottom: 0; }' +
+      '.et-h { display: flex; align-items: center; gap: 9px; }' +
+      '.et-n { position: absolute; left: -11px; top: 0; width: 20px; height: 20px; border-radius: 50%; background: #f5a020; color: #1a3060; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }' +
+      '.et-h b { font-size: 12.5px; color: #1a3060; }' +
+      '.et-d { margin-left: auto; font-size: 10.5px; color: #8c96a8; white-space: nowrap; }' +
+      '.et-t { font-size: 11.5px; color: #4a566b; margin-top: 4px; }' +
+      '.args { display: grid; gap: 11px; }' +
+      '.arg { border-left: 3px solid #1a3060; padding: 2px 0 2px 12px; page-break-inside: avoid; }' +
+      '.arg-t { font-size: 12.5px; font-weight: 700; color: #1a3060; }' +
+      '.arg-d { font-size: 11.5px; color: #4a566b; margin-top: 3px; }' +
+      '.pills { display: flex; flex-wrap: wrap; gap: 7px; }' +
+      '.pill { background: #fff4df; border: 1px solid #f5a020; color: #6d4400; padding: 5px 13px; border-radius: 999px; font-size: 11px; font-weight: 700; }' +
+      '.nota { background: #f4f7fb; border: 1px solid #dce3ed; border-radius: 8px; padding: 13px 16px; font-size: 11.5px; color: #4a566b; page-break-inside: avoid; }' +
+      '.firmas { display: grid; grid-template-columns: 1fr 1fr; gap: 54px; margin-top: 46px; page-break-inside: avoid; }' +
+      '.firma-cli { align-self: end; }' +
+      '.firma-line { border-top: 1px solid #8c96a8; margin-top: 74px; padding-top: 8px; }' +
+      '.firma-line b { display: block; font-size: 12px; color: #172033; }' +
+      '.firma-line span { font-size: 10.5px; color: #5a6478; }' +
+      '.pie { margin-top: 26px; border-top: 1px solid #dce3ed; padding-top: 10px; text-align: center; font-size: 9.5px; color: #8c96a8; } ' +
+      '.np { display: block; margin-bottom: 22px; padding: 10px 24px; background: #1a3060; color: #fff; border: 0; cursor: pointer; border-radius: 6px; font: inherit; font-weight: 700; font-size: 12.5px; }' +
+      '@media print { .np { display: none !important; } body { padding: 0; max-width: none; } }';
+
+    var html = '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Cotización N° ' + esc(doc.numero) + ' — ' + esc(nombreProyecto) + '</title><style>' + css + '</style></head><body>' +
+      '<button class="np" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>';
+
+    if (doc.secciones.portada) {
+      html += '<section class="cov">' +
+        '<div class="cov-top">' +
+          (logoUrl ? '<img class="cov-logo" src="' + logoUrl + '" alt=""/>' : "") +
+          '<div class="cov-emp">' + esc(corp.nombreComercial || "Empresa") + (corp.rut ? "<span>RUT " + esc(corp.rut) + "</span>" : "") + '</div>' +
+        '</div>' +
+        '<div class="cov-mid">' +
+          '<div class="cov-kicker">Propuesta comercial</div>' +
+          '<h1 class="cov-h1">Cotización N° ' + esc(doc.numero) + '</h1>' +
+          '<div class="cov-rule"></div>' +
+          '<div class="cov-proj">' + esc(nombreProyecto) + '</div>' +
+          '<dl class="cov-meta">' +
+            '<div><dt>Cliente</dt><dd>' + esc(nombreCliente) + '</dd></div>' +
+            '<div><dt>Fecha de emisión</dt><dd>' + esc(fechaLarga) + '</dd></div>' +
+            '<div><dt>Validez de la oferta</dt><dd>' + esc(doc.validez) + ' días corridos</dd></div>' +
+            '<div><dt>Presupuesto de referencia</dt><dd>N° ' + esc(t.id) + '</dd></div>' +
+          '</dl>' +
+        '</div>' +
+        '<div class="cov-foot">' +
+          '<div>' + esc(corp.nombreComercial || "") + (corp.telefono ? " · " + esc(corp.telefono) : "") + '</div>' +
+          '<div>' + esc(corp.correo || "") + '</div>' +
+        '</div>' +
+      '</section>';
+    }
+
+    html += '<div class="hd">' +
+      '<div class="hd-l">Cotización N° ' + esc(doc.numero) + '<span>' + esc(nombreProyecto) + '</span></div>' +
+      '<div class="hd-r"><b>' + esc(corp.nombreComercial || "") + '</b>' + (corp.rut ? "<br>RUT " + esc(corp.rut) : "") + (corp.correo ? "<br>" + esc(corp.correo) : "") + '</div>' +
+    '</div>';
+
+    if (doc.secciones.presentacion && doc.presentacion) {
+      html += '<section class="sec">' + tituloSeccion("Presentación") +
+        '<p class="body-txt">' + esc(doc.presentacion) + '</p></section>';
+    }
+
+    if (doc.secciones.resumen && doc.resumenEjecutivo) {
+      html += '<section class="sec">' + tituloSeccion("Resumen ejecutivo") +
+        '<p class="body-txt">' + esc(doc.resumenEjecutivo) + '</p></section>';
+    }
+
+    if (doc.secciones.alcance) {
+      // El alcance hereda la síntesis redactada en el Resumen Ejecutivo. Cada
+      // capítulo se presenta como ficha: qué se hace y cuánto vale, en vez de
+      // una tabla de precios que repetiría el presupuesto.
+      html += '<section class="sec">' + tituloSeccion("Alcance del proyecto") +
+        '<p style="color:#4a566b;margin-bottom:12px">La propuesta contempla los siguientes capítulos de obra. Cada uno detalla el trabajo comprometido y su valor asociado.</p>';
+      estructuraAlcance.forEach(function (cap) {
+        var sub = (cap.partidas || []).reduce(function (acc, partida) { return acc + (Number(partida.valorContratado) || 0); }, 0);
+        var texto = sintesis[cap.id] || sintesisCapituloPorDefecto(cap);
+        var cuenta = (cap.partidas || []).length;
+        html += '<div class="cap">' +
+          '<div class="cap-h"><div class="cap-n">' + esc((cap.codigo ? cap.codigo + " — " : "") + cap.nombre) + '</div>' +
+          '<div class="cap-m">' + mon(sub) + '</div></div>' +
+          '<div class="cap-d">' + esc(texto) + '</div>' +
+          '<div class="cap-c">' + cuenta + (cuenta === 1 ? " partida" : " partidas") + '</div>' +
+        '</div>';
+      });
+      html += '</section>';
+
+      // Cómo se ejecuta: el orden de los capítulos ya es la secuencia real de
+      // obra. La duración por etapa se reparte según el peso económico de cada
+      // capítulo y se rotula como referencial, porque es una estimación.
+      var plazoTotal = Number(doc.plazo) || 0;
+      var totalAlcance = estructuraAlcance.reduce(function (acc, cap) {
+        return acc + (cap.partidas || []).reduce(function (a2, p) { return a2 + (Number(p.valorContratado) || 0); }, 0);
+      }, 0);
+      if (estructuraAlcance.length > 1) {
+        html += '<section class="sec">' + tituloSeccion("Cómo se ejecuta la obra") +
+          '<p style="color:#4a566b;margin-bottom:12px">Los trabajos se desarrollan en el siguiente orden. Cada etapa se cierra antes de iniciar la siguiente, de modo que usted sabe en todo momento en qué punto va la obra.</p>' +
+          '<ol class="etapas">';
+        estructuraAlcance.forEach(function (cap, idx) {
+          var sub = (cap.partidas || []).reduce(function (a2, p) { return a2 + (Number(p.valorContratado) || 0); }, 0);
+          var dias = plazoTotal > 0 && totalAlcance > 0 ? Math.max(1, Math.round(plazoTotal * (sub / totalAlcance))) : 0;
+          html += '<li><div class="et-h"><span class="et-n">' + (idx + 1) + '</span><b>' + esc(cap.nombre) + '</b>' +
+            (dias > 0 ? '<span class="et-d">≈ ' + dias + (dias === 1 ? " día" : " días") + "</span>" : "") + "</div>" +
+            '<div class="et-t">' + esc(sintesis[cap.id] || sintesisCapituloPorDefecto(cap)) + "</div></li>";
+        });
+        html += "</ol>" +
+          (plazoTotal > 0 ? '<p style="font-size:10.5px;color:#8c96a8;margin-top:8px">Distribución referencial del plazo total de ' + plazoTotal + " " + esc(doc.plazoUnidad) + " según la magnitud de cada etapa. El plazo comprometido es el total, no cada tramo por separado.</p>" : "") +
+          "</section>";
+      }
+
+      // Dotación comprometida: solo si hay horas estimadas reales.
+      var dot = calcularResumenDotacion(t, r);
+      if (dot && dot.totales && dot.totales.hh > 0) {
+        var filasRoles = (dot.rolesOrdenados || []).map(function (rid) {
+          var horas = Number(dot.totales.porRol[rid]) || 0;
+          if (horas <= 0) return "";
+          var rol = (dot.documento.valoresRoles[rid] || {}).rol || rid;
+          return "<tr><td>" + esc(rol) + "</td><td>" + Math.round(horas).toLocaleString("es-CL") + " HH</td></tr>";
+        }).join("");
+        html += '<section class="sec">' + tituloSuelto("Equipo comprometido") +
+          '<p style="color:#4a566b;margin-bottom:10px">Horas hombre estimadas para ejecutar el alcance descrito, según el análisis de dotación de la obra.</p>' +
+          '<table class="tbl">' + filasRoles +
+          "<tr><td>Total horas hombre</td><td>" + Math.round(dot.totales.hh).toLocaleString("es-CL") + " HH</td></tr>" +
+          '</table></section>';
+      }
+    }
+
+    if (doc.secciones.inversion) {
+      var hayDescuento = Number(tt.desc) > 0;
+      var anticipoMonto = Number(tt.anticipo) || 0;
+      var anticipoPct = Math.round(((r && r.anticipo) || 0) * 100);
+      html += '<section class="sec">' + tituloSeccion("Inversión") +
+        '<div class="inv"><div class="inv-rows">' +
+          '<div class="inv-row"><span>Subtotal neto</span><b>' + mon(tt.sub) + '</b></div>' +
+          (hayDescuento ? '<div class="inv-row"><span>Descuento comercial</span><b>− ' + mon(tt.desc) + '</b></div>' : "") +
+          (t.sinIva ? "" : '<div class="inv-row"><span>IVA (19%)</span><b>' + mon(tt.iva) + '</b></div>') +
+        '</div>' +
+        '<div class="inv-tot"><div class="inv-tot-l">Inversión total' + (t.sinIva ? " (exento de IVA)" : " (IVA incluido)") + '</div><div class="inv-tot-v">' + mon(tt.total) + '</div></div>' +
+        '</div>' +
+        (anticipoMonto > 0 ? '<p class="inv-nota">Anticipo para el inicio de los trabajos: <b>' + mon(anticipoMonto) + "</b>" + (anticipoPct > 0 ? " (" + anticipoPct + "% del total)" : "") + ". El saldo se factura según el avance aprobado.</p>" : "") +
+      '</section>';
+    }
+
+    if (doc.secciones.incluyeExcluye && (doc.incluye || doc.excluye)) {
+      html += '<section class="sec">' + tituloSeccion("Qué incluye y qué no") +
+        '<div class="cols">' +
+          '<div><div class="col-h" style="color:#0f766e">Incluye</div>' + (listaMarcada(doc.incluye, "inc") || '<p style="color:#8c96a8;font-size:11.5px">Sin ítems declarados.</p>') + '</div>' +
+          '<div><div class="col-h" style="color:#be123c">No incluye</div>' + (listaMarcada(doc.excluye, "exc") || '<p style="color:#8c96a8;font-size:11.5px">Sin ítems declarados.</p>') + '</div>' +
+        '</div></section>';
+    }
+
+    // Ventajas: se ubican después del alcance y el precio, donde cierran el
+    // argumento. Solo salen las que confirmaste en el Resumen Ejecutivo.
+    var ventajas = VENTAJAS_RESUMEN_EJECUTIVO.filter(function (v) { return resumenEj.ventajas && resumenEj.ventajas[v[0]]; });
+    if (doc.secciones.alcance && ventajas.length) {
+      html += '<section class="sec">' + tituloSeccion("Por qué contratarnos") +
+        '<div class="args">' + ventajas.map(function (v) {
+          var razon = ARGUMENTOS_VENTAJAS[v[0]] || "";
+          return '<div class="arg"><div class="arg-t">' + esc(v[1]) + "</div>" +
+            (razon ? '<div class="arg-d">' + esc(razon) + "</div>" : "") + "</div>";
+        }).join("") + "</div></section>";
+    }
+
+    // Qué respalda la oferta: la cadena formal que la aplicación ya genera.
+    // Es el argumento de que el compromiso queda por escrito y verificable.
+    if (doc.secciones.condiciones) {
+      var respaldos = [
+        ["Contrato de obra firmado", "Antes de iniciar se firma un contrato que fija alcance, plazo, forma de pago y las causales que podrían modificarlos. Ninguna de las condiciones de esta propuesta queda en un acuerdo verbal."],
+        ["Estados de pago con acta de avance", "Cada pago se respalda con un estado de pago que detalla el avance real por partida. Usted paga contra trabajo ejecutado y aprobado, no contra promesas."],
+        ["Presupuesto detallado como anexo", "El Presupuesto N° " + esc(t.id) + " lista partidas, cantidades y precios unitarios. Puede revisar línea por línea de dónde sale el valor total."],
+      ];
+      if (doc.garantia) respaldos.push(["Garantía por escrito", "Se compromete una garantía de " + esc(doc.garantia) + " sobre la ejecución, con su alcance definido en el contrato."]);
+      html += '<section class="sec">' + tituloSeccion("Qué respalda esta oferta") +
+        '<div class="args">' + respaldos.map(function (rp) {
+          return '<div class="arg"><div class="arg-t">' + rp[0] + "</div><div class=\"arg-d\">" + rp[1] + "</div></div>";
+        }).join("") + "</div></section>";
+    }
+
+    if (doc.secciones.condiciones) {
+      html += '<section class="sec">' + tituloSeccion("Condiciones comerciales") +
+        '<dl class="cond">' +
+          "<dt>Plazo de ejecución</dt><dd>" + esc(doc.plazo) + " " + esc(doc.plazoUnidad) + "</dd>" +
+          "<dt>Forma de pago</dt><dd>" + esc(doc.formaPago || "Según lo acordado entre las partes") + "</dd>" +
+          (doc.hitos ? "<dt>Hitos de pago</dt><dd>" + esc(doc.hitos) + "</dd>" : "") +
+          (doc.garantia ? "<dt>Garantía</dt><dd>" + esc(doc.garantia) + "</dd>" : "") +
+          "<dt>Validez de la oferta</dt><dd>" + esc(doc.validez) + " días corridos desde la fecha de emisión</dd>" +
+        "</dl></section>";
+    }
+
+    if (doc.secciones.anexo) {
+      html += '<div class="nota"><b>Detalle técnico.</b> Las partidas, cubicaciones y precios unitarios se especifican en el Presupuesto N° ' + esc(t.id) + ', que se adjunta y forma parte integral de esta propuesta.</div>';
+    }
+
+    if (doc.secciones.firmas) {
+      html += '<div class="firmas">' +
+        "<div>" + renderBloqueFirmaCorporativa(r, { sinPie: !0 }) + "</div>" +
+        '<div class="firma-cli"><div class="firma-line"><b>Aceptación de la oferta</b><span>' + esc(nombreCliente) + " — nombre, RUT y firma</span></div></div>" +
+      "</div>" +
+      '<div class="pie">Documento generado por Enlace Constructor Pro · ' + esc(corp.nombreComercial || "") + " · " + esc(new Date().toLocaleDateString("es-CL")) + "</div>";
+    }
+
+    html += "</body></html>";
+    return html;
+  }
+
+  function abrirCotizacionFormal(t, i, r, doc) {
+    var n = window.open("", "_blank");
+    if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
+    (n.document.write(htmlCotizacionFormal(t, i, r, doc)), n.document.close());
+  }
+
+  function CotizacionFormalEditor({ budget: t, client: i, cfg: r, onSave: n, setToast: l, onClose: onCloseProps, inline }) {
+    const [doc, setDoc] = V(function () { return normalizarCotizacionFormal(t, i, r); });
+    const [undoStack, setUndoStack] = V([]);
+    const [redoStack, setRedoStack] = V([]);
+
+    var registrarHistorial = function (actual) {
+      var str = JSON.stringify(actual);
+      setUndoStack(function (prev) {
+        if (prev.length > 0 && prev[prev.length - 1] === str) return prev;
+        return prev.concat([str]);
+      });
+      setRedoStack([]);
+    };
+
+    var realizarDeshacer = function () {
+      if (undoStack.length === 0) return;
+      var prevStr = undoStack[undoStack.length - 1];
+      setUndoStack(function (prev) { return prev.slice(0, -1); });
+      setRedoStack(function (prev) { return prev.concat([JSON.stringify(doc)]); });
+      setDoc(JSON.parse(prevStr));
+    };
+
+    var realizarRehacer = function () {
+      if (redoStack.length === 0) return;
+      var nextStr = redoStack[redoStack.length - 1];
+      setRedoStack(function (prev) { return prev.slice(0, -1); });
+      setUndoStack(function (prev) { return prev.concat([JSON.stringify(doc)]); });
+      setDoc(JSON.parse(nextStr));
+    };
+
+    var cambiar = function (campo, valor) {
+      registrarHistorial(doc);
+      setDoc(function (actual) { return Object.assign({}, actual, { [campo]: valor, estado: "Borrador", _estadoDocumento: "borrador" }); });
+    };
+
+    var cambiarSeccion = function (seccion, valor) {
+      registrarHistorial(doc);
+      setDoc(function (actual) {
+        var sec = Object.assign({}, actual.secciones, { [seccion]: valor });
+        return Object.assign({}, actual, { secciones: sec, estado: "Borrador", _estadoDocumento: "borrador" });
+      });
+    };
+
+    var restaurarSugerencias = function () {
+      registrarHistorial(doc);
+      setDoc(normalizarCotizacionFormal(t, i, r));
+      l("✅ Sugerencias restauradas");
+    };
+
+    var guardar = function () {
+      var salida = Object.assign({}, doc, { estado: "Guardado", _estadoDocumento: "guardado", actualizadoEn: new Date().toISOString() });
+      setDoc(salida);
+      n(salida);
+      l("✅ Propuesta formal guardada");
+    };
+
+    var money = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+
+    var inp = { width: "100%", padding: 6, fontSize: 12, borderRadius: 4, border: "1px solid " + a.border, background: a.bg, color: a.text };
+    var labelStyle = { display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: a.muted, marginBottom: 10 };
+    var cardStyle = { background: a.card, padding: 12, borderRadius: 8, border: "1px solid " + a.border, marginBottom: 12 };
+
+    var itemInput = function (label, campo, type) {
+      return e.jsxs("label", { style: labelStyle, children: [
+        label,
+        e.jsx("input", { type: type || "text", value: doc[campo] == null ? "" : doc[campo], onChange: function (ev) { cambiar(campo, ev.target.value); }, style: inp })
+      ] });
+    };
+
+    var itemTextarea = function (label, campo, placeholder, defVal) {
+      return e.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 4, marginBottom: 12 }, children: [
+        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+          e.jsx("span", { style: { fontSize: 11, color: a.muted, fontWeight: "bold" }, children: label }),
+          e.jsx("button", {
+            onClick: function () { cambiar(campo, defVal); },
+            style: { background: "none", border: "none", color: a.accent, cursor: "pointer", fontSize: 10, textDecoration: "underline" },
+            children: "Restaurar sugerido"
+          })
+        ] }),
+        e.jsx("textarea", { value: doc[campo] || "", placeholder: placeholder, onChange: function (ev) { cambiar(campo, ev.target.value); }, rows: 4, style: Object.assign({}, c.inp, { display: "block", width: "100%" }) })
+      ] });
+    };
+
+    var defCarta = normalizarCartaCliente(t, i, r);
+    var defResumen = normalizarResumenEjecutivo(t, r);
+    var defContrato = normalizarContratoObra(t, i, r);
+    var defPresentacion = defCarta.cuerpo || defCarta.introduccion || "";
+    var defResumenEjecutivo = textoListaCotizacion(defResumen.observaciones);
+    var defIncluye = textoListaCotizacion(defResumen.incluye);
+    var defExcluye = textoListaCotizacion(defResumen.noIncluye);
+    var defPlazo = defContrato.plazoNumero || "";
+    var defPlazoUnidad = defContrato.plazoUnidad || "días";
+    var defFormaPago = defContrato.formaPago || "";
+    var defHitos = defContrato.hitosPago || "";
+    var defGarantia = defContrato.garantiaNumero ? String(defContrato.garantiaNumero) + " " + (defContrato.garantiaUnidad || "días corridos") : "";
+
+    var editorContainer = e.jsxs("div", {
+      style: {
+        background: inline ? "transparent" : a.bg,
+        border: inline ? "none" : `1px solid ${a.border}`,
+        borderRadius: inline ? 0 : 16,
+        width: "100%",
+        maxWidth: inline ? "none" : 1100,
+        height: inline ? "auto" : "90vh",
+        display: "flex",
+        flexDirection: "column",
+        color: a.text
+      },
+      children: [
+          e.jsxs("div", {
+            style: {
+              padding: "12px 18px",
+              borderBottom: "1px solid " + a.border,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              background: a.sb
+            },
+            children: [
+              e.jsxs("div", { children: [
+                e.jsx("strong", { style: { fontSize: 14 }, children: "📄 Propuesta Comercial / Cotización Formal" }),
+                e.jsx("div", { style: { fontSize: 11, color: a.muted }, children: "Propuesta comercial unificada que unifica carta de presentación, resumen ejecutivo, contrato y presupuesto." })
+              ] }),
+              e.jsxs("div", { style: { display: "flex", gap: 6, alignItems: "center" }, children: [
+                e.jsx("button", { onClick: realizarDeshacer, disabled: undoStack.length === 0, style: Object.assign({}, c.btn("s"), { opacity: undoStack.length === 0 ? 0.5 : 1, cursor: undoStack.length === 0 ? "not-allowed" : "pointer" }), children: "↩ Deshacer" }),
+                e.jsx("button", { onClick: realizarRehacer, disabled: redoStack.length === 0, style: Object.assign({}, c.btn("s"), { opacity: redoStack.length === 0 ? 0.5 : 1, cursor: redoStack.length === 0 ? "not-allowed" : "pointer" }), children: "↪ Rehacer" }),
+                e.jsx("button", { style: c.btn("p"), onClick: guardar, children: "💾 Guardar" }),
+                e.jsx("button", { style: c.btn("s"), onClick: restaurarSugerencias, children: "↻ Restaurar sugerencias" }),
+                e.jsx("button", { style: c.btn("p"), onClick: function () { abrirCotizacionFormal(t, i, r, doc); }, children: "Vista previa / PDF" }),
+                e.jsx("button", { style: c.btn("s"), onClick: onCloseProps, children: "Cerrar" })
+              ] })
+            ]
+          }),
+          e.jsxs("div", {
+            style: { display: "flex", flex: 1, overflow: "hidden" },
+            children: [
+              e.jsxs("div", {
+                style: { width: 340, borderRight: "1px solid " + a.border, padding: 14, overflowY: "auto", background: a.card },
+                children: [
+                  e.jsx("div", { style: { fontWeight: "bold", fontSize: 12, marginBottom: 8, color: a.accent }, children: "1. Secciones del documento" }),
+                  e.jsxs("div", { style: cardStyle, children: [
+                    [["portada", "Portada del documento"], ["presentacion", "1. Presentación comercial"], ["resumen", "2. Resumen ejecutivo"], ["alcance", "3. Alcance por capítulos"], ["inversion", "4. Resumen de inversión"], ["incluyeExcluye", "5. Inclusiones/Exclusiones"], ["condiciones", "6. Condiciones y Plazo"], ["anexo", "Nota de anexo de partidas"], ["firmas", "Bloque de firmas corporativas"]].map(function (sec) {
+                      return e.jsxs("label", { style: { display: "flex", gap: 8, alignItems: "center", fontSize: 12, marginBottom: 6, cursor: "pointer" }, children: [
+                        e.jsx("input", { type: "checkbox", checked: !!doc.secciones[sec[0]], onChange: function (ev) { cambiarSeccion(sec[0], ev.target.checked); } }),
+                        sec[1]
+                      ] }, sec[0]);
+                    })
+                  ] }),
+                  e.jsx("div", { style: { fontWeight: "bold", fontSize: 12, marginBottom: 8, color: a.accent }, children: "2. Datos de control" }),
+                  e.jsxs("div", { style: cardStyle, children: [
+                    itemInput("Número de cotización", "numero"),
+                    itemInput("Fecha de cotización", "fecha", "date"),
+                    itemInput("Días de validez de oferta", "validez", "number")
+                  ] })
+                ]
+              }),
+              e.jsxs("div", {
+                style: { flex: 1, padding: 18, overflowY: "auto" },
+                children: [
+                  doc.secciones.presentacion && itemTextarea("Presentación (Carta de Presentación)", "presentacion", "Carta de presentación comercial...", defPresentacion),
+                  doc.secciones.resumen && itemTextarea("Resumen Ejecutivo", "resumenEjecutivo", "Breve resumen ejecutivo...", defResumenEjecutivo),
+                  doc.secciones.incluyeExcluye && e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }, children: [
+                    itemTextarea("Qué incluye", "incluye", "Ítems incluidos en el proyecto...", defIncluye),
+                    itemTextarea("Qué NO incluye (Exclusiones)", "excluye", "Ítems excluidos del proyecto...", defExcluye)
+                  ] }),
+                  doc.secciones.condiciones && e.jsxs("div", { style: cardStyle, children: [
+                    e.jsx("div", { style: { fontWeight: "bold", fontSize: 12, marginBottom: 8 }, children: "Condiciones comerciales" }),
+                    e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 120px", gap: 8 }, children: [
+                      itemInput("Plazo ejecución", "plazo"),
+                      itemInput("Unidad de plazo", "plazoUnidad")
+                    ] }),
+                    itemInput("Forma de pago", "formaPago"),
+                    itemInput("Plan de hitos / pagos", "hitos"),
+                    itemInput("Garantía comercial", "garantia")
+                  ] })
+                ]
+              })
+            ]
+          })
+        ]
+      });
+
+      if (inline) {
+        return editorContainer;
+      }
+      return e.jsx("div", {
+        style: {
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0,0,0,.85)",
+          zIndex: 7e3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 16,
+        },
+        children: editorContainer
+      });
+  }
+
+  function normalizarCartaCliente(presupuesto, cliente, cfg, entrada) {
+    presupuesto = presupuesto || {}; cliente = cliente || {}; cfg = cfg || {};
+    var previo = entrada || obtenerDocumentoObraConfig(presupuesto, "cartaCliente");
+    if (previo) return Object.assign({ estado: "Borrador", _estadoDocumento: "borrador", actualizadoEn: "" }, previo);
+    var totales = Ee(presupuesto.items || [], cfg, presupuesto.descuento, presupuesto.modoCosteo, presupuesto.sinIva) || {};
+    var plazo = presupuesto.plazoEjecucion || cfg.plazoEjecucion || 30;
+    var anticipoPct = Math.round(((cfg && cfg.anticipo) || 0.6) * 100);
+    var corp = obtenerDatosCorporativos(cfg);
+    var presentacionCfg = String(cfg.empresaPresentacion || "").trim();
+    var presentacionTrimada = presentacionCfg.length > 700 ? presentacionCfg.substring(0, 700).replace(/\s+\S*$/, "") + "…" : presentacionCfg;
+    var tieneIVA = !presupuesto.sinIva;
+    return {
+      fecha: new Date().toISOString().split("T")[0],
+      destinatario: cliente.contacto || cliente.nombre || "",
+      empresaCliente: cliente.empresa || cliente.nombre || "",
+      saludo: "Estimado/a",
+      asunto: "Presentación de propuesta — " + (presupuesto.descripcion || "su proyecto"),
+      introduccion: "Por medio de la presente, " + (corp.nombreComercial || "nuestra empresa") + " tiene el agrado de presentar nuestra propuesta técnica y económica para la ejecución de los trabajos correspondientes a " + (presupuesto.descripcion || "los trabajos solicitados") + ". La propuesta ha sido elaborada tomando en cuenta el alcance, las especificaciones técnicas y los plazos requeridos para el proyecto.",
+      presentacionEmpresa: presentacionTrimada,
+      resumenProyecto: "El detalle de ítems y capítulos se incluye en el presupuesto adjunto. El monto total" + (tieneIVA ? " incluye IVA" : " es neto, sin IVA") + " y considera un plazo de ejecución de " + plazo + " días a partir de la fecha de inicio de los trabajos.",
+      vigencia: "Esta propuesta tiene una vigencia de 30 días a partir de la fecha de emisión.",
+      monto: Math.round(Number(totales.total) || 0),
+      anticipoPct: anticipoPct,
+      plazoNumero: plazo, plazoUnidad: "días",
+      cierre: "Quedamos a su entera disposición para resolver cualquier consulta, aclarar los alcances de la propuesta o coordinar una visita a terreno previo al inicio de los trabajos. Agradecemos la confianza depositada en nosotros y esperamos poder contribuir al éxito de su proyecto.",
+      firmante: corp.representanteLegal || corp.nombreComercial || "", cargoFirmante: corp.cargoRepresentante || "Representante Legal",
+      contacto: [corp.telefono, corp.correo].filter(Boolean).join(" · "),
+      estado: "Borrador", _estadoDocumento: "borrador", actualizadoEn: "",
+    };
+  }
+  function htmlCartaCliente(presupuesto, cliente, cfg, entrada) {
+    presupuesto = presupuesto || {}; cliente = cliente || {}; cfg = cfg || {};
+    var carta = normalizarCartaCliente(presupuesto, cliente, cfg, entrada);
+    var capitulos = resumenCapitulosContrato(presupuesto);
+    var corp = obtenerDatosCorporativos(cfg);
+    var esc = function (v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+    var mon = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    var accent = cfg.accentColor || "#f5a020", empresa = corp.nombreComercial || "Empresa", logo = cfg.logoCliente || cfg.logo || "";
+    var logoHtml = logo ? '<img src="' + esc(logo) + '" style="height:70px;object-fit:contain;margin-bottom:8px;display:block"/>' : "";
+    var filasCap = capitulos.map(function (cap) { return '<tr><td>' + esc(cap.nombre) + '</td><td class="n">' + mon(cap.subtotal) + '</td></tr>'; }).join("");
+    var anticipoMonto = Math.round(carta.monto * (Number(carta.anticipoPct) || 0) / 100);
+    return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Carta de Presentación</title><style>' +
+    '*{margin:0;padding:0;box-sizing:border-box}' +
+    'body{font-family:Arial,Helvetica,sans-serif;color:#1a1a1a;background:#fff;padding:30px 52px 24px;max-width:820px;margin:0 auto;font-size:13px;line-height:1.65}' +
+    '.np{display:block;margin-bottom:22px;padding:8px 22px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:5px;font-size:13px;font-family:Arial,sans-serif;letter-spacing:.02em}' +
+    '.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:14px;border-bottom:3px solid ' + accent + '}' +
+    '.header-right{text-align:right;font-size:12px;color:#555;line-height:1.7}' +
+    '.empresa-nombre{font-size:22px;font-weight:700;color:#1a3060;letter-spacing:-.01em;margin-top:6px}' +
+    '.empresa-sub{font-size:11.5px;color:#666;margin-top:3px}' +
+    '.asunto{font-size:10.5px;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}' +
+    '.saludo{margin-bottom:16px;font-size:13px}' +
+    '.intro{margin-bottom:13px;font-size:13px;line-height:1.7}' +
+    '.empresa-block{background:#f5f8ff;border-left:4px solid #1a3060;padding:14px 18px;border-radius:0 8px 8px 0;margin-bottom:16px;font-size:12.5px;line-height:1.75;color:#1e2a45}' +
+    '.empresa-block-title{font-size:10px;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:#1a3060;margin-bottom:8px}' +
+    '.alcance{background:#f9fafb;border-left:4px solid ' + accent + ';padding:14px 18px;border-radius:0 8px 8px 0;margin-bottom:16px}' +
+    '.alcance-title{font-size:10px;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:#555;margin-bottom:10px}' +
+    'table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px}' +
+    'td{padding:6px 8px;border-bottom:1px solid #e5e7eb}.n{text-align:right}.tr-total td{font-weight:700;border-top:2px solid #d1d5db;border-bottom:none;padding-top:8px}' +
+    '.montos{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:4px;padding-top:10px;border-top:1px solid #e5e7eb}' +
+    '.monto-item{}.monto-label{font-size:10.5px;color:#888;margin-bottom:3px}.monto-valor{font-weight:700;color:#1a3060;font-size:15px}.monto-valor.accent{color:' + accent + ';font-size:20px}' +
+    '.resumen{margin-bottom:13px;font-size:12.5px;line-height:1.7;color:#333}' +
+    '.vigencia{font-size:11.5px;color:#888;margin-bottom:18px;font-style:italic}' +
+    '.cierre{margin-bottom:16px;font-size:13px;line-height:1.7}' +
+    '.atentamente{margin-bottom:16px;font-size:13px}' +
+    '@media print{.np{display:none}}' +
+    '</style></head><body>' +
+    '<button class="np" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>' +
+    '<div class="header">' +
+      '<div>' + logoHtml +
+        '<div class="empresa-nombre">' + esc(empresa) + '</div>' +
+        '<div class="empresa-sub">' + (corp.rut ? 'RUT: ' + esc(corp.rut) + (cfg.ciudad ? ' · ' : '') : '') + esc(cfg.ciudad || '') + '</div>' +
+      '</div>' +
+      '<div class="header-right">' +
+        '<div>' + esc(new Date(carta.fecha || Date.now()).toLocaleDateString("es-CL", {day:"numeric",month:"long",year:"numeric"})) + '</div>' +
+        '<div style="margin-top:3px">Presupuesto N° <strong>' + esc(presupuesto.id || "") + '</strong></div>' +
+      '</div>' +
+    '</div>' +
+    '<p class="asunto">' + esc(carta.asunto) + '</p>' +
+    '<p class="saludo">' + esc(carta.saludo) + ' <strong>' + esc(carta.destinatario || "Cliente") + '</strong>' + (carta.empresaCliente && carta.empresaCliente !== carta.destinatario ? ' (' + esc(carta.empresaCliente) + ')' : '') + ',</p>' +
+    '<p class="intro">' + esc(carta.introduccion).replace(/\n/g,"<br>") + '</p>' +
+    (carta.presentacionEmpresa ? '<p class="intro">' + esc(carta.presentacionEmpresa).replace(/\n/g,"<br>") + '</p>' : '') +
+    '<div class="alcance"><div class="alcance-title">Alcance de la propuesta</div>' +
+    '<table>' + filasCap + '</table>' +
+    '<div class="montos">' +
+      '<div class="monto-item"><div class="monto-label">Monto total:</div><div class="monto-valor accent">' + mon(carta.monto) + '</div></div>' +
+      '<div class="monto-item"><div class="monto-label">Anticipo requerido:</div><div class="monto-valor">' + mon(anticipoMonto) + ' (' + esc(carta.anticipoPct) + '%)</div></div>' +
+      '<div class="monto-item"><div class="monto-label">Plazo de ejecución:</div><div class="monto-valor">' + esc(carta.plazoNumero) + ' ' + esc(carta.plazoUnidad) + '</div></div>' +
+    '</div></div>' +
+    '<p class="resumen">' + esc(carta.resumenProyecto).replace(/\n/g,"<br>") + '</p>' +
+    (carta.vigencia ? '<p class="vigencia">' + esc(carta.vigencia) + '</p>' : '') +
+    '<p class="cierre">' + esc(carta.cierre).replace(/\n/g,"<br>") + '</p>' +
+    '<p class="atentamente">Atentamente,</p>' +
+    renderBloqueFirmaCorporativa(cfg, { firmante: carta.firmante, cargoFirmante: carta.cargoFirmante, contacto: carta.contacto }) + '</body></html>';
+  }
+  function abrirCartaCliente(presupuesto, cliente, cfg, entrada) {
+    var n = window.open("", "_blank");
+    if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
+    (n.document.write(htmlCartaCliente(presupuesto, cliente, cfg, entrada)), n.document.close());
+  }
+  async function exportarCartaClienteDocx(presupuesto, cliente, cfg, entrada, setToast) {
+    try {
+      if (setToast) setToast("⏳ Preparando documento Word...");
+      var D = await import("./vendor/docx-8.5.0.mjs");
+      if (!D || !D.Document || !D.Packer) throw new Error("La biblioteca DOCX local no quedó disponible.");
+      var carta = normalizarCartaCliente(presupuesto, cliente, cfg, entrada), capitulos = resumenCapitulosContrato(presupuesto);
+      var corp = obtenerDatosCorporativos(cfg);
+      var Paragraph = D.Paragraph, TextRun = D.TextRun, Table = D.Table, TableRow = D.TableRow, TableCell = D.TableCell, WidthType = D.WidthType, AlignmentType = D.AlignmentType, Header = D.Header, Footer = D.Footer;
+      var par = function (texto, opciones) { opciones = opciones || {}; var lineas = String(texto == null ? "" : texto).split("\n"); return new Paragraph({ alignment: opciones.alignment, spacing: { after: opciones.after == null ? 160 : opciones.after }, children: lineas.map(function (linea, indice) { return new TextRun({ text: linea, break: indice ? 1 : void 0, bold: !!opciones.bold, size: opciones.size, color: opciones.color }); }) }); };
+      var celda = function (texto, bold, color) { return new TableCell({ shading: color ? { fill: color } : void 0, children: [par(texto, { bold: bold, color: color ? "FFFFFF" : void 0, after: 0 })] }); };
+      var mon = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+      var tablaCapitulos = new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [new TableRow({ tableHeader: !0, children: [celda("Capítulo", !0, "1A3060"), celda("Subtotal", !0, "1A3060")] })].concat(capitulos.map(function (cap) { return new TableRow({ children: [celda(cap.nombre), celda(mon(cap.subtotal))] }); })) });
+      var anticipoMonto = Math.round(carta.monto * (Number(carta.anticipoPct) || 0) / 100);
+      var contenido = [
+        par(corp.nombreComercial || "Empresa", { bold: !0, color: "1A3060", size: 30, alignment: AlignmentType.RIGHT }),
+        par(new Date(carta.fecha || Date.now()).toLocaleDateString("es-CL"), { alignment: AlignmentType.RIGHT, color: "64748B" }),
+        par(carta.asunto, { bold: !0, color: "64748B" }),
+        par(carta.saludo + " " + (carta.destinatario || "Cliente") + (carta.empresaCliente ? " (" + carta.empresaCliente + ")" : "") + ","),
+        par(carta.introduccion),
+      ];
+      if (carta.presentacionEmpresa) contenido.push(par(carta.presentacionEmpresa));
+      contenido.push(par(carta.resumenProyecto));
+      contenido.push(par("ALCANCE POR CAPÍTULOS", { bold: !0, color: "1A3060", after: 80 }));
+      contenido.push(tablaCapitulos);
+      contenido.push(par("Monto total: " + mon(carta.monto) + "\nAnticipo requerido: " + mon(anticipoMonto) + " (" + carta.anticipoPct + "%)\nPlazo de ejecución: " + carta.plazoNumero + " " + carta.plazoUnidad, { bold: !0, color: "1A3060" }));
+      contenido.push(par(carta.cierre));
+      contenido.push(par("Atentamente,", { after: 400 }));
+      contenido.push(par(carta.firmante, { bold: !0, color: "1A3060" }));
+      contenido.push(par(carta.cargoFirmante + " — " + (corp.nombreComercial || "") + (carta.contacto ? "\n" + carta.contacto : "")));
+      var documento = new D.Document({ sections: [{ properties: {}, headers: { default: new Header({ children: [par(corp.nombreComercial || "Empresa", { bold: !0, color: "1A3060", alignment: AlignmentType.RIGHT })] }) }, footers: { default: new Footer({ children: [par("Carta para cliente/mandante · Presupuesto N.° " + presupuesto.id + " · Enlace Constructor Pro", { color: "94A3B8", alignment: AlignmentType.CENTER })] }) }, children: contenido }] });
+      var blob = await D.Packer.toBlob(documento), enlace = document.createElement("a"), url = URL.createObjectURL(blob);
+      var limpiar = function (valor) { return String(valor || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9_-]+/g, "_").replace(/^_+|_+$/g, ""); };
+      enlace.href = url; enlace.download = "Carta_" + limpiar(presupuesto.id) + "_" + limpiar(carta.destinatario || "cliente") + ".docx"; document.body.appendChild(enlace); enlace.click(); enlace.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      if (setToast) setToast("✅ Word editable generado");
+    } catch (error) { if (setToast) setToast("❌ No se pudo generar Word: " + (error && error.message ? error.message : "error desconocido")); }
+  }
+  function sintesisCapituloPorDefecto(cap) {
+    var partidas = cap.partidas || [];
+    var n = partidas.length;
+    if (n === 0) return "Sin partidas registradas para este capítulo.";
+    // Get the first 3 partidas to describe the main scope naturally
+    var nombres = partidas.slice(0, 3).map(function (p) {
+      return String(p.nombre || "").toLowerCase().trim();
+    }).filter(Boolean);
+    if (nombres.length === 0) {
+      return "Contempla la ejecución de trabajos correspondientes a " + cap.nombre.toLowerCase() + ".";
+    }
+    var listaNombres = nombres.join(", ").replace(/,([^,]*)$/, " y$1");
+    return "Contempla la ejecución de trabajos de " + cap.nombre.toLowerCase() + ", principalmente en labores de " + listaNombres + ", incluyendo mano de obra calificada, herramientas y control de calidad.";
+  }
+  function normalizarResumenEjecutivo(presupuesto, cfg, entrada) {
+    presupuesto = presupuesto || {}; cfg = cfg || {};
+    var previo = entrada || obtenerDocumentoObraConfig(presupuesto, "resumenEjecutivo");
+    if (previo) {
+      var res = Object.assign({ estado: "Borrador", _estadoDocumento: "borrador", actualizadoEn: "" }, previo, { ventajas: Object.assign({ materialesPrimeraCalidad: !1, cuadrillaPropia: !1, sinSubcontratos: !1, garantia90Dias: !1, plazoGarantizado: !1, experienciaComprobada: !1 }, previo.ventajas || {}) });
+      if (presupuesto.plazoEjecucion) {
+        res.plazoNumero = presupuesto.plazoEjecucion;
+      }
+      return res;
+    }
+    var estructura = estructuraCapitulosObra(presupuesto), sintesis = {};
+    estructura.forEach(function (cap) { sintesis[cap.id] = sintesisCapituloPorDefecto(cap); });
+    var anticipoPct = Math.round(((cfg && cfg.anticipo) || 0.6) * 100);
+    return {
+      plazoNumero: presupuesto.plazoEjecucion || cfg.plazoEjecucion || 30, plazoUnidad: "días",
+      condicionesPrincipales: "Anticipo del " + anticipoPct + "% para el inicio de los trabajos y adquisición de materiales. Pagos posteriores mediante estados de pago quincenales o mensuales según avance de partidas aprobadas por el mandante.",
+      incluye: [
+        "Suministro de materiales y herramientas para todas las partidas presupuestadas.",
+        "Mano de obra calificada y supervisión técnica en terreno.",
+        "Elementos de protección personal (EPP) y medidas de seguridad según normativa.",
+        "Limpieza periódica de la zona de trabajo y retiro de escombros resultantes."
+      ],
+      noIncluye: [
+        "Derechos municipales, permisos de edificación o trámites de regularización.",
+        "Modificaciones de diseño o partidas adicionales no descritas en la propuesta.",
+        "Reparación de vicios ocultos o daños preexistentes no detectados en la visita técnica.",
+        "Conexiones definitivas a empalmes de redes de servicios básicos."
+      ],
+      sintesisPorCapitulo: sintesis,
+      ventajas: { materialesPrimeraCalidad: !1, cuadrillaPropia: !1, sinSubcontratos: !1, garantia90Dias: !1, plazoGarantizado: !1, experienciaComprobada: !1 },
+      observaciones: "", estado: "Borrador", _estadoDocumento: "borrador", actualizadoEn: "",
+    };
+  }
+  var VENTAJAS_RESUMEN_EJECUTIVO = [
+    ["materialesPrimeraCalidad", "Materiales de primera calidad"],
+    ["cuadrillaPropia", "Cuadrilla propia"],
+    ["sinSubcontratos", "Sin subcontratos"],
+    ["garantia90Dias", "Garantía de 90 días"],
+    ["plazoGarantizado", "Plazo garantizado"],
+    ["experienciaComprobada", "Experiencia comprobada"],
+  ];
+  function htmlResumenEjecutivo(presupuesto, cliente, cfg, entrada) {
+    presupuesto = presupuesto || {}; cliente = cliente || {}; cfg = cfg || {};
+    var resumen = normalizarResumenEjecutivo(presupuesto, cfg, entrada);
+    var estructura = estructuraCapitulosObra(presupuesto);
+    var totales = Ee(presupuesto.items || [], cfg, presupuesto.descuento, presupuesto.modoCosteo, presupuesto.sinIva) || {};
+    var corp = obtenerDatosCorporativos(cfg);
+    var esc = function (v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+    var mon = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    var accent = cfg.accentColor || "#f5a020", empresa = corp.nombreComercial || "Empresa", logo = cfg.logoCliente || cfg.logo || "";
+    var filasCap = estructura.map(function (cap) { var sub = cap.partidas.reduce(function (s0, p) { return s0 + p.valorContratado; }, 0); return '<div class="cap"><div class="cap-h"><b>' + esc((cap.codigo ? cap.codigo + " — " : "") + cap.nombre) + '</b><span>' + mon(sub) + '</span></div><p>' + esc(resumen.sintesisPorCapitulo[cap.id] || sintesisCapituloPorDefecto(cap)) + '</p></div>'; }).join("");
+    var listaHtml = function (arr) { return (arr || []).filter(Boolean).map(function (x) { return "<li>" + esc(x) + "</li>"; }).join(""); };
+    var ventajasConfirmadas = VENTAJAS_RESUMEN_EJECUTIVO.filter(function (v) { return resumen.ventajas && resumen.ventajas[v[0]]; });
+    var css = '*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#172033;margin:0;padding:30px;max-width:850px;margin:0 auto}.np{padding:8px 18px;background:#1a3060;color:#fff;border:0;border-radius:6px;margin-bottom:16px;cursor:pointer}.head{display:flex;justify-content:space-between;border-bottom:4px solid ' + accent + ';padding-bottom:12px;margin-bottom:16px}.head img{max-height:60px;max-width:180px}h1{color:#1a3060;font-size:22px;margin:4px 0}.title{text-align:right}.title strong{font-size:26px;color:' + accent + '}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;background:#f3f6fa;border-left:4px solid ' + accent + ';padding:12px;margin-bottom:16px;font-size:12px}.meta b{color:#1a3060}.inv{background:#1a3060;color:#fff;padding:16px;border-radius:8px;text-align:center;margin-bottom:16px}.inv .m{font-size:28px;font-weight:800;color:' + accent + '}h2{font-size:13px;color:#1a3060;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #dbe3ec;padding-bottom:6px;margin:18px 0 10px}.cap{border-left:3px solid ' + accent + ';padding:8px 12px;margin-bottom:8px;background:#f8fafc}.cap-h{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}.cap p{font-size:12px;color:#42536b;margin:0}.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}.cols h3{font-size:12px;margin:0 0 6px}.inc-list,.exc-list{list-style:none;padding:0;margin:0}.inc-list li,.exc-list li{position:relative;padding-left:18px;margin-bottom:7px;font-size:12.5px;line-height:1.5;color:#334155}.inc-list li::before{content:"✓";position:absolute;left:0;color:#10b981;font-weight:700}.exc-list li::before{content:"–";position:absolute;left:0;color:#94a3b8;font-weight:700}.ventajas{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}.pill{background:#fff4df;border:1px solid ' + accent + ';color:#704400;padding:5px 12px;border-radius:999px;font-size:11px;font-weight:700}.obs{white-space:pre-wrap;margin-top:10px;padding:10px;background:#f8fafc;border-left:4px solid #1a3060;font-size:12px}.foot{text-align:center;color:#718096;border-top:1px solid #ddd;margin-top:20px;padding-top:8px;font-size:9px}@media print{.np{display:none}}';
+    return '<!doctype html><html><head><meta charset="utf-8"><title>Resumen Ejecutivo</title><style>' + css + '</style></head><body><button class="np" onclick="print()">🖨 Imprimir / Guardar PDF</button><div class="head"><div>' + (logo ? '<img src="' + esc(logo) + '">' : "") + '<h1>' + esc(empresa) + '</h1></div><div class="title"><div>RESUMEN EJECUTIVO</div><strong>N° ' + esc(presupuesto.id || "") + '</strong></div></div><div class="meta"><div><b>Cliente:</b><br>' + esc((cliente && cliente.nombre) || "Sin cliente") + '</div><div><b>Proyecto:</b><br>' + esc(presupuesto.descripcion || "") + '</div><div><b>Plazo:</b><br>' + esc(resumen.plazoNumero) + ' ' + esc(resumen.plazoUnidad) + '</div></div>' + (() => {
+      var anticipoPctVal = Math.round(((cfg && cfg.anticipo) || 0.6) * 100);
+      var anticipoMontoVal = Math.round(Number(totales.total || 0) * (anticipoPctVal / 100));
+      return '<div class="inv"><div>INVERSIÓN TOTAL</div><div class="m">' + mon(totales.total) + '</div><div style="font-size:12px;margin-top:6px;opacity:0.85;font-weight:bold;letter-spacing:0.04em">ANTICIPO SUGERIDO: ' + mon(anticipoMontoVal) + ' (' + anticipoPctVal + '%)</div></div>';
+    })() + '<h2>Alcance principal por capítulos</h2>' + filasCap + '<div class="cols"><div><h2>Qué incluye</h2><ul class="inc-list">' + (listaHtml(resumen.incluye) || '<li style="color:#94a3b8;padding-left:0">Sin ítems agregados</li>').replace(/<li>/g, '<li>') + '</ul></div><div><h2>Qué no incluye</h2><ul class="exc-list">' + (listaHtml(resumen.noIncluye) || '<li style="color:#94a3b8;padding-left:0">Sin ítems agregados</li>').replace(/<li>/g, '<li>') + '</ul></div></div>' + (resumen.condicionesPrincipales ? '<h2>Condiciones principales</h2><div class="obs">' + esc(resumen.condicionesPrincipales) + '</div>' : "") + (ventajasConfirmadas.length ? '<h2>Ventajas</h2><div class="ventajas">' + ventajasConfirmadas.map(function (v) { return '<span class="pill">' + esc(v[1]) + '</span>'; }).join("") + '</div>' : "") + (resumen.observaciones ? '<h2>Observaciones</h2><div class="obs">' + esc(resumen.observaciones) + '</div>' : "") + '' + renderBloqueFirmaCorporativa(cfg) + '</body></html>';
+  }
+  function abrirResumenEjecutivo(presupuesto, cliente, cfg, entrada) {
+    var n = window.open("", "_blank");
+    if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
+    (n.document.write(htmlResumenEjecutivo(presupuesto, cliente, cfg, entrada)), n.document.close());
+  }
+  async function exportarResumenEjecutivoDocx(presupuesto, cliente, cfg, entrada, setToast) {
+    try {
+      if (setToast) setToast("⏳ Preparando documento Word...");
+      var D = await import("./vendor/docx-8.5.0.mjs");
+      if (!D || !D.Document || !D.Packer) throw new Error("La biblioteca DOCX local no quedó disponible.");
+      var resumen = normalizarResumenEjecutivo(presupuesto, cfg, entrada), estructura = estructuraCapitulosObra(presupuesto);
+      var totales = Ee(presupuesto.items || [], cfg, presupuesto.descuento, presupuesto.modoCosteo, presupuesto.sinIva) || {};
+      var corp = obtenerDatosCorporativos(cfg);
+      var Paragraph = D.Paragraph, TextRun = D.TextRun, AlignmentType = D.AlignmentType, Header = D.Header, Footer = D.Footer;
+      var par = function (texto, opciones) { opciones = opciones || {}; var lineas = String(texto == null ? "" : texto).split("\n"); return new Paragraph({ alignment: opciones.alignment, spacing: { after: opciones.after == null ? 160 : opciones.after }, bullet: opciones.bullet ? { level: 0 } : void 0, children: lineas.map(function (linea, indice) { return new TextRun({ text: linea, break: indice ? 1 : void 0, bold: !!opciones.bold, size: opciones.size, color: opciones.color }); }) }); };
+      var mon = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+      var ventajasConfirmadas = VENTAJAS_RESUMEN_EJECUTIVO.filter(function (v) { return resumen.ventajas && resumen.ventajas[v[0]]; });
+      var contenido = [
+        par("RESUMEN EJECUTIVO", { bold: !0, color: "1A3060", size: 34, alignment: AlignmentType.CENTER }),
+        par("N.° " + presupuesto.id + " · " + (presupuesto.descripcion || ""), { alignment: AlignmentType.CENTER, color: "64748B" }),
+        par("Cliente: " + ((cliente && cliente.nombre) || "Sin cliente") + "\nInversión total: " + mon(totales.total) + "\nPlazo: " + resumen.plazoNumero + " " + resumen.plazoUnidad, { bold: !0, color: "1A3060" }),
+        par("ALCANCE PRINCIPAL POR CAPÍTULOS", { bold: !0, color: "1A3060", after: 80 }),
+      ];
+      estructura.forEach(function (cap) { var sub = cap.partidas.reduce(function (s0, p) { return s0 + p.valorContratado; }, 0); contenido.push(par((cap.codigo ? cap.codigo + " — " : "") + cap.nombre + " (" + mon(sub) + ")", { bold: !0 })); contenido.push(par(resumen.sintesisPorCapitulo[cap.id] || sintesisCapituloPorDefecto(cap))); });
+      contenido.push(par("QUÉ INCLUYE", { bold: !0, color: "1A3060", after: 80 }));
+      (resumen.incluye || []).forEach(function (x) { contenido.push(par(x, { bullet: !0, after: 40 })); });
+      contenido.push(par("QUÉ NO INCLUYE", { bold: !0, color: "1A3060", after: 80 }));
+      (resumen.noIncluye || []).forEach(function (x) { contenido.push(par(x, { bullet: !0, after: 40 })); });
+      if (resumen.condicionesPrincipales) { contenido.push(par("CONDICIONES PRINCIPALES", { bold: !0, color: "1A3060", after: 80 })); contenido.push(par(resumen.condicionesPrincipales)); }
+      if (ventajasConfirmadas.length) { contenido.push(par("VENTAJAS", { bold: !0, color: "1A3060", after: 80 })); ventajasConfirmadas.forEach(function (v) { contenido.push(par(v[1], { bullet: !0, after: 40 })); }); }
+      if (resumen.observaciones) { contenido.push(par("OBSERVACIONES", { bold: !0, color: "1A3060", after: 80 })); contenido.push(par(resumen.observaciones)); }
+      var documento = new D.Document({ sections: [{ properties: {}, headers: { default: new Header({ children: [par(corp.nombreComercial || "Empresa", { bold: !0, color: "1A3060", alignment: AlignmentType.RIGHT })] }) }, footers: { default: new Footer({ children: [par("Resumen Ejecutivo · Presupuesto N.° " + presupuesto.id + " · Enlace Constructor Pro", { color: "94A3B8", alignment: AlignmentType.CENTER })] }) }, children: contenido }] });
+      var blob = await D.Packer.toBlob(documento), enlace = document.createElement("a"), url = URL.createObjectURL(blob);
+      var limpiar = function (valor) { return String(valor || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9_-]+/g, "_").replace(/^_+|_+$/g, ""); };
+      enlace.href = url; enlace.download = "Resumen_Ejecutivo_" + limpiar(presupuesto.id) + ".docx"; document.body.appendChild(enlace); enlace.click(); enlace.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      if (setToast) setToast("✅ Word editable generado");
+    } catch (error) { if (setToast) setToast("❌ No se pudo generar Word: " + (error && error.message ? error.message : "error desconocido")); }
   }
   function Ap({ budget: t, client: i, cfg: r, onClose: n }) {
     const {
@@ -24035,9 +25337,7 @@ ${r.empresa}`;
                               "TOTAL",
                             ]));
                           var ee = $.length,
-                            capsOrdExcel = Array.isArray(s.capitulos)
-                              ? [...s.capitulos].sort((a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0))
-                              : [],
+                            capsOrdExcel = Array.isArray(s.capitulos) ? s.capitulos : [],
                             tt = (() => {
                               var itemsOriginal = obtenerItemsPresupuestoExportables(s.items);
                               if (capsOrdExcel.length === 0) return itemsOriginal;
@@ -24048,10 +25348,7 @@ ${r.empresa}`;
                                       ? !capsOrdExcel.some((c) => c.id === it.capituloId)
                                       : it.capituloId === capId,
                                   )
-                                  .sort(
-                                    (a, b) =>
-                                      (parseFloat(a.ordenDentroCapitulo) || 0) - (parseFloat(b.ordenDentroCapitulo) || 0),
-                                  );
+                                  ;
                               var salidaExcel = [];
                               capsOrdExcel.forEach((cap, capIdx) => {
                                 var itemsCap = porCapExcel(cap.id);
@@ -24525,7 +25822,7 @@ ${r.empresa}`;
                       e.jsx("tbody", {
                         children: ((renderFila) => {
                           var capsOrd = Array.isArray(s.capitulos)
-                            ? [...s.capitulos].sort((a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0))
+                            ? s.capitulos
                             : [];
                           var itemsExportablesPreview = obtenerItemsPresupuestoExportables(s.items);
                           if (capsOrd.length === 0) return itemsExportablesPreview.map((D, k) => renderFila(D, k));
@@ -24535,34 +25832,20 @@ ${r.empresa}`;
                               .filter(({ D }) =>
                                 capId === null ? !capsOrd.some((c) => c.id === D.capituloId) : D.capituloId === capId,
                               )
-                              .sort(
-                                (a, b) =>
-                                  (parseFloat(a.D.ordenDentroCapitulo) || 0) -
-                                  (parseFloat(b.D.ordenDentroCapitulo) || 0),
-                              );
-                          var renderHeader = (cap) =>
-                            e.jsx(
-                              "tr",
-                              {
-                                children: e.jsx("td", {
-                                  colSpan: 6,
-                                  style: { padding: "6px 10px", fontSize: 13, fontWeight: 700, color: "#fff", background: I.header },
-                                  children: cap ? (cap.codigo ? cap.codigo + " — " : "") + (cap.nombre || "Capítulo") : "Sin capítulo",
-                                }),
-                              },
-                              "cap_" + (cap ? cap.id : "sin"),
-                            );
+                              ;
+                          var renderHeader = (cap, filas) =>
+                            e.jsx("tr", { children: e.jsx("td", { colSpan: 6, style: { padding: "6px 10px", fontSize: 13, fontWeight: 700, color: "#fff", background: I.header }, children: e.jsxs("div", { style: { display: "flex", justifyContent: "space-between" }, children: [cap ? (cap.codigo ? cap.codigo + " — " : "") + (cap.nombre || "Capítulo") : "Sin capítulo", "Subtotal: " + ne(Math.round((filas || []).reduce((sum, fila) => sum + calcularLineaPresupuesto(fila.D).totalLinea, 0)))] }) }) }, "cap_" + (cap ? cap.id : "sin"));
                           var salida = [];
                           var filaNum = 0;
                           capsOrd.forEach((cap) => {
                             var items = deGrupo(cap.id);
                             if (!items.length) return;
-                            salida.push(renderHeader(cap));
+                            salida.push(renderHeader(cap, items));
                             items.forEach(({ D }) => salida.push(renderFila(D, filaNum++)));
                           });
                           var sinCap = deGrupo(null);
                           if (sinCap.length) {
-                            salida.push(renderHeader(null));
+                            salida.push(renderHeader(null, sinCap));
                             sinCap.forEach(({ D }) => salida.push(renderFila(D, filaNum++)));
                           }
                           return salida;
@@ -24747,6 +26030,13 @@ ${r.empresa}`;
                       ],
                     }),
                   }),
+                  ((s.notasCliente != null ? s.notasCliente : s.notas || "").trim()) && e.jsxs("div", {
+                    style: { margin: "16px 0", padding: "12px 14px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 7 },
+                    children: [
+                      e.jsx("div", { style: { fontSize: 12, fontWeight: 700, color: I.header, marginBottom: 6 }, children: "OBSERVACIONES DEL PRESUPUESTO" }),
+                      e.jsx("div", { style: { fontSize: 13, lineHeight: 1.55, color: "#475569", whiteSpace: "pre-wrap", overflowWrap: "anywhere" }, children: s.notasCliente != null ? s.notasCliente : s.notas || "" }),
+                    ],
+                  }),
                   e.jsxs("div", {
                     style: {
                       paddingTop: 14,
@@ -24784,10 +26074,6 @@ ${r.empresa}`;
                           ".",
                         ],
                       }),
-                      s.notas &&
-                        e.jsxs("div", {
-                          children: ["• ", e.jsx("em", { children: s.notas })],
-                        }),
                     ],
                   }),
                   g &&
@@ -33623,15 +34909,75 @@ ${r.empresa}`;
       { total: h } = m
         ? Ee(m.items, n, m.descuento, m.modoCosteo, m.sinIva)
         : { total: 0 };
-    var j = h - b,
-      F = [
-        ...new Set([
-          ...(t.items || []).map((v) => v.desc),
-          ...(m ? m.items : []).map((v) => v.desc),
-        ]),
-      ],
-      g = (v, x) => (v.items || []).find((f) => f.desc === x),
-      z = "#1a3a5c";
+    var j = h - b;
+    var normalizarComparacion = (valor) =>
+      String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim();
+    var capitulosComparables = (presupuesto) => {
+      if (!presupuesto) return [];
+      var capsFuente = Array.isArray(presupuesto.capitulos) ? presupuesto.capitulos : [];
+      var itemsFuente = Array.isArray(presupuesto.items) ? presupuesto.items : [];
+      var caps = capsFuente.filter(Boolean).map((cap, posicion) => ({ cap, posicion, sintetico: !1 }));
+      var ids = new Set(caps.map(({ cap }) => String(cap.id)));
+      var sinCapitulo = itemsFuente.some((item) => item && !ids.has(String(item.capituloId)));
+      if (sinCapitulo || caps.length === 0)
+        caps.push({ cap: { id: "__sin_capitulo__", codigo: "", nombre: "Sin capítulo" }, posicion: caps.length, sintetico: !0 });
+      return caps;
+    };
+    var itemsDelCapitulo = (presupuesto, descriptor) => {
+      if (!presupuesto || !descriptor || !descriptor.cap) return [];
+      var caps = Array.isArray(presupuesto.capitulos) ? presupuesto.capitulos.filter(Boolean) : [];
+      var items = Array.isArray(presupuesto.items) ? presupuesto.items.filter(Boolean) : [];
+      return items.filter((item) =>
+        descriptor.sintetico
+          ? !caps.some((cap) => String(cap.id) === String(item.capituloId))
+          : String(item.capituloId) === String(descriptor.cap.id),
+      );
+    };
+    var capsA = capitulosComparables(t), capsB = capitulosComparables(m || { items: [], capitulos: [] });
+    var usadosB = new Set(), paresCapitulos = [];
+    var buscarCapituloB = (capA, indiceA) => {
+      var candidatos = capsB.map((capB, indiceB) => ({ capB, indiceB })).filter(({ indiceB }) => !usadosB.has(indiceB));
+      var idA = String(capA.cap.id), codigoA = normalizarComparacion(capA.cap.codigo), nombreA = normalizarComparacion(capA.cap.nombre);
+      var encontrado = candidatos.find(({ capB }) => String(capB.cap.id) === idA);
+      if (!encontrado && (codigoA || nombreA)) encontrado = candidatos.find(({ capB }) => normalizarComparacion(capB.cap.codigo) === codigoA && normalizarComparacion(capB.cap.nombre) === nombreA);
+      if (!encontrado && nombreA) encontrado = candidatos.find(({ capB }) => normalizarComparacion(capB.cap.nombre) === nombreA);
+      if (!encontrado) encontrado = candidatos.find(({ indiceB }) => indiceB === indiceA);
+      return encontrado;
+    };
+    capsA.forEach((capA, indiceA) => {
+      var encontrado = buscarCapituloB(capA, indiceA);
+      if (encontrado) usadosB.add(encontrado.indiceB);
+      paresCapitulos.push({ capA, capB: encontrado ? encontrado.capB : null });
+    });
+    capsB.forEach((capB, indiceB) => { if (!usadosB.has(indiceB)) paresCapitulos.push({ capA: null, capB }); });
+    var F = [];
+    paresCapitulos.forEach((par, indiceCapitulo) => {
+      var descriptor = par.capA || par.capB, cap = descriptor.cap;
+      var itemsA = par.capA ? itemsDelCapitulo(t, par.capA) : [];
+      var itemsB = par.capB ? itemsDelCapitulo(m, par.capB) : [];
+      var usadosItemsB = new Set();
+      var estadoCapitulo = !par.capA ? "Solo en B" : !par.capB ? "Solo en A" : "En A y B";
+      F.push({ esCapitulo: !0, key: "cap_" + indiceCapitulo, cap, estadoCapitulo, cantidadA: itemsA.length, cantidadB: itemsB.length });
+      itemsA.forEach((itemA, indiceA) => {
+        var indiceB = -1;
+        if (itemA._uid || itemA.id != null)
+          indiceB = itemsB.findIndex((itemB, posicionB) => !usadosItemsB.has(posicionB) && ((itemA._uid && itemB._uid === itemA._uid) || (itemA.id != null && itemB.id === itemA.id)));
+        if (indiceB < 0) {
+          var desc = normalizarComparacion(itemA.desc);
+          indiceB = itemsB.findIndex((itemB, posicionB) => !usadosItemsB.has(posicionB) && normalizarComparacion(itemB.desc) === desc);
+        }
+        var itemB = indiceB >= 0 ? itemsB[indiceB] : null;
+        if (indiceB >= 0) usadosItemsB.add(indiceB);
+        F.push({ key: "cap_" + indiceCapitulo + "_a_" + indiceA, itemA, itemB, descripcion: itemA.desc || (itemB && itemB.desc) || "Sin descripción" });
+      });
+      itemsB.forEach((itemB, indiceB) => { if (!usadosItemsB.has(indiceB)) F.push({ key: "cap_" + indiceCapitulo + "_b_" + indiceB, itemA: null, itemB, descripcion: itemB.desc || "Sin descripción" }); });
+    });
+    var z = "#1a3a5c";
     const B = "#7c3aed";
     var w = a.accent;
     return e.jsx("div", {
@@ -33987,8 +35333,19 @@ ${r.empresa}`;
                         }),
                         e.jsx("tbody", {
                           children: F.map((v, x) => {
-                            var f = g(t, v),
-                              I = g(m, v),
+                            if (v.esCapitulo)
+                              return e.jsx("tr", {
+                                children: e.jsxs("td", {
+                                  colSpan: 8,
+                                  style: { padding: "9px 10px", background: z, color: "#fff", fontWeight: 700, borderTop: "6px solid " + a.bg },
+                                  children: [
+                                    (v.cap.codigo ? v.cap.codigo + " — " : "") + (v.cap.nombre || "Capítulo"),
+                                    e.jsxs("span", { style: { float: "right", fontSize: 11, fontWeight: 600, color: v.estadoCapitulo === "Solo en A" ? "#93c5fd" : v.estadoCapitulo === "Solo en B" ? "#d8b4fe" : "#cbd5e1" }, children: [v.estadoCapitulo, " · ", v.cantidadA, " / ", v.cantidadB, " partidas"] }),
+                                  ],
+                                }),
+                              }, v.key);
+                            var f = v.itemA,
+                              I = v.itemB,
                               D = f
                                 ? (parseFloat(f.cant) || 0) *
                                   (parseFloat(f.precio) || 0)
@@ -34032,7 +35389,7 @@ ${r.empresa}`;
                                       textOverflow: "ellipsis",
                                       whiteSpace: "nowrap",
                                     }),
-                                    title: v,
+                                    title: v.descripcion,
                                     children: [
                                       e.jsx("span", {
                                         style: { marginRight: 5, fontSize: 10 },
@@ -34044,7 +35401,7 @@ ${r.empresa}`;
                                               ? "🟡"
                                               : "✅",
                                       }),
-                                      v,
+                                      v.descripcion,
                                     ],
                                   }),
                                   e.jsx("td", {
@@ -34128,7 +35485,7 @@ ${r.empresa}`;
                                   }),
                                 ],
                               },
-                              x,
+                              v.key,
                             );
                           }),
                         }),
@@ -36115,9 +37472,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
             n("⚠️ Presupuesto no encontrado.");
             return;
           }
-          var capitulosOrdenados = [...(M.capitulos || [])].sort(
-              (a2, b2) => (parseFloat(a2.orden) || 0) - (parseFloat(b2.orden) || 0),
-            ),
+          var capitulosOrdenados = M.capitulos || [],
             itemsConDesc = (M.items || []).filter((Q) => Q.desc),
             cursor = 0;
           capitulosOrdenados.forEach((cap) => {
@@ -41702,7 +43057,7 @@ MATERIALES:
 
     var solucion = SOLUCIONES_COMPUESTAS_ACTIVAS.find((sv) => sv.id === solucionId) || null;
     var catalogPorId = new Map((catalog || []).map((cv) => [cv.id, cv]));
-    var capsOrdenadas = [...(capitulos || [])].sort((a1, b1) => (parseFloat(a1.orden) || 0) - (parseFloat(b1.orden) || 0));
+    var capsOrdenadas = capitulos || [];
 
     function elegirSolucion(sol) {
       var cantInit = {},
@@ -42060,6 +43415,8 @@ MATERIALES:
     setToast: b,
     setMateriales: setMateriales,
     guardRef,
+    sbHidden: sbHiddenExterno,
+    setSbHidden: setSbHiddenExterno,
   }) {
     var h = () => {
         const W = r.moItems || [],
@@ -42087,7 +43444,13 @@ MATERIALES:
       [B, w] = V(() => (m && m.pctGG != null ? m.pctGG : j())),
       [v, x] = V(() => (m && m.pctUtil != null ? m.pctUtil : F()));
     [...new Set(i.map((W) => W.cat))];
+    var _crearUidPartida = function() {
+      return typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID()
+        : "it_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 10);
+    };
     var f = () => ({
+      _uid: _crearUidPartida(),
       desc: "",
       cant: 1,
       unidad: "unidad",
@@ -42107,6 +43470,7 @@ MATERIALES:
               fecha: m.fecha,
               items: (m.items || []).map((W) =>
                 u(d({}, W), {
+                  _uid: W._uid || _crearUidPartida(),
                   _cid: W._cid || "",
                   _tipoCosto: W._tipoCosto || (W._cid ? "auto" : "mo"),
                 }),
@@ -42114,7 +43478,8 @@ MATERIALES:
               descuento: m.descuento,
               estado: m.estado,
               notas: m.notas,
-              notasInternas: m.notasInternas || m.notas || "",
+              notasCliente: m.notasCliente != null ? m.notasCliente : m.notas || "",
+              notasInternas: m.notasInternas || "",
               plazoEjecucion: m.plazoEjecucion || r.plazoEjecucion || 30,
               modoCosteo: m.modoCosteo || "completo",
               customId: m.id,
@@ -42132,10 +43497,11 @@ MATERIALES:
               clienteId: (t[0] && t[0].id) || "",
               descripcion: "",
               fecha: Xt(),
-              items: [f()],
+              items: [u(d({}, f()), { capituloId: 1 })],
               descuento: !1,
               estado: "Pendiente",
               notas: "",
+              notasCliente: "",
               notasInternas: "",
               plazoEjecucion: r.plazoEjecucion || 30,
               modoCosteo: "completo",
@@ -42148,7 +43514,9 @@ MATERIALES:
               _isTenderDraft: false,
               sinIva: false,
               hitosPago: null,
-              capitulos: [],
+              capitulos: [
+                { id: 1, codigo: "1", nombre: "Nuevo capítulo", orden: 0, descripcionOpcional: "", subtotal: 0 },
+              ],
             },
       ),
       [k, R] = V(null),
@@ -42157,11 +43525,41 @@ MATERIALES:
       [S, O] = V(!0),
       [cargosSugeridos, setCargosSugeridos] = V(null),
       [mostrarSelectorSoluciones, setMostrarSelectorSoluciones] = V(!1),
-      [destinoActivoCapituloId, setDestinoActivoCapituloId] = V(null),
+      [destinoActivoCapituloId, setDestinoActivoCapituloId] = V(() => (m ? null : 1)),
+      [capitulosContraidos, setCapitulosContraidos] = V({}),
       [historialTamano, setHistorialTamano] = V(0),
-      [itemSeleccionado, setItemSeleccionado] = V(null),
-      [hayPartidaCopiada, setHayPartidaCopiada] = V(!1),
-      [modalSalida, setModalSalida] = V(null);
+      [itemSeleccionadoId, setItemSeleccionadoId] = V(null),
+      [modalSalida, setModalSalida] = V(null),
+      [anchoVentana, setAnchoVentana] = V(() => window.innerWidth),
+      [catalogoAbierto, setCatalogoAbierto] = V(!1),
+      [resumenAbierto, setResumenAbierto] = V(() => window.innerWidth >= 1180),
+      [datosGeneralesExpandido, setDatosGeneralesExpandido] = V(!0),
+      [factoresExpandido, setFactoresExpandido] = V(!1),
+      [modoEdicion, setModoEdicion] = V(!1),
+      [sbHiddenPrevio, setSbHiddenPrevio] = V(null);
+    // --- Distribución responsive del editor (ECP 1.7.1) ---
+    // Solo afecta la disposición visual de este editor: catálogo/resumen
+    // pasan a drawer y las filas de partidas se reordenan en pantallas
+    // angostas. No toca cálculos, _uid, capítulos ni guardado.
+    Re.useEffect(function () {
+      var onResizeEditor = function () { setAnchoVentana(window.innerWidth); };
+      window.addEventListener("resize", onResizeEditor);
+      return function () { window.removeEventListener("resize", onResizeEditor); };
+    }, []);
+    var anchoCompacto = anchoVentana < 1180, filaCompacta = anchoVentana < 900, distribucionCompacta = modoEdicion || anchoCompacto;
+    // El catálogo y su pestaña se anclan al borde del menú lateral: si el
+    // sidebar está oculto quedan pegados al borde de la pantalla.
+    var anchoCatalogo = "min(340px, 92vw)";
+    var offsetLateral = sbHiddenExterno ? 0 : 230;
+    var alternarModoEdicion = function () {
+      if (!modoEdicion) {
+        if (typeof sbHiddenExterno === "boolean" && setSbHiddenExterno) { setSbHiddenPrevio(sbHiddenExterno); setSbHiddenExterno(!0); }
+        setResumenAbierto(!1); setCatalogoAbierto(!1); setModoEdicion(!0);
+      } else {
+        if (sbHiddenPrevio != null && setSbHiddenExterno) setSbHiddenExterno(sbHiddenPrevio);
+        setResumenAbierto(!0); setModoEdicion(!1);
+      }
+    };
     // --- Protección de salida / guardado incompleto ---
     // "dirty" se calcula comparando el estado actual contra una foto tomada
     // al montar (y renovada tras cada guardado exitoso). Usa comparación
@@ -42170,16 +43568,6 @@ MATERIALES:
     // campos de fila con blur), y el spec exige detectar cualquier cambio.
     var initialIRef = Re.useRef(I);
     var dirty = JSON.stringify(I) !== JSON.stringify(initialIRef.current);
-    // --- Portapapeles interno de partidas (duplicar / copiar / pegar) ---
-    // Solo vive en memoria (useRef) mientras este presupuesto está abierto;
-    // nunca localStorage ni portapapeles del sistema. Se limpia junto con el
-    // historial de deshacer (guardar, cancelar, cambiar de presupuesto).
-    var clipboardPartidaRef = Re.useRef(null);
-    var _uidCounterRef = Re.useRef(0);
-    var _generarItemUid = function() {
-      _uidCounterRef.current += 1;
-      return "it_" + Date.now().toString(36) + "_" + _uidCounterRef.current;
-    };
     var _cloneItem = function(item) {
       return JSON.parse(JSON.stringify(item));
     };
@@ -42194,6 +43582,7 @@ MATERIALES:
         items: estado.items || [],
         capitulos: estado.capitulos || [],
         notas: estado.notas || "",
+        notasCliente: estado.notasCliente || "",
         notasInternas: estado.notasInternas || "",
         descripcion: estado.descripcion || "",
         clienteId: estado.clienteId || "",
@@ -42256,11 +43645,6 @@ MATERIALES:
         setHistorialTamano(hist.length);
       }
     };
-    var limpiarPortapapeles = function() {
-      clipboardPartidaRef.current = null;
-      setHayPartidaCopiada(!1);
-      setItemSeleccionado(null);
-    };
     var limpiarHistorial = function() {
       _pendingEditSnapshot.current = null;
       historialRef.current = [];
@@ -42278,86 +43662,29 @@ MATERIALES:
         snap.destinoActivoCapituloId != null ? snap.destinoActivoCapituloId : null,
       );
     };
-    // Duplicar: copia profunda de la partida en T, insertada inmediatamente
-    // debajo (mismo capítulo, mismo ordenDentroCapitulo para que el orden
-    // relativo se preserve incluso con capítulos activos). Un solo estado
-    // de deshacer por duplicado.
-    var duplicarPartida = function(T) {
-      if (!I.items[T]) return;
+    // Duplicar crea una copia profunda inmediatamente debajo y selecciona su ID estable.
+    var duplicarPartida = function(itemId) {
+      var indiceActual = (I.items || []).findIndex((item) => item._uid === itemId);
+      if (indiceActual < 0) return;
       pushHistorial(I);
+      var nuevoId = _crearUidPartida();
       D(function(J) {
-        var items = [...J.items];
-        if (!items[T]) return J;
-        var copia = _cloneItem(items[T]);
-        copia._uid = _generarItemUid();
-        items.splice(T + 1, 0, copia);
+        var items = [...(J.items || [])];
+        var indice = items.findIndex((item) => item._uid === itemId);
+        if (indice < 0) return J;
+        var copia = _cloneItem(items[indice]);
+        copia._uid = nuevoId;
+        items.splice(indice + 1, 0, copia);
         return u(d({}, J), { items: items });
       });
-      setItemSeleccionado(T + 1);
-    };
-    // Copiar: guarda una copia profunda de la partida seleccionada en el
-    // portapapeles interno (solo memoria, nunca localStorage ni el
-    // portapapeles del sistema). No modifica el presupuesto ni el historial.
-    var copiarPartida = function(T) {
-      if (T == null || !I.items[T]) return;
-      var item = I.items[T];
-      clipboardPartidaRef.current = {
-        item: _cloneItem(item),
-        capituloIdOrigen: item.capituloId || "",
-      };
-      setHayPartidaCopiada(!0);
-      setItemSeleccionado(T);
-    };
-    // Pegar: inserta una copia profunda de la partida copiada. Destino:
-    // capítulo activo si existe, si no el capítulo de origen. Posición:
-    // debajo de refIdx si esa partida pertenece al capítulo destino, si no
-    // al final del grupo destino.
-    var pegarPartida = function(refIdx) {
-      var clip = clipboardPartidaRef.current;
-      if (!clip) return;
-      pushHistorial(I);
-      D(function(J) {
-        var items = [...J.items];
-        var destino =
-          destinoActivoCapituloId != null && destinoActivoCapituloId !== ""
-            ? destinoActivoCapituloId === "sin-capitulo"
-              ? ""
-              : destinoActivoCapituloId
-            : clip.capituloIdOrigen;
-        var copia = _cloneItem(clip.item);
-        copia._uid = _generarItemUid();
-        copia.capituloId = destino;
-        if (
-          refIdx != null &&
-          items[refIdx] &&
-          (items[refIdx].capituloId || "") === (destino || "")
-        ) {
-          copia.ordenDentroCapitulo = items[refIdx].ordenDentroCapitulo;
-          items.splice(refIdx + 1, 0, copia);
-        } else {
-          var maxOrden = items.reduce(function(mx, it) {
-            return (it.capituloId || "") === (destino || "")
-              ? Math.max(mx, parseFloat(it.ordenDentroCapitulo) || 0)
-              : mx;
-          }, -Infinity);
-          copia.ordenDentroCapitulo = maxOrden === -Infinity ? 0 : maxOrden + 1;
-          items.push(copia);
-        }
-        return u(d({}, J), { items: items });
-      });
+      setItemSeleccionadoId(nuevoId);
     };
     var deshacerUltimoRef = Re.useRef(deshacerUltimo);
     deshacerUltimoRef.current = deshacerUltimo;
     var duplicarPartidaRef = Re.useRef(duplicarPartida);
     duplicarPartidaRef.current = duplicarPartida;
-    var copiarPartidaRef = Re.useRef(copiarPartida);
-    copiarPartidaRef.current = copiarPartida;
-    var pegarPartidaRef = Re.useRef(pegarPartida);
-    pegarPartidaRef.current = pegarPartida;
-    var itemSeleccionadoRef = Re.useRef(itemSeleccionado);
-    itemSeleccionadoRef.current = itemSeleccionado;
-    var hayPartidaCopiadaRef = Re.useRef(hayPartidaCopiada);
-    hayPartidaCopiadaRef.current = hayPartidaCopiada;
+    var itemSeleccionadoRef = Re.useRef(itemSeleccionadoId);
+    itemSeleccionadoRef.current = itemSeleccionadoId;
     var guardarPresupuestoRef = Re.useRef(null);
     Re.useEffect(function () {
       function onKeyDownDeshacer(ev) {
@@ -42373,7 +43700,7 @@ MATERIALES:
           }
           return;
         }
-        if (key !== "z" && key !== "d" && key !== "c" && key !== "v") return;
+        if (key !== "z" && key !== "d") return;
         var activo = document.activeElement;
         var enCampoEditable =
           activo &&
@@ -42392,18 +43719,6 @@ MATERIALES:
           duplicarPartidaRef.current(itemSeleccionadoRef.current);
           return;
         }
-        if (key === "c") {
-          if (itemSeleccionadoRef.current == null) return;
-          ev.preventDefault();
-          copiarPartidaRef.current(itemSeleccionadoRef.current);
-          return;
-        }
-        if (key === "v") {
-          if (!hayPartidaCopiadaRef.current) return;
-          ev.preventDefault();
-          pegarPartidaRef.current(itemSeleccionadoRef.current);
-          return;
-        }
       }
       window.addEventListener("keydown", onKeyDownDeshacer);
       return function () {
@@ -42413,7 +43728,7 @@ MATERIALES:
     Re.useEffect(
       function () {
         limpiarHistorial();
-        limpiarPortapapeles();
+        setItemSeleccionadoId(null);
         // Resetea la base de comparación de "dirty" al cambiar de
         // presupuesto (defensa adicional: en la práctica esta instancia de
         // lg siempre se remonta al abrir otro presupuesto, lo que ya
@@ -42423,6 +43738,12 @@ MATERIALES:
         initialIRef.current = I;
       },
       [m && m.id],
+    );
+    var unidadesEditor = Array.from(
+      new Set([
+        "m²", "m³", "ml", "m", "un", "gl", "kg", "ton", "l", "h", "día", "mes", "%",
+        ...(i || []).map((item) => item.unidad).filter(Boolean),
+      ]),
     );
     const catalogItemSatisface = (cid, key) => {
       var ci = i.find((W) => String(W.id) === String(cid));
@@ -42635,12 +43956,13 @@ MATERIALES:
           .reduce((sum, it) => sum + calcularLineaPresupuesto(it).totalLinea, 0),
       agregarCapitulo = () => {
         pushHistorial(I);
-        var nId = null;
+        var caps = I.capitulos || [];
+        var maxId = caps.reduce((mx, c) => Math.max(mx, parseInt(c.id) || 0), 0);
+        var nId = maxId + 1;
+        while (caps.some((c) => String(c.id) === String(nId))) nId++;
         D((J) => {
           var caps = J.capitulos || [];
-          var maxId = caps.reduce((mx, c) => Math.max(mx, parseInt(c.id) || 0), 0);
           var maxOrden = caps.reduce((mx, c) => Math.max(mx, parseFloat(c.orden) || 0), 0);
-          nId = maxId + 1;
           var nuevo = {
             id: nId,
             codigo: nId.toString(),
@@ -42671,27 +43993,14 @@ MATERIALES:
       moverCapitulo = (capId, direccion) => {
         pushHistorial(I);
         D((J) => {
-          var caps = [...(J.capitulos || [])].sort(
-            (a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0),
-          );
+          var caps = [...(J.capitulos || [])];
           var idx = caps.findIndex((c) => c.id === capId);
           var swapIdx = idx + direccion;
           if (idx < 0 || swapIdx < 0 || swapIdx >= caps.length) return J;
-          var ordenA = parseFloat(caps[idx].orden) || 0,
-            ordenB = parseFloat(caps[swapIdx].orden) || 0;
-          if (ordenA === ordenB) {
-            ordenA = idx;
-            ordenB = swapIdx;
-          }
-          var idA = caps[idx].id,
-            idB = caps[swapIdx].id;
-          return u(d({}, J), {
-            capitulos: (J.capitulos || []).map((c) => {
-              if (c.id === idA) return u(d({}, c), { orden: ordenB });
-              if (c.id === idB) return u(d({}, c), { orden: ordenA });
-              return c;
-            }),
-          });
+          var tmp = caps[idx];
+          caps[idx] = caps[swapIdx];
+          caps[swapIdx] = tmp;
+          return u(d({}, J), { capitulos: caps });
         });
       },
       eliminarCapitulo = (capId) => {
@@ -42732,24 +44041,15 @@ MATERIALES:
                 ? !(J.capitulos || []).some((c) => c.id === it.capituloId)
                 : it.capituloId === capId,
             )
-            .sort(
-              (a, b) =>
-                (parseFloat(a.it.ordenDentroCapitulo) || 0) -
-                (parseFloat(b.it.ordenDentroCapitulo) || 0),
-            );
+            ;
           var pos = grupo.findIndex(({ idx }) => idx === T);
           var swapPos = pos + direccion;
           if (pos < 0 || swapPos < 0 || swapPos >= grupo.length) return J;
-          var ordenA = parseFloat(grupo[pos].it.ordenDentroCapitulo) || 0,
-            ordenB = parseFloat(grupo[swapPos].it.ordenDentroCapitulo) || 0;
-          if (ordenA === ordenB) {
-            ordenA = pos;
-            ordenB = swapPos;
-          }
           var idxA = grupo[pos].idx,
             idxB = grupo[swapPos].idx;
-          items[idxA] = u(d({}, items[idxA]), { ordenDentroCapitulo: ordenB });
-          items[idxB] = u(d({}, items[idxB]), { ordenDentroCapitulo: ordenA });
+          var tmp = items[idxA];
+          items[idxA] = items[idxB];
+          items[idxB] = tmp;
           return u(d({}, J), { items });
         });
       },
@@ -42768,7 +44068,7 @@ MATERIALES:
           return;
         }
         limpiarHistorial();
-        limpiarPortapapeles();
+        setItemSeleccionadoId(null);
         initialIRef.current = I;
         var capitulosConSubtotal = (I.capitulos || []).map((cap) =>
           u(d({}, cap), { subtotal: Math.round(subtotalCapitulo(cap.id)) }),
@@ -42888,6 +44188,17 @@ K &&
             y(!1); 
           },
             onSelect: (W) => {
+              pushHistorial(I);
+              if (W.esModerna) {
+                (D((L) => {
+                  var existentes = L.capitulos || [], usados = new Set(existentes.map((cap) => String(cap.id)));
+                  var siguiente = existentes.reduce((max, cap) => Math.max(max, parseInt(cap.id) || 0), 0) + 1, mapa = new Map();
+                  var capsNuevos = (W.capitulos || []).map((cap) => { while (usados.has(String(siguiente))) siguiente++; var id = siguiente++; usados.add(String(id)); mapa.set(String(cap.id), id); return u(d({}, cap), { id: id, codigo: cap.codigo || String(id) }); });
+                  var itemsNuevos = (W.items || []).map((item) => u(d({}, item), { _uid: item._uid || _crearUidPartida(), capituloId: mapa.has(String(item.capituloId)) ? mapa.get(String(item.capituloId)) : item.capituloId || "" }));
+                  return u(d({}, L), { capitulos: [...existentes, ...capsNuevos], items: L.items.filter((E) => E.desc).length > 0 ? [...L.items, ...itemsNuevos] : itemsNuevos });
+                }), y(!1));
+                return;
+              }
               var T = (W.items || []).map((L, E) => {
                 var M = L._cid
                   ? i.find((q) => q.id === parseInt(L._cid))
@@ -42901,7 +44212,6 @@ K &&
                   _tipoCosto: L._tipoCosto || (L._cid ? "auto" : "mo"),
                 });
               });
-              pushHistorial(I);
               (D((L) =>
                 u(d({}, L), {
                   items:
@@ -43118,11 +44428,18 @@ K &&
               ],
             }),
             e.jsxs("div", {
-              style: { display: "flex", gap: 10 },
+              style: { display: "flex", gap: 10, alignItems: "center" },
               children: [
                 e.jsx("button", {
+                  title: modoEdicion ? "Salir del modo edición" : "Modo edición: oculta catálogo, resumen y sidebar para maximizar el espacio",
+                  style: u(d({}, c.btn(modoEdicion ? "p" : "s")), { padding: "8px 10px" }),
+                  onClick: alternarModoEdicion,
+                  children: modoEdicion ? "⛶ Salir" : "⛶ Modo edición",
+                }),
+                e.jsx("button", {
                   style: c.btn("s"),
-                  onClick: () => intentarSalir(() => { limpiarHistorial(); limpiarPortapapeles(); s(); }),
+                  onClick: () => intentarSalir(() => { limpiarHistorial();
+        setItemSeleccionadoId(null); s(); }),
                   children: "Cancelar",
                 }),
                 e.jsx("button", {
@@ -43156,29 +44473,66 @@ K &&
           ],
         }),
         e.jsxs("div", {
-          style: {
-            display: "grid",
-            gridTemplateColumns: "270px 1fr 300px",
-            gap: 16,
-            alignItems: "start",
-          },
+          style: distribucionCompacta
+            ? { display: "block" }
+            : { display: "grid", gridTemplateColumns: "1fr 300px", gap: 16, alignItems: "start" },
           children: [
-            e.jsx(eg, {
-              catalog: i,
-              apus: n,
-              form: I,
-              addFromCatalog: le,
-              C: a,
-              S: c,
-              fmt: ne,
-              cfg: r,
+            e.jsxs(e.Fragment, {
+              children: [
+                e.jsx("button", {
+                  title: catalogoAbierto ? "Ocultar catálogo" : "Mostrar catálogo",
+                  onClick: () => setCatalogoAbierto((W) => !W),
+                  style: {
+                    position: "fixed",
+                    left: catalogoAbierto ? `calc(${offsetLateral}px + ${anchoCatalogo})` : offsetLateral,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    zIndex: 9992,
+                    width: 28,
+                    height: 78,
+                    padding: 0,
+                    border: "none",
+                    borderRadius: "0 12px 12px 0",
+                    background: a.accent,
+                    color: "#1a3060",
+                    fontSize: 15,
+                    fontWeight: 800,
+                    cursor: "pointer",
+                    boxShadow: "2px 0 12px rgba(0,0,0,.30)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  },
+                  children: catalogoAbierto ? "‹" : "📁",
+                }),
+                catalogoAbierto && e.jsxs(e.Fragment, { children: [
+                  e.jsx("div", { onClick: () => setCatalogoAbierto(!1), style: { position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", zIndex: 9990 } }),
+                  e.jsxs("div", { style: { position: "fixed", top: 0, left: offsetLateral, height: "100vh", width: anchoCatalogo, background: a.card, borderRight: `1px solid ${a.border}`, boxShadow: "4px 0 24px rgba(0,0,0,.35)", zIndex: 9991, overflowY: "auto", padding: "14px 12px" }, children: [
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }, children: [
+                      e.jsx("div", { style: { fontWeight: 800, fontSize: 13, color: a.text }, children: "📁 Catálogo" }),
+                      e.jsx("button", { onClick: () => setCatalogoAbierto(!1), style: u(d({}, c.btn("s")), { padding: "4px 10px" }), children: "×" }),
+                    ] }),
+                    e.jsx(eg, { catalog: i, apus: n, form: I, addFromCatalog: le, C: a, S: c, fmt: ne, cfg: r }),
+                  ] }),
+                ] }),
+              ],
             }),
             e.jsxs("div", {
               children: [
                 e.jsxs("div", {
                   style: c.card,
                   children: [
-                    e.jsx("div", { style: c.ct, children: "Datos Generales" }),
+                    e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }, children: [
+                      e.jsx("div", { style: c.ct, children: "Datos Generales" }),
+                      e.jsx("button", { onClick: () => setDatosGeneralesExpandido((W) => !W), style: u(d({}, c.btn("s")), { padding: "3px 9px", fontSize: 11 }), children: datosGeneralesExpandido ? "Ocultar detalles" : "Ver detalles" }),
+                    ] }),
+                    !datosGeneralesExpandido && e.jsxs("div", { style: { fontSize: 12, color: a.muted, marginTop: 6 }, children: [
+                      (t.find((W) => W.id === I.clienteId) || {}).nombre || I._pendingClientName || "Sin cliente",
+                      " · ", I.fecha || "—",
+                      " · N.º ", (m && m.id) || I.customId || r.nextNum || 1,
+                      " · ", I.plazoEjecucion || r.plazoEjecucion || 30, " días",
+                    ] }),
+                    datosGeneralesExpandido && e.jsxs(e.Fragment, { children: [
                     e.jsxs("div", {
                       style: {
                         display: "grid",
@@ -43337,6 +44691,7 @@ K &&
                             : null,
                         ),
                       }),
+                    ] }),
                   ],
                 }),
                 e.jsxs("div", {
@@ -43451,15 +44806,35 @@ K &&
                               onClick: deshacerUltimo,
                               children: "↶ Deshacer",
                             }),
+                            (I.capitulos || []).length > 1 && e.jsx("button", {
+                              style: u(d({}, c.btn("s")), { fontSize: 12, padding: "5px 10px" }),
+                              onClick: () => setCapitulosContraidos({}),
+                              children: "Expandir todos",
+                            }),
+                            (I.capitulos || []).length > 1 && e.jsx("button", {
+                              style: u(d({}, c.btn("s")), { fontSize: 12, padding: "5px 10px" }),
+                              onClick: () => {
+                                var todos = {};
+                                (I.capitulos || []).forEach((cap) => { todos[String(cap.id)] = !0; });
+                                todos["sin-capitulo"] = !0;
+                                setCapitulosContraidos(todos);
+                              },
+                              children: "Contraer todos",
+                            }),
+                            e.jsx("button", {
+                              style: u(d({}, c.btn(catalogoAbierto ? "p" : "s")), { fontSize: 12, padding: "5px 10px" }),
+                              onClick: () => setCatalogoAbierto((W) => !W),
+                              children: "📁 Catálogo",
+                            }),
                           ],
                         }),
                       ],
                     }),
-                    e.jsx("div", {
+                    !filaCompacta && e.jsx("div", {
                       style: {
                         display: "grid",
                         gridTemplateColumns:
-                          "1fr 55px 28px 72px 75px 75px 75px 100px 60px 28px",
+                          "minmax(280px,1fr) 55px 28px 72px 75px 75px 75px 100px 60px 28px",
                         gap: 6,
                         marginBottom: 4,
                       },
@@ -43492,9 +44867,7 @@ K &&
                       ),
                     }),
                     ((renderFilaItem) => {
-                      var capsOrdenados = [...(I.capitulos || [])].sort(
-                        (a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0),
-                      );
+                      var capsOrdenados = I.capitulos || [];
                       if (capsOrdenados.length === 0)
                         return (I.items || []).map((W, T) => renderFilaItem(W, T, false, capsOrdenados, `${T + 1}`));
                       var itemsConIndice = (I.items || []).map((W, T) => ({ W, T }));
@@ -43505,14 +44878,13 @@ K &&
                               ? !capsOrdenados.some((c) => c.id === W.capituloId)
                               : W.capituloId === capId,
                           )
-                          .sort(
-                            (a, b) =>
-                              (parseFloat(a.W.ordenDentroCapitulo) || 0) -
-                              (parseFloat(b.W.ordenDentroCapitulo) || 0),
-                          );
+                          ;
                       var renderEncabezado = (cap, capIdx) => {
                         var esSinCapitulo = cap === null;
                         var subtotal = subtotalCapitulo(esSinCapitulo ? null : cap.id);
+                        var cantidadPartidas = itemsDeGrupo(esSinCapitulo ? null : cap.id).length;
+                        var claveContraido = esSinCapitulo ? "sin-capitulo" : String(cap.id);
+                        var estaContraido = !!capitulosContraidos[claveContraido];
                         return e.jsxs(
                           "div",
                           {
@@ -43529,6 +44901,7 @@ K &&
                               cursor: "pointer",
                             },
                             children: [
+                              e.jsx("button", { title: estaContraido ? "Expandir capítulo" : "Contraer capítulo", onClick: (ev) => { ev.stopPropagation(); setCapitulosContraidos((actual) => u(d({}, actual), { [claveContraido]: !actual[claveContraido] })); }, style: { background: "transparent", border: "none", color: a.accent, cursor: "pointer", fontSize: 13 }, children: estaContraido ? "▶" : "▼" }),
                               !esSinCapitulo &&
                                 e.jsxs("div", {
                                   style: { display: "flex", flexDirection: "column", gap: 1 },
@@ -43582,6 +44955,7 @@ K &&
                                       onChange: (ev) => actualizarCapitulo(cap.id, "nombre", ev.target.value),
                                       style: u(d({}, c.inp), { flex: 1, fontWeight: 700, fontSize: 13, padding: "4px 6px" }),
                                     }),
+                                e.jsxs("div", { style: { fontSize: 12, color: a.muted, whiteSpace: "nowrap" }, children: [cantidadPartidas, cantidadPartidas === 1 ? " partida" : " partidas"] }),
                                 e.jsxs("div", { style: { fontSize: 12, color: a.accent, fontWeight: 700, whiteSpace: "nowrap" }, children: ["Subtotal: ", ne(Math.round(subtotal))] }),
                                 !esSinCapitulo &&
                                   e.jsx("button", {
@@ -43598,12 +44972,12 @@ K &&
                       var salida = [];
                       capsOrdenados.forEach((cap, capIdx) => {
                         salida.push(renderEncabezado(cap, capIdx));
-                        itemsDeGrupo(cap.id).forEach(({ W, T }, itemIdx) => salida.push(renderFilaItem(W, T, true, capsOrdenados, `${cap.codigo || (capIdx + 1)}.${itemIdx + 1}`)));
+                        if (!capitulosContraidos[String(cap.id)]) itemsDeGrupo(cap.id).forEach(({ W, T }, itemIdx) => salida.push(renderFilaItem(W, T, true, capsOrdenados, `${cap.codigo || (capIdx + 1)}.${itemIdx + 1}`)));
                       });
                       var sinCap = itemsDeGrupo(null);
                       if (sinCap.length > 0) {
                         salida.push(renderEncabezado(null, -1));
-                        sinCap.forEach(({ W, T }, itemIdx) => salida.push(renderFilaItem(W, T, true, capsOrdenados, `${itemIdx + 1}`)));
+                        if (!capitulosContraidos["sin-capitulo"]) sinCap.forEach(({ W, T }, itemIdx) => salida.push(renderFilaItem(W, T, true, capsOrdenados, `${itemIdx + 1}`)));
                       }
                       return salida;
                     })((W, T, usaCapitulos, capsOrdenados, numJerarquico) => {
@@ -43624,27 +44998,31 @@ K &&
                         "div",
                         {
                           onClick: () => {
-                            setItemSeleccionado(T);
+                            setItemSeleccionadoId(W._uid);
                             if (W.capituloId) setDestinoActivoCapituloId(W.capituloId);
                           },
                           style: {
-                            background: itemSeleccionado === T ? (a.accent + "0d") : "transparent",
-                            border: `1px solid ${itemSeleccionado === T ? a.accent : "transparent"}`,
+                            background: itemSeleccionadoId === W._uid ? (a.accent + "0d") : "transparent",
+                            border: `1px solid ${itemSeleccionadoId === W._uid ? a.accent : "transparent"}`,
                             borderRadius: 6,
                           },
                           children: [
                             e.jsxs("div", {
-                              style: {
-                                display: "grid",
-                                gridTemplateColumns:
-                                  "1fr 55px 28px 72px 75px 75px 75px 100px 60px 28px",
-                                gap: 6,
-                                marginBottom: 4,
-                                alignItems: "center",
-                              },
+                              style: filaCompacta
+                                ? { display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 4, alignItems: "center" }
+                                : {
+                                    display: "grid",
+                                    gridTemplateColumns:
+                                      "minmax(280px,1fr) 55px 28px 72px 75px 75px 75px 100px 60px 28px",
+                                    gap: 6,
+                                    marginBottom: 4,
+                                    alignItems: "center",
+                                  },
                               children: [
                                 e.jsxs("div", {
-                                  style: { display: "flex", alignItems: "center", gap: 6 },
+                                  style: filaCompacta
+                                    ? { display: "flex", alignItems: "center", gap: 6, order: 1, flexBasis: "calc(100% - 46px)" }
+                                    : { display: "flex", alignItems: "center", gap: 6 },
                                   children: [
                                     numJerarquico && e.jsx("span", { style: { fontWeight: 700, color: a.muted, fontSize: 12, minWidth: 20 }, children: numJerarquico }),
                                     e.jsx("input", {
@@ -43702,16 +45080,19 @@ K &&
                                     }),
                                   children: "📐",
                                 }),
-                                e.jsx("input", {
-                                  style: u(d({}, c.inp), {
-                                    fontSize: 13,
-                                    padding: "6px 8px",
-                                  }),
-                                  value: W.unidad,
+                                e.jsx("select", {
+                                  style: u(d({}, c.inp), { fontSize: 13, padding: "6px 4px", width: "100%" }),
+                                  value: W.unidad || "",
                                   onFocus: (ev) => iniciarEdicionCampo(ev.target.value),
                                   onBlur: (ev) => confirmarEdicionCampo(ev.target.value),
-                                  onChange: (M) =>
-                                    ee(T, "unidad", M.target.value),
+                                  onChange: (M) => ee(T, "unidad", M.target.value),
+                                  children: (W.unidad && !unidadesEditor.includes(W.unidad)
+                                    ? [W.unidad, ...unidadesEditor]
+                                    : unidadesEditor
+                                  ).map((unidad) => e.jsx("option", {
+                                    value: unidad,
+                                    children: unidad === "m2" ? "m²" : unidad === "m3" ? "m³" : unidad,
+                                  }, unidad)),
                                 }),
                                 e.jsxs("div", {
                                   style: { position: "relative", display: "flex" },
@@ -43944,7 +45325,7 @@ K &&
                                   });
                                 })(),
                                 e.jsx("button", {
-                                  style: u(d({}, c.btn("d")), {
+                                  style: u(d({}, c.btn("d")), filaCompacta ? { padding: "5px 6px", fontSize: 17, order: 2, flexBasis: "40px" } : {
                                     padding: "5px 6px",
                                     fontSize: 17,
                                   }),
@@ -43964,7 +45345,7 @@ K &&
                             }),
                             e.jsxs("div", {
                                 style: {
-                                  gridColumn: "span 10",
+                                  gridColumn: filaCompacta ? "auto" : "span 10",
                                   display: "flex",
                                   flexWrap: "wrap",
                                   alignItems: "center",
@@ -44029,22 +45410,9 @@ K &&
                                   }),
                                   e.jsx("button", {
                                     title: "Duplicar partida",
-                                    onClick: (ev) => { ev.stopPropagation(); duplicarPartida(T); },
+                                    onClick: (ev) => { ev.stopPropagation(); duplicarPartida(W._uid); },
                                     style: { background: a.sb, border: `1px solid ${a.border}`, borderRadius: 6, color: a.muted, cursor: "pointer", fontSize: 13, padding: "3px 8px", flexShrink: 0 },
                                     children: "⧉",
-                                  }),
-                                  e.jsx("button", {
-                                    title: "Copiar partida",
-                                    onClick: (ev) => { ev.stopPropagation(); copiarPartida(T); },
-                                    style: { background: a.sb, border: `1px solid ${a.border}`, borderRadius: 6, color: a.muted, cursor: "pointer", fontSize: 13, padding: "3px 8px", flexShrink: 0 },
-                                    children: "⎘",
-                                  }),
-                                  e.jsx("button", {
-                                    title: hayPartidaCopiada ? "Pegar partida" : "No hay ninguna partida copiada",
-                                    disabled: !hayPartidaCopiada,
-                                    onClick: (ev) => { ev.stopPropagation(); pegarPartida(T); },
-                                    style: { background: a.sb, border: `1px solid ${a.border}`, borderRadius: 6, color: a.muted, cursor: hayPartidaCopiada ? "pointer" : "not-allowed", fontSize: 13, padding: "3px 8px", flexShrink: 0, opacity: hayPartidaCopiada ? 1 : 0.4 },
-                                    children: "📋",
                                   }),
                                 ],
                               }),
@@ -44058,11 +45426,11 @@ K &&
                 e.jsxs("div", {
                   style: c.card,
                   children: [
-                    e.jsx("div", { style: c.ct, children: "Notas" }),
+                    e.jsx("div", { style: c.ct, children: "Notas para el cliente" }),
                     e.jsx("textarea", {
-                      value: I.notas,
+                      value: I.notasCliente || "",
                       onChange: (W) =>
-                        D((T) => u(d({}, T), { notas: W.target.value })),
+                        D((T) => u(d({}, T), { notasCliente: W.target.value })),
                       placeholder: "Condiciones especiales, garantías, plazos…",
                       style: u(d({}, c.inp), {
                         minHeight: 60,
@@ -44078,20 +45446,19 @@ K &&
                 e.jsxs("div", {
                   style: u(d({}, c.card), { marginBottom: 8 }),
                   children: [
-                    e.jsx("div", {
-                      style: {
-                        fontSize: 12,
-                        fontWeight: 700,
-                        color: a.text,
-                        marginBottom: 6,
-                      },
-                      children: "⚙️ Factores del presupuesto",
+                    e.jsxs("div", {
+                      style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, flexWrap: "wrap" },
+                      children: [
+                        e.jsxs("span", { style: { fontSize: 11, color: a.muted, fontWeight: 600 }, children: ["⚙️ MO ", g, "% · GG ", B, "% · Utilidad ", v, "% · Factor ", (1 + (g + B + v) / 100).toFixed(3), "×"] }),
+                        e.jsx("button", { onClick: () => setFactoresExpandido((W) => !W), style: u(d({}, c.btn("s")), { padding: "3px 9px", fontSize: 11 }), children: factoresExpandido ? "Ocultar" : "Ver factores" }),
+                      ],
                     }),
+                    factoresExpandido && e.jsxs(e.Fragment, { children: [
                     e.jsxs("div", {
                       style: {
                         fontSize: 10,
                         color: a.muted,
-                        marginBottom: 10,
+                        margin: "10px 0",
                         lineHeight: 1.5,
                       },
                       children: [
@@ -44162,6 +45529,7 @@ K &&
                         }),
                       ],
                     }),
+                    ] }),
                   ],
                 }),
                 (() => {
@@ -44235,10 +45603,12 @@ K &&
                     M = I.descuento ? Math.round(E * (r.descuento || 0.05)) : 0,
                     q = E - M,
                     J = Math.round(q * (r.anticipo || 0.6));
-                  return e.jsxs("div", {
-                    style: u(d({}, c.card), { position: "sticky", top: 0 }),
+                  if (!resumenAbierto) return e.jsxs("div", { onClick: () => setResumenAbierto(!0), style: u(d({}, c.card), { cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }), children: [e.jsx("span", { style: { fontWeight: 700, fontSize: 13, color: a.text }, children: "Resumen" }), e.jsx("span", { style: { color: a.accent, fontWeight: 800, fontSize: 14 }, children: ne(q) })] });
+                  var contenidoResumen = e.jsxs("div", {
+                    style: u(d({}, c.card), { position: distribucionCompacta ? "relative" : "sticky", top: 0 }),
                     children: [
-                      e.jsxs("div", { 
+                      e.jsxs("div", { style: { display: "flex", justifyContent: "flex-end", marginBottom: 4 }, children: [e.jsx("button", { onClick: () => setResumenAbierto(!1), style: u(d({}, c.btn("s")), { padding: "3px 9px", fontSize: 11 }), children: distribucionCompacta ? "× Cerrar" : "− Contraer" })] }),
+                      e.jsxs("div", {
                         style: u(d({}, c.ct), { display: "flex", justifyContent: "space-between", alignItems: "center" }), 
                         children: [
                           "Resumen",
@@ -44475,6 +45845,12 @@ K &&
                       }),
                     ],
                   });
+                  return distribucionCompacta
+                    ? e.jsxs(e.Fragment, { children: [
+                        e.jsx("div", { onClick: () => setResumenAbierto(!1), style: { position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", zIndex: 9990 } }),
+                        e.jsx("div", { style: { position: "fixed", top: 0, right: 0, height: "100vh", width: "min(360px, 92vw)", overflowY: "auto", zIndex: 9991, boxShadow: "-4px 0 24px rgba(0,0,0,.35)", padding: "14px 12px", background: a.bg }, children: contenidoResumen }),
+                      ] })
+                    : contenidoResumen;
                 })(),
               ],
             }),
@@ -45920,66 +47296,35 @@ K &&
       }),
     });
   }
-  function mg({ budget: t, client: i, cfg: r, onPagos: n, onClose: l }) {
-    var o = [
-        {
-          id: "carta",
-          icon: "✉️",
-          label: "Carta para cliente / mandante",
-          desc: "Presentación comercial para acompañar un presupuesto particular",
-          etapa: "Al presentar",
-          color: "#3b82f6",
-        },
-        {
-          id: "resumen",
-          icon: "📊",
-          label: "Resumen Ejecutivo",
-          desc: "Síntesis para el cliente cuando tiene dudas sobre el alcance",
-          etapa: "Si hay dudas",
-          color: "#8b5cf6",
-        },
-        {
-          id: "negociacion",
-          icon: "🤝",
-          label: "Hoja de Negociación",
-          desc: "Guía interna: qué ceder y qué no (confidencial)",
-          etapa: "Si piden rebaja",
-          color: "#ef4444",
-        },
-        {
-          id: "contrato",
-          icon: "📄",
-          label: "Contrato de Obra",
-          desc: "Contrato formal con cláusulas, plazo y forma de pago",
-          etapa: "Al cerrar",
-          color: "#c084fc",
-        },
-        {
-          id: "pagos",
-          icon: "💰",
-          label: "Estados de Pago / Acta",
-          desc: "Registrar pagos y generar documentos de cobro con firma",
-          etapa: "Al cobrar",
-          color: "#f59e0b",
-        },
-        {
-          id: "desglose",
-          icon: "📊",
-          label: "Desglose Interno",
-          desc: "Desglose por partida: materiales, MO, GG y utilidad",
-          etapa: "Uso interno",
-          color: "#1e3a5f",
-        },
-        {
-          id: "dotacion",
-          icon: "👷",
-          label: "Resumen de Dotación",
-          desc: "HH estimadas y monto a pagar por rol",
-          etapa: "Uso interno",
-          color: "#14532d",
-        },
-      ],
-      s = Gt(r && r.licenciaCodigo, r && r.rut),
+  var documentosObraConfig = [
+    { id: "carta", tipo: "cartaCliente", icon: "✉️", label: "Carta de Presentación", desc: "Presentación comercial para acompañar un presupuesto particular", etapa: "Al presentar", categoria: "alPresentar", formatos: ["pdf", "docx"], editable: !0, color: "#3b82f6" },
+    { id: "resumen", tipo: "resumenEjecutivo", icon: "📊", label: "Resumen Ejecutivo", desc: "Síntesis para el cliente cuando tiene dudas sobre el alcance", etapa: "Si hay dudas", categoria: "siHayDudas", formatos: ["pdf", "docx"], editable: !0, color: "#8b5cf6" },
+    { id: "negociacion", tipo: "hojaNegociacion", icon: "🤝", label: "Análisis de Negociación", desc: "Guía interna: qué ceder y qué no (confidencial)", etapa: "Si piden rebaja", categoria: "siPidenRebaja", formatos: ["pdf"], editable: !0, interno: !0, color: "#ef4444" },
+    { id: "contrato", tipo: "contratoObra", icon: "📄", label: "Contrato de Obra", desc: "Contrato formal con cláusulas, plazo y forma de pago", etapa: "Al cerrar", categoria: "alCerrar", formatos: ["pdf", "docx"], editable: !0, color: "#c084fc" },
+    { id: "pagos", tipo: "estadoPago", icon: "💰", label: "Estado de Pago / Acta", desc: "Registrar pagos y generar documentos de cobro con firma", etapa: "Al cobrar", categoria: "alCobrar", formatos: ["pdf", "xlsx"], editable: !0, color: "#f59e0b" },
+    { id: "informe", tipo: "informeEntrega", icon: "📋", label: "Informe de Entrega", desc: "Informe de entrega de obra emitido por el contratista", etapa: "Entrega final", categoria: "entregaFinal", formatos: ["pdf", "docx"], editable: !0, color: "#14b8a6" },
+    { id: "desglose", tipo: "desgloseInterno", icon: "📊", label: "Desglose Interno", desc: "Desglose por partida: materiales, MO, GG y utilidad", etapa: "Uso interno", categoria: "usoInterno", formatos: ["pdf", "xlsx"], editable: !0, interno: !0, color: "#1e3a5f" },
+    { id: "dotacion", tipo: "resumenDotacion", icon: "👷", label: "Resumen de Dotación", desc: "HH estimadas y monto a pagar por rol", etapa: "Uso interno", categoria: "usoInterno", formatos: ["pdf", "xlsx"], editable: !0, interno: !0, color: "#14532d" },
+    { id: "cotizacion", tipo: "cotizacionFormal", icon: "📄", label: "Cotización Formal", desc: "Cotización comercial formal con selección de partidas", etapa: "Comercial", categoria: "comercial", formatos: ["pdf", "docx"], editable: !0, color: "#38bdf8" },
+  ];
+  function obtenerDocumentoObraConfig(presupuesto, tipo) {
+    if (!presupuesto) return null;
+    var configuracion = presupuesto.documentosObra && presupuesto.documentosObra[tipo];
+    if (!configuracion && tipo === "contratoObra") configuracion = presupuesto.contratoObra;
+    return configuracion || null;
+  }
+  function estadoDocumentoObra(presupuesto, tipo) {
+    var configuracion = obtenerDocumentoObraConfig(presupuesto, tipo);
+    if (!configuracion) return "Sin configurar";
+    return configuracion._estadoDocumento === "borrador" || configuracion.estado === "Borrador" ? "Borrador" : "Guardado";
+  }
+  function guardarDocumentoObra(presupuesto, tipo, configuracion) {
+    var documentos = u(d({}, presupuesto && presupuesto.documentosObra), { [tipo]: configuracion });
+    return u(d({}, presupuesto), { documentosObra: documentos });
+  }
+  function mg({ budget: t, client: i, cfg: r, onPagos: n, onClose: l, onOpenDocument: abrirDocumento }) {
+    var o = documentosObraConfig;
+    var s = Gt(r && r.licenciaCodigo, r && r.rut),
       m = (s.valid && !s.expired && r && r.version) || "starter",
       p = (F) => {
         var g = Up[F] || "basico";
@@ -45992,7 +47337,9 @@ K &&
         "Si piden rebaja",
         "Al cerrar",
         "Al cobrar",
+        "Entrega final",
         "Uso interno",
+        "Comercial",
       ];
     const { total: h } = Ee(t.items || [], r, t.descuento, t.modoCosteo, t.sinIva);
     var j = async (F) => {
@@ -46351,7 +47698,7 @@ K &&
             children: ["Total: $", h.toLocaleString("es-CL")],
           }),
           b.map((F) => {
-            var g = o.filter((z) => z.etapa === F && C(z.id));
+            var g = o.filter((z) => z.etapa === F);
             return g.length === 0
               ? null
               : e.jsxs(
@@ -46394,7 +47741,10 @@ K &&
                           e.jsxs(
                             "div",
                             {
-                              onClick: () => j(z.id),
+                              onClick: () => {
+                                if (abrirDocumento) abrirDocumento({ presupuestoId: t.id, documentoTipo: z.id, modo: "preview" });
+                                l();
+                              },
                               style: {
                                 display: "flex",
                                 alignItems: "center",
@@ -46656,9 +48006,7 @@ K &&
             var usaCapitulosPdf = Array.isArray(t.capitulos) && t.capitulos.length > 0;
             var gruposPdf = usaCapitulosPdf
               ? (() => {
-                  var capsOrd = [...t.capitulos].sort(
-                    (a, b) => (parseFloat(a.orden) || 0) - (parseFloat(b.orden) || 0),
-                  );
+                  var capsOrd = t.capitulos;
                   var out = capsOrd.map((cap) => ({
                     cap,
                     items: G.filter((it) => it.capituloId === cap.id),
@@ -46671,10 +48019,8 @@ K &&
             var filaNum = 0;
             gruposPdf.forEach((grp, capIdx) => {
               if (usaCapitulosPdf) {
-                if (S > 255) {
-                  f.addPage();
-                  S = 18;
-                }
+                if (S > 247) { f.addPage(); S = 18; }
+                var subtotalGrupoPdf = grp.items.reduce((sum, item) => sum + calcularLineaPresupuesto(item).totalLinea, 0);
                 f.setFillColor(...R);
                 f.roundedRect(A, S, P, 7, 1, 1, "F");
                 f.setFont("helvetica", "bold");
@@ -46687,6 +48033,7 @@ K &&
                   A + 3,
                   S + 5,
                 );
+                f.text("Subtotal: " + I(Math.round(subtotalGrupoPdf)), A + P - 2, S + 5, { align: "right" });
                 S += 9;
               }
               grp.items.forEach((Z, itemIdx) => {
@@ -46806,6 +48153,15 @@ K &&
           f.setFont("helvetica", "normal"),
           f.setFontSize(8),
           f.setTextColor(...y));
+        var observacionClientePdf = t.notasCliente != null ? t.notasCliente : t.notas || "";
+        if (observacionClientePdf.trim()) {
+          f.setFont("helvetica", "normal"); f.setFontSize(8.5);
+          var lineasObs = f.splitTextToSize(observacionClientePdf, P - 10), altoObs = 13 + lineasObs.length * 4;
+          if (S + altoObs > 255) { f.addPage(); S = 18; }
+          f.setFillColor(248, 250, 252); f.roundedRect(A, S, P, altoObs, 2, 2, "F");
+          f.setFont("helvetica", "bold"); f.text("OBSERVACIONES DEL PRESUPUESTO", A + 5, S + 6);
+          f.setFont("helvetica", "normal"); lineasObs.forEach((linea, idx) => f.text(linea, A + 5, S + 12 + idx * 4)); S += altoObs + 7;
+        }
         var Y = [
           "— Valores netos, no incluyen " +
             ((r && r.impuestoNombre) ||
@@ -47211,6 +48567,7 @@ K &&
     setToast: z,
     licitaciones: tenderOptions,
     onLinkLicitacion: linkTender,
+    onOpenDocument: onOpenDocument,
   }) {
     const [ocBudget, setOcBudget] = Re.useState(null);
     const [linkingBudget, setLinkingBudget] = Re.useState(null);
@@ -47485,15 +48842,14 @@ K &&
                   style: {
                     width: "100%",
                     borderCollapse: "collapse",
-                    minWidth: 1020,
+                    minWidth: 880,
                   },
                   children: [
                     e.jsx("thead", {
                       children: e.jsx("tr", {
                         children: [
                           "N°",
-                          "Cliente",
-                          "Descripción",
+                          "Cliente / Descripción",
                           "Fecha",
                           "Subtotal",
                           "IVA",
@@ -47551,37 +48907,35 @@ K &&
                                 ],
                               }),
                               e.jsx("td", {
-                                style: c.td,
-                                children:
-                                  G && G.nombre
-                                    ? G.nombre.split(" ").slice(0, 3).join(" ")
-                                    : Q._borrador && !Q.clienteId
-                                      ? e.jsx("span", {
-                                          title: "Borrador guardado sin cliente asociado",
-                                          style: {
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            gap: 4,
-                                            padding: "2px 6px",
-                                            borderRadius: 999,
-                                            background: "rgba(251,146,60,.10)",
-                                            border: "1px solid rgba(251,146,60,.4)",
-                                            color: "#fb923c",
-                                            fontSize: 9.5,
-                                            fontWeight: 800,
-                                            whiteSpace: "nowrap",
-                                          },
-                                          children: "📋 Borrador · Sin cliente",
-                                        })
-                                      : null,
-                              }),
-                              e.jsx("td", {
-                                style: u(d({}, c.td), {
-                                  color: a.muted,
-                                  maxWidth: 190,
-                                }),
+                                style: u(d({}, c.td), { maxWidth: 280 }),
                                 children: e.jsxs("div", { children: [
-                                  e.jsx("div", { style: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: Q.descripcion }),
+                                  e.jsx("div", {
+                                    title: G && G.nombre ? G.nombre : "",
+                                    style: { fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
+                                    children:
+                                      G && G.nombre
+                                        ? G.nombre.split(" ").slice(0, 3).join(" ")
+                                        : Q._borrador && !Q.clienteId
+                                          ? e.jsx("span", {
+                                              title: "Borrador guardado sin cliente asociado",
+                                              style: {
+                                                display: "inline-flex",
+                                                alignItems: "center",
+                                                gap: 4,
+                                                padding: "2px 6px",
+                                                borderRadius: 999,
+                                                background: "rgba(251,146,60,.10)",
+                                                border: "1px solid rgba(251,146,60,.4)",
+                                                color: "#fb923c",
+                                                fontSize: 9.5,
+                                                fontWeight: 800,
+                                                whiteSpace: "nowrap",
+                                              },
+                                              children: "📋 Borrador · Sin cliente",
+                                            })
+                                          : null,
+                                  }),
+                                  e.jsx("div", { title: Q.descripcion || "", style: { color: a.muted, fontSize: 12, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: Q.descripcion }),
                                   Q.licitacionIdMP && e.jsxs("div", { title: Q.licitacionNombre || "Presupuesto vinculado a Mercado Público", style: { display: "inline-flex", alignItems: "center", gap: 4, marginTop: 4, padding: "2px 6px", borderRadius: 999, background: "rgba(245,160,32,.10)", border: "1px solid rgba(245,160,32,.4)", color: a.accent, fontSize: 9.5, fontWeight: 800, whiteSpace: "nowrap" }, children: [e.jsx("span", { children: "🔒" }), e.jsx("span", { children: "Licitación " + Q.licitacionIdMP })] }),
                                 ] }),
                               }),
@@ -47589,17 +48943,25 @@ K &&
                                 style: u(d({}, c.td), {
                                   color: a.muted,
                                   fontSize: 13,
+                                  whiteSpace: "nowrap",
                                 }),
-                                children: Q.fecha,
+                                children: (() => {
+                                  var fechaCorta = String(Q.fecha || ""),
+                                    partesFecha = fechaCorta.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                                  return partesFecha
+                                    ? partesFecha[3] + "/" + partesFecha[2] + "/" + partesFecha[1].slice(2)
+                                    : fechaCorta;
+                                })(),
                               }),
                               e.jsx("td", {
-                                style: u(d({}, c.td), { fontSize: 13 }),
+                                style: u(d({}, c.td), { fontSize: 13, whiteSpace: "nowrap" }),
                                 children: ne(ie),
                               }),
                               e.jsx("td", {
                                 style: u(d({}, c.td), {
                                   fontSize: 13,
                                   color: a.muted,
+                                  whiteSpace: "nowrap",
                                 }),
                                 children: ne(oe),
                               }),
@@ -47607,6 +48969,7 @@ K &&
                                 style: u(d({}, c.td), {
                                   fontWeight: 600,
                                   color: a.accent,
+                                  whiteSpace: "nowrap",
                                 }),
                                 children: ne(ce),
                               }),
@@ -47622,13 +48985,17 @@ K &&
                                           : be,
                                       ),
                                     ),
-                                  style: {
+                                  style: u(d({}, c.bdg(Q.estado)), {
                                     width: "auto",
-                                    fontSize: 12,
-                                    padding: "3px 6px",
-                                    background: "transparent",
-                                    border: `1px solid ${a.border}`,
-                                  },
+                                    border: "none",
+                                    outline: "none",
+                                    cursor: "pointer",
+                                    textAlign: "center",
+                                    appearance: "none",
+                                    WebkitAppearance: "none",
+                                    MozAppearance: "none",
+                                    backgroundImage: "none",
+                                  }),
                                   children: [
                                     "Pendiente",
                                     "Aprobado",
@@ -47811,12 +49178,8 @@ K &&
                                             label: "Cotización Formal",
                                             color: "#38bdf8",
                                             action: () => {
-                                              const ve =
-                                                r.find(
-                                                  (be) => be.id === Q.clienteId,
-                                                ) || {};
-                                              (X({ budget: Q, client: ve }),
-                                                I(null));
+                                              if (onOpenDocument) onOpenDocument({ presupuestoId: Q.id, documentoTipo: "cotizacion", modo: "preview" });
+                                              I(null);
                                             },
                                           },
                                           {
@@ -47827,7 +49190,7 @@ K &&
                                               (le(Q), I(null));
                                             },
                                           },
-                                        ].map(
+                                        ].filter(Boolean).map(
                                           (
                                             {
                                               icon: ve,
@@ -47898,10 +49261,14 @@ K &&
             ],
           }),
           Z &&
-            e.jsx(fg, {
+            e.jsx(CotizacionFormalEditor, {
               budget: Z.budget,
               client: Z.client,
               cfg: n,
+              setToast: z || (() => {}),
+              onSave: (cotizacionFormal) => {
+                i((actuales) => (actuales || []).map((presupuesto) => String(presupuesto.id) === String(Z.budget.id) ? guardarDocumentoObra(presupuesto, "cotizacionFormal", cotizacionFormal) : presupuesto));
+              },
               onClose: () => X(null),
             }),
           v &&
@@ -47945,6 +49312,7 @@ K &&
                 (S(O), U(null));
               },
               onClose: () => U(null),
+              onOpenDocument: onOpenDocument,
             }),
           D &&
             e.jsx(Kf, {
@@ -54021,7 +55389,7 @@ K &&
       "Selecciona un presupuesto para acceder a todos sus documentos organizados por etapa del proceso de venta.",
       "Al presentar: Carta de Presentación, PDF y Excel del presupuesto.",
       "Si hay dudas: Resumen Ejecutivo con alcances, exclusiones y argumentos de valor.",
-      "Si piden rebaja: Hoja de Negociación confidencial con análisis de partidas negociables.",
+      "Si piden rebaja: Análisis de Negociación confidencial con análisis de partidas negociables.",
       "Al cerrar: Contrato de Obra. Al cobrar: Estados de Pago y Acta de Recepción. Al ejecutar: Informe de Entrega de Obra.",
     ],
   };
@@ -64351,20 +65719,38 @@ K &&
       },
       suggestCompanyPresentation = () => {
         var company = String(h.empresa || "Nuestra empresa").trim();
-        var industry = String(h.empresaRubro || "servicios, construcción y mantenimiento").trim();
+        var industry = String(h.empresaRubro || "construcción y obras civiles").trim();
+        var ciudad = String(h.ciudad || cfg && cfg.ciudad || "").trim();
         var startYear = parseInt(h.empresaAnioInicio, 10);
         var currentYear = new Date().getFullYear();
-        var years = startYear > 1900 && startYear <= currentYear ? currentYear - startYear : 0;
-        var budgets = (r && r.budgets || []).filter((budget) => budget && !budget._deleted);
-        var clients = (r && r.clients || []).filter(Boolean);
-        var descriptions = budgets.map((budget) => String(budget.descripcion || "").trim()).filter(Boolean).slice(-5);
-        var specialties = descriptions.length ? descriptions.slice(0, 3).join(", ") : industry;
-        var text = company + " desarrolla trabajos en el ámbito de " + industry + ".";
-        if (years > 0) text += " Cuenta con " + years + " años de trayectoria desde " + startYear + ".";
-        if (budgets.length > 0) text += " En Enlace Constructor mantiene un historial de " + budgets.length + " presupuestos preparados" + (clients.length ? " para " + clients.length + " clientes registrados" : "") + ", con experiencia comercial asociada a " + specialties + ".";
-        text += " Para esta postulación, la empresa pone a disposición su capacidad de planificación, control de costos y coordinación de recursos, ajustándose a las bases administrativas y técnicas de la contratación.";
+        var yearsNum = startYear > 1900 && startYear <= currentYear ? currentYear - startYear : 0;
+        // Deduce specialties from budget descriptions — group keywords, don't list raw titles
+        var budgets = (r && r.budgets || []).filter(function(b){ return b && !b._deleted; });
+        var allDesc = budgets.map(function(b){ return String(b.descripcion || "").toLowerCase(); }).filter(Boolean);
+        // Extract recurring meaningful nouns (3+ chars, not stop words)
+        var stopWords = ["de","el","la","los","las","en","un","una","por","para","del","con","y","a","al","se","que","su","sus","obra","trabajo","trabajos","servicio","servicios","proyecto","proyectos","instalacion","instalación"];
+        var wordFreq = {};
+        allDesc.forEach(function(desc){
+          desc.split(/[\s,\/\.\-]+/).forEach(function(w){
+            w = w.replace(/[^a-záéíóúüñ]/gi,"").toLowerCase();
+            if(w.length >= 4 && !stopWords.includes(w)) wordFreq[w] = (wordFreq[w]||0)+1;
+          });
+        });
+        var topWords = Object.entries(wordFreq).sort(function(a,b){return b[1]-a[1];}).slice(0,5).map(function(e){return e[0];});
+        // Build specialties phrase in natural language
+        var especialidades = topWords.length >= 3
+          ? topWords.slice(0,3).map(function(w){ return w.charAt(0).toUpperCase()+w.slice(1); }).join(", ").replace(/,([^,]*)$/," y$1")
+          : industry;
+        // Build paragraphs
+        var p1 = company + " es una empresa dedicada a " + industry;
+        if (ciudad) p1 += ", con presencia en " + ciudad;
+        if (yearsNum > 0) p1 += ", con más de " + yearsNum + " " + (yearsNum === 1 ? "año" : "años") + " de experiencia en el rubro";
+        p1 += ". Contamos con trayectoria en trabajos de " + especialidades + ", brindando soluciones ajustadas a los requerimientos técnicos y al presupuesto de cada proyecto.";
+        var p2 = "Nuestro enfoque se basa en la transparencia, el cumplimiento de plazos y la calidad de ejecución — compromisos que mantenemos en cada obra que emprendemos.";
+        var p3 = "Ponemos a disposición nuestra capacidad técnica y de gestión para el desarrollo exitoso de este proyecto, comprometiendo a nuestro equipo desde la planificación hasta la entrega final.";
+        var text = p1 + "\n\n" + p2 + "\n\n" + p3;
         z((current) => u(d({}, current), { empresaPresentacion: text }));
-        o("✨ Presentación sugerida. Revísala y ajusta cualquier afirmación antes de guardarla.");
+        o("✨ Presentación sugerida. Revísala y personalízala antes de guardar — es un punto de partida, no un texto definitivo.");
       },
       importCompanyPresentation = (event) => {
         var file = event.target.files && event.target.files[0];
@@ -65192,7 +66578,7 @@ K &&
                     e.jsx(ze, { label: "Rubro o especialidad principal", children: e.jsx(Pe, { value: h.empresaRubro || "", onChange: B("empresaRubro"), placeholder: "Ej: obras civiles, mantención de áreas verdes" }) }),
                     e.jsx(ze, { label: "Año de inicio de actividades", children: e.jsx(Pe, { type: "number", min: "1900", max: String(new Date().getFullYear()), value: h.empresaAnioInicio || "", onChange: B("empresaAnioInicio"), placeholder: "Ej: 2018" }) }),
                   ] }),
-                  e.jsx(ze, { label: "Presentación estándar de la empresa", children: e.jsx("textarea", { value: h.empresaPresentacion || "", onChange: B("empresaPresentacion"), placeholder: "Describe experiencia, especialidades, forma de trabajo y fortalezas comprobables...", rows: 6, style: u(d({}, c.inp), { width: "100%", resize: "vertical", lineHeight: 1.55 }) }) }),
+                  e.jsx(ze, { label: "Presentación estándar de la empresa", children: e.jsx("textarea", { value: h.empresaPresentacion || "", onChange: (evt) => B("empresaPresentacion")(evt.target.value), placeholder: "Describe experiencia, especialidades, forma de trabajo y fortalezas comprobables...", rows: 6, style: u(d({}, c.inp), { width: "100%", resize: "vertical", lineHeight: 1.55 }) }) }),
                   e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginTop: 9 }, children: [
                     e.jsxs("label", { style: u(d({}, c.btn("s")), { padding: "7px 11px", fontSize: 11, cursor: "pointer" }), children: ["📎 Asociar presentación existente", e.jsx("input", { type: "file", accept: ".txt,.pdf,.doc,.docx", onChange: importCompanyPresentation, style: { display: "none" } })] }),
                     h.empresaPresentacionArchivo && e.jsx("span", { style: { color: a.text, fontSize: 11 }, children: "Archivo asociado: " + h.empresaPresentacionArchivo }),
@@ -66128,7 +67514,7 @@ K &&
                 },
                 children: [
                   e.jsx("div", { style: { fontSize: 20, fontWeight: 800, color: a.text, marginBottom: 2 }, children: "Enlace Constructor Pro" }),
-                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accent, marginBottom: 12 }, children: ["Versión 1.7.0 · Edición de lanzamiento"] }),
+                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accent, marginBottom: 12 }, children: ["Versión 1.7.2 · Edición de lanzamiento"] }),
                   e.jsxs("div", { style: { fontSize: 12, color: a.muted, lineHeight: 2 }, children: [
                     e.jsxs("div", { children: [e.jsx("strong", { style: { color: a.text }, children: "Titular de derechos: " }), "ENLACE"] }),
                     e.jsxs("div", { children: [
@@ -69151,6 +70537,1386 @@ K &&
       "</div></body></html>";
     return h;
   }
+  async function exportarContratoDocx(t, i, r, entradaContrato, setToast) {
+    try {
+      if (setToast) setToast("⏳ Preparando documento Word...");
+      var D = await import("./vendor/docx-8.5.0.mjs");
+      if (!D || !D.Document || !D.Packer) throw new Error("La biblioteca DOCX local no quedó disponible.");
+      var contrato = normalizarContratoObra(t, i, r, entradaContrato), economia = datosEconomicosContrato(t, r, contrato), capitulos = resumenCapitulosContrato(t);
+      var Paragraph = D.Paragraph, TextRun = D.TextRun, Table = D.Table, TableRow = D.TableRow, TableCell = D.TableCell, WidthType = D.WidthType, AlignmentType = D.AlignmentType, HeadingLevel = D.HeadingLevel, Header = D.Header, Footer = D.Footer;
+      var par = function (texto, opciones) { opciones = opciones || {}; var lineas = String(texto == null ? "" : texto).split("\n"); return new Paragraph({ alignment: opciones.alignment, heading: opciones.heading, spacing: { after: opciones.after == null ? 120 : opciones.after }, children: lineas.map(function (linea, indice) { return new TextRun({ text: linea, break: indice ? 1 : void 0, bold: !!opciones.bold, color: opciones.color, size: opciones.size }); }) }); };
+      var celda = function (texto, bold, color) { return new TableCell({ shading: color ? { fill: color } : void 0, children: [par(texto, { bold: bold, color: color ? "FFFFFF" : void 0, after: 0 })] }); };
+      var tablaPartes = new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [new TableRow({ children: [celda("CONTRATISTA", !0, "1A3060"), celda("MANDANTE", !0, "1A3060")] }), new TableRow({ children: [celda(contrato.contratistaNombre + "\nRUT: " + contrato.contratistaRut + "\nRepresentante: " + contrato.representanteLegal + "\n" + contrato.contratistaDomicilio), celda(contrato.mandanteNombre + "\nRUT: " + contrato.mandanteRut + "\n" + contrato.mandanteTelefono + " · " + contrato.mandanteCorreo)] })] });
+      var filasCapitulos = [new TableRow({ tableHeader: !0, children: [celda("Código", !0, "1A3060"), celda("Capítulo", !0, "1A3060"), celda("Subtotal", !0, "1A3060")] })].concat(capitulos.map(function (capitulo) { return new TableRow({ children: [celda(capitulo.codigo || "—"), celda(capitulo.nombre), celda("$" + Math.round(capitulo.subtotal).toLocaleString("es-CL"))] }); }));
+      var tablaCapitulos = new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: filasCapitulos });
+      var tablaEconomia = new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: [["Subtotal neto", economia.subtotal], ["IVA", economia.iva], ["Total del contrato", economia.total], ["Anticipo (" + contrato.anticipoPorcentaje + "%)", economia.anticipo], ["Saldo", economia.saldo]].filter(function (fila) { return fila[0] !== "IVA" || fila[1] || contrato.valoresIncluyenIva; }).map(function (fila) { return new TableRow({ children: [celda(fila[0], fila[0] === "Total del contrato"), celda("$" + Math.round(fila[1]).toLocaleString("es-CL"), fila[0] === "Total del contrato")] }); }) });
+      var clausulas = contrato.clausulas.filter(function (clausula) { return clausula.activa !== !1; }).sort(function (A, B) { return A.orden - B.orden; });
+      var contenido = [par("CONTRATO DE OBRA", { bold: !0, color: "1A3060", size: 34, alignment: AlignmentType.CENTER }), par("N.° " + contrato.numero + " · " + contrato.fecha + " · " + contrato.estado, { alignment: AlignmentType.CENTER, color: "64748B" }), tablaPartes, par("DESCRIPCIÓN DE LA OBRA", { bold: !0, color: "1A3060", after: 80 }), par("Proyecto: " + contrato.proyectoNombre + "\nDirección: " + contrato.direccionObra + "\nComuna / ciudad: " + contrato.obraCiudad), par("RESUMEN ECONÓMICO POR CAPÍTULOS", { bold: !0, color: "1A3060", after: 80 }), tablaCapitulos, tablaEconomia, par(contrato.clausulaAnexo, { color: "7C5A00" }), par("CONDICIONES ECONÓMICAS Y PLAZO", { bold: !0, color: "1A3060" }), par("Forma de pago: " + contrato.formaPago + "\nEstados de pago: " + contrato.estadosPago + "\nHitos: " + contrato.hitosPago + "\nCondición tributaria: " + contrato.condicionTributaria + "\nPlazo: " + contrato.plazoNumero + " " + contrato.plazoUnidad + "\nEvento de inicio: " + contrato.eventoInicio + "\nSuspensión o ampliación: " + contrato.suspensionPlazo), par("CLÁUSULAS DEL CONTRATO", { bold: !0, color: "1A3060", heading: HeadingLevel.HEADING_1 })];
+      clausulas.forEach(function (clausula, indice) { contenido.push(par((indice + 1) + ". " + clausula.titulo, { bold: !0, color: "1A3060" })); contenido.push(par(clausula.contenido)); });
+      contenido.push(par("FIRMAS", { bold: !0, color: "1A3060" }));
+      var firmas = [["Contratista", contrato.firmaContratista + "\n" + contrato.firmaRepresentante, contrato.firmaContratistaRut], ["Mandante", contrato.firmaMandante, contrato.firmaMandanteRut]];
+      if (contrato.incluirInspector) firmas.push(["Inspector técnico", contrato.inspectorNombre, contrato.inspectorRut]);
+      if (contrato.incluirTestigo) firmas.push(["Testigo", contrato.testigoNombre, contrato.testigoRut]);
+      if (contrato.incluirAdministrador) firmas.push(["Administrador", contrato.administradorNombre, contrato.administradorRut]);
+      contenido.push(new Table({ width: { size: 100, type: WidthType.PERCENTAGE }, rows: firmas.map(function (firma) { return new TableRow({ children: [celda(firma[0], !0), celda(firma[1] + "\nRUT: " + firma[2] + "\n\nFirma: ______________________________")] }); }) }));
+      contenido.push(par("Lugar y fecha: " + contrato.firmaLugar + " · " + (contrato.firmaFecha || contrato.fecha), { alignment: AlignmentType.CENTER }));
+      var documento = new D.Document({ sections: [{ properties: {}, headers: { default: new Header({ children: [par(contrato.contratistaNombre || "Bajo Deslinde", { bold: !0, color: "1A3060", alignment: AlignmentType.RIGHT })] }) }, footers: { default: new Footer({ children: [par("Contrato de Obra N.° " + contrato.numero + " · Enlace Constructor Pro", { color: "94A3B8", alignment: AlignmentType.CENTER })] }) }, children: contenido }] });
+      var blob = await D.Packer.toBlob(documento), enlace = document.createElement("a"), url = URL.createObjectURL(blob);
+      var limpiar = function (valor) { return String(valor || "").normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").replace(/[^a-zA-Z0-9_-]+/g, "_").replace(/^_+|_+$/g, ""); };
+      enlace.href = url; enlace.download = "Contrato_de_Obra_" + limpiar(contrato.numero || t.id) + "_" + limpiar(contrato.mandanteNombre || "cliente") + ".docx"; document.body.appendChild(enlace); enlace.click(); enlace.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      if (setToast) setToast("✅ Word editable generado");
+    } catch (error) {
+      if (setToast) setToast("❌ No se pudo generar Word: " + (error && error.message ? error.message : "error desconocido"));
+    }
+  }
+  function ContratoObraEditor({ budget: t, client: i, cfg: r, onSave: n, setToast: l }) {
+    const [o, m] = V(function () { return normalizarContratoObra(t, i, r); });
+    var economia = datosEconomicosContrato(t, r, o), capitulos = resumenCapitulosContrato(t);
+    var setCampo = function (campo, valor) { m(function (actual) { return u(d({}, actual), { [campo]: valor }); }); };
+    var input = function (label, campo, tipo) { return e.jsxs("label", { style: { display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: a.muted }, children: [label, e.jsx("input", { type: tipo || "text", value: o[campo] == null ? "" : o[campo], onChange: function (evento) { setCampo(campo, tipo === "number" ? Number(evento.target.value) : evento.target.value); }, style: u(d({}, c.inp), { width: "100%" }) })] }); };
+    var textarea = function (label, campo, alto) { return e.jsxs("label", { style: { display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: a.muted }, children: [label, e.jsx("textarea", { value: o[campo] || "", onChange: function (evento) { setCampo(campo, evento.target.value); }, style: u(d({}, c.inp), { width: "100%", minHeight: alto || 70 }) })] }); };
+    var grid = function (children, columnas) { return e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(" + (columnas || 2) + ",minmax(0,1fr))", gap: 10 }, children: children }); };
+    var seccion = function (titulo, contenido) { return e.jsxs("div", { style: u(d({}, c.card), { marginBottom: 12 }), children: [e.jsx("div", { style: u(d({}, c.ct), { marginBottom: 10 }), children: titulo }), contenido] }); };
+    var clausulasOrdenadas = [].concat(o.clausulas || []).sort(function (A, B) { return A.orden - B.orden; });
+    var reemplazarClausulas = function (clausulas) { setCampo("clausulas", clausulas.map(function (clausula, indice) { return u(d({}, clausula), { numero: indice + 1, orden: indice }); })); };
+    var actualizarClausula = function (id, campo, valor) { reemplazarClausulas(clausulasOrdenadas.map(function (clausula) { return clausula.id === id ? u(d({}, clausula), { [campo]: valor }) : clausula; })); };
+    var moverClausula = function (id, direccion) { var lista = clausulasOrdenadas.slice(), indice = lista.findIndex(function (clausula) { return clausula.id === id; }), destino = indice + direccion; if (indice < 0 || destino < 0 || destino >= lista.length) return; var temporal = lista[indice]; lista[indice] = lista[destino]; lista[destino] = temporal; reemplazarClausulas(lista); };
+    var agregarClausula = function () { reemplazarClausulas(clausulasOrdenadas.concat([{ id: "clausula_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7), numero: clausulasOrdenadas.length + 1, titulo: "Nueva cláusula", contenido: "", orden: clausulasOrdenadas.length, activa: !0 }])); };
+    var eliminarClausula = function (id) { reemplazarClausulas(clausulasOrdenadas.filter(function (clausula) { return clausula.id !== id; })); };
+    var restaurarClausulas = function () { if (confirm("¿Restaurar las cláusulas predeterminadas? Se reemplazarán las cláusulas actuales del contrato.")) reemplazarClausulas(clausulasContratoPredeterminadas(t)); };
+    var vista = function () { Ep(t, i, r, o); };
+    var guardar = function () { var guardado = u(d({}, o), { _estadoDocumento: o.estado === "Borrador" ? "borrador" : "guardado", actualizadoEn: new Date().toISOString() }); n(guardado); l("✅ Contrato guardado en el presupuesto"); };
+    return e.jsxs("div", { children: [
+      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 12, flexWrap: "wrap" }, children: [e.jsx("div", { style: { fontSize: 12, color: a.muted, maxWidth: 520 }, children: "Editor interno del contrato. La vista previa, PDF y Word usan el diseño corporativo. Revisa el contenido con asesoría profesional cuando corresponda." }), e.jsxs("div", { style: { display: "flex", gap: 8 }, children: [e.jsx("button", { style: c.btn("s"), onClick: function () { exportarContratoDocx(t, i, r, o, l); }, children: "Descargar Word" }), e.jsx("button", { style: c.btn("p"), onClick: vista, children: "Vista previa / Generar PDF" })] })] }),
+      seccion("1. Identificación", grid([input("Número del contrato", "numero"), input("Fecha", "fecha", "date"), input("Estado", "estado"), input("Proyecto", "proyectoNombre"), input("Contratista / razón social", "contratistaNombre"), input("RUT contratista", "contratistaRut"), input("Representante legal", "representanteLegal"), input("Domicilio contratista", "contratistaDomicilio"), input("Ciudad contratista", "contratistaCiudad"), input("Teléfono contratista", "contratistaTelefono"), input("Correo contratista", "contratistaCorreo"), input("Mandante / razón social", "mandanteNombre"), input("RUT mandante", "mandanteRut"), input("Teléfono mandante", "mandanteTelefono"), input("Correo mandante", "mandanteCorreo"), input("Dirección de la obra", "direccionObra"), input("Comuna / ciudad de la obra", "obraCiudad"), input("Lugar de firma", "firmaLugar"), input("Fecha de firma", "firmaFecha", "date")], 2)),
+      seccion("2. Resumen económico por capítulos", e.jsxs("div", { children: [e.jsxs("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: 12 }, children: [e.jsx("thead", { children: e.jsxs("tr", { children: [e.jsx("th", { style: c.th, children: "Código" }), e.jsx("th", { style: c.th, children: "Capítulo" }), e.jsx("th", { style: c.th, children: "Subtotal" })] }) }), e.jsx("tbody", { children: capitulos.map(function (capitulo) { return e.jsxs("tr", { children: [e.jsx("td", { style: c.td, children: capitulo.codigo || "—" }), e.jsx("td", { style: c.td, children: capitulo.nombre }), e.jsx("td", { style: u(d({}, c.td), { textAlign: "right", fontWeight: 700 }), children: "$" + Number(capitulo.subtotal).toLocaleString("es-CL") })] }, capitulo.id); }) })] }), grid([input("Subtotal neto", "subtotalNeto", "number"), input("IVA", "ivaMonto", "number"), input("Total del contrato", "montoTotal", "number"), e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: [e.jsx("input", { type: "checkbox", checked: !!o.valoresIncluyenIva, onChange: function (evento) { setCampo("valoresIncluyenIva", evento.target.checked); } }), " Valores incluyen IVA"] })]), textarea("Cláusula del presupuesto anexo", "clausulaAnexo", 70)] })),
+      seccion("3. Condiciones económicas", e.jsxs("div", { children: [grid([input("Anticipo (%)", "anticipoPorcentaje", "number"), input("Estados de pago", "estadosPago", "number"), e.jsxs("div", { style: { padding: 9, background: a.sb, borderRadius: 7 }, children: [e.jsx("div", { style: { fontSize: 10, color: a.muted }, children: "Monto de anticipo calculado" }), e.jsx("b", { children: "$" + economia.anticipo.toLocaleString("es-CL") })] }), e.jsxs("div", { style: { padding: 9, background: a.sb, borderRadius: 7 }, children: [e.jsx("div", { style: { fontSize: 10, color: a.muted }, children: "Saldo calculado" }), e.jsx("b", { children: "$" + economia.saldo.toLocaleString("es-CL") })] })]), e.jsxs("div", { style: { padding: "9px 0", color: a.accent, fontWeight: 700, display: "flex", gap: 24 }, children: ["Anticipo: $" + economia.anticipo.toLocaleString("es-CL"), "Saldo: $" + economia.saldo.toLocaleString("es-CL")] }), textarea("Forma de pago", "formaPago", 60), textarea("Hitos de pago", "hitosPago", 70), textarea("Condición tributaria", "condicionTributaria", 60)] })),
+      seccion("4. Plazos y garantía", e.jsxs("div", { children: [grid([input("Duración", "plazoNumero", "number"), e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Unidad", e.jsx("select", { value: o.plazoUnidad || "días corridos", onChange: function (evento) { setCampo("plazoUnidad", evento.target.value); }, style: u(d({}, c.inp), { width: "100%" }), children: ["días corridos", "días hábiles", "semanas", "meses"].map(function (unidad) { return e.jsx("option", { value: unidad, children: unidad }, unidad); }) })] }), input("Fecha estimada de inicio", "fechaInicio", "date"), input("Fecha estimada de término", "fechaTermino", "date"), input("Garantía", "garantiaNumero", "number"), input("Unidad de garantía", "garantiaUnidad")]), textarea("Evento de inicio", "eventoInicio", 60), textarea("Causas de suspensión o ampliación", "suspensionPlazo", 70)] })),
+      seccion("5. Cláusulas editables", e.jsxs("div", { children: [clausulasOrdenadas.map(function (clausula, indice) { return e.jsxs("div", { style: { padding: 10, background: a.sb, border: "1px solid " + a.border, borderRadius: 8, marginBottom: 8, opacity: clausula.activa === !1 ? .6 : 1 }, children: [e.jsxs("div", { style: { display: "flex", gap: 6, alignItems: "center", marginBottom: 6 }, children: [e.jsx("span", { style: { width: 22, fontWeight: 800, color: a.accent }, children: indice + 1 }), e.jsx("input", { value: clausula.titulo, onChange: function (evento) { actualizarClausula(clausula.id, "titulo", evento.target.value); }, style: u(d({}, c.inp), { flex: 1, fontWeight: 700 }) }), e.jsxs("label", { style: { fontSize: 10, color: a.muted }, children: [e.jsx("input", { type: "checkbox", checked: clausula.activa !== !1, onChange: function (evento) { actualizarClausula(clausula.id, "activa", evento.target.checked); } }), " Activa"] }), e.jsx("button", { style: c.btn("s"), disabled: indice === 0, onClick: function () { moverClausula(clausula.id, -1); }, children: "↑" }), e.jsx("button", { style: c.btn("s"), disabled: indice === clausulasOrdenadas.length - 1, onClick: function () { moverClausula(clausula.id, 1); }, children: "↓" }), e.jsx("button", { style: c.btn("d"), onClick: function () { eliminarClausula(clausula.id); }, children: "Eliminar" })] }), e.jsx("textarea", { value: clausula.contenido, onChange: function (evento) { actualizarClausula(clausula.id, "contenido", evento.target.value); }, style: u(d({}, c.inp), { width: "100%", minHeight: 82 }) })] }, clausula.id); }), e.jsxs("div", { style: { display: "flex", gap: 8 }, children: [e.jsx("button", { style: c.btn("s"), onClick: agregarClausula, children: "+ Agregar cláusula" }), e.jsx("button", { style: c.btn("s"), onClick: restaurarClausulas, children: "Restaurar predeterminadas" })] })] })),
+      seccion("6. Firmas", e.jsxs("div", { children: [grid([input("Contratista", "firmaContratista"), input("Representante", "firmaRepresentante"), input("RUT contratista", "firmaContratistaRut"), input("Mandante", "firmaMandante"), input("RUT mandante", "firmaMandanteRut")]), [["incluirInspector", "Inspector técnico", "inspectorNombre", "inspectorRut"], ["incluirTestigo", "Testigo", "testigoNombre", "testigoRut"], ["incluirAdministrador", "Administrador", "administradorNombre", "administradorRut"]].map(function (firma) { return e.jsxs("div", { style: { marginTop: 9 }, children: [e.jsxs("label", { style: { fontSize: 11, fontWeight: 700 }, children: [e.jsx("input", { type: "checkbox", checked: !!o[firma[0]], onChange: function (evento) { setCampo(firma[0], evento.target.checked); } }), " Incluir " + firma[1]] }), o[firma[0]] && grid([input("Nombre " + firma[1].toLowerCase(), firma[2]), input("RUT", firma[3])])] }, firma[0]); })] })),
+      e.jsx("button", { style: u(d({}, c.btn("p")), { width: "100%", padding: 12, fontWeight: 700 }), onClick: guardar, children: "💾 Guardar contrato" })
+    ] });
+  }
+  function DesgloseInternoEditor({ budget: t, client: i, cfg: r, onSave: n, setToast: l }) {
+    const [doc, setDoc] = V(function () { return normalizarDesgloseInterno(t, r); });
+    const [undoStack, setUndoStack] = V([]);
+    const [redoStack, setRedoStack] = V([]);
+
+    var registrarHistorial = function (actual) {
+      var str = JSON.stringify(actual);
+      setUndoStack(function (prev) {
+        if (prev.length > 0 && prev[prev.length - 1] === str) return prev;
+        return prev.concat([str]);
+      });
+      setRedoStack([]);
+    };
+
+    var realizarDeshacer = function () {
+      if (undoStack.length === 0) return;
+      var prevStr = undoStack[undoStack.length - 1];
+      setUndoStack(function (prev) { return prev.slice(0, -1); });
+      setRedoStack(function (prev) { return prev.concat([JSON.stringify(doc)]); });
+      setDoc(JSON.parse(prevStr));
+    };
+
+    var realizarRehacer = function () {
+      if (redoStack.length === 0) return;
+      var nextStr = redoStack[redoStack.length - 1];
+      setRedoStack(function (prev) { return prev.slice(0, -1); });
+      setUndoStack(function (prev) { return prev.concat([JSON.stringify(doc)]); });
+      setDoc(JSON.parse(nextStr));
+    };
+
+    var datos = calcularDesgloseInterno(t, r, doc), manual = doc.modoCalculo === "manual", money = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    var cambiar = function (campo, valor) { setDoc(function (actual) { registrarHistorial(actual); return Object.assign({}, actual, { [campo]: valor, estado: "Borrador", _estadoDocumento: "borrador" }); }); };
+    var activarManual = function () { setDoc(function (actual) { registrarHistorial(actual); var auto = Object.assign({}, actual, { modoCalculo: "automatico" }), ajustes = Object.assign({}, actual.ajustesPorPartida); actual.estructura.forEach(function (cap) { cap.partidas.forEach(function (p) { if (!ajustes[p.clave]) { var x = componentesDesglose(p, auto); ajustes[p.clave] = { materiales: x.materiales, manoObra: x.manoObra, gastosGenerales: x.gastosGenerales, utilidad: x.utilidad }; } }); }); return Object.assign({}, actual, { modoCalculo: "manual", ajustesPorPartida: ajustes, estado: "Borrador", _estadoDocumento: "borrador" }); }); };
+    var ajustar = function (clave, campo, valor) { setDoc(function (actual) { registrarHistorial(actual); var ajustes = Object.assign({}, actual.ajustesPorPartida), fila = Object.assign({}, ajustes[clave]); fila[campo] = Number(valor) || 0; ajustes[clave] = fila; return Object.assign({}, actual, { ajustesPorPartida: ajustes, estado: "Borrador", _estadoDocumento: "borrador" }); }); };
+    var recalcular = function () {
+      setDoc(function (actual) {
+         return Object.assign({}, actual, { _showModalConfirmacion: true });
+      });
+    };
+
+    var realizarRecalculo = function (reset) {
+      registrarHistorial(doc);
+      var nueva = estructuraDesglose(t), claves = new Set();
+      nueva.forEach(function (cap) { cap.partidas.forEach(function (p) { claves.add(p.clave); }); });
+      
+      var ajustes = {};
+      if (!reset) {
+         Object.keys(doc.ajustesPorPartida).forEach(function (k) { if (claves.has(k)) ajustes[k] = doc.ajustesPorPartida[k]; });
+      }
+      
+      var defGG = Number(r && r.pctGG) || 0;
+      var defUtil = Number(r && (r.pctUtil || r.pctUtilidad)) || 0;
+
+      setDoc(Object.assign({}, doc, {
+         estructura: nueva,
+         ajustesPorPartida: ajustes,
+         modoCalculo: reset ? "automatico" : doc.modoCalculo,
+         porcentajeGG: reset ? defGG : doc.porcentajeGG,
+         porcentajeUtilidad: reset ? defUtil : doc.porcentajeUtilidad,
+         estado: "Borrador",
+         _estadoDocumento: "borrador",
+         _showModalConfirmacion: false
+      }));
+      
+      l(reset ? "✅ Ajustes manuales restablecidos a cero" : "✅ Estructura del presupuesto sincronizada");
+    };
+    var guardar = function () { var salida = Object.assign({}, doc, { estado: "Guardado", _estadoDocumento: "guardado", actualizadoEn: new Date().toISOString() }); setDoc(salida); n(salida); l("✅ Desglose interno guardado"); };
+    var th = { padding: 7, background: "#1a3060", color: "#fff", fontSize: 10, whiteSpace: "nowrap" }, td = { padding: 7, borderBottom: "1px solid " + a.border, fontSize: 11 }, inputMonto = { width: 100, padding: 5, textAlign: "right", fontSize: 11 };
+    var monto = function (p, campo) { return manual ? e.jsx("input", { type: "number", min: 0, value: p[campo], onChange: function (ev) { ajustar(p.clave, campo, ev.target.value); }, style: Object.assign({}, c.inp, inputMonto) }) : money(p[campo]); };
+    var filas = datos.capitulos.flatMap(function (cap) { var s = cap.subtotal; return [e.jsx("tr", { children: e.jsxs("td", { colSpan: 9, style: Object.assign({}, td, { background: "#f5a020", color: "#1a3060", fontWeight: 800, textAlign: "left" }), children: [(cap.codigo ? cap.codigo + " — " : "") + cap.nombre, e.jsx("span", { style: { float: "right" }, children: cap.partidas.length + " partidas" })] }) }, "cap" + cap.id)].concat(cap.partidas.map(function (p) { return e.jsxs("tr", { children: [e.jsx("td", { style: Object.assign({}, td, { minWidth: 240 }), children: p.descripcion }), e.jsx("td", { style: td, children: p.cantidad }), e.jsx("td", { style: td, children: p.unidad }), e.jsx("td", { style: td, children: money(p.precioUnitario) }), e.jsx("td", { style: td, children: monto(p, "materiales") }), e.jsx("td", { style: td, children: monto(p, "manoObra") }), e.jsx("td", { style: td, children: monto(p, "gastosGenerales") }), e.jsx("td", { style: td, children: monto(p, "utilidad") }), e.jsx("td", { style: Object.assign({}, td, { fontWeight: 800 }), children: money(p.totalInterno) })] }, p.clave); }), [e.jsxs("tr", { children: [e.jsx("td", { colSpan: 4, style: Object.assign({}, td, { background: a.sb, fontWeight: 800 }), children: "Subtotal " + cap.nombre }), [s.materiales, s.manoObra, s.gastosGenerales, s.utilidad, s.totalInterno].map(function (v, k) { return e.jsx("td", { style: Object.assign({}, td, { background: a.sb, textAlign: "right", fontWeight: 800 }), children: money(v) }, k); })] }, "sub" + cap.id)]); });
+    var resumen = [["Materiales", datos.totales.materiales], ["Mano de obra", datos.totales.manoObra], ["Gastos generales", datos.totales.gastosGenerales], ["Utilidad", datos.totales.utilidad], ["Costo interno total", datos.totales.costoInterno], ["Precio ofertado neto", datos.precioOfertadoNeto], ["Precio total presupuesto", datos.precioTotalPresupuesto]];
+    return e.jsxs("div", { children: [
+      doc._showModalConfirmacion && e.jsx("div", {
+         style: {
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(15, 23, 42, 0.65)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 99999,
+            backdropFilter: "blur(4px)"
+         },
+         children: e.jsxs("div", {
+            style: {
+               background: "#fff",
+               borderRadius: 12,
+               padding: 24,
+               width: 440,
+               maxWidth: "90%",
+               boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+               border: "1px solid #e2e8f0",
+               textAlign: "left"
+            },
+            children: [
+               e.jsx("h3", {
+                  style: { fontSize: 16, fontWeight: "bold", color: "#0f172a", margin: "0 0 12px 0" },
+                  children: "Recalcular Desglose Interno"
+               }),
+               e.jsx("p", {
+                  style: { fontSize: 13, color: "#475569", lineHeight: "1.5", margin: "0 0 20px 0" },
+                  children: "¿Deseas restablecer todos tus ajustes manuales a cero para volver a calcular automáticamente desde el presupuesto base, o prefieres mantener tus ajustes y solo sincronizar la estructura?"
+               }),
+               e.jsxs("div", {
+                  style: { display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 },
+                  children: [
+                     e.jsx("button", {
+                        onClick: function() { realizarRecalculo(true); },
+                        style: { background: "#e11d48", color: "#fff", border: "none", padding: "10px", borderRadius: 6, cursor: "pointer", fontWeight: "bold", fontSize: 12 },
+                        children: "🔄 Restablecer todo a cero (Limpiar cambios)"
+                     }),
+                     e.jsx("button", {
+                        onClick: function() { realizarRecalculo(false); },
+                        style: { background: "#1e3a8a", color: "#fff", border: "none", padding: "10px", borderRadius: 6, cursor: "pointer", fontWeight: "bold", fontSize: 12 },
+                        children: "Sincronizar estructura (Mantener cambios)"
+                     })
+                  ]
+               }),
+               e.jsx("div", {
+                  style: { display: "flex", justifyContent: "flex-end" },
+                  children: e.jsx("button", {
+                     onClick: function() { setDoc(function(actual) { return Object.assign({}, actual, { _showModalConfirmacion: false }); }); },
+                     style: { background: "none", border: "none", color: "#64748b", cursor: "pointer", fontSize: 12 },
+                     children: "Cancelar"
+                  })
+               })
+            ]
+         })
+      }),
+      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap", marginBottom: 12 }, children: [e.jsx("div", { style: { color: a.muted, fontSize: 11 }, children: "Planilla interna: los ajustes no modifican el presupuesto ni sus APU." }), e.jsxs("div", { style: { display: "flex", gap: 7, alignItems: "center" }, children: [e.jsx("button", { onClick: realizarDeshacer, disabled: undoStack.length === 0, style: Object.assign({}, c.btn("s"), { opacity: undoStack.length === 0 ? 0.5 : 1, cursor: undoStack.length === 0 ? "not-allowed" : "pointer" }), children: "↩ Deshacer" }), e.jsx("button", { onClick: realizarRehacer, disabled: redoStack.length === 0, style: Object.assign({}, c.btn("s"), { opacity: redoStack.length === 0 ? 0.5 : 1, cursor: redoStack.length === 0 ? "not-allowed" : "pointer" }), children: "↪ Rehacer" }), e.jsx("button", { style: c.btn("p"), onClick: guardar, children: "💾 Guardar" }), e.jsx("button", { style: c.btn("s"), onClick: recalcular, children: "↻ Recalcular desde presupuesto" }), e.jsx("button", { style: c.btn("s"), onClick: function () { excelDesgloseInterno(t, i, r, doc, l); }, children: "Excel" }), e.jsx("button", { style: c.btn("p"), onClick: function () { Mf(t, i, r, doc); }, children: "Vista previa / PDF" })] })] }),
+      e.jsxs("div", { style: Object.assign({}, c.card, { display: "flex", gap: 14, alignItems: "end", flexWrap: "wrap", marginBottom: 12 }), children: [e.jsxs("div", { children: [e.jsx("div", { style: { color: a.muted, fontSize: 11, marginBottom: 5 }, children: "Modo de cálculo" }), e.jsxs("div", { style: { display: "flex", gap: 7 }, children: [e.jsx("button", { style: c.btn(!manual ? "p" : "s"), onClick: function () { cambiar("modoCalculo", "automatico"); }, children: "Automático" }), e.jsx("button", { style: c.btn(manual ? "p" : "s"), onClick: activarManual, children: "Ajuste manual" })] })] }), ["porcentajeGG", "porcentajeUtilidad"].map(function (campo) { return e.jsxs("label", { style: { color: a.muted, fontSize: 11 }, children: [campo === "porcentajeGG" ? "Gastos generales (%)" : "Utilidad (%)", e.jsx("input", { type: "number", min: 0, value: doc[campo], onChange: function (ev) { cambiar(campo, Number(ev.target.value) || 0); }, style: Object.assign({}, c.inp, { display: "block", width: 140, marginTop: 5 }) })] }, campo); })] }),
+      e.jsx("div", { style: { overflowX: "auto", border: "1px solid " + a.border, borderRadius: 8 }, children: e.jsxs("table", { style: { width: "100%", minWidth: 1050, borderCollapse: "collapse", textAlign: "right" }, children: [e.jsx("thead", { children: e.jsx("tr", { children: ["Partida", "Cantidad", "Unidad", "Precio unit.", "Materiales", "Mano de obra", "GG", "Utilidad", "Total partida"].map(function (x, index) { return e.jsx("th", { style: Object.assign({}, th, { textAlign: index ? "right" : "left" }), children: x }, x); }) }) }), e.jsx("tbody", { children: filas })] }) }),
+      e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "minmax(260px,1fr) 360px", gap: 12, marginTop: 12 }, children: [
+        e.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 5 }, children: [
+          e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+            e.jsx("span", { style: { fontSize: 11, color: a.muted, fontWeight: "bold" }, children: "Observación interna" }),
+            e.jsx("button", {
+              onClick: function () {
+                var pctGG = doc.porcentajeGG;
+                var pctUtil = doc.porcentajeUtilidad;
+                var sug = "Análisis de Desglose Interno. Materiales: " + money(datos.totales.materiales) + " · Mano de Obra: " + money(datos.totales.manoObra) + " · Gastos Generales (" + pctGG + "%): " + money(datos.totales.gastosGenerales) + " · Utilidad (" + pctUtil + "%): " + money(datos.totales.utilidad) + ". Costo interno total estimado: " + money(datos.totales.costoInterno) + " para un precio neto ofertado de " + money(datos.precioOfertadoNeto) + ", proyectando un margen comercial de " + money(datos.diferencia) + " (" + (datos.margen * 100).toFixed(1) + "% sobre venta).";
+                cambiar("observaciones", sug);
+              },
+              style: { background: "#1e3a8a", border: "none", color: "#fff", padding: "3px 8px", borderRadius: 4, cursor: "pointer", fontSize: 10, fontWeight: "bold" },
+              children: "🤖 Auto-generar Observación"
+            })
+          ] }),
+          e.jsx("textarea", { value: doc.observaciones || "", onChange: function (ev) { cambiar("observaciones", ev.target.value); }, rows: 5, style: Object.assign({}, c.inp, { display: "block", width: "100%" }) })
+        ] }),
+        e.jsxs("div", { style: Object.assign({}, c.card, { display: "grid", gridTemplateColumns: "1fr auto", gap: 6 }), children: [resumen.map(function (x) { return [e.jsx("span", { children: x[0] }, x[0] + "l"), e.jsx("b", { children: money(x[1]) }, x[0] + "v")]; }), e.jsx("span", { style: { color: a.accent, fontWeight: 800 }, children: "Diferencia / margen" }), e.jsx("b", { style: { color: a.accent }, children: money(datos.diferencia) + " · " + (datos.margen * 100).toFixed(1) + "%" })] })] }),
+      Math.abs(datos.diferencia) > 1 && e.jsx("div", { style: { marginTop: 10, padding: 10, background: "#fff4df", border: "1px solid #f5a020", color: "#704400", fontWeight: 800 }, children: "Existe una diferencia entre el desglose interno y el total del presupuesto." }),
+      e.jsx("button", { style: Object.assign({}, c.btn("p"), { width: "100%", padding: 12, marginTop: 12 }), onClick: guardar, children: "💾 Guardar desglose interno" })
+    ] });
+  }
+  function ResumenDotacionEditor({ budget: t, client: i, cfg: r, onSave: n, setToast: l }) {
+    const [doc, setDoc] = V(function () { return normalizarResumenDotacion(t, r); });
+    const [undoStack, setUndoStack] = V([]);
+    const [redoStack, setRedoStack] = V([]);
+
+    var registrarHistorial = function (actual) {
+      var str = JSON.stringify(actual);
+      setUndoStack(function (prev) {
+        if (prev.length > 0 && prev[prev.length - 1] === str) return prev;
+        return prev.concat([str]);
+      });
+      setRedoStack([]);
+    };
+
+    var realizarDeshacer = function () {
+      if (undoStack.length === 0) return;
+      var prevStr = undoStack[undoStack.length - 1];
+      setUndoStack(function (prev) { return prev.slice(0, -1); });
+      setRedoStack(function (prev) { return prev.concat([JSON.stringify(doc)]); });
+      setDoc(JSON.parse(prevStr));
+    };
+
+    var realizarRehacer = function () {
+      if (redoStack.length === 0) return;
+      var nextStr = redoStack[redoStack.length - 1];
+      setRedoStack(function (prev) { return prev.slice(0, -1); });
+      setUndoStack(function (prev) { return prev.concat([JSON.stringify(doc)]); });
+      setDoc(JSON.parse(nextStr));
+    };
+
+    var datos = calcularResumenDotacion(t, r, doc), manual = doc.modoCalculo === "manual", roles = datos.rolesOrdenados, money = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    var cambiar = function (campo, valor) {
+      registrarHistorial(doc);
+      setDoc(function (actual) { return Object.assign({}, actual, { [campo]: valor, estado: "Borrador", _estadoDocumento: "borrador" }); });
+    };
+    var activarManual = function () {
+      registrarHistorial(doc);
+      setDoc(function (actual) {
+        var auto = Object.assign({}, actual, { modoCalculo: "automatico" }), calc = calcularResumenDotacion(t, r, auto), ajustes = Object.assign({}, actual.ajustesPorPartida);
+        calc.capitulos.forEach(function (cap) { cap.partidas.forEach(function (p) { if (!ajustes[p.clave]) ajustes[p.clave] = { rendimiento: p.rendimiento, dotacion: p.dotacion, hh: p.hh, montosPorRol: Object.assign({}, p.montosPorRol), gastosGenerales: p.gastosGenerales, utilidad: p.utilidad }; }); });
+        return Object.assign({}, actual, { modoCalculo: "manual", ajustesPorPartida: ajustes, estado: "Borrador", _estadoDocumento: "borrador" });
+      });
+    };
+    var ajustar = function (clave, campo, valor) {
+      registrarHistorial(doc);
+      setDoc(function (actual) { var ajustes = Object.assign({}, actual.ajustesPorPartida), fila = Object.assign({}, ajustes[clave]); fila[campo] = Number(valor) || 0; ajustes[clave] = fila; return Object.assign({}, actual, { ajustesPorPartida: ajustes, estado: "Borrador", _estadoDocumento: "borrador" }); });
+    };
+    var ajustarMontoRol = function (clave, rid, valor) {
+      registrarHistorial(doc);
+      setDoc(function (actual) { var ajustes = Object.assign({}, actual.ajustesPorPartida), fila = Object.assign({}, ajustes[clave]); fila.montosPorRol = Object.assign({}, fila.montosPorRol); fila.montosPorRol[rid] = Number(valor) || 0; ajustes[clave] = fila; return Object.assign({}, actual, { ajustesPorPartida: ajustes, estado: "Borrador", _estadoDocumento: "borrador" }); });
+    };
+    var ajustarRol = function (rid, campo, valor) {
+      registrarHistorial(doc);
+      setDoc(function (actual) { var vr = Object.assign({}, actual.valoresRoles); vr[rid] = Object.assign({}, vr[rid]); vr[rid][campo] = Number(valor) || 0; return Object.assign({}, actual, { valoresRoles: vr, estado: "Borrador", _estadoDocumento: "borrador" }); });
+    };
+    var recalcular = function () {
+      var nueva = estructuraDotacion(t), claves = new Set(); nueva.forEach(function (cap) { cap.partidas.forEach(function (p) { claves.add(p.clave); }); });
+      var perdidos = Object.keys(doc.ajustesPorPartida).filter(function (k) { return !claves.has(k); });
+      if (perdidos.length && !confirm("Hay " + perdidos.length + " ajustes de partidas eliminadas. ¿Deseas eliminarlos y recalcular?")) return;
+      registrarHistorial(doc);
+      var ajustes = {}; Object.keys(doc.ajustesPorPartida).forEach(function (k) { if (claves.has(k)) ajustes[k] = doc.ajustesPorPartida[k]; });
+      setDoc(Object.assign({}, doc, { estructura: nueva, ajustesPorPartida: ajustes, estado: "Borrador", _estadoDocumento: "borrador" })); l("✅ Recalculado; pulsa Guardar para confirmar");
+    };
+    var guardar = function () { var salida = Object.assign({}, doc, { estado: "Guardado", _estadoDocumento: "guardado", actualizadoEn: new Date().toISOString() }); setDoc(salida); n(salida); l("✅ Resumen de dotación guardado"); };
+    var th = { padding: 7, background: "#1a3060", color: "#fff", fontSize: 10, whiteSpace: "nowrap" }, td = { padding: 7, borderBottom: "1px solid " + a.border, fontSize: 11 }, inputMonto = { width: 90, padding: 5, textAlign: "right", fontSize: 11 }, inputChico = { width: 60, padding: 5, textAlign: "right", fontSize: 11 };
+    var numRow = function (p, campo, ancho) { return manual ? e.jsx("input", { type: "number", min: 0, value: p[campo], onChange: function (ev) { ajustar(p.clave, campo, ev.target.value); }, style: Object.assign({}, c.inp, ancho ? inputChico : inputMonto) }) : (campo === "hh" ? p.hh.toFixed(1) : money(p[campo])); };
+    var montoRol = function (p, rid) { return manual ? e.jsx("input", { type: "number", min: 0, value: p.montosPorRol[rid], onChange: function (ev) { ajustarMontoRol(p.clave, rid, ev.target.value); }, style: Object.assign({}, c.inp, inputMonto) }) : money(p.montosPorRol[rid]); };
+    var nCols = 8 + roles.length;
+    var filas = datos.capitulos.flatMap(function (cap) {
+      var s = cap.subtotal;
+      return [e.jsx("tr", { children: e.jsxs("td", { colSpan: nCols, style: Object.assign({}, td, { background: "#f5a020", color: "#1a3060", fontWeight: 800, textAlign: "left" }), children: [(cap.codigo ? cap.codigo + " — " : "") + cap.nombre, e.jsx("span", { style: { float: "right" }, children: cap.partidas.length + " partidas" })] }) }, "cap" + cap.id)]
+        .concat(cap.partidas.map(function (p) {
+          return e.jsxs("tr", { children: [
+            e.jsx("td", { style: Object.assign({}, td, { minWidth: 220 }), children: p.descripcion }),
+            e.jsx("td", { style: td, children: p.cantidad }),
+            e.jsx("td", { style: td, children: p.unidad }),
+            e.jsx("td", { style: td, children: numRow(p, "hh", !0) }),
+            e.jsx("td", { style: td, children: money(p.manoObra) }),
+            e.jsx("td", { style: td, children: numRow(p, "gastosGenerales") }),
+            e.jsx("td", { style: td, children: numRow(p, "utilidad") }),
+            e.jsx("td", { style: Object.assign({}, td, { fontWeight: 800 }), children: money(p.totalMO) }),
+          ].concat(roles.map(function (rid) { return e.jsx("td", { style: td, children: montoRol(p, rid) }, rid); })) }, p.clave);
+        }))
+        .concat([e.jsxs("tr", { children: [e.jsx("td", { colSpan: 3, style: Object.assign({}, td, { background: a.sb, fontWeight: 800 }), children: "Subtotal " + cap.nombre }), e.jsx("td", { style: Object.assign({}, td, { background: a.sb, textAlign: "right", fontWeight: 800 }), children: s.hh.toFixed(1) })].concat([s.manoObra, s.gastosGenerales, s.utilidad, s.totalMO].map(function (v, k) { return e.jsx("td", { style: Object.assign({}, td, { background: a.sb, textAlign: "right", fontWeight: 800 }), children: money(v) }, k); })).concat(roles.map(function (rid) { return e.jsx("td", { style: Object.assign({}, td, { background: a.sb, textAlign: "right", fontWeight: 800 }), children: money(s.porRol[rid]) }, rid); })) }, "sub" + cap.id)]);
+    });
+    var resumen = [["HH total", datos.totales.hh.toFixed(1), !0], ["Mano de obra", money(datos.totales.manoObra)], ["Gastos generales", money(datos.totales.gastosGenerales)], ["Utilidad", money(datos.totales.utilidad)], ["Total MO + GG + Utilidad", money(datos.totales.totalMO)]].concat(roles.map(function (rid) { return [doc.valoresRoles[rid].rol, money(datos.totales.porRol[rid])]; }));
+    if (datos.sinDatosHH) return e.jsxs("div", { children: [
+      e.jsx("div", { style: Object.assign({}, c.card, { textAlign: "center", padding: "36px 20px" }), children: [
+        e.jsx("div", { style: { fontSize: 32, marginBottom: 10 }, children: "👷" }),
+        e.jsx("div", { style: { fontWeight: 700, marginBottom: 6 }, children: "Sin datos de HH" }),
+        e.jsx("div", { style: { color: a.muted, fontSize: 13 }, children: "Configura rendimiento y dotación en los APUs de cada partida, o activa el ajuste manual para ingresar HH directamente." }),
+        e.jsx("button", { style: Object.assign({}, c.btn("p"), { marginTop: 14 }), onClick: activarManual, children: "Activar ajuste manual" }),
+      ] }),
+    ] });
+    return e.jsxs("div", { children: [
+      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap", marginBottom: 12 }, children: [
+        e.jsx("div", { style: { color: a.muted, fontSize: 11 }, children: "Planilla interna: los ajustes no modifican el presupuesto, los APU ni la configuración global." }),
+        e.jsxs("div", { style: { display: "flex", gap: 7, alignItems: "center" }, children: [
+          e.jsx("button", { onClick: realizarDeshacer, disabled: undoStack.length === 0, style: Object.assign({}, c.btn("s"), { opacity: undoStack.length === 0 ? 0.5 : 1, cursor: undoStack.length === 0 ? "not-allowed" : "pointer" }), children: "↩ Deshacer" }),
+          e.jsx("button", { onClick: realizarRehacer, disabled: redoStack.length === 0, style: Object.assign({}, c.btn("s"), { opacity: redoStack.length === 0 ? 0.5 : 1, cursor: redoStack.length === 0 ? "not-allowed" : "pointer" }), children: "↪ Rehacer" }),
+          e.jsx("button", { style: c.btn("p"), onClick: guardar, children: "💾 Guardar" }),
+          e.jsx("button", { style: c.btn("s"), onClick: recalcular, children: "↻ Recalcular desde presupuesto" }),
+          e.jsx("button", { style: c.btn("s"), onClick: function () { excelResumenDotacion(t, i, r, doc, l); }, children: "Excel" }),
+          e.jsx("button", { style: c.btn("p"), onClick: function () { abrirResumenDotacion(t, i, r, doc); }, children: "Vista previa / PDF" })
+        ] })
+      ] }),
+      e.jsxs("div", { style: Object.assign({}, c.card, { display: "flex", gap: 14, alignItems: "end", flexWrap: "wrap", marginBottom: 12 }), children: [
+        e.jsxs("div", { children: [e.jsx("div", { style: { color: a.muted, fontSize: 11, marginBottom: 5 }, children: "Modo de cálculo" }), e.jsxs("div", { style: { display: "flex", gap: 7 }, children: [e.jsx("button", { style: c.btn(!manual ? "p" : "s"), onClick: function () { cambiar("modoCalculo", "automatico"); }, children: "Automático" }), e.jsx("button", { style: c.btn(manual ? "p" : "s"), onClick: activarManual, children: "Ajuste manual" })] })] }),
+        ["porcentajeGG", "porcentajeUtilidad"].map(function (campo) { return e.jsxs("label", { style: { color: a.muted, fontSize: 11 }, children: [campo === "porcentajeGG" ? "Gastos generales (%)" : "Utilidad (%)", e.jsx("input", { type: "number", min: 0, value: doc[campo], onChange: function (ev) { cambiar(campo, Number(ev.target.value) || 0); }, style: Object.assign({}, c.inp, { display: "block", width: 130, marginTop: 5 }) })] }, campo); }),
+      ] }),
+      e.jsx("div", { style: Object.assign({}, c.card, { marginBottom: 12 }), children: e.jsxs("div", { style: { display: "flex", gap: 14, flexWrap: "wrap" }, children: [
+        e.jsx("div", { style: { fontSize: 11, color: a.muted, minWidth: 130, alignSelf: "center" }, children: "Valor diario por rol" }),
+        roles.map(function (rid) { return e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: [doc.valoresRoles[rid].rol, manual ? e.jsx("input", { type: "number", min: 0, value: doc.valoresRoles[rid].jornal, onChange: function (ev) { ajustarRol(rid, "jornal", ev.target.value); }, style: Object.assign({}, c.inp, { display: "block", width: 120, marginTop: 5 }) }) : e.jsx("div", { style: { fontWeight: 700, color: a.text, marginTop: 5 }, children: money(doc.valoresRoles[rid].jornal) })] }, rid); }),
+      ] }) }),
+      e.jsx("div", { style: { overflowX: "auto", border: "1px solid " + a.border, borderRadius: 8 }, children: e.jsxs("table", { style: { width: "100%", minWidth: 900 + roles.length * 90, borderCollapse: "collapse", textAlign: "right" }, children: [
+        e.jsx("thead", { children: e.jsx("tr", { children: ["Partida", "Cantidad", "Unidad", "HH", "Mano de obra", "GG", "Utilidad", "Total MO"].concat(roles.map(function (rid) { return doc.valoresRoles[rid].rol; })).map(function (x, index) { return e.jsx("th", { style: Object.assign({}, th, { textAlign: index ? "right" : "left" }), children: x }, x + index); }) }) }),
+        e.jsx("tbody", { children: filas }),
+      ] }) }),
+      e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "minmax(260px,1fr) 360px", gap: 12, marginTop: 12 }, children: [
+        e.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 5 }, children: [
+          e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+            e.jsx("span", { style: { fontSize: 11, color: a.muted, fontWeight: "bold" }, children: "Observación interna" }),
+            e.jsx("button", {
+              onClick: function () {
+                var pctGG = doc.porcentajeGG;
+                var pctUtil = doc.porcentajeUtilidad;
+                var sug = "Análisis de Desglose Interno. Materiales: " + money(datos.totales.materiales) + " · Mano de Obra: " + money(datos.totales.manoObra) + " · Gastos Generales (" + pctGG + "%): " + money(datos.totales.gastosGenerales) + " · Utilidad (" + pctUtil + "%): " + money(datos.totales.utilidad) + ". Costo interno total estimado: " + money(datos.totales.costoInterno) + " para un precio neto ofertado de " + money(datos.precioOfertadoNeto) + ", proyectando un margen comercial de " + money(datos.diferencia) + " (" + (datos.margen * 100).toFixed(1) + "% sobre venta).";
+                cambiar("observaciones", sug);
+              },
+              style: { background: "#1e3a8a", border: "none", color: "#fff", padding: "3px 8px", borderRadius: 4, cursor: "pointer", fontSize: 10, fontWeight: "bold" },
+              children: "🤖 Auto-generar Observación"
+            })
+          ] }),
+          e.jsx("textarea", { value: doc.observaciones || "", onChange: function (ev) { cambiar("observaciones", ev.target.value); }, rows: 5, style: Object.assign({}, c.inp, { display: "block", width: "100%" }) })
+        ] }),
+        e.jsx("div", { style: Object.assign({}, c.card, { display: "grid", gridTemplateColumns: "1fr auto", gap: 6 }), children: resumen.map(function (x) { return [e.jsx("span", { style: x[2] ? { color: a.accent, fontWeight: 800 } : {}, children: x[0] }, x[0] + "l"), e.jsx("b", { style: x[2] ? { color: a.accent } : {}, children: x[1] }, x[0] + "v")]; }) }),
+      ] }),
+      e.jsx("button", { style: Object.assign({}, c.btn("p"), { width: "100%", padding: 12, marginTop: 12 }), onClick: guardar, children: "💾 Guardar resumen de dotación" }),
+    ] });
+  }
+  function EstadoPagoActaEditor({ budget: t, client: i, cfg: r, onSave: n, setToast: l }) {
+    const [doc, setDoc] = V(function () { return normalizarEstadoPago(t, r); });
+    const [estadoActivoId, setEstadoActivoId] = V(doc.estadoEditandoId);
+    var calculo = calcularEstadoPago(t, r, doc, estadoActivoId), estado = calculo.estado;
+    var money = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    var guardarDoc = function (nuevo, mensaje) { setDoc(nuevo); n(Object.assign({}, nuevo, { _estadoDocumento: "borrador" })); if (mensaje && l) l(mensaje); };
+    var actualizarEstados = function (mutador) {
+      var estados = doc.estados.map(function (e0) { return e0.id === estadoActivoId ? mutador(e0) : e0; });
+      guardarDoc(Object.assign({}, doc, { estados: estados, estadoEditandoId: estadoActivoId }));
+    };
+    var crearEstado = function () {
+      var nuevo = nuevoEstadoPagoVacio(calculo.numeroSiguiente, calculo.ultimoEstado);
+      var estados = doc.estados.concat([nuevo]);
+      guardarDoc(Object.assign({}, doc, { estados: estados, estadoEditandoId: nuevo.id }));
+      setEstadoActivoId(nuevo.id);
+    };
+    var eliminarEstado = function () {
+      if (!estado) return;
+      if (!confirm("¿Eliminar el Estado de Pago N° " + estado.numero + "? Esta acción no se puede deshacer.")) return;
+      var estados = doc.estados.filter(function (e0) { return e0.id !== estadoActivoId; });
+      var siguienteId = estados.length ? estados[estados.length - 1].id : null;
+      guardarDoc(Object.assign({}, doc, { estados: estados, estadoEditandoId: siguienteId }), "🗑 Estado de pago eliminado");
+      setEstadoActivoId(siguienteId);
+    };
+    var actualizarCampo = function (campo, valor) { actualizarEstados(function (e0) { return Object.assign({}, e0, { [campo]: valor }); }); };
+    var actualizarFirma = function (campo, valor) { actualizarEstados(function (e0) { return Object.assign({}, e0, { firmas: Object.assign({}, e0.firmas, { [campo]: valor }) }); }); };
+    var actualizarAvance = function (clave, valor) { actualizarEstados(function (e0) { var avances = Object.assign({}, e0.avances); avances[clave] = { periodoPct: Math.max(0, Number(valor) || 0) }; return Object.assign({}, e0, { avances: avances }); }); };
+    var actualizarAvanceMonto = function (clave, valorMonto, valorContratado) { actualizarEstados(function (e0) { var avances = Object.assign({}, e0.avances); var m = Math.max(0, Number(valorMonto) || 0); var pct = valorContratado > 0 ? (m / valorContratado) * 100 : 0; avances[clave] = { periodoPct: pct }; return Object.assign({}, e0, { avances: avances }); }); };
+    var marcarGuardado = function () { var salida = Object.assign({}, doc, { _estadoDocumento: "guardado", actualizadoEn: new Date().toISOString() }); setDoc(salida); n(salida); l("✅ Estado de pago guardado"); };
+    var th = { padding: 7, background: "#1a3060", color: "#fff", fontSize: 10, whiteSpace: "nowrap" }, td = { padding: 7, borderBottom: "1px solid " + a.border, fontSize: 11 }, inputPct = { width: 66, padding: 5, textAlign: "right", fontSize: 11 };
+    if (!estado) return e.jsxs("div", { children: [
+      e.jsx("div", { style: Object.assign({}, c.card, { textAlign: "center", padding: "36px 20px" }), children: [
+        e.jsx("div", { style: { fontSize: 32, marginBottom: 10 }, children: "💰" }),
+        e.jsx("div", { style: { fontWeight: 700, marginBottom: 6 }, children: "Sin estados de pago" }),
+        e.jsx("div", { style: { color: a.muted, fontSize: 13, marginBottom: 14 }, children: "Crea el primer Estado de Pago / Acta para este presupuesto." }),
+        e.jsx("button", { style: c.btn("p"), onClick: crearEstado, children: "+ Nuevo estado de pago" }),
+      ] }),
+    ] });
+    var filas = calculo.capitulos.flatMap(function (cap) {
+      var s = cap.subtotal, pctSub = s.valorContratado ? (s.montoAcumulado / s.valorContratado * 100) : 0;
+      return [e.jsx("tr", { children: e.jsxs("td", { colSpan: 11, style: Object.assign({}, td, { background: "#f5a020", color: "#1a3060", fontWeight: 800, textAlign: "left" }), children: [(cap.codigo ? cap.codigo + " — " : "") + cap.nombre, e.jsx("span", { style: { float: "right" }, children: cap.partidas.length + " partidas" })] }) }, "cap" + cap.id)]
+        .concat(cap.partidas.map(function (p) {
+          return e.jsxs("tr", { children: [
+            e.jsx("td", { style: Object.assign({}, td, { minWidth: 220 }), children: p.descripcion }),
+            e.jsx("td", { style: td, children: p.cantidad }),
+            e.jsx("td", { style: td, children: p.unidad }),
+            e.jsx("td", { style: td, children: money(p.valorContratado) }),
+            e.jsx("td", { style: td, children: p.avanceAnteriorPct.toFixed(1) + "%" }),
+            e.jsx("td", { style: td, children: e.jsx("input", { type: "number", min: 0, max: 100, value: p.avancePeriodoPct, onChange: function (ev) { actualizarAvance(p.clave, ev.target.value); }, style: Object.assign({}, c.inp, inputPct) }) }),
+            e.jsx("td", { style: Object.assign({}, td, { fontWeight: 800 }), children: p.avanceAcumuladoPct.toFixed(1) + "%" }),
+            e.jsx("td", { style: td, children: money(p.montoAnterior) }),
+            e.jsx("td", { style: td, children: e.jsx("input", { type: "number", min: 0, max: p.valorContratado, value: Math.round(p.montoPeriodo || 0), onChange: function (ev) { actualizarAvanceMonto(p.clave, ev.target.value, p.valorContratado); }, style: Object.assign({}, c.inp, { width: 90, padding: 5, textAlign: "right", fontSize: 11 }) }) }),
+            e.jsx("td", { style: Object.assign({}, td, { fontWeight: 800 }), children: money(p.montoAcumulado) }),
+            e.jsx("td", { style: td, children: money(p.saldo) }),
+          ] }, p.clave);
+        }))
+        .concat([e.jsxs("tr", { children: [
+          e.jsx("td", { colSpan: 3, style: Object.assign({}, td, { background: a.sb, fontWeight: 800 }), children: "Subtotal " + cap.nombre }),
+          e.jsx("td", { style: Object.assign({}, td, { background: a.sb, textAlign: "right", fontWeight: 800 }), children: money(s.valorContratado) }),
+          e.jsx("td", { style: Object.assign({}, td, { background: a.sb }) }),
+          e.jsx("td", { style: Object.assign({}, td, { background: a.sb }) }),
+          e.jsx("td", { style: Object.assign({}, td, { background: a.sb, textAlign: "right", fontWeight: 800 }), children: pctSub.toFixed(1) + "%" }),
+          e.jsx("td", { style: Object.assign({}, td, { background: a.sb, textAlign: "right", fontWeight: 800 }), children: money(s.montoAnterior) }),
+          e.jsx("td", { style: Object.assign({}, td, { background: a.sb, textAlign: "right", fontWeight: 800 }), children: money(s.montoPeriodo) }),
+          e.jsx("td", { style: Object.assign({}, td, { background: a.sb, textAlign: "right", fontWeight: 800 }), children: money(s.montoAcumulado) }),
+          e.jsx("td", { style: Object.assign({}, td, { background: a.sb, textAlign: "right", fontWeight: 800 }), children: money(s.saldo) }),
+        ] }, "sub" + cap.id)]);
+    });
+    var pctTotal = calculo.total.valorContratado ? (calculo.total.montoAcumulado / calculo.total.valorContratado * 100) : 0;
+    return e.jsxs("div", { children: [
+      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap", marginBottom: 12, alignItems: "end" }, children: [
+        e.jsxs("div", { style: { display: "flex", gap: 8, alignItems: "end", flexWrap: "wrap" }, children: [
+          e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Estado de pago", e.jsx("select", { value: estadoActivoId || "", onChange: function (ev) { setEstadoActivoId(ev.target.value); }, style: Object.assign({}, c.sel, { display: "block", marginTop: 5, minWidth: 200 }), children: calculo.historial.map(function (e0) { return e.jsx("option", { value: e0.id, children: "N° " + e0.numero + (e0.periodo ? " — " + e0.periodo : "") }, e0.id); }) })] }, "sel"),
+          e.jsx("button", { style: c.btn("s"), onClick: crearEstado, children: "+ Nuevo estado" }),
+          e.jsx("button", { style: c.btn("s"), onClick: function () { var base = doc.estados.find(function (e0) { return e0.id === estadoActivoId; }); var nuevo = nuevoEstadoPagoVacio(calculo.numeroSiguiente, base); var estados = doc.estados.concat([nuevo]); guardarDoc(Object.assign({}, doc, { estados: estados, estadoEditandoId: nuevo.id })); setEstadoActivoId(nuevo.id); }, children: "⧉ Duplicar como base" }),
+          e.jsx("button", { style: c.btn("d"), onClick: eliminarEstado, children: "Eliminar" }),
+        ] }),
+        e.jsxs("div", { style: { display: "flex", gap: 7 }, children: [
+          e.jsx("button", { style: c.btn("s"), onClick: function () { excelEstadoPago(t, i, r, doc, l); }, children: "Excel" }),
+          e.jsx("button", { style: c.btn("p"), onClick: function () { abrirEstadoPagoActa(t, i, r, doc, estadoActivoId); }, children: "Vista previa / PDF" }),
+        ] }),
+      ] }),
+      e.jsxs("div", { style: Object.assign({}, c.card, { display: "flex", gap: 14, alignItems: "end", flexWrap: "wrap", marginBottom: 12 }), children: [
+        e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Fecha", e.jsx("input", { type: "date", value: estado.fecha || "", onChange: function (ev) { actualizarCampo("fecha", ev.target.value); }, style: Object.assign({}, c.inp, { display: "block", marginTop: 5 }) })] }),
+        e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Período", e.jsx("input", { type: "text", placeholder: "Ej: Mayo 2026", value: estado.periodo || "", onChange: function (ev) { actualizarCampo("periodo", ev.target.value); }, style: Object.assign({}, c.inp, { display: "block", marginTop: 5 }) })] }),
+        e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Estado", e.jsxs("select", { value: estado.estado || "Borrador", onChange: function (ev) { actualizarCampo("estado", ev.target.value); }, style: Object.assign({}, c.sel, { display: "block", marginTop: 5 }), children: [e.jsx("option", { value: "Borrador", children: "Borrador" }), e.jsx("option", { value: "Emitido", children: "Emitido" }), e.jsx("option", { value: "Aprobado", children: "Aprobado" }), e.jsx("option", { value: "Pagado", children: "Pagado" })] })] }),
+      ] }),
+      e.jsx("div", { style: { overflowX: "auto", border: "1px solid " + a.border, borderRadius: 8 }, children: e.jsxs("table", { style: { width: "100%", minWidth: 1150, borderCollapse: "collapse", textAlign: "right" }, children: [
+        e.jsx("thead", { children: e.jsx("tr", { children: ["Partida", "Cantidad", "Unidad", "Valor contratado", "Av. anterior", "Av. período", "Av. acumulado", "Monto anterior", "Monto período", "Monto acumulado", "Saldo"].map(function (x, index) { return e.jsx("th", { style: Object.assign({}, th, { textAlign: index ? "right" : "left" }), children: x }, x); }) }) }),
+        e.jsx("tbody", { children: filas }),
+      ] }) }),
+      e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "minmax(260px,1fr) 380px", gap: 12, marginTop: 12 }, children: [
+        e.jsxs("div", { children: [
+          e.jsxs("div", { style: { display: "flex", flexDirection: "column", gap: 5 }, children: [
+            e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+               e.jsx("span", { style: { fontSize: 11, color: a.muted, fontWeight: "bold" }, children: "Observaciones" }),
+               e.jsx("button", {
+                  onClick: function() {
+                     var pctAvance = calculo.total.valorContratado > 0 ? (calculo.total.montoPeriodo / calculo.total.valorContratado * 100) : 0;
+                     var pctAcum = calculo.total.valorContratado > 0 ? (calculo.total.montoAcumulado / calculo.total.valorContratado * 100) : 0;
+                     var sug = "Estado de Pago N° " + estado.numero + ". En este período se presenta un avance de obra neto de " + money(calculo.total.montoPeriodo) + " (equivalente a " + pctAvance.toFixed(1) + "% de avance del período), acumulando un total neto facturado a la fecha de " + money(calculo.total.montoAcumulado) + " (" + pctAcum.toFixed(1) + "% acumulado). Saldo restante por ejecutar: " + money(calculo.total.saldo) + ".";
+                     actualizarCampo("observaciones", sug);
+                  },
+                  style: { background: "#1e3a8a", border: "none", color: "#fff", padding: "3px 8px", borderRadius: 4, cursor: "pointer", fontSize: 10, fontWeight: "bold" },
+                  children: "🤖 Auto-generar Observación"
+               })
+            ] }),
+            e.jsx("textarea", { value: estado.observaciones || "", onChange: function (ev) { actualizarCampo("observaciones", ev.target.value); }, rows: 4, style: Object.assign({}, c.inp, { display: "block", width: "100%" }) })
+         ] }),
+          e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 10 }, children: [
+            e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Firma mandante", e.jsx("input", { type: "text", value: estado.firmas.mandante || "", onChange: function (ev) { actualizarFirma("mandante", ev.target.value); }, style: Object.assign({}, c.inp, { display: "block", width: "100%", marginTop: 5 }) })] }),
+            e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Inspección técnica", e.jsx("input", { type: "text", value: estado.firmas.ito || "", onChange: function (ev) { actualizarFirma("ito", ev.target.value); }, style: Object.assign({}, c.inp, { display: "block", width: "100%", marginTop: 5 }) })] }),
+          ] }),
+          e.jsxs("div", { style: { display: "flex", gap: 16, marginTop: 4, flexWrap: "wrap", borderTop: "1px solid #f1f5f9", paddingTop: 8 }, children: [
+             e.jsxs("label", { style: { display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: a.muted, cursor: "pointer" }, children: [
+                e.jsx("input", { type: "checkbox", checked: estado.incluirFirmaMandante !== false, onChange: function(ev) { actualizarCampo("incluirFirmaMandante", ev.target.checked); } }),
+                e.jsx("span", { children: "Incluir Firma Mandante en PDF" })
+             ] }),
+             e.jsxs("label", { style: { display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: a.muted, cursor: "pointer" }, children: [
+                e.jsx("input", { type: "checkbox", checked: estado.incluirFirmaIto !== false, onChange: function(ev) { actualizarCampo("incluirFirmaIto", ev.target.checked); } }),
+                e.jsx("span", { children: "Incluir Firma ITO en PDF" })
+             ] })
+          ] }),
+        ] }),
+        e.jsx("div", { style: Object.assign({}, c.card, { display: "grid", gridTemplateColumns: "1fr auto", gap: 6 }), children: [
+          [e.jsx("span", { children: "Valor contratado" }, "l1"), e.jsx("b", { children: money(calculo.total.valorContratado) }, "v1")],
+          [e.jsx("span", { children: "Monto anterior" }, "l2"), e.jsx("b", { children: money(calculo.total.montoAnterior) }, "v2")],
+          [e.jsx("span", { style: { color: a.accent, fontWeight: 800 }, children: "Monto del período" }, "l3"), e.jsx("b", { style: { color: a.accent }, children: money(calculo.total.montoPeriodo) }, "v3")],
+          [e.jsx("span", { children: "Monto acumulado (" + pctTotal.toFixed(1) + "%)" }, "l4"), e.jsx("b", { children: money(calculo.total.montoAcumulado) }, "v4")],
+          [e.jsx("span", { children: "Saldo por ejecutar" }, "l5"), e.jsx("b", { children: money(calculo.total.saldo) }, "v5")],
+        ] }),
+      ] }),
+      e.jsx("button", { style: Object.assign({}, c.btn("p"), { width: "100%", padding: 12, marginTop: 12 }), onClick: marcarGuardado, children: "💾 Guardar estado de pago" }),
+    ] });
+  }
+  function CartaClienteEditor({ budget: t, client: i, cfg: r, onSave: n, setToast: l }) {
+    const [doc, setDoc] = V(function () { return normalizarCartaCliente(t, i, r); });
+    var capitulos = resumenCapitulosContrato(t);
+    var money = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    var cambiar = function (campo, valor) { setDoc(function (actual) { return Object.assign({}, actual, { [campo]: valor, estado: "Borrador", _estadoDocumento: "borrador" }); }); };
+    var guardar = function () { var salida = Object.assign({}, doc, { estado: "Guardado", _estadoDocumento: "guardado", actualizadoEn: new Date().toISOString() }); setDoc(salida); n(salida); l("✅ Carta guardada"); };
+    var input = function (label, campo, tipo) { return e.jsxs("label", { style: { display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: a.muted }, children: [label, e.jsx("input", { type: tipo || "text", value: doc[campo] == null ? "" : doc[campo], onChange: function (ev) { cambiar(campo, tipo === "number" ? Number(ev.target.value) : ev.target.value); }, style: Object.assign({}, c.inp, { width: "100%" }) })] }); };
+    var textarea = function (label, campo, alto) { return e.jsxs("label", { style: { display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: a.muted }, children: [label, e.jsx("textarea", { value: doc[campo] || "", onChange: function (ev) { cambiar(campo, ev.target.value); }, style: Object.assign({}, c.inp, { width: "100%", minHeight: alto || 70 }) })] }); };
+    var grid = function (children, columnas) { return e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(" + (columnas || 2) + ",minmax(0,1fr))", gap: 10 }, children: children }); };
+    var seccion = function (titulo, contenido) { return e.jsxs("div", { style: Object.assign({}, c.card, { marginBottom: 12 }), children: [e.jsx("div", { style: Object.assign({}, c.ct, { marginBottom: 10 }), children: titulo }), contenido] }); };
+    return e.jsxs("div", { children: [
+      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 12, flexWrap: "wrap" }, children: [
+        e.jsx("div", { style: { fontSize: 12, color: a.muted, maxWidth: 520 }, children: "Editor de la carta de presentación para el cliente/mandante. No incluye firma del cliente." }),
+        e.jsxs("div", { style: { display: "flex", gap: 8 }, children: [e.jsx("button", { style: c.btn("s"), onClick: function () { exportarCartaClienteDocx(t, i, r, doc, l); }, children: "Descargar Word" }), e.jsx("button", { style: c.btn("p"), onClick: function () { abrirCartaCliente(t, i, r, doc); }, children: "Vista previa / PDF" })] }),
+      ] }),
+      seccion("1. Encabezado", grid([input("Fecha", "fecha", "date"), input("Destinatario", "destinatario"), input("Empresa del destinatario", "empresaCliente"), input("Saludo", "saludo"), input("Asunto", "asunto")], 2)),
+      seccion("2. Contenido de la carta", e.jsxs("div", { style: { display: "grid", gap: 10 }, children: [textarea("Introducción", "introduccion", 80), textarea("Presentación de la empresa (opcional)", "presentacionEmpresa", 70), textarea("Resumen del proyecto", "resumenProyecto", 80), textarea("Texto de cierre", "cierre", 80)] })),
+      seccion("3. Condiciones comerciales", grid([input("Monto (neto o total, según su configuración)", "monto", "number"), input("Anticipo (%)", "anticipoPct", "number"), input("Plazo", "plazoNumero", "number"), input("Unidad de plazo", "plazoUnidad")], 2)),
+      seccion("4. Alcance por capítulos (vista previa, no editable aquí)", e.jsxs("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: 12 }, children: [e.jsx("thead", { children: e.jsxs("tr", { children: [e.jsx("th", { style: c.th, children: "Capítulo" }), e.jsx("th", { style: c.th, children: "Subtotal" })] }) }), e.jsx("tbody", { children: capitulos.map(function (cap) { return e.jsxs("tr", { children: [e.jsx("td", { style: c.td, children: cap.nombre }), e.jsx("td", { style: Object.assign({}, c.td, { textAlign: "right", fontWeight: 700 }), children: money(cap.subtotal) })] }, cap.id); }) })] })),
+      seccion("5. Firmante", grid([input("Nombre del firmante", "firmante"), input("Cargo", "cargoFirmante"), input("Datos de contacto", "contacto")], 2)),
+      e.jsx("button", { style: Object.assign({}, c.btn("p"), { width: "100%", padding: 12, fontWeight: 700 }), onClick: guardar, children: "💾 Guardar carta" }),
+    ] });
+  }
+  // Núcleo de cálculo de la Análisis de Negociación.
+  // Los costos salen de calcularDesgloseInterno, que ya respeta los ajustes
+  // manuales del Desglose Interno guardado y, cuando no existe, los deriva de
+  // los porcentajes de configuración. Es la única fuente de verdad: la usan
+  // tanto el simulador en pantalla como el PDF.
+  function calcularNegociacion(presupuesto, cfg, entradaNegociacion) {
+    presupuesto = presupuesto || {}; cfg = cfg || {};
+    var doc = normalizarHojaNegociacion(presupuesto, cfg, entradaNegociacion, null);
+    var margenMinPct = Math.max(0, Math.min(99, Number(doc.margenMinimoPct) || 0));
+    var reservaPct = Math.max(0, Number(doc.reservaRiesgoPct) || 0);
+    var base = calcularDesgloseInterno(presupuesto, cfg);
+    var partidas = [];
+    var capitulos = (base.capitulos || []).map(function (cap) {
+      var sub = { venta: 0, costo: 0, utilidad: 0, holgura: 0 };
+      var lista = (cap.partidas || []).map(function (p) {
+        var venta = Number(p.totalPresupuesto) || 0;
+        var costoDirecto = (Number(p.materiales) || 0) + (Number(p.manoObra) || 0) + (Number(p.gastosGenerales) || 0);
+        var costoProtegido = costoDirecto * (1 + reservaPct / 100);
+        var utilidad = venta - costoDirecto;
+        var precioMinimo = margenMinPct >= 100 ? venta : costoProtegido / (1 - margenMinPct / 100);
+        var holgura = Math.max(0, venta - precioMinimo);
+        var fila = Object.assign({}, p, {
+          venta: venta,
+          costoDirecto: costoDirecto,
+          costoProtegido: costoProtegido,
+          utilidad: utilidad,
+          margenPct: venta > 0 ? (utilidad / venta) * 100 : 0,
+          precioMinimo: precioMinimo,
+          holgura: holgura,
+          capituloId: cap.id,
+          capituloNombre: cap.nombre,
+        });
+        sub.venta += venta; sub.costo += costoDirecto; sub.utilidad += utilidad; sub.holgura += holgura;
+        partidas.push(fila);
+        return fila;
+      });
+      return Object.assign({}, cap, { partidas: lista, resumen: sub });
+    });
+    var total = partidas.reduce(function (acc, p) {
+      acc.venta += p.venta; acc.costo += p.costoDirecto; acc.utilidad += p.utilidad; acc.holgura += p.holgura;
+      return acc;
+    }, { venta: 0, costo: 0, utilidad: 0, holgura: 0 });
+    total.margenPct = total.venta > 0 ? (total.utilidad / total.venta) * 100 : 0;
+    total.precioMinimo = total.venta - total.holgura;
+    return { documento: doc, capitulos: capitulos, partidas: partidas, total: total, margenMinPct: margenMinPct, reservaPct: reservaPct };
+  }
+
+  // Puente entre calcularNegociacion y las vistas de la Análisis de Negociación.
+  // Devuelve el costo directo real (materiales + mano de obra + gastos generales)
+  // por partida. Sustituye la estimación plana que asumía el mismo margen para
+  // todas las partidas y por lo tanto nunca leía el presupuesto.
+  // Se indexa por "clave" y, como respaldo, por capítulo + posición. No se usa
+  // "uid" porque las partidas sin _uid lo traen vacío y todas colisionarían en
+  // la misma entrada, repartiendo un costo único a toda la obra.
+  function costosRealesNegociacion(presupuesto, cfg, entradaNegociacion) {
+    var analisis = calcularNegociacion(presupuesto, cfg, entradaNegociacion);
+    var porClave = {}, porPosicion = {};
+    (analisis.capitulos || []).forEach(function (cap) {
+      (cap.partidas || []).forEach(function (p, indice) {
+        var costo = Number(p.costoDirecto) || 0;
+        if (p.clave) porClave[p.clave] = costo;
+        porPosicion[String(cap.id) + "#" + indice] = costo;
+      });
+    });
+    return { analisis: analisis, porClave: porClave, porPosicion: porPosicion, total: analisis.total };
+  }
+
+  // Costo directo de una partida según el análisis. Si no logra emparejarla,
+  // cae en la estimación por margen estándar para no dejar la fila en blanco.
+  function costoPartidaNegociacion(res, capituloId, clave, indice, venta, margenBasePct) {
+    if (clave && res.porClave[clave] != null) return res.porClave[clave];
+    var k = String(capituloId) + "#" + indice;
+    if (res.porPosicion[k] != null) return res.porPosicion[k];
+    return (Number(venta) || 0) * (1 - (Number(margenBasePct) || 0) / 100);
+  }
+
+  // Reparte un descuento entre las partidas, priorizando las de mayor holgura.
+  // Nunca baja una partida por debajo de su precio mínimo: lo que no cabe se
+  // informa como excedente en vez de comerse la utilidad en silencio.
+  function repartirDescuentoNegociacion(analisis, montoDescuento) {
+    var objetivo = Math.max(0, Number(montoDescuento) || 0);
+    var restante = objetivo;
+    var asignado = {}, tramoSeguro = {};
+    var totalSeguro = 0, totalMargen = 0;
+    // Reparte por tramos: primero lo que no duele, después lo que sí.
+    function repartirTramo(capacidadDe, registrar) {
+      analisis.partidas
+        .slice()
+        .sort(function (A, B) { return capacidadDe(B) - capacidadDe(A); })
+        .forEach(function (p) {
+          if (restante <= 0) return;
+          var cap = capacidadDe(p);
+          if (cap <= 0) return;
+          var toma = Math.min(cap, restante);
+          asignado[p.clave] = (asignado[p.clave] || 0) + toma;
+          registrar(p, toma);
+          restante -= toma;
+        });
+    }
+    // Tramo 1: holgura por encima del margen mínimo. No compromete el objetivo.
+    repartirTramo(
+      function (p) { return p.holgura; },
+      function (p, toma) { tramoSeguro[p.clave] = toma; totalSeguro += toma; }
+    );
+    // Tramo 2: desde donde quedó el precio tras el tramo 1 hasta el costo
+    // protegido. Baja la utilidad, pero la obra sigue cubriendo sus costos.
+    // Se mide desde la venta real (no desde el precio mínimo): si la partida
+    // ya estaba bajo el mínimo, su margen de maniobra es menor.
+    repartirTramo(
+      function (p) { return Math.max(0, p.venta - p.holgura - p.costoProtegido); },
+      function (p, toma) { totalMargen += toma; }
+    );
+    var enPerdida = Math.max(0, restante);
+    return {
+      objetivo: Math.round(objetivo),
+      seguro: Math.round(totalSeguro),
+      desdeMargen: Math.round(totalMargen),
+      enPerdida: Math.round(enPerdida),
+      asignado: asignado,
+      tramoSeguro: tramoSeguro,
+      viable: totalMargen <= 0.5 && enPerdida <= 0.5,
+      holguraRestante: Math.round(Math.max(0, analisis.total.holgura - totalSeguro)),
+    };
+  }
+
+    function normalizarHojaNegociacion(presupuesto, cfg, entrada, cliente) {
+    var previo = entrada || obtenerDocumentoObraConfig(presupuesto, "hojaNegociacion") || {};
+    return Object.assign({
+      titulo: "Asistente Inteligente de Negociación",
+      fecha: new Date().toISOString().split("T")[0],
+      clienteNombre: (cliente && cliente.nombre) || "",
+      proyectoNombre: presupuesto.descripcion || "",
+      margenMinimoPct: 10,
+      reservaRiesgoPct: 3,
+      rebajaPropuesta: 0,
+      anticipoMinimoPct: 30,
+      modificarAlcance: false,
+      modificarMateriales: false,
+      modificarPlazo: false,
+      modificarFormaPago: false,
+      overrides: {},
+      notasInternas: "",
+      estado: "Borrador",
+      _estadoDocumento: "borrador",
+      actualizadoEn: ""
+    }, previo);
+  }
+
+  function htmlHojaNegociacion(presupuesto, cliente, cfg, entrada) {
+    presupuesto = presupuesto || {}; cliente = cliente || {}; cfg = cfg || {};
+    var doc = normalizarHojaNegociacion(presupuesto, cfg, entrada, cliente);
+    var estructura = estructuraCapitulosObra(presupuesto);
+    var esc = function (v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+    var mon = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    
+    var accent = cfg.accentColor || "#1e3a8a";
+    var logo = cfg.logoCliente || cfg.logo || "";
+    var corp = obtenerDatosCorporativos(cfg);
+    var empresa = corp.nombreComercial || "Empresa";
+
+
+    var precioOfertado = 0;
+    var costoInterno = 0;
+    var hasCostos = false;
+    var defaultMargenBase = Number(cfg.porcentajeUtilidad || 15);
+
+    // Calculate costs
+    var costosReales = costosRealesNegociacion(presupuesto, cfg, doc);
+    if (costosReales.total.venta > 0) {
+       costoInterno = costosReales.total.costo;
+       precioOfertado = costosReales.total.venta;
+       hasCostos = costoInterno > 0;
+    } else {
+       (presupuesto.items || []).forEach(function(i) {
+          var pv = (i.precio * i.cant) || 0;
+          precioOfertado += pv;
+          costoInterno += pv * (1 - (defaultMargenBase/100));
+       });
+    }
+
+    if (!precioOfertado) precioOfertado = presupuesto.neto || 0;
+    var utilidadActual = Math.max(0, precioOfertado - costoInterno);
+    var margenActualPct = precioOfertado > 0 ? (utilidadActual / precioOfertado) * 100 : 0;
+
+    // Negotiation parameters
+    var reservaPct = Number(doc.reservaRiesgoPct || 3);
+    var margenMinPct = Number(doc.margenMinimoPct || cfg.porcentajeUtilidad || 15);
+
+    var costoProtegido = costoInterno * (1 + (reservaPct / 100));
+    var precioMinimoRecomendado = costoProtegido / (1 - (margenMinPct / 100));
+    var holguraNegociacion = Math.max(0, precioOfertado - precioMinimoRecomendado);
+
+    // Simulated discount
+    var rebajaPropuesta = Number(doc.rebajaPropuesta || 0);
+    var precioSimulado = Math.max(0, precioOfertado - rebajaPropuesta);
+    var utilidadSimulada = Math.max(0, precioSimulado - costoInterno);
+    var margenSimuladoPct = precioSimulado > 0 ? (utilidadSimulada / precioSimulado) * 100 : 0;
+
+    // Smart distribution algorithm
+    var totalHolguraCapitulos = 0;
+    var holgurasPorCapitulo = {};
+    var costosPorCapitulo = {};
+    var ventasPorCapitulo = {};
+
+    estructura.forEach(function(cap) {
+       var vCap = 0; var cCap = 0;
+       cap.partidas.forEach(function(p, idxP) {
+          var originalItem = (presupuesto.items || []).find(function(it) { return it._uid === p.uid; }) || {};
+          var pv = p.valorContratado || 0;
+          var pc = costoPartidaNegociacion(costosReales, cap.id, p.clave, idxP, pv, defaultMargenBase);
+          vCap += pv;
+          cCap += pc;
+       });
+       var cCapProtegido = cCap * (1 + (reservaPct / 100));
+       var vCapMinimo = cCapProtegido / (1 - (margenMinPct / 100));
+       var holguraCap = Math.max(0, vCap - vCapMinimo);
+
+       totalHolguraCapitulos += holguraCap;
+       holgurasPorCapitulo[cap.id] = holguraCap;
+       costosPorCapitulo[cap.id] = cCap;
+       ventasPorCapitulo[cap.id] = vCap;
+    });
+
+    var rebajasPorCapitulo = {};
+    estructura.forEach(function(cap) {
+       var hCap = holgurasPorCapitulo[cap.id] || 0;
+       var rebajaCap = 0;
+       if (rebajaPropuesta > 0) {
+          if (totalHolguraCapitulos > 0) {
+             if (rebajaPropuesta <= totalHolguraCapitulos) {
+                rebajaCap = rebajaPropuesta * (hCap / totalHolguraCapitulos);
+             } else {
+                // Eat up target margins proportionally down to cost protected
+                rebajaCap = hCap;
+                var restante = rebajaPropuesta - totalHolguraCapitulos;
+                var vCapMinimo = (costosPorCapitulo[cap.id] * (1 + (reservaPct / 100))) / (1 - (margenMinPct / 100));
+                var cCapProtegido = costosPorCapitulo[cap.id] * (1 + (reservaPct / 100));
+                var bufferAdicionalCap = Math.max(0, vCapMinimo - cCapProtegido);
+                var totalBufferAdicional = precioMinimoRecomendado - costoProtegido;
+                if (totalBufferAdicional > 0) {
+                   rebajaCap += restante * (bufferAdicionalCap / totalBufferAdicional);
+                }
+             }
+          } else {
+             // Distribute proportionally directly based on sales
+             rebajaCap = rebajaPropuesta * (ventasPorCapitulo[cap.id] / precioOfertado);
+          }
+       }
+       rebajasPorCapitulo[cap.id] = rebajaCap;
+    });
+
+    // Build table rows
+    var filasCap = estructura.map(function(cap) {
+       var vCap = ventasPorCapitulo[cap.id] || 0;
+       var cCap = costosPorCapitulo[cap.id] || 0;
+       var rCap = rebajasPorCapitulo[cap.id] || 0;
+       var vCapSimulada = Math.max(0, vCap - rCap);
+       var utilCapSimulada = Math.max(0, vCapSimulada - cCap);
+       var margCapSimulado = vCapSimulada > 0 ? (utilCapSimulada / vCapSimulada) * 100 : 0;
+       var holguraCap = holgurasPorCapitulo[cap.id] || 0;
+
+       var estado = "Crítico";
+       var pClr = "#ef4444";
+       if (margCapSimulado >= (margenMinPct + 4)) {
+          estado = "Negociable";
+          pClr = "#10b981";
+       } else if (margCapSimulado >= margenMinPct) {
+          estado = "En Límite";
+          pClr = "#eab308";
+       }
+
+       return '<tr class="cap-row">' +
+          '<td class="cap-title" colspan="6">' + esc(cap.codigo ? cap.codigo + " — " + cap.nombre : cap.nombre) + '</td>' +
+          '</tr>' +
+          cap.partidas.map(function(p, idxP) {
+             var originalItem = (presupuesto.items || []).find(function(it) { return it._uid === p.uid; }) || {};
+             var pv = p.valorContratado || 0;
+             var pc = costoPartidaNegociacion(costosReales, cap.id, p.clave, idxP, pv, defaultMargenBase);
+             var rPartida = vCap > 0 ? rCap * (pv / vCap) : 0;
+             var pvSim = Math.max(0, pv - rPartida);
+             var margPSim = pvSim > 0 ? ((pvSim - pc) / pvSim) * 100 : 0;
+
+             return '<tr class="item-row">' +
+                '<td style="padding-left:20px;">' + esc(p.descripcion) + '</td>' +
+                '<td class="n">' + p.cantidad + ' ' + esc(p.unidad) + '</td>' +
+                '<td class="n">' + mon(pv) + '</td>' +
+                '<td class="n" style="color:#ef4444">' + mon(rPartida) + '</td>' +
+                '<td class="n" style="font-weight:bold">' + mon(pvSim) + '</td>' +
+                '<td class="n" style="font-weight:bold;color:' + (margPSim >= margenMinPct ? '#10b981' : '#ef4444') + '">' + margPSim.toFixed(1) + '%</td>' +
+                '</tr>';
+          }).join("") +
+          '<tr class="subtotal-row">' +
+          '<td>SUBTOTAL CAPÍTULO</td>' +
+          '<td>-</td>' +
+          '<td class="n">' + mon(vCap) + '</td>' +
+          '<td class="n" style="color:#ef4444">' + mon(rCap) + '</td>' +
+          '<td class="n">' + mon(vCapSimulada) + '</td>' +
+          '<td class="n" style="color:' + pClr + '">' + margCapSimulado.toFixed(1) + '% (' + estado + ')</td>' +
+          '</tr>';
+    }).join("");
+
+    var css = '*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#1e293b;margin:0;padding:30px;max-width:900px;margin:0 auto}' +
+       '.head{display:flex;justify-content:space-between;border-bottom:4px solid ' + accent + ';padding-bottom:12px;margin-bottom:18px}' +
+       'h1{color:#1e3a8a;font-size:22px;margin:4px 0}.title{text-align:right;font-size:12px;color:#64748b}.title strong{font-size:24px;color:' + accent + '}' +
+       '.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;background:#f8fafc;padding:12px;margin-bottom:16px;font-size:12px;border-left:4px solid ' + accent + ';border-radius:0 6px 6px 0}' +
+       'table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px}' +
+       'th{background:#1e3a8a;color:#fff;padding:8px;text-align:left;font-weight:700}' +
+       'td{padding:7px 8px;border-bottom:1px solid #e2e8f0}.n{text-align:right}' +
+       '.cap-row td{background:#f1f5f9;font-weight:bold;color:#1e3a8a;font-size:11.5px;padding:8px}' +
+       '.subtotal-row td{background:#fafafa;font-weight:bold;border-top:1px solid #cbd5e1;border-bottom:2px solid #cbd5e1}' +
+       '.strategy{background:#f8fafc;border:1px solid #e2e8f0;padding:14px;border-radius:8px;margin-bottom:20px;font-size:12px}' +
+       '@media print{.np{display:none}}';
+
+    return '<!doctype html><html><head><meta charset="utf-8"><title>Análisis de Negociación</title><style>' + css + '</style></head><body>' +
+       '<button class="np" onclick="print()">🖨 Imprimir / Guardar PDF</button>' +
+       '<div class="head"><div>' + (logo ? '<img src="' + esc(logo) + '" style="max-height:60px;margin-bottom:6px;display:block"/>' : "") + '<h1>' + esc(empresa) + '</h1></div><div class="title"><div>ANÁLISIS Y RECOMENDACIÓN COMERCIAL DE NEGOCIACIÓN</div><strong>Ref. N° ' + esc(presupuesto.id || "") + '</strong></div></div>' +
+       '<div class="meta"><div><b>Cliente:</b><br>' + esc((cliente && cliente.nombre) || "Sin cliente") + '</div><div><b>Proyecto:</b><br>' + esc(presupuesto.descripcion || "") + '</div><div><b>Margen Objetivo Mínimo:</b><br>' + margenMinPct + '% (Reserva: ' + reservaPct + '%)</div></div>' +
+       
+       panelNegociacionHtml(precioOfertado, costoProtegido, precioMinimoRecomendado, holguraNegociacion, 0, margenMinPct) +
+       '<h2>Matriz Comparativa de Rebajas Proyectadas</h2>' +
+       '<table><thead><tr><th>Partida / Capítulo</th><th class="n">Cantidad</th><th class="n">Valor Contratado</th><th class="n">Rebaja Proyectada</th><th class="n">Nuevo Monto</th><th class="n">Margen Nuevo (%)</th></tr></thead><tbody>' +
+       filasCap +
+       '</tbody>' +
+       '<tfoot><tr style="background:#f1f5f9;font-weight:bold;border-top:2px solid #94a3b8;border-bottom:2px solid #94a3b8;">' +
+       '<td style="padding:10px 8px;">TOTAL GENERAL PRESUPUESTO</td>' +
+       '<td class="n">-</td>' +
+       '<td class="n">' + mon(precioOfertado) + '</td>' +
+       '<td class="n" style="color:#ef4444">' + mon(rebajaPropuesta) + '</td>' +
+       '<td class="n" style="color:#1e3a8a">' + mon(precioSimulado) + '</td>' +
+       '<td class="n" style="color:' + (margenSimuladoPct >= margenMinPct ? '#10b981' : '#ef4444') + '">' + margenSimuladoPct.toFixed(1) + '%</td>' +
+       '</tr></tfoot></table>' +
+       
+       (doc.notasInternas ? '<h2>Notas y Conclusiones de Negociación</h2><div style="background:#f8fafc;padding:12px;border-left:4px solid ' + accent + ';font-size:12px;white-space:pre-wrap;">' + esc(doc.notasInternas) + '</div>' : "") +
+       '<div style="margin-top:30px;font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:16px;text-align:center;">Asistente Inteligente de Negociación · Presupuesto Nº ' + presupuesto.id + ' · Enlace Constructor Pro</div>' +
+       renderBloqueFirmaCorporativa(cfg) +
+       '</body></html>';
+  }
+
+  function abrirHojaNegociacion(presupuesto, cliente, cfg, entrada) {
+    var n = window.open("", "_blank");
+    if (!n) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
+    (n.document.write(htmlHojaNegociacion(presupuesto, cliente, cfg, entrada)), n.document.close());
+  }
+
+  function sugerirConclusionNegociacion(precioOfertado, costoInterno, descuentoAplicado, margenMinPct, margenOriginalPct, margenSimuladoPct) {
+     var viable = "viable y mantiene un margen aceptable de rentabilidad";
+     if (margenSimuladoPct < (margenMinPct - 5)) {
+        viable = "crítico (con riesgo de pérdida o margen comercial inviable)";
+     } else if (margenSimuladoPct < margenMinPct) {
+        viable = "ajustado (situándose por debajo del margen objetivo del " + margenMinPct + "%)";
+     }
+
+     var txt = "CONCLUSIÓN COMERCIAL DE NEGOCIACIÓN:\n" +
+               "Se analiza un descuento simulado de $" + Math.round(descuentoAplicado).toLocaleString("es-CL") + " (" + (precioOfertado > 0 ? ((descuentoAplicado / precioOfertado) * 100).toFixed(1) : 0) + "% del total ofertado).\n\n" +
+               "Impacto del Escenario comercial:\n" +
+               "· Precio Original: $" + Math.round(precioOfertado).toLocaleString("es-CL") + " (Margen Base: " + margenOriginalPct.toFixed(1) + "%)\n" +
+               "· Precio Proyectado: $" + Math.round(precioOfertado - descuentoAplicado).toLocaleString("es-CL") + " (Margen Proyectado: " + margenSimuladoPct.toFixed(1) + "%)\n" +
+               "· Clasificación comercial: Este escenario se evalúa como " + viable + ".\n\n" +
+               "Estrategia de Mitigación de Costos:\n" +
+               "Para sostener esta oferta sin sacrificar la utilidad final, se sugiere negociar tarifas por volumen con subcontratistas e insumos críticos en las partidas con menor holgura de rentabilidad.";
+     return txt;
+  }
+
+  function HojaNegociacionEditor({ budget, client, cfg, onSave, setToast, onNavigateDocument }) {
+    var apusList = [];
+    try { apusList = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_apus") || "[]"); } catch(e){}
+    var materialesList = [];
+    try { materialesList = JSON.parse(localStorage.getItem("enlace_constructor_pro_v1_materiales") || "[]"); } catch(e){}
+
+    const [doc, setDoc] = V(function() { 
+      return normalizarHojaNegociacion(budget, cfg, undefined, client); 
+    });
+    
+    // States for interactive simulator
+    const [simDescuentoPct, setSimDescuentoPct] = V(""); // starts empty to avoid leading zeros
+    const [simDescuentoClp, setSimDescuentoClp] = V("");
+    const [expandedPartidas, setExpandedPartidas] = V({});
+
+    var estructura = estructuraCapitulosObra(budget);
+    var money = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+
+    var cambiar = function (campo, valor) { 
+      setDoc(function (actual) { 
+        var n = Object.assign({}, actual, { [campo]: valor, estado: "Borrador", _estadoDocumento: "borrador" }); 
+        return n;
+      }); 
+    };
+
+    var guardar = function () {
+      var salida = Object.assign({}, doc, { 
+        estado: "Guardado", 
+        _estadoDocumento: "guardado", 
+        actualizadoEn: new Date().toISOString() 
+      });
+      setDoc(salida);
+      if (onSave) onSave(salida);
+      if (setToast) setToast("✅ Asistente de Negociación guardado");
+    };
+
+
+    var precioOfertado = 0;
+    var costoInterno = 0;
+    var hasCostos = false;
+    var defaultMargenBase = Number(cfg.porcentajeUtilidad || 15);
+
+    // Load costs and price
+    var costosReales = costosRealesNegociacion(budget, cfg, doc);
+    // Enlace partida -> ítem original. No basta con buscar por _uid: las partidas
+    // cargadas a mano no lo traen y quedarían sin APU ni insumos. Se reconstruye
+    // la misma clave que arma estructuraCapitulosObra.
+    var itemsPorClaveNegociacion = (function () {
+      var mapa = {}, items = (budget.items || []).filter(function (x) { return x && x.desc; });
+      var caps = Array.isArray(budget.capitulos) ? budget.capitulos.filter(Boolean) : [];
+      var grupos = caps.length
+        ? caps.map(function (capitulo) { return items.filter(function (x) { return String(x.capituloId) === String(capitulo.id); }); })
+        : [items];
+      if (caps.length) {
+        var ids = {};
+        caps.forEach(function (capitulo) { ids[String(capitulo.id)] = !0; });
+        var sueltos = items.filter(function (x) { return x.capituloId == null || !ids[String(x.capituloId)]; });
+        if (sueltos.length) grupos.push(sueltos);
+      }
+      grupos.forEach(function (grupo, gi) {
+        grupo.forEach(function (item, ii) {
+          mapa[item._uid ? "uid:" + item._uid : "legacy:" + gi + "|" + ii] = item;
+        });
+      });
+      return mapa;
+    })();
+    if (costosReales.total.venta > 0) {
+       costoInterno = costosReales.total.costo;
+       precioOfertado = costosReales.total.venta;
+       hasCostos = costoInterno > 0;
+    } else {
+       (budget.items || []).forEach(function(i) {
+          var pv = (i.precio * i.cant) || 0;
+          precioOfertado += pv;
+          costoInterno += pv * (1 - (defaultMargenBase/100));
+       });
+    }
+    if (!precioOfertado) precioOfertado = budget.neto || 0;
+
+    // Recalculations based on simulation values
+    var valPct = parseFloat(simDescuentoPct) || 0;
+    var valClp = parseFloat(simDescuentoClp) || 0;
+    var descuentoAplicado = valClp > 0 ? valClp : (precioOfertado * (valPct / 100));
+    var precioSimulado = Math.max(0, precioOfertado - descuentoAplicado);
+    
+    var utilidadActual = Math.max(0, precioOfertado - costoInterno);
+    var margenActualPct = precioOfertado > 0 ? (utilidadActual / precioOfertado) * 100 : 0;
+
+    var utilidadSimulada = Math.max(0, precioSimulado - costoInterno);
+    var margenSimuladoPct = precioSimulado > 0 ? (utilidadSimulada / precioSimulado) * 100 : 0;
+
+    // Negotiation target bounds
+    var reservaPct = Number(doc.reservaRiesgoPct || 3);
+    var margenMinPct = Number(doc.margenMinimoPct || cfg.porcentajeUtilidad || 15);
+    
+    var costoProtegido = costoInterno * (1 + (reservaPct/100));
+    var precioMinimoRecomendado = costoProtegido / (1 - (margenMinPct/100));
+    var holguraNegociacion = Math.max(0, precioOfertado - precioMinimoRecomendado);
+
+    // Smart distribution algorithm
+    var totalHolguraCapitulos = 0;
+    var holgurasPorCapitulo = {};
+    var costosPorCapitulo = {};
+    var ventasPorCapitulo = {};
+
+    estructura.forEach(function(cap) {
+       var vCap = 0; var cCap = 0;
+       cap.partidas.forEach(function(p, idxP) {
+          var originalItem = itemsPorClaveNegociacion[p.clave] || (budget.items || []).find(function(it) { return it._uid && it._uid === p.uid; }) || {};
+          var pv = p.valorContratado || 0;
+          var pc = costoPartidaNegociacion(costosReales, cap.id, p.clave, idxP, pv, defaultMargenBase);
+          vCap += pv;
+          cCap += pc;
+       });
+       var cCapProtegido = cCap * (1 + (reservaPct / 100));
+       var vCapMinimo = cCapProtegido / (1 - (margenMinPct / 100));
+       var holguraCap = Math.max(0, vCap - vCapMinimo);
+
+       totalHolguraCapitulos += holguraCap;
+       holgurasPorCapitulo[cap.id] = holguraCap;
+       costosPorCapitulo[cap.id] = cCap;
+       ventasPorCapitulo[cap.id] = vCap;
+    });
+
+    var rebajasPorCapitulo = {};
+    estructura.forEach(function(cap) {
+       var hCap = holgurasPorCapitulo[cap.id] || 0;
+       var rebajaCap = 0;
+       if (descuentoAplicado > 0) {
+          if (totalHolguraCapitulos > 0) {
+             if (descuentoAplicado <= totalHolguraCapitulos) {
+                rebajaCap = descuentoAplicado * (hCap / totalHolguraCapitulos);
+             } else {
+                rebajaCap = hCap;
+                var restante = descuentoAplicado - totalHolguraCapitulos;
+                var vCapMinimo = (costosPorCapitulo[cap.id] * (1 + (reservaPct / 100))) / (1 - (margenMinPct / 100));
+                var cCapProtegido = costosPorCapitulo[cap.id] * (1 + (reservaPct / 100));
+                var bufferAdicionalCap = Math.max(0, vCapMinimo - cCapProtegido);
+                var totalBufferAdicional = precioMinimoRecomendado - costoProtegido;
+                if (totalBufferAdicional > 0) {
+                   rebajaCap += restante * (bufferAdicionalCap / totalBufferAdicional);
+                }
+             }
+          } else {
+             rebajaCap = descuentoAplicado * (ventasPorCapitulo[cap.id] / precioOfertado);
+          }
+       }
+       rebajasPorCapitulo[cap.id] = rebajaCap;
+    });
+
+    // Dynamic strategic recommendations card
+    var recommendationBox = null;
+    if (holguraNegociacion > 0) {
+       var holguraPct = (holguraNegociacion / precioOfertado) * 100;
+       recommendationBox = e.jsxs("div", { style: { background: "#f0fdf4", border: "1px solid #bbf7d0", padding: 14, borderRadius: 6, marginBottom: 18, color: "#166534" }, children: [
+          e.jsxs("div", { style: { fontWeight: "bold", fontSize: 13, display: "flex", alignItems: "center", gap: 6 }, children: [
+             e.jsx("span", { children: "💡" }),
+             e.jsx("span", { children: "Propuesta Recomendada de Negociación Comercial" })
+          ] }),
+          e.jsxs("div", { style: { fontSize: 12, marginTop: 4, lineHeight: 1.45 }, children: [
+             "El presupuesto cuenta con una holgura segura de ",
+             e.jsx("strong", { children: money(holguraNegociacion) }),
+             " (hasta un ",
+             e.jsx("strong", { children: holguraPct.toFixed(1) + "%" }),
+             " de descuento global) antes de bajar de tu margen mínimo del ",
+             margenMinPct,
+             "%. Se sugiere priorizar rebajas en los capítulos con mayor margen disponible."
+          ] })
+       ] });
+    } else {
+       recommendationBox = e.jsxs("div", { style: { background: "#fff1f2", border: "1px solid #fecdd3", padding: 14, borderRadius: 6, marginBottom: 18, color: "#9f1239" }, children: [
+          e.jsxs("div", { style: { fontWeight: "bold", fontSize: 13, display: "flex", alignItems: "center", gap: 6 }, children: [
+             e.jsx("span", { children: "⚠️" }),
+             e.jsx("span", { children: "Límite Comercial Alcanzado" })
+          ] }),
+          e.jsxs("div", { style: { fontSize: 12, marginTop: 4, lineHeight: 1.45 }, children: [
+             "El presupuesto actual se encuentra en un margen de ",
+             e.jsx("strong", { children: margenActualPct.toFixed(1) + "%" }),
+             ", el cual ya está en el límite o por debajo de tu objetivo del ",
+             margenMinPct,
+             "%. ",
+             e.jsx("strong", { children: "No se recomienda aplicar descuentos globales" }),
+             " adicionales para evitar pérdidas."
+          ] })
+       ] });
+    }
+
+    // Alerta de viabilidad semáforo
+    var semaforo = "Gris"; var colorSemaforo = "#94a3b8"; var textoSemaforo = "DATOS INSUFICIENTES";
+    var msgSemaforo = "";
+
+    if (precioSimulado < costoProtegido) {
+        semaforo = "Rojo"; colorSemaforo = "#ef4444"; textoSemaforo = "ESCENARIO INVIABLE (PÉRDIDA)";
+        msgSemaforo = "La rebaja propuesta de " + money(descuentoAplicado) + " deja el precio final por debajo del costo protegido estimado de la obra (" + money(costoProtegido) + ").";
+    } else if (precioSimulado < precioMinimoRecomendado) {
+        semaforo = "Amarillo"; colorSemaforo = "#eab308"; textoSemaforo = "UTILIDAD BAJO EL OBJETIVO";
+        msgSemaforo = "Cubre los costos directos de la obra, pero el margen de utilidad proyectado (" + margenSimuladoPct.toFixed(1) + "%) cae por debajo de tu objetivo mínimo (" + margenMinPct + "%).";
+    } else {
+        semaforo = "Verde"; colorSemaforo = "#10b981"; textoSemaforo = "ESCENARIO SEGURO Y VIABLE";
+        msgSemaforo = "El margen proyectado (" + margenSimuladoPct.toFixed(1) + "%) respeta la utilidad mínima aceptable de tu empresa.";
+    }
+
+    var togglePartida = function(id) {
+       setExpandedPartidas(function(prev) {
+          return Object.assign({}, prev, { [id]: !prev[id] });
+       });
+    };
+
+    var seccion = function (titulo, contenido) { 
+      return e.jsxs("div", { style: Object.assign({}, c.card, { marginBottom: 16 }), children: [
+        e.jsx("div", { style: Object.assign({}, c.ct, { marginBottom: 12 }), children: titulo }), 
+        contenido
+      ] }); 
+    };
+
+    return e.jsxs("div", { children: [
+      // 1. Header Information & Navigation
+      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 14, flexWrap: "wrap" }, children: [
+         e.jsxs("div", { children: [
+            e.jsx("div", { style: { fontSize: 13, color: a.muted }, children: "Análisis y recomendación comercial para la toma de decisiones al negociar." }),
+            !hasCostos && e.jsx("div", { style: { fontSize: 11, color: "#ea580c", fontWeight: "bold", marginTop: 4 }, children: "💡 Nota: Mostrando estimación basada en Margen de Utilidad estándar (" + defaultMargenBase + "%)." })
+         ] }),
+         e.jsxs("div", { style: { display: "flex", gap: 8 }, children: [
+            onNavigateDocument && e.jsx("button", { onClick: function() { onNavigateDocument(budget.id, "desglose", "edit"); }, style: Object.assign({}, c.btn("s"), { padding: "8px 16px", border: "1px solid #e2e8f0", background: "#fff", color: "#000" }), children: "Ir a Desglose Interno" }),
+            e.jsx("button", { style: c.btn("p"), onClick: function() { abrirHojaNegociacion(budget, client, cfg, Object.assign({}, doc, { rebajaPropuesta: descuentoAplicado })); }, children: "🖨️ Abrir / Imprimir PDF" })
+         ] })
+      ] }),
+
+      // Dynamic Strategic Recommendation Card
+      recommendationBox,
+
+      // 2. Real-time Status Card (Semaforo)
+      descuentoAplicado > 0 && e.jsxs("div", { style: { background: colorSemaforo + "15", borderLeft: "6px solid " + colorSemaforo, padding: 16, borderRadius: 4, marginBottom: 18 }, children: [
+         e.jsx("div", { style: { fontSize: 16, fontWeight: "bold", color: colorSemaforo }, children: textoSemaforo }),
+         e.jsx("div", { style: { fontSize: 12.5, color: "#334155", marginTop: 4, lineHeight: 1.45 }, children: msgSemaforo })
+      ] }),
+
+      // 3. Panel de negociación: un número protagonista, la barra de tramos y
+      // los datos de apoyo. Misma lectura que el PDF (panelNegociacionHtml).
+      (function () {
+        var COSTO = "#e4e6ea", REQ = "#2a78d6", LIBRE = "#008300";
+        var venta = precioOfertado || 0,
+          minimo = precioMinimoRecomendado || 0,
+          libre = Math.max(0, holguraNegociacion || 0),
+          requerido = Math.max(0, minimo - costoProtegido),
+          denom = Math.max(venta, minimo) || 1,
+          deficit = Math.max(0, minimo - venta),
+          pctLibre = venta > 0 ? (libre / venta) * 100 : 0,
+          posVenta = ((venta / denom) * 100).toFixed(2) + "%";
+        var estado = pctLibre >= 5
+          ? { c: "#0ca30c", bg: "#eaf6ea", bd: "#b6e0b6", t: "✅ HAY MARGEN PARA NEGOCIAR" }
+          : (libre > 0
+            ? { c: "#b07d00", bg: "#fff8e6", bd: "#f2d98a", t: "⚠️ MARGEN AJUSTADO" }
+            : { c: "#d03b3b", bg: "#fdeaea", bd: "#f0b4b4", t: "⛔ SIN MARGEN — NO BAJAR EL PRECIO" });
+        var seg = function (v, color, radio, k) {
+          var w = (v / denom) * 100;
+          return w <= 0 ? null : e.jsx("div", { style: { flex: "0 0 " + w.toFixed(2) + "%", background: color, height: 38, borderRadius: radio } }, k);
+        };
+        var chip = function (color, rot, val, k) {
+          return e.jsxs("div", { style: { display: "flex", gap: 7, flex: "1 1 0" }, children: [
+            e.jsx("span", { style: { flex: "0 0 auto", width: 11, height: 11, borderRadius: 3, background: color, marginTop: 4 } }),
+            e.jsxs("div", { children: [
+              e.jsx("div", { style: { fontSize: 10.5, color: "#52514e" }, children: rot }),
+              e.jsx("div", { style: { fontSize: 14, fontWeight: 700, color: "#0b0b0b" }, children: money(val) }),
+              e.jsx("div", { style: { fontSize: 10, color: "#78776f" }, children: (venta > 0 ? (val / venta) * 100 : 0).toFixed(1) + "% del precio" }),
+            ] }),
+          ] }, k);
+        };
+        var mini = function (rot, val, nota, color, k) {
+          return e.jsxs("div", { style: { flex: "1 1 0", border: "1px solid #dfe1e6", borderRadius: 8, padding: "10px 12px" }, children: [
+            e.jsx("div", { style: { fontSize: 9.5, color: "#78776f", textTransform: "uppercase", letterSpacing: ".07em" }, children: rot }),
+            e.jsx("div", { style: { fontSize: 17, fontWeight: 700, color: color || "#1a3060", marginTop: 3 }, children: money(val) }),
+            nota ? e.jsx("div", { style: { fontSize: 9.5, color: "#78776f", marginTop: 2 }, children: nota }) : null,
+          ] }, k);
+        };
+        return e.jsxs("div", { style: { border: "1px solid #dfe1e6", borderRadius: 12, padding: "18px 20px", marginBottom: 18, background: "#fff" }, children: [
+          e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 20, flexWrap: "wrap" }, children: [
+            e.jsxs("div", { children: [
+              e.jsx("div", { style: { fontSize: 10.5, color: "#78776f", textTransform: "uppercase", letterSpacing: ".08em" }, children: "Margen disponible para negociar" }),
+              e.jsx("div", { style: { fontSize: 48, lineHeight: 1.05, fontWeight: 800, color: libre > 0 ? "#0b0b0b" : "#d03b3b", marginTop: 2 }, children: money(libre) }),
+              e.jsx("div", { style: { fontSize: 12, color: "#52514e", marginTop: 2, maxWidth: 620 }, children: deficit > 0
+                ? "El precio ofertado ya está " + money(deficit) + " bajo el precio mínimo para un margen de " + margenMinPct + "%. No hay descuento posible sin perder margen."
+                : "Equivale a un " + pctLibre.toFixed(1) + "% de descuento sobre el precio ofertado, sin bajar del margen mínimo de " + margenMinPct + "%." }),
+            ] }),
+            e.jsx("div", { style: { background: estado.bg, border: "1px solid " + estado.bd, color: estado.c, borderRadius: 999, padding: "8px 16px", fontSize: 11.5, fontWeight: 800, letterSpacing: ".04em", whiteSpace: "nowrap" }, children: estado.t }),
+          ] }),
+          e.jsxs("div", { style: { position: "relative", marginTop: 18, marginBottom: deficit > 0 ? 22 : 0 }, children: [
+            e.jsxs("div", { style: { display: "flex", gap: 2, overflow: "hidden" }, children: [
+              seg(costoProtegido, COSTO, "4px 0 0 4px", "s1"),
+              seg(requerido, REQ, "0", "s2"),
+              seg(libre, LIBRE, "0 4px 4px 0", "s3"),
+            ] }),
+            deficit > 0 ? e.jsx("div", { style: { position: "absolute", top: -4, bottom: -4, left: posVenta, width: 2, background: "#0b0b0b" } }, "mk") : null,
+            deficit > 0 ? e.jsx("div", { style: { position: "absolute", top: "100%", left: posVenta, transform: "translateX(-100%)", fontSize: 10, color: "#0b0b0b", paddingTop: 5, whiteSpace: "nowrap" }, children: "▲ Precio ofertado " + money(venta) }, "mkt") : null,
+          ] }),
+          e.jsxs("div", { style: { display: "flex", gap: 18, marginTop: 12 }, children: [
+            chip(COSTO, "Costo protegido (intocable)", costoProtegido, "c1"),
+            chip(REQ, "Margen requerido hasta el mínimo", requerido, "c2"),
+            chip(LIBRE, "Margen disponible", libre, "c3"),
+          ] }),
+          e.jsxs("div", { style: { display: "flex", gap: 10, marginTop: 16 }, children: [
+            mini("Precio ofertado", venta, "Margen actual " + margenActualPct.toFixed(1) + "%", null, "m1"),
+            mini("Precio mínimo recomendado", minimo, "Bajo este valor pierdes margen", null, "m2"),
+            mini("Precio proyectado (simulado)", precioSimulado, "Margen simulado " + margenSimuladoPct.toFixed(1) + "%", "#1d4ed8", "m3"),
+          ] }),
+        ] });
+      })(),
+
+      // 4. Interactive Scenario Inputs
+      seccion("Simulador de Escenarios y Rebajas", e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12 }, children: [
+         e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Descuento (%)", e.jsx("input", { type: "number", min: "0", max: "100", value: simDescuentoPct, placeholder: "0", onChange: function(ev) { var val = ev.target.value; setSimDescuentoPct(val); setSimDescuentoClp(""); cambiar("rebajaPropuesta", Math.round(precioOfertado * ((parseFloat(val)||0)/100))); }, style: Object.assign({}, c.inp, { width: "100%" }) })] }),
+         e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Descuento ($)", e.jsx("input", { type: "number", min: "0", value: simDescuentoClp, placeholder: "Monto directo CLP", onChange: function(ev) { var val = ev.target.value; setSimDescuentoClp(val); setSimDescuentoPct(""); cambiar("rebajaPropuesta", parseFloat(val)||0); }, style: Object.assign({}, c.inp, { width: "100%" }) })] }),
+         e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Margen Mínimo Objetivo (%)", e.jsx("input", { type: "number", value: doc.margenMinimoPct, onChange: function(ev) { cambiar("margenMinimoPct", parseFloat(ev.target.value) || 0); }, style: Object.assign({}, c.inp, { width: "100%" }) })] }),
+         e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Reserva de Riesgo (%)", e.jsx("input", { type: "number", value: doc.reservaRiesgoPct, onChange: function(ev) { cambiar("reservaRiesgoPct", parseFloat(ev.target.value) || 0); }, style: Object.assign({}, c.inp, { width: "100%" }) })] })
+      ] })),
+
+      // 5. Chapters breakdown with expandable APUs - matrix layout matching Estado de Pago
+      seccion("Matriz de Rebajas Proyectadas por Partida", e.jsx("div", { style: { overflowX: "auto" }, children: e.jsxs("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: 12, minWidth: 700 }, children: [
+         e.jsx("thead", { children: e.jsxs("tr", { style: { background: "#1e3a8a", color: "#fff" }, children: [
+            e.jsx("th", { style: { padding: "8px 12px", textAlign: "left", width: "40%" }, children: "Partida / Capítulo" }),
+            e.jsx("th", { style: { padding: "8px 12px", textAlign: "right" }, children: "Cantidad" }),
+            e.jsx("th", { style: { padding: "8px 12px", textAlign: "right" }, children: "Valor Contratado" }),
+            e.jsx("th", { style: { padding: "8px 12px", textAlign: "right", color: "#fca5a5" }, children: "Rebaja Proyectada" }),
+            e.jsx("th", { style: { padding: "8px 12px", textAlign: "right", color: "#93c5fd" }, children: "Nuevo Monto" }),
+            e.jsx("th", { style: { padding: "8px 12px", textAlign: "right" }, children: "Margen Nuevo" })
+         ] }) }),
+         e.jsx("tbody", { children: estructura.map(function(cap) {
+            var vCap = ventasPorCapitulo[cap.id] || 0;
+            var cCap = costosPorCapitulo[cap.id] || 0;
+            var rCap = rebajasPorCapitulo[cap.id] || 0;
+            var vCapSimulada = Math.max(0, vCap - rCap);
+            var utilCapSimulada = Math.max(0, vCapSimulada - cCap);
+            var margCapSimulado = vCapSimulada > 0 ? (utilCapSimulada / vCapSimulada) * 100 : 0;
+
+            var estado = "Crítico";
+            var pClr = "#ef4444";
+            if (margCapSimulado >= (margenMinPct + 4)) {
+               estado = "Negociable";
+               pClr = "#10b981";
+            } else if (margCapSimulado >= margenMinPct) {
+               estado = "En Límite";
+               pClr = "#eab308";
+            }
+
+            return e.jsxs(e.Fragment, { children: [
+               // Chapter Header row
+               e.jsxs("tr", { style: { background: "#ea580c12", borderBottom: "1px solid #cbd5e1" }, children: [
+                  e.jsx("td", { style: { padding: "8px 12px", fontWeight: "bold", color: "#d97706" }, children: cap.codigo ? cap.codigo + " — " + cap.nombre : cap.nombre }),
+                  e.jsx("td", { style: { textAlign: "right" }, children: "-" }),
+                  e.jsx("td", { style: { textAlign: "right", fontWeight: "bold" }, children: money(vCap) }),
+                  e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: "#dc2626" }, children: money(rCap) }),
+                  e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: "#2563eb" }, children: money(vCapSimulada) }),
+                  e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: pClr }, children: margCapSimulado.toFixed(1) + "% (" + estado + ")" })
+               ] }, cap.id),
+               
+               // Partidas rows
+               cap.partidas.map(function(p, idxP) {
+                  var originalItem = itemsPorClaveNegociacion[p.clave] || (budget.items || []).find(function(it) { return it._uid && it._uid === p.uid; }) || {};
+                  var pv = p.valorContratado || 0;
+                  var pc = costoPartidaNegociacion(costosReales, cap.id, p.clave, idxP, pv, defaultMargenBase);
+                  var rPartida = vCap > 0 ? rCap * (pv / vCap) : 0;
+                  var pvSim = Math.max(0, pv - rPartida);
+                  var margPSim = pvSim > 0 ? ((pvSim - pc) / pvSim) * 100 : 0;
+                  var claveExpandible = p.clave || p.uid || (String(cap.id) + "#" + idxP);
+                  var isExpanded = !!expandedPartidas[claveExpandible];
+
+                  // Calculate resources details
+                  var activeMats = originalItem._customApuMaterials || null;
+                  var resolvedMats = [];
+                  if (activeMats) {
+                     resolvedMats = activeMats.filter(function(x) { return x._activo; }).map(function(m) {
+                        var fullM = materialesList.find(function(a) { return a.id === m.materialId; }) || m._mat || {};
+                        return { nombre: fullM.nombre || m.nombre || "Insumo", unidad: fullM.unidad || m.unidad || "un", consumo: Number(m.cantidad != null ? m.cantidad : m.rendimiento) || 0, precio: Number(fullM.precio || m.precio || 0) };
+                     });
+                  } else {
+                     var matchedApu = apusList.find(function(a) { return a.id === originalItem.apuId || a.id === originalItem._apuId; });
+                     if (matchedApu && matchedApu.materiales) {
+                        resolvedMats = matchedApu.materiales.map(function(m) {
+                           var fullM = materialesList.find(function(a) { return a.id === m.materialId; }) || {};
+                           return { nombre: fullM.nombre || "Insumo", unidad: fullM.unidad || "un", consumo: Number(m.cantidad != null ? m.cantidad : m.rendimiento) || 0, precio: Number(fullM.precio || 0) };
+                        });
+                     }
+                  }
+
+                  return e.jsxs(e.Fragment, { children: [
+                     e.jsxs("tr", { style: { borderBottom: "1px solid #f1f5f9" }, children: [
+                        e.jsxs("td", { style: { padding: "8px 12px", display: "flex", alignItems: "center", gap: 6 }, children: [
+                           e.jsx("button", { onClick: function() { togglePartida(claveExpandible); }, style: { background: "none", border: "none", color: "#1e3a8a", fontWeight: "bold", cursor: "pointer", fontSize: 11 }, children: isExpanded ? "▼" : "▶" }),
+                           e.jsx("span", { children: p.descripcion })
+                        ] }),
+                        e.jsxs("td", { style: { textAlign: "right", color: a.muted }, children: [p.cantidad, " ", p.unidad] }),
+                        e.jsx("td", { style: { textAlign: "right" }, children: money(pv) }),
+                        e.jsx("td", { style: { textAlign: "right", color: "#ef4444" }, children: money(rPartida) }),
+                        e.jsx("td", { style: { textAlign: "right", fontWeight: "bold" }, children: money(pvSim) }),
+                        e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: margPSim >= margenMinPct ? "#10b981" : "#ef4444" }, children: margPSim.toFixed(1) + "%" })
+                     ] }, p.id),
+
+                     // Expanded resource row
+                     isExpanded && e.jsx("tr", { style: { background: "#fafafa" }, children: e.jsx("td", { colSpan: "6", style: { padding: "10px 14px" }, children: e.jsxs("div", { style: { border: "1px solid #e2e8f0", borderRadius: 4, padding: 8, background: "#fff" }, children: [
+                        e.jsx("div", { style: { fontSize: 11, fontWeight: "bold", color: "#475569", marginBottom: 6 }, children: "📦 Desglose de Insumos / APU para negociación de proveedores:" }),
+                        resolvedMats.length === 0 ? e.jsx("div", { style: { fontSize: 11, color: a.muted }, children: "Sin insumos de materiales." }) :
+                        e.jsxs("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: 11 }, children: [
+                           e.jsx("thead", { children: e.jsxs("tr", { style: { background: "#f1f5f9", borderBottom: "1px solid #cbd5e1" }, children: [
+                              e.jsx("th", { style: { padding: 4 }, children: "Recurso" }),
+                              e.jsx("th", { style: { padding: 4, textAlign: "right" }, children: "Consumo por unidad" }),
+                              e.jsx("th", { style: { padding: 4, textAlign: "right" }, children: "Cantidad Total" }),
+                              e.jsx("th", { style: { padding: 4, textAlign: "right" }, children: "Precio Unitario" }),
+                              e.jsx("th", { style: { padding: 4, textAlign: "right" }, children: "Costo Total" }),
+                              e.jsx("th", { style: { padding: 4, textAlign: "center" }, children: "Impacto (%)" })
+                           ] }) }),
+                           e.jsx("tbody", { children: resolvedMats.map(function(m, mIdx) {
+                              var qtyTotal = (parseFloat(p.cantidad) || 0) * (parseFloat(m.consumo) || 0);
+                              var cTotal = qtyTotal * (m.precio || 0);
+                              var pctImpacto = pc > 0 ? (cTotal / pc) * 100 : 0;
+                              return e.jsxs("tr", { style: { borderBottom: "1px solid #f1f5f9" }, children: [
+                                 e.jsxs("td", { style: { padding: 4 }, children: [
+                                    e.jsx("div", { style: { fontWeight: "bold" }, children: m.nombre }),
+                                    pctImpacto > 20 && e.jsx("div", { style: { fontSize: 9, color: "#ef4444" }, children: "💡 Insumo clave" })
+                                 ] }),
+                                 e.jsxs("td", { style: { padding: 4, textAlign: "right" }, children: [(Number(m.consumo) || 0).toLocaleString("es-CL", { maximumFractionDigits: 3 }), " ", m.unidad] }),
+                                 e.jsx("td", { style: { padding: 4, textAlign: "right" }, children: qtyTotal.toFixed(2) }),
+                                 e.jsx("td", { style: { padding: 4, textAlign: "right" }, children: money(m.precio) }),
+                                 e.jsx("td", { style: { padding: 4, textAlign: "right", fontWeight: "bold" }, children: money(cTotal) }),
+                                 e.jsxs("td", { style: { padding: 4, textAlign: "center", color: pctImpacto > 20 ? "#ef4444" : "#475569" }, children: [pctImpacto.toFixed(1), "%"] })
+                              ] }, mIdx);
+                           }) })
+                        ] })
+                     ] }) }) })
+                  ] });
+               })
+            ] });
+         }) }),
+         e.jsx("tfoot", { children: e.jsxs("tr", { style: { background: "#f8fafc", borderTop: "2px solid #cbd5e1", fontWeight: "bold" }, children: [
+            e.jsx("td", { style: { padding: "10px 12px" }, children: "TOTAL GENERAL PRESUPUESTO" }),
+            e.jsx("td", { style: { textAlign: "right" }, children: "-" }),
+            e.jsx("td", { style: { textAlign: "right", fontWeight: "bold" }, children: money(precioOfertado) }),
+            e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: "#dc2626" }, children: money(descuentoAplicado) }),
+            e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: "#2563eb" }, children: money(precioSimulado) }),
+            e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: margenSimuladoPct >= margenMinPct ? "#10b981" : "#ef4444" }, children: margenSimuladoPct.toFixed(1) + "%" })
+         ] }) })
+      ] }) })),
+
+      // 6. Internal notes & save
+      seccion(
+         e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }, children: [
+            e.jsx("span", { children: "Notas Internas y Conclusiones de Negociación" }),
+            e.jsx("button", { 
+               onClick: function() { cambiar("notasInternas", sugerirConclusionNegociacion(precioOfertado, costoInterno, descuentoAplicado, margenMinPct, margenActualPct, margenSimuladoPct)); }, 
+               style: { background: "#1e3a8a", border: "none", color: "#fff", padding: "4px 8px", borderRadius: 4, cursor: "pointer", fontSize: 10.5, fontWeight: "bold" }, 
+               children: "🤖 Auto-generar Análisis Comercial" 
+            })
+         ] }),
+         e.jsx("textarea", { 
+            value: doc.notasInternas || "", 
+            placeholder: "Haz clic en el botón superior derecho para generar automáticamente el análisis comercial o escribe tus comentarios aquí...",
+            onChange: function(ev) { cambiar("notasInternas", ev.target.value); }, 
+            style: Object.assign({}, c.inp, { width: "100%", minHeight: 110, fontSize: 12, lineHeight: 1.4 }) 
+         })
+      ),
+
+      e.jsx("button", { style: Object.assign({}, c.btn("p"), { width: "100%", padding: 12, fontWeight: 700 }), onClick: guardar, children: "💾 Guardar Asistente de Negociación" }),
+    ] });
+  }
+function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setToast: l }) {
+    const [doc, setDoc] = V(function () { return normalizarResumenEjecutivo(t, r); });
+    var estructura = estructuraCapitulosObra(t);
+    var totales = Ee(t.items || [], r, t.descuento, t.modoCosteo, t.sinIva) || {};
+    var money = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+    var cambiar = function (campo, valor) { setDoc(function (actual) { return Object.assign({}, actual, { [campo]: valor, estado: "Borrador", _estadoDocumento: "borrador" }); }); };
+    var cambiarSintesis = function (capId, valor) { setDoc(function (actual) { return Object.assign({}, actual, { sintesisPorCapitulo: Object.assign({}, actual.sintesisPorCapitulo, { [capId]: valor }), estado: "Borrador", _estadoDocumento: "borrador" }); }); };
+    var cambiarVentaja = function (clave, valor) { setDoc(function (actual) { return Object.assign({}, actual, { ventajas: Object.assign({}, actual.ventajas, { [clave]: valor }), estado: "Borrador", _estadoDocumento: "borrador" }); }); };
+    var listaAgregar = function (campo) { setDoc(function (actual) { return Object.assign({}, actual, { [campo]: (actual[campo] || []).concat(["" ]), estado: "Borrador", _estadoDocumento: "borrador" }); }); };
+    var listaCambiar = function (campo, idx, valor) { setDoc(function (actual) { var lista = (actual[campo] || []).slice(); lista[idx] = valor; return Object.assign({}, actual, { [campo]: lista, estado: "Borrador", _estadoDocumento: "borrador" }); }); };
+    var listaQuitar = function (campo, idx) { setDoc(function (actual) { var lista = (actual[campo] || []).slice(); lista.splice(idx, 1); return Object.assign({}, actual, { [campo]: lista, estado: "Borrador", _estadoDocumento: "borrador" }); }); };
+    var guardar = function () { var salida = Object.assign({}, doc, { estado: "Guardado", _estadoDocumento: "guardado", actualizadoEn: new Date().toISOString() }); setDoc(salida); n(salida); l("✅ Resumen ejecutivo guardado"); };
+    var seccion = function (titulo, contenido) { return e.jsxs("div", { style: Object.assign({}, c.card, { marginBottom: 12 }), children: [e.jsx("div", { style: Object.assign({}, c.ct, { marginBottom: 10 }), children: titulo }), contenido] }); };
+    var listaEditor = function (titulo, campo) { return e.jsxs("div", { children: [
+      e.jsx("div", { style: { fontSize: 11, color: a.muted, marginBottom: 6 }, children: titulo }),
+      (doc[campo] || []).map(function (valor, idx) { return e.jsxs("div", { style: { display: "flex", gap: 6, marginBottom: 6 }, children: [e.jsx("input", { type: "text", value: valor, onChange: function (ev) { listaCambiar(campo, idx, ev.target.value); }, style: Object.assign({}, c.inp, { flex: 1 }) }), e.jsx("button", { style: c.btn("d"), onClick: function () { listaQuitar(campo, idx); }, children: "×" })] }, campo + idx); }),
+      e.jsx("button", { style: c.btn("s"), onClick: function () { listaAgregar(campo); }, children: "+ Agregar" }),
+    ] }); };
+    return e.jsxs("div", { children: [
+      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 12, flexWrap: "wrap" }, children: [
+        e.jsx("div", { style: { fontSize: 12, color: a.muted, maxWidth: 520 }, children: "Síntesis del presupuesto para resolver dudas del cliente. Las ventajas solo se muestran si las confirmas explícitamente." }),
+        e.jsxs("div", { style: { display: "flex", gap: 8 }, children: [e.jsx("button", { style: c.btn("s"), onClick: function () { exportarResumenEjecutivoDocx(t, i, r, doc, l); }, children: "Descargar Word" }), e.jsx("button", { style: c.btn("p"), onClick: function () { abrirResumenEjecutivo(t, i, r, doc); }, children: "Vista previa / PDF" })] }),
+      ] }),
+      seccion("Datos generales", e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, fontSize: 12 }, children: [
+        e.jsxs("div", { children: [e.jsx("div", { style: { color: a.muted, fontSize: 11 }, children: "Cliente" }), e.jsx("b", { children: (i && i.nombre) || "Sin cliente" })] }),
+        e.jsxs("div", { children: [e.jsx("div", { style: { color: a.muted, fontSize: 11 }, children: "Inversión total" }), e.jsx("b", { style: { color: a.accent }, children: money(totales.total) })] }),
+        e.jsxs("div", { style: { display: "flex", gap: 8, alignItems: "end" }, children: [e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Plazo", e.jsx("input", { type: "number", value: doc.plazoNumero, onChange: function (ev) { cambiar("plazoNumero", Number(ev.target.value) || 0); }, style: Object.assign({}, c.inp, { display: "block", width: 80, marginTop: 5 }) })] }), e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Unidad", e.jsx("input", { type: "text", value: doc.plazoUnidad, onChange: function (ev) { cambiar("plazoUnidad", ev.target.value); }, style: Object.assign({}, c.inp, { display: "block", width: 80, marginTop: 5 }) })] })] }),
+      ] })),
+      seccion("Alcance principal por capítulos", e.jsx("div", { style: { display: "grid", gap: 10 }, children: estructura.map(function (cap) { var sub = cap.partidas.reduce(function (s0, p) { return s0 + p.valorContratado; }, 0); return e.jsxs("div", { style: { border: "1px solid " + a.border, borderRadius: 8, padding: 10 }, children: [
+        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700, marginBottom: 6 }, children: [e.jsx("span", { children: (cap.codigo ? cap.codigo + " — " : "") + cap.nombre }), e.jsx("span", { style: { color: a.accent }, children: money(sub) })] }),
+        e.jsx("textarea", { value: doc.sintesisPorCapitulo[cap.id] || "", onChange: function (ev) { cambiarSintesis(cap.id, ev.target.value); }, style: Object.assign({}, c.inp, { width: "100%", minHeight: 50 }) }),
+      ] }, cap.id); }) })),
+      seccion("Qué incluye / Qué no incluye", e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }, children: [listaEditor("Qué incluye", "incluye"), listaEditor("Qué no incluye", "noIncluye")] })),
+      seccion("Condiciones principales", e.jsx("textarea", { value: doc.condicionesPrincipales || "", onChange: function (ev) { cambiar("condicionesPrincipales", ev.target.value); }, style: Object.assign({}, c.inp, { width: "100%", minHeight: 70 }) })),
+      seccion("Ventajas o argumentos de valor (marca solo lo que puedas respaldar)", e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 8 }, children: VENTAJAS_RESUMEN_EJECUTIVO.map(function (v0) { return e.jsxs("label", { style: { fontSize: 12, display: "flex", alignItems: "center", gap: 8 }, children: [e.jsx("input", { type: "checkbox", checked: !!doc.ventajas[v0[0]], onChange: function (ev) { cambiarVentaja(v0[0], ev.target.checked); } }), v0[1]] }, v0[0]); }) })),
+      seccion("Observaciones", e.jsx("textarea", { value: doc.observaciones || "", onChange: function (ev) { cambiar("observaciones", ev.target.value); }, style: Object.assign({}, c.inp, { width: "100%", minHeight: 60 }) })),
+      e.jsx("button", { style: Object.assign({}, c.btn("p"), { width: "100%", padding: 12, fontWeight: 700 }), onClick: guardar, children: "💾 Guardar resumen ejecutivo" }),
+    ] });
+  }
   function Vg({
     budgets: t,
     clients: i,
@@ -69160,15 +71926,31 @@ K &&
     setToast: o0,
     initBudgetId: u0,
     initDocId: l0,
+    setBudgets: q0,
+    mode: mode0,
+    onNavigateDocument: navegarDocumento,
   }) {
     var o =
       u0 ||
       (t.length > 0 ? String([...t].sort((f, I) => I.id - f.id)[0].id) : "");
+    var presupuestoInicialDocumento = t.find((f) => String(f.id) === String(o));
+    var clienteInicialDocumento = presupuestoInicialDocumento ? i.find((f) => f.id === presupuestoInicialDocumento.clienteId) || {} : {};
+    var modoInicialDocumento = mode0 || "edit";
+    var contenidoInicialDocumento = "";
+    if (presupuestoInicialDocumento && l0) {
+      contenidoInicialDocumento = l0 === "carta" ? (modoInicialDocumento === "preview" ? htmlCartaCliente(presupuestoInicialDocumento, clienteInicialDocumento, r, obtenerDocumentoObraConfig(presupuestoInicialDocumento, "cartaCliente")) : "editor")
+        : l0 === "resumen" ? (modoInicialDocumento === "preview" ? htmlResumenEjecutivo(presupuestoInicialDocumento, clienteInicialDocumento, r, obtenerDocumentoObraConfig(presupuestoInicialDocumento, "resumenEjecutivo")) : "editor")
+        : l0 === "negociacion" ? (modoInicialDocumento === "preview" ? htmlHojaNegociacion(presupuestoInicialDocumento, clienteInicialDocumento, r, obtenerDocumentoObraConfig(presupuestoInicialDocumento, "hojaNegociacion")) : "editor")
+        : l0 === "contrato" ? (modoInicialDocumento === "preview" ? ts(presupuestoInicialDocumento, clienteInicialDocumento, r) : "editor")
+        : l0 === "informe" ? (modoInicialDocumento === "preview" ? Jf0(presupuestoInicialDocumento, clienteInicialDocumento, r) : "<!DOCTYPE html><html><body></body></html>")
+        : l0 === "pagos" ? (modoInicialDocumento === "preview" ? htmlEstadoPagoActa(presupuestoInicialDocumento, clienteInicialDocumento, r, obtenerDocumentoObraConfig(presupuestoInicialDocumento, "estadoPago")) : "editor")
+        : l0 === "cotizacion" ? "cotizacion_formal"
+        : l0 === "desglose" ? (modoInicialDocumento === "preview" ? htmlDesgloseInterno(presupuestoInicialDocumento, clienteInicialDocumento, r, obtenerDocumentoObraConfig(presupuestoInicialDocumento, "desgloseInterno")) : "editor")
+        : l0 === "dotacion" ? (modoInicialDocumento === "preview" ? htmlResumenDotacion(presupuestoInicialDocumento, clienteInicialDocumento, r, obtenerDocumentoObraConfig(presupuestoInicialDocumento, "resumenDotacion")) : "editor") : "";
+    }
     const [s, m] = V(o),
       [p, C] = V(l0 || null),
-      [b, h] = V(
-        l0 === "informe" ? "<!DOCTYPE html><html><body></body></html>" : "",
-      );
+      [b, h] = V(contenidoInicialDocumento);
     var j = t.find((f) => String(f.id) === String(s)),
       F = j ? i.find((f) => f.id === j.clienteId) || {} : {},
       g = (r && r.version) || "starter";
@@ -69179,64 +71961,8 @@ K &&
           k = wr.indexOf(g);
         return k >= D;
       },
-      B = [
-        {
-          id: "carta",
-          icon: "✉️",
-          label: "Carta para cliente / mandante",
-          etapa: "🚀 Al presentar",
-          color: "#3b82f6",
-          desc: "Presentación comercial para acompañar un presupuesto particular",
-        },
-        {
-          id: "resumen",
-          icon: "📋",
-          label: "Resumen Ejecutivo",
-          etapa: "🤔 Si hay dudas",
-          color: "#8b5cf6",
-          desc: "Síntesis de alcances, exclusiones y argumentos de valor",
-        },
-        {
-          id: "negociacion",
-          icon: "🤝",
-          label: "Hoja de Negociación",
-          etapa: "💬 Si piden rebaja",
-          color: "#ef4444",
-          desc: "Guía confidencial: qué ceder y qué no (uso interno)",
-        },
-        {
-          id: "contrato",
-          icon: "📄",
-          label: "Contrato de Obra",
-          etapa: "🔒 Al cerrar",
-          color: "#c084fc",
-          desc: "Contrato formal con cláusulas, plazo y garantía",
-        },
-        {
-          id: "informe",
-          icon: "📋",
-          label: "Informe de Entrega",
-          etapa: "📊 Entrega final",
-          color: "#14b8a6",
-          desc: "Informe de entrega de obra emitido por el contratista",
-        },
-        {
-          id: "desglose",
-          icon: "📊",
-          label: "Desglose Interno",
-          etapa: "🔐 Uso interno",
-          color: "#1e3a5f",
-          desc: "Desglose por partida: materiales, MO, GG y utilidad con totales",
-        },
-        {
-          id: "dotacion",
-          icon: "👷",
-          label: "Resumen de Dotación",
-          etapa: "🔐 Uso interno",
-          color: "#14532d",
-          desc: "HH estimadas y monto a pagar por rol para este presupuesto",
-        },
-      ],
+      B = documentosObraConfig,
+      modoDocumento = mode0 || "edit",
       w = (f) => {
         if (p === f.id) {
           (C(null), h(""));
@@ -69247,26 +71973,34 @@ K &&
           return;
         }
         f.id === "carta"
-          ? h(Af(j, F, r))
+          ? h(modoDocumento === "preview" ? htmlCartaCliente(j, F, r, obtenerDocumentoObraConfig(j, "cartaCliente")) : "editor")
           : f.id === "resumen"
-            ? h(Rf(j, F, r))
+            ? h(modoDocumento === "preview" ? htmlResumenEjecutivo(j, F, r, obtenerDocumentoObraConfig(j, "resumenEjecutivo")) : "editor")
             : f.id === "negociacion"
-              ? h(Df(j, F, r, "return"))
+              ? h(modoDocumento === "preview" ? htmlHojaNegociacion(j, F, r, obtenerDocumentoObraConfig(j, "hojaNegociacion")) : "editor")
               : f.id === "contrato"
-                ? h(ts(j, F, r))
+                ? h(modoDocumento === "preview" ? ts(j, F, r) : "editor")
                 : f.id === "informe"
-                  ? h("<!DOCTYPE html><html><body></body></html>")
-                  : f.id === "desglose"
-                    ? h(Pp(j, F, r))
+                  ? h(modoDocumento === "preview" ? Jf0(j, F, r) : "<!DOCTYPE html><html><body></body></html>")
+                  : f.id === "pagos"
+                    ? h(modoDocumento === "preview" ? htmlEstadoPagoActa(j, F, r, obtenerDocumentoObraConfig(j, "estadoPago")) : "editor")
+                    : f.id === "cotizacion"
+                      ? h(modoDocumento === "preview" ? htmlCotizacionFormal(j, F, r, obtenerDocumentoObraConfig(j, "cotizacionFormal")) : "editor")
+                      : f.id === "desglose"
+                    ? h(modoDocumento === "preview" ? htmlDesgloseInterno(j, F, r, obtenerDocumentoObraConfig(j, "desgloseInterno")) : "editor")
                     : f.id === "dotacion"
-                      ? h(Tp(j, F, r))
-                      : f.id === "contrato" && h(ts(j, F, r));
+                      ? h(modoDocumento === "preview" ? htmlResumenDotacion(j, F, r, obtenerDocumentoObraConfig(j, "resumenDotacion")) : "editor")
+                      : h("");
       },
       v = () => {
         if (b && p !== "informe") {
           var f = window.open("", "_blank");
           if (!f) { alert("No se pudo abrir la ventana del documento. Tu navegador puede estar bloqueando las ventanas emergentes (pop-ups); permítelas para este sitio e inténtalo de nuevo."); return; }
-          (f.document.write(b), f.document.close());
+          var content = b === "editor"
+            ? (p === "negociacion" ? htmlHojaNegociacion(j, F, r, obtenerDocumentoObraConfig(j, "hojaNegociacion")) :
+               p === "cotizacion" ? htmlCotizacionFormal(j, F, r, obtenerDocumentoObraConfig(j, "cotizacionFormal")) : "")
+            : b;
+          (f.document.write(content), f.document.close());
         }
       },
       x = B.find((f) => f.id === p);
@@ -69359,12 +72093,14 @@ K &&
         j &&
           e.jsxs("div", {
             children: [
+              modoDocumento !== "preview" &&
               e.jsx("div", {
                 style: {
-                  display: "grid",
-                  gridTemplateColumns: "repeat(4,1fr)",
-                  gap: 10,
-                  marginBottom: 14,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 8,
+                  alignItems: "center",
+                  marginBottom: 16,
                 },
                 children: [...B]
                   .sort((f, I) => {
@@ -69374,87 +72110,57 @@ K &&
                   })
                   .map((f) => {
                     var I = p === f.id;
+                    var st = estadoDocumentoObra(j, f.tipo);
+                    var stColor = st === "Guardado" ? "#34d399" : st === "Borrador" ? "#f59e0b" : "transparent";
                     return e.jsxs(
-                      "div",
+                      "button",
                       {
                         onClick: () => w(f),
-                        style: u(d({}, c.card), {
+                        style: {
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          padding: "6px 14px",
+                          borderRadius: 20,
+                          fontSize: 12,
+                          fontWeight: I ? 700 : 500,
                           cursor: "pointer",
-                          textAlign: "center",
-                          padding: "18px 12px",
-                          marginBottom: 0,
-                          background: I ? f.color + "22" : a.card,
-                          border: `2px solid ${I ? f.color : a.border}`,
-                          transition: "all .15s",
-                        }),
+                          border: I ? `1.5px solid ${f.color}` : `1px solid ${a.border}`,
+                          background: I ? (f.color + "22") : a.card,
+                          color: I ? f.color : (z(f.id) || f.id === "informe" ? a.text : a.muted),
+                          boxShadow: I ? `0 2px 8px ${f.color}25` : "none",
+                          transition: "all .15s ease",
+                          outline: "none",
+                          whiteSpace: "nowrap",
+                        },
                         onMouseEnter: (D) => {
                           I ||
-                            ((D.currentTarget.style.borderColor = f.color),
-                            (D.currentTarget.style.background =
-                              f.color + "11"));
+                            ((D.currentTarget.style.borderColor = f.color + "aa"),
+                            (D.currentTarget.style.color = f.color));
                         },
                         onMouseLeave: (D) => {
                           I ||
                             ((D.currentTarget.style.borderColor = a.border),
-                            (D.currentTarget.style.background = a.card));
+                            (D.currentTarget.style.color = (z(f.id) || f.id === "informe" ? a.text : a.muted)));
                         },
                         children: [
-                          e.jsx("div", {
-                            style: { fontSize: 28, marginBottom: 8 },
+                          e.jsx("span", {
+                            style: { fontSize: 13 },
                             children:
                               f.id === "informe" || z(f.id) ? f.icon : "🔒",
                           }),
-                          e.jsx("div", {
-                            style: {
-                              fontSize: 13,
-                              fontWeight: 700,
-                              color: I
-                                ? f.color
-                                : z(f.id) || f.id === "informe"
-                                  ? a.text
-                                  : a.muted,
-                              marginBottom: 4,
-                            },
-                            children: f.label,
-                          }),
-                          e.jsx("div", {
-                            style: {
-                              fontSize: 10,
-                              color:
-                                z(f.id) || f.id === "informe"
-                                  ? f.color
-                                  : "#f87171",
-                              fontWeight: 600,
-                              textTransform: "uppercase",
-                              letterSpacing: ".05em",
-                              marginBottom: 6,
-                            },
-                            children:
-                              z(f.id) || f.id === "informe"
-                                ? f.etapa
-                                : "Plan Constructor",
-                          }),
-                          e.jsxs("div", {
-                            style: {
-                              fontSize: 11,
-                              color: a.muted,
-                              lineHeight: 1.4,
-                            },
-                            children: [
-                              f.desc,
-                              f.id === "informe" &&
-                                e.jsx("span", {
-                                  style: {
-                                    display: "block",
-                                    color: f.color,
-                                    fontSize: 10,
-                                    marginTop: 4,
-                                    fontWeight: 600,
-                                  },
-                                  children: "→ Ver informe completo",
-                                }),
-                            ],
-                          }),
+                          e.jsx("span", { children: f.label }),
+                          stColor !== "transparent" &&
+                            e.jsx("span", {
+                              style: {
+                                width: 7,
+                                height: 7,
+                                borderRadius: "50%",
+                                background: stColor,
+                                display: "inline-block",
+                              },
+                              title: st,
+                            }),
                         ],
                       },
                       f.id,
@@ -69467,6 +72173,7 @@ K &&
                 e.jsxs("div", {
                   style: d({}, c.card),
                   children: [
+                    modoDocumento === "preview" && e.jsxs("div", { style: { padding: "10px 12px", marginBottom: 12, borderRadius: 8, background: a.sb, border: `1px solid ${a.border}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }, children: [e.jsx("div", { style: { fontSize: 11, color: a.muted, flex: 1 }, children: "Para editar este documento, modificar sus datos o personalizar su contenido, ábralo desde el módulo Documentos de Obra." }), e.jsxs("div", { style: { display: "flex", gap: 7, flexWrap: "wrap" }, children: [p === "contrato" && e.jsx("button", { style: c.btn("s"), onClick: () => exportarContratoDocx(j, F, r, obtenerDocumentoObraConfig(j, "contratoObra"), o0 || (() => {})), children: "Descargar Word" }), p === "contrato" && e.jsx("button", { style: c.btn("s"), onClick: () => Ep(j, F, r), children: "Abrir / PDF" }), p === "desglose" && e.jsx("button", { style: c.btn("s"), onClick: () => excelDesgloseInterno(j, F, r, obtenerDocumentoObraConfig(j, "desgloseInterno"), o0 || (() => {})), children: "Descargar Excel" }), p === "desglose" && e.jsx("button", { style: c.btn("s"), onClick: () => Mf(j, F, r, obtenerDocumentoObraConfig(j, "desgloseInterno")), children: "Abrir / PDF" }), p === "dotacion" && e.jsx("button", { style: c.btn("s"), onClick: () => excelResumenDotacion(j, F, r, obtenerDocumentoObraConfig(j, "resumenDotacion"), o0 || (() => {})), children: "Descargar Excel" }), p === "dotacion" && e.jsx("button", { style: c.btn("s"), onClick: () => abrirResumenDotacion(j, F, r, obtenerDocumentoObraConfig(j, "resumenDotacion")), children: "Abrir / PDF" }), p === "pagos" && e.jsx("button", { style: c.btn("s"), onClick: () => excelEstadoPago(j, F, r, obtenerDocumentoObraConfig(j, "estadoPago"), o0 || (() => {})), children: "Descargar Excel" }), p === "pagos" && e.jsx("button", { style: c.btn("s"), onClick: () => abrirEstadoPagoActa(j, F, r, obtenerDocumentoObraConfig(j, "estadoPago")), children: "Abrir / PDF" }), p === "carta" && e.jsx("button", { style: c.btn("s"), onClick: () => exportarCartaClienteDocx(j, F, r, obtenerDocumentoObraConfig(j, "cartaCliente"), o0 || (() => {})), children: "Descargar Word" }), p === "carta" && e.jsx("button", { style: c.btn("s"), onClick: () => abrirCartaCliente(j, F, r, obtenerDocumentoObraConfig(j, "cartaCliente")), children: "Abrir / PDF" }), p === "resumen" && e.jsx("button", { style: c.btn("s"), onClick: () => exportarResumenEjecutivoDocx(j, F, r, obtenerDocumentoObraConfig(j, "resumenEjecutivo"), o0 || (() => {})), children: "Descargar Word" }), p === "resumen" && e.jsx("button", { style: c.btn("s"), onClick: () => abrirResumenEjecutivo(j, F, r, obtenerDocumentoObraConfig(j, "resumenEjecutivo")), children: "Abrir / PDF" }), p === "cotizacion" && e.jsx("button", { style: c.btn("s"), onClick: () => abrirCotizacionFormal(j, F, r, obtenerDocumentoObraConfig(j, "cotizacionFormal")), children: "Abrir / PDF" }), e.jsx("button", { style: c.btn("p"), onClick: () => navegarDocumento && navegarDocumento({ presupuestoId: j.id, documentoTipo: p, modo: "edit" }), children: "Ir a Documentos de Obra" })] })] }),
                     e.jsxs("div", {
                       style: {
                         display: "flex",
@@ -69497,6 +72204,13 @@ K &&
                         }),
                         b !== "locked" &&
                           p !== "informe" &&
+                          p !== "contrato" &&
+                          p !== "desglose" &&
+                          p !== "dotacion" &&
+                          p !== "pagos" &&
+                          p !== "carta" &&
+                          p !== "resumen" &&
+                          p !== "cotizacion" &&
                           e.jsxs("div", {
                             style: {
                               display: "flex",
@@ -69513,14 +72227,15 @@ K &&
                                   },
                                   children: "⚠️ Confidencial — uso interno",
                                 }),
-                              e.jsx("button", {
-                                style: u(d({}, c.btn("p")), {
-                                  padding: "8px 22px",
-                                  fontWeight: 700,
+                              p !== "negociacion" &&
+                                e.jsx("button", {
+                                  style: u(d({}, c.btn("p")), {
+                                    padding: "8px 22px",
+                                    fontWeight: 700,
+                                  }),
+                                  onClick: v,
+                                  children: "🖨️ Abrir / Imprimir PDF",
                                 }),
-                                onClick: v,
-                                children: "🖨️ Abrir / Imprimir PDF",
-                              }),
                             ],
                           }),
                       ],
@@ -69592,7 +72307,40 @@ K &&
                             overflow: "hidden",
                           },
                           children:
-                            p === "informe"
+                            p === "pagos" && modoDocumento !== "preview"
+                              ? e.jsx(EstadoPagoActaEditor, { key: "pagos_" + j.id, budget: j, client: F, cfg: r, setToast: o0 || (() => {}), onSave: (estadoPago) => { if (q0) q0((actuales) => (actuales || []).map((presupuesto) => String(presupuesto.id) === String(j.id) ? guardarDocumentoObra(presupuesto, "estadoPago", estadoPago) : presupuesto)); } })
+                              : p === "carta" && modoDocumento !== "preview"
+                                ? e.jsx(CartaClienteEditor, { key: "carta_" + j.id, budget: j, client: F, cfg: r, setToast: o0 || (() => {}), onSave: (cartaCliente) => { if (q0) q0((actuales) => (actuales || []).map((presupuesto) => String(presupuesto.id) === String(j.id) ? guardarDocumentoObra(presupuesto, "cartaCliente", cartaCliente) : presupuesto)); } })
+                              : p === "negociacion" && modoDocumento !== "preview" ? e.jsx(HojaNegociacionEditor, { key: "negociacion_" + j.id, budget: j, client: F, cfg: r, setToast: o0 || (() => {}), onNavigateDocument: navegarDocumento, onSave: (doc) => { if (q0) q0((actuales) => (actuales || []).map((presupuesto) => String(presupuesto.id) === String(j.id) ? guardarDocumentoObra(presupuesto, "hojaNegociacion", doc) : presupuesto)); } }) : p === "resumen" && modoDocumento !== "preview"
+                                ? e.jsx(ResumenEjecutivoEditor, { key: "resumen_" + j.id, budget: j, client: F, cfg: r, setToast: o0 || (() => {}), onSave: (resumenEjecutivo) => { if (q0) q0((actuales) => (actuales || []).map((presupuesto) => String(presupuesto.id) === String(j.id) ? guardarDocumentoObra(presupuesto, "resumenEjecutivo", resumenEjecutivo) : presupuesto)); } })
+                              : p === "cotizacion" && modoDocumento !== "preview"
+                                ? e.jsx(CotizacionFormalEditor, {
+                                    key: "cotizacion_" + j.id,
+                                    budget: j,
+                                    client: F,
+                                    cfg: r,
+                                    setToast: o0 || (() => {}),
+                                    onSave: (cotizacionFormal) => {
+                                      if (q0) q0((actuales) => (actuales || []).map((presupuesto) => String(presupuesto.id) === String(j.id) ? guardarDocumentoObra(presupuesto, "cotizacionFormal", cotizacionFormal) : presupuesto));
+                                    },
+                                    inline: true
+                                  })
+                              : p === "contrato" && modoDocumento !== "preview"
+                              ? e.jsx(ContratoObraEditor, {
+                                  key: "contrato_" + j.id,
+                                  budget: j,
+                                  client: F,
+                                  cfg: r,
+                                  setToast: o0 || (() => {}),
+                                  onSave: (contratoObra) => {
+                                    if (q0) q0((actuales) => (actuales || []).map((presupuesto) => String(presupuesto.id) === String(j.id) ? guardarDocumentoObra(presupuesto, "contratoObra", u(d({}, contratoObra), { _estadoDocumento: contratoObra.estado === "Borrador" ? "borrador" : "guardado", actualizadoEn: new Date().toISOString() })) : presupuesto));
+                                  },
+                                })
+                              : p === "desglose" && modoDocumento !== "preview"
+                                ? e.jsx(DesgloseInternoEditor, { key: "desglose_" + j.id, budget: j, client: F, cfg: r, setToast: o0 || (() => {}), onSave: (desglose) => { if (q0) q0((actuales) => (actuales || []).map((presupuesto) => String(presupuesto.id) === String(j.id) ? guardarDocumentoObra(presupuesto, "desgloseInterno", desglose) : presupuesto)); } })
+                              : p === "dotacion" && modoDocumento !== "preview"
+                                ? e.jsx(ResumenDotacionEditor, { key: "dotacion_" + j.id, budget: j, client: F, cfg: r, setToast: o0 || (() => {}), onSave: (dotacion) => { if (q0) q0((actuales) => (actuales || []).map((presupuesto) => String(presupuesto.id) === String(j.id) ? guardarDocumentoObra(presupuesto, "resumenDotacion", dotacion) : presupuesto)); } })
+                              : p === "informe" && modoDocumento !== "preview"
                               ? e.jsx("div", {
                                   style: {
                                     width: "100%",
@@ -69606,8 +72354,13 @@ K &&
                                     cfg: r,
                                     setToast: o0 || (() => {}),
                                     initBudgetId: s,
+                                    onSaveDocument: (informeEntrega) => {
+                                      if (q0) q0((actuales) => (actuales || []).map((presupuesto) => String(presupuesto.id) === String(j.id) ? guardarDocumentoObra(presupuesto, "informeEntrega", informeEntrega) : presupuesto));
+                                    },
                                   }),
                                 })
+                              : p === "cotizacion" && modoDocumento === "preview"
+                                ? e.jsxs("div", { style: { padding: 28, textAlign: "center", background: a.sb }, children: [e.jsx("div", { style: { fontSize: 28, marginBottom: 10 }, children: x.icon }), e.jsx("div", { style: { fontWeight: 800, marginBottom: 8 }, children: x.label }), e.jsx("div", { style: { color: a.muted, fontSize: 12 }, children: "La generación utiliza el flujo corporativo existente. Usa Ir a Documentos de Obra para abrir sus controles y generar el archivo final." })] })
                               : e.jsx("iframe", {
                                   srcDoc: b,
                                   style: {
@@ -69632,6 +72385,7 @@ K &&
     cfg: r,
     setToast: n,
     initBudgetId: l,
+    onSaveDocument: guardarInformeDocumento,
   }) {
     const [o, s] = V("nuevo"),
       [m, p] = V(() => {
@@ -69643,7 +72397,10 @@ K &&
         }
       }),
       [C, b] = V(null);
-    var h = () => ({
+    var h = () => {
+      var presupuestoInforme = t && l ? t.find((presupuesto) => String(presupuesto.id) === String(l)) : null;
+      var informeGuardado = obtenerDocumentoObraConfig(presupuestoInforme, "informeEntrega");
+      return informeGuardado ? u(d({}, informeGuardado), { presupuestoId: String(l) }) : {
       presupuestoId: l ? String(l) : "",
       titulo: "",
       fecha: new Date().toISOString().split("T")[0],
@@ -69659,7 +72416,8 @@ K &&
       conclusiones: "",
       recomendaciones: "",
       checklist: {},
-    });
+    };
+    };
     const [j, F] = V(h);
     var g = (k) => (R) => F((K) => u(d({}, K), { [k]: R })),
       z =
@@ -69751,6 +72509,7 @@ K &&
         try {
           localStorage.setItem("informes_obra", JSON.stringify(R));
         } catch (K) {}
+        if (guardarInformeDocumento) guardarInformeDocumento(u(d({}, k), { _estadoDocumento: "guardado", actualizadoEn: new Date().toISOString() }));
         (s("historial"), b(k));
       },
       D = (k) => {
@@ -81690,6 +84449,9 @@ K &&
       [E, M] = V(!1),
       [q, J] = V(!1),
       [re, Q] = V(null);
+    ct(() => {
+      if (x !== "documentos" && x !== "informe" && X) W(null);
+    }, [x]);
     var G = wp(null),
       ie = Fp(B, p, l, s);
     var syncBudgetToTender = function (budgetRecord, budgetId) {
@@ -82399,6 +85161,8 @@ K &&
             onDeletePlantillaUser: O,
             setToast: Q,
             guardRef: editorGuardRef,
+            sbHidden: sbHidden,
+            setSbHidden: setSbHidden,
           });
         }
         if (x === "dashboard")
@@ -82455,7 +85219,8 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
               (Z(H.id), f("cubicacion"));
             },
             onInforme: (H) => {
-              (W(H.id), f("documentos"), setTimeout(() => W(null), 0));
+              W({ presupuestoId: H.id, documentoTipo: "informe", modo: "preview" });
+              f("documentos");
             },
             setHistorialBudget: y,
             onNew: () => {
@@ -82468,6 +85233,7 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
             setToast: Q,
             licitaciones: s,
             onLinkLicitacion: linkBudgetToOpportunity,
+            onOpenDocument: (contextoDocumento) => { W(contextoDocumento); f("documentos"); },
           });
         if (x === "lista")
           return e.jsx(Dp, {
@@ -82745,8 +85511,11 @@ Esta acción no se puede deshacer.`) &&
                 onGoHistory: () => f("history"),
                 setPage: f,
                 setToast: Q,
-                initBudgetId: X,
+                setBudgets: w,
+                initBudgetId: X && X.presupuestoId,
                 initDocId: "informe",
+                mode: "edit",
+                onNavigateDocument: W,
               })
             : e.jsx(di, {
                 modulo: "informe",
@@ -82761,8 +85530,12 @@ Esta acción no se puede deshacer.`) &&
             onGoHistory: () => f("history"),
             setPage: f,
             setToast: Q,
-            initBudgetId: X,
-            initDocId: X ? "informe" : null,
+            setBudgets: w,
+            key: "documentos_" + (X ? String(X.presupuestoId) + "_" + String(X.documentoTipo) + "_" + String(X.modo) : "manual"),
+            initBudgetId: X && X.presupuestoId,
+            initDocId: X && X.documentoTipo,
+            mode: X && X.modo || "edit",
+            onNavigateDocument: W,
           });
       },
       se =
@@ -83895,7 +86668,7 @@ Esta acción no se puede deshacer.`) &&
                 textDecoration: "underline",
                 cursor: "pointer"
               },
-              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.0")
+              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.2")
             }),
           ],
         }),
