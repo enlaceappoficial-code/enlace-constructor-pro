@@ -55337,187 +55337,336 @@ K &&
       }),
     });
   }
+  // Consejos por módulo. Cada entrada trae título, icono, resumen y grupos.
+  // Cada consejo tiene encabezado (se lee de un vistazo) y detalle (se
+  // despliega al tocarlo), para que el modal informe sin abrumar.
   var Cg = {
-    dashboard: [
-      "El módulo Inicio muestra un resumen de todos tus presupuestos en tiempo real.",
-      "Los KPIs en la parte superior se actualizan automáticamente cuando guardas presupuestos.",
-      "Haz click en 'Ver →' en cualquier presupuesto reciente para ver su detalle completo.",
-    ],
-    new: [
-      "Selecciona una partida del catálogo usando el buscador — escribe el nombre o categoría para filtrar al instante.",
-      "Usa el botón 📐 al lado de la cantidad para calcular dimensiones: m² (largo × ancho), m³ (largo × ancho × espesor), ml (longitud).",
-      "Para m² y ml puedes agregar todos los vanos o elementos que necesites — la calculadora los suma.",
-      "Para m³ cada elemento tiene sus propias dimensiones: agrega todos los pilares o vigas con sus medidas individuales.",
-      "Al elegir una partida con APU vinculado, la calculadora se abre primero, luego el modal de materiales con la cantidad ya cargada.",
-      "Desde el visor del presupuesto puedes exportar a PDF, enviar por WhatsApp o descargar en Excel con el botón 📊 Excel.",
-    ],
-    history: [
-      "Cambia el estado de un presupuesto directo desde el selector en la tabla.",
-      "El ícono 🧱 genera la Materiales por Obra para ese presupuesto.",
-      "Duplica cualquier presupuesto con 📋 para usarlo como base de uno nuevo.",
-    ],
-    lista: [
-      "La Materiales por Obra consolida todos los materiales de las partidas que tienen APU.",
-      "Haz click en cualquier fila para ver de qué partidas proviene ese material.",
-      "Solo aparecen los ítems que tienen un APU con materiales definidos.",
-    ],
-    clients: [
-      "Haz click en cualquier cliente para ver su ficha financiera: total presupuestado, cobrado, deuda estimada y presupuestos activos.",
-      "La columna Deuda muestra en rojo si el cliente tiene saldo pendiente y en verde si está al día.",
-      "El badge 'En obra' aparece cuando el cliente tiene presupuestos en estado 'En progreso'.",
-      "Desde la ficha del cliente puedes ver todos sus presupuestos con montos y estados de un vistazo.",
-    ],
-    catalog: [
-      "El catálogo incluye Hormigón Armado (H-20/H-25/H-30), Estructuras Metálicas, Mov. de Tierras, Obras Exteriores, Climatización, Seguridad, Obras Provisorias y Pavimentos.",
-      "Las partidas de hormigón se miden en m³ — ingresa las dimensiones reales en la calculadora 📐.",
-      "Si agregas nuevas partidas al archivo, aparecen automáticamente sin borrar tu historial.",
-    ],
-    materiales: [
-      "Los precios son de referencia Chile 2025. Actualízalos según tus proveedores habituales.",
-      "Al actualizar un precio, todos los APU que usen ese material recalcularán su costo automáticamente.",
-      "La base incluye materiales para hormigón armado, estructuras metálicas, obras exteriores, climatización y seguridad.",
-    ],
-    apu: [
-      "El APU calcula el precio de cada partida desde sus insumos reales, más MO, GG y utilidad.",
-      "En la sección ⏱ Rendimiento y Mano de Obra ingresa cuánto produce tu cuadrilla por día — la app calcula días y HH totales.",
-      "Haz click en 📊 Rendimientos de Referencia para ver valores típicos de terreno en Chile con el botón ✅ Usar.",
-      "Los días y HH estimados aparecen en el PDF del presupuesto si defines el rendimiento en el APU.",
-      "Para trabajos de subcontrato, activa el toggle 'Es subcontrato' y agrega el % de administración.",
-    ],
-    config: [
-      "Sube tu logo y se mostrará en el sidebar y en todos los PDFs.",
-      "El color de acento cambia los colores destacados en toda la aplicación.",
-      "La firma aparece al pie de cada presupuesto PDF.",
-      "Cambia entre tema oscuro y claro con el botón ☀️/🌙 en el encabezado.",
-    ],
-    cubicacion: [
-      "Cubicación Libre: selecciona partidas del catálogo, ingresa dimensiones y ve los materiales necesarios calculados desde el APU.",
-      "Para partidas de hormigón puedes elegir entre 🚚 Premezclado o 🧱 In-situ (cemento + arena + gravilla + agua) con espesor real.",
-      "Optimizador de Cortes: elige el material, ingresa los cortes con cantidades y la app calcula cuántas planchas necesitas con visualización SVG.",
-      "Desde Presupuesto: selecciona un presupuesto aprobado, revisa y ajusta materiales, excluye los que no aplican y guarda la cubicación.",
-      "Las cubicaciones guardadas se pueden imprimir o consultar después desde el historial.",
-    ],
-    gantt: [
-      "Selecciona un presupuesto o licitación y haz click en ⚡ Cargar tareas para generar la Carta Gantt automáticamente.",
-      "Las tareas se cargan desde las partidas del presupuesto con duraciones estimadas — puedes editarlas libremente.",
-      "Cambia la escala entre Días, Semanas o Meses según el detalle que necesites mostrar.",
-      "El botón 🖨️ Imprimir genera una versión imprimible lista para adjuntar a una propuesta o licitación.",
-      "Puedes agregar tareas manualmente con ➕ Agregar tarea y ajustar inicio y duración en días.",
-    ],
-    informe: [
-      "Crea un informe de obra vinculado a un presupuesto con fecha, inspector, clima y porcentaje de avance.",
-      "El checklist se genera automáticamente según las categorías de trabajo del presupuesto seleccionado.",
-      "Marca cada ítem como ✅ Conforme, ❌ No conforme o — No aplica.",
-      "Guarda el informe y accede a él desde el Historial cuando lo necesites.",
-      "El botón 🖨️ Imprimir genera un PDF profesional del informe con todos los ítems del checklist.",
-    ],
-    documentos: [
-      "Selecciona un presupuesto para acceder a todos sus documentos organizados por etapa del proceso de venta.",
-      "Al presentar: Carta de Presentación, PDF y Excel del presupuesto.",
-      "Si hay dudas: Resumen Ejecutivo con alcances, exclusiones y argumentos de valor.",
-      "Si piden rebaja: Análisis de Negociación confidencial con análisis de partidas negociables.",
-      "Al cerrar: Contrato de Obra. Al cobrar: Estados de Pago y Acta de Recepción. Al ejecutar: Informe de Entrega de Obra.",
-    ],
+    dashboard: {
+      titulo: "Inicio", icono: "📋", resumen: "El tablero con el estado real de tu negocio.",
+      grupos: [
+        { nombre: "Leer el tablero", consejos: [
+          { t: "Los indicadores se actualizan solos", d: "Cada vez que guardas un presupuesto, los totales de arriba se recalculan. No hay que refrescar ni apretar nada." },
+          { t: "Entra al detalle con Ver", d: "En la lista de presupuestos recientes ese enlace te lleva directo a la vista completa del presupuesto." },
+        ] },
+        { nombre: "Primeros pasos", consejos: [
+          { t: "Carga tus datos antes de cotizar", d: "En Configuración pon nombre, RUT, logo y firma. Todos los documentos los toman de ahí, así que cargarlos una vez te ahorra corregir cada PDF." },
+          { t: "Revisa los precios del catálogo", d: "Los valores vienen de referencia. Ajústalos a tus proveedores en Base de Materiales antes de mandar la primera cotización." },
+        ] },
+      ],
+    },
+    new: {
+      titulo: "Nuevo Presupuesto", icono: "🧾", resumen: "Arma el presupuesto partida por partida.",
+      grupos: [
+        { nombre: "Agregar partidas", consejos: [
+          { t: "Busca en el catálogo escribiendo", d: "El buscador filtra al instante por nombre o categoría. No hace falta navegar carpetas." },
+          { t: "Organiza en capítulos", d: "Agrupa las partidas por etapa de obra. Los capítulos ordenan el PDF, aparecen con subtotal y son la secuencia que usa la Cotización Formal." },
+          { t: "Copia y pega partidas", d: "Puedes copiar una partida y pegarla en otro capítulo, con sus cantidades y precios." },
+        ] },
+        { nombre: "Calculadora de cantidades", consejos: [
+          { t: "El botón 📐 calcula por dimensiones", d: "m² es largo por ancho, m³ agrega el espesor y ml es longitud. Escribes las medidas y el sistema pone la cantidad." },
+          { t: "Suma varios elementos de una vez", d: "En m² y ml puedes cargar todos los vanos o tramos y la calculadora los suma. En m³ cada pilar o viga lleva sus propias medidas." },
+          { t: "Con APU se abre sola", d: "Si la partida tiene APU vinculado, primero aparece la calculadora y después el detalle de materiales con la cantidad ya cargada." },
+        ] },
+        { nombre: "Antes de guardar", consejos: [
+          { t: "El modo edición despeja la pantalla", d: "Oculta los paneles laterales para trabajar solo sobre las partidas. Útil en pantallas chicas." },
+          { t: "Nada se pierde al salir", d: "Si intentas salir con cambios sin guardar, la aplicación avisa y ofrece guardarlo como borrador aunque falte el cliente." },
+        ] },
+      ],
+    },
+    history: {
+      titulo: "Mis Presupuestos", icono: "💼", resumen: "Todo lo cotizado, con su estado y sus documentos.",
+      grupos: [
+        { nombre: "Gestionar la lista", consejos: [
+          { t: "Cambia el estado en la misma fila", d: "El selector de la columna Estado guarda al instante: Pendiente, Aprobado, En progreso, Completado, Rechazado o Vencido." },
+          { t: "Duplica para no partir de cero", d: "Crea una copia con todas las partidas. Sirve para obras parecidas o para probar otra versión de precio." },
+          { t: "Filtra por estado y busca por texto", d: "El buscador mira cliente y descripción; el selector de arriba deja ver solo un estado." },
+        ] },
+        { nombre: "Sacar documentos", consejos: [
+          { t: "El menú de tres puntos abre los documentos", d: "Desde ahí llegas a la vista previa de cada documento de obra sin entrar a editar el presupuesto." },
+          { t: "Materiales por Obra en un clic", d: "Consolida los materiales de todas las partidas que tengan APU, listo para cotizar con proveedores." },
+        ] },
+      ],
+    },
+    lista: {
+      titulo: "Materiales por Obra", icono: "🧱", resumen: "Todo lo que hay que comprar, sumado.",
+      grupos: [
+        { nombre: "Cómo se arma", consejos: [
+          { t: "Solo entran partidas con APU", d: "Si una partida no tiene APU con materiales definidos, no aparece aquí. Es la razón más común de que falte algo en la lista." },
+          { t: "Consolida cantidades repetidas", d: "Si tres partidas usan cemento, verás una sola línea con el total sumado." },
+        ] },
+        { nombre: "Usarla", consejos: [
+          { t: "Clic en la fila muestra el origen", d: "Se abre el detalle de qué partidas aportan ese material y cuánto pone cada una." },
+          { t: "Sirve para pedir precio", d: "Llévala a Proveedores para armar la solicitud de cotización por WhatsApp." },
+        ] },
+      ],
+    },
+    clients: {
+      titulo: "Clientes", icono: "👥", resumen: "Con quién trabajas y cuánto te deben.",
+      grupos: [
+        { nombre: "Ficha del cliente", consejos: [
+          { t: "Clic en el cliente abre su ficha", d: "Muestra total presupuestado, cobrado, deuda estimada y los presupuestos activos en un solo lugar." },
+          { t: "La columna Deuda avisa por color", d: "Rojo es saldo pendiente, verde es al día. Se calcula con los estados de pago registrados." },
+          { t: "El distintivo En obra marca lo activo", d: "Aparece cuando el cliente tiene al menos un presupuesto en estado En progreso." },
+        ] },
+      ],
+    },
+    catalog: {
+      titulo: "Partidas de Obra", icono: "🗂️", resumen: "Tu catálogo técnico de partidas.",
+      grupos: [
+        { nombre: "Encontrar partidas", consejos: [
+          { t: "Filtra por rubro y subrubro", d: "Cada partida está clasificada por rubro, subrubro, tipo de intervención y sistema constructivo. Combina filtros para acotar rápido." },
+          { t: "Cubre las especialidades principales", d: "Hormigón armado H-20 a H-30, estructuras metálicas, movimiento de tierras, obras exteriores, climatización, seguridad, obras provisorias y pavimentos." },
+        ] },
+        { nombre: "Mantenerlo al día", consejos: [
+          { t: "Agregar partidas no borra nada", d: "Las partidas nuevas aparecen sin afectar tu historial ni los presupuestos ya emitidos." },
+          { t: "El hormigón se mide en m³", d: "Usa la calculadora con las dimensiones reales; no estimes el volumen a ojo." },
+        ] },
+      ],
+    },
+    materiales: {
+      titulo: "Base de Materiales", icono: "🧱", resumen: "Los precios que alimentan todos tus costos.",
+      grupos: [
+        { nombre: "Precios", consejos: [
+          { t: "Actualízalos a tus proveedores", d: "Los valores son de referencia Chile 2025. Mientras no los ajustes, todos tus costos arrastran ese supuesto." },
+          { t: "Un cambio recalcula todo", d: "Al editar un precio, cada APU que use ese material recalcula su costo solo. No hay que tocar los APU uno por uno." },
+        ] },
+        { nombre: "Qué incluye", consejos: [
+          { t: "Cubre las especialidades del catálogo", d: "Materiales para hormigón armado, estructuras metálicas, obras exteriores, climatización y seguridad." },
+        ] },
+      ],
+    },
+    apu: {
+      titulo: "APU", icono: "🔧", resumen: "El análisis de precio unitario de cada partida.",
+      grupos: [
+        { nombre: "Qué hace un APU", consejos: [
+          { t: "Descompone la partida", d: "Define qué materiales lleva por unidad, cuánta mano de obra y con qué rendimiento. De ahí sale el precio y también las horas hombre." },
+          { t: "Alimenta otros módulos", d: "Sin APU no hay Materiales por Obra, ni dotación, ni desglose de insumos en el Análisis de Negociación." },
+        ] },
+        { nombre: "Mantenimiento", consejos: [
+          { t: "Rendimiento y dotación importan", d: "Son los que convierten cantidades en horas hombre. Si están en cero, el Resumen de Dotación no puede estimar plazos." },
+          { t: "Repara vínculos si algo se ve raro", d: "Si un APU muestra materiales que no corresponden, en Respaldos hay una herramienta que reconstruye los vínculos por nombre." },
+        ] },
+      ],
+    },
+    cubicacion: {
+      titulo: "Cubicación", icono: "📐", resumen: "Calcula cantidades antes de cotizar.",
+      grupos: [
+        { nombre: "Cómo usarla", consejos: [
+          { t: "Elige la unidad correcta", d: "m² para superficies, m³ para volúmenes, ml para longitudes. La unidad define qué dimensiones te pide." },
+          { t: "Carga elemento por elemento", d: "Agrega cada muro, losa o tramo con sus medidas. El total se suma solo y queda trazable." },
+        ] },
+      ],
+    },
+    gantt: {
+      titulo: "Carta Gantt", icono: "📊", resumen: "La obra en el tiempo.",
+      grupos: [
+        { nombre: "Planificar", consejos: [
+          { t: "Parte desde los capítulos", d: "Los capítulos del presupuesto son la base natural de las etapas. Mantener ese orden hace coherente la Cotización Formal con la carta." },
+          { t: "Sirve para comprometer plazos", d: "El plazo que definas aquí es el que debería ir en el Contrato y en las condiciones de la propuesta." },
+        ] },
+      ],
+    },
+    documentos: {
+      titulo: "Documentos de Obra", icono: "📁", resumen: "Un documento distinto para cada momento de la venta.",
+      grupos: [
+        { nombre: "Según la etapa", consejos: [
+          { t: "Al presentar", d: "Carta de Presentación y Cotización Formal. La Cotización hereda el alcance, el plazo y las ventajas de los demás documentos, así que conviene llenarlos antes." },
+          { t: "Si hay dudas", d: "Resumen Ejecutivo: síntesis por capítulo, qué incluye, qué no incluye y tus ventajas. Es la fuente de la que bebe la Cotización Formal." },
+          { t: "Si piden rebaja", d: "Análisis de Negociación. Es confidencial, de uso interno: dice cuánto puedes descontar sin bajar de tu margen mínimo y en qué partida hay holgura." },
+          { t: "Al cerrar y al cobrar", d: "Contrato de Obra para firmar; Estados de Pago y Acta de Recepción para cobrar contra avance; Informe de Entrega al terminar." },
+        ] },
+        { nombre: "Cómo se relacionan", consejos: [
+          { t: "Se heredan entre sí", d: "Lo que escribes en el Resumen Ejecutivo y el Contrato aparece en la Cotización Formal. Llenar primero esos dos ahorra reescribir." },
+          { t: "Cada sección se puede apagar", d: "En el editor de la Cotización puedes desactivar secciones; la numeración se reordena sola." },
+          { t: "El detalle de precios va aparte", d: "La Cotización no repite el presupuesto: lo referencia como anexo. Envía ambos." },
+        ] },
+      ],
+    },
+    licitaciones: {
+      titulo: "Mercado Público", icono: "⚖️", resumen: "Licitaciones y compras ágiles del Estado.",
+      grupos: [
+        { nombre: "Buscar oportunidades", consejos: [
+          { t: "Busca por código si ya lo tienes", d: "Pega el ID de la licitación, con formato 1067476-21-L126, para ir directo a esa ficha." },
+          { t: "Filtra por región y rubro", d: "Acota por tu zona y especialidad para no revisar publicaciones que no puedes atender." },
+          { t: "Solo urgentes muestra los cierres próximos", d: "Deja a la vista lo que vence en menos de 48 horas, que es donde se pierden las postulaciones." },
+        ] },
+        { nombre: "Seguir una postulación", consejos: [
+          { t: "Seis vistas del mismo proceso", d: "Detalle, Kanban, Tabla, Buscar MP, Alertas y Análisis. El Kanban es el más útil para ver en qué etapa va cada postulación." },
+          { t: "Las alertas avisan de los plazos", d: "El contador de la campana, en la barra superior, marca cuántas tienes pendientes." },
+          { t: "Vincula la licitación a un presupuesto", d: "Desde Mis Presupuestos, el icono de vínculo conecta un presupuesto con la licitación para no perder la trazabilidad." },
+        ] },
+        { nombre: "Requisitos", consejos: [
+          { t: "Necesitas tu clave de Mercado Público", d: "Cárgala en Configuración. Sin ella la búsqueda en línea no puede consultar el portal." },
+        ] },
+      ],
+    },
+    calendario: {
+      titulo: "Calendario", icono: "📆", resumen: "Plazos, visitas y vencimientos en un solo lugar.",
+      grupos: [
+        { nombre: "Registrar", consejos: [
+          { t: "Cuatro tipos de evento", d: "Tarea, obra, licitación y seguimiento. El tipo define el color y permite distinguir de un vistazo qué es cada cosa." },
+          { t: "Crea desde el día", d: "Selecciona una fecha y usa Nuevo evento. Queda asociado a ese día sin escribir la fecha a mano." },
+        ] },
+        { nombre: "Usarlo bien", consejos: [
+          { t: "Agenda los cierres de licitación", d: "Las postulaciones se pierden por fecha, no por precio. Registra el cierre apenas te interese una publicación." },
+          { t: "Marca la visita a terreno", d: "Anotarla antes de cotizar evita presupuestar sobre supuestos." },
+        ] },
+      ],
+    },
+    proveedores: {
+      titulo: "Proveedores", icono: "🚚", resumen: "Pide precios sin escribir la lista a mano.",
+      grupos: [
+        { nombre: "Solicitar cotización", consejos: [
+          { t: "Arma el mensaje solo", d: "Toma los materiales de la obra y redacta la solicitud lista para enviar por WhatsApp." },
+          { t: "Elige qué mostrar", d: "Puedes incluir o no el detalle de materiales, los totales con IVA y las condiciones de cierre, según la confianza que tengas con ese proveedor." },
+          { t: "Revisa antes de mandar", d: "La vista previa muestra el texto final. También puedes copiarlo y pegarlo donde quieras." },
+        ] },
+        { nombre: "Comparar", consejos: [
+          { t: "Auto-asignar propone proveedores", d: "Sugiere a quién pedirle cada material según lo que ya tienes registrado." },
+          { t: "Manda la misma lista a varios", d: "Con el mismo mensaje base a dos o tres proveedores la comparación es real: mismas cantidades, mismas unidades." },
+        ] },
+      ],
+    },
+    config: {
+      titulo: "Configuración", icono: "⚙️", resumen: "Los datos que usan todos los documentos.",
+      grupos: [
+        { nombre: "Identidad de la empresa", consejos: [
+          { t: "Cárgalo una vez y sirve para todo", d: "Nombre, RUT, logo, firma, teléfono y correo alimentan cada PDF: cotización, contrato, estados de pago e informes." },
+          { t: "La firma gráfica se ve en los documentos", d: "Sube la imagen de tu firma escaneada y aparece sobre la línea en cada documento firmado." },
+        ] },
+        { nombre: "Reglas de cálculo", consejos: [
+          { t: "Gastos generales y utilidad", d: "Son los porcentajes por defecto de cada presupuesto nuevo. Puedes cambiarlos presupuesto por presupuesto sin tocar esta configuración." },
+          { t: "Anticipo y plazo por defecto", d: "Definen lo que proponen el contrato y la cotización. Ajústalos a como trabajas habitualmente." },
+          { t: "Mínimos comerciales", d: "Evitan cotizar bajo el valor que te conviene atender. Se aplican al calcular cada línea." },
+        ] },
+      ],
+    },
+    backup: {
+      titulo: "Respaldos", icono: "💾", resumen: "Tus datos viven en este equipo. Respáldalos.",
+      grupos: [
+        { nombre: "Lo esencial", consejos: [
+          { t: "Todo se guarda solo en este computador", d: "No hay copia en la nube. Si se pierde el equipo o se borran los datos del navegador, se pierde la información: el respaldo es tu única red." },
+          { t: "El respaldo completo lleva todo", d: "Clientes, presupuestos, catálogo, APU y materiales en un solo archivo." },
+          { t: "Hay respaldo automático", d: "Se ejecuta al abrir la aplicación, con la frecuencia que definas. Igual conviene bajar uno manual antes de cambios grandes." },
+        ] },
+        { nombre: "Restaurar", consejos: [
+          { t: "Revisa la vista previa antes", d: "Antes de restaurar se muestra qué se va a reemplazar, y se crea un respaldo del estado actual por si acaso." },
+          { t: "Tu licencia se conserva", d: "Restaurar datos no afecta la licencia activa." },
+          { t: "Guarda una copia fuera del equipo", d: "Un respaldo que vive en el mismo disco no protege contra la falla de ese disco. Súbelo a la nube o a un pendrive." },
+        ] },
+        { nombre: "Reparaciones", consejos: [
+          { t: "Vínculos entre APU y materiales", d: "Si los APU muestran materiales que no corresponden, esta herramienta reconstruye los vínculos por nombre y no toca los demás valores." },
+        ] },
+      ],
+    },
+    tu_plan: {
+      titulo: "Tu Plan", icono: "🏅", resumen: "Licencia, límites y vencimiento.",
+      grupos: [
+        { nombre: "Entender tu plan", consejos: [
+          { t: "Cada plan abre módulos distintos", d: "Los módulos bloqueados aparecen con candado en el menú lateral. El plan define cuáles están disponibles." },
+          { t: "Hay un límite de presupuestos", d: "El contador del panel muestra cuántos llevas sobre el máximo de tu plan." },
+          { t: "Al vencer, los datos siguen ahí", d: "Se pasa a solo lectura: puedes ver y exportar lo que ya tienes, pero no crear ni editar." },
+        ] },
+      ],
+    },
   };
+  // Consejos del módulo. Muestra grupos plegables: el encabezado de cada
+  // consejo se lee de corrido y el detalle se abre al tocarlo, así el modal
+  // entrega bastante información sin convertirse en un muro de texto.
   function zg({ page: t, onClose: i }) {
-    var r = Cg[t] || ["Explora los módulos desde el menú lateral."];
+    var ficha = Cg[t];
+    if (!ficha) {
+      ficha = {
+        titulo: "Ayuda",
+        icono: "💡",
+        resumen: "Este módulo todavía no tiene consejos propios.",
+        grupos: [
+          { nombre: "Mientras tanto", consejos: [
+            { t: "Explora desde el menú lateral", d: "Cada módulo tiene su propio botón de consejos en la barra superior, con el detalle de lo que puedes hacer ahí." },
+            { t: "Respalda antes de experimentar", d: "En Respaldos puedes bajar una copia completa de tus datos antes de probar algo nuevo." },
+          ] },
+        ],
+      };
+    }
+    var grupos = ficha.grupos || [];
+    var totalConsejos = grupos.reduce(function (acc, g) { return acc + ((g.consejos || []).length); }, 0);
+    var [abiertos, setAbiertos] = V({});
+    var alternar = function (clave) {
+      setAbiertos(function (prev) { return u(d({}, prev), { [clave]: !prev[clave] }); });
+    };
+    var todosAbiertos = totalConsejos > 0 && Object.keys(abiertos).filter(function (k) { return abiertos[k]; }).length >= totalConsejos;
+    var alternarTodos = function () {
+      if (todosAbiertos) return setAbiertos({});
+      var siguiente = {};
+      grupos.forEach(function (g, gi) { (g.consejos || []).forEach(function (_, ci) { siguiente[gi + "-" + ci] = !0; }); });
+      setAbiertos(siguiente);
+    };
     return e.jsx("div", {
-      style: {
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,.8)",
-        zIndex: 6e3,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 20,
-      },
+      style: { position: "fixed", inset: 0, background: "rgba(0,0,0,.8)", zIndex: 6e3, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 },
       onClick: i,
       children: e.jsxs("div", {
-        style: {
-          background: a.card,
-          border: `1px solid ${a.border}`,
-          borderRadius: 16,
-          padding: "26px 28px",
-          maxWidth: 420,
-          width: "100%",
-        },
-        onClick: (n) => n.stopPropagation(),
+        style: { background: a.card, border: `1px solid ${a.border}`, borderRadius: 16, maxWidth: 560, width: "100%", maxHeight: "88vh", display: "flex", flexDirection: "column" },
+        onClick: function (n) { n.stopPropagation(); },
         children: [
           e.jsxs("div", {
-            style: {
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 18,
-            },
+            style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, padding: "22px 24px 16px", borderBottom: `1px solid ${a.border}` },
             children: [
-              e.jsxs("div", {
-                style: { fontSize: 18, fontWeight: 700 },
-                children: [
-                  "💡 Consejos — ",
-                  {
-                    dashboard: "Inicio",
-                    new: "Nuevo Presupuesto",
-                    history: "Mis Presupuestos",
-                    lista: "Materiales por Obra",
-                    clients: "Clientes",
-                    catalog: "Catálogo",
-                    materiales: "Materiales",
-                    apu: "APU",
-                    config: "Configuración",
-                    tu_plan: "Tu Plan — Licencia y Datos",
-                    cubicacion: "Cubicación",
-                    gantt: "Carta Gantt",
-                    informe: "Documentos de Obra",
-                  }[t] || "Ayuda",
-                ],
-              }),
-              e.jsx("button", { style: c.btn("s"), onClick: i, children: "✕" }),
+              e.jsxs("div", { children: [
+                e.jsxs("div", { style: { fontSize: 18, fontWeight: 700, display: "flex", alignItems: "center", gap: 9 }, children: [
+                  e.jsx("span", { style: { fontSize: 20 }, children: ficha.icono || "💡" }),
+                  "Consejos — " + (ficha.titulo || "Ayuda"),
+                ] }),
+                ficha.resumen ? e.jsx("div", { style: { fontSize: 13, color: a.muted, marginTop: 5 }, children: ficha.resumen }) : null,
+              ] }),
+              e.jsx("button", { style: c.btn("s"), onClick: i, title: "Cerrar", children: "✕" }),
+            ],
+          }),
+          e.jsxs("div", {
+            style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, padding: "10px 24px", borderBottom: `1px solid ${a.border}` },
+            children: [
+              e.jsx("div", { style: { fontSize: 11.5, color: a.muted }, children: totalConsejos + (totalConsejos === 1 ? " consejo" : " consejos") + (grupos.length > 1 ? " en " + grupos.length + " temas" : "") }),
+              e.jsx("button", { style: c.btn("s"), onClick: alternarTodos, children: todosAbiertos ? "Contraer todo" : "Expandir todo" }),
             ],
           }),
           e.jsx("div", {
-            style: { display: "flex", flexDirection: "column", gap: 12 },
-            children: r.map((n, l) =>
-              e.jsxs(
-                "div",
-                {
-                  style: { display: "flex", gap: 12, alignItems: "flex-start" },
-                  children: [
-                    e.jsx("div", {
-                      style: {
-                        width: 22,
-                        height: 22,
-                        borderRadius: "50%",
-                        background: a.border,
-                        color: a.accent,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 13,
-                        fontWeight: 700,
-                        flexShrink: 0,
-                      },
-                      children: l + 1,
-                    }),
-                    e.jsx("div", {
-                      style: { fontSize: 16, color: a.mutedL, lineHeight: 1.6 },
-                      children: n,
-                    }),
-                  ],
-                },
-                l,
-              ),
-            ),
-          }),
-          e.jsx("button", {
-            style: u(d({}, c.btn("p")), {
-              width: "100%",
-              padding: "10px",
-              marginTop: 20,
+            style: { overflowY: "auto", padding: "16px 24px 4px", display: "flex", flexDirection: "column", gap: 18 },
+            children: grupos.map(function (grupo, gi) {
+              return e.jsxs("div", { children: [
+                e.jsx("div", {
+                  style: { fontSize: 10.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".09em", color: a.accent, marginBottom: 9 },
+                  children: grupo.nombre || "",
+                }),
+                e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 7 }, children: (grupo.consejos || []).map(function (consejo, ci) {
+                  var clave = gi + "-" + ci;
+                  var abierto = !!abiertos[clave];
+                  return e.jsxs("div", {
+                    onClick: function () { alternar(clave); },
+                    style: { border: `1px solid ${a.border}`, borderRadius: 10, padding: "11px 13px", cursor: "pointer", background: abierto ? a.sb : "transparent" },
+                    children: [
+                      e.jsxs("div", { style: { display: "flex", gap: 10, alignItems: "flex-start" }, children: [
+                        e.jsx("div", {
+                          style: { width: 21, height: 21, borderRadius: "50%", background: a.border, color: a.accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0, marginTop: 1 },
+                          children: ci + 1,
+                        }),
+                        e.jsx("div", { style: { flex: 1, fontSize: 14.5, fontWeight: 600, lineHeight: 1.45 }, children: consejo.t || "" }),
+                        e.jsx("div", { style: { color: a.muted, fontSize: 12, flexShrink: 0, marginTop: 3 }, children: abierto ? "▾" : "▸" }),
+                      ] }),
+                      abierto && consejo.d
+                        ? e.jsx("div", { style: { fontSize: 13.5, color: a.mutedL, lineHeight: 1.6, marginTop: 8, paddingLeft: 31 }, children: consejo.d })
+                        : null,
+                    ],
+                  }, clave);
+                }) }),
+              ] }, gi);
             }),
-            onClick: i,
-            children: "Entendido",
+          }),
+          e.jsx("div", {
+            style: { padding: "14px 24px 20px", borderTop: `1px solid ${a.border}` },
+            children: e.jsx("button", {
+              style: u(d({}, c.btn("p")), { width: "100%", padding: "10px" }),
+              onClick: i,
+              children: "Entendido",
+            }),
           }),
         ],
       }),
