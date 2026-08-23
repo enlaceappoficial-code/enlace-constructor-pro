@@ -55722,6 +55722,12 @@ K &&
           sub: "Lo que puedes hacer hoy dentro de la app",
         },
         {
+          id: "planes",
+          icon: "🏅",
+          title: "Planes disponibles",
+          sub: "Cuál tienes hoy y qué suma cada uno",
+        },
+        {
           id: "flujo",
           icon: "⚡",
           title: "Flujo de trabajo",
@@ -56166,6 +56172,90 @@ K &&
                   ),
                 }),
               r === 3 &&
+                (() => {
+                  // Planes: se marca el que esta activo y se destaca el
+                  // siguiente, para que se vea que hay camino hacia arriba.
+                  var planActual = (b && b.version) || (i && i.version) || "starter";
+                  var indiceActual = wr.indexOf(planActual);
+                  if (indiceActual < 0) indiceActual = 0;
+                  var siguiente = wr[indiceActual + 1] || null;
+                  var precio = function (v) { return "$" + Math.round(Number(v) || 0).toLocaleString("es-CL"); };
+                  var periodo = function (pl) { return pl.suscripcion ? "por mes" : pl.anual ? "por año" : "pago único"; };
+                  return e.jsxs("div", {
+                    style: { display: "flex", flexDirection: "column", gap: 14 },
+                    children: [
+                      e.jsxs("div", {
+                        style: { background: a.card, border: "1px solid " + a.border, borderRadius: 12, padding: "13px 15px", fontSize: 13.5, color: a.text, lineHeight: 1.55 },
+                        children: [
+                          "Tu plan actual es ",
+                          e.jsx("b", { style: { color: (Fe[planActual] || Fe.starter).color }, children: (Fe[planActual] || Fe.starter).label }),
+                          ". Puedes cambiarlo cuando quieras desde ",
+                          e.jsx("b", { children: "Cambiar plan" }),
+                          ", en el panel lateral. Tus datos y presupuestos se conservan al subir de plan.",
+                        ],
+                      }),
+                      e.jsx("div", {
+                        style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(215px, 1fr))", gap: 10 },
+                        children: wr.map(function (clave) {
+                          var pl = Fe[clave];
+                          if (!pl) return null;
+                          var esActual = clave === planActual;
+                          var esSiguiente = clave === siguiente;
+                          var cantidadModulos = (pl.modules || []).length;
+                          return e.jsxs("div", {
+                            style: {
+                              border: "1px solid " + (esActual ? pl.color : esSiguiente ? a.accent : a.border),
+                              borderRadius: 12,
+                              padding: "12px 13px",
+                              background: esActual ? a.sb : "transparent",
+                              position: "relative",
+                            },
+                            children: [
+                              e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 7, marginBottom: 3 }, children: [
+                                e.jsx("span", { style: { width: 9, height: 9, borderRadius: "50%", background: pl.color, flexShrink: 0 } }),
+                                e.jsx("div", { style: { fontSize: 14.5, fontWeight: 700, color: a.text }, children: pl.label }),
+                                esActual
+                                  ? e.jsx("span", { style: { marginLeft: "auto", fontSize: 9.5, fontWeight: 800, letterSpacing: ".06em", background: pl.color, color: "#0d1a2b", padding: "2px 7px", borderRadius: 999 }, children: "TU PLAN" })
+                                  : esSiguiente
+                                    ? e.jsx("span", { style: { marginLeft: "auto", fontSize: 9.5, fontWeight: 800, letterSpacing: ".06em", border: "1px solid " + a.accent, color: a.accent, padding: "2px 7px", borderRadius: 999 }, children: "SIGUIENTE" })
+                                    : null,
+                              ] }),
+                              e.jsxs("div", { style: { display: "flex", alignItems: "baseline", gap: 5, marginBottom: 6 }, children: [
+                                e.jsx("div", { style: { fontSize: 17, fontWeight: 800, color: a.text }, children: precio(pl.precio) }),
+                                e.jsx("div", { style: { fontSize: 10.5, color: a.muted }, children: periodo(pl) }),
+                              ] }),
+                              e.jsx("div", { style: { fontSize: 11.5, color: a.muted, lineHeight: 1.5, minHeight: 34 }, children: pl.desc || "" }),
+                              e.jsxs("div", { style: { fontSize: 10.5, color: a.muted, marginTop: 7, borderTop: "1px solid " + a.border, paddingTop: 6 }, children: [
+                                cantidadModulos + (cantidadModulos === 1 ? " módulo" : " módulos"),
+                                pl.limite && pl.limite.presupuestos ? " · hasta " + pl.limite.presupuestos + " presupuestos" : " · presupuestos ilimitados",
+                              ] }),
+                            ],
+                          }, clave);
+                        }),
+                      }),
+                      siguiente
+                        ? e.jsxs("div", {
+                            style: { background: "rgba(245,160,32,.10)", border: "1px solid " + a.accent, borderRadius: 12, padding: "12px 14px", fontSize: 12.5, color: a.text, lineHeight: 1.55 },
+                            children: [
+                              e.jsx("b", { children: "Subiendo a " + (Fe[siguiente] || {}).label + " sumas: " }),
+                              (function () {
+                                var actuales = (Fe[planActual] || {}).modules || [];
+                                var nuevos = ((Fe[siguiente] || {}).modules || []).filter(function (mod) { return actuales.indexOf(mod) === -1; });
+                                var nombres = { catalog: "Partidas de Obra", materiales: "Base de Materiales", apu: "APU", proveedores: "Proveedores", lista: "Materiales por Obra", cubicacion: "Cubicación", gantt: "Carta Gantt", informe: "Informes", calendario: "Calendario", licitaciones: "Mercado Público", documentos: "Documentos de Obra", indices: "Índices" };
+                                var etiquetas = nuevos.map(function (mod) { return nombres[mod] || mod; });
+                                if (!etiquetas.length) return "soporte y actualizaciones incluidas.";
+                                return etiquetas.join(", ") + ".";
+                              })(),
+                            ],
+                          })
+                        : e.jsx("div", {
+                            style: { background: "rgba(16,185,129,.10)", border: "1px solid #10b981", borderRadius: 12, padding: "12px 14px", fontSize: 12.5, color: a.text },
+                            children: "Tienes el plan más completo. Todos los módulos están disponibles.",
+                          }),
+                    ],
+                  });
+                })(),
+              r === 4 &&
                 e.jsxs("div", {
                   style: { position: "relative" },
                   children: [
@@ -56232,7 +56322,7 @@ K &&
                     ),
                   ],
                 }),
-              r === 4 &&
+              r === 5 &&
                 e.jsxs("div", {
                   style: { textAlign: "center" },
                   children: [
@@ -56325,7 +56415,7 @@ K &&
                     }),
                   ],
                 }),
-              r === 5 &&
+              r === 6 &&
                 e.jsxs("div", {
                   style: { textAlign: "center" },
                   children: [
