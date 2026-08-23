@@ -55652,7 +55652,7 @@ K &&
                         e.jsx("div", { style: { color: a.muted, fontSize: 12, flexShrink: 0, marginTop: 3 }, children: abierto ? "▾" : "▸" }),
                       ] }),
                       abierto && consejo.d
-                        ? e.jsx("div", { style: { fontSize: 13.5, color: a.mutedL, lineHeight: 1.6, marginTop: 8, paddingLeft: 31 }, children: consejo.d })
+                        ? e.jsx("div", { style: { fontSize: 13.5, color: a.text, lineHeight: 1.6, marginTop: 8, paddingLeft: 31 }, children: consejo.d })
                         : null,
                     ],
                   }, clave);
