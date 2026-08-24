@@ -55973,7 +55973,7 @@ K &&
                         children: "Desde hoy tus presupuestos se ven como los de una constructora grande",
                       }),
                       e.jsx("div", {
-                        style: { fontSize: 14, color: a.mutedL, lineHeight: 1.6, marginBottom: 16 },
+                        style: { fontSize: 14, color: a.text, lineHeight: 1.6, marginBottom: 16 },
                         children: "Cotiza con precios reales, entrega un PDF con tu logo y tu firma, y respalda cada peso con su análisis de costo.",
                       }),
                       nPartidas > 0
