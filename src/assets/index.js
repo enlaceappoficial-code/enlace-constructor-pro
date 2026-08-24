@@ -55950,82 +55950,66 @@ K &&
                 ],
               }),
               r === 0 &&
-                e.jsxs("div", {
-                  children: [
-                    e.jsxs("div", {
-                      style: {
-                        background: a.sb,
-                        borderRadius: 12,
-                        padding: "18px 20px",
-                        marginBottom: 16,
-                        border: `1px solid ${a.border}`,
-                      },
+                (() => {
+                  // Las cifras salen de los arreglos reales del catalogo, no de
+                  // constantes escritas a mano: si la biblioteca crece, la
+                  // bienvenida lo refleja sin tocar este texto.
+                  var nPartidas = (typeof qi !== "undefined" && qi && qi.length) || 0;
+                  var nMateriales = (typeof Qi !== "undefined" && Qi && Qi.length) || 0;
+                  var nApus = (typeof Ai !== "undefined" && Ai && Ai.length) || 0;
+                  var cifra = function (rotulo, valor) {
+                    return e.jsxs("div", {
+                      style: { background: a.card, border: "1px solid " + a.border, borderRadius: 10, padding: "11px 12px", textAlign: "center" },
                       children: [
-                        e.jsx("div", {
-                          style: {
-                            fontSize: 15,
-                            color: a.text,
-                            lineHeight: 1.8,
-                            marginBottom: 14,
-                          },
-                          children:
-                            "Enlace Constructor Pro reemplaza tu Excel de presupuestos con una plataforma completa para empresas constructoras y contratistas.",
-                        }),
-                        e.jsx("div", {
-                          style: {
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr",
-                            gap: 10,
-                          },
-                          children: [
-                            ["⏱️", "Presupuesto listo en 5 min"],
-                            ["📊", "Materiales calculados solos"],
-                            ["📲", "Envío directo por WhatsApp"],
-                            ["⚖️", "Licitaciones Mercado Público"],
-                          ].map(([g, z]) =>
-                            e.jsxs(
-                              "div",
-                              {
-                                style: {
-                                  display: "flex",
-                                  gap: 10,
-                                  alignItems: "center",
-                                  background: a.card,
-                                  borderRadius: 8,
-                                  padding: "10px 12px",
-                                  border: `1px solid ${a.border}`,
-                                },
-                                children: [
-                                  e.jsx("span", {
-                                    style: { fontSize: 20 },
-                                    children: g,
-                                  }),
-                                  e.jsx("span", {
-                                    style: {
-                                      fontSize: 13,
-                                      color: a.text,
-                                      fontWeight: 600,
-                                    },
-                                    children: z,
-                                  }),
-                                ],
-                              },
-                              z,
-                            ),
-                          ),
-                        }),
+                        e.jsx("div", { style: { fontSize: 23, fontWeight: 800, color: a.text, lineHeight: 1.1 }, children: valor.toLocaleString("es-CL") }),
+                        e.jsx("div", { style: { fontSize: 11, color: a.muted, marginTop: 3 }, children: rotulo }),
                       ],
-                    }),
-                    e.jsx("div", {
-                      style: {
-                        fontSize: 12,
-                        color: a.muted,
-                        textAlign: "center",
-                      },
-                      children: "Este tour toma menos de 2 minutos",
-                    }),
-                  ],
-                }),
+                    });
+                  };
+                  return e.jsxs("div", {
+                    children: [
+                      e.jsx("div", {
+                        style: { fontSize: 21, fontWeight: 800, color: a.text, lineHeight: 1.3, marginBottom: 8 },
+                        children: "Desde hoy tus presupuestos se ven como los de una constructora grande",
+                      }),
+                      e.jsx("div", {
+                        style: { fontSize: 14, color: a.mutedL, lineHeight: 1.6, marginBottom: 16 },
+                        children: "Cotiza con precios reales, entrega un PDF con tu logo y tu firma, y respalda cada peso con su análisis de costo.",
+                      }),
+                      nPartidas > 0
+                        ? e.jsxs("div", {
+                            style: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 9, marginBottom: 16 },
+                            children: [
+                              cifra("partidas listas", nPartidas),
+                              cifra("materiales con precio", nMateriales),
+                              cifra("análisis de precio", nApus),
+                            ],
+                          })
+                        : null,
+                      e.jsx("div", {
+                        style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9, marginBottom: 18 },
+                        children: [
+                          ["⏱️", "Presupuesto listo en 5 min"],
+                          ["🧱", "Materiales calculados solos"],
+                          ["📲", "Envío directo por WhatsApp"],
+                          ["⚖️", "Licitaciones Mercado Público"],
+                        ].map(function (par, ix) {
+                          return e.jsxs("div", {
+                            style: { display: "flex", alignItems: "center", gap: 8, background: a.card, border: "1px solid " + a.border, borderRadius: 10, padding: "9px 11px" },
+                            children: [
+                              e.jsx("span", { style: { fontSize: 15, flexShrink: 0 }, children: par[0] }),
+                              e.jsx("span", { style: { fontSize: 12.5, color: a.text, lineHeight: 1.35 }, children: par[1] }),
+                            ],
+                          }, ix);
+                        }),
+                      }),
+                      e.jsx("div", {
+                        style: { fontSize: 12, color: a.muted, textAlign: "center" },
+                        children: "Configúralo en 2 minutos y deja lista tu primera cotización",
+                      }),
+                    ],
+                  });
+                })(),
               r === 1 &&
                 e.jsxs("div", {
                   children: [
@@ -56669,7 +56653,7 @@ K &&
                           cursor: "pointer",
                         },
                         onClick: () => n((g) => g + 1),
-                        children: r === 0 ? "Comenzar →" : "Continuar →",
+                        children: r === 0 ? "Crear mi primer presupuesto →" : "Continuar →",
                       })
                     : e.jsx("button", {
                         style: {
@@ -56697,7 +56681,7 @@ K &&
                     color: a.muted,
                   }),
                   onClick: () => t({}),
-                  children: "Saltar y configurar después",
+                  children: "Prefiero mirar primero",
                 }),
             ],
           }),
