@@ -20231,6 +20231,12 @@ Error generating stack: ` +
       text: "var(--text)",
       muted: "var(--muted)",
       mutedL: "var(--mutedL)",
+      accentTxt: "var(--accent-txt)",
+      okTxt: "var(--ok-txt)",
+      infoTxt: "var(--info-txt)",
+      violetTxt: "var(--violet-txt)",
+      warnTxt: "var(--warn-txt)",
+      dangerTxt: "var(--danger-txt)",
     },
     c = {
       app: {
@@ -20300,7 +20306,7 @@ Error generating stack: ` +
       ct: {
         fontSize: 13,
         fontWeight: 700,
-        color: a.accent,
+        color: a.accentTxt,
         marginBottom: 14,
         textTransform: "uppercase",
         letterSpacing: ".08em",
@@ -20369,7 +20375,7 @@ Error generating stack: ` +
           },
           g: {
             background: "transparent",
-            color: a.accent,
+            color: a.accentTxt,
             border: "none",
             padding: "5px 7px",
             fontSize: 13,
@@ -23318,7 +23324,7 @@ Error generating stack: ` +
           e.jsx("span", { style: { fontSize: 11, color: a.muted, fontWeight: "bold" }, children: label }),
           e.jsx("button", {
             onClick: function () { cambiar(campo, defVal); },
-            style: { background: "none", border: "none", color: a.accent, cursor: "pointer", fontSize: 10, textDecoration: "underline" },
+            style: { background: "none", border: "none", color: a.accentTxt, cursor: "pointer", fontSize: 10, textDecoration: "underline" },
             children: "Restaurar sugerido"
           })
         ] }),
@@ -23382,7 +23388,7 @@ Error generating stack: ` +
               e.jsxs("div", {
                 style: { width: 340, borderRight: "1px solid " + a.border, padding: 14, overflowY: "auto", background: a.card },
                 children: [
-                  e.jsx("div", { style: { fontWeight: "bold", fontSize: 12, marginBottom: 8, color: a.accent }, children: "1. Secciones del documento" }),
+                  e.jsx("div", { style: { fontWeight: "bold", fontSize: 12, marginBottom: 8, color: a.accentTxt }, children: "1. Secciones del documento" }),
                   e.jsxs("div", { style: cardStyle, children: [
                     [["portada", "Portada del documento"], ["presentacion", "1. Presentación comercial"], ["resumen", "2. Resumen ejecutivo"], ["alcance", "3. Alcance por capítulos"], ["inversion", "4. Resumen de inversión"], ["incluyeExcluye", "5. Inclusiones/Exclusiones"], ["condiciones", "6. Condiciones y Plazo"], ["anexo", "Nota de anexo de partidas"], ["firmas", "Bloque de firmas corporativas"]].map(function (sec) {
                       return e.jsxs("label", { style: { display: "flex", gap: 8, alignItems: "center", fontSize: 12, marginBottom: 6, cursor: "pointer" }, children: [
@@ -23391,7 +23397,7 @@ Error generating stack: ` +
                       ] }, sec[0]);
                     })
                   ] }),
-                  e.jsx("div", { style: { fontWeight: "bold", fontSize: 12, marginBottom: 8, color: a.accent }, children: "2. Datos de control" }),
+                  e.jsx("div", { style: { fontWeight: "bold", fontSize: 12, marginBottom: 8, color: a.accentTxt }, children: "2. Datos de control" }),
                   e.jsxs("div", { style: cardStyle, children: [
                     itemInput("Número de cotización", "numero"),
                     itemInput("Fecha de cotización", "fecha", "date"),
@@ -23979,7 +23985,7 @@ ${D}
                       }),
                       e.jsx("span", {
                         style: {
-                          color: p ? "#34d399" : "#f87171",
+                          color: p ? a.okTxt : a.dangerTxt,
                           fontWeight: 700,
                         },
                         children: p
@@ -24207,7 +24213,7 @@ ${r.empresa}`;
                     children: [
                       "N° ",
                       e.jsx("span", {
-                        style: { color: a.accent },
+                        style: { color: a.accentTxt },
                         children: t.id,
                       }),
                       " — ",
@@ -24235,7 +24241,7 @@ ${r.empresa}`;
                     children: "Para: ",
                   }),
                   e.jsx("span", {
-                    style: { color: "#a78bfa", fontWeight: 600 },
+                    style: { color: a.violetTxt, fontWeight: 600 },
                     children: i.email,
                   }),
                 ],
@@ -24248,7 +24254,7 @@ ${r.empresa}`;
                   padding: "8px 12px",
                   marginBottom: 14,
                   fontSize: 14,
-                  color: "#f87171",
+                  color: a.dangerTxt,
                 },
                 children: "⚠ Cliente sin correo registrado.",
               }),
@@ -24651,7 +24657,7 @@ ${r.empresa}`;
                 tipo: "budget",
                 msg: `Presupuesto N° ${s.id} venció hace ${-p} días`,
                 sub: C && C.nombre,
-                color: "#f87171",
+                color: a.dangerTxt,
                 icon: "⚠️",
                 urgencia: 3,
               })
@@ -24661,7 +24667,7 @@ ${r.empresa}`;
                 tipo: "budget",
                 msg: `Presupuesto N° ${s.id} vence en ${p} día${p !== 1 ? "s" : ""}`,
                 sub: C && C.nombre,
-                color: a.accent,
+                color: a.accentTxt,
                 icon: "🔔",
                 urgencia: 2,
               });
@@ -24676,7 +24682,7 @@ ${r.empresa}`;
                 tipo: "licit",
                 msg: `Licitación ${s.idMP || "—"} cerró hace ${-m} días`,
                 sub: s.nombreObra,
-                color: "#f87171",
+                color: a.dangerTxt,
                 icon: "⚖️",
                 urgencia: 3,
               })
@@ -24685,7 +24691,7 @@ ${r.empresa}`;
                 tipo: "licit",
                 msg: `Licitación ${s.idMP || "—"} cierra en ${m} día${m !== 1 ? "s" : ""}`,
                 sub: s.nombreObra,
-                color: "#fbbf24",
+                color: a.accentTxt,
                 icon: "⚖️",
                 urgencia: m <= 3 ? 3 : 2,
               });
@@ -24705,7 +24711,7 @@ ${r.empresa}`;
                   tipo: "garantia",
                   msg: `${b} vencida — ${s.idMP || "—"}`,
                   sub: s.nombreObra,
-                  color: "#f87171",
+                  color: a.dangerTxt,
                   icon: "🏦",
                   urgencia: 3,
                 })
@@ -24714,7 +24720,7 @@ ${r.empresa}`;
                   tipo: "garantia",
                   msg: `${b} vence en ${C} días — ${s.idMP || "—"}`,
                   sub: s.nombreObra,
-                  color: "#38bdf8",
+                  color: a.infoTxt,
                   icon: "🏦",
                   urgencia: C <= 3 ? 3 : 1,
                 });
@@ -24997,7 +25003,7 @@ ${r.empresa}`;
                     children: [
                       e.jsxs("span", {
                         style: {
-                          color: a.accent,
+                          color: a.accentTxt,
                           fontWeight: 600,
                           fontSize: 14,
                         },
@@ -25205,7 +25211,7 @@ ${r.empresa}`;
                                             }),
                                             e.jsx("div", {
                                               style: {
-                                                color: a.accent,
+                                                color: a.accentTxt,
                                                 fontWeight: 900,
                                               },
                                               children: ne(Math.round(total)),
@@ -26796,7 +26802,7 @@ ${r.empresa}`;
                     children: [
                       "Presupuesto ",
                       e.jsxs("span", {
-                        style: { color: a.accent, fontWeight: 600 },
+                        style: { color: a.accentTxt, fontWeight: 600 },
                         children: ["N° ", t.id],
                       }),
                     ],
@@ -27450,21 +27456,21 @@ ${r.empresa}`;
       Ce = ({ apu: _ }) => {
         var ue = li(_, r, cfgApu),
           xe = [
-            { label: "Materiales", val: ue.matTotal, color: "#60a5fa" },
+            { label: "Materiales", val: ue.matTotal, color: a.infoTxt },
             {
               label: "Mano de Obra - " + ue.moLabel,
               val: ue.moTotal,
-              color: "#34d399",
+              color: a.okTxt,
             },
             {
               label: "Gastos Generales (" + _.pctGG + "%)",
               val: ue.ggTotal,
-              color: "#c084fc",
+              color: a.violetTxt,
             },
             {
               label: "Utilidad (" + _.pctUtilidad + "%)",
               val: ue.utilTotal,
-              color: a.accent,
+              color: a.accentTxt,
             },
           ],
           se = n && _.catalogId ? n.find((H) => H.id === _.catalogId) : null;
@@ -27542,7 +27548,7 @@ ${r.empresa}`;
                       children: "PRECIO UNITARIO",
                     }),
                     e.jsx("div", {
-                      style: { fontSize: 26, fontWeight: 700, color: a.accent },
+                      style: { fontSize: 26, fontWeight: 700, color: a.accentTxt },
                       children: ne(ue.precioFinal),
                     }),
                     e.jsxs("div", {
@@ -27696,7 +27702,7 @@ ${r.empresa}`;
                         style: {
                           fontSize: 17,
                           fontWeight: 700,
-                          color: a.accent,
+                          color: a.accentTxt,
                         },
                         children: ne(ue.ggTotal),
                       }),
@@ -27715,7 +27721,7 @@ ${r.empresa}`;
                 },
                 children: [
                   e.jsx("div", {
-                    style: { fontSize: 11, color: a.accent, textTransform: "uppercase", fontWeight: 800, letterSpacing: ".05em", marginBottom: 6 },
+                    style: { fontSize: 11, color: a.accentTxt, textTransform: "uppercase", fontWeight: 800, letterSpacing: ".05em", marginBottom: 6 },
                     children: "Base técnica de cálculo",
                   }),
                   e.jsxs("div", {
@@ -27813,7 +27819,7 @@ ${r.empresa}`;
                                         padding: "6px 8px",
                                         fontSize: 13,
                                         fontWeight: 600,
-                                        color: "#60a5fa",
+                                        color: a.infoTxt,
                                       }),
                                       children: ne(N.precio * H.cantidad),
                                     }),
@@ -27971,19 +27977,19 @@ ${r.empresa}`;
                     label: "Total APUs",
                     val: _,
                     sub: "definidos",
-                    color: a.accent,
+                    color: a.accentTxt,
                   },
                   {
                     label: "Vinculados",
                     val: xe,
                     sub: "con partida",
-                    color: "#4ade80",
+                    color: a.okTxt,
                   },
                   {
                     label: "Sin partida",
                     val: se,
                     sub: "huérfanos",
-                    color: se > 0 ? "#f87171" : a.muted,
+                    color: se > 0 ? a.dangerTxt : a.muted,
                   },
                   {
                     label: "Precio promedio",
@@ -28350,7 +28356,7 @@ ${r.empresa}`;
                           e.jsxs("span", {
                             style: {
                               fontSize: 13,
-                              color: a.accent,
+                              color: a.accentTxt,
                               fontWeight: 600,
                             },
                             children: [
@@ -28364,7 +28370,7 @@ ${r.empresa}`;
                           e.jsx("button", {
                             style: {
                               background: "var(--bdg-prog-bg)",
-                              color: a.accent,
+                              color: a.accentTxt,
                               border: `1px solid ${a.accent}`,
                               borderRadius: 7,
                               fontSize: 12,
@@ -28899,12 +28905,12 @@ ${r.empresa}`;
                         children: [
                           "⚠️ ",
                           e.jsx("strong", {
-                            style: { color: "#34d399" },
+                            style: { color: a.okTxt },
                             children: "Valores referenciales de terreno.",
                           }),
                           " Basados en experiencias de constructores locales en Chile. Incluyen tiempos reales de faena: preparación, descansos y charlas de seguridad. Fuente: Enlace Constructor Pro, en base a práctica habitual de obra. ",
                           e.jsx("strong", {
-                            style: { color: "#34d399" },
+                            style: { color: a.okTxt },
                             children:
                               "Se recomienda ajustar según tu cuadrilla, clima y condiciones específicas del proyecto.",
                           }),
@@ -29126,14 +29132,14 @@ ${r.empresa}`;
                                       e.jsx("td", {
                                         style: u(d({}, c.td), {
                                           textAlign: "center",
-                                          color: a.accent,
+                                          color: a.accentTxt,
                                         }),
                                         children: ue,
                                       }),
                                       e.jsx("td", {
                                         style: u(d({}, c.td), {
                                           textAlign: "center",
-                                          color: "#c084fc",
+                                          color: a.violetTxt,
                                           fontWeight: 700,
                                         }),
                                         children: xe,
@@ -29281,7 +29287,7 @@ ${r.empresa}`;
                                       e.jsx("button", {
                                         style: {
                                           background: "var(--bdg-prog-bg)",
-                                          color: a.accent,
+                                          color: a.accentTxt,
                                           border: `1px solid ${a.accent}`,
                                           borderRadius: 6,
                                           fontSize: 11,
@@ -29383,7 +29389,7 @@ ${r.empresa}`;
                                                   e.jsx("span", {
                                                     style: {
                                                       background: a.sb,
-                                                      color: a.accent,
+                                                      color: a.accentTxt,
                                                       fontSize: 11,
                                                       fontWeight: 700,
                                                       padding: "3px 10px",
@@ -29476,7 +29482,7 @@ ${r.empresa}`;
                                                     style: {
                                                       marginLeft: 5,
                                                       fontSize: 11,
-                                                      color: "#a78bfa",
+                                                      color: a.violetTxt,
                                                       fontWeight: 700,
                                                     },
                                                     children: "SUB",
@@ -29549,7 +29555,7 @@ ${r.empresa}`;
                                         e.jsx("td", {
                                           style: u(d({}, c.td), {
                                             fontSize: 13,
-                                            color: "#60a5fa",
+                                            color: a.infoTxt,
                                           }),
                                           onClick: () => k(_),
                                           children: _.esSubcontrato
@@ -29559,7 +29565,7 @@ ${r.empresa}`;
                                         e.jsx("td", {
                                           style: u(d({}, c.td), {
                                             fontSize: 13,
-                                            color: "#34d399",
+                                            color: a.okTxt,
                                           }),
                                           onClick: () => k(_),
                                           children: _.esSubcontrato
@@ -29569,7 +29575,7 @@ ${r.empresa}`;
                                         e.jsx("td", {
                                           style: u(d({}, c.td), {
                                             fontSize: 13,
-                                            color: "#c084fc",
+                                            color: a.violetTxt,
                                           }),
                                           onClick: () => k(_),
                                           children: ne(
@@ -29579,7 +29585,7 @@ ${r.empresa}`;
                                         e.jsx("td", {
                                           style: u(d({}, c.td), {
                                             fontWeight: 700,
-                                            color: a.accent,
+                                            color: a.accentTxt,
                                           }),
                                           onClick: () => k(_),
                                           children: ne(ue.precioFinal),
@@ -29594,7 +29600,7 @@ ${r.empresa}`;
                                             (_.rendimiento || 0) > 0
                                               ? e.jsxs("span", {
                                                   style: {
-                                                    color: "#c084fc",
+                                                    color: a.violetTxt,
                                                     fontWeight: 600,
                                                   },
                                                   children: [
@@ -30248,7 +30254,7 @@ ${r.empresa}`;
                                           e.jsxs("div", {
                                             style: {
                                               fontSize: 11,
-                                              color: "#60a5fa",
+                                              color: a.infoTxt,
                                               gridColumn: "span 3",
                                               marginTop: -2,
                                               paddingLeft: 2,
@@ -30415,7 +30421,7 @@ ${r.empresa}`;
                                     style: {
                                       fontSize: 22,
                                       fontWeight: 700,
-                                      color: a.accent,
+                                      color: a.accentTxt,
                                     },
                                     children: ne(Q.precioFinal),
                                   }),
@@ -30425,7 +30431,7 @@ ${r.empresa}`;
                                 e.jsx("div", {
                                   style: {
                                     fontSize: 12,
-                                    color: "#34d399",
+                                    color: a.okTxt,
                                     marginTop: 6,
                                   },
                                   children:
@@ -30704,7 +30710,7 @@ ${r.empresa}`;
                             style: {
                               fontSize: 18,
                               fontWeight: 700,
-                              color: a.accent,
+                              color: a.accentTxt,
                             },
                             children: new Intl.NumberFormat("es-CL", {
                               style: "currency",
@@ -30799,7 +30805,7 @@ ${r.empresa}`;
                                     e.jsx("span", { style: { fontSize: 11, color: a.muted }, children: q.fecha })
                                   ]
                                 }),
-                                e.jsx("span", { style: { fontSize: 14, fontWeight: 700, color: a.accent }, children: O(q.precio) })
+                                e.jsx("span", { style: { fontSize: 14, fontWeight: 700, color: a.accentTxt }, children: O(q.precio) })
                               ]
                             }, idx))
                           ]
@@ -30832,7 +30838,7 @@ ${r.empresa}`;
                                 );
                                 return e.jsxs("span", {
                                   style: {
-                                    color: $ > 0 ? "#f87171" : "#4ade80",
+                                    color: $ > 0 ? a.dangerTxt : a.okTxt,
                                     fontWeight: 700,
                                   },
                                   children: [$ > 0 ? "+" : "", $, "% total"],
@@ -30907,7 +30913,7 @@ ${r.empresa}`;
                                       e.jsxs("span", {
                                         style: {
                                           fontSize: 10,
-                                          color: Z > 0 ? "#f87171" : "#4ade80",
+                                          color: Z > 0 ? a.dangerTxt : a.okTxt,
                                         },
                                         children: [Z > 0 ? "+" : "", Z, "%"],
                                       }),
@@ -31069,7 +31075,7 @@ ${r.empresa}`;
                           label: "Total",
                           val: A,
                           sub: S.length + " categorías",
-                          color: a.accent,
+                          color: a.accentTxt,
                         },
                         {
                           label: "Precio promedio",
@@ -31081,13 +31087,13 @@ ${r.empresa}`;
                           label: "Al día",
                           val: ee,
                           sub: "actualizados <30d",
-                          color: "#4ade80",
+                          color: a.okTxt,
                         },
                         {
                           label: "Desactualizados",
                           val: Y,
                           sub: "sin revisar +90d",
-                          color: Y > 0 ? "#f87171" : a.muted,
+                          color: Y > 0 ? a.dangerTxt : a.muted,
                         },
                       ].map((T) =>
                         e.jsxs(
@@ -31555,7 +31561,7 @@ ${r.empresa}`;
                                         }),
                                         e.jsx("td", {
                                           style: u(d({}, c.td), {
-                                            color: a.accent,
+                                            color: a.accentTxt,
                                             fontWeight: 600,
                                           }),
                                           children: ne(
@@ -31821,7 +31827,7 @@ ${r.empresa}`;
                                     style: {
                                       fontSize: 17,
                                       fontWeight: 700,
-                                      color: a.accent,
+                                      color: a.accentTxt,
                                     },
                                     children: ne(
                                       Math.round(parseFloat(B.precio) * 1.19),
@@ -32069,7 +32075,7 @@ ${r.empresa}`;
           label: "Completado",
           value: S.Completado,
           count: A.Completado,
-          color: "#34d399",
+          color: a.okTxt,
         },
         {
           label: "En progreso",
@@ -32513,7 +32519,7 @@ ${r.empresa}`;
                                 children: [
                                   "Ya llevas ",
                                   e.jsxs("strong", {
-                                    style: { color: a.accent },
+                                    style: { color: a.accentTxt },
                                     children: [L, " presupuestos"],
                                   }),
                                   " — ya dominas el flujo. ",
@@ -32523,7 +32529,7 @@ ${r.empresa}`;
                                       background: "none",
                                       border: "none",
                                       cursor: "pointer",
-                                      color: a.accent,
+                                      color: a.accentTxt,
                                       fontSize: 12,
                                       fontWeight: 700,
                                       padding: 0,
@@ -32611,7 +32617,7 @@ ${r.empresa}`;
                             ? e.jsx("div", {
                                 style: {
                                   fontSize: 11,
-                                  color: a.accent,
+                                  color: a.accentTxt,
                                   fontWeight: 600,
                                 },
                                 children: "✅ Completado",
@@ -32660,7 +32666,7 @@ ${r.empresa}`;
                       style: {
                         fontSize: 14,
                         fontWeight: 700,
-                        color: "#f5a020",
+                        color: a.accentTxt,
                         marginBottom: 4,
                       },
                       children: "⚠️ Estás viendo datos de demostración",
@@ -32712,7 +32718,7 @@ ${r.empresa}`;
               e.jsxs("div", {
                 style: {
                   fontSize: 13,
-                  color: R.dias <= 7 ? "#f97316" : "#fbbf24",
+                  color: R.dias <= 7 ? "#f97316" : a.accentTxt,
                   fontWeight: 600,
                 },
                 children: [
@@ -32767,7 +32773,7 @@ ${r.empresa}`;
                         style: {
                           fontSize: 22,
                           fontWeight: 700,
-                          color: a.accent,
+                          color: a.accentTxt,
                           lineHeight: 1.2,
                         },
                         children: E,
@@ -33329,7 +33335,7 @@ ${r.empresa}`;
                                   children: [
                                     e.jsx("td", {
                                       style: u(d({}, c.td), {
-                                        color: a.accent,
+                                        color: a.accentTxt,
                                         fontWeight: 700,
                                       }),
                                       children: L.id,
@@ -33468,7 +33474,7 @@ ${r.empresa}`;
                                       children: e.jsx("span", {
                                         style: {
                                           background: a.border,
-                                          color: a.accent,
+                                          color: a.accentTxt,
                                           padding: "2px 9px",
                                           borderRadius: 20,
                                           fontSize: 12,
@@ -33913,7 +33919,7 @@ ${r.empresa}`;
                 style: { fontSize: 14, color: a.muted },
                 children: [
                   e.jsx("span", {
-                    style: { color: a.accent, fontWeight: 600 },
+                    style: { color: a.accentTxt, fontWeight: 600 },
                     children: t ? t.desc : i.nombre,
                   }),
                   " · ",
@@ -34108,7 +34114,7 @@ ${r.empresa}`;
                             style: {
                               fontSize: 14,
                               fontWeight: 700,
-                              color: S > 0 ? "#60a5fa" : a.muted,
+                              color: S > 0 ? a.infoTxt : a.muted,
                             },
                             children: ne(Math.round(S)),
                           }),
@@ -34252,7 +34258,7 @@ ${r.empresa}`;
                                               children: [mat.nombre, " (", mat.unidad, ")"]
                                             }),
                                             e.jsxs("span", {
-                                              style: { color: "#60a5fa", fontWeight: 600, whiteSpace: "nowrap" },
+                                              style: { color: a.infoTxt, fontWeight: 600, whiteSpace: "nowrap" },
                                               children: ["- $", mat.precio.toLocaleString("es-CL")]
                                             })
                                           ]
@@ -34262,7 +34268,7 @@ ${r.empresa}`;
                                   }, cat)
                                 )
                               : e.jsx("div", {
-                                  style: { padding: "12px", color: "#f87171", fontSize: 12, textAlign: "center" },
+                                  style: { padding: "12px", color: a.dangerTxt, fontSize: 12, textAlign: "center" },
                                   children: "No se encontraron materiales"
                                 })
                           })
@@ -34368,7 +34374,7 @@ ${r.empresa}`;
                       style: {
                         fontSize: 11,
                         fontWeight: 700,
-                        color: "#34d399",
+                        color: a.okTxt,
                         background: "#34d39922",
                         border: "1px solid #34d39955",
                         borderRadius: 6,
@@ -34424,7 +34430,7 @@ ${r.empresa}`;
                         style: {
                           fontSize: 24,
                           fontWeight: 700,
-                          color: a.accent,
+                          color: a.accentTxt,
                         },
                         children: ne(k),
                       }),
@@ -34448,7 +34454,7 @@ ${r.empresa}`;
                           style: {
                             fontSize: 16,
                             fontWeight: 700,
-                            color: "#34d399",
+                            color: a.okTxt,
                           },
                           children: ne(k * n),
                         }),
@@ -34561,7 +34567,7 @@ ${r.empresa}`;
                         style: {
                           fontSize: 18,
                           fontWeight: 800,
-                          color: "#c084fc",
+                          color: a.violetTxt,
                         },
                         children:
                           (parseFloat(g) || 0) > 0
@@ -34603,7 +34609,7 @@ ${r.empresa}`;
                           style: {
                             fontSize: 14,
                             fontWeight: 700,
-                            color: "#c084fc",
+                            color: a.violetTxt,
                           },
                           children: [
                             Math.ceil(n / (parseFloat(g) || 1)),
@@ -35090,7 +35096,7 @@ ${r.empresa}`;
                         style: {
                           fontSize: 11,
                           fontWeight: 700,
-                          color: "#60a5fa",
+                          color: a.infoTxt,
                           marginBottom: 4,
                           textTransform: "uppercase",
                           letterSpacing: ".06em",
@@ -35128,7 +35134,7 @@ ${r.empresa}`;
                         style: {
                           fontSize: 11,
                           fontWeight: 700,
-                          color: "#c084fc",
+                          color: a.violetTxt,
                           marginBottom: 4,
                           textTransform: "uppercase",
                           letterSpacing: ".06em",
@@ -35191,7 +35197,7 @@ ${r.empresa}`;
                               style: {
                                 fontSize: 16,
                                 fontWeight: 700,
-                                color: "#c084fc",
+                                color: a.violetTxt,
                                 marginTop: 4,
                               },
                               children: ne(h),
@@ -35303,7 +35309,7 @@ ${r.empresa}`;
                                 style: u(d({}, c.th), {
                                   padding: "8px 10px",
                                   textAlign: "center",
-                                  color: "#60a5fa",
+                                  color: a.infoTxt,
                                 }),
                                 children: "Cant. A",
                               }),
@@ -35311,7 +35317,7 @@ ${r.empresa}`;
                                 style: u(d({}, c.th), {
                                   padding: "8px 10px",
                                   textAlign: "right",
-                                  color: "#60a5fa",
+                                  color: a.infoTxt,
                                 }),
                                 children: "Precio A",
                               }),
@@ -35319,7 +35325,7 @@ ${r.empresa}`;
                                 style: u(d({}, c.th), {
                                   padding: "8px 10px",
                                   textAlign: "right",
-                                  color: "#60a5fa",
+                                  color: a.infoTxt,
                                 }),
                                 children: "Total A",
                               }),
@@ -35327,7 +35333,7 @@ ${r.empresa}`;
                                 style: u(d({}, c.th), {
                                   padding: "8px 10px",
                                   textAlign: "center",
-                                  color: "#c084fc",
+                                  color: a.violetTxt,
                                 }),
                                 children: "Cant. B",
                               }),
@@ -35335,7 +35341,7 @@ ${r.empresa}`;
                                 style: u(d({}, c.th), {
                                   padding: "8px 10px",
                                   textAlign: "right",
-                                  color: "#c084fc",
+                                  color: a.violetTxt,
                                 }),
                                 children: "Precio B",
                               }),
@@ -35343,7 +35349,7 @@ ${r.empresa}`;
                                 style: u(d({}, c.th), {
                                   padding: "8px 10px",
                                   textAlign: "right",
-                                  color: "#c084fc",
+                                  color: a.violetTxt,
                                 }),
                                 children: "Total B",
                               }),
@@ -35434,7 +35440,7 @@ ${r.empresa}`;
                                     style: u(d({}, c.td), {
                                       padding: "7px 10px",
                                       textAlign: "center",
-                                      color: "#60a5fa",
+                                      color: a.infoTxt,
                                     }),
                                     children: f ? f.cant : "—",
                                   }),
@@ -35442,7 +35448,7 @@ ${r.empresa}`;
                                     style: u(d({}, c.td), {
                                       padding: "7px 10px",
                                       textAlign: "right",
-                                      color: "#60a5fa",
+                                      color: a.infoTxt,
                                     }),
                                     children: f
                                       ? ne(parseFloat(f.precio) || 0)
@@ -35453,7 +35459,7 @@ ${r.empresa}`;
                                       padding: "7px 10px",
                                       textAlign: "right",
                                       fontWeight: 600,
-                                      color: "#60a5fa",
+                                      color: a.infoTxt,
                                     }),
                                     children:
                                       D !== null ? ne(Math.round(D)) : "—",
@@ -35462,7 +35468,7 @@ ${r.empresa}`;
                                     style: u(d({}, c.td), {
                                       padding: "7px 10px",
                                       textAlign: "center",
-                                      color: "#c084fc",
+                                      color: a.violetTxt,
                                     }),
                                     children: I ? I.cant : "—",
                                   }),
@@ -35470,7 +35476,7 @@ ${r.empresa}`;
                                     style: u(d({}, c.td), {
                                       padding: "7px 10px",
                                       textAlign: "right",
-                                      color: "#c084fc",
+                                      color: a.violetTxt,
                                     }),
                                     children: I
                                       ? ne(parseFloat(I.precio) || 0)
@@ -35481,7 +35487,7 @@ ${r.empresa}`;
                                       padding: "7px 10px",
                                       textAlign: "right",
                                       fontWeight: 600,
-                                      color: "#c084fc",
+                                      color: a.violetTxt,
                                     }),
                                     children:
                                       k !== null ? ne(Math.round(k)) : "—",
@@ -35645,7 +35651,7 @@ ${r.empresa}`;
                 style: {
                   fontSize: 12,
                   fontWeight: 700,
-                  color: a.accent,
+                  color: a.accentTxt,
                   marginBottom: 6,
                 },
                 children: [t.items.length, " partidas incluidas:"],
@@ -36274,7 +36280,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
             l.preguntasIniciales && l.preguntasIniciales.length > 0 && e.jsxs("div", {
               style: { background: a.sb, padding: 12, borderRadius: 8, border: `1px solid ${a.border}` },
               children: [
-                e.jsx("div", { style: { fontWeight: 700, marginBottom: 8, fontSize: 12, color: a.accent }, children: "Preguntas de Referencia (para ajustar opcionales):" }),
+                e.jsx("div", { style: { fontWeight: 700, marginBottom: 8, fontSize: 12, color: a.accentTxt }, children: "Preguntas de Referencia (para ajustar opcionales):" }),
                 ...l.preguntasIniciales.map((p, idx) => e.jsx("div", { style: { fontSize: 12, color: a.text, marginBottom: 4 }, children: `• ${p}` }, idx))
               ]
             }),
@@ -36282,7 +36288,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
             l.advertencias && l.advertencias.length > 0 && e.jsxs("div", {
               style: { background: "rgba(251,146,60,0.1)", padding: 12, borderRadius: 8, border: "1px solid #fb923c" },
               children: [
-                e.jsx("div", { style: { fontWeight: 700, marginBottom: 8, fontSize: 12, color: "#fb923c" }, children: "⚠️ Advertencias:" }),
+                e.jsx("div", { style: { fontWeight: 700, marginBottom: 8, fontSize: 12, color: a.warnTxt }, children: "⚠️ Advertencias:" }),
                 ...l.advertencias.map((ad, idx) => e.jsx("div", { style: { fontSize: 12, color: a.text, marginBottom: 4 }, children: `• ${ad}` }, idx))
               ]
             }),
@@ -36293,7 +36299,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
               children: (l.capitulos || []).map((cap, cIdx) => e.jsxs("div", {
                 style: { marginBottom: 12 },
                 children: [
-                  e.jsx("div", { style: { fontWeight: 700, fontSize: 13, marginBottom: 6, color: a.accent }, children: cap.nombre }),
+                  e.jsx("div", { style: { fontWeight: 700, fontSize: 13, marginBottom: 6, color: a.accentTxt }, children: cap.nombre }),
                   ...(cap.partidasDirectas || []).map((pd, pIdx) => {
                     var catItem = catalogPorId.get(pd.catalogId);
                     if(!catItem) return null;
@@ -36340,12 +36346,12 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
               style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 10, padding: 12, background: a.sb, borderRadius: 8 },
               children: [
                 e.jsx("div", { style: { fontSize: 14, fontWeight: 700 }, children: "Total Estimado:" }),
-                e.jsx("div", { style: { fontSize: 18, fontWeight: 700, color: a.accent }, children: ne(calcularTotalModerna()) })
+                e.jsx("div", { style: { fontSize: 18, fontWeight: 700, color: a.accentTxt }, children: ne(calcularTotalModerna()) })
               ]
             }),
 
             itemsParaCargar === 0 && e.jsx("div", {
-              style: { color: "#ef4444", fontSize: 13, textAlign: "center", marginTop: 10, fontWeight: 600 },
+              style: { color: a.dangerTxt, fontSize: 13, textAlign: "center", marginTop: 10, fontWeight: 600 },
               children: "⚠️ Selecciona al menos una partida para continuar."
             }),
             e.jsxs("div", {
@@ -36519,7 +36525,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
                         },
                         children: [
                           e.jsxs("span", {
-                            style: { fontSize: 11, color: a.accent },
+                            style: { fontSize: 11, color: a.accentTxt },
                             children: [(b.items ? b.items.length : (b.capitulos ? "Varias" : 0)), " partidas"],
                           }),
                           b.esUsuario &&
@@ -36545,7 +36551,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
                             border: "none",
                             cursor: "pointer",
                             fontSize: 14,
-                            color: "#f87171",
+                            color: a.dangerTxt,
                             opacity: 0.6,
                             padding: "2px 5px",
                           },
@@ -36571,7 +36577,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
                   style: {
                     fontSize: 12,
                     fontWeight: 700,
-                    color: a.accent,
+                    color: a.accentTxt,
                     marginBottom: 8,
                   },
                   children: "Partidas incluidas:",
@@ -36701,7 +36707,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
                     style: {
                       fontSize: 10,
                       background: "var(--bdg-pend-bg)",
-                      color: "#fb923c",
+                      color: a.warnTxt,
                       border: "1px solid #7c2d12",
                       borderRadius: 6,
                       padding: "2px 7px",
@@ -36870,7 +36876,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
                                         style: {
                                           fontSize: 9,
                                           background: "var(--bdg-pend-bg)",
-                                          color: "#60a5fa",
+                                          color: a.infoTxt,
                                           padding: "1px 5px",
                                           borderRadius: 4,
                                           fontWeight: 700,
@@ -36915,7 +36921,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
                                   style: {
                                     fontSize: 13,
                                     fontWeight: 700,
-                                    color: w ? "#fb923c" : o.accent,
+                                    color: w ? a.warnTxt : o.accent,
                                   },
                                   children: m(v.precio, p),
                                 }),
@@ -36927,7 +36933,7 @@ function AsistenteInteligenteModal({ catalog, onClose, onGenerarPropuesta, paso,
                                     w &&
                                       e.jsx("span", {
                                         style: {
-                                          color: "#fb923c",
+                                          color: a.warnTxt,
                                           marginLeft: 3,
                                         },
                                         children: "⚠️",
@@ -39575,7 +39581,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                 border: "none",
                                 cursor: "pointer",
                                 fontSize: 15,
-                                color: a.accent,
+                                color: a.accentTxt,
                                 padding: "2px 4px",
                                 flexShrink: 0,
                               },
@@ -39869,7 +39875,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                           border: "none",
                                           cursor: "pointer",
                                           fontSize: 15,
-                                          color: a.accent,
+                                          color: a.accentTxt,
                                           padding: "2px 4px",
                                           flexShrink: 0,
                                         },
@@ -39886,7 +39892,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                           border: "none",
                                           cursor: "pointer",
                                           fontSize: 15,
-                                          color: U ? "#34d399" : a.muted,
+                                          color: U ? a.okTxt : a.muted,
                                           padding: "2px 4px",
                                           flexShrink: 0,
                                         },
@@ -40026,7 +40032,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                       border: `1px dashed ${a.border}`,
                                       borderRadius: 8,
                                       padding: "7px",
-                                      color: a.accent,
+                                      color: a.accentTxt,
                                       cursor: "pointer",
                                       fontSize: 12,
                                       fontWeight: 600,
@@ -41116,7 +41122,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                                         e.jsx("div", {
                                           style: {
                                             fontSize: 10,
-                                            color: "#f5a020",
+                                            color: a.accentTxt,
                                             marginBottom: 3,
                                             fontWeight: 700,
                                           },
@@ -41333,7 +41339,7 @@ ${re.getDate()}/${re.getMonth() + 1}`,
                           border: `1px dashed ${a.border}`,
                           borderRadius: 8,
                           padding: "9px",
-                          color: a.accent,
+                          color: a.accentTxt,
                           cursor: "pointer",
                           fontSize: 13,
                           fontWeight: 600,
@@ -41786,7 +41792,7 @@ MATERIALES:
                           border: `1px dashed ${a.border}`,
                           borderRadius: 8,
                           padding: "8px",
-                          color: a.accent,
+                          color: a.accentTxt,
                           cursor: "pointer",
                           fontSize: 13,
                           fontWeight: 600,
@@ -42041,7 +42047,7 @@ MATERIALES:
                                               e.jsxs("div", {
                                                 style: {
                                                   fontSize: 11,
-                                                  color: a.accent,
+                                                  color: a.accentTxt,
                                                   marginTop: 1,
                                                 },
                                                 children: [
@@ -42392,7 +42398,7 @@ MATERIALES:
                                 children: e.jsxs("a", {
                                   href: `tel:${j.telefono}`,
                                   style: {
-                                    color: a.accent,
+                                    color: a.accentTxt,
                                     textDecoration: "none",
                                   },
                                   children: ["📞 ", j.telefono],
@@ -42407,7 +42413,7 @@ MATERIALES:
                                 children: e.jsxs("a", {
                                   href: `mailto:${j.email}`,
                                   style: {
-                                    color: a.accent,
+                                    color: a.accentTxt,
                                     textDecoration: "none",
                                   },
                                   children: ["✉️ ", j.email],
@@ -43236,8 +43242,8 @@ MATERIALES:
                 e.jsx("span", { style: { fontSize: 11, color: a.muted }, children: catItem.unidad }),
               ]}),
               e.jsx("div", { style: { fontSize: 11, color: a.muted, marginTop: 3 }, children: "P.Unit: " + ne(catItem.precio, cfg) }),
-              linea && e.jsx("div", { style: { fontSize: 12, fontWeight: 700, color: a.accent, marginTop: 2 }, children: ne(linea.totalLinea, cfg) }),
-              linea && linea.reglaAplicada && e.jsx("div", { style: { fontSize: 9, color: "#fb923c", marginTop: 2 }, children: "⚠️ mínimo comercial aplicado" }),
+              linea && e.jsx("div", { style: { fontSize: 12, fontWeight: 700, color: a.accentTxt, marginTop: 2 }, children: ne(linea.totalLinea, cfg) }),
+              linea && linea.reglaAplicada && e.jsx("div", { style: { fontSize: 9, color: a.warnTxt, marginTop: 2 }, children: "⚠️ mínimo comercial aplicado" }),
             ]}),
           ],
         },
@@ -43293,7 +43299,7 @@ MATERIALES:
           var miembros = solucion.partidas.filter((p) => p.grupoSeleccion === g);
           var opcional = miembros[0] && miembros[0].seleccionMinima === 0;
           return e.jsxs("div", { key: g, style: { marginTop: 6 }, children: [
-            e.jsx("div", { style: { fontSize: 11, fontWeight: 700, color: a.accent, marginTop: 8 }, children: "Elige una opción" + (opcional ? " (o ninguna)" : "") + ":" }),
+            e.jsx("div", { style: { fontSize: 11, fontWeight: 700, color: a.accentTxt, marginTop: 8 }, children: "Elige una opción" + (opcional ? " (o ninguna)" : "") + ":" }),
             opcional && e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 8, padding: "4px 0" }, children: [
               e.jsx("input", { type: "radio", name: g, checked: grupoElegido[g] == null, onChange: () => setGrupoElegido((prev) => u(d({}, prev), { [g]: null })) }),
               e.jsx("span", { style: { fontSize: 12, color: a.muted }, children: "Ninguna de estas opciones" }),
@@ -43392,7 +43398,7 @@ MATERIALES:
                 borderRadius: 8,
                 padding: "8px 12px",
                 fontSize: 12,
-                color: "#fb923c",
+                color: a.warnTxt,
                 marginBottom: 24,
               },
               children: "⚠️ También falta la descripción de la obra.",
@@ -44491,7 +44497,7 @@ K &&
           },
           children: [
             e.jsxs("div", { children: [
-              e.jsx("div", { style: { color: a.accent, fontSize: 12, fontWeight: 900 }, children: "🔒 PRESUPUESTO VINCULADO A LICITACIÓN" }),
+              e.jsx("div", { style: { color: a.accentTxt, fontSize: 12, fontWeight: 900 }, children: "🔒 PRESUPUESTO VINCULADO A LICITACIÓN" }),
               e.jsx("div", { style: { color: a.text, fontSize: 13, fontWeight: 700, marginTop: 3 }, children: "ID Mercado Público " + I.licitacionIdMP }),
               I.licitacionNombre && e.jsx("div", { style: { color: a.muted, fontSize: 11, marginTop: 2 }, children: I.licitacionNombre }),
             ] }),
@@ -44927,7 +44933,7 @@ K &&
                               cursor: "pointer",
                             },
                             children: [
-                              e.jsx("button", { title: estaContraido ? "Expandir capítulo" : "Contraer capítulo", onClick: (ev) => { ev.stopPropagation(); setCapitulosContraidos((actual) => u(d({}, actual), { [claveContraido]: !actual[claveContraido] })); }, style: { background: "transparent", border: "none", color: a.accent, cursor: "pointer", fontSize: 13 }, children: estaContraido ? "▶" : "▼" }),
+                              e.jsx("button", { title: estaContraido ? "Expandir capítulo" : "Contraer capítulo", onClick: (ev) => { ev.stopPropagation(); setCapitulosContraidos((actual) => u(d({}, actual), { [claveContraido]: !actual[claveContraido] })); }, style: { background: "transparent", border: "none", color: a.accentTxt, cursor: "pointer", fontSize: 13 }, children: estaContraido ? "▶" : "▼" }),
                               !esSinCapitulo &&
                                 e.jsxs("div", {
                                   style: { display: "flex", flexDirection: "column", gap: 1 },
@@ -44982,7 +44988,7 @@ K &&
                                       style: u(d({}, c.inp), { flex: 1, fontWeight: 700, fontSize: 13, padding: "4px 6px" }),
                                     }),
                                 e.jsxs("div", { style: { fontSize: 12, color: a.muted, whiteSpace: "nowrap" }, children: [cantidadPartidas, cantidadPartidas === 1 ? " partida" : " partidas"] }),
-                                e.jsxs("div", { style: { fontSize: 12, color: a.accent, fontWeight: 700, whiteSpace: "nowrap" }, children: ["Subtotal: ", ne(Math.round(subtotal))] }),
+                                e.jsxs("div", { style: { fontSize: 12, color: a.accentTxt, fontWeight: 700, whiteSpace: "nowrap" }, children: ["Subtotal: ", ne(Math.round(subtotal))] }),
                                 !esSinCapitulo &&
                                   e.jsx("button", {
                                     title: "Eliminar capítulo",
@@ -45086,7 +45092,7 @@ K &&
                                     background: a.sb,
                                     border: `1px solid ${a.border}`,
                                     borderRadius: 6,
-                                    color: "#34d399",
+                                    color: a.okTxt,
                                     cursor: "pointer",
                                     fontSize: 14,
                                     padding: "4px 5px",
@@ -45130,7 +45136,7 @@ K &&
                                         textAlign: "right",
                                         borderColor: W._cid && U ? "#7c2d12" : void 0,
                                         fontWeight: 700,
-                                        color: "#34d399",
+                                        color: a.okTxt,
                                       }),
                                       type: "number",
                                       value: Math.round(W.precio || 0),
@@ -45154,7 +45160,7 @@ K &&
                                     }),
                                     W._cid && U && e.jsx("span", {
                                       title: "Precio puede estar desactualizado (+90 días)",
-                                      style: { position: "absolute", right: -16, fontSize: 12, color: "#fb923c", cursor: "help" },
+                                      style: { position: "absolute", right: -16, fontSize: 12, color: a.warnTxt, cursor: "help" },
                                       children: "⚠",
                                     })
                                   ]
@@ -45164,7 +45170,7 @@ K &&
                                     fontSize: 13,
                                     padding: "6px 8px",
                                     textAlign: "right",
-                                    color: "#f5a020",
+                                    color: a.accentTxt,
                                     fontWeight: 600,
                                   }),
                                   type: "number",
@@ -45189,7 +45195,7 @@ K &&
                                     fontSize: 13,
                                     padding: "6px 8px",
                                     textAlign: "right",
-                                    color: "#60a5fa",
+                                    color: a.infoTxt,
                                     fontWeight: 600,
                                   }),
                                   type: "number",
@@ -45223,7 +45229,7 @@ K &&
                                           style: {
                                             fontSize: 13,
                                             fontWeight: 700,
-                                            color: a.accent,
+                                            color: a.accentTxt,
                                           },
                                           children: (() => {
                                             var Lrow = calcularLineaPresupuesto(W),
@@ -45298,9 +45304,9 @@ K &&
                                             return e.jsxs("div", {
                                               style: { display: "flex", flexDirection: "column", alignItems: "flex-end", fontSize: 10, lineHeight: 1.2 },
                                               children: [
-                                                e.jsxs("span", { style: { color: "#f5a020" }, children: ["MAT ", ne(mt)] }),
-                                                e.jsxs("span", { style: { color: "#60a5fa" }, children: ["+ MO ", ne(nm)] }),
-                                                e.jsxs("span", { style: { color: "#34d399", fontSize: 12, borderTop: "1px solid " + a.border, paddingTop: 2, marginTop: 1 }, children: ["= ", ne(tt)] })
+                                                e.jsxs("span", { style: { color: a.accentTxt }, children: ["MAT ", ne(mt)] }),
+                                                e.jsxs("span", { style: { color: a.infoTxt }, children: ["+ MO ", ne(nm)] }),
+                                                e.jsxs("span", { style: { color: a.okTxt, fontSize: 12, borderTop: "1px solid " + a.border, paddingTop: 2, marginTop: 1 }, children: ["= ", ne(tt)] })
                                               ]
                                             });
                                           })(),
@@ -45337,7 +45343,7 @@ K &&
                                             style: {
                                               fontSize: 12,
                                               fontWeight: 600,
-                                              color: "#60a5fa",
+                                              color: a.infoTxt,
                                             },
                                             children: Q,
                                           })
@@ -45425,7 +45431,7 @@ K &&
                                       borderRadius: 6,
                                       padding: "3px 10px",
                                       fontSize: 12,
-                                      color: E ? "#34d399" : "#60a5fa",
+                                      color: E ? a.okTxt : a.infoTxt,
                                       cursor: "pointer",
                                       fontWeight: 600,
                                       flexShrink: 0,
@@ -45490,12 +45496,12 @@ K &&
                       children: [
                         "Referencia informativa. Los factores se aplican dentro de cada partida (APU). Para modificarlos ve a ",
                         e.jsx("strong", {
-                          style: { color: a.accent },
+                          style: { color: a.accentTxt },
                           children: "APU",
                         }),
                         " o ",
                         e.jsx("strong", {
-                          style: { color: a.accent },
+                          style: { color: a.accentTxt },
                           children: "Configuración",
                         }),
                         ".",
@@ -45550,7 +45556,7 @@ K &&
                       children: [
                         e.jsx("span", { children: "Factor total" }),
                         e.jsxs("span", {
-                          style: { color: a.accent, fontWeight: 700 },
+                          style: { color: a.accentTxt, fontWeight: 700 },
                           children: [(1 + (g + B + v) / 100).toFixed(3), "×"],
                         }),
                       ],
@@ -45629,7 +45635,7 @@ K &&
                     M = I.descuento ? Math.round(E * (r.descuento || 0.05)) : 0,
                     q = E - M,
                     J = Math.round(q * (r.anticipo || 0.6));
-                  if (!resumenAbierto) return e.jsxs("div", { onClick: () => setResumenAbierto(!0), style: u(d({}, c.card), { cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }), children: [e.jsx("span", { style: { fontWeight: 700, fontSize: 13, color: a.text }, children: "Resumen" }), e.jsx("span", { style: { color: a.accent, fontWeight: 800, fontSize: 14 }, children: ne(q) })] });
+                  if (!resumenAbierto) return e.jsxs("div", { onClick: () => setResumenAbierto(!0), style: u(d({}, c.card), { cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }), children: [e.jsx("span", { style: { fontWeight: 700, fontSize: 13, color: a.text }, children: "Resumen" }), e.jsx("span", { style: { color: a.accentTxt, fontWeight: 800, fontSize: 14 }, children: ne(q) })] });
                   var contenidoResumen = e.jsxs("div", {
                     style: u(d({}, c.card), { position: distribucionCompacta ? "relative" : "sticky", top: 0 }),
                     children: [
@@ -45767,14 +45773,14 @@ K &&
                           },
                           children: [
                             e.jsx("span", {
-                              style: { fontSize: 13, color: "#f87171" },
+                              style: { fontSize: 13, color: a.dangerTxt },
                               children: "− Descuento aplicado",
                             }),
                             e.jsxs("span", {
                               style: {
                                 fontSize: 14,
                                 fontWeight: 600,
-                                color: "#f87171",
+                                color: a.dangerTxt,
                               },
                               children: ["− ", ne(M)],
                             }),
@@ -45802,7 +45808,7 @@ K &&
                             style: {
                               fontSize: 14,
                               fontWeight: 700,
-                              color: "#34d399",
+                              color: a.okTxt,
                             },
                             children: "TOTAL",
                           }),
@@ -45810,7 +45816,7 @@ K &&
                             style: {
                               fontSize: 22,
                               fontWeight: 700,
-                              color: "#34d399",
+                              color: a.okTxt,
                             },
                             children: ne(q),
                           }),
@@ -46641,7 +46647,7 @@ K &&
                           e.jsxs("div", {
                             style: {
                               fontSize: 11,
-                              color: "#f5a020",
+                              color: a.accentTxt,
                               marginTop: 4,
                             },
                             children: [
@@ -46658,7 +46664,7 @@ K &&
                           style: {
                             fontSize: 12,
                             fontWeight: 700,
-                            color: a.accent,
+                            color: a.accentTxt,
                             marginBottom: 8,
                             textTransform: "uppercase",
                             letterSpacing: ".05em",
@@ -46714,7 +46720,7 @@ K &&
                                       style: {
                                         fontSize: 14,
                                         fontWeight: 700,
-                                        color: "#34d399",
+                                        color: a.okTxt,
                                       },
                                       children: [
                                         "$",
@@ -46751,7 +46757,7 @@ K &&
                           style: {
                             fontSize: 12,
                             fontWeight: 700,
-                            color: a.accent,
+                            color: a.accentTxt,
                             marginBottom: 10,
                             textTransform: "uppercase",
                           },
@@ -46914,7 +46920,7 @@ K &&
                             style: {
                               fontSize: 12,
                               fontWeight: 700,
-                              color: a.accent,
+                              color: a.accentTxt,
                               marginBottom: 8,
                               textTransform: "uppercase",
                               letterSpacing: ".05em",
@@ -47044,7 +47050,7 @@ K &&
                           style: {
                             fontSize: 12,
                             fontWeight: 700,
-                            color: a.accent,
+                            color: a.accentTxt,
                             marginBottom: 10,
                             textTransform: "uppercase",
                             letterSpacing: ".05em",
@@ -47172,7 +47178,7 @@ K &&
                                     }),
                                     e.jsxs("span", {
                                       style: {
-                                        color: "#34d399",
+                                        color: a.okTxt,
                                         fontWeight: 600,
                                       },
                                       children: ["→ ", ne(Y), " cobrable"],
@@ -47194,7 +47200,7 @@ K &&
                             style: {
                               fontSize: 12,
                               fontWeight: 700,
-                              color: a.accent,
+                              color: a.accentTxt,
                               marginBottom: 8,
                               textTransform: "uppercase",
                               letterSpacing: ".05em",
@@ -47238,7 +47244,7 @@ K &&
                                     style: {
                                       fontSize: 14,
                                       fontWeight: 700,
-                                      color: "#34d399",
+                                      color: a.okTxt,
                                     },
                                     children: ne(O.monto),
                                   }),
@@ -47276,7 +47282,7 @@ K &&
                           children: [
                             "Genera un documento oficial con el avance actual por partida. Monto a cobrar: ",
                             e.jsx("strong", {
-                              style: { color: a.accent },
+                              style: { color: a.accentTxt },
                               children: ne(Math.round(k)),
                             }),
                           ],
@@ -47325,13 +47331,13 @@ K &&
   var documentosObraConfig = [
     { id: "carta", tipo: "cartaCliente", icon: "✉️", label: "Carta de Presentación", desc: "Presentación comercial para acompañar un presupuesto particular", etapa: "Al presentar", categoria: "alPresentar", formatos: ["pdf", "docx"], editable: !0, color: "#3b82f6" },
     { id: "resumen", tipo: "resumenEjecutivo", icon: "📊", label: "Resumen Ejecutivo", desc: "Síntesis para el cliente cuando tiene dudas sobre el alcance", etapa: "Si hay dudas", categoria: "siHayDudas", formatos: ["pdf", "docx"], editable: !0, color: "#8b5cf6" },
-    { id: "negociacion", tipo: "hojaNegociacion", icon: "🤝", label: "Análisis de Negociación", desc: "Guía interna: qué ceder y qué no (confidencial)", etapa: "Si piden rebaja", categoria: "siPidenRebaja", formatos: ["pdf"], editable: !0, interno: !0, color: "#ef4444" },
-    { id: "contrato", tipo: "contratoObra", icon: "📄", label: "Contrato de Obra", desc: "Contrato formal con cláusulas, plazo y forma de pago", etapa: "Al cerrar", categoria: "alCerrar", formatos: ["pdf", "docx"], editable: !0, color: "#c084fc" },
-    { id: "pagos", tipo: "estadoPago", icon: "💰", label: "Estado de Pago / Acta", desc: "Registrar pagos y generar documentos de cobro con firma", etapa: "Al cobrar", categoria: "alCobrar", formatos: ["pdf", "xlsx"], editable: !0, color: "#f59e0b" },
+    { id: "negociacion", tipo: "hojaNegociacion", icon: "🤝", label: "Análisis de Negociación", desc: "Guía interna: qué ceder y qué no (confidencial)", etapa: "Si piden rebaja", categoria: "siPidenRebaja", formatos: ["pdf"], editable: !0, interno: !0, color: a.dangerTxt },
+    { id: "contrato", tipo: "contratoObra", icon: "📄", label: "Contrato de Obra", desc: "Contrato formal con cláusulas, plazo y forma de pago", etapa: "Al cerrar", categoria: "alCerrar", formatos: ["pdf", "docx"], editable: !0, color: a.violetTxt },
+    { id: "pagos", tipo: "estadoPago", icon: "💰", label: "Estado de Pago / Acta", desc: "Registrar pagos y generar documentos de cobro con firma", etapa: "Al cobrar", categoria: "alCobrar", formatos: ["pdf", "xlsx"], editable: !0, color: a.accentTxt },
     { id: "informe", tipo: "informeEntrega", icon: "📋", label: "Informe de Entrega", desc: "Informe de entrega de obra emitido por el contratista", etapa: "Entrega final", categoria: "entregaFinal", formatos: ["pdf", "docx"], editable: !0, color: "#14b8a6" },
     { id: "desglose", tipo: "desgloseInterno", icon: "📊", label: "Desglose Interno", desc: "Desglose por partida: materiales, MO, GG y utilidad", etapa: "Uso interno", categoria: "usoInterno", formatos: ["pdf", "xlsx"], editable: !0, interno: !0, color: "#1e3a5f" },
     { id: "dotacion", tipo: "resumenDotacion", icon: "👷", label: "Resumen de Dotación", desc: "HH estimadas y monto a pagar por rol", etapa: "Uso interno", categoria: "usoInterno", formatos: ["pdf", "xlsx"], editable: !0, interno: !0, color: "#14532d" },
-    { id: "cotizacion", tipo: "cotizacionFormal", icon: "📄", label: "Cotización Formal", desc: "Cotización comercial formal con selección de partidas", etapa: "Comercial", categoria: "comercial", formatos: ["pdf", "docx"], editable: !0, color: "#38bdf8" },
+    { id: "cotizacion", tipo: "cotizacionFormal", icon: "📄", label: "Cotización Formal", desc: "Cotización comercial formal con selección de partidas", etapa: "Comercial", categoria: "comercial", formatos: ["pdf", "docx"], editable: !0, color: a.infoTxt },
   ];
   function obtenerDocumentoObraConfig(presupuesto, tipo) {
     if (!presupuesto) return null;
@@ -47717,7 +47723,7 @@ K &&
           e.jsxs("div", {
             style: {
               fontSize: 11,
-              color: a.accent,
+              color: a.accentTxt,
               fontWeight: 600,
               marginBottom: 16,
             },
@@ -48484,7 +48490,7 @@ K &&
                           textAlign: "right",
                           fontWeight: 700,
                           fontSize: 13,
-                          color: a.accent,
+                          color: a.accentTxt,
                           whiteSpace: "nowrap",
                         },
                         children: new Intl.NumberFormat("es-CL", {
@@ -48535,7 +48541,7 @@ K &&
                         style: {
                           fontSize: 16,
                           fontWeight: 700,
-                          color: a.accent,
+                          color: a.accentTxt,
                         },
                         children: new Intl.NumberFormat("es-CL", {
                           style: "currency",
@@ -48681,7 +48687,7 @@ K &&
                     children: ["N° ", Y.id, " — ", Y.descripcion],
                   }),
                   e.jsx("div", {
-                    style: { fontSize: 12, color: "#f87171", marginBottom: 24 },
+                    style: { fontSize: 12, color: a.dangerTxt, marginBottom: 24 },
                     children: "Esta acción no se puede deshacer.",
                   }),
                   e.jsxs("div", {
@@ -48729,7 +48735,7 @@ K &&
                   e.jsx("button", { type: "button", onClick: function () { setLinkingBudget(null); }, style: u(d({}, c.btn("s")), { padding: "5px 9px", fontSize: 16 }), children: "×" }),
                 ] }),
                 linkingBudget.licitacionIdMP && e.jsxs("div", { style: { padding: "10px 12px", marginBottom: 13, background: "rgba(245,160,32,.10)", border: "1px solid rgba(245,160,32,.45)", borderRadius: 8 }, children: [
-                  e.jsx("div", { style: { color: a.accent, fontSize: 11, fontWeight: 900 }, children: "🔒 VÍNCULO ACTUAL" }),
+                  e.jsx("div", { style: { color: a.accentTxt, fontSize: 11, fontWeight: 900 }, children: "🔒 VÍNCULO ACTUAL" }),
                   e.jsx("div", { style: { color: a.text, fontSize: 13, fontWeight: 700, marginTop: 3 }, children: "Licitación " + linkingBudget.licitacionIdMP }),
                   linkingBudget.licitacionNombre && e.jsx("div", { style: { color: a.muted, fontSize: 11, marginTop: 2 }, children: linkingBudget.licitacionNombre }),
                 ] }),
@@ -48769,7 +48775,7 @@ K &&
                       style: {
                         fontSize: 13,
                         fontWeight: 700,
-                        color: E ? "#f87171" : "#10b981",
+                        color: E ? a.dangerTxt : a.okTxt,
                       },
                       children: E ? "🔒 Límite alcanzado" : "🎁 Plan Starter",
                     }),
@@ -48781,7 +48787,7 @@ K &&
                 }),
                 E &&
                   e.jsx("span", {
-                    style: { fontSize: 11, color: "#fbbf24" },
+                    style: { fontSize: 11, color: a.accentTxt },
                     children:
                       "Actualiza al plan Básico ($59.990) para presupuestos ilimitados, historial completo y contratos",
                   }),
@@ -48912,7 +48918,7 @@ K &&
                                 style: u(d({}, c.td), { fontWeight: 700 }),
                                 children: [
                                   e.jsx("span", {
-                                    style: { color: a.accent },
+                                    style: { color: a.accentTxt },
                                     children: Q.id,
                                   }),
                                   Q.notasInternas &&
@@ -48952,7 +48958,7 @@ K &&
                                                 borderRadius: 999,
                                                 background: "rgba(251,146,60,.10)",
                                                 border: "1px solid rgba(251,146,60,.4)",
-                                                color: "#fb923c",
+                                                color: a.warnTxt,
                                                 fontSize: 9.5,
                                                 fontWeight: 800,
                                                 whiteSpace: "nowrap",
@@ -48962,7 +48968,7 @@ K &&
                                           : null,
                                   }),
                                   e.jsx("div", { title: Q.descripcion || "", style: { color: a.muted, fontSize: 12, marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: Q.descripcion }),
-                                  Q.licitacionIdMP && e.jsxs("div", { title: Q.licitacionNombre || "Presupuesto vinculado a Mercado Público", style: { display: "inline-flex", alignItems: "center", gap: 4, marginTop: 4, padding: "2px 6px", borderRadius: 999, background: "rgba(245,160,32,.10)", border: "1px solid rgba(245,160,32,.4)", color: a.accent, fontSize: 9.5, fontWeight: 800, whiteSpace: "nowrap" }, children: [e.jsx("span", { children: "🔒" }), e.jsx("span", { children: "Licitación " + Q.licitacionIdMP })] }),
+                                  Q.licitacionIdMP && e.jsxs("div", { title: Q.licitacionNombre || "Presupuesto vinculado a Mercado Público", style: { display: "inline-flex", alignItems: "center", gap: 4, marginTop: 4, padding: "2px 6px", borderRadius: 999, background: "rgba(245,160,32,.10)", border: "1px solid rgba(245,160,32,.4)", color: a.accentTxt, fontSize: 9.5, fontWeight: 800, whiteSpace: "nowrap" }, children: [e.jsx("span", { children: "🔒" }), e.jsx("span", { children: "Licitación " + Q.licitacionIdMP })] }),
                                 ] }),
                               }),
                               e.jsx("td", {
@@ -48994,7 +49000,7 @@ K &&
                               e.jsx("td", {
                                 style: u(d({}, c.td), {
                                   fontWeight: 600,
-                                  color: a.accent,
+                                  color: a.accentTxt,
                                   whiteSpace: "nowrap",
                                 }),
                                 children: ne(ce),
@@ -49096,7 +49102,7 @@ K &&
                                           {
                                             icon: "⬇",
                                             label: "Descargar PDF",
-                                            color: a.accent,
+                                            color: a.accentTxt,
                                             action: () => {
                                               (x(Q), I(null));
                                             },
@@ -49104,7 +49110,7 @@ K &&
                                           {
                                             icon: "📁",
                                             label: "Documentos de Obra",
-                                            color: "#c084fc",
+                                            color: a.violetTxt,
                                             action: () => {
                                               (U(Q), I(null));
                                             },
@@ -49112,7 +49118,7 @@ K &&
                                           {
                                             icon: "📲",
                                             label: "Compartir por WhatsApp",
-                                            color: "#34d399",
+                                            color: a.okTxt,
                                             action: () => {
                                               (P({ budget: Q, client: G }),
                                                 I(null));
@@ -49129,7 +49135,7 @@ K &&
                                           {
                                             icon: "🧱",
                                             label: "Materiales por Obra",
-                                            color: "#60a5fa",
+                                            color: a.infoTxt,
                                             action: () => {
                                               (p(Q), I(null));
                                             },
@@ -49170,7 +49176,7 @@ K &&
                                           {
                                             icon: "⚖️",
                                             label: "Comparar versiones",
-                                            color: "#60a5fa",
+                                            color: a.infoTxt,
                                             action: () => {
                                               (K(Q), I(null));
                                             },
@@ -49178,7 +49184,7 @@ K &&
                                           {
                                             icon: "📌",
                                             label: "Guardar como plantilla",
-                                            color: "#fbbf24",
+                                            color: a.accentTxt,
                                             action: () => {
                                               (k(Q), I(null));
                                             },
@@ -49186,7 +49192,7 @@ K &&
                                           {
                                             icon: "🛒",
                                             label: "📦 Centro de Adquisiciones",
-                                            color: "#f5a020",
+                                            color: a.accentTxt,
                                             action: () => {
                                               (setOcBudget(Q), I(null));
                                             },
@@ -49194,7 +49200,7 @@ K &&
                                           {
                                             icon: Q.licitacionIdMP ? "🔒" : "🔗",
                                             label: Q.licitacionIdMP ? "Cambiar licitación vinculada" : "Vincular a licitación",
-                                            color: "#f5a020",
+                                            color: a.accentTxt,
                                             action: () => {
                                               (setLinkingBudget(Q), I(null));
                                             },
@@ -49202,7 +49208,7 @@ K &&
                                           {
                                             icon: "📄",
                                             label: "Cotización Formal",
-                                            color: "#38bdf8",
+                                            color: a.infoTxt,
                                             action: () => {
                                               if (onOpenDocument) onOpenDocument({ presupuestoId: Q.id, documentoTipo: "cotizacion", modo: "preview" });
                                               I(null);
@@ -49211,7 +49217,7 @@ K &&
                                           {
                                             icon: "✕",
                                             label: "Eliminar",
-                                            color: "#f87171",
+                                            color: a.dangerTxt,
                                             action: () => {
                                               (le(Q), I(null));
                                             },
@@ -50104,7 +50110,7 @@ K &&
                                     children: [
                                       e.jsxs("span", {
                                         style: {
-                                          color: "#f87171",
+                                          color: a.dangerTxt,
                                           fontWeight: 700,
                                           marginRight: 8,
                                         },
@@ -50118,7 +50124,7 @@ K &&
                                   }),
                                   e.jsx("div", {
                                     style: {
-                                      color: "#f87171",
+                                      color: a.dangerTxt,
                                       fontWeight: 700,
                                       whiteSpace: "nowrap",
                                     },
@@ -50163,7 +50169,7 @@ K &&
                           children: [
                             e.jsxs("span", {
                               style: {
-                                color: a.accent,
+                                color: a.accentTxt,
                                 fontWeight: 700,
                                 marginRight: 8,
                               },
@@ -50201,7 +50207,7 @@ K &&
                                 return e.jsxs("span", {
                                   style: {
                                     fontSize: 11,
-                                    color: "#34d399",
+                                    color: a.okTxt,
                                     fontWeight: 600,
                                   },
                                   children: ["💰 ", R, "% cobrado"],
@@ -50338,7 +50344,7 @@ K &&
                   children: F.nombre,
                 }),
                 e.jsx("div", {
-                  style: { fontSize: 12, color: "#f87171", marginBottom: 24 },
+                  style: { fontSize: 12, color: a.dangerTxt, marginBottom: 24 },
                   children: "Esta acción no se puede deshacer.",
                 }),
                 e.jsxs("div", {
@@ -50465,7 +50471,7 @@ K &&
                           style: {
                             fontSize: 22,
                             fontWeight: 800,
-                            color: "#f5a020",
+                            color: a.accentTxt,
                           },
                           children: (() => {
                             var S = new Set((r || []).map((O) => O.clienteId));
@@ -50494,7 +50500,7 @@ K &&
                           style: {
                             fontSize: 22,
                             fontWeight: 800,
-                            color: "#38bdf8",
+                            color: a.infoTxt,
                           },
                           children: t.filter((S) => S.email).length,
                         }),
@@ -50520,7 +50526,7 @@ K &&
                           style: {
                             fontSize: 22,
                             fontWeight: 800,
-                            color: "#4ade80",
+                            color: a.okTxt,
                           },
                           children: t.filter((S) => S.telefono).length,
                         }),
@@ -50773,7 +50779,7 @@ K &&
                             children: [
                               e.jsx("td", {
                                 style: u(d({}, c.td), {
-                                  color: a.accent,
+                                  color: a.accentTxt,
                                   fontWeight: 700,
                                   width: 32,
                                 }),
@@ -50813,7 +50819,7 @@ K &&
                                   ? e.jsx("a", {
                                       href: "mailto:" + I.email,
                                       style: {
-                                        color: "#38bdf8",
+                                        color: a.infoTxt,
                                         textDecoration: "none",
                                       },
                                       onClick: (K) => K.stopPropagation(),
@@ -50839,7 +50845,7 @@ K &&
                                       target: "_blank",
                                       rel: "noreferrer",
                                       style: {
-                                        color: "#4ade80",
+                                        color: a.okTxt,
                                         textDecoration: "none",
                                       },
                                       onClick: (K) => K.stopPropagation(),
@@ -50857,7 +50863,7 @@ K &&
                               e.jsx("td", {
                                 style: u(d({}, c.td), {
                                   fontWeight: 600,
-                                  color: k ? "#f87171" : "#34d399",
+                                  color: k ? a.dangerTxt : a.okTxt,
                                   fontSize: 13,
                                 }),
                                 children:
@@ -51289,7 +51295,7 @@ K &&
                       fontSize: 12,
                       fontWeight: 800,
                       background: difSignificativa ? "rgba(251,146,60,0.15)" : "rgba(52,211,153,0.15)",
-                      color: difSignificativa ? "#fb923c" : "#34d399",
+                      color: difSignificativa ? a.warnTxt : a.okTxt,
                       border: "1px solid " + (difSignificativa ? "#fb923c" : "#34d399"),
                     },
                     children: difSignificativa ? "⚠️ Revisar" : "✅ Coincide",
@@ -51867,7 +51873,7 @@ K &&
                             label: "Total partidas",
                             val: y,
                             sub: P.length + " categorías",
-                            color: a.accent,
+                            color: a.accentTxt,
                           },
                           {
                             label: "Precio promedio",
@@ -51884,7 +51890,7 @@ K &&
                               0,
                               18,
                             ),
-                            color: "#f87171",
+                            color: a.dangerTxt,
                           },
                           {
                             label: "Más barata",
@@ -51895,7 +51901,7 @@ K &&
                               0,
                               18,
                             ),
-                            color: "#4ade80",
+                            color: a.okTxt,
                           },
                         ].map((Z) =>
                           e.jsxs(
@@ -52286,7 +52292,7 @@ K &&
                         (rubroFiltro !== "Todos" || subrubroFiltro !== "Todos" || tipoFiltro !== "Todos") &&
                           e.jsx("button", {
                             onClick: () => { setRubroFiltro("Todos"); setSubrubroFiltro("Todos"); setTipoFiltro("Todos"); },
-                            style: { fontSize: 11, padding: "4px 10px", borderRadius: 6, border: "1px solid " + a.accent, background: "transparent", color: a.accent, cursor: "pointer", fontWeight: 700, marginTop: 18 },
+                            style: { fontSize: 11, padding: "4px 10px", borderRadius: 6, border: "1px solid " + a.accent, background: "transparent", color: a.accentTxt, cursor: "pointer", fontWeight: 700, marginTop: 18 },
                             children: "✕ Limpiar filtros",
                           }),
                       ],
@@ -52390,7 +52396,7 @@ K &&
                                             padding: "2px 6px",
                                             borderRadius: 8,
                                             border: "1px solid " + a.border,
-                                            color: "#f59e0b",
+                                            color: a.accentTxt,
                                             background: "#f59e0b22",
                                             fontWeight: 800,
                                           },
@@ -52404,7 +52410,7 @@ K &&
                                             padding: "2px 6px",
                                             borderRadius: 8,
                                             border: "1px solid " + a.border,
-                                            color: "#f87171",
+                                            color: a.dangerTxt,
                                             background: "#f8717122",
                                             fontWeight: 800,
                                           },
@@ -52418,7 +52424,7 @@ K &&
                                             padding: "2px 6px",
                                             borderRadius: 8,
                                             border: "1px solid " + a.border,
-                                            color: "#fb923c",
+                                            color: a.warnTxt,
                                             background: "#fb923c22",
                                             fontWeight: 800,
                                           },
@@ -52432,7 +52438,7 @@ K &&
                                             padding: "2px 6px",
                                             borderRadius: 8,
                                             border: "1px solid " + a.border,
-                                            color: "#38bdf8",
+                                            color: a.infoTxt,
                                             background: "#38bdf822",
                                             fontWeight: 800,
                                           },
@@ -52472,7 +52478,7 @@ K &&
                                   }),
                                   e.jsx("td", {
                                     style: u(d({}, c.td), {
-                                      color: a.accent,
+                                      color: a.accentTxt,
                                       fontWeight: 600,
                                     }),
                                     children: ne(Math.round(y.precio * 1.19)),
@@ -52735,7 +52741,7 @@ K &&
                                           }),
                                           e.jsx("div", {
                                             style: {
-                                              color: a.accent,
+                                              color: a.accentTxt,
                                               fontWeight: 900,
                                             },
                                             children: ne(Math.round(total)),
@@ -52819,7 +52825,7 @@ K &&
                 }),
                 j.precio !== "" &&
                   e.jsxs("div", {
-                    style: { fontSize: 13, color: a.accent, marginBottom: 10 },
+                    style: { fontSize: 13, color: a.accentTxt, marginBottom: 10 },
                     children: [
                       "Con IVA: ",
                       ne(Math.round(parseFloat(j.precio || 0) * 1.19)),
@@ -53559,7 +53565,7 @@ K &&
                       e.jsxs("span", {
                         style: {
                           fontWeight: 600,
-                          color: I > 0 ? "#34d399" : "#f87171",
+                          color: I > 0 ? a.okTxt : a.dangerTxt,
                         },
                         children: [I, " / ", z.items.length],
                       }),
@@ -53611,7 +53617,7 @@ K &&
                   fontSize: 15,
                   fontWeight: 700,
                   marginBottom: 12,
-                  color: a.accent,
+                  color: a.accentTxt,
                 },
                 children:
                   "⚠️ Sin materiales calculables — Diagnóstico por ítem",
@@ -53683,13 +53689,13 @@ K &&
                                 ? e.jsx("span", {
                                     style: {
                                       fontSize: 12,
-                                      color: "#34d399",
+                                      color: a.okTxt,
                                       fontWeight: 600,
                                     },
                                     children: "✅ APU vinculado",
                                   })
                                 : e.jsx("span", {
-                                    style: { fontSize: 12, color: "#f87171" },
+                                    style: { fontSize: 12, color: a.dangerTxt },
                                     children: "❌ Sin APU",
                                   }),
                             }),
@@ -53812,7 +53818,7 @@ K &&
                         style: {
                           fontSize: 34,
                           fontWeight: 700,
-                          color: a.accent,
+                          color: a.accentTxt,
                         },
                         children: v.length,
                       }),
@@ -53835,7 +53841,7 @@ K &&
                         style: {
                           fontSize: 34,
                           fontWeight: 700,
-                          color: "#60a5fa",
+                          color: a.infoTxt,
                         },
                         children: f.length,
                       }),
@@ -53858,7 +53864,7 @@ K &&
                         style: {
                           fontSize: 22,
                           fontWeight: 700,
-                          color: "#34d399",
+                          color: a.okTxt,
                         },
                         children: ne(Math.round(x)),
                       }),
@@ -53885,7 +53891,7 @@ K &&
                         style: {
                           fontSize: 22,
                           fontWeight: 700,
-                          color: a.accent,
+                          color: a.accentTxt,
                         },
                         children: ne(Math.round(x * 1.19)),
                       }),
@@ -54270,7 +54276,7 @@ K &&
                                                       return U && U.q > 0
                                                         ? e.jsxs("span", {
                                                             style: {
-                                                              color: "#f5a020",
+                                                              color: a.accentTxt,
                                                               fontWeight: 700,
                                                               fontSize: 13,
                                                             },
@@ -54294,7 +54300,7 @@ K &&
                                                           })
                                                         : e.jsxs("span", {
                                                             style: {
-                                                              color: "#f5a020",
+                                                              color: a.accentTxt,
                                                               fontWeight: 700,
                                                               fontSize: 13,
                                                             },
@@ -54334,7 +54340,7 @@ K &&
                                             e.jsx("td", {
                                               style: u(d({}, c.td), {
                                                 fontWeight: 700,
-                                                color: "#34d399",
+                                                color: a.okTxt,
                                                 padding: "8px 10px",
                                                 textAlign: "right",
                                               }),
@@ -54391,7 +54397,7 @@ K &&
                                                       children: [
                                                         e.jsx("span", {
                                                           style: {
-                                                            color: "#60a5fa",
+                                                            color: a.infoTxt,
                                                             fontWeight: 600,
                                                           },
                                                           children: "→",
@@ -54678,7 +54684,7 @@ K &&
                             style: {
                               padding: "5px 12px 3px",
                               fontSize: 11,
-                              color: a.accent,
+                              color: a.accentTxt,
                               fontWeight: 700,
                               textTransform: "uppercase",
                               letterSpacing: ".06em",
@@ -54850,7 +54856,7 @@ K &&
                       children: [
                         "Unidad: ",
                         e.jsx("span", {
-                          style: { color: a.accent, fontWeight: 700 },
+                          style: { color: a.accentTxt, fontWeight: 700 },
                           children: n,
                         }),
                       ],
@@ -54884,14 +54890,14 @@ K &&
                       children: [
                         "💡 Para radier o losa: ingresa ",
                         e.jsx("strong", {
-                          style: { color: "#34d399" },
+                          style: { color: a.okTxt },
                           children: "Largo × Ancho × Espesor",
                         }),
                         " (ej: 6m × 4m × 0.10m = 2.4 m³)",
                         e.jsx("br", {}),
                         "Para pilar o viga: ingresa ",
                         e.jsx("strong", {
-                          style: { color: "#34d399" },
+                          style: { color: a.okTxt },
                           children: "Ancho × Profundidad × Altura",
                         }),
                         " (ej: 0.35 × 0.35 × 3m = 0.3675 m³)",
@@ -55063,7 +55069,7 @@ K &&
                         border: `1px dashed ${a.border}`,
                         borderRadius: 8,
                         padding: "8px",
-                        color: a.accent,
+                        color: a.accentTxt,
                         cursor: "pointer",
                         fontSize: 13,
                         fontWeight: 600,
@@ -55228,7 +55234,7 @@ K &&
                         border: `1px dashed ${a.border}`,
                         borderRadius: 8,
                         padding: "8px",
-                        color: a.accent,
+                        color: a.accentTxt,
                         cursor: "pointer",
                         fontSize: 13,
                         fontWeight: 600,
@@ -55296,7 +55302,7 @@ K &&
                         style: {
                           fontSize: 28,
                           fontWeight: 800,
-                          color: X ? "#34d399" : a.muted,
+                          color: X ? a.okTxt : a.muted,
                         },
                         children: X ? Z : "—",
                       }),
@@ -55633,7 +55639,7 @@ K &&
             children: grupos.map(function (grupo, gi) {
               return e.jsxs("div", { children: [
                 e.jsx("div", {
-                  style: { fontSize: 10.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".09em", color: a.accent, marginBottom: 9 },
+                  style: { fontSize: 10.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".09em", color: a.accentTxt, marginBottom: 9 },
                   children: grupo.nombre || "",
                 }),
                 e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 7 }, children: (grupo.consejos || []).map(function (consejo, ci) {
@@ -55645,7 +55651,7 @@ K &&
                     children: [
                       e.jsxs("div", { style: { display: "flex", gap: 10, alignItems: "flex-start" }, children: [
                         e.jsx("div", {
-                          style: { width: 21, height: 21, borderRadius: "50%", background: a.border, color: a.accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0, marginTop: 1 },
+                          style: { width: 21, height: 21, borderRadius: "50%", background: a.border, color: a.accentTxt, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0, marginTop: 1 },
                           children: ci + 1,
                         }),
                         e.jsx("div", { style: { flex: 1, fontSize: 14.5, fontWeight: 600, lineHeight: 1.45 }, children: consejo.t || "" }),
@@ -55928,7 +55934,7 @@ K &&
                             : e.jsx("span", {
                                 style: {
                                   fontSize: 28,
-                                  color: "#f5a020",
+                                  color: a.accentTxt,
                                   fontWeight: 900,
                                 },
                                 children: "E",
@@ -56201,7 +56207,7 @@ K &&
                                 esActual
                                   ? e.jsx("span", { style: { marginLeft: "auto", fontSize: 9.5, fontWeight: 800, letterSpacing: ".06em", background: pl.color, color: "#0d1a2b", padding: "2px 7px", borderRadius: 999 }, children: "TU PLAN" })
                                   : esSiguiente
-                                    ? e.jsx("span", { style: { marginLeft: "auto", fontSize: 9.5, fontWeight: 800, letterSpacing: ".06em", border: "1px solid " + a.accent, color: a.accent, padding: "2px 7px", borderRadius: 999 }, children: "SIGUIENTE" })
+                                    ? e.jsx("span", { style: { marginLeft: "auto", fontSize: 9.5, fontWeight: 800, letterSpacing: ".06em", border: "1px solid " + a.accent, color: a.accentTxt, padding: "2px 7px", borderRadius: 999 }, children: "SIGUIENTE" })
                                     : null,
                               ] }),
                               e.jsxs("div", { style: { display: "flex", alignItems: "baseline", gap: 5, marginBottom: 6 }, children: [
@@ -56415,7 +56421,7 @@ K &&
                         e.jsx("div", {
                           style: {
                             fontSize: 16,
-                            color: "#34d399",
+                            color: a.okTxt,
                             fontWeight: 700,
                             marginBottom: 12,
                           },
@@ -56485,7 +56491,7 @@ K &&
                             style: {
                               fontSize: 13,
                               fontWeight: 800,
-                              color: "#60a5fa",
+                              color: a.infoTxt,
                               marginBottom: 6,
                             },
                             children: "🚀 ¿Quieres ver la versión completa?",
@@ -56547,7 +56553,7 @@ K &&
                               e.jsx("button", {
                                 style: {
                                   background: "transparent",
-                                  color: "#60a5fa",
+                                  color: a.infoTxt,
                                   border: "1px solid rgba(96,165,250,0.55)",
                                   borderRadius: 8,
                                   padding: "9px 12px",
@@ -56597,7 +56603,7 @@ K &&
                           style: {
                             fontSize: 13,
                             fontWeight: 700,
-                            color: "#f59e0b",
+                            color: a.accentTxt,
                             marginBottom: 5,
                           },
                           children: "⚠️ Importante — tus datos",
@@ -57117,7 +57123,7 @@ K &&
               },
               children: [
                 e.jsx("span", {
-                  style: { fontSize: 13, color: s.ok ? "#4ade80" : "#fb7185" },
+                  style: { fontSize: 13, color: s.ok ? a.okTxt : "#fb7185" },
                   children: s.ok ? "✓" : "○",
                 }),
                 e.jsx("span", {
@@ -57768,7 +57774,7 @@ K &&
                                         children: [
                                           e.jsx("div", {
                                             style: {
-                                              color: a.accent,
+                                              color: a.accentTxt,
                                               fontWeight: 600,
                                             },
                                             children: ne(P.precioSugerido),
@@ -58326,7 +58332,7 @@ K &&
                 }),
                 w.length > 0 &&
                   e.jsxs("div", {
-                    style: { fontSize: 11, color: "#fbbf24", marginTop: 10 },
+                    style: { fontSize: 11, color: a.accentTxt, marginTop: 10 },
                     children: [
                       "⚠️ ",
                       w.length,
@@ -58514,7 +58520,7 @@ K &&
                               }),
                               e.jsxs("span", {
                                 style: {
-                                  color: "#fbbf24",
+                                  color: a.accentTxt,
                                   fontWeight: 700,
                                   whiteSpace: "nowrap",
                                 },
@@ -58641,7 +58647,7 @@ K &&
                     style: {
                       fontSize: 12,
                       fontWeight: 700,
-                      color: "#fbbf24",
+                      color: a.accentTxt,
                       marginBottom: 8,
                     },
                     children: "⚠️ Ítems sin APU — no incluidos en el análisis",
@@ -58669,7 +58675,7 @@ K &&
                     ),
                   ),
                   e.jsx("div", {
-                    style: { fontSize: 11, color: "#fb923c", marginTop: 8 },
+                    style: { fontSize: 11, color: a.warnTxt, marginTop: 8 },
                     children:
                       "Para incluirlos: crea un APU para cada partida y vincúlalo al catálogo.",
                   }),
@@ -58774,7 +58780,7 @@ K &&
                             style: {
                               fontSize: 18,
                               fontWeight: 800,
-                              color: a.accent,
+                              color: a.accentTxt,
                               marginBottom: 2,
                             },
                             children: t.idMP,
@@ -58974,7 +58980,7 @@ K &&
                               }),
                               e.jsx("span", {
                                 style: {
-                                  color: a.accent,
+                                  color: a.accentTxt,
                                   fontWeight: 600,
                                   whiteSpace: "nowrap",
                                 },
@@ -60141,7 +60147,7 @@ K &&
                         e.jsx("div", {
                           style: {
                             fontSize: 12,
-                            color: "#4ade80",
+                            color: a.okTxt,
                             marginTop: 4,
                           },
                           children:
@@ -60385,7 +60391,7 @@ K &&
                                   e.jsx("td", {
                                     style: u(d({}, c.td), {
                                       fontWeight: 600,
-                                      color: a.accent,
+                                      color: a.accentTxt,
                                       fontSize: 12,
                                       whiteSpace: "nowrap",
                                     }),
@@ -60473,7 +60479,7 @@ K &&
                           justifyContent: "space-between",
                           fontSize: 15,
                           fontWeight: 700,
-                          color: a.accent,
+                          color: a.accentTxt,
                           borderTop: "1px solid " + a.border,
                           paddingTop: 8,
                         },
@@ -61334,7 +61340,7 @@ K &&
                     ],
                   }),
                   e.jsx("div", {
-                    style: { fontSize: 14, fontWeight: 700, color: a.accent },
+                    style: { fontSize: 14, fontWeight: 700, color: a.accentTxt },
                     children: "Total: " + ne(He(s.items).total),
                   }),
                 ],
@@ -61473,7 +61479,7 @@ K &&
                   b.id ? "Editar licitación" : "Nueva licitación",
                   b.idMP &&
                     e.jsx("span", {
-                      style: { color: a.accent },
+                      style: { color: a.accentTxt },
                       children: " — " + b.idMP,
                     }),
                 ],
@@ -61622,7 +61628,7 @@ K &&
                 children: "⚖️",
               }),
               e.jsx("div", {
-                style: { fontSize: 20, fontWeight: 700, color: a.accent },
+                style: { fontSize: 20, fontWeight: 700, color: a.accentTxt },
                 children: t.length,
               }),
               e.jsx("div", {
@@ -61645,7 +61651,7 @@ K &&
                 children: "✅",
               }),
               e.jsx("div", {
-                style: { fontSize: 20, fontWeight: 700, color: a.accent },
+                style: { fontSize: 20, fontWeight: 700, color: a.accentTxt },
                 children: X + " / " + ne(W),
               }),
               e.jsx("div", {
@@ -61668,7 +61674,7 @@ K &&
                 children: "🎯",
               }),
               e.jsx("div", {
-                style: { fontSize: 20, fontWeight: 700, color: a.accent },
+                style: { fontSize: 20, fontWeight: 700, color: a.accentTxt },
                 children: T + "%",
               }),
               e.jsx("div", {
@@ -61691,7 +61697,7 @@ K &&
                 children: "📝",
               }),
               e.jsx("div", {
-                style: { fontSize: 20, fontWeight: 700, color: a.accent },
+                style: { fontSize: 20, fontWeight: 700, color: a.accentTxt },
                 children: t.filter(function (N) {
                   return N.estado === "Borrador";
                 }).length,
@@ -61766,7 +61772,7 @@ K &&
                             children: [
                               e.jsx("td", {
                                 style: u(d({}, c.td), {
-                                  color: a.accent,
+                                  color: a.accentTxt,
                                   fontWeight: 700,
                                   fontSize: 12,
                                 }),
@@ -61980,7 +61986,7 @@ K &&
                               style: {
                                 fontSize: 11,
                                 fontWeight: 700,
-                                color: a.accent,
+                                color: a.accentTxt,
                                 marginBottom: 3,
                               },
                               children: pe.idMP,
@@ -62143,7 +62149,7 @@ K &&
                 children: [
                   e.jsx("span", { style: { fontSize: 16 }, children: "✅" }),
                   e.jsx("div", {
-                    style: { fontSize: 13, color: "#4ade80", fontWeight: 600 },
+                    style: { fontSize: 13, color: a.okTxt, fontWeight: 600 },
                     children:
                       "API Mercado Público conectada — Búsqueda en tiempo real disponible",
                   }),
@@ -62438,7 +62444,7 @@ K &&
                               children: [
                                 e.jsx("span", { children: N }),
                                 e.jsx("span", {
-                                  style: { color: a.accent },
+                                  style: { color: a.accentTxt },
                                   children: "→",
                                 }),
                               ],
@@ -62846,7 +62852,7 @@ K &&
                                         style: {
                                           fontSize: 12,
                                           fontWeight: 700,
-                                          color: a.accent,
+                                          color: a.accentTxt,
                                         },
                                         children: N.idMP,
                                       }),
@@ -62888,7 +62894,7 @@ K &&
                                             {
                                               style: {
                                                 background: a.accent + "22",
-                                                color: a.accent,
+                                                color: a.accentTxt,
                                                 borderRadius: 4,
                                                 padding: "2px 6px",
                                                 fontSize: 10,
@@ -63051,13 +63057,13 @@ K &&
                         ic: "💰",
                         val: ne(we),
                         label: "Total adjudicado",
-                        color: "#4ade80",
+                        color: a.okTxt,
                       },
                       {
                         ic: "⏳",
                         val: ne(ye),
                         label: "En evaluación ahora",
-                        color: a.accent,
+                        color: a.accentTxt,
                       },
                       {
                         ic: "📈",
@@ -63133,7 +63139,7 @@ K &&
                             {
                               label: "Adjudicadas ✅",
                               val: be,
-                              color: "#4ade80",
+                              color: a.okTxt,
                             },
                             {
                               label: "No adjudicadas ❌",
@@ -63231,7 +63237,7 @@ K &&
                             {
                               label: "Checklist promedio — Adjudicadas",
                               val: se,
-                              color: "#4ade80",
+                              color: a.okTxt,
                               count: te.length,
                             },
                             {
@@ -63439,7 +63445,7 @@ K &&
                                         style: {
                                           fontSize: 12,
                                           fontWeight: 700,
-                                          color: a.accent,
+                                          color: a.accentTxt,
                                         },
                                         children: N.idMP,
                                       }),
@@ -63566,7 +63572,7 @@ K &&
                   children: ["ID: ", v.idMP || "—"],
                 }),
                 e.jsx("div", {
-                  style: { fontSize: 12, color: "#f87171", marginBottom: 24 },
+                  style: { fontSize: 12, color: a.dangerTxt, marginBottom: 24 },
                   children: "Esta acción no se puede deshacer.",
                 }),
                 e.jsxs("div", {
@@ -63661,7 +63667,7 @@ K &&
                                   style: {
                                     fontSize: 12,
                                     fontWeight: 700,
-                                    color: a.accent,
+                                    color: a.accentTxt,
                                   },
                                   children: N.idMP,
                                 }),
@@ -64221,7 +64227,7 @@ K &&
   var Fe = {
       starter: {
         label: "Starter",
-        color: "#10b981",
+        color: a.okTxt,
         precio: 19990,
         modules: ["dashboard", "new", "history", "clients", "config"],
         desc: "Pago único · Plan base para comenzar",
@@ -64229,7 +64235,7 @@ K &&
       },
       basico: {
         label: "Básico",
-        color: "#34d399",
+        color: a.okTxt,
         precio: 59990,
         anual: !0,
         modules: [
@@ -64244,7 +64250,7 @@ K &&
       },
       constructor: {
         label: "Constructor",
-        color: "#38bdf8",
+        color: a.infoTxt,
         precio: 89990,
         anual: !0,
         modules: [
@@ -64263,7 +64269,7 @@ K &&
       },
       pro: {
         label: "Pro",
-        color: "#a78bfa",
+        color: a.violetTxt,
         precio: 129990,
         anual: !0,
         modules: [
@@ -64287,7 +64293,7 @@ K &&
       },
       plus: {
         label: "Plus",
-        color: "#f5a020",
+        color: a.accentTxt,
         precio: 179990,
         anual: !0,
         modules: [
@@ -64532,7 +64538,7 @@ K &&
                 style: {
                   fontSize: 22,
                   fontWeight: 700,
-                  color: "#f5a020",
+                  color: a.accentTxt,
                   marginBottom: 6,
                 },
                 children: "Enlace Constructor Pro",
@@ -64579,7 +64585,7 @@ K &&
               }),
               l &&
                 e.jsx("div", {
-                  style: { marginTop: 8, fontSize: 13, color: "#f87171" },
+                  style: { marginTop: 8, fontSize: 13, color: a.dangerTxt },
                   children: l,
                 }),
               e.jsx("button", {
@@ -64932,7 +64938,7 @@ K &&
           children: [
             "Ingresa los roles y jornales de tu cuadrilla tipo. El sistema calcula automáticamente tu ",
             e.jsx("strong", {
-              style: { color: a.accent },
+              style: { color: a.accentTxt },
               children: "% de Mano de Obra",
             }),
             " y lo usa como valor predeterminado en todos los presupuestos.",
@@ -65165,7 +65171,7 @@ K &&
             border: `1px dashed ${a.border}`,
             borderRadius: 8,
             padding: "8px",
-            color: a.accent,
+            color: a.accentTxt,
             cursor: "pointer",
             fontSize: 13,
             fontWeight: 600,
@@ -65249,7 +65255,7 @@ K &&
           children: [
             "Define los componentes de tu utilidad. El sistema suma todos los porcentajes y los usa como ",
             e.jsx("strong", {
-              style: { color: a.accent },
+              style: { color: a.accentTxt },
               children: "% de Utilidad",
             }),
             " predeterminado en todos los presupuestos.",
@@ -65333,7 +65339,7 @@ K &&
                           style: {
                             fontSize: 12,
                             fontWeight: 700,
-                            color: a.accent,
+                            color: a.accentTxt,
                           },
                           children: [j.pct, "%"],
                         }),
@@ -65441,7 +65447,7 @@ K &&
             border: `1px dashed ${a.border}`,
             borderRadius: 8,
             padding: "8px",
-            color: a.accent,
+            color: a.accentTxt,
             cursor: "pointer",
             fontSize: 13,
             fontWeight: 600,
@@ -65542,7 +65548,7 @@ K &&
           children: [
             "Ingresa tus gastos reales de empresa. El sistema calcula automáticamente tu ",
             e.jsx("strong", {
-              style: { color: a.accent },
+              style: { color: a.accentTxt },
               children: "% de Gastos Generales",
             }),
             " y lo usa como valor predeterminado en el Análisis de Propuesta y Construir Oferta.",
@@ -65763,7 +65769,7 @@ K &&
             border: `1px dashed ${a.border}`,
             borderRadius: 8,
             padding: "8px",
-            color: a.accent,
+            color: a.accentTxt,
             cursor: "pointer",
             fontSize: 13,
             fontWeight: 600,
@@ -66597,7 +66603,7 @@ K &&
                         e.jsx("span", {
                           style: {
                             fontSize: 11,
-                            color: "#fbbf24",
+                            color: a.accentTxt,
                             background: "var(--bdg-prog-bg)",
                             padding: "3px 10px",
                             borderRadius: 10,
@@ -66754,7 +66760,7 @@ K &&
                             style: {
                               fontSize: 11,
                               marginTop: 3,
-                              color: x ? "#22c55e" : "#ef4444",
+                              color: x ? a.okTxt : a.dangerTxt,
                             },
                             children: x
                               ? "✅ RUT válido"
@@ -67350,7 +67356,7 @@ K &&
                     children: [
                       "Vista previa: ",
                       e.jsx("strong", {
-                        style: { color: a.accent },
+                        style: { color: a.accentTxt },
                         children: ne(1234567, h),
                       }),
                       e.jsxs("span", {
@@ -67669,7 +67675,7 @@ K &&
                             e.jsx("div", {
                               style: {
                                 background: "#1a3a6e",
-                                color: "#60a5fa",
+                                color: a.infoTxt,
                                 borderRadius: "50%",
                                 width: 24,
                                 height: 24,
@@ -67763,7 +67769,7 @@ K &&
                 },
                 children: [
                   e.jsx("div", { style: { fontSize: 20, fontWeight: 800, color: a.text, marginBottom: 2 }, children: "Enlace Constructor Pro" }),
-                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accent, marginBottom: 12 }, children: ["Versión 1.7.2 · Edición de lanzamiento"] }),
+                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accentTxt, marginBottom: 12 }, children: ["Versión 1.7.2 · Edición de lanzamiento"] }),
                   e.jsxs("div", { style: { fontSize: 12, color: a.muted, lineHeight: 2 }, children: [
                     e.jsxs("div", { children: [e.jsx("strong", { style: { color: a.text }, children: "Titular de derechos: " }), "ENLACE"] }),
                     e.jsxs("div", { children: [
@@ -67802,7 +67808,7 @@ K &&
                       },
                       children: [
                         (idx + 1) + ". " + sec.title,
-                        e.jsx("span", { style: { color: a.accent, flexShrink: 0, marginLeft: 10 }, children: aboutOpen[sec.id] ? "▲" : "▼" }),
+                        e.jsx("span", { style: { color: a.accentTxt, flexShrink: 0, marginLeft: 10 }, children: aboutOpen[sec.id] ? "▲" : "▼" }),
                       ],
                     }),
                     aboutOpen[sec.id] &&
@@ -67810,7 +67816,7 @@ K &&
                         style: { padding: "14px 16px", fontSize: 13, lineHeight: 1.7, color: a.text, maxWidth: 720 },
                         children: sec.body.map((item, bi) =>
                           item.t === "h"
-                            ? e.jsx("div", { key: bi, style: { fontSize: 12, fontWeight: 700, color: a.accent, textTransform: "uppercase", letterSpacing: ".04em", marginTop: bi ? 14 : 0, marginBottom: 6 }, children: item.c })
+                            ? e.jsx("div", { key: bi, style: { fontSize: 12, fontWeight: 700, color: a.accentTxt, textTransform: "uppercase", letterSpacing: ".04em", marginTop: bi ? 14 : 0, marginBottom: 6 }, children: item.c })
                             : item.t === "ul"
                             ? e.jsx("ul", { key: bi, style: { margin: "2px 0 12px", paddingLeft: 20, display: "flex", flexDirection: "column", gap: 4 }, children: item.items.map((li, li2) => e.jsx("li", { key: li2, children: li })) })
                             : e.jsx("p", { key: bi, style: { margin: "0 0 10px" }, children: item.c }),
@@ -68234,7 +68240,7 @@ K &&
                   ],
                 }),
                 e.jsx("div", {
-                  style: { fontSize: 12, color: "#f87171", marginBottom: 14, lineHeight: 1.5 },
+                  style: { fontSize: 12, color: a.dangerTxt, marginBottom: 14, lineHeight: 1.5 },
                   children: "La restauración reemplazará los datos actuales incluidos en este archivo. Se creará un respaldo automático antes de continuar.",
                 }),
                 e.jsxs("label", {
@@ -68251,7 +68257,7 @@ K &&
                 }),
                 imp.restoreLicense
                   ? e.jsx("div", {
-                      style: { fontSize: 11.5, color: "#f59e0b", marginBottom: 14, lineHeight: 1.4 },
+                      style: { fontSize: 11.5, color: a.accentTxt, marginBottom: 14, lineHeight: 1.4 },
                       children: "⚠️ Esto reemplazará tu licencia activa actual por la que venía en este respaldo.",
                     })
                   : e.jsx("div", {
@@ -68325,10 +68331,10 @@ K &&
                   },
                   children: [
                     e.jsxs("div", { children: ["APU revisados: ", e.jsx("strong", { children: repairPreview.apusRevisados })] }),
-                    e.jsxs("div", { children: ["Vínculos válidos: ", e.jsx("strong", { style: { color: "#4ade80" }, children: repairPreview.validos })] }),
-                    e.jsxs("div", { children: ["Vínculos que serán corregidos: ", e.jsx("strong", { style: { color: "#f59e0b" }, children: repairPreview.corregibles })] }),
-                    e.jsxs("div", { children: ["Casos ambiguos: ", e.jsx("strong", { style: { color: "#f87171" }, children: repairPreview.ambiguos })] }),
-                    e.jsxs("div", { style: { gridColumn: "1 / -1" }, children: ["Casos no resueltos: ", e.jsx("strong", { style: { color: "#f87171" }, children: repairPreview.noResueltos })] }),
+                    e.jsxs("div", { children: ["Vínculos válidos: ", e.jsx("strong", { style: { color: a.okTxt }, children: repairPreview.validos })] }),
+                    e.jsxs("div", { children: ["Vínculos que serán corregidos: ", e.jsx("strong", { style: { color: a.accentTxt }, children: repairPreview.corregibles })] }),
+                    e.jsxs("div", { children: ["Casos ambiguos: ", e.jsx("strong", { style: { color: a.dangerTxt }, children: repairPreview.ambiguos })] }),
+                    e.jsxs("div", { style: { gridColumn: "1 / -1" }, children: ["Casos no resueltos: ", e.jsx("strong", { style: { color: a.dangerTxt }, children: repairPreview.noResueltos })] }),
                   ],
                 }),
                 (repairPreview.ambiguos > 0 || repairPreview.noResueltos > 0) &&
@@ -68337,7 +68343,7 @@ K &&
                     children: "Los casos ambiguos y no resueltos no se modifican automáticamente — quedan para revisión manual.",
                   }),
                 e.jsx("div", {
-                  style: { fontSize: 12, color: "#f87171", marginBottom: 16, lineHeight: 1.5 },
+                  style: { fontSize: 12, color: a.dangerTxt, marginBottom: 16, lineHeight: 1.5 },
                   children: "Esta herramienta corregirá únicamente referencias de materiales dañadas. No reemplazará ni restaurará los demás valores de los APU.",
                 }),
                 e.jsxs("div", {
@@ -68389,7 +68395,7 @@ K &&
                   style: {
                     fontSize: 20,
                     fontWeight: 700,
-                    color: C.length >= rs ? "#f59e0b" : "#4ade80",
+                    color: C.length >= rs ? a.accentTxt : a.okTxt,
                   },
                   children: [C.length, "/", rs],
                 }),
@@ -68468,7 +68474,7 @@ K &&
                   style: {
                     fontSize: 20,
                     fontWeight: 700,
-                    color: C[0] ? "#4ade80" : "#f87171",
+                    color: C[0] ? a.okTxt : a.dangerTxt,
                   },
                   children: C[0]
                     ? new Date(C[0].fecha).toLocaleDateString("es-CL")
@@ -68675,7 +68681,7 @@ K &&
                                     e.jsx("div", { style: { fontWeight: 600, color: a.text }, children: R(y.fecha) }),
                                     P === 0 &&
                                       e.jsx("div", {
-                                        style: { fontSize: 10, color: "#4ade80", fontWeight: 600, marginTop: 2 },
+                                        style: { fontSize: 10, color: a.okTxt, fontWeight: 600, marginTop: 2 },
                                         children: "● Más reciente",
                                       }),
                                   ],
@@ -68826,15 +68832,15 @@ K &&
                                     e.jsx("div", { style: { fontWeight: 600, color: a.text }, children: R(y.fecha) }),
                                     P === 0 &&
                                       e.jsx("div", {
-                                        style: { fontSize: 10, color: "#4ade80", fontWeight: 600, marginTop: 2 },
+                                        style: { fontSize: 10, color: a.okTxt, fontWeight: 600, marginTop: 2 },
                                         children: "● Más reciente",
                                       }),
                                   ],
                                 }),
                               }),
                               e.jsx("td", { style: { padding: "10px 6px", color: a.muted }, children: y.generado }),
-                              e.jsx("td", { style: { padding: "10px 6px", color: "#34d399", fontWeight: 700 }, children: nuevos }),
-                              e.jsx("td", { style: { padding: "10px 6px", color: a.accent, fontWeight: 700 }, children: actualizados }),
+                              e.jsx("td", { style: { padding: "10px 6px", color: a.okTxt, fontWeight: 700 }, children: nuevos }),
+                              e.jsx("td", { style: { padding: "10px 6px", color: a.accentTxt, fontWeight: 700 }, children: actualizados }),
                               e.jsx("td", { style: { padding: "10px 6px", color: a.blue, fontWeight: 700 }, children: protegidos }),
                               e.jsx("td", { style: { padding: "10px 6px", color: a.muted }, children: sinCambios }),
                             ],
@@ -68907,7 +68913,7 @@ K &&
                       style: {
                         fontSize: 13,
                         fontWeight: 600,
-                        color: "#f59e0b",
+                        color: a.accentTxt,
                       },
                       children: "⚠️ Reparar vínculos APU↔Material",
                     }),
@@ -69087,7 +69093,7 @@ K &&
       s = [
         {
           key: "starter",
-          color: "#10b981",
+          color: a.okTxt,
           emoji: "🟢",
           precio: 19990,
           tagline: "Pago único + IVA · para siempre",
@@ -69110,7 +69116,7 @@ K &&
         },
         {
           key: "basico",
-          color: "#fb923c",
+          color: a.warnTxt,
           emoji: "🟠",
           precio: 59990,
           tagline: "Plan anual + IVA",
@@ -69130,7 +69136,7 @@ K &&
         },
         {
           key: "constructor",
-          color: "#60a5fa",
+          color: a.infoTxt,
           emoji: "🔵",
           precio: 89990,
           tagline: "Plan anual + IVA",
@@ -69162,7 +69168,7 @@ K &&
         },
         {
           key: "plus",
-          color: "#f5a020",
+          color: a.accentTxt,
           emoji: "⭐",
           precio: 179990,
           tagline: "Plan anual + IVA",
@@ -69248,12 +69254,12 @@ K &&
                             style: {
                               fontSize: 14,
                               fontWeight: 700,
-                              color: "#4ade80",
+                              color: a.okTxt,
                             },
                             children: [n.dias, " días restantes"],
                           })
                         : e.jsx("div", {
-                            style: { fontSize: 14, color: "#f87171" },
+                            style: { fontSize: 14, color: a.dangerTxt },
                             children: "Sin licencia activa",
                           }),
                       n.valid &&
@@ -69770,7 +69776,7 @@ K &&
                       title: `⏰ Vence N°${T.id} — ${T.descripcion || E || "Presupuesto"}`,
                       date: re.toISOString().split("T")[0],
                       type: "seguimiento",
-                      color: "#f59e0b",
+                      color: a.accentTxt,
                       linkedId: T.id,
                       linkedType: "presupuesto",
                       note: "Vencimiento presupuesto (" + J + "d validez)",
@@ -69932,14 +69938,14 @@ K &&
           children: [
             { type: "obra", label: "📋 Obra", color: "#3b82f6" },
             { type: "licitacion", label: "📑 Licitación", color: "#f97316" },
-            { type: "seguimiento", label: "🔍 Seguimiento", color: "#10b981" },
+            { type: "seguimiento", label: "🔍 Seguimiento", color: a.okTxt },
             { type: "tarea", label: "⏰ Tarea libre", color: "#8b5cf6" },
             { type: "reunion", label: "🤝 Reunión", color: "#06b6d4" },
             { type: "visita", label: "📍 Visita", color: "#ec4899" },
             {
               type: "presupuesto_nuevo",
               label: "🧾 Presupuesto nuevo",
-              color: "#f59e0b",
+              color: a.accentTxt,
             },
             { type: "llamada", label: "📞 Llamada", color: "#a855f7" },
             { type: "pago", label: "💰 Pago / Cobro", color: "#16a34a" },
@@ -70175,7 +70181,7 @@ K &&
                                     top: 4,
                                     right: 4,
                                     fontSize: 10,
-                                    color: a.accent,
+                                    color: a.accentTxt,
                                     background: "rgba(59,130,246,0.2)",
                                     borderRadius: "50%",
                                     width: 16,
@@ -70231,7 +70237,7 @@ K &&
                               },
                               style: {
                                 fontSize: 10,
-                                color: a.accent,
+                                color: a.accentTxt,
                                 fontWeight: 600,
                                 cursor: "pointer",
                                 padding: "1px 2px",
@@ -70839,9 +70845,9 @@ K &&
       e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 12, flexWrap: "wrap" }, children: [e.jsx("div", { style: { fontSize: 12, color: a.muted, maxWidth: 520 }, children: "Editor interno del contrato. La vista previa, PDF y Word usan el diseño corporativo. Revisa el contenido con asesoría profesional cuando corresponda." }), e.jsxs("div", { style: { display: "flex", gap: 8 }, children: [e.jsx("button", { style: c.btn("s"), onClick: function () { exportarContratoDocx(t, i, r, o, l); }, children: "Descargar Word" }), e.jsx("button", { style: c.btn("p"), onClick: vista, children: "Vista previa / Generar PDF" })] })] }),
       seccion("1. Identificación", grid([input("Número del contrato", "numero"), input("Fecha", "fecha", "date"), input("Estado", "estado"), input("Proyecto", "proyectoNombre"), input("Contratista / razón social", "contratistaNombre"), input("RUT contratista", "contratistaRut"), input("Representante legal", "representanteLegal"), input("Domicilio contratista", "contratistaDomicilio"), input("Ciudad contratista", "contratistaCiudad"), input("Teléfono contratista", "contratistaTelefono"), input("Correo contratista", "contratistaCorreo"), input("Mandante / razón social", "mandanteNombre"), input("RUT mandante", "mandanteRut"), input("Teléfono mandante", "mandanteTelefono"), input("Correo mandante", "mandanteCorreo"), input("Dirección de la obra", "direccionObra"), input("Comuna / ciudad de la obra", "obraCiudad"), input("Lugar de firma", "firmaLugar"), input("Fecha de firma", "firmaFecha", "date")], 2)),
       seccion("2. Resumen económico por capítulos", e.jsxs("div", { children: [e.jsxs("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: 12 }, children: [e.jsx("thead", { children: e.jsxs("tr", { children: [e.jsx("th", { style: c.th, children: "Código" }), e.jsx("th", { style: c.th, children: "Capítulo" }), e.jsx("th", { style: c.th, children: "Subtotal" })] }) }), e.jsx("tbody", { children: capitulos.map(function (capitulo) { return e.jsxs("tr", { children: [e.jsx("td", { style: c.td, children: capitulo.codigo || "—" }), e.jsx("td", { style: c.td, children: capitulo.nombre }), e.jsx("td", { style: u(d({}, c.td), { textAlign: "right", fontWeight: 700 }), children: "$" + Number(capitulo.subtotal).toLocaleString("es-CL") })] }, capitulo.id); }) })] }), grid([input("Subtotal neto", "subtotalNeto", "number"), input("IVA", "ivaMonto", "number"), input("Total del contrato", "montoTotal", "number"), e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: [e.jsx("input", { type: "checkbox", checked: !!o.valoresIncluyenIva, onChange: function (evento) { setCampo("valoresIncluyenIva", evento.target.checked); } }), " Valores incluyen IVA"] })]), textarea("Cláusula del presupuesto anexo", "clausulaAnexo", 70)] })),
-      seccion("3. Condiciones económicas", e.jsxs("div", { children: [grid([input("Anticipo (%)", "anticipoPorcentaje", "number"), input("Estados de pago", "estadosPago", "number"), e.jsxs("div", { style: { padding: 9, background: a.sb, borderRadius: 7 }, children: [e.jsx("div", { style: { fontSize: 10, color: a.muted }, children: "Monto de anticipo calculado" }), e.jsx("b", { children: "$" + economia.anticipo.toLocaleString("es-CL") })] }), e.jsxs("div", { style: { padding: 9, background: a.sb, borderRadius: 7 }, children: [e.jsx("div", { style: { fontSize: 10, color: a.muted }, children: "Saldo calculado" }), e.jsx("b", { children: "$" + economia.saldo.toLocaleString("es-CL") })] })]), e.jsxs("div", { style: { padding: "9px 0", color: a.accent, fontWeight: 700, display: "flex", gap: 24 }, children: ["Anticipo: $" + economia.anticipo.toLocaleString("es-CL"), "Saldo: $" + economia.saldo.toLocaleString("es-CL")] }), textarea("Forma de pago", "formaPago", 60), textarea("Hitos de pago", "hitosPago", 70), textarea("Condición tributaria", "condicionTributaria", 60)] })),
+      seccion("3. Condiciones económicas", e.jsxs("div", { children: [grid([input("Anticipo (%)", "anticipoPorcentaje", "number"), input("Estados de pago", "estadosPago", "number"), e.jsxs("div", { style: { padding: 9, background: a.sb, borderRadius: 7 }, children: [e.jsx("div", { style: { fontSize: 10, color: a.muted }, children: "Monto de anticipo calculado" }), e.jsx("b", { children: "$" + economia.anticipo.toLocaleString("es-CL") })] }), e.jsxs("div", { style: { padding: 9, background: a.sb, borderRadius: 7 }, children: [e.jsx("div", { style: { fontSize: 10, color: a.muted }, children: "Saldo calculado" }), e.jsx("b", { children: "$" + economia.saldo.toLocaleString("es-CL") })] })]), e.jsxs("div", { style: { padding: "9px 0", color: a.accentTxt, fontWeight: 700, display: "flex", gap: 24 }, children: ["Anticipo: $" + economia.anticipo.toLocaleString("es-CL"), "Saldo: $" + economia.saldo.toLocaleString("es-CL")] }), textarea("Forma de pago", "formaPago", 60), textarea("Hitos de pago", "hitosPago", 70), textarea("Condición tributaria", "condicionTributaria", 60)] })),
       seccion("4. Plazos y garantía", e.jsxs("div", { children: [grid([input("Duración", "plazoNumero", "number"), e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Unidad", e.jsx("select", { value: o.plazoUnidad || "días corridos", onChange: function (evento) { setCampo("plazoUnidad", evento.target.value); }, style: u(d({}, c.inp), { width: "100%" }), children: ["días corridos", "días hábiles", "semanas", "meses"].map(function (unidad) { return e.jsx("option", { value: unidad, children: unidad }, unidad); }) })] }), input("Fecha estimada de inicio", "fechaInicio", "date"), input("Fecha estimada de término", "fechaTermino", "date"), input("Garantía", "garantiaNumero", "number"), input("Unidad de garantía", "garantiaUnidad")]), textarea("Evento de inicio", "eventoInicio", 60), textarea("Causas de suspensión o ampliación", "suspensionPlazo", 70)] })),
-      seccion("5. Cláusulas editables", e.jsxs("div", { children: [clausulasOrdenadas.map(function (clausula, indice) { return e.jsxs("div", { style: { padding: 10, background: a.sb, border: "1px solid " + a.border, borderRadius: 8, marginBottom: 8, opacity: clausula.activa === !1 ? .6 : 1 }, children: [e.jsxs("div", { style: { display: "flex", gap: 6, alignItems: "center", marginBottom: 6 }, children: [e.jsx("span", { style: { width: 22, fontWeight: 800, color: a.accent }, children: indice + 1 }), e.jsx("input", { value: clausula.titulo, onChange: function (evento) { actualizarClausula(clausula.id, "titulo", evento.target.value); }, style: u(d({}, c.inp), { flex: 1, fontWeight: 700 }) }), e.jsxs("label", { style: { fontSize: 10, color: a.muted }, children: [e.jsx("input", { type: "checkbox", checked: clausula.activa !== !1, onChange: function (evento) { actualizarClausula(clausula.id, "activa", evento.target.checked); } }), " Activa"] }), e.jsx("button", { style: c.btn("s"), disabled: indice === 0, onClick: function () { moverClausula(clausula.id, -1); }, children: "↑" }), e.jsx("button", { style: c.btn("s"), disabled: indice === clausulasOrdenadas.length - 1, onClick: function () { moverClausula(clausula.id, 1); }, children: "↓" }), e.jsx("button", { style: c.btn("d"), onClick: function () { eliminarClausula(clausula.id); }, children: "Eliminar" })] }), e.jsx("textarea", { value: clausula.contenido, onChange: function (evento) { actualizarClausula(clausula.id, "contenido", evento.target.value); }, style: u(d({}, c.inp), { width: "100%", minHeight: 82 }) })] }, clausula.id); }), e.jsxs("div", { style: { display: "flex", gap: 8 }, children: [e.jsx("button", { style: c.btn("s"), onClick: agregarClausula, children: "+ Agregar cláusula" }), e.jsx("button", { style: c.btn("s"), onClick: restaurarClausulas, children: "Restaurar predeterminadas" })] })] })),
+      seccion("5. Cláusulas editables", e.jsxs("div", { children: [clausulasOrdenadas.map(function (clausula, indice) { return e.jsxs("div", { style: { padding: 10, background: a.sb, border: "1px solid " + a.border, borderRadius: 8, marginBottom: 8, opacity: clausula.activa === !1 ? .6 : 1 }, children: [e.jsxs("div", { style: { display: "flex", gap: 6, alignItems: "center", marginBottom: 6 }, children: [e.jsx("span", { style: { width: 22, fontWeight: 800, color: a.accentTxt }, children: indice + 1 }), e.jsx("input", { value: clausula.titulo, onChange: function (evento) { actualizarClausula(clausula.id, "titulo", evento.target.value); }, style: u(d({}, c.inp), { flex: 1, fontWeight: 700 }) }), e.jsxs("label", { style: { fontSize: 10, color: a.muted }, children: [e.jsx("input", { type: "checkbox", checked: clausula.activa !== !1, onChange: function (evento) { actualizarClausula(clausula.id, "activa", evento.target.checked); } }), " Activa"] }), e.jsx("button", { style: c.btn("s"), disabled: indice === 0, onClick: function () { moverClausula(clausula.id, -1); }, children: "↑" }), e.jsx("button", { style: c.btn("s"), disabled: indice === clausulasOrdenadas.length - 1, onClick: function () { moverClausula(clausula.id, 1); }, children: "↓" }), e.jsx("button", { style: c.btn("d"), onClick: function () { eliminarClausula(clausula.id); }, children: "Eliminar" })] }), e.jsx("textarea", { value: clausula.contenido, onChange: function (evento) { actualizarClausula(clausula.id, "contenido", evento.target.value); }, style: u(d({}, c.inp), { width: "100%", minHeight: 82 }) })] }, clausula.id); }), e.jsxs("div", { style: { display: "flex", gap: 8 }, children: [e.jsx("button", { style: c.btn("s"), onClick: agregarClausula, children: "+ Agregar cláusula" }), e.jsx("button", { style: c.btn("s"), onClick: restaurarClausulas, children: "Restaurar predeterminadas" })] })] })),
       seccion("6. Firmas", e.jsxs("div", { children: [grid([input("Contratista", "firmaContratista"), input("Representante", "firmaRepresentante"), input("RUT contratista", "firmaContratistaRut"), input("Mandante", "firmaMandante"), input("RUT mandante", "firmaMandanteRut")]), [["incluirInspector", "Inspector técnico", "inspectorNombre", "inspectorRut"], ["incluirTestigo", "Testigo", "testigoNombre", "testigoRut"], ["incluirAdministrador", "Administrador", "administradorNombre", "administradorRut"]].map(function (firma) { return e.jsxs("div", { style: { marginTop: 9 }, children: [e.jsxs("label", { style: { fontSize: 11, fontWeight: 700 }, children: [e.jsx("input", { type: "checkbox", checked: !!o[firma[0]], onChange: function (evento) { setCampo(firma[0], evento.target.checked); } }), " Incluir " + firma[1]] }), o[firma[0]] && grid([input("Nombre " + firma[1].toLowerCase(), firma[2]), input("RUT", firma[3])])] }, firma[0]); })] })),
       e.jsx("button", { style: u(d({}, c.btn("p")), { width: "100%", padding: 12, fontWeight: 700 }), onClick: guardar, children: "💾 Guardar contrato" })
     ] });
@@ -70998,7 +71004,7 @@ K &&
           ] }),
           e.jsx("textarea", { value: doc.observaciones || "", onChange: function (ev) { cambiar("observaciones", ev.target.value); }, rows: 5, style: Object.assign({}, c.inp, { display: "block", width: "100%" }) })
         ] }),
-        e.jsxs("div", { style: Object.assign({}, c.card, { display: "grid", gridTemplateColumns: "1fr auto", gap: 6 }), children: [resumen.map(function (x) { return [e.jsx("span", { children: x[0] }, x[0] + "l"), e.jsx("b", { children: money(x[1]) }, x[0] + "v")]; }), e.jsx("span", { style: { color: a.accent, fontWeight: 800 }, children: "Diferencia / margen" }), e.jsx("b", { style: { color: a.accent }, children: money(datos.diferencia) + " · " + (datos.margen * 100).toFixed(1) + "%" })] })] }),
+        e.jsxs("div", { style: Object.assign({}, c.card, { display: "grid", gridTemplateColumns: "1fr auto", gap: 6 }), children: [resumen.map(function (x) { return [e.jsx("span", { children: x[0] }, x[0] + "l"), e.jsx("b", { children: money(x[1]) }, x[0] + "v")]; }), e.jsx("span", { style: { color: a.accentTxt, fontWeight: 800 }, children: "Diferencia / margen" }), e.jsx("b", { style: { color: a.accentTxt }, children: money(datos.diferencia) + " · " + (datos.margen * 100).toFixed(1) + "%" })] })] }),
       Math.abs(datos.diferencia) > 1 && e.jsx("div", { style: { marginTop: 10, padding: 10, background: "#fff4df", border: "1px solid #f5a020", color: "#704400", fontWeight: 800 }, children: "Existe una diferencia entre el desglose interno y el total del presupuesto." }),
       e.jsx("button", { style: Object.assign({}, c.btn("p"), { width: "100%", padding: 12, marginTop: 12 }), onClick: guardar, children: "💾 Guardar desglose interno" })
     ] });
@@ -71138,7 +71144,7 @@ K &&
           ] }),
           e.jsx("textarea", { value: doc.observaciones || "", onChange: function (ev) { cambiar("observaciones", ev.target.value); }, rows: 5, style: Object.assign({}, c.inp, { display: "block", width: "100%" }) })
         ] }),
-        e.jsx("div", { style: Object.assign({}, c.card, { display: "grid", gridTemplateColumns: "1fr auto", gap: 6 }), children: resumen.map(function (x) { return [e.jsx("span", { style: x[2] ? { color: a.accent, fontWeight: 800 } : {}, children: x[0] }, x[0] + "l"), e.jsx("b", { style: x[2] ? { color: a.accent } : {}, children: x[1] }, x[0] + "v")]; }) }),
+        e.jsx("div", { style: Object.assign({}, c.card, { display: "grid", gridTemplateColumns: "1fr auto", gap: 6 }), children: resumen.map(function (x) { return [e.jsx("span", { style: x[2] ? { color: a.accentTxt, fontWeight: 800 } : {}, children: x[0] }, x[0] + "l"), e.jsx("b", { style: x[2] ? { color: a.accentTxt } : {}, children: x[1] }, x[0] + "v")]; }) }),
       ] }),
       e.jsx("button", { style: Object.assign({}, c.btn("p"), { width: "100%", padding: 12, marginTop: 12 }), onClick: guardar, children: "💾 Guardar resumen de dotación" }),
     ] });
@@ -71270,7 +71276,7 @@ K &&
         e.jsx("div", { style: Object.assign({}, c.card, { display: "grid", gridTemplateColumns: "1fr auto", gap: 6 }), children: [
           [e.jsx("span", { children: "Valor contratado" }, "l1"), e.jsx("b", { children: money(calculo.total.valorContratado) }, "v1")],
           [e.jsx("span", { children: "Monto anterior" }, "l2"), e.jsx("b", { children: money(calculo.total.montoAnterior) }, "v2")],
-          [e.jsx("span", { style: { color: a.accent, fontWeight: 800 }, children: "Monto del período" }, "l3"), e.jsx("b", { style: { color: a.accent }, children: money(calculo.total.montoPeriodo) }, "v3")],
+          [e.jsx("span", { style: { color: a.accentTxt, fontWeight: 800 }, children: "Monto del período" }, "l3"), e.jsx("b", { style: { color: a.accentTxt }, children: money(calculo.total.montoPeriodo) }, "v3")],
           [e.jsx("span", { children: "Monto acumulado (" + pctTotal.toFixed(1) + "%)" }, "l4"), e.jsx("b", { children: money(calculo.total.montoAcumulado) }, "v4")],
           [e.jsx("span", { children: "Saldo por ejecutar" }, "l5"), e.jsx("b", { children: money(calculo.total.saldo) }, "v5")],
         ] }),
@@ -71986,7 +71992,7 @@ K &&
             e.jsx("th", { style: { padding: "8px 12px", textAlign: "left", width: "40%" }, children: "Partida / Capítulo" }),
             e.jsx("th", { style: { padding: "8px 12px", textAlign: "right" }, children: "Cantidad" }),
             e.jsx("th", { style: { padding: "8px 12px", textAlign: "right" }, children: "Valor Contratado" }),
-            e.jsx("th", { style: { padding: "8px 12px", textAlign: "right", color: "#fca5a5" }, children: "Rebaja Proyectada" }),
+            e.jsx("th", { style: { padding: "8px 12px", textAlign: "right", color: a.dangerTxt }, children: "Rebaja Proyectada" }),
             e.jsx("th", { style: { padding: "8px 12px", textAlign: "right", color: "#93c5fd" }, children: "Nuevo Monto" }),
             e.jsx("th", { style: { padding: "8px 12px", textAlign: "right" }, children: "Margen Nuevo" })
          ] }) }),
@@ -72056,9 +72062,9 @@ K &&
                         ] }),
                         e.jsxs("td", { style: { textAlign: "right", color: a.muted }, children: [p.cantidad, " ", p.unidad] }),
                         e.jsx("td", { style: { textAlign: "right" }, children: money(pv) }),
-                        e.jsx("td", { style: { textAlign: "right", color: "#ef4444" }, children: money(rPartida) }),
+                        e.jsx("td", { style: { textAlign: "right", color: a.dangerTxt }, children: money(rPartida) }),
                         e.jsx("td", { style: { textAlign: "right", fontWeight: "bold" }, children: money(pvSim) }),
-                        e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: margPSim >= margenMinPct ? "#10b981" : "#ef4444" }, children: margPSim.toFixed(1) + "%" })
+                        e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: margPSim >= margenMinPct ? a.okTxt : a.dangerTxt }, children: margPSim.toFixed(1) + "%" })
                      ] }, p.id),
 
                      // Expanded resource row
@@ -72081,13 +72087,13 @@ K &&
                               return e.jsxs("tr", { style: { borderBottom: "1px solid #f1f5f9" }, children: [
                                  e.jsxs("td", { style: { padding: 4 }, children: [
                                     e.jsx("div", { style: { fontWeight: "bold" }, children: m.nombre }),
-                                    pctImpacto > 20 && e.jsx("div", { style: { fontSize: 9, color: "#ef4444" }, children: "💡 Insumo clave" })
+                                    pctImpacto > 20 && e.jsx("div", { style: { fontSize: 9, color: a.dangerTxt }, children: "💡 Insumo clave" })
                                  ] }),
                                  e.jsxs("td", { style: { padding: 4, textAlign: "right" }, children: [(Number(m.consumo) || 0).toLocaleString("es-CL", { maximumFractionDigits: 3 }), " ", m.unidad] }),
                                  e.jsx("td", { style: { padding: 4, textAlign: "right" }, children: qtyTotal.toFixed(2) }),
                                  e.jsx("td", { style: { padding: 4, textAlign: "right" }, children: money(m.precio) }),
                                  e.jsx("td", { style: { padding: 4, textAlign: "right", fontWeight: "bold" }, children: money(cTotal) }),
-                                 e.jsxs("td", { style: { padding: 4, textAlign: "center", color: pctImpacto > 20 ? "#ef4444" : "#475569" }, children: [pctImpacto.toFixed(1), "%"] })
+                                 e.jsxs("td", { style: { padding: 4, textAlign: "center", color: pctImpacto > 20 ? a.dangerTxt : "#475569" }, children: [pctImpacto.toFixed(1), "%"] })
                               ] }, mIdx);
                            }) })
                         ] })
@@ -72102,7 +72108,7 @@ K &&
             e.jsx("td", { style: { textAlign: "right", fontWeight: "bold" }, children: money(precioOfertado) }),
             e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: "#dc2626" }, children: money(descuentoAplicado) }),
             e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: "#2563eb" }, children: money(precioSimulado) }),
-            e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: margenSimuladoPct >= margenMinPct ? "#10b981" : "#ef4444" }, children: margenSimuladoPct.toFixed(1) + "%" })
+            e.jsx("td", { style: { textAlign: "right", fontWeight: "bold", color: margenSimuladoPct >= margenMinPct ? a.okTxt : a.dangerTxt }, children: margenSimuladoPct.toFixed(1) + "%" })
          ] }) })
       ] }) })),
 
@@ -72152,11 +72158,11 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
       ] }),
       seccion("Datos generales", e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, fontSize: 12 }, children: [
         e.jsxs("div", { children: [e.jsx("div", { style: { color: a.muted, fontSize: 11 }, children: "Cliente" }), e.jsx("b", { children: (i && i.nombre) || "Sin cliente" })] }),
-        e.jsxs("div", { children: [e.jsx("div", { style: { color: a.muted, fontSize: 11 }, children: "Inversión total" }), e.jsx("b", { style: { color: a.accent }, children: money(totales.total) })] }),
+        e.jsxs("div", { children: [e.jsx("div", { style: { color: a.muted, fontSize: 11 }, children: "Inversión total" }), e.jsx("b", { style: { color: a.accentTxt }, children: money(totales.total) })] }),
         e.jsxs("div", { style: { display: "flex", gap: 8, alignItems: "end" }, children: [e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Plazo", e.jsx("input", { type: "number", value: doc.plazoNumero, onChange: function (ev) { cambiar("plazoNumero", Number(ev.target.value) || 0); }, style: Object.assign({}, c.inp, { display: "block", width: 80, marginTop: 5 }) })] }), e.jsxs("label", { style: { fontSize: 11, color: a.muted }, children: ["Unidad", e.jsx("input", { type: "text", value: doc.plazoUnidad, onChange: function (ev) { cambiar("plazoUnidad", ev.target.value); }, style: Object.assign({}, c.inp, { display: "block", width: 80, marginTop: 5 }) })] })] }),
       ] })),
       seccion("Alcance principal por capítulos", e.jsx("div", { style: { display: "grid", gap: 10 }, children: estructura.map(function (cap) { var sub = cap.partidas.reduce(function (s0, p) { return s0 + p.valorContratado; }, 0); return e.jsxs("div", { style: { border: "1px solid " + a.border, borderRadius: 8, padding: 10 }, children: [
-        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700, marginBottom: 6 }, children: [e.jsx("span", { children: (cap.codigo ? cap.codigo + " — " : "") + cap.nombre }), e.jsx("span", { style: { color: a.accent }, children: money(sub) })] }),
+        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700, marginBottom: 6 }, children: [e.jsx("span", { children: (cap.codigo ? cap.codigo + " — " : "") + cap.nombre }), e.jsx("span", { style: { color: a.accentTxt }, children: money(sub) })] }),
         e.jsx("textarea", { value: doc.sintesisPorCapitulo[cap.id] || "", onChange: function (ev) { cambiarSintesis(cap.id, ev.target.value); }, style: Object.assign({}, c.inp, { width: "100%", minHeight: 50 }) }),
       ] }, cap.id); }) })),
       seccion("Qué incluye / Qué no incluye", e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }, children: [listaEditor("Qué incluye", "incluye"), listaEditor("Qué no incluye", "noIncluye")] })),
@@ -72307,7 +72313,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                 }),
               j &&
                 e.jsx("span", {
-                  style: { fontSize: 13, color: a.accent, fontWeight: 700 },
+                  style: { fontSize: 13, color: a.accentTxt, fontWeight: 700 },
                   children: `$${Ee(j.items, r, j.descuento, j.modoCosteo, j.sinIva).total.toLocaleString("es-CL")}`,
                 }),
             ],
@@ -72471,7 +72477,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                 e.jsx("span", {
                                   style: {
                                     fontSize: 11,
-                                    color: "#f87171",
+                                    color: a.dangerTxt,
                                     fontWeight: 600,
                                   },
                                   children: "⚠️ Confidencial — uso interno",
@@ -72520,7 +72526,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                               children: [
                                 "Este documento está disponible desde el plan ",
                                 e.jsx("strong", {
-                                  style: { color: "#38bdf8" },
+                                  style: { color: a.infoTxt },
                                   children: "Constructor",
                                 }),
                                 " ($29.990 pago único)",
@@ -73757,7 +73763,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                     e.jsxs("div", {
                                       style: {
                                         fontSize: 12,
-                                        color: "#34d399",
+                                        color: a.okTxt,
                                         marginTop: 4,
                                       },
                                       children: ["Avance: ", k.avance, "%"],
@@ -74701,7 +74707,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                     children: [
                                       "Tienes ",
                                       e.jsxs("strong", {
-                                        style: { color: "#f87171" },
+                                        style: { color: a.dangerTxt },
                                         children: [S.length, " materiales"],
                                       }),
                                       " sin actualizar hace más de 30 días.",
@@ -74760,7 +74766,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                             children:
                                               f !== "" && !isNaN(parseFloat(f))
                                                 ? e.jsx("span", {
-                                                    style: { color: a.accent },
+                                                    style: { color: a.accentTxt },
                                                     children: "✏️ Manual",
                                                   })
                                                 : e.jsxs("span", {
@@ -74768,7 +74774,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                                       "IPC: ",
                                                       e.jsxs("strong", {
                                                         style: {
-                                                          color: a.accent,
+                                                          color: a.accentTxt,
                                                         },
                                                         children: [
                                                           "+",
@@ -74945,7 +74951,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                       }),
                                       e.jsxs("td", {
                                         style: u(d({}, c.td), {
-                                          color: "#4ade80",
+                                          color: a.okTxt,
                                           fontWeight: 700,
                                         }),
                                         children: [
@@ -74959,7 +74965,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                         style: d({}, c.td),
                                         children: e.jsxs("span", {
                                           style: {
-                                            color: "#f87171",
+                                            color: a.dangerTxt,
                                             fontWeight: 700,
                                           },
                                           children: [
@@ -75039,7 +75045,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                 e.jsx("div", {
                                   style: {
                                     fontSize: 10,
-                                    color: "#f87171",
+                                    color: a.dangerTxt,
                                     marginTop: 2,
                                   },
                                   children: T.fechaActualizacion
@@ -75156,7 +75162,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                       style: { background: "rgba(0,0,0,0.1)", padding: "12px 16px", fontWeight: 600, display: "flex", justifyContent: "space-between" },
                       children: [
                         e.jsx("span", { children: `Vista Previa: ${batchMaterials.length} materiales afectados` }),
-                        isValidPct && e.jsx("span", { style: { color: pctValue > 0 ? "#f87171" : "#34d399" }, children: `Impacto: ${pctValue > 0 ? "+" : ""}${pctValue}%` })
+                        isValidPct && e.jsx("span", { style: { color: pctValue > 0 ? a.dangerTxt : a.okTxt }, children: `Impacto: ${pctValue > 0 ? "+" : ""}${pctValue}%` })
                       ]
                     }),
                     e.jsx("div", {
@@ -75181,7 +75187,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                 children: [
                                   e.jsx("td", { style: { padding: "8px 16px", fontSize: 13, fontWeight: 500 }, children: m.nombre }),
                                   e.jsx("td", { style: { padding: "8px 16px", fontSize: 13, textAlign: "right", color: "var(--muted)" }, children: "$" + oldP.toLocaleString("es-CL") }),
-                                  e.jsx("td", { style: { padding: "8px 16px", fontSize: 13, textAlign: "right", fontWeight: 600, color: isValidPct && pctValue > 0 ? "#f87171" : (isValidPct && pctValue < 0 ? "#34d399" : "var(--text)") }, children: "$" + newP.toLocaleString("es-CL") })
+                                  e.jsx("td", { style: { padding: "8px 16px", fontSize: 13, textAlign: "right", fontWeight: 600, color: isValidPct && pctValue > 0 ? a.dangerTxt : (isValidPct && pctValue < 0 ? a.okTxt : "var(--text)") }, children: "$" + newP.toLocaleString("es-CL") })
                                 ]
                               }, m.id || idx);
                             }),
@@ -75508,7 +75514,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                               style: {
                                 fontSize: 16,
                                 fontWeight: 800,
-                                color: "#4ade80",
+                                color: a.okTxt,
                                 marginBottom: 6,
                               },
                               children: [
@@ -75555,7 +75561,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                         style: {
                                           fontSize: 13,
                                           fontWeight: 700,
-                                          color: a.accent,
+                                          color: a.accentTxt,
                                         },
                                         children: ne(T.precio),
                                       }),
@@ -75692,7 +75698,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                   e.jsx("div", {
                                     style: {
                                       fontSize: 11,
-                                      color: T.auto ? "#4ade80" : a.accent,
+                                      color: T.auto ? a.okTxt : a.accent,
                                       fontWeight: 600,
                                       marginTop: 2,
                                     },
@@ -75809,7 +75815,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                         style: {
                                           fontSize: 16,
                                           fontWeight: 700,
-                                          color: a.accent,
+                                          color: a.accentTxt,
                                         },
                                         children: [
                                           "+",
@@ -76027,7 +76033,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                   : e.jsx("span", {
                       style: {
                         fontSize: 36,
-                        color: "#f5a020",
+                        color: a.accentTxt,
                         fontWeight: 900,
                       },
                       children: "E",
@@ -76398,7 +76404,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
         borderRadius: 7,
         border: "1px solid " + (props.border || "rgba(100,140,180,.35)"),
         background: props.surface || "rgba(80,120,160,.08)",
-        color: props.accent || "#f5a020",
+        color: props.accent || a.accentTxt,
         fontSize: compact ? 12 : 10.5,
         fontWeight: 900,
         cursor: "pointer",
@@ -77942,7 +77948,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                           fontSize: 11,
                           fontWeight: 800,
                           whiteSpace: "nowrap",
-                          color: dirtyDraft ? "#fbbf24" : savedAt ? "#34d399" : props.th.muted,
+                          color: dirtyDraft ? a.accentTxt : savedAt ? a.okTxt : props.th.muted,
                           border:
                             "1px solid " +
                             (dirtyDraft
@@ -78158,7 +78164,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                     children: [
                                       "Estado de trabajo",
                                       e.jsx("div", {
-                                        style: Object.assign({}, props.sty.inp, { width: "100%", marginTop: 5, minHeight: 38, display: "flex", alignItems: "center", color: "#fbbf24", fontWeight: 700, cursor: "default" }),
+                                        style: Object.assign({}, props.sty.inp, { width: "100%", marginTop: 5, minHeight: 38, display: "flex", alignItems: "center", color: a.accentTxt, fontWeight: 700, cursor: "default" }),
                                         children: mpDisplayText(
                                           (props.initialItem && props.initialItem.estado) || form.Estado,
                                           "Borrador",
@@ -78400,7 +78406,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                           children: [opportunity.organismo, opportunity.region].filter(Boolean).join(" · ") || "Organismo no informado",
                                         }),
                                         e.jsxs("div", { style: { marginTop: 9 }, children: [
-                                          e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, color: props.th.text, fontSize: 10.5, fontWeight: 800 }, children: [e.jsx("span", { children: "Continuar desde: " + savedStage }), e.jsx("span", { style: { color: progress.percent === 100 ? "#34d399" : props.th.accent }, children: progress.percent + "% · " + progress.ready + "/" + progress.total })] }),
+                                          e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, color: props.th.text, fontSize: 10.5, fontWeight: 800 }, children: [e.jsx("span", { children: "Continuar desde: " + savedStage }), e.jsx("span", { style: { color: progress.percent === 100 ? a.okTxt : props.th.accent }, children: progress.percent + "% · " + progress.ready + "/" + progress.total })] }),
                                           e.jsx("div", { style: { height: 7, borderRadius: 999, background: props.th.card, overflow: "hidden", marginTop: 6 }, children: e.jsx("div", { style: { width: progress.percent + "%", height: "100%", background: progress.percent === 100 ? "#34d399" : props.th.accent } }) }),
                                           progress.pending.length > 0 && e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, lineHeight: 1.4, marginTop: 6 }, children: "Primer bloque pendiente: " + progress.stage + " · " + progress.pending.join(" · ") }),
                                           progress.updatedAt && e.jsx("div", { style: { color: props.th.muted, fontSize: 9, marginTop: 4 }, children: "Último guardado: " + new Date(progress.updatedAt).toLocaleString("es-CL") }),
@@ -78473,7 +78479,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                           e.jsx("textarea", { value: document.textoAnalisis || "", onChange: function (event) { updateAntecedent(document.id, "textoAnalisis", event.target.value); }, placeholder: "Pega el texto de garantías, plazos, visita a terreno, anexos y requisitos...", style: Object.assign({}, props.sty.inp, { minHeight: 76, resize: "vertical", fontSize: 11 }) }),
                           e.jsx("button", { type: "button", onClick: function () { analyzeStoredAntecedent(document.id); }, disabled: !String(document.textoAnalisis || "").trim(), style: Object.assign({}, props.sty.btn("p"), { marginTop: 7, padding: "7px 11px", fontSize: 10.5 }), children: "🔎 Analizar texto" }),
                         ] }),
-                        !requiresText && e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginTop: 8 }, children: [e.jsx("span", { style: { color: "#34d399", fontSize: 10.5, fontWeight: 800 }, children: "✓ Texto disponible para análisis" }), e.jsx("button", { type: "button", onClick: function () { analyzeStoredAntecedent(document.id); }, style: Object.assign({}, props.sty.btn("s"), { padding: "5px 9px", fontSize: 10 }), children: "Volver a analizar" })] }),
+                        !requiresText && e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginTop: 8 }, children: [e.jsx("span", { style: { color: a.okTxt, fontSize: 10.5, fontWeight: 800 }, children: "✓ Texto disponible para análisis" }), e.jsx("button", { type: "button", onClick: function () { analyzeStoredAntecedent(document.id); }, style: Object.assign({}, props.sty.btn("s"), { padding: "5px 9px", fontSize: 10 }), children: "Volver a analizar" })] }),
                       ] }, document.id);
                     }) }),
                   ] }),
@@ -78483,11 +78489,11 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                       var applied = finding.status === "aplicado";
                       var dismissed = finding.status === "descartado";
                       return e.jsxs("div", { style: { padding: 11, borderRadius: 8, background: props.th.surface, border: "1px solid " + (applied ? "rgba(52,211,153,.5)" : dismissed ? props.th.border : "rgba(245,160,32,.38)"), opacity: dismissed ? .62 : 1 }, children: [
-                        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "flex-start" }, children: [e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 12.5, fontWeight: 900 }, children: (finding.type === "garantia" ? "🛡️ " : finding.type === "documento" ? "📎 " : "🔎 ") + finding.title }), e.jsx("div", { style: { color: applied ? "#34d399" : props.th.accent, fontSize: 11, fontWeight: 800, marginTop: 3 }, children: finding.value })] }), e.jsx("span", { style: { color: finding.confidence === "Alta" ? "#34d399" : "#fbbf24", fontSize: 9.5, fontWeight: 900 }, children: "CONFIANZA " + finding.confidence.toUpperCase() })] }),
+                        e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 10, alignItems: "flex-start" }, children: [e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 12.5, fontWeight: 900 }, children: (finding.type === "garantia" ? "🛡️ " : finding.type === "documento" ? "📎 " : "🔎 ") + finding.title }), e.jsx("div", { style: { color: applied ? a.okTxt : props.th.accent, fontSize: 11, fontWeight: 800, marginTop: 3 }, children: finding.value })] }), e.jsx("span", { style: { color: finding.confidence === "Alta" ? a.okTxt : a.accentTxt, fontSize: 9.5, fontWeight: 900 }, children: "CONFIANZA " + finding.confidence.toUpperCase() })] }),
                         e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 5, lineHeight: 1.45 }, children: finding.detail }),
                         e.jsxs("details", { style: { marginTop: 7 }, children: [e.jsx("summary", { style: { color: props.th.muted, fontSize: 10, cursor: "pointer", fontWeight: 800 }, children: "Ver evidencia · " + finding.source }), e.jsx("div", { style: { color: props.th.text, fontSize: 10.5, lineHeight: 1.5, marginTop: 6, padding: 8, borderLeft: "3px solid " + props.th.accent, background: props.th.card }, children: finding.evidence || "Evidencia no disponible" })] }),
                         finding.status === "pendiente" && e.jsxs("div", { style: { display: "flex", justifyContent: "flex-end", gap: 7, marginTop: 8 }, children: [e.jsx("button", { type: "button", onClick: function () { dismissAntecedentFinding(finding.id); }, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 10 }), children: "Descartar" }), e.jsx("button", { type: "button", onClick: function () { applyAntecedentFinding(finding.id); }, style: Object.assign({}, props.sty.btn("p"), { padding: "6px 10px", fontSize: 10, fontWeight: 800 }), children: finding.type === "garantia" ? "Aplicar a Garantías" : finding.type === "plazo" ? "Aplicar a General" : finding.type === "documento" ? "Agregar a Documentos" : "Marcar revisado" })] }),
-                        applied && e.jsx("div", { style: { color: "#34d399", fontSize: 10.5, fontWeight: 800, marginTop: 7 }, children: "✓ Aplicado; revisa el campo de destino antes de postular." }),
+                        applied && e.jsx("div", { style: { color: a.okTxt, fontSize: 10.5, fontWeight: 800, marginTop: 7 }, children: "✓ Aplicado; revisa el campo de destino antes de postular." }),
                         dismissed && e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 7 }, children: "Hallazgo descartado por el usuario." }),
                       ] }, finding.id);
                     }) }),
@@ -78503,7 +78509,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                   e.jsxs("section", { style: { background: "rgba(96,165,250,.08)", border: "1px solid rgba(96,165,250,.38)", borderRadius: 10, padding: 14, marginBottom: 14 }, children: [
                     e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 12, alignItems: "center", flexWrap: "wrap" }, children: [
                       e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontWeight: 900, fontSize: 14 }, children: "🧭 Tu ruta documental, sin experiencia previa" }), e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginTop: 4 }, children: "ECP organiza y prepara; tú confirmas la exigencia en las bases antes de enviar." })] }),
-                      e.jsx("div", { style: { color: documentChecklistReady === normalizedChecklistDocuments.length && normalizedChecklistDocuments.length ? "#34d399" : props.th.accent, fontWeight: 900, fontSize: 13 }, children: documentChecklistReady + " / " + normalizedChecklistDocuments.length + " documentos listos" }),
+                      e.jsx("div", { style: { color: documentChecklistReady === normalizedChecklistDocuments.length && normalizedChecklistDocuments.length ? a.okTxt : props.th.accent, fontWeight: 900, fontSize: 13 }, children: documentChecklistReady + " / " + normalizedChecklistDocuments.length + " documentos listos" }),
                     ] }),
                     e.jsx("div", { style: { height: 6, borderRadius: 999, background: props.th.surface, overflow: "hidden", marginTop: 10 }, children: e.jsx("div", { style: { width: (normalizedChecklistDocuments.length ? Math.round(documentChecklistReady / normalizedChecklistDocuments.length * 100) : 0) + "%", height: "100%", background: documentChecklistReady === normalizedChecklistDocuments.length && normalizedChecklistDocuments.length ? "#34d399" : props.th.accent } }) }),
                     e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 8, marginTop: 12 }, children: [
@@ -78511,7 +78517,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                       ["2", "Prepara", "Completa, firma y respalda cada documento en su formato oficial."],
                       ["3", "Comprueba", "Marca Listo solo después de abrir el archivo final y revisarlo."],
                     ].map(function (guide) { return e.jsxs("div", { style: { background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 8, padding: 10 }, children: [e.jsx("span", { style: { display: "inline-flex", width: 22, height: 22, borderRadius: 99, alignItems: "center", justifyContent: "center", background: props.th.accent, color: "#111", fontWeight: 900, fontSize: 11 }, children: guide[0] }), e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 11, marginTop: 7 }, children: guide[1] }), e.jsx("div", { style: { color: props.th.muted, fontSize: 10, lineHeight: 1.4, marginTop: 3 }, children: guide[2] })] }, guide[0]); }) }),
-                    e.jsx("div", { style: { color: "#fbbf24", fontSize: 10.5, marginTop: 10, lineHeight: 1.45 }, children: "⚠️ ‘Borrador listo’ no significa ‘listo para enviar’: todavía debes revisar la versión final, firmas, fechas, vigencias y coincidencia con las bases." }),
+                    e.jsx("div", { style: { color: a.accentTxt, fontSize: 10.5, marginTop: 10, lineHeight: 1.45 }, children: "⚠️ ‘Borrador listo’ no significa ‘listo para enviar’: todavía debes revisar la versión final, firmas, fechas, vigencias y coincidencia con las bases." }),
                   ] }),
                   suggestedChecklistDocuments.length > 0 && e.jsxs("section", { style: { background: "rgba(245,160,32,.07)", border: "1px solid rgba(245,160,32,.4)", borderRadius: 10, padding: 14, marginBottom: 14 }, children: [
                     e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 900 }, children: "💡 Sugerencias encontradas en tus antecedentes" }),
@@ -78521,7 +78527,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                   e.jsxs("section", { style: { background: props.th.card, border: "1px solid " + props.th.border, borderRadius: 10, padding: 16, marginBottom: 14 }, children: [
                     e.jsx("div", { style: { color: props.th.text, fontSize: 14, fontWeight: 800, marginBottom: 10 }, children: "Documentos que ECP puede preparar" }),
                     e.jsx("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 10 }, children: automaticDocuments.map(function (document) { return e.jsxs("div", { style: { padding: 13, background: props.th.surface, border: "1px solid " + (document.ready ? "rgba(52,211,153,.45)" : props.th.border), borderRadius: 8 }, children: [
-                      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8 }, children: [e.jsx("div", { style: { fontSize: 20 }, children: document.icon }), e.jsx("span", { style: { color: document.ready ? "#34d399" : "#fbbf24", fontSize: 10, fontWeight: 800 }, children: document.ready ? "BORRADOR PARA REVISAR" : "FALTAN DATOS" })] }),
+                      e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8 }, children: [e.jsx("div", { style: { fontSize: 20 }, children: document.icon }), e.jsx("span", { style: { color: document.ready ? a.okTxt : a.accentTxt, fontSize: 10, fontWeight: 800 }, children: document.ready ? "BORRADOR PARA REVISAR" : "FALTAN DATOS" })] }),
                       e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 13, marginTop: 5 }, children: document.title }),
                       e.jsx("div", { style: { color: props.th.muted, fontSize: 11, marginTop: 4, lineHeight: 1.4 }, children: document.desc }),
                       e.jsx("button", { type: "button", onClick: function () { openAutomaticDocument(document); }, style: Object.assign({}, props.sty.btn(document.ready ? "s" : "p"), { width: "100%", marginTop: 9, padding: "7px 9px", fontSize: 11 }), children: document.ready ? "👁 Abrir y revisar borrador" : "✏️ Completar datos faltantes" }),
@@ -78588,7 +78594,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                     e.jsx("textarea", { rows: 4, value: form.DecisionJustificacion || "", onChange: function (event) { updateFichaField("DecisionJustificacion", event.target.value); }, placeholder: "Explica brevemente por qué conviene, qué falta revisar o por qué no participar...", style: Object.assign({}, props.sty.inp, { width: "100%", marginTop: 12, resize: "vertical" }) }),
                     e.jsxs("label", { style: { display: "flex", gap: 9, alignItems: "flex-start", padding: 11, marginTop: 10, borderRadius: 8, background: props.th.surface, border: "1px solid " + (form.DecisionConfirmada ? "rgba(52,211,153,.5)" : props.th.border), color: props.th.text, fontSize: 11.5 }, children: [e.jsx("input", { type: "checkbox", disabled: !form.DecisionEstudio || form.DecisionEstudio === "Por decidir", checked: !!form.DecisionConfirmada, onChange: function (event) { updateFichaField("DecisionConfirmada", event.target.checked); } }), e.jsx("span", { children: "Confirmo que esta decisión se basa en la ficha, las bases y el itemizado preliminar." })] }),
                   ] }),
-                  studyDecisionApproved && e.jsx("div", { style: { padding: 12, borderRadius: 9, background: "rgba(52,211,153,.09)", border: "1px solid rgba(52,211,153,.45)", color: "#34d399", fontSize: 12, fontWeight: 900 }, children: "✓ Estudio aprobado. Al continuar comenzarás la oferta económica final." }),
+                  studyDecisionApproved && e.jsx("div", { style: { padding: 12, borderRadius: 9, background: "rgba(52,211,153,.09)", border: "1px solid rgba(52,211,153,.45)", color: a.okTxt, fontSize: 12, fontWeight: 900 }, children: "✓ Estudio aprobado. Al continuar comenzarás la oferta económica final." }),
                 ],
               }),
               (step === 3 || step === 5) && (function () {
@@ -78789,7 +78795,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                   ] }),
                   e.jsxs("section", { style: sectionStyle, children: [
                     e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginBottom: 10 }, children: [
-                      e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14 }, children: "1. Metodología de trabajo" }), e.jsx("div", { style: { color: "#ef4444", fontSize: 9.5, fontWeight: 800, marginTop: 2 }, children: "OBLIGATORIO PARA EL BORRADOR" })] }),
+                      e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontWeight: 800, fontSize: 14 }, children: "1. Metodología de trabajo" }), e.jsx("div", { style: { color: a.dangerTxt, fontSize: 9.5, fontWeight: 800, marginTop: 2 }, children: "OBLIGATORIO PARA EL BORRADOR" })] }),
                       e.jsx("button", { type: "button", onClick: applyTechnicalTemplate, style: Object.assign({}, props.sty.btn("s"), { padding: "6px 10px", fontSize: 11 }), children: "✨ Ayúdame a redactar" }),
                     ] }),
                     e.jsx("div", { style: { color: props.th.muted, fontSize: 11, lineHeight: 1.5, marginBottom: 9 }, children: "Responde en un solo relato: cómo comenzarás, cómo ejecutarás, qué controles aplicarás y cómo entregarás el trabajo. La plantilla es un punto de partida editable." }),
@@ -78848,7 +78854,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                           e.jsx("div", { style: { color: props.th.text, fontSize: 12.5, fontWeight: 900 }, children: "👥 Constructor de cuadrilla por cargos" }),
                           e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, marginTop: 3, lineHeight: 1.45 }, children: "Usa los cargos, jornales y jornadas de Configuración. Al aplicar, estos valores quedan copiados en la licitación y no cambian retroactivamente." }),
                         ] }),
-                        crewPlanApplied && e.jsx("span", { style: { color: "#34d399", background: "rgba(52,211,153,.09)", border: "1px solid rgba(52,211,153,.35)", borderRadius: 999, padding: "4px 8px", fontSize: 9.5, fontWeight: 900 }, children: "✓ PLAN APLICADO" }),
+                        crewPlanApplied && e.jsx("span", { style: { color: a.okTxt, background: "rgba(52,211,153,.09)", border: "1px solid rgba(52,211,153,.35)", borderRadius: 999, padding: "4px 8px", fontSize: 9.5, fontWeight: 900 }, children: "✓ PLAN APLICADO" }),
                       ] }),
                       configuredLaborRoles.length ? e.jsxs("div", { children: [
                         e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, fontWeight: 800, textTransform: "uppercase", marginBottom: 5 }, children: "Combinaciones rápidas" }),
@@ -79043,7 +79049,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                         e.jsx("button", { type: "button", onClick: function () { selectGuaranteeDecision(definition.key, "exigida"); }, style: Object.assign({}, props.sty.btn("s"), { padding: "9px 8px", borderColor: decision === "exigida" ? props.th.accent : props.th.border, background: decision === "exigida" ? "rgba(250,162,32,.13)" : props.th.surface, color: decision === "exigida" ? props.th.accent : props.th.text, fontWeight: 800 }), children: decision === "exigida" ? "✓ Sí se exige" : "Sí se exige" }),
                       ] }),
                       decision === "pendiente" && e.jsx("div", { style: { color: props.th.muted, fontSize: 10.5, padding: 10, textAlign: "center", background: props.th.surface, borderRadius: 7 }, children: "Selecciona una opción después de revisar las bases." }),
-                      decision === "no_exigida" && e.jsx("div", { style: { color: "#34d399", fontSize: 10.5, padding: 10, textAlign: "center", background: "rgba(52,211,153,.08)", borderRadius: 7 }, children: definition.key === "fiel" ? "Registrado: las bases no contemplan esta garantía en caso de adjudicación." : "Registrado: esta garantía no debe acompañar la oferta." }),
+                      decision === "no_exigida" && e.jsx("div", { style: { color: a.okTxt, fontSize: 10.5, padding: 10, textAlign: "center", background: "rgba(52,211,153,.08)", borderRadius: 7 }, children: definition.key === "fiel" ? "Registrado: las bases no contemplan esta garantía en caso de adjudicación." : "Registrado: esta garantía no debe acompañar la oferta." }),
                       decision === "exigida" && e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 }, children: [
                         e.jsxs("label", { style: props.sty.lbl, children: ["Forma del monto", e.jsx("select", { value: guarantee.montoTipo || "monto", onChange: function (event) { updateGuarantee(definition.key, "montoTipo", event.target.value); }, style: Object.assign({}, props.sty.sel, { marginTop: 5 }), children: [e.jsx("option", { value: "monto", children: "Monto fijo ($)" }), e.jsx("option", { value: "porcentaje", children: "Porcentaje (%)" })] })] }),
                         e.jsxs("label", { style: props.sty.lbl, children: [guarantee.montoTipo === "porcentaje" ? "Porcentaje exigido (%) *" : "Monto exigido ($) *", e.jsx("input", { type: "number", min: 0, value: guarantee.monto || "", placeholder: guarantee.montoTipo === "porcentaje" ? "Ej: 5" : "Ej: 500000", onChange: function (event) { updateGuarantee(definition.key, "monto", event.target.value); }, style: Object.assign({}, props.sty.inp, { marginTop: 5 }) })] }),
@@ -79147,7 +79153,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                 children: [
                   e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }, children: [
                     e.jsx("div", { style: { color: props.th.text, fontSize: 13, fontWeight: 900 }, children: "Checklist de la oferta" }),
-                    e.jsx("div", { style: { color: checklistProgress === 100 ? "#34d399" : props.th.accent, fontSize: 12, fontWeight: 900 }, children: checklistReady + "/" + checklistItems.length }),
+                    e.jsx("div", { style: { color: checklistProgress === 100 ? a.okTxt : props.th.accent, fontSize: 12, fontWeight: 900 }, children: checklistReady + "/" + checklistItems.length }),
                   ] }),
                   !form.Nombre && selectedPreparationOpportunity && e.jsxs("div", {
                     style: { marginTop: 8, padding: "8px 9px", borderRadius: 7, background: props.th.surface, border: "1px solid " + props.th.border },
@@ -79169,10 +79175,10 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                           else if (props.setToast) props.setToast("⚠️ Guarda primero la ficha oficial");
                         },
                         style: { width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, border: "none", background: activeGroup ? props.th.surface : "transparent", color: activeGroup ? props.th.accent : props.th.text, borderRadius: 6, padding: "5px 6px", cursor: canOpenPreparationStep(group.step) ? "pointer" : "not-allowed", opacity: canOpenPreparationStep(group.step) ? 1 : 0.48, fontSize: 11, fontWeight: 900, textAlign: "left" },
-                        children: [e.jsx("span", { children: group.step + ". " + group.title }), e.jsx("span", { style: { color: groupReady === group.items.length ? "#34d399" : props.th.muted, fontSize: 10 }, children: groupReady + "/" + group.items.length })],
+                        children: [e.jsx("span", { children: group.step + ". " + group.title }), e.jsx("span", { style: { color: groupReady === group.items.length ? a.okTxt : props.th.muted, fontSize: 10 }, children: groupReady + "/" + group.items.length })],
                       }),
                       e.jsx("div", { style: { display: "flex", flexDirection: "column", gap: 5, padding: "6px 5px 0" }, children: group.items.map(function (item) {
-                        return e.jsxs("div", { style: { display: "flex", gap: 6, alignItems: "flex-start", color: item.ready ? "#34d399" : props.th.muted, fontSize: 10.5, lineHeight: 1.3 }, children: [e.jsx("span", { style: { width: 12, flexShrink: 0, fontWeight: 900 }, children: item.ready ? "✓" : "○" }), e.jsx("span", { children: item.label })] }, item.label);
+                        return e.jsxs("div", { style: { display: "flex", gap: 6, alignItems: "flex-start", color: item.ready ? a.okTxt : props.th.muted, fontSize: 10.5, lineHeight: 1.3 }, children: [e.jsx("span", { style: { width: 12, flexShrink: 0, fontWeight: 900 }, children: item.ready ? "✓" : "○" }), e.jsx("span", { children: item.label })] }, item.label);
                       }) }),
                     ] }, group.step);
                   }) }),
@@ -79224,9 +79230,9 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                     ["Itemizado o presupuesto oficial", "Especialmente si existe un archivo Excel"],
                     ["Planos y antecedentes técnicos", "Cuando la contratación corresponda a una obra o instalación"],
                     ["Modelo de contrato y garantías", "Si aparecen como documentos separados"],
-                  ].map(function (requiredDocument) { return e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "17px minmax(0,1fr)", gap: 7, marginBottom: 9 }, children: [e.jsx("span", { style: { color: "#34d399", fontWeight: 900 }, children: "✓" }), e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 11, fontWeight: 800 }, children: requiredDocument[0] }), e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, lineHeight: 1.4, marginTop: 2 }, children: requiredDocument[1] })] })] }, requiredDocument[0]); }),
+                  ].map(function (requiredDocument) { return e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "17px minmax(0,1fr)", gap: 7, marginBottom: 9 }, children: [e.jsx("span", { style: { color: a.okTxt, fontWeight: 900 }, children: "✓" }), e.jsxs("div", { children: [e.jsx("div", { style: { color: props.th.text, fontSize: 11, fontWeight: 800 }, children: requiredDocument[0] }), e.jsx("div", { style: { color: props.th.muted, fontSize: 9.5, lineHeight: 1.4, marginTop: 2 }, children: requiredDocument[1] })] })] }, requiredDocument[0]); }),
                   e.jsxs("div", { style: { marginTop: 11, padding: 10, borderRadius: 8, background: "rgba(239,68,68,.07)", border: "1px solid rgba(239,68,68,.28)" }, children: [e.jsx("div", { style: { color: "#ef4444", fontSize: 10.5, fontWeight: 900 }, children: "⚠ Antes de salir de Mercado Público" }), e.jsx("div", { style: { color: props.th.text, fontSize: 9.8, lineHeight: 1.5, marginTop: 4 }, children: "Revisa las fechas y descarga la versión más reciente. Una modificación o aclaración posterior puede reemplazar una condición de las bases originales." })] }),
-                  e.jsxs("div", { style: { marginTop: 10, padding: 10, borderRadius: 8, background: "rgba(59,130,246,.07)", border: "1px solid rgba(59,130,246,.25)" }, children: [e.jsx("div", { style: { color: "#60a5fa", fontSize: 10.5, fontWeight: 900 }, children: "Estos son antecedentes de entrada" }), e.jsx("div", { style: { color: props.th.text, fontSize: 9.8, lineHeight: 1.5, marginTop: 4 }, children: "Aquí no debes subir todavía tu oferta firmada. Primero cargamos lo publicado por el organismo para que ECP pueda ayudarte a preparar la respuesta." })] }),
+                  e.jsxs("div", { style: { marginTop: 10, padding: 10, borderRadius: 8, background: "rgba(59,130,246,.07)", border: "1px solid rgba(59,130,246,.25)" }, children: [e.jsx("div", { style: { color: a.infoTxt, fontSize: 10.5, fontWeight: 900 }, children: "Estos son antecedentes de entrada" }), e.jsx("div", { style: { color: props.th.text, fontSize: 9.8, lineHeight: 1.5, marginTop: 4 }, children: "Aquí no debes subir todavía tu oferta firmada. Primero cargamos lo publicado por el organismo para que ECP pueda ayudarte a preparar la respuesta." })] }),
                 ] }),
               ] }) }),
               e.jsxs("div", { style: { padding: "12px 18px", borderTop: "1px solid " + props.th.border, background: props.th.card, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }, children: [
@@ -79714,7 +79720,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
               e.jsx("button", { type: "button", onClick: readyCount === checks.length ? (props.onGoSearch || props.onGoConfig) : props.onGoConfig, style: Object.assign({}, sty.btn("p"), { marginTop: 13, padding: "9px 15px", fontWeight: 900 }), children: readyCount === checks.length ? "🔎 Quiero buscar oportunidades" : "🚀 Comenzar mi preparación" }),
             ] }),
             e.jsxs("div", { style: { minWidth: 170, padding: 13, borderRadius: 10, background: th.surface, border: "1px solid " + th.border, textAlign: "center" }, children: [
-              e.jsx("div", { style: { color: progress === 100 ? "#34d399" : th.accent, fontSize: 23, fontWeight: 900 }, children: progress + "%" }),
+              e.jsx("div", { style: { color: progress === 100 ? a.okTxt : th.accent, fontSize: 23, fontWeight: 900 }, children: progress + "%" }),
               e.jsx("div", { style: { color: th.muted, fontSize: 10.5, marginTop: 2 }, children: readyCount + " de " + checks.length + " verificaciones listas" }),
             ] }),
           ] }),
@@ -80386,7 +80392,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
     var countdown = function (fecha) {
       if (!fecha) return null;
       var diff = new Date(fecha) - new Date();
-      if (diff <= 0) return { txt: "Cerrada", color: "#f87171", days: -1 };
+      if (diff <= 0) return { txt: "Cerrada", color: a.dangerTxt, days: -1 };
       var dd = Math.floor(diff / 864e5),
         hh = Math.floor((diff % 864e5) / 36e5);
       var color = dd < 3 ? "#f87171" : dd < 7 ? "#fbbf24" : "#34d399";
@@ -80514,12 +80520,12 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
       if (src === "compra_agil")
         return {
           bg: "rgba(52,211,153,.15)",
-          color: "#34d399",
+          color: a.okTxt,
           label: "\uD83D\uDED2 Compra \u00C1gil",
         };
       return {
         bg: "rgba(96,165,250,.15)",
-        color: "#60a5fa",
+        color: a.infoTxt,
         label: "\u2696\uFE0F Licitaci\u00F3n",
       };
     };
@@ -81868,7 +81874,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                 background: "rgba(96,165,250,.08)",
                               },
                               children: [
-                                e.jsx("div", { style: { color: "#60a5fa", fontSize: 12, fontWeight: 800, marginBottom: 4 }, children: "Vista previa · todavía no está guardada" }),
+                                e.jsx("div", { style: { color: a.infoTxt, fontSize: 12, fontWeight: 800, marginBottom: 4 }, children: "Vista previa · todavía no está guardada" }),
                                 e.jsx("div", { style: { color: th.muted, fontSize: 11.5, lineHeight: 1.45 }, children: "Revisa qué se compra, quién compra, dónde se ejecuta y cuándo cierra. Si te interesa estudiarla, guárdala en Mis oportunidades." }),
                               ],
                             }),
@@ -82068,7 +82074,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                   style: {
                                     fontSize: 14,
                                     fontWeight: 700,
-                                    color: "#10b981",
+                                    color: a.okTxt,
                                     marginBottom: 8,
                                   },
                                   children:
@@ -82195,7 +82201,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                 marginBottom: 24,
                               },
                               children: [
-                                e.jsx("div", { style: { fontSize: 13, fontWeight: 800, color: "#60a5fa", marginBottom: 5 }, children: "¿Qué ocurre al guardarla?" }),
+                                e.jsx("div", { style: { fontSize: 13, fontWeight: 800, color: a.infoTxt, marginBottom: 5 }, children: "¿Qué ocurre al guardarla?" }),
                                 e.jsx("div", { style: { fontSize: 12, color: th.muted, lineHeight: 1.5 }, children: "La oportunidad pasará a Mis oportunidades con estado En estudio. Allí podrás revisar requisitos, costos, riesgos y decidir si conviene comenzar su preparación." }),
                               ],
                             }),
@@ -82526,7 +82532,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                           style: {
                             fontSize: 11,
                             background: "rgba(96,165,250,.15)",
-                            color: "#60a5fa",
+                            color: a.infoTxt,
                             padding: "3px 8px",
                             borderRadius: 12,
                             fontWeight: 600,
@@ -82556,7 +82562,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                         style: {
                           fontSize: 16,
                           fontWeight: 800,
-                          color: "#34d399",
+                          color: a.okTxt,
                           marginBottom: 12,
                         },
                         children: [
@@ -82724,11 +82730,11 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
       setWorkItem = _workItem[1];
     var estados = [
       { id: "Pendiente", color: "#8892a4", icon: "\u23F3" },
-      { id: "En Estudio", color: "#f5a020", icon: "\uD83D\uDD0D" },
-      { id: "En Preparación", color: "#a78bfa", icon: "🛠️" },
-      { id: "Postulada", color: "#60a5fa", icon: "\uD83D\uDCE4" },
-      { id: "Adjudicada", color: "#34d399", icon: "\u2705" },
-      { id: "Perdida", color: "#f87171", icon: "\u274C" },
+      { id: "En Estudio", color: a.accentTxt, icon: "\uD83D\uDD0D" },
+      { id: "En Preparación", color: a.violetTxt, icon: "🛠️" },
+      { id: "Postulada", color: a.infoTxt, icon: "\uD83D\uDCE4" },
+      { id: "Adjudicada", color: a.okTxt, icon: "\u2705" },
+      { id: "Perdida", color: a.dangerTxt, icon: "\u274C" },
     ];
 
     var countdown = function (fecha) {
@@ -82737,7 +82743,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
       if (diff <= 0)
         return {
           txt: "Cerrada",
-          color: "#f87171",
+          color: a.dangerTxt,
           badge: "\uD83D\uDD34",
           days: -1,
         };
@@ -82746,20 +82752,20 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
       if (dd < 3)
         return {
           txt: dd + "d " + hh + "h",
-          color: "#f87171",
+          color: a.dangerTxt,
           badge: "\uD83D\uDD34",
           days: dd,
         };
       if (dd < 7)
         return {
           txt: dd + "d " + hh + "h",
-          color: "#fbbf24",
+          color: a.accentTxt,
           badge: "\uD83D\uDFE1",
           days: dd,
         };
       return {
         txt: dd + "d " + hh + "h",
-        color: "#34d399",
+        color: a.okTxt,
         badge: "\uD83D\uDFE2",
         days: dd,
       };
@@ -82961,7 +82967,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
               }),
               children: [
                 e.jsx("div", {
-                  style: { fontSize: 22, fontWeight: 800, color: "#34d399" },
+                  style: { fontSize: 22, fontWeight: 800, color: a.okTxt },
                   children:
                     "$ " +
                     (totalVal > 0
@@ -82986,7 +82992,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
               }),
               children: [
                 e.jsx("div", {
-                  style: { fontSize: 22, fontWeight: 800, color: "#60a5fa" },
+                  style: { fontSize: 22, fontWeight: 800, color: a.infoTxt },
                   children: lics.filter(function (x) {
                     return x.estado === "Adjudicada";
                   }).length,
@@ -83188,7 +83194,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                     style: {
                                       fontSize: 14,
                                       fontWeight: 800,
-                                      color: "#34d399",
+                                      color: a.okTxt,
                                       marginBottom: 6,
                                     },
                                     children:
@@ -83200,12 +83206,12 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                 : null,
                               it.idMP
                                 ? e.jsxs("div", { style: { display: "flex", alignItems: "center", gap: 6 }, children: [
-                                    e.jsx("a", { href: "https://www.mercadopublico.cl/", target: "_blank", rel: "noopener", style: { fontSize: 11, color: "#60a5fa", textDecoration: "none", fontWeight: 600 }, children: "🏛️ " + it.idMP }),
+                                    e.jsx("a", { href: "https://www.mercadopublico.cl/", target: "_blank", rel: "noopener", style: { fontSize: 11, color: a.infoTxt, textDecoration: "none", fontWeight: 600 }, children: "🏛️ " + it.idMP }),
                                     e.jsx(MpCopyCodeButton, { code: it.idMP, setToast: props.setToast, accent: th.accent, border: th.border, surface: th.card }),
                                   ] })
                                 : null,
                               (it.estado === "En Preparación" || it.preparacion) && e.jsxs("div", { style: { marginTop: 9, padding: "8px 9px", borderRadius: 8, background: th.surface, border: "1px solid " + th.border }, children: [
-                                e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, color: th.text, fontSize: 10.5, fontWeight: 800 }, children: [e.jsx("span", { children: preparationProgress.stage }), e.jsx("span", { style: { color: preparationProgress.percent === 100 ? "#34d399" : "#a78bfa" }, children: preparationProgress.percent + "% · " + preparationProgress.ready + "/" + preparationProgress.total })] }),
+                                e.jsxs("div", { style: { display: "flex", justifyContent: "space-between", gap: 8, color: th.text, fontSize: 10.5, fontWeight: 800 }, children: [e.jsx("span", { children: preparationProgress.stage }), e.jsx("span", { style: { color: preparationProgress.percent === 100 ? a.okTxt : a.violetTxt }, children: preparationProgress.percent + "% · " + preparationProgress.ready + "/" + preparationProgress.total })] }),
                                 e.jsx("div", { style: { height: 6, borderRadius: 999, background: th.card, overflow: "hidden", marginTop: 6 }, children: e.jsx("div", { style: { width: preparationProgress.percent + "%", height: "100%", background: preparationProgress.percent === 100 ? "#34d399" : "#a78bfa" } }) }),
                                 preparationProgress.pending.length > 0 && e.jsx("div", { style: { color: th.muted, fontSize: 9.5, marginTop: 6, lineHeight: 1.35 }, children: "Falta: " + preparationProgress.pending.join(" · ") }),
                               ] }),
@@ -83272,7 +83278,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                     style: {
                                       background: "rgba(248,113,113,.15)",
                                       border: "none",
-                                      color: "#f87171",
+                                      color: a.dangerTxt,
                                       borderRadius: 6,
                                       padding: "4px 8px",
                                       cursor: "pointer",
@@ -83662,7 +83668,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
               error &&
                 e.jsx("div", {
                   style: {
-                    color: "#fbbf24",
+                    color: a.accentTxt,
                     fontSize: 12,
                     padding: 9,
                     border: "1px solid rgba(251,191,36,.35)",
@@ -83692,7 +83698,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                     e.jsx("div", { style: { color: th.text, fontSize: 12, fontWeight: 800, marginBottom: 3 }, children: "Estado del trabajo: En estudio \u00b7 a\u00fan no est\u00e1s postulando" }),
                     e.jsx("div", { style: { color: th.muted, fontSize: 11, lineHeight: 1.4 }, children: nextActionText }),
                   ] }),
-                  e.jsxs("div", { style: { color: evaluationPending === 0 ? "#34d399" : th.accent, fontSize: 12, fontWeight: 900, whiteSpace: "nowrap" }, children: [evaluationCompleted, "/4 etapas"] }),
+                  e.jsxs("div", { style: { color: evaluationPending === 0 ? a.okTxt : th.accent, fontSize: 12, fontWeight: 900, whiteSpace: "nowrap" }, children: [evaluationCompleted, "/4 etapas"] }),
                 ],
               }),
               tab === "resumen"
@@ -84003,7 +84009,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                         },
                         children: [
                           e.jsx("div", {
-                            style: { color: "#34d399", fontWeight: 800, fontSize: 14, marginBottom: 10 },
+                            style: { color: a.okTxt, fontWeight: 800, fontSize: 14, marginBottom: 10 },
                             children: "3. Evaluación económica preliminar",
                           }),
                           e.jsxs("div", {
@@ -84034,7 +84040,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                   e.jsx("div", { style: { color: th.muted, fontSize: 10 }, children: "Margen estimado" }),
                                   e.jsx("div", {
                                     style: {
-                                      color: margin === null ? th.muted : margin >= 0 ? "#34d399" : "#f87171",
+                                      color: margin === null ? th.muted : margin >= 0 ? a.okTxt : a.dangerTxt,
                                       fontSize: 13,
                                       fontWeight: 800,
                                       marginTop: 3,
@@ -84054,7 +84060,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                   e.jsx("div", { style: { color: th.muted, fontSize: 10 }, children: "Margen sobre monto" }),
                                   e.jsx("div", {
                                     style: {
-                                      color: marginPct === null ? th.muted : marginPct >= 0 ? "#34d399" : "#f87171",
+                                      color: marginPct === null ? th.muted : marginPct >= 0 ? a.okTxt : a.dangerTxt,
                                       fontSize: 13,
                                       fontWeight: 800,
                                       marginTop: 3,
@@ -84125,7 +84131,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                               props.onChangeState("Perdida");
                               props.onClose();
                             },
-                            style: u(d({}, sty.btn("s")), { color: "#f87171" }),
+                            style: u(d({}, sty.btn("s")), { color: a.dangerTxt }),
                             children: "❌ Marcar como no conveniente",
                           }),
                           e.jsx("button", {
@@ -84172,11 +84178,11 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
       var time = Date.parse(item.fechaCierre || "");
       if (!Number.isFinite(time)) return { days: null, label: "Sin fecha de cierre", color: th.muted };
       var days = Math.ceil((time - now) / 86400000);
-      if (days < 0) return { days: days, label: "Cerrada", color: "#f87171" };
-      if (days === 0) return { days: 0, label: "Cierra hoy", color: "#ef4444" };
-      if (days <= 3) return { days: days, label: "Cierra en " + days + " día" + (days === 1 ? "" : "s"), color: "#ef4444" };
-      if (days <= 7) return { days: days, label: "Cierra en " + days + " días", color: "#fbbf24" };
-      return { days: days, label: "Cierra en " + days + " días", color: "#34d399" };
+      if (days < 0) return { days: days, label: "Cerrada", color: a.dangerTxt };
+      if (days === 0) return { days: 0, label: "Cierra hoy", color: a.dangerTxt };
+      if (days <= 3) return { days: days, label: "Cierra en " + days + " día" + (days === 1 ? "" : "s"), color: a.dangerTxt };
+      if (days <= 7) return { days: days, label: "Cierra en " + days + " días", color: a.accentTxt };
+      return { days: days, label: "Cierra en " + days + " días", color: a.okTxt };
     };
     var enriched = opportunities.map(function (item) {
       var progress = MpPreparationProgress(item, props.budgets || [], cfg);
@@ -84217,9 +84223,9 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
     var maxStateCount = Math.max.apply(null, stateCounts.map(function (row) { return row.count; }).concat([1]));
     var kpis = [
       { icon: "🎯", value: active.length, label: "Oportunidades activas", help: "Pendientes, en estudio o preparación", color: th.accent },
-      { icon: "⏰", value: urgent.length, label: "Cierran en 7 días", help: urgent.length ? "Requieren atención prioritaria" : "No hay cierres urgentes", color: urgent.length ? "#ef4444" : "#34d399" },
-      { icon: "🛠️", value: preparing.length, label: "En preparación", help: readyToSubmit.length + " lista(s) para postular", color: "#a78bfa" },
-      { icon: "💰", value: money(trackedValue), label: "Valor activo", help: "Monto referencial monitoreado", color: "#34d399", compact: true },
+      { icon: "⏰", value: urgent.length, label: "Cierran en 7 días", help: urgent.length ? "Requieren atención prioritaria" : "No hay cierres urgentes", color: urgent.length ? a.dangerTxt : a.okTxt },
+      { icon: "🛠️", value: preparing.length, label: "En preparación", help: readyToSubmit.length + " lista(s) para postular", color: a.violetTxt },
+      { icon: "💰", value: money(trackedValue), label: "Valor activo", help: "Monto referencial monitoreado", color: a.okTxt, compact: true },
     ];
     function renderKpi(kpi) {
       return e.jsxs("div", { style: Object.assign({}, sty.card, { padding: 15, borderLeft: "4px solid " + kpi.color }), children: [
@@ -84264,7 +84270,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
               ] }),
               e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "minmax(120px,1fr) auto", gap: 10, alignItems: "center", marginTop: 9 }, children: [
                 e.jsx("div", { style: { height: 6, borderRadius: 999, background: th.card, overflow: "hidden" }, children: e.jsx("div", { style: { height: "100%", width: row.progress.percent + "%", background: row.progress.percent === 100 ? "#34d399" : th.accent } }) }),
-                e.jsx("div", { style: { color: row.progress.percent === 100 ? "#34d399" : th.muted, fontSize: 9.8, fontWeight: 900 }, children: row.progress.percent + "% · Continúa: " + row.savedStage }),
+                e.jsx("div", { style: { color: row.progress.percent === 100 ? a.okTxt : th.muted, fontSize: 9.8, fontWeight: 900 }, children: row.progress.percent + "% · Continúa: " + row.savedStage }),
               ] }),
               e.jsx("div", { style: { color: th.muted, fontSize: 9.5, marginTop: 6 }, children: row.readyToSubmit ? "✓ Expediente declarado listo para postular" : missing.length ? "Primer bloque pendiente: " + row.progress.stage + " · " + missing.join(" · ") : "Sin pendientes registrados" }),
             ] }, item.id);
@@ -84284,7 +84290,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
             e.jsx("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 11 }, children: [
               ["Postuladas / resueltas", submitted.length, "#60a5fa"], ["Adjudicadas", awarded.length, "#34d399"], ["No adjudicadas", lost.length, "#f87171"], ["Tasa adjudicación", awardRate + "%", th.accent]
             ].map(function (metric) { return e.jsxs("div", { style: { padding: 9, borderRadius: 8, background: th.surface, border: "1px solid " + th.border }, children: [e.jsx("div", { style: { color: metric[2], fontSize: 16, fontWeight: 900 }, children: metric[1] }), e.jsx("div", { style: { color: th.muted, fontSize: 9, marginTop: 2 }, children: metric[0] })] }, metric[0]); }) }),
-            e.jsx("div", { style: { marginTop: 10, padding: 10, borderRadius: 8, background: "rgba(52,211,153,.07)", border: "1px solid rgba(52,211,153,.3)" }, children: e.jsxs("div", { children: [e.jsx("div", { style: { color: "#34d399", fontSize: 9.5, fontWeight: 900 }, children: "MONTO ADJUDICADO" }), e.jsx("div", { style: { color: th.text, fontSize: 17, fontWeight: 900, marginTop: 3 }, children: money(awardedValue) })] }) }),
+            e.jsx("div", { style: { marginTop: 10, padding: 10, borderRadius: 8, background: "rgba(52,211,153,.07)", border: "1px solid rgba(52,211,153,.3)" }, children: e.jsxs("div", { children: [e.jsx("div", { style: { color: a.okTxt, fontSize: 9.5, fontWeight: 900 }, children: "MONTO ADJUDICADO" }), e.jsx("div", { style: { color: th.text, fontSize: 17, fontWeight: 900, marginTop: 3 }, children: money(awardedValue) })] }) }),
           ] }),
           e.jsxs("section", { style: { padding: 14, borderRadius: 10, background: "rgba(59,130,246,.07)", border: "1px solid rgba(59,130,246,.3)" }, children: [e.jsx("div", { style: { color: th.text, fontSize: 12.5, fontWeight: 900 }, children: "Cómo usar este panel" }), e.jsx("div", { style: { color: th.muted, fontSize: 10, lineHeight: 1.5, marginTop: 5 }, children: "Empieza por las alertas rojas, continúa las preparaciones con cierre cercano y evita comenzar nuevas ofertas si tienes documentos pendientes en una licitación urgente." })] }),
         ] }),
@@ -85991,7 +85997,7 @@ Esta acción no se puede deshacer.`) &&
                             style: {
                               fontSize: 20,
                               fontWeight: 800,
-                              color: a.accent,
+                              color: a.accentTxt,
                               lineHeight: 1.3,
                             },
                             children: val,
@@ -86153,7 +86159,7 @@ Esta acción no se puede deshacer.`) &&
                   },
                   children: [
                     e.jsxs("div", {
-                      style: { fontSize: 13, color: "#34d399", fontWeight: 700, marginBottom: 10 },
+                      style: { fontSize: 13, color: a.okTxt, fontWeight: 700, marginBottom: 10 },
                       children: ["✅ Archivo generado para RUT ", genResult.rutNorm],
                     }),
                     e.jsx("div", {
@@ -86476,6 +86482,7 @@ Esta acción no se puede deshacer.`) &&
             }),
           }),
         e.jsxs("div", {
+          className: "ecp-sb",
           style: u(
             d({}, c.sb),
             sbHidden
@@ -86598,7 +86605,7 @@ Esta acción no se puede deshacer.`) &&
                                       fontSize: 9,
                                       fontWeight: 700,
                                       background: "#2563eb33",
-                                      color: "#60a5fa",
+                                      color: a.infoTxt,
                                       padding: "1px 5px",
                                       borderRadius: 4,
                                       letterSpacing: ".04em",
@@ -86611,7 +86618,7 @@ Esta acción no se puede deshacer.`) &&
                                       fontSize: 9,
                                       fontWeight: 800,
                                       background: "rgba(245,160,32,.2)",
-                                      color: "#f5a020",
+                                      color: a.accentTxt,
                                       padding: "1px 5px",
                                       borderRadius: 4,
                                       letterSpacing: ".04em",
@@ -86624,7 +86631,7 @@ Esta acción no se puede deshacer.`) &&
                                       fontSize: 9,
                                       fontWeight: 800,
                                       background: "rgba(16,185,129,.2)",
-                                      color: "#10b981",
+                                      color: a.okTxt,
                                       padding: "1px 5px",
                                       borderRadius: 4,
                                       letterSpacing: ".04em",
@@ -86797,7 +86804,7 @@ Esta acción no se puede deshacer.`) &&
                                 e.jsx("span", { children: "Presupuestos" }),
                                 e.jsxs("span", {
                                   style: {
-                                    color: pe >= 100 ? "#f87171" : "#4ade80",
+                                    color: pe >= 100 ? a.dangerTxt : a.okTxt,
                                   },
                                   children: [me, "/", de],
                                 }),
@@ -86893,7 +86900,7 @@ Esta acción no se puede deshacer.`) &&
                         marginLeft: "auto",
                         fontSize: 10,
                         background: "rgba(245,160,32,.2)",
-                        color: "#f5a020",
+                        color: a.accentTxt,
                         padding: "1px 6px",
                         borderRadius: 4,
                         fontWeight: 800,
@@ -87198,7 +87205,7 @@ Esta acción no se puede deshacer.`) &&
                         style: {
                           fontSize: 12,
                           lineHeight: 1.35,
-                          color: t === "light" ? "#7c2d12" : "#fca5a5",
+                          color: t === "light" ? "#7c2d12" : a.dangerTxt,
                         },
                         children:
                           "⚠️ El RUT configurado no coincide con tu licencia. Puedes corregirlo en Configuración.",
@@ -87263,7 +87270,7 @@ Esta acción no se puede deshacer.`) &&
                         style: {
                           fontSize: 12,
                           lineHeight: 1.4,
-                          color: t === "light" ? "#7c2d12" : "#fbbf24",
+                          color: t === "light" ? "#7c2d12" : a.accentTxt,
                           flex: "1 1 260px",
                         },
                         children:
@@ -87535,7 +87542,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                           style: {
                             fontSize: 14,
                             fontWeight: 600,
-                            color: "#38bdf8",
+                            color: a.infoTxt,
                           },
                           children: [
                             "🤝 Saludo / Presentación",
@@ -88032,7 +88039,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                           style: {
                             fontSize: 14,
                             fontWeight: 600,
-                            color: "#38bdf8",
+                            color: a.infoTxt,
                           },
                           children: [
                             "🤝 Saludo / Presentación",
@@ -89518,7 +89525,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                   style: {
                                     padding: "6px 12px",
                                     background: "rgba(56, 189, 248, 0.1)",
-                                    color: "#38bdf8",
+                                    color: a.infoTxt,
                                     border: "1px solid rgba(56, 189, 248, 0.3)",
                                     borderRadius: 6,
                                     cursor: "pointer",
@@ -89700,7 +89707,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                               style: {
                                                 background: "none",
                                                 border: "none",
-                                                color: "#ef4444",
+                                                color: a.dangerTxt,
                                                 cursor: "pointer",
                                                 fontSize: 16,
                                               },
@@ -89787,7 +89794,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                       style: {
                                         padding: "8px 16px",
                                         background: "rgba(52, 211, 153, 0.15)",
-                                        color: "#34d399",
+                                        color: a.okTxt,
                                         border:
                                           "1px solid rgba(52, 211, 153, 0.4)",
                                         borderRadius: 6,
@@ -90561,7 +90568,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                               style: {
                                 fontSize: 24,
                                 fontWeight: 800,
-                                color: "#38bdf8",
+                                color: a.infoTxt,
                               },
                               children: totalEmail,
                             }),
@@ -90591,7 +90598,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                               style: {
                                 fontSize: 24,
                                 fontWeight: 800,
-                                color: "#34d399",
+                                color: a.okTxt,
                               },
                               children: totalTel,
                             }),
@@ -90793,7 +90800,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                         style: {
                                           padding: "12px 10px",
                                           fontSize: 13,
-                                          color: "#f5a020",
+                                          color: a.accentTxt,
                                           fontWeight: 700,
                                           width: 40,
                                         },
@@ -90820,7 +90827,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                         style: {
                                           padding: "12px 10px",
                                           fontSize: 13,
-                                          color: "#38bdf8",
+                                          color: a.infoTxt,
                                         },
                                         children: p.email || "—",
                                       }),
@@ -90828,7 +90835,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                         style: {
                                           padding: "12px 10px",
                                           fontSize: 13,
-                                          color: "#34d399",
+                                          color: a.okTxt,
                                         },
                                         children: p.telefono || "—",
                                       }),
@@ -90847,7 +90854,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                               fontSize: 11,
                                               background:
                                                 "rgba(56, 189, 248, 0.1)",
-                                              color: "#38bdf8",
+                                              color: a.infoTxt,
                                               border:
                                                 "1px solid rgba(56, 189, 248, 0.3)",
                                               borderRadius: 6,
@@ -90866,7 +90873,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                               fontSize: 11,
                                               background:
                                                 "rgba(52, 211, 153, 0.1)",
-                                              color: "#34d399",
+                                              color: a.okTxt,
                                               border:
                                                 "1px solid rgba(52, 211, 153, 0.3)",
                                               borderRadius: 6,
@@ -90920,7 +90927,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                               fontSize: 11,
                                               background:
                                                 "rgba(239, 68, 68, 0.1)",
-                                              color: "#ef4444",
+                                              color: a.dangerTxt,
                                               border:
                                                 "1px solid rgba(239, 68, 68, 0.3)",
                                               borderRadius: 6,
@@ -90956,7 +90963,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                       children: [
                         e.jsx("div", {
                           style: {
-                            color: "#f5a020",
+                            color: a.accentTxt,
                             fontSize: 14,
                             fontWeight: 700,
                             marginBottom: 20,
@@ -91291,7 +91298,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                           background: isSC
                                             ? "rgba(59, 130, 246, 0.1)"
                                             : "rgba(245, 160, 32, 0.1)",
-                                          color: isSC ? "#3b82f6" : "#f5a020",
+                                          color: isSC ? "#3b82f6" : a.accentTxt,
                                           borderRadius: 12,
                                           fontWeight: 600,
                                         },
@@ -91496,7 +91503,7 @@ Favor confirmar recepción y plazos de entrega oportunos.\n\n`;
                                         style: {
                                           padding: "2px 8px",
                                           background: "rgba(16, 185, 129, 0.1)",
-                                          color: "#10b981",
+                                          color: a.okTxt,
                                           borderRadius: 12,
                                           fontWeight: 700,
                                         },
