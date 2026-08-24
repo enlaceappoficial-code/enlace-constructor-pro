@@ -27497,16 +27497,30 @@ ${r.empresa}`;
                     e.jsxs("div", {
                       style: { display: "flex", gap: 8, flexWrap: "wrap" },
                       children: [
-                        e.jsx("span", {
+                        e.jsxs("span", {
                           style: {
                             background: "var(--dark-surface)",
-                            color: p(_.categoria),
+                            color: a.text,
                             padding: "2px 8px",
                             borderRadius: 20,
                             fontSize: 11,
                             fontWeight: 700,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 5,
                           },
-                          children: _.categoria,
+                          children: [
+                            e.jsx("span", {
+                              style: {
+                                width: 7,
+                                height: 7,
+                                borderRadius: "50%",
+                                background: p(_.categoria),
+                                flexShrink: 0,
+                              },
+                            }),
+                            _.categoria,
+                          ],
                         }),
                         e.jsxs("span", {
                           style: { color: a.muted, fontSize: 13 },
@@ -29498,32 +29512,57 @@ ${r.empresa}`;
                                               },
                                               children: [
                                                 _.tipo &&
-                                                  e.jsx("span", {
+                                                  e.jsxs("span", {
                                                     style: {
                                                       fontSize: 10,
                                                       padding: "1px 6px",
                                                       borderRadius: 10,
                                                       fontWeight: 700,
                                                       background: a.sb,
-                                                      color:
-                                                        we[_.tipo] || "#888",
+                                                      color: a.text,
+                                                      display: "inline-flex",
+                                                      alignItems: "center",
+                                                      gap: 4,
                                                     },
-                                                    children: _.tipo,
+                                                    children: [
+                                                      e.jsx("span", {
+                                                        style: {
+                                                          width: 6,
+                                                          height: 6,
+                                                          borderRadius: "50%",
+                                                          background: we[_.tipo] || "#888",
+                                                          flexShrink: 0,
+                                                        },
+                                                      }),
+                                                      _.tipo,
+                                                    ],
                                                   }),
                                                 _.estructura &&
                                                   _.estructura !== "General" &&
-                                                  e.jsx("span", {
+                                                  e.jsxs("span", {
                                                     style: {
                                                       fontSize: 10,
                                                       padding: "1px 6px",
                                                       borderRadius: 10,
                                                       fontWeight: 700,
                                                       background: a.sb,
-                                                      color:
-                                                        ye[_.estructura] ||
-                                                        "#888",
+                                                      color: a.text,
+                                                      display: "inline-flex",
+                                                      alignItems: "center",
+                                                      gap: 4,
                                                     },
-                                                    children: _.estructura,
+                                                    children: [
+                                                      e.jsx("span", {
+                                                        style: {
+                                                          width: 6,
+                                                          height: 6,
+                                                          borderRadius: "50%",
+                                                          background: ye[_.estructura] || "#888",
+                                                          flexShrink: 0,
+                                                        },
+                                                      }),
+                                                      _.estructura,
+                                                    ],
                                                   }),
                                               ],
                                             }),
@@ -29532,16 +29571,30 @@ ${r.empresa}`;
                                         e.jsx("td", {
                                           style: c.td,
                                           onClick: () => k(_),
-                                          children: e.jsx("span", {
+                                          children: e.jsxs("span", {
                                             style: {
                                               background: "var(--dark-surface)",
-                                              color: p(_.categoria),
+                                              color: a.text,
                                               padding: "2px 7px",
                                               borderRadius: 20,
                                               fontSize: 11,
                                               fontWeight: 700,
+                                              display: "inline-flex",
+                                              alignItems: "center",
+                                              gap: 5,
                                             },
-                                            children: _.categoria,
+                                            children: [
+                                              e.jsx("span", {
+                                                style: {
+                                                  width: 7,
+                                                  height: 7,
+                                                  borderRadius: "50%",
+                                                  background: p(_.categoria),
+                                                  flexShrink: 0,
+                                                },
+                                              }),
+                                              _.categoria,
+                                            ],
                                           }),
                                         }),
                                         e.jsx("td", {
@@ -31530,16 +31583,30 @@ ${r.empresa}`;
                                       children: [
                                         e.jsx("td", {
                                           style: c.td,
-                                          children: e.jsx("span", {
+                                          children: e.jsxs("span", {
                                             style: {
                                               background: "var(--dark-surface)",
-                                              color: P(A.cat),
+                                              color: a.text,
                                               padding: "2px 8px",
                                               borderRadius: 20,
                                               fontSize: 11,
                                               fontWeight: 700,
+                                              display: "inline-flex",
+                                              alignItems: "center",
+                                              gap: 5,
                                             },
-                                            children: A.cat,
+                                            children: [
+                                              e.jsx("span", {
+                                                style: {
+                                                  width: 7,
+                                                  height: 7,
+                                                  borderRadius: "50%",
+                                                  background: P(A.cat),
+                                                  flexShrink: 0,
+                                                },
+                                              }),
+                                              A.cat,
+                                            ],
                                           }),
                                         }),
                                         e.jsx("td", {
@@ -52214,11 +52281,23 @@ K &&
                                 cursor: "pointer",
                                 border: `1px solid ${S ? A : a.border}`,
                                 background: S ? A + "33" : "var(--surface)",
-                                color: S ? A : a.text,
+                                color: a.text,
                                 fontSize: 12,
                                 fontWeight: S ? 700 : 400,
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 6,
                               },
                               children: [
+                                e.jsx("span", {
+                                  style: {
+                                    width: 8,
+                                    height: 8,
+                                    borderRadius: "50%",
+                                    background: A,
+                                    flexShrink: 0,
+                                  },
+                                }),
                                 y,
                                 " ",
                                 e.jsxs("span", {
@@ -52371,17 +52450,31 @@ K &&
                                   }),
                                   e.jsx("td", {
                                     style: c.td,
-                                    children: e.jsx("span", {
+                                    children: e.jsxs("span", {
                                       style: {
                                         background: `${R(y.cat)}22`,
-                                        color: R(y.cat),
+                                        color: a.text,
                                         padding: "2px 8px",
                                         borderRadius: 20,
                                         fontSize: 11,
                                         fontWeight: 700,
                                         whiteSpace: "nowrap",
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: 5,
                                       },
-                                      children: y.cat,
+                                      children: [
+                                        e.jsx("span", {
+                                          style: {
+                                            width: 7,
+                                            height: 7,
+                                            borderRadius: "50%",
+                                            background: R(y.cat),
+                                            flexShrink: 0,
+                                          },
+                                        }),
+                                        y.cat,
+                                      ],
                                     }),
                                   }),
                                   e.jsxs("td", {
@@ -53933,7 +54026,7 @@ K &&
                               style: {
                                 fontSize: 13,
                                 fontWeight: 600,
-                                color: k(R),
+                                color: a.text,
                               },
                               children: R,
                             }),
@@ -54026,7 +54119,7 @@ K &&
                                 style: {
                                   fontSize: 13,
                                   fontWeight: 700,
-                                  color: k(R),
+                                  color: a.text,
                                   textTransform: "uppercase",
                                   letterSpacing: ".06em",
                                 },
@@ -79738,7 +79831,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                 e.jsxs("div", { children: [e.jsx("div", { style: { color: th.text, fontSize: 14.5, fontWeight: 900 }, children: item.number + ". " + item.title }), e.jsx("div", { style: { color: th.muted, fontSize: 11.5, lineHeight: 1.5, marginTop: 4, maxWidth: 760 }, children: item.desc })] }),
                 e.jsx("span", { style: { padding: "5px 8px", borderRadius: 999, background: statusColor + "16", border: "1px solid " + statusColor + "55", color: statusColor, fontSize: 9.5, fontWeight: 900, whiteSpace: "nowrap" }, children: item.status }),
               ] }),
-              e.jsx("div", { style: { display: "flex", gap: 7, flexWrap: "wrap", marginTop: 10 }, children: item.details.map(function (detail) { var color = detail[1] === true ? "#34d399" : detail[1] === false ? th.muted : "#60a5fa"; return e.jsx("span", { style: { padding: "5px 7px", borderRadius: 7, background: th.surface, border: "1px solid " + th.border, color: color, fontSize: 9.8, fontWeight: 700 }, children: (detail[1] === true ? "✓ " : detail[1] === false ? "▫ " : "↗ ") + detail[0] }, detail[0]); }) }),
+              e.jsx("div", { style: { display: "flex", gap: 7, flexWrap: "wrap", marginTop: 10 }, children: item.details.map(function (detail) { var color = detail[1] === true ? "var(--ok-txt)" : detail[1] === false ? th.muted : "var(--info-txt)"; return e.jsx("span", { style: { padding: "5px 7px", borderRadius: 7, background: th.surface, border: "1px solid " + th.border, color: color, fontSize: 9.8, fontWeight: 700 }, children: (detail[1] === true ? "✓ " : detail[1] === false ? "▫ " : "↗ ") + detail[0] }, detail[0]); }) }),
               e.jsx("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", marginTop: 11 }, children: (item.actions || []).map(actionButton) }),
             ] }),
           ] }, item.number);
