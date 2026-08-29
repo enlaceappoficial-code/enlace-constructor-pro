@@ -9383,7 +9383,7 @@ Error generating stack: ` +
                     "Email: " +
                     m.email,
                 );
-              (window.open("https://wa.me/56912345678?text=" + f, "_blank"),
+              (window.open("https://wa.me/56941278725?text=" + f, "_blank"),
                 h(!0));
             }
           }
