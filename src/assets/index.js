@@ -48667,6 +48667,7 @@ K &&
     licitaciones: tenderOptions,
     onLinkLicitacion: linkTender,
     onOpenDocument: onOpenDocument,
+    onImportMedidas,
   }) {
     const [ocBudget, setOcBudget] = Re.useState(null);
     const [linkingBudget, setLinkingBudget] = Re.useState(null);
@@ -48878,8 +48879,38 @@ K &&
                       : ["Mis Presupuestos (", re.length, ")"],
                   }),
                   e.jsxs("div", {
-                    style: { display: "flex", gap: 8, alignItems: "center" },
+                    style: { display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" },
                     children: [
+                      onImportMedidas &&
+                        e.jsxs("label", {
+                          style: u(d({}, c.btn("s")), {
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 6,
+                            fontSize: 12,
+                            padding: "5px 12px",
+                            cursor: "pointer",
+                            fontWeight: 700,
+                            background: "rgba(245,158,11,0.15)",
+                            borderColor: "rgba(245,158,11,0.45)",
+                            color: a.accentTxt || "#f59e0b",
+                            borderRadius: 8,
+                          }),
+                          title: "¿Quieres importar mediciones de la app móvil? Haz clic para cargar el archivo .json",
+                          children: [
+                            "📐 Importar Medidas Móvil",
+                            e.jsx("input", {
+                              type: "file",
+                              accept: ".json",
+                              style: { display: "none" },
+                              onChange: (ev) => {
+                                var file = ev.target.files && ev.target.files[0];
+                                ev.target.value = "";
+                                if (file) onImportMedidas(file);
+                              },
+                            }),
+                          ],
+                        }),
                       e.jsx("input", {
                         type: "text",
                         value: $,
@@ -67862,7 +67893,7 @@ K &&
                 },
                 children: [
                   e.jsx("div", { style: { fontSize: 20, fontWeight: 800, color: a.text, marginBottom: 2 }, children: "Enlace Constructor Pro" }),
-                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accentTxt, marginBottom: 12 }, children: ["Versión 1.7.2 · Edición de lanzamiento"] }),
+                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accentTxt, marginBottom: 12 }, children: ["Versión 1.7.3 · Edición de lanzamiento"] }),
                   e.jsxs("div", { style: { fontSize: 12, color: a.muted, lineHeight: 2 }, children: [
                     e.jsxs("div", { children: [e.jsx("strong", { style: { color: a.text }, children: "Titular de derechos: " }), "ENLACE"] }),
                     e.jsxs("div", { children: [
@@ -67993,6 +68024,7 @@ K &&
     onImportUpdatePack: Zu,
     updateHistory: Xu,
     soloLectura: SL,
+    onImportMedidas,
   }) {
     var [C, b] = V(Hp),
       [imp, setImp] = V(null),
@@ -68134,6 +68166,14 @@ K &&
             O = JSON.parse(S.target.result);
           } catch (U) {
             n("⚠️ El archivo no contiene JSON válido.");
+            return;
+          }
+          if (typeof esEcpMedidas === "function" && esEcpMedidas(O)) {
+            if (onImportMedidas) {
+              onImportMedidas(O);
+            } else {
+              n("ℹ️ Este archivo contiene cubicaciones de ECP Medidas Móvil. Usa el botón 'Importar Medidas Móvil'.");
+            }
             return;
           }
           iniciarRestauracion(O, { source: "archivo", fileName: P.name });
@@ -68698,27 +68738,55 @@ K &&
           children: "💾 Respaldo completo (clientes, presupuestos, catálogo)",
         }),
         e.jsxs("div", {
-          style: { display: "flex", gap: 10, marginBottom: 20 },
+          style: { display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" },
           children: [
             e.jsx("button", {
-              style: u(d({}, c.btn("p")), { flex: 1, padding: "10px" }),
+              style: u(d({}, c.btn("p")), { flex: 1, minWidth: 180, padding: "10px" }),
               onClick: x,
               children: "💾 Respaldar ahora",
             }),
             e.jsxs("label", {
               style: u(d({}, c.btn("s")), {
                 flex: 1,
+                minWidth: 210,
                 padding: "10px",
                 textAlign: "center",
                 cursor: "pointer",
               }),
               children: [
-                "📂 Importar archivo .json",
+                "📂 Importar Respaldo Sistema (.json)",
                 e.jsx("input", {
                   type: "file",
                   accept: ".json",
                   style: { display: "none" },
                   onChange: k,
+                }),
+              ],
+            }),
+            e.jsxs("label", {
+              style: u(d({}, c.btn("s")), {
+                flex: 1,
+                minWidth: 230,
+                padding: "10px",
+                textAlign: "center",
+                cursor: "pointer",
+                background: "rgba(245,158,11,0.12)",
+                borderColor: "rgba(245,158,11,0.45)",
+                color: a.accentTxt || "#f59e0b",
+                fontWeight: 700,
+              }),
+              title: "Importar cubicaciones y partidas tomadas en terreno con la App Móvil ECP Medidas",
+              children: [
+                "📐 Importar Medidas Móvil (.json)",
+                e.jsx("input", {
+                  type: "file",
+                  accept: ".json",
+                  style: { display: "none" },
+                  onChange: (ev) => {
+                    var file = ev.target.files && ev.target.files[0];
+                    ev.target.value = "";
+                    if (file && onImportMedidas) onImportMedidas(file);
+                  },
                 }),
               ],
             }),
@@ -69189,40 +69257,49 @@ K &&
           color: a.okTxt,
           emoji: "🟢",
           precio: 19990,
-          tagline: "Pago único + IVA · para siempre",
-          para: "Plan base de Enlace Constructor Pro. Gratis con código de la Red Enlace.",
+          periodo: "+ IVA · Pago único · Acceso permanente",
+          tagline: "Ideal para maestros y emprendedores que inician en presupuestos.",
+          para: "Ideal para maestros y emprendedores que inician en presupuestos.",
+          regaloBadge: null,
+          regaloDetalle: null,
+          appMovil: false,
           si: [
-            "Dashboard de obras",
-            "Presupuestos ilimitados",
-            "PDF profesional con logo y firma",
-            "Clientes + Documentos de obra",
-            "Contratos y WhatsApp integrado",
+            "Dashboard de obras y control básico",
+            "Presupuestos de obra con cálculo de IVA y descuentos",
+            "Exportación PDF profesional con logo y firma",
+            "Gestión de clientes y documentos de obra",
+            "Contratos y envío directo por WhatsApp",
           ],
           no: [
-            "APU y Análisis de Precios Unitarios",
-            "Catálogo de partidas y Base de materiales",
-            "Directorio de Proveedores",
-            "Cubicación y Carta Gantt",
+            "APU y análisis detallado de precios",
+            "Catálogo de partidas y base de materiales",
+            "Cubicación inteligente y Carta Gantt",
             "Licitaciones Mercado Público",
           ],
-          nota: "¿Eres de la Red Enlace? Solicita tu código de regalo o paga $19.990 + IVA",
+          nota: "Gratis para miembros elegibles de la Red Social Enlace mediante código de activación válido.",
         },
         {
           key: "basico",
           color: a.warnTxt,
           emoji: "🟠",
           precio: 59990,
-          tagline: "Plan anual + IVA",
-          para: "Presupuestos + Clientes + PDF + Contratos de obra.",
+          periodo: "+ IVA · Plan Anual (equivale a $4.999 / mes)",
+          tagline: "Para el contratista que quiere dejar de usar hojas sueltas y Excel básico.",
+          para: "Para el contratista que quiere dejar de usar hojas sueltas y Excel básico.",
+          regaloBadge: "🎁 +$25.000 en regalos",
+          regaloDetalle: 'Manual Vol. I "Presupuestar y Rentabilizar en Construcción" (Valorado en +$25.000 CLP)',
+          appMovil: false,
           si: [
-            "Presupuestos ilimitados",
-            "PDF profesional con logo y firma",
-            "Gestión de clientes",
+            "Presupuestos y obras ilimitadas",
+            "PDF profesional con logo, firma y marca personalizada",
+            "Gestión completa de clientes y borradores",
+            "Documentos de obra y contratos listos para firmar",
+            "WhatsApp integrado + Calendario",
+            "🎁 Regalo de Bienvenida: Manual Vol. I (+$25.000 CLP)",
           ],
           no: [
-            "APU y Análisis de Precios Unitarios",
-            "Catálogo de partidas y Base de materiales",
-            "Directorio de Proveedores",
+            "APU y análisis de precios unitarios",
+            "Catálogo propio y base de materiales",
             "Cubicación y Carta Gantt",
             "Licitaciones Mercado Público",
           ],
@@ -69232,46 +69309,69 @@ K &&
           color: a.infoTxt,
           emoji: "🔵",
           precio: 89990,
-          tagline: "Plan anual + IVA",
-          para: "Todo el plan Básico + APU + Catálogo + Base de Materiales.",
+          periodo: "+ IVA · Plan Anual (equivale a $7.499 / mes)",
+          tagline: "Para el constructor que necesita desglosar costos reales con APU.",
+          para: "Para el constructor que necesita desglosar costos reales con APU y catálogo de materiales.",
+          regaloBadge: "🎁 +$95.000 en regalos",
+          regaloDetalle: "Manual Vol. I y II + 14 Checklists de Terreno + 11 Actas de Obra (Valorados en +$95.000 CLP)",
+          appMovil: false,
           si: [
-            "Todo del plan Básico",
-            "Catálogo de partidas",
-            "Base de materiales propia",
-            "Directorio de Proveedores",
-            "Análisis de Precios Unitarios",
+            "Todo lo del Plan Básico",
+            "Más de 300 partidas preconfiguradas con APU",
+            "Base de materiales y soluciones constructivas",
+            "APU — Análisis de Precios Unitarios personalizable",
+            "Generador de lista de compras de materiales por obra",
+            "🎁 Regalos de Bienvenida: Manual Vol. I y II + 14 Checklists + 11 Actas",
           ],
-          no: ["Cubicación y Carta Gantt", "Licitaciones Mercado Público"],
+          no: [
+            "Cubicación avanzada y Carta Gantt MS Project",
+            "Licitaciones Mercado Público",
+          ],
         },
         {
           key: "pro",
           color: "#f97316",
-          emoji: "🟧",
+          emoji: "🔥",
+          masPopular: true,
           precio: 129990,
-          tagline: "Plan anual + IVA",
-          para: "Todo del Constructor + Cubicación + Gantt + Documentos de Obra + Calendario.",
+          periodo: "+ IVA · Plan Anual (equivale a $10.833 / mes)",
+          tagline: "La solución técnica completa para empresas constructoras y contratistas de obra vendida.",
+          para: "La solución técnica completa: cubicación inteligente, carta gantt, informes fotográficos y app móvil.",
+          regaloBadge: "🎁 +$233.000 en regalos",
+          regaloDetalle: "Megapack de Regalos: Calculadora Maestra Excel con APU, Curso Completo de Excel para Construcción y los Manuales Vol. I y II (Valorados en +$233.000 CLP)",
+          appMovil: true,
           si: [
-            "Todo del plan Constructor",
-            "Cubicación inteligente",
-            "Carta Gantt integrada",
-            "Documentos de obra",
-            "Calendario + Estados de Pago",
+            "Todo lo del Plan Constructor",
+            "Cubicación inteligente de obras y recintos",
+            "Carta Gantt profesional con exportación a MS Project (XML)",
+            "Informes de Obra con fotografías y especificaciones técnicas",
+            "Calendario laboral + Estados de Pago y curvas de avance",
+            "📱 ACCESO ILIMITADO A APP ECP MEDIDAS DE TERRENO (Móvil)",
+            "🎁 Megapack de Regalos: Calculadora Maestra Excel con APU, Curso Completo y Manuales",
           ],
-          no: ["Licitaciones Mercado Público"],
+          no: [
+            "Módulo de Licitaciones Mercado Público",
+          ],
         },
         {
           key: "plus",
           color: a.accentTxt,
           emoji: "⭐",
           precio: 179990,
-          tagline: "Plan anual + IVA",
-          para: "Todo incluido + Licitaciones Mercado Público completo.",
+          periodo: "+ IVA · Plan Anual (equivale a $14.999 / mes)",
+          tagline: "Todo incluido + Postulación a Licitaciones del Estado en Mercado Público.",
+          para: "Todo incluido: potencia técnica completa más licitaciones del Estado en Mercado Público.",
+          regaloBadge: "🎁 +$380.000 en regalos",
+          regaloDetalle: "Pack Completo VIP (+ $380.000 CLP en regalos): Incluye todo lo anterior más la Biblioteca Normativa Chilena y Megapack de Contratos",
+          appMovil: true,
           si: [
-            "Todo del plan Pro",
-            "Licitaciones Mercado Público",
-            "Análisis de conveniencia con APU",
-            "Exportación Excel MP listo",
-            "Soporte prioritario",
+            "Todo lo del Plan Pro (incluyendo App ECP Medidas y Carta Gantt)",
+            "Módulo de Licitaciones de Mercado Público",
+            "Análisis de conveniencia económica con APU",
+            "Organización de antecedentes y propuestas técnicas",
+            "Alertas de fechas de apertura y cierre de licitaciones",
+            "🎁 Pack Completo VIP (+ $380.000 CLP en regalos)",
+            "Soporte técnico prioritario por WhatsApp",
           ],
           no: [],
         },
@@ -69280,22 +69380,26 @@ K &&
           color: "#3b82f6",
           emoji: "☁️",
           precio: 24990,
-          tagline: "$24.990 / mes · cancela cuando quieras",
-          para: "Para empresas que quieren soporte y actualizaciones continuas.",
+          periodo: "+ IVA · Suscripción Mensual (cancela cuando quieras)",
+          tagline: "Todo el potencial de ECP con respaldo en la nube y actualización continua.",
+          para: "Todo el potencial de ECP con respaldo en la nube, soporte prioritario y actualización continua.",
+          regaloBadge: "☁️ Nube + Actualizaciones Continuas",
+          regaloDetalle: "Actualización mensual automática de precios de materiales y acceso inmediato a nuevos módulos",
+          appMovil: true,
           si: [
-            "Todo del plan Pro",
-            "Actualización mensual de precios de materiales",
-            "Soporte prioritario por WhatsApp",
-            "Nuevos módulos al lanzar",
-            "Capacitación inicial incluida",
+            "Todo lo del Plan Pro (con Cubicación, Gantt y App ECP Medidas)",
+            "Actualización mensual automática de precios de mercado de materiales",
+            "Soporte prioritario directo por WhatsApp",
+            "Acceso automático e inmediato a todos los nuevos módulos que se lancen",
+            "Capacitación inicial personalizada por videollamada",
           ],
           no: [],
-          nota: "Suscripción mensual · Sin permanencia mínima",
+          nota: "Suscripción mensual · Cancela cuando quieras sin permanencia",
         },
       ];
     return e.jsx(e.Fragment, {
       children: e.jsxs("div", {
-        style: { maxWidth: 900, margin: "0 auto", padding: "0 0 40px" },
+        style: { maxWidth: 1080, margin: "0 auto", padding: "0 0 40px" },
         children: [
           e.jsxs("div", {
             style: u(d({}, c.card), {
@@ -69380,20 +69484,21 @@ K &&
           }),
           e.jsx("div", {
             style: {
-              fontSize: 16,
-              fontWeight: 700,
+              fontSize: 18,
+              fontWeight: 800,
               color: a.text,
               marginBottom: 14,
+              letterSpacing: "-.02em",
             },
             children:
-              "Planes: Starter (pago único) · Básico/Constructor/Pro/Plus (anual) · Pro Cloud (mensual)",
+              "Planes Oficiales: Starter (pago único) · Básico/Constructor/Pro/Plus (anual) · Pro Cloud (mensual)",
           }),
           e.jsx("div", {
             style: {
               display: "grid",
-              gridTemplateColumns: "repeat(3,1fr)",
-              gap: 12,
-              marginBottom: 24,
+              gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr))",
+              gap: 16,
+              marginBottom: 28,
             },
             children: s.map((m) => {
               var p = l === m.key;
@@ -69402,10 +69507,13 @@ K &&
                 {
                   style: u(d({}, c.card), {
                     marginBottom: 0,
-                    border: "2px solid " + (p ? m.color : a.border),
+                    border: "2px solid " + (p ? m.color : m.masPopular ? "#f59e0b" : a.border),
                     background: p ? m.color + "12" : a.card,
                     position: "relative",
-                    paddingTop: 20,
+                    paddingTop: 26,
+                    display: "flex",
+                    flexDirection: "column",
+                    boxShadow: m.masPopular ? "0 4px 20px rgba(245,158,11,0.15)" : "none",
                   }),
                   children: [
                     p &&
@@ -69419,102 +69527,174 @@ K &&
                           color: "#000",
                           fontSize: 10,
                           fontWeight: 800,
-                          padding: "2px 12px",
+                          padding: "2px 14px",
                           borderRadius: "0 0 8px 8px",
                           letterSpacing: ".08em",
                         },
                         children: "✓ ACTIVO",
                       }),
+                    !p &&
+                      m.masPopular &&
+                      e.jsx("div", {
+                        style: {
+                          position: "absolute",
+                          top: -1,
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          background: "#f59e0b",
+                          color: "#050a10",
+                          fontSize: 10,
+                          fontWeight: 900,
+                          padding: "2px 14px",
+                          borderRadius: "0 0 8px 8px",
+                          letterSpacing: ".08em",
+                          boxShadow: "0 2px 6px rgba(245,158,11,0.4)",
+                        },
+                        children: "🔥 MÁS POPULAR",
+                      }),
                     e.jsxs("div", {
                       style: { textAlign: "center", marginBottom: 12 },
                       children: [
                         e.jsx("div", {
-                          style: { fontSize: 22, marginBottom: 4 },
+                          style: { fontSize: 26, marginBottom: 4 },
                           children: m.emoji,
                         }),
                         e.jsx("div", {
                           style: {
-                            fontSize: 15,
-                            fontWeight: 700,
+                            fontSize: 17,
+                            fontWeight: 800,
                             color: m.color,
                           },
-                          children: Fe[m.key].label,
+                          children: Fe[m.key] ? Fe[m.key].label : m.key,
                         }),
                         e.jsxs("div", {
                           style: {
-                            fontSize: 20,
-                            fontWeight: 800,
+                            fontSize: 24,
+                            fontWeight: 900,
                             color: a.text,
                             marginTop: 4,
                           },
                           children: ["$", m.precio.toLocaleString("es-CL")],
                         }),
                         e.jsx("div", {
-                          style: { fontSize: 10, color: a.muted },
-                          children: Fe[m.key].suscripcion
-                            ? "Mensual · cancela cuando quieras"
-                            : Fe[m.key].anual
-                              ? "Plan anual"
-                              : "Pago único",
+                          style: { fontSize: 11, color: a.muted, fontWeight: 600, marginTop: 2 },
+                          children: m.periodo,
                         }),
                       ],
                     }),
                     e.jsx("div", {
                       style: {
-                        fontSize: 11,
+                        fontSize: 11.5,
                         color: a.muted,
                         fontStyle: "italic",
-                        marginBottom: 10,
-                        minHeight: 30,
-                        lineHeight: 1.4,
+                        marginBottom: 12,
+                        minHeight: 34,
+                        lineHeight: 1.45,
                         textAlign: "center",
                       },
                       children: m.tagline,
                     }),
+                    m.appMovil &&
+                      e.jsxs("div", {
+                        style: {
+                          background: "rgba(245,158,11,0.12)",
+                          border: "1px solid rgba(245,158,11,0.4)",
+                          borderRadius: 6,
+                          padding: "6px 8px",
+                          fontSize: 11,
+                          fontWeight: 700,
+                          color: a.accentTxt || "#f59e0b",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: 5,
+                          marginBottom: 8,
+                          textAlign: "center",
+                          lineHeight: 1.35,
+                        },
+                        children: [
+                          "📱 Incluye App ECP Medidas de Terreno para Celular (Ilimitada)",
+                        ],
+                      }),
+                    m.regaloBadge &&
+                      e.jsxs("div", {
+                        style: {
+                          background: "rgba(16,185,129,0.12)",
+                          border: "1px solid rgba(16,185,129,0.35)",
+                          borderRadius: 6,
+                          padding: "7px 9px",
+                          fontSize: 11,
+                          color: a.okTxt || "#10b981",
+                          marginBottom: 10,
+                          textAlign: "center",
+                        },
+                        children: [
+                          e.jsx("div", {
+                            style: { fontWeight: 800, fontSize: 11.5 },
+                            children: m.regaloBadge,
+                          }),
+                          m.regaloDetalle &&
+                            e.jsx("div", {
+                              style: {
+                                fontSize: 9.5,
+                                color: a.text,
+                                marginTop: 3,
+                                fontWeight: 500,
+                                lineHeight: 1.35,
+                              },
+                              children: m.regaloDetalle,
+                            }),
+                        ],
+                      }),
                     e.jsx("div", {
                       style: {
-                        fontSize: 10,
+                        fontSize: 10.5,
                         color: a.muted,
                         fontWeight: 700,
                         textTransform: "uppercase",
                         marginBottom: 6,
+                        letterSpacing: ".05em",
                       },
                       children: "Incluye:",
                     }),
-                    m.si.map((C, b) =>
-                      e.jsxs(
-                        "div",
-                        {
-                          style: {
-                            display: "flex",
-                            gap: 6,
-                            marginBottom: 4,
-                            fontSize: 11,
-                            color: a.text,
-                            lineHeight: 1.3,
+                    e.jsx("div", {
+                      style: { flex: 1 },
+                      children: m.si.map((C, b) =>
+                        e.jsxs(
+                          "div",
+                          {
+                            style: {
+                              display: "flex",
+                              gap: 6,
+                              marginBottom: 4.5,
+                              fontSize: 11.5,
+                              color: a.text,
+                              lineHeight: 1.35,
+                            },
+                            children: [
+                              e.jsx("span", {
+                                style: { color: m.color, flexShrink: 0, fontWeight: 800 },
+                                children: "✓",
+                              }),
+                              C,
+                            ],
                           },
-                          children: [
-                            e.jsx("span", {
-                              style: { color: m.color, flexShrink: 0 },
-                              children: "✓",
-                            }),
-                            C,
-                          ],
-                        },
-                        b,
+                          b,
+                        ),
                       ),
-                    ),
+                    }),
                     m.no.length > 0 &&
                       e.jsxs("div", {
                         style: { marginTop: 8 },
                         children: [
                           e.jsx("div", {
                             style: {
-                              fontSize: 10,
+                              fontSize: 10.5,
                               color: a.muted,
                               fontWeight: 700,
                               textTransform: "uppercase",
                               marginBottom: 6,
+                              letterSpacing: ".05em",
                             },
                             children: "No incluye:",
                           }),
@@ -69525,7 +69705,7 @@ K &&
                                 style: {
                                   display: "flex",
                                   gap: 6,
-                                  marginBottom: 3,
+                                  marginBottom: 3.5,
                                   fontSize: 11,
                                   color: a.muted,
                                   lineHeight: 1.3,
@@ -69547,13 +69727,14 @@ K &&
                       e.jsx("div", {
                         style: {
                           marginTop: 10,
-                          fontSize: 11,
+                          fontSize: 10.5,
                           color: m.color,
                           fontWeight: 600,
                           textAlign: "center",
                           background: m.color + "15",
                           borderRadius: 6,
-                          padding: "5px 8px",
+                          padding: "6px 8px",
+                          lineHeight: 1.35,
                         },
                         children: m.nota,
                       }),
@@ -69562,10 +69743,11 @@ K &&
                         style: u(d({}, c.btn("s")), {
                           width: "100%",
                           marginTop: 14,
-                          fontSize: 12,
-                          padding: "7px",
+                          fontSize: 12.5,
+                          padding: "8px",
                           borderColor: m.color,
                           color: m.color,
+                          fontWeight: 700,
                         }),
                         onClick: () =>
                           window.open(
@@ -69576,10 +69758,10 @@ K &&
                           ),
                         children:
                           m.key === "starter"
-                            ? "Obtener →"
-                            : Fe[m.key].suscripcion
+                            ? "Obtener con código →"
+                            : Fe[m.key] && Fe[m.key].suscripcion
                               ? "Suscribirme →"
-                              : "Solicitar →",
+                              : "Solicitar Plan →",
                       }),
                   ],
                 },
@@ -69589,17 +69771,18 @@ K &&
           }),
           e.jsx("div", {
             style: {
-              fontSize: 16,
-              fontWeight: 700,
+              fontSize: 17,
+              fontWeight: 800,
               color: a.text,
               marginBottom: 14,
+              letterSpacing: "-.01em",
             },
             children: "¿Cuál es el plan ideal para ti?",
           }),
           e.jsx("div", {
             style: {
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
               gap: 12,
               marginBottom: 24,
             },
@@ -69630,15 +69813,16 @@ K &&
                             fontWeight: 700,
                             color: m.color,
                           },
-                          children: Fe[m.key].label,
+                          children: Fe[m.key] ? Fe[m.key].label : m.key,
                         }),
                         e.jsxs("span", {
                           style: {
-                            fontSize: 11,
+                            fontSize: 12,
+                            fontWeight: 700,
                             color: a.muted,
                             marginLeft: "auto",
                           },
-                          children: ["$", m.precio.toLocaleString("es-CL")],
+                          children: ["$", m.precio.toLocaleString("es-CL"), Fe[m.key] && Fe[m.key].suscripcion ? " / mes" : ""],
                         }),
                       ],
                     }),
@@ -72622,7 +72806,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                                   style: { color: a.infoTxt },
                                   children: "Constructor",
                                 }),
-                                " ($29.990 pago único)",
+                                " ($89.990 anual)",
                               ],
                             }),
                             e.jsx("div", {
@@ -84391,6 +84575,308 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
     ] });
   }
 
+  function esEcpMedidas(data) {
+    if (!data || typeof data !== "object") return false;
+    if (data.origen === "ECP_MOVIL") return true;
+    if (data.proyecto && (data.proyecto.capitulos || data.proyecto.datosGenerales)) return true;
+    if (Array.isArray(data.proyectos) && data.proyectos.length > 0 && (data.proyectos[0].capitulos || data.proyectos[0].datosGenerales)) return true;
+    if (Array.isArray(data) && data.length > 0 && (data[0].origen === "ECP_MOVIL" || data[0].proyecto || data[0].capitulos)) return true;
+    if (data.capitulos && Array.isArray(data.capitulos) && data.datosGenerales) return true;
+    return false;
+  }
+
+  function procesarImportacionEcpMedidas({
+    jsonData,
+    currentBudgets,
+    setBudgets,
+    currentClients,
+    setClients,
+    catalog,
+    cfg,
+    setCfg,
+    setToast,
+    onOpenBudget,
+    onNavigateHistory,
+  }) {
+    if (!jsonData || typeof jsonData !== "object") {
+      setToast("⚠️ El archivo no contiene datos válidos.");
+      return;
+    }
+
+    let rawProjects = [];
+    if (jsonData.origen === "ECP_MOVIL") {
+      if (jsonData.proyecto) rawProjects = [jsonData.proyecto];
+      else if (Array.isArray(jsonData.proyectos)) rawProjects = jsonData.proyectos;
+    } else if (Array.isArray(jsonData)) {
+      rawProjects = jsonData.map((item) => (item && item.proyecto ? item.proyecto : item)).filter(Boolean);
+    } else if (jsonData.proyecto) {
+      rawProjects = [jsonData.proyecto];
+    } else if (Array.isArray(jsonData.proyectos)) {
+      rawProjects = jsonData.proyectos;
+    } else if (Array.isArray(jsonData.capitulos)) {
+      rawProjects = [jsonData];
+    }
+
+    if (!rawProjects.length) {
+      setToast("⚠️ No se encontraron proyectos o cubicaciones válidas en el archivo.");
+      return;
+    }
+
+    const presupuestosActuales = Array.isArray(currentBudgets) ? currentBudgets : [];
+    const clientesActuales = Array.isArray(currentClients) ? currentClients : [];
+    const omitidos = [];
+    const paraCrear = [];
+
+    for (const proj of rawProjects) {
+      if (!proj || typeof proj !== "object") continue;
+      const movilId = proj.id != null ? String(proj.id).trim() : "";
+      const dg = proj.datosGenerales || {};
+      const descNorm = (dg.descripcionObra || "").trim().toLowerCase();
+      const fechaNorm = (dg.fecha || "").slice(0, 10);
+      const clienteNom = (dg.cliente || "").trim().toLowerCase();
+
+      const yaExiste = presupuestosActuales.some((b) => {
+        if (!b || b._deleted) return false;
+        if (movilId && b.origenMovilId && String(b.origenMovilId).trim() === movilId) {
+          return true;
+        }
+        if (descNorm && (b.descripcion || "").trim().toLowerCase() === descNorm && (b.fecha || "").slice(0, 10) === fechaNorm) {
+          if (!clienteNom) return true;
+          const cl = clientesActuales.find((c) => c.id === b.clienteId);
+          const clNom = (cl && cl.nombre ? cl.nombre : "").trim().toLowerCase();
+          if (clNom === clienteNom) return true;
+        }
+        return false;
+      });
+
+      if (yaExiste) {
+        omitidos.push(dg.descripcionObra || (movilId ? "ID " + movilId : "Proyecto existente"));
+      } else {
+        paraCrear.push(proj);
+      }
+    }
+
+    if (paraCrear.length === 0) {
+      setToast(
+        "ℹ️ Todos los presupuestos de este archivo ya habían sido importados previamente (" +
+          omitidos.length +
+          " omitido" +
+          (omitidos.length === 1 ? "" : "s") +
+          ")."
+      );
+      return;
+    }
+
+    if (typeof Fe !== "undefined" && cfg) {
+      const planAct = Fe[cfg.version || "starter"] || Fe.basico;
+      const maxAllowed = planAct && planAct.limite && planAct.limite.presupuestos;
+      const currentCount = presupuestosActuales.filter((b) => !b._deleted).length;
+      if (maxAllowed && currentCount + paraCrear.length > maxAllowed) {
+        setToast(
+          "🔒 Límite de presupuestos alcanzado en tu Plan (" +
+            currentCount +
+            "/" +
+            maxAllowed +
+            "). Actualiza tu plan para importar más presupuestos."
+        );
+        return;
+      }
+    }
+
+    let updatedClients = [...clientesActuales];
+    let maxBudgetId = presupuestosActuales.reduce((max, b) => Math.max(max, Number(b.id) || 0), 0);
+    let maxClientId = updatedClients.reduce((max, c) => Math.max(max, Number(c.id) || 0), 0);
+    const nuevosBudgets = [];
+
+    const normUnidad = (uStr) => {
+      if (!uStr) return "unidad";
+      const s = String(uStr).trim().toLowerCase();
+      if (s === "m2" || s === "mt2") return "m²";
+      if (s === "m3" || s === "mt3") return "m³";
+      if (s === "ml" || s === "m") return "ml";
+      if (s === "un" || s === "und" || s === "u") return "unidad";
+      if (s === "gl" || s === "gbl") return "gl";
+      return uStr;
+    };
+
+    const catalogList = Array.isArray(catalog) ? catalog : [];
+    const findInCatalog = (descStr) => {
+      if (!descStr) return null;
+      const sNorm = descStr.trim().toLowerCase();
+      return (
+        catalogList.find((c) => {
+          const cNom = (c.nombre || c.desc || "").trim().toLowerCase();
+          return cNom === sNorm;
+        }) || null
+      );
+    };
+
+    for (const proj of paraCrear) {
+      maxBudgetId++;
+      const newBudgetId = maxBudgetId;
+      const dg = proj.datosGenerales || {};
+
+      const rawClientName = (dg.cliente || "Cliente Móvil").trim();
+      let matchedClient = updatedClients.find(
+        (c) => (c.nombre || "").trim().toLowerCase() === rawClientName.toLowerCase()
+      );
+      let clienteId;
+      if (matchedClient) {
+        clienteId = matchedClient.id;
+      } else {
+        maxClientId++;
+        clienteId = maxClientId;
+        const newClientObj = {
+          id: clienteId,
+          nombre: rawClientName,
+          telefono: dg.telefono || "",
+          email: dg.correo || dg.email || "",
+          rut: "",
+          direccion: "",
+          fecha: dg.fecha || new Date().toISOString().slice(0, 10),
+          notas: "Cliente creado automáticamente desde ECP Medidas Móvil",
+        };
+        updatedClients.push(newClientObj);
+      }
+
+      const rawCaps = Array.isArray(proj.capitulos) ? proj.capitulos : [];
+      const mappedCapitulos = [];
+      const mappedItems = [];
+
+      rawCaps.forEach((cap, cIdx) => {
+        const capId = cap.id != null ? cap.id : cIdx + 1;
+        mappedCapitulos.push({
+          id: capId,
+          codigo: String(cIdx + 1),
+          nombre: cap.nombre || "Capítulo " + (cIdx + 1),
+          orden: cIdx,
+          descripcionOpcional: "",
+          subtotal: 0,
+        });
+
+        const partidas = Array.isArray(cap.partidas) ? cap.partidas : [];
+        partidas.forEach((p) => {
+          const unitNorm = normUnidad(p.unidad);
+          const catMatch = findInCatalog(p.descripcion);
+          const det = p.detalles || {};
+          const dimParts = [];
+          if (det.largo != null && det.largo !== "") dimParts.push("Largo: " + det.largo + "m");
+          if (det.ancho != null && det.ancho !== "") dimParts.push("Ancho: " + det.ancho + "m");
+          if (det.alto != null && det.alto !== "") dimParts.push("Alto/Espesor: " + det.alto + "m");
+          if (det.poligono && Array.isArray(det.poligono.puntos))
+            dimParts.push("Polígono (" + det.poligono.puntos.length + " vértices)");
+          const dimTexto = dimParts.length ? "Medición de terreno: " + dimParts.join(" × ") : "";
+
+          mappedItems.push({
+            _uid: "it_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8),
+            desc: p.descripcion || "Partida",
+            cant: Number(p.cantidad) || 1,
+            unidad: unitNorm,
+            precio: catMatch && Number(catMatch.precio) > 0 ? Number(catMatch.precio) : 0,
+            capituloId: capId,
+            especTecnica: dimTexto,
+            detallesMedida: det,
+            tipoMedida: p.tipo_medida || "",
+            _cid: catMatch ? catMatch.id : "",
+            _tipoCosto: catMatch ? "auto" : "mo",
+          });
+        });
+      });
+
+      const newBudgetObj = {
+        id: newBudgetId,
+        clienteId: clienteId,
+        descripcion: dg.descripcionObra || ("Presupuesto Medidas Móvil " + rawClientName),
+        fecha: dg.fecha || new Date().toISOString().slice(0, 10),
+        items: mappedItems,
+        capitulos: mappedCapitulos.length
+          ? mappedCapitulos
+          : [{ id: 1, codigo: "1", nombre: "General", orden: 0, descripcionOpcional: "", subtotal: 0 }],
+        descuento: false,
+        estado: "Pendiente",
+        notas: dg.notasCliente || dg.notasInternas || "Importado desde ECP Medidas Terreno",
+        notasCliente: dg.notasCliente || "",
+        notasInternas:
+          (dg.notasInternas ? dg.notasInternas + "\n" : "") +
+          "📍 Importado desde ECP Medidas Terreno (ID Móvil: " +
+          (proj.id || "") +
+          ")",
+        plazoEjecucion: Number(dg.plazoEjecucionDias) || 30,
+        modoCosteo: dg.modo === "Simple" ? "simple" : "completo",
+        customId: null,
+        licitacionIdMP: "",
+        licitacionOpportunityId: "",
+        licitacionNombre: "",
+        licitacionOrganismo: "",
+        _pendingClientName: "",
+        _isTenderDraft: false,
+        sinIva: false,
+        hitosPago: null,
+        origen: "ECP_MOVIL",
+        origenMovilId: String(proj.id || ""),
+        fechaImportacion: new Date().toISOString(),
+        changelog: [{ fecha: Wt(), accion: "📐 Importado desde ECP Medidas Terreno" }],
+      };
+      nuevosBudgets.push(newBudgetObj);
+    }
+
+    if (updatedClients.length > clientesActuales.length) {
+      setClients(updatedClients);
+      try {
+        _t("clients", updatedClients);
+      } catch (e2) {}
+    }
+
+    const combinedBudgets = [...nuevosBudgets, ...presupuestosActuales];
+    setBudgets(combinedBudgets);
+    try {
+      _t("budgets", combinedBudgets);
+    } catch (e2) {}
+
+    if (setCfg) {
+      setCfg((prevCfg) => ({
+        ...prevCfg,
+        nextNum: maxBudgetId + 1,
+      }));
+    }
+
+    const totalNuevos = nuevosBudgets.length;
+    const totalOmitidos = omitidos.length;
+    let mensaje = "";
+    if (totalOmitidos > 0) {
+      mensaje =
+        "✅ " +
+        totalNuevos +
+        " presupuesto" +
+        (totalNuevos === 1 ? "" : "s") +
+        " nuevo" +
+        (totalNuevos === 1 ? "" : "s") +
+        " importado" +
+        (totalNuevos === 1 ? "" : "s") +
+        " con éxito (" +
+        totalOmitidos +
+        " omitido" +
+        (totalOmitidos === 1 ? "" : "s") +
+        " por ya existir).";
+    } else {
+      mensaje =
+        "✅ " +
+        totalNuevos +
+        " presupuesto" +
+        (totalNuevos === 1 ? "" : "s") +
+        " creado" +
+        (totalNuevos === 1 ? "" : "s") +
+        " con éxito desde ECP Medidas Móvil.";
+    }
+    setToast(mensaje);
+
+    if (totalNuevos === 1 && onOpenBudget) {
+      onOpenBudget(nuevosBudgets[0]);
+    } else if (onNavigateHistory) {
+      onNavigateHistory();
+    }
+  }
+
   function Jg() {
     const [unreadAlerts, setUnreadAlerts] = V(0);
     ct(() => {
@@ -85271,6 +85757,60 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
       (Q("📦 Paquete generado para RUT " + rutNorm),
         setGenResult({ rutNorm: rutNorm, generado: pack.generado }));
     };
+    const importarDesdeEcpMedidas = (fileOrData) => {
+      if (modoSoloLecturaPorLicencia) {
+        avisoSoloLectura();
+        return;
+      }
+      if (!fileOrData) return;
+      if (typeof fileOrData === "object" && !(fileOrData instanceof File) && !(fileOrData instanceof Blob)) {
+        procesarImportacionEcpMedidas({
+          jsonData: fileOrData,
+          currentBudgets: B,
+          setBudgets: w,
+          currentClients: p,
+          setClients: C,
+          catalog: b,
+          cfg: l,
+          setCfg: o,
+          setToast: Q,
+          onOpenBudget: (nuevo) => {
+            R(nuevo);
+            f("edit");
+          },
+          onNavigateHistory: () => f("history"),
+        });
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const parsed = JSON.parse(ev.target.result);
+          procesarImportacionEcpMedidas({
+            jsonData: parsed,
+            currentBudgets: B,
+            setBudgets: w,
+            currentClients: p,
+            setClients: C,
+            catalog: b,
+            cfg: l,
+            setCfg: o,
+            setToast: Q,
+            onOpenBudget: (nuevo) => {
+              R(nuevo);
+              f("edit");
+            },
+            onNavigateHistory: () => f("history"),
+          });
+        } catch (err) {
+          Q("⚠️ El archivo seleccionado no contiene formato JSON válido.");
+        }
+      };
+      reader.onerror = () => {
+        Q("⚠️ Error al leer el archivo del dispositivo.");
+      };
+      reader.readAsText(fileOrData);
+    };
     const diffUpdatePack = (t, i) => {
       var r = new Map((t || []).map((s) => [s.id, s])),
         n = 0,
@@ -85582,6 +86122,7 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
             licitaciones: s,
             onLinkLicitacion: linkBudgetToOpportunity,
             onOpenDocument: (contextoDocumento) => { W(contextoDocumento); f("documentos"); },
+            onImportMedidas: importarDesdeEcpMedidas,
           });
         if (x === "lista")
           return e.jsx(Dp, {
@@ -85697,6 +86238,7 @@ Se borrarán los 3 clientes, 4 presupuestos y 1 licitación de ejemplo. Esta acc
             onImportUpdatePack: gsl(analizarPaqueteImportado),
             updateHistory: updateHistory,
             soloLectura: modoSoloLecturaPorLicencia,
+            onImportMedidas: importarDesdeEcpMedidas,
             onClearAll: gsl(() => {
               confirm(`¿Borrar TODOS los datos?
 
@@ -87017,7 +87559,7 @@ Esta acción no se puede deshacer.`) &&
                 textDecoration: "underline",
                 cursor: "pointer"
               },
-              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.2")
+              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.3")
             }),
           ],
         }),
@@ -87169,6 +87711,34 @@ Esta acción no se puede deshacer.`) &&
                       },
                       children: "🪄",
                     }),
+                    (x === "dashboard" || x === "history") &&
+                      e.jsxs("label", {
+                        style: u(d({}, c.btn("s")), {
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          cursor: "pointer",
+                          fontWeight: 600,
+                          fontSize: 13,
+                          background: "rgba(245,158,11,0.12)",
+                          borderColor: "rgba(245,158,11,0.4)",
+                          color: a.accentTxt || "#f59e0b",
+                        }),
+                        title: "Importar cubicaciones y mediciones de terreno desde la App Móvil ECP Medidas (.json)",
+                        children: [
+                          "📐 Medidas Móvil",
+                          e.jsx("input", {
+                            type: "file",
+                            accept: ".json",
+                            style: { display: "none" },
+                            onChange: (ev) => {
+                              var file = ev.target.files && ev.target.files[0];
+                              ev.target.value = "";
+                              if (file) importarDesdeEcpMedidas(file);
+                            },
+                          }),
+                        ],
+                      }),
                     (x === "dashboard" || x === "history") &&
                       e.jsx("button", {
                         style: u(d({}, c.btn("p")), { background: fe }),
