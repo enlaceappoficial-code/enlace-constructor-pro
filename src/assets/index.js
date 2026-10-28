@@ -84986,7 +84986,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
         () => window.removeEventListener("resize", H)
       );
     }, []);
-    const hdrNarrow = winW - (sbHidden ? 0 : 230) < 900;
+    const hdrNarrow = winW - (sbHidden ? 0 : 230) < 940;
     const [adminGate, setAdminGate] = V(!1),
       [adminPanel, setAdminPanel] = V(!1),
       [adminPin, setAdminPin] = V(""),
@@ -87571,11 +87571,17 @@ Esta acción no se puede deshacer.`) &&
                 position: "relative",
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
               }),
               children: [
                 e.jsx("div", {
                   style: {
-                    flex: 1,
+                    flex: "0 1 auto",
+                    minWidth: 60,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
                     fontSize: 18,
                     fontWeight: 700,
                     letterSpacing: "-.02em",
@@ -87583,13 +87589,101 @@ Esta acción no se puede deshacer.`) &&
                   },
                   children: se,
                 }),
+                x !== "licitaciones" && !hdrNarrow && e.jsxs("div", {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 9,
+                    flexShrink: 0,
+                    margin: "0 auto",
+                    padding: "0 8px",
+                    pointerEvents: "none",
+                    userSelect: "none",
+                  },
+                  children: [
+                    l.logo
+                      ? e.jsx("img", {
+                          src: l.logo,
+                          alt: "Enlace",
+                          style: {
+                            height: 34,
+                            objectFit: "contain",
+                            filter: "drop-shadow(0 0 6px #2563eb99)",
+                          },
+                        })
+                      : e.jsxs("svg", {
+                          width: "30",
+                          height: "30",
+                          viewBox: "0 0 100 100",
+                          children: [
+                            e.jsx("defs", {
+                              children: e.jsxs("linearGradient", {
+                                id: "lg2",
+                                x1: "0%",
+                                y1: "0%",
+                                x2: "100%",
+                                y2: "100%",
+                                children: [
+                                  e.jsx("stop", {
+                                    offset: "0%",
+                                    stopColor: "#60a5fa",
+                                  }),
+                                  e.jsx("stop", {
+                                    offset: "100%",
+                                    stopColor: "#2563eb",
+                                  }),
+                                ],
+                              }),
+                            }),
+                            e.jsx("path", {
+                              d: "M50 8 C28 8 10 26 10 48 C10 62 17 74 28 82 L50 95 L72 82 C83 74 90 62 90 48 C90 26 72 8 50 8Z",
+                              fill: "url(#lg2)",
+                            }),
+                            e.jsx("path", {
+                              d: "M35 35 Q50 25 65 35 Q72 42 65 52 Q55 58 50 52 Q44 46 50 40 Q58 36 62 42",
+                              fill: "none",
+                              stroke: fe,
+                              strokeWidth: "5",
+                              strokeLinecap: "round",
+                            }),
+                          ],
+                        }),
+                    e.jsxs("div", {
+                      style: { lineHeight: 1.2 },
+                      children: [
+                        e.jsx("div", {
+                          style: {
+                            fontSize: 14,
+                            fontWeight: 800,
+                            color: "#ffffff",
+                            letterSpacing: ".08em",
+                            textTransform: "uppercase",
+                          },
+                          children: "ENLACE",
+                        }),
+                        e.jsx("div", {
+                          style: {
+                            fontSize: 8.5,
+                            fontWeight: 700,
+                            color: fe,
+                            letterSpacing: ".12em",
+                            textTransform: "uppercase",
+                          },
+                          children: "CONSTRUCTOR",
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
                 e.jsxs("div", {
                   style: {
-                    flex: 1,
+                    flex: "0 0 auto",
+                    marginLeft: "auto",
                     display: "flex",
                     gap: 8,
                     alignItems: "center",
                     justifyContent: "flex-end",
+                    flexShrink: 0,
                   },
                   children: [
                     e.jsx("button", {
@@ -87718,11 +87812,13 @@ Esta acción no se puede deshacer.`) &&
                           alignItems: "center",
                           gap: 6,
                           cursor: "pointer",
-                          fontWeight: 600,
+                          fontWeight: 700,
                           fontSize: 13,
-                          background: "rgba(245,158,11,0.12)",
-                          borderColor: "rgba(245,158,11,0.4)",
-                          color: a.accentTxt || "#f59e0b",
+                          whiteSpace: "nowrap",
+                          flexShrink: 0,
+                          background: "rgba(245,160,32,0.18)",
+                          border: "1px solid rgba(245,160,32,0.55)",
+                          color: "#fbbf24",
                         }),
                         title: "Importar cubicaciones y mediciones de terreno desde la App Móvil ECP Medidas (.json)",
                         children: [
@@ -87741,105 +87837,17 @@ Esta acción no se puede deshacer.`) &&
                       }),
                     (x === "dashboard" || x === "history") &&
                       e.jsx("button", {
-                        style: u(d({}, c.btn("p")), { background: fe }),
+                        style: u(d({}, c.btn("p")), {
+                          background: fe,
+                          whiteSpace: "nowrap",
+                          flexShrink: 0,
+                        }),
                         onClick: () => {
                           if (modoSoloLecturaPorLicencia) { avisoSoloLectura(); return; }
                           (R(null), f("new"));
                         },
                         children: "+ Nuevo Presupuesto",
                       }),
-                  ],
-                }),
-                x !== "licitaciones" && e.jsxs("div", {
-                  style: hdrNarrow
-                    ? {
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 9,
-                        flexShrink: 0,
-                        marginLeft: 10,
-                      }
-                    : {
-                        position: "absolute",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 9,
-                      },
-                  children: [
-                    l.logo
-                      ? e.jsx("img", {
-                          src: l.logo,
-                          alt: "Enlace",
-                          style: {
-                            height: 34,
-                            objectFit: "contain",
-                            filter: "drop-shadow(0 0 6px #2563eb99)",
-                          },
-                        })
-                      : e.jsxs("svg", {
-                          width: "30",
-                          height: "30",
-                          viewBox: "0 0 100 100",
-                          children: [
-                            e.jsx("defs", {
-                              children: e.jsxs("linearGradient", {
-                                id: "lg2",
-                                x1: "0%",
-                                y1: "0%",
-                                x2: "100%",
-                                y2: "100%",
-                                children: [
-                                  e.jsx("stop", {
-                                    offset: "0%",
-                                    stopColor: "#60a5fa",
-                                  }),
-                                  e.jsx("stop", {
-                                    offset: "100%",
-                                    stopColor: "#2563eb",
-                                  }),
-                                ],
-                              }),
-                            }),
-                            e.jsx("path", {
-                              d: "M50 8 C28 8 10 26 10 48 C10 62 17 74 28 82 L50 95 L72 82 C83 74 90 62 90 48 C90 26 72 8 50 8Z",
-                              fill: "url(#lg2)",
-                            }),
-                            e.jsx("path", {
-                              d: "M35 35 Q50 25 65 35 Q72 42 65 52 Q55 58 50 52 Q44 46 50 40 Q58 36 62 42",
-                              fill: "none",
-                              stroke: fe,
-                              strokeWidth: "5",
-                              strokeLinecap: "round",
-                            }),
-                          ],
-                        }),
-                    e.jsxs("div", {
-                      style: { lineHeight: 1.2 },
-                      children: [
-                        e.jsx("div", {
-                          style: {
-                            fontSize: 14,
-                            fontWeight: 800,
-                            color: "#ffffff",
-                            letterSpacing: ".08em",
-                            textTransform: "uppercase",
-                          },
-                          children: "ENLACE",
-                        }),
-                        e.jsx("div", {
-                          style: {
-                            fontSize: 8.5,
-                            fontWeight: 700,
-                            color: fe,
-                            letterSpacing: ".12em",
-                            textTransform: "uppercase",
-                          },
-                          children: "CONSTRUCTOR",
-                        }),
-                      ],
-                    }),
                   ],
                 }),
               ],
