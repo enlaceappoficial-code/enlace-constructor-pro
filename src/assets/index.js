@@ -66759,59 +66759,71 @@ K &&
                           id: "simple",
                           name: "Simple",
                           desc: "Diseño limpio sin logo, ideal para envíos rápidos",
+                          header: "#1a3a5c",
+                          accent: "#f5a020",
                         },
                         {
                           id: "azul",
                           name: "Azul",
                           desc: "Formal con encabezado azul y espacio para logo",
+                          header: "#1e40af",
+                          accent: "#3b82f6",
                         },
                         {
                           id: "verde",
                           name: "Verde",
                           desc: "Estilo ecológico con acentos verdes",
+                          header: "#14532d",
+                          accent: "#16a34a",
                         },
                         {
                           id: "naranja",
                           name: "Naranja",
                           desc: "Ejecutivo moderno con toques naranjas",
+                          header: "#92400e",
+                          accent: "#f97316",
                         },
                         {
                           id: "gris",
                           name: "Gris",
                           desc: "Profesional institucional en escala de grises",
+                          header: "#1f2937",
+                          accent: "#6b7280",
                         },
-                      ].map((x) =>
-                        e.jsxs(
+                      ].map((x) => {
+                        const isSelected = ((h && h.pdfTplPref) || pt("pdfTplPref", "simple")) === x.id;
+                        const isDisabled = t.version === "starter" && x.id !== "simple";
+                        const selectTpl = () => {
+                          if (isDisabled) return;
+                          _t("pdfTplPref", x.id);
+                          z((f) => u(d({}, f), { pdfTplPref: x.id }));
+                        };
+                        return e.jsxs(
                           "label",
                           {
+                            onClick: selectTpl,
                             style: {
                               display: "flex",
                               alignItems: "center",
                               gap: 12,
                               padding: "10px 14px",
-                              background: a.sb,
+                              background: isSelected ? (a.isDark ? "rgba(245,160,32,0.12)" : "rgba(245,160,32,0.06)") : a.sb,
                               borderRadius: 8,
-                              border: `2px solid ${pt("pdfTplPref", "simple") === x.id ? a.accent : a.border}`,
-                              cursor:
-                                t.version === "starter" && x.id !== "simple"
-                                  ? "not-allowed"
-                                  : "pointer",
-                              opacity:
-                                t.version === "starter" && x.id !== "simple"
-                                  ? 0.4
-                                  : 1,
+                              border: `2px solid ${isSelected ? (h.accentColor || a.accent) : a.border}`,
+                              cursor: isDisabled ? "not-allowed" : "pointer",
+                              opacity: isDisabled ? 0.4 : 1,
                               position: "relative",
+                              transition: "all .18s ease",
                             },
                             children: [
                               e.jsx("input", {
                                 type: "radio",
                                 name: "pdfTplPref",
-                                disabled:
-                                  t.version === "starter" && x.id !== "simple",
+                                disabled: isDisabled,
                                 value: x.id,
-                                checked: pt("pdfTplPref", "simple") === x.id,
-                                onChange: () => _t("pdfTplPref", x.id),
-                                style: { cursor: "pointer" },
+                                checked: isSelected,
+                                onChange: selectTpl,
+                                style: { cursor: isDisabled ? "not-allowed" : "pointer", accentColor: h.accentColor || a.accent },
                               }),
                               e.jsxs("div", {
                                 style: { flex: 1 },
@@ -66830,11 +66842,47 @@ K &&
                                   }),
                                 ],
                               }),
+                              e.jsxs("div", {
+                                style: {
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 6,
+                                  padding: "3px 8px",
+                                  borderRadius: 6,
+                                  background: a.isDark ? "rgba(255,255,255,0.06)" : "#f1f5f9",
+                                  border: `1px solid ${a.border}`,
+                                  flexShrink: 0,
+                                },
+                                children: [
+                                  e.jsx("span", {
+                                    title: "Color encabezado",
+                                    style: {
+                                      width: 14,
+                                      height: 14,
+                                      borderRadius: 3,
+                                      background: x.header,
+                                      display: "inline-block",
+                                      border: "1px solid rgba(0,0,0,0.15)",
+                                    },
+                                  }),
+                                  e.jsx("span", {
+                                    title: "Color acento",
+                                    style: {
+                                      width: 14,
+                                      height: 14,
+                                      borderRadius: "50%",
+                                      background: x.accent,
+                                      display: "inline-block",
+                                      border: "1px solid rgba(0,0,0,0.15)",
+                                    },
+                                  }),
+                                ],
+                              }),
                             ],
                           },
                           x.id,
-                        ),
-                      ),
+                        );
+                      }),
                     }),
                   }),
                 ],
