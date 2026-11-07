@@ -22896,6 +22896,33 @@ Error generating stack: ` +
     var defFormaPago = defContrato.formaPago || "";
     var defHitos = defContrato.hitosPago || "";
     var defGarantia = defContrato.garantiaNumero ? String(defContrato.garantiaNumero) + " " + (defContrato.garantiaUnidad || "días corridos") : "";
+
+    var itemsNorm = (typeof obtenerItemsPresupuestoExportables === 'function' ? obtenerItemsPresupuestoExportables(presupuesto.items) : (presupuesto.items || [])).filter(Boolean);
+    var m2Total = 0, mlTotal = 0, m3Total = 0;
+    itemsNorm.forEach(function(it) {
+      var u0 = String(it.unidad || '').toLowerCase().trim();
+      var c0 = parseFloat(it.cant) || 0;
+      if (u0 === 'm2' || u0 === 'm²') m2Total += c0;
+      else if (u0 === 'ml' || u0 === 'm' || u0 === 'metro' || u0 === 'metros') mlTotal += c0;
+      else if (u0 === 'm3' || u0 === 'm³') m3Total += c0;
+    });
+
+    var defKpi1Val = m2Total > 0 ? (m2Total.toLocaleString('es-CL', { maximumFractionDigits: 2 }) + ' m²') : (itemsNorm.length > 0 ? (itemsNorm.length + ' Partidas') : '1.517,99 m²');
+    var defKpi1Lbl = m2Total > 0 ? 'SUPERFICIE DE PROYECTO' : 'PARTIDAS TÉCNICAS';
+
+    var defKpi2Val = mlTotal > 0 ? (mlTotal.toLocaleString('es-CL', { maximumFractionDigits: 2 }) + ' ml') : (m3Total > 0 ? (m3Total.toLocaleString('es-CL', { maximumFractionDigits: 2 }) + ' m³') : '127,20 ml');
+    var defKpi2Lbl = mlTotal > 0 ? 'LONGITUD / LINEALES' : (m3Total > 0 ? 'VOLUMEN DE OBRA' : 'ALCANCE DE OBRA');
+
+    var heroImg = previo.fotoPortada || '';
+    if (!heroImg && presupuesto.items) {
+      for (var iIdx = 0; iIdx < presupuesto.items.length; iIdx++) {
+        var pFotos = presupuesto.items[iIdx] && presupuesto.items[iIdx].fotos;
+        if (pFotos && pFotos.length > 0 && pFotos[0].data) {
+          heroImg = pFotos[0].data;
+          break;
+        }
+      }
+    }
     
     var r = {
       estado: previo.estado || "Borrador",
@@ -22915,6 +22942,15 @@ Error generating stack: ` +
       formaPago: previo.formaPago || defFormaPago,
       hitos: previo.hitos || defHitos,
       garantia: previo.garantia || defGarantia,
+
+      fotoPortada: previo.fotoPortada || heroImg,
+      fotoPortadaLeyenda: previo.fotoPortadaLeyenda || "Extracto de referencia documental y planimetría del proyecto.",
+      categoriaPortada: previo.categoriaPortada || "PROPUESTA TÉCNICA Y PRESUPUESTO FORMAL",
+      tituloPortada: previo.tituloPortada || "",
+      kpi1_valor: previo.kpi1_valor || defKpi1Val,
+      kpi1_label: previo.kpi1_label || defKpi1Lbl,
+      kpi2_valor: previo.kpi2_valor || defKpi2Val,
+      kpi2_label: previo.kpi2_label || defKpi2Lbl,
       
       secciones: Object.assign({
         portada: true,
@@ -23066,27 +23102,120 @@ Error generating stack: ` +
     var html = '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Cotización N° ' + esc(doc.numero) + ' — ' + esc(nombreProyecto) + '</title><style>' + css + '</style></head><body>' +
       '<button class="np" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>';
 
+    var accentBrand = r.accentColor || "#f5a020";
+    var darkBrand = "#0d1f35";
+
     if (doc.secciones.portada) {
-      html += '<section class="cov">' +
-        '<div class="cov-top">' +
-          (logoUrl ? '<img class="cov-logo" src="' + logoUrl + '" alt=""/>' : "") +
-          '<div class="cov-emp">' + esc(corp.nombreComercial || "Empresa") + (corp.rut ? "<span>RUT " + esc(corp.rut) + "</span>" : "") + '</div>' +
+      var totalVal = tt && tt.total != null ? tt.total : 0;
+      var totalFormatted = mon(totalVal);
+      var ivaLabel = t.sinIva ? "neto" : "con IVA considerado";
+
+      var heroImg = doc.fotoPortada || "";
+      var heroImgHtml = heroImg
+        ? '<img src="' + heroImg + '" style="width:100%;max-height:270px;object-fit:contain;object-position:center;display:block;"/>'
+        : '<div style="padding:42px 20px;color:#94a3b8;display:flex;flex-direction:column;align-items:center;gap:8px;">' +
+            '<span style="font-size:38px;">📐</span>' +
+            '<span style="font-size:13px;font-weight:700;color:#64748b;">Documentación Técnica y Cotización Formal</span>' +
+            '<span style="font-size:11px;color:#94a3b8;">' + esc(corp.nombreComercial || "Enlace Constructor Pro") + ' · Enlace Constructor Pro</span>' +
+          '</div>';
+
+      var tFull = (doc.tituloPortada || nombreProyecto || "PROPUESTA TÉCNICA Y PRESUPUESTO").trim();
+      var words = tFull.split(/\s+/);
+      var dualTitle = "";
+      if (words.length >= 3) {
+        var cut = Math.ceil(words.length / 2);
+        dualTitle = esc(words.slice(0, cut).join(" ")) + ' <span style="color:' + accentBrand + ';display:block;">' + esc(words.slice(cut).join(" ")) + '</span>';
+      } else if (words.length === 2) {
+        dualTitle = esc(words[0]) + ' <span style="color:' + accentBrand + ';display:block;">' + esc(words[1]) + '</span>';
+      } else {
+        dualTitle = '<span style="color:' + accentBrand + ';">' + esc(tFull) + '</span>';
+      }
+
+      var slogan = r.empresaSlogan || r.empresaRubro || "";
+
+      html += '<section class="cov ecp-cover-page" style="min-height:270mm;padding:24px 20px 20px 20px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box;page-break-after:always;break-after:page;">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+          '<div>' +
+            (logoUrl
+              ? '<img src="' + logoUrl + '" style="max-height:65px;max-width:240px;object-fit:contain;display:block;margin-bottom:4px;"/>'
+              : '<div style="font-size:26px;font-weight:900;color:' + darkBrand + ';letter-spacing:-0.5px;">' + esc(corp.nombreComercial || "Empresa") + '</div>') +
+            (slogan ? '<div style="font-size:11px;color:#64748b;font-weight:600;margin-top:4px;">' + esc(slogan) + '</div>' : '') +
+            (corp.rut ? '<div style="font-size:10.5px;color:#8c96a8;margin-top:2px;">RUT: ' + esc(corp.rut) + (corp.ciudad ? ' · ' + esc(corp.ciudad) : '') + '</div>' : '') +
+          '</div>' +
+          '<div style="text-align:right;">' +
+            '<div style="font-size:11px;font-weight:800;letter-spacing:1.5px;color:#64748b;text-transform:uppercase;">COTIZACIÓN FORMAL</div>' +
+            '<div style="font-size:34px;font-weight:900;color:' + darkBrand + ';line-height:1;margin-top:2px;">N° ' + esc(doc.numero || t.id || "001") + '</div>' +
+            '<div style="font-size:10px;font-weight:700;color:#94a3b8;margin-top:4px;text-transform:uppercase;">' +
+              esc(fechaLarga || doc.fecha) + (doc.validez ? ' | VALIDEZ: ' + doc.validez + ' DÍAS' : '') +
+            '</div>' +
+          '</div>' +
         '</div>' +
-        '<div class="cov-mid">' +
-          '<div class="cov-kicker">Propuesta comercial</div>' +
-          '<h1 class="cov-h1">Cotización N° ' + esc(doc.numero) + '</h1>' +
-          '<div class="cov-rule"></div>' +
-          '<div class="cov-proj">' + esc(nombreProyecto) + '</div>' +
-          '<dl class="cov-meta">' +
-            '<div><dt>Cliente</dt><dd>' + esc(nombreCliente) + '</dd></div>' +
-            '<div><dt>Fecha de emisión</dt><dd>' + esc(fechaLarga) + '</dd></div>' +
-            '<div><dt>Validez de la oferta</dt><dd>' + esc(doc.validez) + ' días corridos</dd></div>' +
-            '<div><dt>Presupuesto de referencia</dt><dd>N° ' + esc(t.id) + '</dd></div>' +
-          '</dl>' +
+
+        '<div style="margin-top:24px;">' +
+          '<div style="font-size:11px;font-weight:800;letter-spacing:1.8px;color:' + darkBrand + ';text-transform:uppercase;margin-bottom:6px;">' +
+            esc(doc.categoriaPortada || "PROPUESTA TÉCNICA Y PRESUPUESTO FORMAL") +
+          '</div>' +
+          '<div style="font-size:28px;font-weight:900;line-height:1.15;color:' + darkBrand + ';text-transform:uppercase;">' +
+            dualTitle +
+          '</div>' +
         '</div>' +
-        '<div class="cov-foot">' +
-          '<div>' + esc(corp.nombreComercial || "") + (corp.telefono ? " · " + esc(corp.telefono) : "") + '</div>' +
-          '<div>' + esc(corp.correo || "") + '</div>' +
+
+        '<div style="margin-top:14px;line-height:1.5;">' +
+          '<div style="font-size:13.5px;font-weight:700;color:#334155;">' +
+            esc(nombreCliente) + ((i && i.rut) ? ' <span style="font-weight:400;color:#64748b;">(RUT: ' + esc(i.rut) + ')</span>' : '') +
+          '</div>' +
+          '<div style="font-size:12px;font-weight:700;color:' + darkBrand + ';">' +
+            esc((i && i.direccion) || t.lugar || corp.ciudad || "Ubicación del proyecto") +
+          '</div>' +
+          '<div style="font-size:11px;color:#64748b;margin-top:3px;">' +
+            esc(doc.resumenEjecutivo ? doc.resumenEjecutivo.slice(0, 160) : (t.descripcion || "Alcance técnico detallado y especificaciones de partida.")) +
+          '</div>' +
+        '</div>' +
+
+        '<div style="margin:18px 0 10px 0;">' +
+          '<div style="border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;background:#f8fafc;display:flex;align-items:center;justify-content:center;min-height:210px;max-height:280px;">' +
+            heroImgHtml +
+          '</div>' +
+          '<div style="font-size:10px;color:#64748b;font-style:italic;margin-top:6px;text-align:left;">' +
+            esc(doc.fotoPortadaLeyenda || "Extracto de referencia documental y registro del proyecto.") +
+          '</div>' +
+        '</div>' +
+
+        '<div style="position:relative;border-radius:14px;overflow:hidden;background:' + darkBrand + ';color:#fff;padding:22px 26px 16px;margin-top:auto;">' +
+          '<svg style="position:absolute;top:0;left:0;right:0;width:100%;height:16px;" viewBox="0 0 100 12" preserveAspectRatio="none">' +
+            '<path d="M0,0 Q35,12 70,4 T100,5 L100,0 Z" fill="' + accentBrand + '" opacity="0.95"></path>' +
+            '<path d="M0,3 Q40,11 75,5 T100,6 L100,0 Z" fill="' + darkBrand + '"></path>' +
+          '</svg>' +
+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-top:4px;margin-bottom:14px;">' +
+            '<div>' +
+              '<div style="font-size:24px;font-weight:900;letter-spacing:-0.5px;line-height:1;">' + esc(doc.kpi1_valor) + '</div>' +
+              '<div style="font-size:10px;font-weight:800;letter-spacing:1px;color:' + accentBrand + ';text-transform:uppercase;margin-top:4px;">' + esc(doc.kpi1_label) + '</div>' +
+            '</div>' +
+            '<div>' +
+              '<div style="font-size:24px;font-weight:900;letter-spacing:-0.5px;line-height:1;">' + esc(doc.kpi2_valor) + '</div>' +
+              '<div style="font-size:10px;font-weight:800;letter-spacing:1px;color:' + accentBrand + ';text-transform:uppercase;margin-top:4px;">' + esc(doc.kpi2_label) + '</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:10px;display:flex;justify-content:space-between;align-items:flex-end;">' +
+            '<div>' +
+              '<div style="font-size:10px;font-weight:800;letter-spacing:0.8px;color:' + accentBrand + ';text-transform:uppercase;">' +
+                'PRESUPUESTO N° ' + esc(t.id || doc.numero || "001") +
+              '</div>' +
+              '<div style="font-size:18px;font-weight:900;color:#fff;margin-top:2px;">' +
+                'VALOR TOTAL DE LA PROPUESTA' +
+              '</div>' +
+            '</div>' +
+            '<div style="text-align:right;">' +
+              '<div style="font-size:26px;font-weight:900;color:#fff;letter-spacing:-0.5px;line-height:1;">' +
+                totalFormatted +
+              '</div>' +
+              '<div style="font-size:10px;color:' + accentBrand + ';font-weight:700;margin-top:3px;text-transform:uppercase;">' +
+                ivaLabel +
+              '</div>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
       '</section>';
     }
@@ -23408,6 +23537,79 @@ Error generating stack: ` +
               e.jsxs("div", {
                 style: { flex: 1, padding: 18, overflowY: "auto" },
                 children: [
+                  doc.secciones.portada && e.jsxs("div", {
+                    style: cardStyle,
+                    children: [
+                      e.jsxs("div", {
+                        style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 },
+                        children: [
+                          e.jsx("div", { style: { fontWeight: "bold", fontSize: 12, color: a.accentTxt }, children: "🖼️ Portada Ejecutiva de Marca (Estilo Corporativo / Bajo Deslinde)" }),
+                          e.jsx("span", { style: { fontSize: 11, color: a.muted }, children: "Foto, KPIs y Zócalo Curvo SVG" }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 },
+                        children: [
+                          itemInput("Categoría de portada", "categoriaPortada"),
+                          itemInput("Título personalizado (opcional)", "tituloPortada"),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        style: { marginBottom: 10 },
+                        children: [
+                          e.jsx("div", { style: { fontSize: 11, color: a.muted, marginBottom: 4, fontWeight: "bold" }, children: "Fotografía o Planimetría de Portada" }),
+                          e.jsxs("div", {
+                            style: { display: "flex", gap: 10, alignItems: "center" },
+                            children: [
+                              e.jsxs("label", {
+                                style: Object.assign({}, c.btn("s"), { display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", fontSize: 12 }),
+                                children: [
+                                  "📁 Subir foto de portada",
+                                  e.jsx("input", {
+                                    type: "file",
+                                    accept: "image/*",
+                                    style: { display: "none" },
+                                    onChange: function (ev) {
+                                      var fl = ev.target.files && ev.target.files[0];
+                                      if (fl) {
+                                        var fr = new FileReader();
+                                        fr.onload = function (fev) { cambiar("fotoPortada", fev.target.result); };
+                                        fr.readAsDataURL(fl);
+                                      }
+                                    },
+                                  }),
+                                ],
+                              }),
+                              doc.fotoPortada && e.jsx("button", {
+                                onClick: function () { cambiar("fotoPortada", ""); },
+                                style: Object.assign({}, c.btn("d"), { fontSize: 12, padding: "5px 10px" }),
+                                children: "✕ Quitar",
+                              }),
+                              doc.fotoPortada && e.jsx("span", {
+                                style: { fontSize: 11, color: "#16a34a", fontWeight: 700 },
+                                children: "✓ Foto cargada",
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        style: { marginBottom: 10 },
+                        children: [
+                          itemInput("Leyenda de la foto", "fotoPortadaLeyenda"),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 8 },
+                        children: [
+                          itemInput("KPI 1 — Valor", "kpi1_valor"),
+                          itemInput("KPI 1 — Etiqueta", "kpi1_label"),
+                          itemInput("KPI 2 — Valor", "kpi2_valor"),
+                          itemInput("KPI 2 — Etiqueta", "kpi2_label"),
+                        ],
+                      }),
+                    ],
+                  }),
                   doc.secciones.presentacion && itemTextarea("Presentación (Carta de Presentación)", "presentacion", "Carta de presentación comercial...", defPresentacion),
                   doc.secciones.resumen && itemTextarea("Resumen Ejecutivo", "resumenEjecutivo", "Breve resumen ejecutivo...", defResumenEjecutivo),
                   doc.secciones.incluyeExcluye && e.jsxs("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }, children: [
@@ -66276,6 +66478,80 @@ K &&
           o("✅ Configuración guardada"),
           s && s(!1));
       };
+    var _selTpl = (h && h.pdfTplPref) || pt("pdfTplPref", "simple") || "simple",
+      _tplConfigs = {
+        simple: {
+          name: "Simple",
+          cardBorder: "#cbd5e1",
+          cardBg: "#ffffff",
+          topBarBg: "#1a3a5c",
+          topBarTxt: "#ffffff",
+          headerTitleColor: "#1a3a5c",
+          numberColor: h.accentColor || "#f5a020",
+          badgeNewBg: h.accentColor || "#f5a020",
+          badgeNewTxt: "#ffffff",
+          badgeBorder: h.accentColor || "#f5a020",
+          badgeTxt: h.accentColor || "#f5a020",
+          avatarBg: "#1a3a5c"
+        },
+        azul: {
+          name: "Azul",
+          cardBorder: "#1e40af",
+          cardBg: "#ffffff",
+          topBarBg: "#1e40af",
+          topBarTxt: "#ffffff",
+          headerTitleColor: "#1e40af",
+          numberColor: h.accentColor || "#3b82f6",
+          badgeNewBg: "#1e40af",
+          badgeNewTxt: "#ffffff",
+          badgeBorder: h.accentColor || "#3b82f6",
+          badgeTxt: h.accentColor || "#3b82f6",
+          avatarBg: "#1e40af"
+        },
+        verde: {
+          name: "Verde",
+          cardBorder: "#15803d",
+          cardBg: "#f0fdf4",
+          topBarBg: "#14532d",
+          topBarTxt: "#ffffff",
+          headerTitleColor: "#14532d",
+          numberColor: "#15803d",
+          badgeNewBg: "#15803d",
+          badgeNewTxt: "#ffffff",
+          badgeBorder: "#16a34a",
+          badgeTxt: "#15803d",
+          avatarBg: "#14532d"
+        },
+        naranja: {
+          name: "Naranja",
+          cardBorder: "#ea580c",
+          cardBg: "#fffaf5",
+          topBarBg: "#ea580c",
+          topBarTxt: "#ffffff",
+          headerTitleColor: "#92400e",
+          numberColor: "#ea580c",
+          badgeNewBg: "#ea580c",
+          badgeNewTxt: "#ffffff",
+          badgeBorder: "#ea580c",
+          badgeTxt: "#ea580c",
+          avatarBg: "#ea580c"
+        },
+        gris: {
+          name: "Gris",
+          cardBorder: "#475569",
+          cardBg: "#f8fafc",
+          topBarBg: "#334155",
+          topBarTxt: "#ffffff",
+          headerTitleColor: "#1e293b",
+          numberColor: "#334155",
+          badgeNewBg: "#475569",
+          badgeNewTxt: "#ffffff",
+          badgeBorder: "#64748b",
+          badgeTxt: "#475569",
+          avatarBg: "#334155"
+        }
+      },
+      _activeTpl = _tplConfigs[_selTpl] || _tplConfigs.simple;
     return e.jsxs("div", {
       style: { display: "flex", gap: 32, padding: "30px 40px", maxWidth: 1200, margin: "0 auto", alignItems: "flex-start" },
       children: [
@@ -66549,23 +66825,31 @@ K &&
                   e.jsxs("div", {
                     style: {
                       marginTop: 12,
-                      background: "#fff",
-                      border: `2px solid ${h.accentColor}`,
+                      background: _activeTpl.cardBg,
+                      border: `2px solid ${_activeTpl.cardBorder}`,
                       borderRadius: 10,
                       overflow: "hidden",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                      transition: "all .2s ease",
                     },
                     children: [
-                      e.jsx("div", {
+                      e.jsxs("div", {
                         style: {
-                          background: h.accentColor,
-                          padding: "3px 14px",
-                          fontSize: 10,
+                          background: _activeTpl.topBarBg,
+                          padding: "5px 14px",
+                          fontSize: 10.5,
                           fontWeight: 700,
-                          color: "#fff",
+                          color: _activeTpl.topBarTxt,
                           letterSpacing: ".08em",
                           textTransform: "uppercase",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
                         },
-                        children: "Vista previa — encabezado del presupuesto",
+                        children: [
+                          e.jsx("span", { children: `Vista previa — Plantilla ${_activeTpl.name}` }),
+                          e.jsx("span", { style: { opacity: 0.85, fontSize: 10 }, children: "Encabezado del presupuesto" }),
+                        ],
                       }),
                       e.jsxs("div", {
                         style: {
@@ -66598,7 +66882,7 @@ K &&
                                       width: 48,
                                       height: 48,
                                       borderRadius: 8,
-                                      background: h.accentColor,
+                                      background: _activeTpl.avatarBg,
                                       display: "flex",
                                       alignItems: "center",
                                       justifyContent: "center",
@@ -66615,7 +66899,7 @@ K &&
                                     style: {
                                       fontSize: 14,
                                       fontWeight: 800,
-                                      color: a.text,
+                                      color: _activeTpl.headerTitleColor,
                                     },
                                     children:
                                       h.empresa || "Nombre de tu empresa",
@@ -66659,7 +66943,7 @@ K &&
                                 style: {
                                   fontSize: 26,
                                   fontWeight: 900,
-                                  color: h.accentColor,
+                                  color: _activeTpl.numberColor,
                                   lineHeight: 1,
                                 },
                                 children: ["N° ", h.nextNum || 1],
@@ -66674,23 +66958,23 @@ K &&
                                 children: [
                                   e.jsx("span", {
                                     style: {
-                                      background: h.accentColor,
+                                      background: _activeTpl.badgeNewBg,
                                       borderRadius: 6,
                                       padding: "3px 10px",
                                       fontSize: 11,
                                       fontWeight: 700,
-                                      color: "#fff",
+                                      color: _activeTpl.badgeNewTxt,
                                     },
                                     children: "+ Nuevo",
                                   }),
                                   e.jsx("span", {
                                     style: {
-                                      border: `1px solid ${h.accentColor}`,
+                                      border: `1px solid ${_activeTpl.badgeBorder}`,
                                       borderRadius: 6,
                                       padding: "3px 10px",
                                       fontSize: 11,
                                       fontWeight: 700,
-                                      color: h.accentColor,
+                                      color: _activeTpl.badgeTxt,
                                     },
                                     children: "Pendiente",
                                   }),
@@ -67941,7 +68225,7 @@ K &&
                 },
                 children: [
                   e.jsx("div", { style: { fontSize: 20, fontWeight: 800, color: a.text, marginBottom: 2 }, children: "Enlace Constructor Pro" }),
-                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accentTxt, marginBottom: 12 }, children: ["Versión 1.7.4 · Edición de lanzamiento"] }),
+                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accentTxt, marginBottom: 12 }, children: ["Versión 1.7.5 · Edición de lanzamiento"] }),
                   e.jsxs("div", { style: { fontSize: 12, color: a.muted, lineHeight: 2 }, children: [
                     e.jsxs("div", { children: [e.jsx("strong", { style: { color: a.text }, children: "Titular de derechos: " }), "ENLACE"] }),
                     e.jsxs("div", { children: [
@@ -87922,7 +88206,7 @@ Esta acción no se puede deshacer.`) &&
                 textDecoration: "underline",
                 cursor: "pointer"
               },
-              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.4")
+              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.5")
             }),
           ],
         }),
