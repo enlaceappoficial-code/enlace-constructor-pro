@@ -23009,12 +23009,13 @@ Error generating stack: ` +
     };
 
     var css =
-      '@page { size: A4; margin: 16mm 15mm; }' +
+      '@page { size: A4 portrait; margin: 10mm 12mm; }' +
       '* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }' +
-      'body { font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; color: #172033; margin: 0 auto; padding: 34px 38px; max-width: 900px; line-height: 1.55; font-size: 12.5px; }' +
-      'p { margin: 0 0 9px 0; }' +
-      // Portada
-      '.cov { min-height: 250mm; display: flex; flex-direction: column; page-break-after: always; }' +
+      'body { font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; color: #172033; margin: 0 auto; padding: 22px 28px; max-width: 900px; line-height: 1.5; font-size: 12px; }' +
+      'p { margin: 0 0 8px 0; }' +
+      // Portada ejecutiva auto-contenida en una sola página (sin corte ni página en blanco)
+      '.cov, .ecp-cover-page { box-sizing: border-box; height: 246mm; max-height: 246mm; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: always !important; break-after: page !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; overflow: hidden !important; padding: 12px 14px 10px 14px !important; }' +
+      '.cov-zocalo { page-break-inside: avoid !important; break-inside: avoid !important; margin-top: auto; }' +
       '.cov-top { border-top: 6px solid #1a3060; padding-top: 26px; }' +
       '.cov-logo { max-height: 78px; max-width: 240px; object-fit: contain; display: block; margin-bottom: 26px; }' +
       '.cov-emp { font-size: 17px; font-weight: 700; color: #1a3060; letter-spacing: .01em; }' +
@@ -23112,11 +23113,11 @@ Error generating stack: ` +
 
       var heroImg = doc.fotoPortada || "";
       var heroImgHtml = heroImg
-        ? '<img src="' + heroImg + '" style="width:100%;max-height:270px;object-fit:contain;object-position:center;display:block;"/>'
-        : '<div style="padding:42px 20px;color:#94a3b8;display:flex;flex-direction:column;align-items:center;gap:8px;">' +
-            '<span style="font-size:38px;">📐</span>' +
-            '<span style="font-size:13px;font-weight:700;color:#64748b;">Documentación Técnica y Cotización Formal</span>' +
-            '<span style="font-size:11px;color:#94a3b8;">' + esc(corp.nombreComercial || "Enlace Constructor Pro") + ' · Enlace Constructor Pro</span>' +
+        ? '<img src="' + heroImg + '" style="width:100%;max-height:140px;object-fit:contain;object-position:center;display:block;"/>'
+        : '<div style="padding:16px 12px;color:#94a3b8;display:flex;flex-direction:column;align-items:center;gap:4px;">' +
+            '<span style="font-size:28px;">📐</span>' +
+            '<span style="font-size:11px;font-weight:700;color:#64748b;">Documentación Técnica y Cotización Formal</span>' +
+            '<span style="font-size:10px;color:#94a3b8;">' + esc(corp.nombreComercial || "Enlace Constructor Pro") + ' · Enlace Constructor Pro</span>' +
           '</div>';
 
       var tFull = (doc.tituloPortada || nombreProyecto || "PROPUESTA TÉCNICA Y PRESUPUESTO").trim();
@@ -23133,85 +23134,90 @@ Error generating stack: ` +
 
       var slogan = r.empresaSlogan || r.empresaRubro || "";
 
-      html += '<section class="cov ecp-cover-page" style="min-height:270mm;padding:24px 20px 20px 20px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box;page-break-after:always;break-after:page;">' +
+      html += '<section class="cov ecp-cover-page">' +
+        // Cabecera superior compacta
         '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
           '<div>' +
             (logoUrl
-              ? '<img src="' + logoUrl + '" style="max-height:65px;max-width:240px;object-fit:contain;display:block;margin-bottom:4px;"/>'
-              : '<div style="font-size:26px;font-weight:900;color:' + darkBrand + ';letter-spacing:-0.5px;">' + esc(corp.nombreComercial || "Empresa") + '</div>') +
-            (slogan ? '<div style="font-size:11px;color:#64748b;font-weight:600;margin-top:4px;">' + esc(slogan) + '</div>' : '') +
-            (corp.rut ? '<div style="font-size:10.5px;color:#8c96a8;margin-top:2px;">RUT: ' + esc(corp.rut) + (corp.ciudad ? ' · ' + esc(corp.ciudad) : '') + '</div>' : '') +
+              ? '<img src="' + logoUrl + '" style="max-height:46px;max-width:200px;object-fit:contain;display:block;margin-bottom:2px;"/>'
+              : '<div style="font-size:22px;font-weight:900;color:' + darkBrand + ';letter-spacing:-0.5px;">' + esc(corp.nombreComercial || "Empresa") + '</div>') +
+            (slogan ? '<div style="font-size:10px;color:#64748b;font-weight:600;margin-top:2px;">' + esc(slogan) + '</div>' : '') +
+            (corp.rut ? '<div style="font-size:9.5px;color:#8c96a8;margin-top:2px;">RUT: ' + esc(corp.rut) + (corp.ciudad ? ' · ' + esc(corp.ciudad) : '') + '</div>' : '') +
           '</div>' +
           '<div style="text-align:right;">' +
-            '<div style="font-size:11px;font-weight:800;letter-spacing:1.5px;color:#64748b;text-transform:uppercase;">COTIZACIÓN FORMAL</div>' +
-            '<div style="font-size:34px;font-weight:900;color:' + darkBrand + ';line-height:1;margin-top:2px;">N° ' + esc(doc.numero || t.id || "001") + '</div>' +
-            '<div style="font-size:10px;font-weight:700;color:#94a3b8;margin-top:4px;text-transform:uppercase;">' +
+            '<div style="font-size:10px;font-weight:800;letter-spacing:1.5px;color:#64748b;text-transform:uppercase;">COTIZACIÓN FORMAL</div>' +
+            '<div style="font-size:28px;font-weight:900;color:' + darkBrand + ';line-height:1;margin-top:2px;">N° ' + esc(doc.numero || t.id || "001") + '</div>' +
+            '<div style="font-size:9.5px;font-weight:700;color:#94a3b8;margin-top:3px;text-transform:uppercase;">' +
               esc(fechaLarga || doc.fecha) + (doc.validez ? ' | VALIDEZ: ' + doc.validez + ' DÍAS' : '') +
             '</div>' +
           '</div>' +
         '</div>' +
 
-        '<div style="margin-top:24px;">' +
-          '<div style="font-size:11px;font-weight:800;letter-spacing:1.8px;color:' + darkBrand + ';text-transform:uppercase;margin-bottom:6px;">' +
+        // Título de la propuesta
+        '<div style="margin-top:12px;">' +
+          '<div style="font-size:9.5px;font-weight:800;letter-spacing:1.6px;color:' + darkBrand + ';text-transform:uppercase;margin-bottom:3px;">' +
             esc(doc.categoriaPortada || "PROPUESTA TÉCNICA Y PRESUPUESTO FORMAL") +
           '</div>' +
-          '<div style="font-size:28px;font-weight:900;line-height:1.15;color:' + darkBrand + ';text-transform:uppercase;">' +
+          '<div style="font-size:22px;font-weight:900;line-height:1.15;color:' + darkBrand + ';text-transform:uppercase;">' +
             dualTitle +
           '</div>' +
         '</div>' +
 
-        '<div style="margin-top:14px;line-height:1.5;">' +
-          '<div style="font-size:13.5px;font-weight:700;color:#334155;">' +
+        // Mandante y datos de ubicación
+        '<div style="margin-top:8px;line-height:1.4;">' +
+          '<div style="font-size:12px;font-weight:700;color:#334155;">' +
             esc(nombreCliente) + ((i && i.rut) ? ' <span style="font-weight:400;color:#64748b;">(RUT: ' + esc(i.rut) + ')</span>' : '') +
           '</div>' +
-          '<div style="font-size:12px;font-weight:700;color:' + darkBrand + ';">' +
+          '<div style="font-size:11px;font-weight:700;color:' + darkBrand + ';">' +
             esc((i && i.direccion) || t.lugar || corp.ciudad || "Ubicación del proyecto") +
           '</div>' +
-          '<div style="font-size:11px;color:#64748b;margin-top:3px;">' +
-            esc(doc.resumenEjecutivo ? doc.resumenEjecutivo.slice(0, 160) : (t.descripcion || "Alcance técnico detallado y especificaciones de partida.")) +
+          '<div style="font-size:10px;color:#64748b;margin-top:2px;">' +
+            esc(doc.resumenEjecutivo ? doc.resumenEjecutivo.slice(0, 140) : (t.descripcion || "Alcance técnico detallado y especificaciones de partida.")) +
           '</div>' +
         '</div>' +
 
-        '<div style="margin:18px 0 10px 0;">' +
-          '<div style="border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;background:#f8fafc;display:flex;align-items:center;justify-content:center;min-height:210px;max-height:280px;">' +
+        // Hero box compacto
+        '<div style="margin:8px 0 6px 0;">' +
+          '<div style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;background:#f8fafc;display:flex;align-items:center;justify-content:center;min-height:110px;max-height:145px;">' +
             heroImgHtml +
           '</div>' +
-          '<div style="font-size:10px;color:#64748b;font-style:italic;margin-top:6px;text-align:left;">' +
+          '<div style="font-size:9px;color:#64748b;font-style:italic;margin-top:3px;text-align:left;">' +
             esc(doc.fotoPortadaLeyenda || "Extracto de referencia documental y registro del proyecto.") +
           '</div>' +
         '</div>' +
 
-        '<div style="position:relative;border-radius:14px;overflow:hidden;background:' + darkBrand + ';color:#fff;padding:22px 26px 16px;margin-top:auto;">' +
-          '<svg style="position:absolute;top:0;left:0;right:0;width:100%;height:16px;" viewBox="0 0 100 12" preserveAspectRatio="none">' +
+        // Zócalo curvo SVG corporativo compacto e indivisible
+        '<div class="cov-zocalo" style="position:relative;border-radius:10px;overflow:hidden;background:' + darkBrand + ';color:#fff;padding:12px 18px 10px;margin-top:auto;">' +
+          '<svg style="position:absolute;top:0;left:0;right:0;width:100%;height:10px;" viewBox="0 0 100 12" preserveAspectRatio="none">' +
             '<path d="M0,0 Q35,12 70,4 T100,5 L100,0 Z" fill="' + accentBrand + '" opacity="0.95"></path>' +
             '<path d="M0,3 Q40,11 75,5 T100,6 L100,0 Z" fill="' + darkBrand + '"></path>' +
           '</svg>' +
 
-          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-top:4px;margin-bottom:14px;">' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:2px;margin-bottom:8px;">' +
             '<div>' +
-              '<div style="font-size:24px;font-weight:900;letter-spacing:-0.5px;line-height:1;">' + esc(doc.kpi1_valor) + '</div>' +
-              '<div style="font-size:10px;font-weight:800;letter-spacing:1px;color:' + accentBrand + ';text-transform:uppercase;margin-top:4px;">' + esc(doc.kpi1_label) + '</div>' +
+              '<div style="font-size:18px;font-weight:900;letter-spacing:-0.5px;line-height:1;">' + esc(doc.kpi1_valor) + '</div>' +
+              '<div style="font-size:9px;font-weight:800;letter-spacing:1px;color:' + accentBrand + ';text-transform:uppercase;margin-top:2px;">' + esc(doc.kpi1_label) + '</div>' +
             '</div>' +
             '<div>' +
-              '<div style="font-size:24px;font-weight:900;letter-spacing:-0.5px;line-height:1;">' + esc(doc.kpi2_valor) + '</div>' +
-              '<div style="font-size:10px;font-weight:800;letter-spacing:1px;color:' + accentBrand + ';text-transform:uppercase;margin-top:4px;">' + esc(doc.kpi2_label) + '</div>' +
+              '<div style="font-size:18px;font-weight:900;letter-spacing:-0.5px;line-height:1;">' + esc(doc.kpi2_valor) + '</div>' +
+              '<div style="font-size:9px;font-weight:800;letter-spacing:1px;color:' + accentBrand + ';text-transform:uppercase;margin-top:2px;">' + esc(doc.kpi2_label) + '</div>' +
             '</div>' +
           '</div>' +
 
-          '<div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:10px;display:flex;justify-content:space-between;align-items:flex-end;">' +
+          '<div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:6px;display:flex;justify-content:space-between;align-items:flex-end;">' +
             '<div>' +
-              '<div style="font-size:10px;font-weight:800;letter-spacing:0.8px;color:' + accentBrand + ';text-transform:uppercase;">' +
+              '<div style="font-size:9px;font-weight:800;letter-spacing:0.8px;color:' + accentBrand + ';text-transform:uppercase;">' +
                 'PRESUPUESTO N° ' + esc(t.id || doc.numero || "001") +
               '</div>' +
-              '<div style="font-size:18px;font-weight:900;color:#fff;margin-top:2px;">' +
+              '<div style="font-size:14px;font-weight:900;color:#fff;margin-top:2px;">' +
                 'VALOR TOTAL DE LA PROPUESTA' +
               '</div>' +
             '</div>' +
             '<div style="text-align:right;">' +
-              '<div style="font-size:26px;font-weight:900;color:#fff;letter-spacing:-0.5px;line-height:1;">' +
+              '<div style="font-size:20px;font-weight:900;color:#fff;letter-spacing:-0.5px;line-height:1;">' +
                 totalFormatted +
               '</div>' +
-              '<div style="font-size:10px;color:' + accentBrand + ';font-weight:700;margin-top:3px;text-transform:uppercase;">' +
+              '<div style="font-size:9px;color:' + accentBrand + ';font-weight:700;margin-top:2px;text-transform:uppercase;">' +
                 ivaLabel +
               '</div>' +
             '</div>' +
@@ -66411,12 +66417,12 @@ K &&
         "#f5a020",
         "#2563eb",
         "#10b981",
+        "#475569",
+        "#ea580c",
         "#8b5cf6",
         "#ef4444",
         "#06b6d4",
-        "#f59e0b",
         "#ec4899",
-        "#84cc16",
         "#14b8a6",
       ],
       v = () => {
@@ -66479,6 +66485,7 @@ K &&
           s && s(!1));
       };
     var _selTpl = (h && h.pdfTplPref) || pt("pdfTplPref", "simple") || "simple",
+      _curAccent = h.accentColor || (_selTpl === "gris" ? "#475569" : (_selTpl === "azul" ? "#2563eb" : (_selTpl === "verde" ? "#16a34a" : (_selTpl === "naranja" ? "#ea580c" : "#f5a020")))),
       _tplConfigs = {
         simple: {
           name: "Simple",
@@ -66487,11 +66494,11 @@ K &&
           topBarBg: "#1a3a5c",
           topBarTxt: "#ffffff",
           headerTitleColor: "#1a3a5c",
-          numberColor: h.accentColor || "#f5a020",
-          badgeNewBg: h.accentColor || "#f5a020",
+          numberColor: _curAccent,
+          badgeNewBg: _curAccent,
           badgeNewTxt: "#ffffff",
-          badgeBorder: h.accentColor || "#f5a020",
-          badgeTxt: h.accentColor || "#f5a020",
+          badgeBorder: _curAccent,
+          badgeTxt: _curAccent,
           avatarBg: "#1a3a5c"
         },
         azul: {
@@ -66501,11 +66508,11 @@ K &&
           topBarBg: "#1e40af",
           topBarTxt: "#ffffff",
           headerTitleColor: "#1e40af",
-          numberColor: h.accentColor || "#3b82f6",
+          numberColor: _curAccent || "#2563eb",
           badgeNewBg: "#1e40af",
           badgeNewTxt: "#ffffff",
-          badgeBorder: h.accentColor || "#3b82f6",
-          badgeTxt: h.accentColor || "#3b82f6",
+          badgeBorder: _curAccent || "#3b82f6",
+          badgeTxt: _curAccent || "#3b82f6",
           avatarBg: "#1e40af"
         },
         verde: {
@@ -66515,11 +66522,11 @@ K &&
           topBarBg: "#14532d",
           topBarTxt: "#ffffff",
           headerTitleColor: "#14532d",
-          numberColor: "#15803d",
-          badgeNewBg: "#15803d",
+          numberColor: _curAccent || "#16a34a",
+          badgeNewBg: _curAccent || "#15803d",
           badgeNewTxt: "#ffffff",
-          badgeBorder: "#16a34a",
-          badgeTxt: "#15803d",
+          badgeBorder: _curAccent || "#16a34a",
+          badgeTxt: _curAccent || "#15803d",
           avatarBg: "#14532d"
         },
         naranja: {
@@ -66529,11 +66536,11 @@ K &&
           topBarBg: "#ea580c",
           topBarTxt: "#ffffff",
           headerTitleColor: "#92400e",
-          numberColor: "#ea580c",
-          badgeNewBg: "#ea580c",
+          numberColor: _curAccent || "#ea580c",
+          badgeNewBg: _curAccent || "#ea580c",
           badgeNewTxt: "#ffffff",
-          badgeBorder: "#ea580c",
-          badgeTxt: "#ea580c",
+          badgeBorder: _curAccent || "#ea580c",
+          badgeTxt: _curAccent || "#ea580c",
           avatarBg: "#ea580c"
         },
         gris: {
@@ -66543,11 +66550,11 @@ K &&
           topBarBg: "#334155",
           topBarTxt: "#ffffff",
           headerTitleColor: "#1e293b",
-          numberColor: "#334155",
-          badgeNewBg: "#475569",
+          numberColor: _curAccent || "#475569",
+          badgeNewBg: _curAccent || "#475569",
           badgeNewTxt: "#ffffff",
-          badgeBorder: "#64748b",
-          badgeTxt: "#475569",
+          badgeBorder: _curAccent || "#64748b",
+          badgeTxt: _curAccent || "#475569",
           avatarBg: "#334155"
         }
       },
@@ -66761,8 +66768,11 @@ K &&
                         e.jsx(
                           "div",
                           {
-                            onClick: () =>
-                              z((f) => u(d({}, f), { accentColor: x })),
+                            onClick: () => {
+                              var matchTpl = x === "#2563eb" ? "azul" : (x === "#10b981" || x === "#16a34a" ? "verde" : (x === "#ea580c" || x === "#f5a020" ? "naranja" : (x === "#475569" ? "gris" : null)));
+                              if (matchTpl) _t("pdfTplPref", matchTpl);
+                              z((f) => u(d({}, f), u({ accentColor: x }, matchTpl ? { pdfTplPref: matchTpl } : {})));
+                            },
                             style: {
                               width: 32,
                               height: 32,
@@ -67079,9 +67089,11 @@ K &&
                         const isDisabled = t.version === "starter" && x.id !== "simple";
                         const selectTpl = () => {
                           if (isDisabled) return;
+                          var syncAccent = x.id === "gris" ? "#475569" : (x.id === "azul" ? "#2563eb" : (x.id === "verde" ? "#16a34a" : (x.id === "naranja" ? "#ea580c" : (h.accentColor || "#f5a020"))));
                           _t("pdfTplPref", x.id);
-                          z((f) => u(d({}, f), { pdfTplPref: x.id }));
+                          z((f) => u(d({}, f), { pdfTplPref: x.id, accentColor: syncAccent }));
                         };
+                        var tplBorderColor = x.id === "gris" ? "#475569" : (x.id === "azul" ? "#1e40af" : (x.id === "verde" ? "#15803d" : (x.id === "naranja" ? "#ea580c" : "#1a3a5c")));
                         return e.jsxs(
                           "label",
                           {
@@ -67093,7 +67105,7 @@ K &&
                               padding: "10px 14px",
                               background: isSelected ? (a.isDark ? "rgba(245,160,32,0.12)" : "rgba(245,160,32,0.06)") : a.sb,
                               borderRadius: 8,
-                              border: `2px solid ${isSelected ? (h.accentColor || a.accent) : a.border}`,
+                              border: `2px solid ${isSelected ? tplBorderColor : a.border}`,
                               cursor: isDisabled ? "not-allowed" : "pointer",
                               opacity: isDisabled ? 0.4 : 1,
                               position: "relative",
@@ -68225,7 +68237,7 @@ K &&
                 },
                 children: [
                   e.jsx("div", { style: { fontSize: 20, fontWeight: 800, color: a.text, marginBottom: 2 }, children: "Enlace Constructor Pro" }),
-                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accentTxt, marginBottom: 12 }, children: ["Versión 1.7.5 · Edición de lanzamiento"] }),
+                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accentTxt, marginBottom: 12 }, children: ["Versión 1.7.6 · Edición de lanzamiento"] }),
                   e.jsxs("div", { style: { fontSize: 12, color: a.muted, lineHeight: 2 }, children: [
                     e.jsxs("div", { children: [e.jsx("strong", { style: { color: a.text }, children: "Titular de derechos: " }), "ENLACE"] }),
                     e.jsxs("div", { children: [
@@ -88206,7 +88218,7 @@ Esta acción no se puede deshacer.`) &&
                 textDecoration: "underline",
                 cursor: "pointer"
               },
-              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.5")
+              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.6")
             }),
           ],
         }),
