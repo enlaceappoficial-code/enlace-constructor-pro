@@ -67941,7 +67941,7 @@ K &&
                 },
                 children: [
                   e.jsx("div", { style: { fontSize: 20, fontWeight: 800, color: a.text, marginBottom: 2 }, children: "Enlace Constructor Pro" }),
-                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accentTxt, marginBottom: 12 }, children: ["Versión 1.7.3 · Edición de lanzamiento"] }),
+                  e.jsxs("div", { style: { fontSize: 14, fontWeight: 700, color: a.accentTxt, marginBottom: 12 }, children: ["Versión 1.7.4 · Edición de lanzamiento"] }),
                   e.jsxs("div", { style: { fontSize: 12, color: a.muted, lineHeight: 2 }, children: [
                     e.jsxs("div", { children: [e.jsx("strong", { style: { color: a.text }, children: "Titular de derechos: " }), "ENLACE"] }),
                     e.jsxs("div", { children: [
@@ -73098,7 +73098,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
           y = (r && r.logoCliente) || "",
           P = (r && r.firmaImg) || "",
           A = y
-            ? `<img src='${y}' style='height:70px;object-fit:contain;display:block;margin-bottom:6px'/>`
+            ? `<img src='${y}' style='height:65px;max-width:240px;object-fit:contain;display:block;margin-bottom:6px'/>`
             : "",
           S = (z || { items: [] }).items || [],
           O = S.map((ee, Y) => {
@@ -73123,7 +73123,7 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                 .join("");
             return `
         <div style='break-inside:avoid;margin-bottom:24px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden'>
-          <div style='background:#1a3060;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center'>
+          <div style='background:#0d1f35;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center'>
             <span style='font-weight:bold;font-size:13px'>${Y + 1}. ${ee.desc}</span>
             <span style='font-size:12px;background:${X};padding:2px 10px;border-radius:12px'>${W}</span>
           </div>
@@ -73160,63 +73160,207 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
         <td style='padding:7px 10px;font-size:11px'>${le.ejecutado || "—"}</td>
         <td style='padding:7px 10px;text-align:center;background:${X};font-size:11px;font-weight:700'>${W}</td>
       </tr>`;
-          }).join(""),
-          pe = `<!DOCTYPE html><html><head><meta charset='utf-8'>
-    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;padding:40px;font-size:13px;max-width:820px;margin:0 auto}
-    table{width:100%;border-collapse:collapse}th{background:#1a3060;color:#fff;padding:8px 10px;font-size:11px;text-align:left}
-    h1{font-size:20px;color:#1a3060}h2{font-size:14px;color:#1a3060;border-bottom:2px solid ${R};padding-bottom:4px;margin:24px 0 12px}
-    @media print{.np{display:none}}</style></head><body>
-    <button class='np' onclick='window.print()' style='margin-bottom:20px;padding:8px 20px;background:#1a3060;color:#fff;border:none;cursor:pointer;border-radius:4px'>🖨 Imprimir / PDF</button>
+          }).join("");
 
-    <div style='display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;border-bottom:3px solid ${R}'>
-      <div>${A}<div style='font-size:20px;font-weight:bold;color:#1a3060'>${K}</div>
-      <div style='font-size:11px;color:#666'>${r.rut ? "RUT: " + r.rut + " | " : ""}${r.ciudad || ""}</div></div>
-      <div style='text-align:right'>
-        <div style='font-size:14px;font-weight:bold;color:${R};text-transform:uppercase'>INFORME DE OBRA</div>
-        ${k.presupuestoDesc ? `<div style='font-size:12px;color:#666;margin-top:4px'>${k.presupuestoDesc}</div>` : ""}
-        <div style='font-size:11px;color:#888;margin-top:2px'>Fecha: ${k.fecha}</div>
+        // Cálculo de Métricas y Totales para Portada
+        var m2Total = 0, mlTotal = 0, m3Total = 0;
+        (S || []).forEach(function(it) {
+          var u0 = String(it.unidad || '').toLowerCase().trim();
+          var c0 = parseFloat(it.cant) || 0;
+          if (u0 === 'm2' || u0 === 'm²') m2Total += c0;
+          else if (u0 === 'ml' || u0 === 'm' || u0 === 'metro' || u0 === 'metros') mlTotal += c0;
+          else if (u0 === 'm3' || u0 === 'm³') m3Total += c0;
+        });
+
+        var kpi1_val = k.kpi1_valor || (m2Total > 0 ? (m2Total.toLocaleString('es-CL', { maximumFractionDigits: 2 }) + ' m²') : (S.length > 0 ? (S.length + ' Partidas') : '1.517,99 m²'));
+        var kpi1_lbl = k.kpi1_label || (m2Total > 0 ? 'SUPERFICIE DE PROYECTO' : 'PARTIDAS TÉCNICAS');
+
+        var kpi2_val = k.kpi2_valor || (mlTotal > 0 ? (mlTotal.toLocaleString('es-CL', { maximumFractionDigits: 2 }) + ' ml') : (m3Total > 0 ? (m3Total.toLocaleString('es-CL', { maximumFractionDigits: 2 }) + ' m³') : '127,20 ml'));
+        var kpi2_lbl = k.kpi2_label || (mlTotal > 0 ? 'LONGITUD / LINEALES' : (m3Total > 0 ? 'VOLUMEN DE OBRA' : 'ALCANCE EJECUTADO'));
+
+        var totalObj = z ? Ee(z.items, r, z.descuento, z.modoCosteo, z.sinIva) : null;
+        var totalVal = totalObj ? totalObj.total : (k.totalPresupuesto || 0);
+        var totalFormatted = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(totalVal);
+        var ivaLabel = (z && z.sinIva) ? 'neto' : 'con IVA considerado';
+
+        // Imagen de Portada
+        var heroImg = k.fotoPortada || '';
+        if (!heroImg && k.partidas) {
+          for (var pKey in k.partidas) {
+            var pFotos = k.partidas[pKey] && k.partidas[pKey].fotos;
+            if (pFotos && pFotos.length > 0 && pFotos[0].data) {
+              heroImg = pFotos[0].data;
+              break;
+            }
+          }
+        }
+        var heroImgHtml = heroImg
+          ? `<img src='${heroImg}' style='width:100%;max-height:260px;object-fit:contain;object-position:center;display:block;'/>`
+          : `<div style='padding:36px 20px;color:#94a3b8;display:flex;flex-direction:column;align-items:center;gap:6px;'>
+              <span style='font-size:36px;'>📐</span>
+              <span style='font-size:12px;font-weight:700;color:#64748b;'>Documentación Técnica y Planimetría de Obra</span>
+              <span style='font-size:11px;color:#94a3b8;'>${K} · Enlace Constructor Pro</span>
+             </div>`;
+
+        var coverHtml = (k.incluirPortada !== false) ? `
+    <div class='ecp-cover-page' style='min-height:270mm;padding:24px 20px 20px 20px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box;page-break-after:always;break-after:page;'>
+      <div style='display:flex;justify-content:space-between;align-items:flex-start;'>
+        <div>
+          ${y ? `<img src='${y}' style='max-height:65px;max-width:240px;object-fit:contain;display:block;'/>` : `<div style='font-size:26px;font-weight:900;color:#0d1f35;letter-spacing:-0.5px;'>${K}</div>`}
+          ${r.empresaSlogan ? `<div style='font-size:11px;color:#64748b;font-weight:600;margin-top:4px;'>${r.empresaSlogan}</div>` : (r.empresaRubro ? `<div style='font-size:11px;color:#64748b;margin-top:3px;'>${r.empresaRubro}</div>` : '')}
+        </div>
+        <div style='text-align:right;'>
+          <div style='font-size:11px;font-weight:800;letter-spacing:1.5px;color:#64748b;text-transform:uppercase;'>INFORME</div>
+          <div style='font-size:34px;font-weight:900;color:#0d1f35;line-height:1;margin-top:2px;'>${k.numeroInforme || (z ? z.id : '') || '260'}</div>
+          <div style='font-size:10px;font-weight:700;color:#94a3b8;margin-top:4px;text-transform:uppercase;'>
+            ${k.fecha || new Date().toISOString().split("T")[0]} | REV. ${k.revision || '01'}
+          </div>
+        </div>
+      </div>
+
+      <div style='margin-top:24px;'>
+        <div style='font-size:11px;font-weight:800;letter-spacing:1.8px;color:#0d1f35;text-transform:uppercase;margin-bottom:6px;'>
+          ${k.categoria || "PROPUESTA TÉCNICA Y CUBICACIONES"}
+        </div>
+        <div style='font-size:28px;font-weight:900;line-height:1.15;color:#0d1f35;text-transform:uppercase;'>
+          ${(() => {
+            var tFull = (k.titulo || (z ? z.descripcion : '') || 'PREPARACIÓN Y PINTURA DE FACHADAS').trim();
+            var words = tFull.split(/\s+/);
+            if (words.length >= 3) {
+              var cut = Math.ceil(words.length / 2);
+              return words.slice(0, cut).join(' ') + ` <span style='color:${R};display:block;'>` + words.slice(cut).join(' ') + `</span>`;
+            }
+            return words.length === 2 ? `${words[0]} <span style='color:${R};display:block;'>${words[1]}</span>` : `<span style='color:${R};'>${tFull}</span>`;
+          })()}
+        </div>
+      </div>
+
+      <div style='margin-top:14px;line-height:1.5;'>
+        <div style='font-size:13px;font-weight:700;color:#334155;'>
+          ${k.mandante || (B && B.nombre) || "Cliente / Mandante"}${k.cargoMandante ? `, <span style='font-weight:400;color:#64748b;'>${k.cargoMandante}</span>` : ""}
+        </div>
+        <div style='font-size:12px;font-weight:700;color:#0d1f35;'>
+          ${k.ubicacion || (B && B.direccion) || (z && z.lugar) || r.ciudad || "Ubicación de la obra"}
+        </div>
+        <div style='font-size:11px;color:#64748b;margin-top:3px;'>
+          ${k.basesTexto || k.alcanceResumen || (z ? z.descripcion : '') || "Paños identificados en proyecto · Alcance técnico y especificaciones"}
+        </div>
+      </div>
+
+      <div style='margin:18px 0 10px 0;'>
+        <div style='border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;background:#f8fafc;display:flex;align-items:center;justify-content:center;min-height:210px;max-height:280px;'>
+          ${heroImgHtml}
+        </div>
+        <div style='font-size:10px;color:#64748b;font-style:italic;margin-top:6px;text-align:left;'>
+          ${k.fotoPortadaLeyenda || "Extracto de referencia documental y registro del proyecto."}
+        </div>
+      </div>
+
+      <div style='position:relative;border-radius:14px;overflow:hidden;background:#0d1f35;color:#fff;padding:22px 26px 16px;margin-top:auto;'>
+        <svg style='position:absolute;top:0;left:0;right:0;width:100%;height:16px;' viewBox='0 0 100 12' preserveAspectRatio='none'>
+          <path d='M0,0 Q35,12 70,4 T100,5 L100,0 Z' fill='${R}' opacity='0.95'></path>
+          <path d='M0,3 Q40,11 75,5 T100,6 L100,0 Z' fill='#0d1f35'></path>
+        </svg>
+
+        <div style='display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-top:4px;margin-bottom:14px;'>
+          <div>
+            <div style='font-size:24px;font-weight:900;letter-spacing:-0.5px;line-height:1;'>${kpi1_val}</div>
+            <div style='font-size:10px;font-weight:800;letter-spacing:1px;color:${R};text-transform:uppercase;margin-top:4px;'>${kpi1_lbl}</div>
+          </div>
+          <div>
+            <div style='font-size:24px;font-weight:900;letter-spacing:-0.5px;line-height:1;'>${kpi2_val}</div>
+            <div style='font-size:10px;font-weight:800;letter-spacing:1px;color:${R};text-transform:uppercase;margin-top:4px;'>${kpi2_lbl}</div>
+          </div>
+        </div>
+
+        <div style='border-top:1px solid rgba(255,255,255,0.15);padding-top:10px;display:flex;justify-content:space-between;align-items:flex-end;'>
+          <div>
+            <div style='font-size:10px;font-weight:800;letter-spacing:0.8px;color:${R};text-transform:uppercase;'>
+              PRESUPUESTO Nº ${k.numeroInforme || (z ? z.id : '') || '260'}
+            </div>
+            <div style='font-size:18px;font-weight:900;color:#fff;margin-top:2px;'>
+              ${totalFormatted} <span style='font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);'>${ivaLabel}</span>
+            </div>
+          </div>
+          <div style='text-align:right;'>
+            <div style='font-size:11px;font-weight:700;color:rgba(255,255,255,0.85);'>
+              ${K}${r.web ? ` | ${r.web.replace(/^https?:\/\//, '')}` : (r.email ? ` | ${r.email}` : '')}
+            </div>
+            <div style='font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);margin-top:2px;'>PORTADA EJECUTIVA</div>
+          </div>
+        </div>
       </div>
     </div>
+        ` : '';
 
-    <h2>1. Antecedentes generales</h2>
-    <table style='margin-bottom:16px'>
-      <tr><td style='padding:6px 10px;width:160px;color:#666;font-size:12px'>Responsable</td><td style='padding:6px 10px;font-size:12px;font-weight:bold'>${k.responsable || r.firmaNombre || K}</td>
-          <td style='padding:6px 10px;width:120px;color:#666;font-size:12px'>Cargo</td><td style='padding:6px 10px;font-size:12px'>${k.cargo || r.firmaCargo || "Representante Legal"}</td></tr>
-      <tr><td style='padding:6px 10px;color:#666;font-size:12px'>Mandante</td><td style='padding:6px 10px;font-size:12px'>${k.mandante || (B == null ? void 0 : B.nombre) || "—"}</td>
-          <td style='padding:6px 10px;color:#666;font-size:12px'>Fecha informe</td><td style='padding:6px 10px;font-size:12px'>${k.fecha}</td></tr>
-      <tr><td style='padding:6px 10px;color:#666;font-size:12px'>Ubicación</td><td colspan='3' style='padding:6px 10px;font-size:12px'>${k.ubicacion || "—"}</td></tr>
-      <tr><td style='padding:6px 10px;color:#666;font-size:12px'>Clima</td><td style='padding:6px 10px;font-size:12px'>${k.clima}</td>
-          <td style='padding:6px 10px;color:#666;font-size:12px'>Avance global</td><td style='padding:6px 10px;font-size:12px;font-weight:bold;color:${R}'>${k.avance || "—"}%</td></tr>
-    </table>
+        var pe = `<!DOCTYPE html><html><head><meta charset='utf-8'>
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#111;padding:36px;font-size:13px;max-width:820px;margin:0 auto}
+    table{width:100%;border-collapse:collapse}th{background:#0d1f35;color:#fff;padding:8px 10px;font-size:11px;text-align:left}
+    h1{font-size:20px;color:#0d1f35}
+    .ecp-section-title{display:flex;align-items:center;gap:10px;margin:24px 0 12px;padding-bottom:6px;border-bottom:2px solid ${R};}
+    .ecp-badge-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:${R};color:#fff;font-weight:900;font-size:12px;flex-shrink:0;}
+    @media print{
+      @page{margin:12mm 15mm;size:A4 portrait;}
+      body{padding:0 !important;max-width:100% !important;}
+      .np{display:none !important;}
+      .ecp-cover-page{page-break-after:always;break-after:page;min-height:270mm;}
+    }</style></head><body>
+    <button class='np' onclick='window.print()' style='margin-bottom:20px;padding:8px 20px;background:#0d1f35;color:#fff;border:none;cursor:pointer;border-radius:4px;font-weight:700'>🖨 Imprimir / PDF</button>
 
-    ${k.basesTexto ? `<h2>2. Base técnica y normativa</h2><div style='background:#f0f4f8;padding:12px;border-radius:4px;font-size:12px;line-height:1.7;margin-bottom:16px'>${k.basesTexto.replace(/\n/g, "<br/>")}</div>` : ""}
+    ${coverHtml}
 
-    <h2>3. Descripción técnica de obras ejecutadas</h2>
-    ${O}
+    <div class='ecp-interior-content' style='padding-top:10px;'>
+      <div style='display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;border-bottom:3px solid ${R}'>
+        <div>${A}<div style='font-size:20px;font-weight:bold;color:#0d1f35'>${K}</div>
+        <div style='font-size:11px;color:#666'>${r.rut ? "RUT: " + r.rut + " | " : ""}${r.ciudad || ""}</div></div>
+        <div style='text-align:right'>
+          <div style='font-size:14px;font-weight:bold;color:${R};text-transform:uppercase'>INFORME TÉCNICO DE OBRA</div>
+          ${k.presupuestoDesc ? `<div style='font-size:12px;color:#666;margin-top:4px'>${k.presupuestoDesc}</div>` : ""}
+          <div style='font-size:11px;color:#888;margin-top:2px'>Nº ${k.numeroInforme || (z ? z.id : '') || '260'} · Fecha: ${k.fecha} | REV. ${k.revision || '01'}</div>
+        </div>
+      </div>
 
-    <h2>4. Matriz de contraste con bases técnicas</h2>
-    <table style='margin-bottom:24px'>
-      <thead><tr><th>Partida</th><th>Cant./Unidad</th><th>Trabajo ejecutado</th><th style='text-align:center'>Verificación</th></tr></thead>
-      <tbody>${U}</tbody>
-    </table>
+      <div class='ecp-section-title'><span class='ecp-badge-num'>1</span><span style='font-size:14px;font-weight:800;color:#0d1f35;text-transform:uppercase;'>Antecedentes generales</span></div>
+      <table style='margin-bottom:16px'>
+        <tr><td style='padding:6px 10px;width:160px;color:#666;font-size:12px'>Responsable</td><td style='padding:6px 10px;font-size:12px;font-weight:bold'>${k.responsable || r.firmaNombre || K}</td>
+            <td style='padding:6px 10px;width:120px;color:#666;font-size:12px'>Cargo</td><td style='padding:6px 10px;font-size:12px'>${k.cargo || r.firmaCargo || "Representante Legal"}</td></tr>
+        <tr><td style='padding:6px 10px;color:#666;font-size:12px'>Mandante</td><td style='padding:6px 10px;font-size:12px'>${k.mandante || (B == null ? void 0 : B.nombre) || "—"}</td>
+            <td style='padding:6px 10px;color:#666;font-size:12px'>Fecha informe</td><td style='padding:6px 10px;font-size:12px'>${k.fecha}</td></tr>
+        <tr><td style='padding:6px 10px;color:#666;font-size:12px'>Ubicación</td><td colspan='3' style='padding:6px 10px;font-size:12px'>${k.ubicacion || "—"}</td></tr>
+        <tr><td style='padding:6px 10px;color:#666;font-size:12px'>Clima</td><td style='padding:6px 10px;font-size:12px'>${k.clima}</td>
+            <td style='padding:6px 10px;color:#666;font-size:12px'>Avance global</td><td style='padding:6px 10px;font-size:12px;font-weight:bold;color:${R}'>${k.avance || "—"}%</td></tr>
+      </table>
 
-    ${k.observacionesGenerales ? `<h2>5. Observaciones generales</h2><div style='background:#fffbeb;border-left:4px solid #f59e0b;padding:12px;border-radius:0 4px 4px 0;font-size:12px;line-height:1.7;margin-bottom:16px'>${k.observacionesGenerales.replace(/\n/g, "<br/>")}</div>` : ""}
+      ${k.basesTexto ? `<div class='ecp-section-title'><span class='ecp-badge-num'>2</span><span style='font-size:14px;font-weight:800;color:#0d1f35;text-transform:uppercase;'>Base técnica y normativa</span></div><div style='background:#f0f4f8;padding:12px;border-radius:4px;font-size:12px;line-height:1.7;margin-bottom:16px'>${k.basesTexto.replace(/\n/g, "<br/>")}</div>` : ""}
 
-    ${k.conclusiones ? `<h2>6. Conclusiones técnicas</h2><div style='font-size:12px;line-height:1.8;margin-bottom:16px'>${k.conclusiones.replace(/\n/g, "<br/>")}</div>` : ""}
+      <div class='ecp-section-title'><span class='ecp-badge-num'>3</span><span style='font-size:14px;font-weight:800;color:#0d1f35;text-transform:uppercase;'>Descripción técnica de obras ejecutadas</span></div>
+      ${O}
 
-    ${k.recomendaciones ? `<h2>7. Recomendaciones de cierre</h2><div style='font-size:12px;line-height:1.8;margin-bottom:16px'>${k.recomendaciones.replace(/\n/g, "<br/>")}</div>` : ""}
+      <div class='ecp-section-title'><span class='ecp-badge-num'>4</span><span style='font-size:14px;font-weight:800;color:#0d1f35;text-transform:uppercase;'>Matriz de contraste con bases técnicas</span></div>
+      <table style='margin-bottom:24px'>
+        <thead><tr><th>Partida</th><th>Cant./Unidad</th><th>Trabajo ejecutado</th><th style='text-align:center'>Verificación</th></tr></thead>
+        <tbody>${U}</tbody>
+      </table>
 
-    <div style='display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px;align-items:end'>
-      <div style='text-align:center'>${P ? `<img src='${P}' style='height:100px;object-fit:contain;display:block;margin:0 auto 6px'/>` : "<div style='height:100px'></div>"}
-        <div style='border-top:1.5px solid #333;padding-top:8px'><strong style='color:#1a3060;font-size:14px'>${k.responsable || r.firmaNombre || K}</strong><br/>
-        <span style='font-size:11px;color:#666'>${k.cargo || r.firmaCargo || "Representante Legal"} — ${K}</span></div></div>
-      <div style='text-align:center'><div style='height:100px'></div>
-        <div style='border-top:1.5px solid #333;padding-top:8px'><strong style='color:#1a3060;font-size:14px'>${k.mandante || (B == null ? void 0 : B.nombre) || "Cliente / Mandante"}</strong><br/>
-        <span style='font-size:11px;color:#666'>Recepción conforme</span></div></div>
+      ${k.observacionesGenerales ? `<div class='ecp-section-title'><span class='ecp-badge-num'>5</span><span style='font-size:14px;font-weight:800;color:#0d1f35;text-transform:uppercase;'>Observaciones generales</span></div><div style='background:#fffbeb;border-left:4px solid #f59e0b;padding:12px;border-radius:0 4px 4px 0;font-size:12px;line-height:1.7;margin-bottom:16px'>${k.observacionesGenerales.replace(/\n/g, "<br/>")}</div>` : ""}
+
+      ${k.conclusiones ? `<div class='ecp-section-title'><span class='ecp-badge-num'>6</span><span style='font-size:14px;font-weight:800;color:#0d1f35;text-transform:uppercase;'>Conclusiones técnicas</span></div><div style='font-size:12px;line-height:1.8;margin-bottom:16px'>${k.conclusiones.replace(/\n/g, "<br/>")}</div>` : ""}
+
+      ${k.recomendaciones ? `<div class='ecp-section-title'><span class='ecp-badge-num'>7</span><span style='font-size:14px;font-weight:800;color:#0d1f35;text-transform:uppercase;'>Recomendaciones de cierre</span></div><div style='font-size:12px;line-height:1.8;margin-bottom:16px'>${k.recomendaciones.replace(/\n/g, "<br/>")}</div>` : ""}
+
+      <div style='display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px;align-items:end;page-break-inside:avoid;'>
+        <div style='text-align:center'>${P ? `<img src='${P}' style='height:90px;object-fit:contain;display:block;margin:0 auto 6px'/>` : "<div style='height:90px'></div>"}
+          <div style='border-top:1.5px solid #0d1f35;padding-top:8px'><strong style='color:#0d1f35;font-size:14px'>${k.responsable || r.firmaNombre || K}</strong><br/>
+          <span style='font-size:11px;color:#666'>${k.cargo || r.firmaCargo || "Representante Legal"} — ${K}</span></div></div>
+        <div style='text-align:center'><div style='height:90px'></div>
+          <div style='border-top:1.5px solid #0d1f35;padding-top:8px'><strong style='color:#0d1f35;font-size:14px'>${k.mandante || (B == null ? void 0 : B.nombre) || "Cliente / Mandante"}</strong><br/>
+          <span style='font-size:11px;color:#666'>Recepción conforme</span></div></div>
+      </div>
+      <div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>
+        Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — ${K} · ${k.fecha}
+      </div>
     </div>
-    <div style='margin-top:20px;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;text-align:center'>
-      Presupuesto generado con Enlace Constructor Pro. La verificación matemática, técnica y económica de los montos y mediciones es responsabilidad exclusiva del profesional a cargo. — ${K} · ${k.fecha}
-    </div></body></html>`;
+    </body></html>`;
         var ve = document.getElementById("ecp_preview_overlay");
         ve && ve.remove();
         ve = document.createElement("div");
@@ -73543,6 +73687,177 @@ function ResumenEjecutivoEditor({ budget: t, client: i, cfg: r, onSave: n, setTo
                             value: j.avance,
                             onChange: (k) => g("avance")(k.target.value),
                             placeholder: "0",
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+              e.jsxs("div", {
+                style: c.card,
+                children: [
+                  e.jsxs("div", {
+                    style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 },
+                    children: [
+                      e.jsx("div", {
+                        style: u(d({}, c.ct), { marginBottom: 0 }),
+                        children: "🎨 Portada Ejecutiva y Presentación de Marca",
+                      }),
+                      e.jsxs("label", {
+                        style: { display: "flex", alignItems: "center", gap: 6, cursor: "pointer", fontSize: 13, fontWeight: 700, color: a.text },
+                        children: [
+                          e.jsx("input", {
+                            type: "checkbox",
+                            checked: j.incluirPortada !== false,
+                            onChange: (k) => g("incluirPortada")(k.target.checked),
+                            style: { accentColor: a.accent, cursor: "pointer" },
+                          }),
+                          "Incluir Portada Ejecutiva",
+                        ],
+                      }),
+                    ],
+                  }),
+                  e.jsx("div", {
+                    style: { fontSize: 12, color: a.muted, marginBottom: 14, lineHeight: 1.6 },
+                    children: "Personaliza la portada de alto impacto para tu marca (estilo Bajo Deslinde con zócalo curvo de métricas, plano o fachada central y colores corporativos dinámicos).",
+                  }),
+                  e.jsxs("div", {
+                    style: { display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 12, marginBottom: 12 },
+                    children: [
+                      e.jsxs("div", {
+                        children: [
+                          e.jsx("div", { style: c.lbl, children: "Subtítulo / Especialidad de portada" }),
+                          e.jsx("input", {
+                            style: u(d({}, c.inp), { width: "100%" }),
+                            value: j.categoria || "",
+                            onChange: (k) => g("categoria")(k.target.value),
+                            placeholder: "Ej: PROPUESTA TÉCNICA Y CUBICACIONES",
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        children: [
+                          e.jsx("div", { style: c.lbl, children: "N° de Informe" }),
+                          e.jsx("input", {
+                            style: u(d({}, c.inp), { width: "100%" }),
+                            value: j.numeroInforme || "",
+                            onChange: (k) => g("numeroInforme")(k.target.value),
+                            placeholder: z ? String(z.id) : "260",
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        children: [
+                          e.jsx("div", { style: c.lbl, children: "Revisión" }),
+                          e.jsx("input", {
+                            style: u(d({}, c.inp), { width: "100%" }),
+                            value: j.revision || "",
+                            onChange: (k) => g("revision")(k.target.value),
+                            placeholder: "Ej: 04",
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                  e.jsxs("div", {
+                    style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 },
+                    children: [
+                      e.jsxs("div", {
+                        children: [
+                          e.jsx("div", { style: c.lbl, children: "Foto de portada (plano, elevación o fachada)" }),
+                          e.jsxs("div", {
+                            style: { display: "flex", gap: 10, alignItems: "center" },
+                            children: [
+                              e.jsxs("label", {
+                                style: u(d({}, c.btn("s")), { cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13 }),
+                                children: [
+                                  "📁 Subir foto de portada",
+                                  e.jsx("input", {
+                                    type: "file",
+                                    accept: "image/*",
+                                    style: { display: "none" },
+                                    onChange: (k) => {
+                                      var fl = k.target.files && k.target.files[0];
+                                      if (fl) {
+                                        var fr = new FileReader();
+                                        fr.onload = (ev) => g("fotoPortada")(ev.target.result);
+                                        fr.readAsDataURL(fl);
+                                      }
+                                    },
+                                  }),
+                                ],
+                              }),
+                              j.fotoPortada && e.jsx("button", {
+                                onClick: () => g("fotoPortada")(""),
+                                style: u(d({}, c.btn("d")), { fontSize: 12, padding: "5px 10px" }),
+                                children: "✕ Quitar",
+                              }),
+                              j.fotoPortada && e.jsx("span", {
+                                style: { fontSize: 11, color: "#16a34a", fontWeight: 700 },
+                                children: "✓ Foto cargada",
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        children: [
+                          e.jsx("div", { style: c.lbl, children: "Leyenda o referencia de la foto" }),
+                          e.jsx("input", {
+                            style: u(d({}, c.inp), { width: "100%" }),
+                            value: j.fotoPortadaLeyenda || "",
+                            onChange: (k) => g("fotoPortadaLeyenda")(k.target.value),
+                            placeholder: "Ej: Fachada norte. Extracto de la lámina 6, de referencia documental.",
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                  e.jsxs("div", {
+                    style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12 },
+                    children: [
+                      e.jsxs("div", {
+                        children: [
+                          e.jsx("div", { style: c.lbl, children: "KPI 1 — Valor destacado" }),
+                          e.jsx("input", {
+                            style: u(d({}, c.inp), { width: "100%" }),
+                            value: j.kpi1_valor || "",
+                            onChange: (k) => g("kpi1_valor")(k.target.value),
+                            placeholder: "Ej: 1.517,99 m²",
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        children: [
+                          e.jsx("div", { style: c.lbl, children: "KPI 1 — Etiqueta" }),
+                          e.jsx("input", {
+                            style: u(d({}, c.inp), { width: "100%" }),
+                            value: j.kpi1_label || "",
+                            onChange: (k) => g("kpi1_label")(k.target.value),
+                            placeholder: "SUPERFICIE DE PINTURA",
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        children: [
+                          e.jsx("div", { style: c.lbl, children: "KPI 2 — Valor destacado" }),
+                          e.jsx("input", {
+                            style: u(d({}, c.inp), { width: "100%" }),
+                            value: j.kpi2_valor || "",
+                            onChange: (k) => g("kpi2_valor")(k.target.value),
+                            placeholder: "Ej: 127,20 ml",
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        children: [
+                          e.jsx("div", { style: c.lbl, children: "KPI 2 — Etiqueta" }),
+                          e.jsx("input", {
+                            style: u(d({}, c.inp), { width: "100%" }),
+                            value: j.kpi2_label || "",
+                            onChange: (k) => g("kpi2_label")(k.target.value),
+                            placeholder: "BAJADAS DE AGUAS LLUVIAS",
                           }),
                         ],
                       }),
@@ -87607,7 +87922,7 @@ Esta acción no se puede deshacer.`) &&
                 textDecoration: "underline",
                 cursor: "pointer"
               },
-              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.3")
+              children: "Enlace Constructor Pro " + (window.APP_INTERNAL_VERSION || "v1.7.4")
             }),
           ],
         }),
